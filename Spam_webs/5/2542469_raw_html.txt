@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html ng-app="eg">
+ <head>
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+  <meta content="!" name="fragment"/>
+  <title ng-bind="tags.title ? tags.title + ' | Evergig' : 'Evergig'">
+  </title>
+  <link href="//d1wtxbt0cnjb5w.cloudfront.net/assets/build/d34ea3f/boot/vendors.css" rel="stylesheet"/>
+  <link href="//d1wtxbt0cnjb5w.cloudfront.net/assets/build/d34ea3f/boot/boot.css" rel="stylesheet"/>
+  <link href="//d1wtxbt0cnjb5w.cloudfront.net/assets/build/d34ea3f/boot/favicon.ico" rel="icon" type="image/x-icon"/>
+  <!-- Typekit -->
+  <script src="//use.typekit.net/sbz0pwy.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   try{Typekit.load();}catch(e){}
+  </script>
+  <!-- Google Analytics -->
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-49771942-1', 'evergig.com');
+    ga('require', 'displayfeatures');
+  </script>
+ </head>
+ <body class="app {{controllerName}}" ng-class="{'is-notTouring': !tour.isActive}" ng-controller="main" ui-keypress="{'space':'playPause($event)'}">
+  <div class="u-textCenter" id="ProAd" ng-if="controllerName == 'home'">
+   <span ng-bind="'Home.ProAd.catchphrase' | translate">
+   </span>
+   <a href="http://pro.evergig.com" ng-bind="'Home.ProAd.link' | translate">
+   </a>
+  </div>
+  <!-- Nav -->
+  <nav class="Nav" ng-class="{'is-showingMenu': menuVisible}" ng-controller="Nav">
+   <div class="Container">
+    <div class="u-pullLeft">
+     <div class="Arrange Arrange--middle">
+      <div class="Arrange-sizeFit u-isHiddenDesktop">
+       <div class="Nav-searchBtnMobile">
+        <a class="Button Button--icon Button--transparent" ng-click="search.toggleVisibility()">
+         <span class="Icon Icon--search u-centered">
+          Search
+         </span>
+        </a>
+       </div>
+      </div>
+      <div class="Arrange-sizeFill">
+       <div class="Nav-home">
+        <a class="Logo Logo--main u-alignMiddle u-linkClean" href="/">
+         <h1 class="u-isHiddenVisually">
+          Evergig
+         </h1>
+         <p class="Logo-tagline u-isHiddenTablet">
+          Every concert, by and for the Fans.
+         </p>
+        </a>
+       </div>
+      </div>
+      <div class="Arrange-sizeFit u-isHiddenDesktop" ng-cloak="" ng-if="controllerName != 'concert' &amp;&amp; player.current">
+       <div class="Nav-menuBtn">
+        <a class="Player-Button Button Button--icon Button--transparent u-inlineBlock u-alignMiddle" ng-href="{{player.currentConcert.url}}" tooltip-html-unsafe="&lt;span class='Icon Icon--music u-marginRm'&gt;&lt;/span&gt;{{player.currentConcert.headliner.name}} / {{player.currentConcert.venue.city}} - {{player.currentConcert.venue.name}}" tooltip-placement="bottom">
+         <span class="Icon u-centered Icon--wave">
+          <span class="wave1">
+          </span>
+          <span class="wave2">
+          </span>
+          <span class="wave3">
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+      <div class="Arrange-sizeFit u-isHiddenDesktop">
+       <div class="Nav-menuBtn">
+        <a class="Button Button--icon Button--transparent" ng-click="toggleMenu()">
+         <span class="Icon u-centered" ng-class="{'Icon--menu': !menuVisible, 'Icon--close': menuVisible}">
+          Menu
+         </span>
+        </a>
+       </div>
+      </div>
+     </div>
+    </div>
+    <ul class="Nav-items">
+     <li class="Nav-item item-important u-isHiddenTablet" ng-cloak="" ng-if="controllerName != 'concert' &amp;&amp; player.currentConcert &amp;&amp; player.isPlaying">
+      <a class="Player-Button Button Button--icon u-inlineBlock u-alignMiddle" ng-href="{{player.currentConcert.url}}" tooltip-html-unsafe="&lt;div class='Player-Button-tooltip'&gt;&lt;span class='Icon Icon--music u-marginRm'&gt;&lt;/span&gt;&lt;span class='artist'&gt;{{player.currentConcert.headliner.name}}&lt;/span&gt;&lt;br&gt;&lt;span class='venue'&gt;{{player.currentConcert.venue.city}} - {{player.currentConcert.venue.name}}&lt;/span&gt;&lt;/div&gt;" tooltip-placement="bottom">
+       <span class="Icon u-centered Icon--wave">
+        <span class="wave1">
+        </span>
+        <span class="wave2">
+        </span>
+        <span class="wave3">
+        </span>
+       </span>
+      </a>
+     </li>
+     <li class="Nav-item item-important u-isHiddenTablet">
+      <button class="Button Button--pill u-inlineBlock u-alignMiddle" ng-click="search.toggleVisibility()">
+       <span class="Icon Icon--search">
+       </span>
+       <span ng-bind="'App.search' | translate">
+       </span>
+      </button>
+     </li>
+     <li class="Nav-item">
+      <a class="u-linkClean u-pointer" ng-bind="'App.help' | translate" ng-click="startTour();toggleMenu();">
+      </a>
+     </li>
+     <li class="Nav-item">
+      <a class="u-linkClean" href="http://evergig.tumblr.com/">
+       Tumblr
+      </a>
+     </li>
+     <li class="Nav-item">
+      <a class="u-linkClean" href="http://pro.evergig.com/" ng-bind="'App.pro' | translate">
+      </a>
+     </li>
+     <li class="Nav-item">
+      <a class="u-linkClean" href="http://blog.evergig.com/" ng-bind="'App.about' | translate">
+      </a>
+     </li>
+     <li class="Nav-item item-important">
+      <a class="u-linkClean" ng-click="login()">
+       <div class="Avatar Avatar--small u-alignMiddle u-pointer" ng-class="{'is-unAuthed': identity.isAnonymous}" tooltip="{{ identity.isAnonymous ? 'App.login' : 'App.profile' | translate }}" tooltip-placement="bottom">
+        <div class="Icon Icon--user u-centered">
+        </div>
+        <div class="Avatar-image u-centered" ng-style="{'background-image': 'url('+identity.data.image.small+')'}">
+        </div>
+       </div>
+       <span class="u-isHiddenDesktop u-marginLs" ng-bind="identity.isAnonymous ? 'Login' : 'Profile' | translate">
+       </span>
+      </a>
+     </li>
+    </ul>
+   </div>
+  </nav>
+  <!-- end Nav -->
+  <!-- Banner -->
+  <div class="Banner" id="banner">
+   <!-- Search -->
+   <search live="" search-focus="search.isVisible" type="full">
+   </search>
+   <!-- User profile -->
+   <user ng-if="controllerName === 'user'">
+   </user>
+   <!-- Artist profile -->
+   <artist ng-if="controllerName === 'artist'">
+   </artist>
+   <!-- Player -->
+   <player concert="selected.concert" ng-show="selected.concert">
+   </player>
+   <slideshow ng-show="controllerName != 'concert'">
+   </slideshow>
+   <nyancat ng-if="easteregg">
+   </nyancat>
+  </div>
+  <!-- end Banner -->
+  <!-- Topbar with search filters -->
+  <bar>
+  </bar>
+  <!-- main grid -->
+  <div id="main" ng-view="">
+  </div>
+  <!-- Footer -->
+  <footer class="Footer u-cf">
+   <div class="Container">
+    <nav class="Footer-nav">
+     <a class="u-isActionable" ng-bind="'App.about' | translate" ng-click="showWelcome()">
+     </a>
+     <span class="u-textMute">
+      |
+     </span>
+     <a class="u-isActionable" ng-bind="'App.help' | translate" ng-click="startTour()">
+     </a>
+     <span class="u-textMute">
+      |
+     </span>
+     <a href="http://evergig.tumblr.com/" ng-bind="'App.blog' | translate">
+     </a>
+     <span class="u-textMute">
+      |
+     </span>
+     <a class="u-isActionable" href="/terms" ng-bind="'App.terms' | translate">
+     </a>
+    </nav>
+    <div class="Footer-copyright">
+     <span>
+      Copyright  2010 - 2014 Evergig Music S.A.S.U.
+     </span>
+     <span ng-bind="'App.copyright' | translate">
+     </span>
+    </div>
+    <div class="Footer-colophon">
+     <span class="Icon Icon--code u-textGreen">
+      Coded
+     </span>
+     with
+     <span class="Icon Icon--heart u-textRed">
+      love
+     </span>
+     in Paris
+    </div>
+   </div>
+  </footer>
+  <!-- end Footer -->
+  <!-- Overlay -->
+  <overlay>
+  </overlay>
+  <!-- Bootstrap our app -->
+  <script src="//d1wtxbt0cnjb5w.cloudfront.net/assets/build/d34ea3f/boot/vendors.js" type="text/javascript">
+  </script>
+  <script src="//d1wtxbt0cnjb5w.cloudfront.net/assets/build/d34ea3f/boot/boot.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   require('boot');
+  </script>
+  <!-- Crazyegg script -->
+  <script type="text/javascript">
+   setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0022/4065.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+ </body>
+</html>

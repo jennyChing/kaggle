@@ -1,0 +1,3903 @@
+<!DOCTYPE html>
+<html lang="en-US">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes" name="viewport"/>
+  <title>
+   The state of mapping APIs - O'Reilly Radar
+  </title>
+  <link href="http://cdn.oreillystatic.com/radar/images/favicon.ico" rel="shortcut icon"/>
+  <link href="http://cdn.oreillystatic.com/radar/images/favicon.ico" rel="icon"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://radar.oreilly.com/wp-content/themes/radar/style.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://radar.oreilly.com/wp-content/themes/radar/custom.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://radar.oreilly.com/xmlrpc.php" rel="pingback"/>
+  <link href="https://plus.google.com/105451978536505503907" rel="publisher"/>
+  <meta content="The state of mapping APIs" name="search-title"/>
+  <meta content="10295842" property="twitter:account_id"/>
+  <meta content="article" name="search-content"/>
+  <meta content="Uncategorized" name="Category"/>
+  <meta content="Mobile, utility and server-side development will define the future of maps." name="subtitle"/>
+  <meta content="Map APIs took off in 2005, and during the ensuing years the whole notion of maps has changed. Where once they were slick add-ons, map functionality is now a necessary -- and expected -- tool. In this piece, Adam DuVander looks at the current state of mapping and he explains how mobile devices, third-party services and ease of use are shaping the map development world." name="description"/>
+  <meta content="Adam DuVander" name="author"/>
+  <meta content="2010-09-07" name="search_date"/>
+  <meta content="API,location,maps" name="keywords"/>
+  <!-- Twitter meta -->
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="http://radar.oreilly.com/2010/09/the-state-of-mapping-apis-five.html" name="twitter:url"/>
+  <meta content="The state of mapping APIs" name="twitter:title"/>
+  <meta content="Map APIs took off in 2005, and during the ensuing years the whole notion of maps has changed. Where once they were slick add-ons, map functionality is now a necessary -- and expected -- tool. In this piece, Adam DuVander looks at the current state of mapping and he explains how mobile devices, third-party services and ease of use are shaping the map development world." name="twitter:description"/>
+  <meta content="http://s.radar.oreilly.com/2010/09/03/0910-map-api-slider.png" name="twitter:image"/>
+  <meta content="adamd" name="twitter:creator"/>
+  <meta content="radar" name="twitter:site"/>
+  <meta content="http://cdn.oreillystatic.com/radar/images/people/photo_adamd_m.jpg" property="og:image"/>
+  <meta content="http://s.radar.oreilly.com/2010/09/03/0910-map-api-slider.png" property="og:image"/>
+  <script src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f6110d016518605" type="text/javascript">
+  </script>
+  <link href="http://radar.oreilly.com/feed" rel="alternate" title="O'Reilly Radar  Feed" type="application/rss+xml"/>
+  <link href="http://radar.oreilly.com/comments/feed" rel="alternate" title="O'Reilly Radar  Comments Feed" type="application/rss+xml"/>
+  <link href="http://radar.oreilly.com/2010/09/the-state-of-mapping-apis-five.html/feed" rel="alternate" title="O'Reilly Radar  The state of mapping APIs Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/radar.oreilly.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://radar.oreilly.com/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=2.7.1" id="crayon-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://contextlysitescripts.contextly.com/kit/assets/2.4/widgets--page-view.css" id="contextly-kit-widgets--page-view-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://radar.oreilly.com/wp-content/plugins/inline-tweet-sharer/inline-tweet-sharer.css?ver=4.2.2" id="inline-tweet-sharer-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" id="et_monarch-open-sans-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://radar.oreilly.com/wp-content/plugins/monarch/css/style.css?ver=1.2.3" id="et_monarch-css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://radar.oreilly.com/wp-content/plugins/videojs-html5-video-player-for-wordpress/plugin-styles.css?ver=4.2.2" id="videojs-plugin-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//vjs.zencdn.net/4.5/video-js.css?ver=4.2.2" id="videojs-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://s.radar.oreilly.com/wp-content/plugins/powerpress/player.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://cdn.oreillystatic.com/search/radar/scripts/jquery-1.10.2.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.7.1","is_admin":"0","ajaxurl":"http:\/\/radar.oreilly.com\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]&gt; */
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=2.7.1" type="text/javascript">
+  </script>
+  <!--[if lt IE 8]&gt;
+&lt;script type='text/javascript' src='http://s.radar.oreilly.com/wp-includes/js/json2.min.js?ver=2011-02-23'&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <script src="http://s.radar.oreilly.com/wp-content/plugins/inline-tweet-sharer/inline-tweet-sharer.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="http://radar.oreilly.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://radar.oreilly.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://radar.oreilly.com/2010/09/four-short-links-7-september-2-1.html" rel="prev" title="Four short links: 7 September 2010"/>
+  <link href="http://radar.oreilly.com/2010/09/four-short-links-8-september-2-1.html" rel="next" title="Four short links: 8 September 2010"/>
+  <link href="http://radar.oreilly.com/2010/09/the-state-of-mapping-apis-five.html" rel="canonical"/>
+  <link href="http://radar.oreilly.com/?p=42868" rel="shortlink"/>
+  <!--Plugin WP Missed Schedule 2011.0920.2011 Active-->
+  <meta content='{"title":"The state of mapping APIs","url":"http:\/\/radar.oreilly.com\/2010\/09\/the-state-of-mapping-apis-five.html","pub_date":"2010-09-07 06:00:00","mod_date":"2012-09-17 06:27:26","type":"post","post_id":42868,"author_id":"4","author_name":"Adam DuVander","author_display_name":"Adam DuVander","tags":["@home","@top","API","location","maps"],"categories":[],"image":null}' id="contextly-page" name="contextly-page"/>
+  <style id="et-social-custom-css" type="text/css">
+   .et_monarch .et_social_inline .et_social_circle .et_social_icons_container li i, .et_monarch .et_social_inline li { background: #8c8c8c; } .et_monarch .et_social_inline_top { margin-bottom: 0; } .et_monarch .et_social_networks { width: 180px !important; float: left;} .et_monarch .et_social_autowidth li { margin: 0 5px 2% 0 !important;} .et_monarch .et_social_networks .et_social_icon, .et_monarch .et_social_networks .et_social_icon:before, .et_monarch .et_social_networks .et_social_icon:after { width: 23px; height: 23px; line-height: 23px; } .et_monarch .et_social_left .et_social_overlay { margin: 0 0 0 23px; } .et_monarch .et_social_networks li, .et_monarch .widget_monarchwidget .et_social_networks li, .et_monarch .widget .et_social_networks li, .et_monarch .widget_text .et_social_networks li { min-height: 23px; } .et_monarch .et_social_networks { width: 112px !important; float: left;} .entry-utility .comments-link.utility-items a { margin-top: 0;} .et_monarch .et_social_icon, .et_monarch .et_social_icon:before, .et_monarch .et_social_icon:after { font-size: 13px; line-height: 13px; } .et_monarch .et_social_inline_bottom { margin-top: 0;} #featured-box .entry-utility {margin-top: 30px;}
+  </style>
+  <script type="text/javascript">
+   &lt;!--
+function powerpress_pinw(pinw){window.open('http://radar.oreilly.com/?powerpress_pinw='+pinw, 'PowerPressPlayer','toolbar=0,status=0,resizable=1,width=460,height=320');	return false;}
+powerpress_url = 'http://radar.oreilly.com/wp-content/plugins/powerpress/';
+//--&gt;
+  </script>
+  <script type="text/javascript">
+   document.createElement("video");document.createElement("audio");document.createElement("track");
+  </script>
+  <link href="/wp-content/themes/radar/css/lazyYT.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body class="single single-post postid-42868 single-format-standard et_monarch">
+  <div id="fixed-top">
+   <span>
+    Menu
+   </span>
+  </div>
+  <nav class="menu-main-nav-container" id="mobi">
+   <ul class="menu" id="menu-main-nav">
+    <li class="first menu-item menu-item-type-custom menu-item-object-custom menu-item-48418" id="menu-item-48418">
+     <a href="http://oreilly.com/">
+      Home
+     </a>
+    </li>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48419" id="menu-item-48419">
+     <a href="http://shop.oreilly.com/">
+      Shop Video Training &amp; Books
+     </a>
+    </li>
+    <li class="current_page_item menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-has-children menu-item-48420" id="menu-item-48420">
+     <a href="http://radar.oreilly.com/">
+      Radar
+     </a>
+    </li>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48422" id="menu-item-48422">
+     <a href="http://www.safaribooksonline.com/?utm_source=oreilly&amp;utm_medium=referral&amp;utm_campaign=publisher&amp;utm_content=nav">
+      Safari Books Online
+     </a>
+    </li>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48423" id="menu-item-48423">
+     <a href="http://oreilly.com/conferences/">
+      Conferences
+     </a>
+    </li>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48426" id="menu-item-48426">
+     <a href="http://www.oreillyschool.com/">
+      IT Courses &amp; Certificates
+     </a>
+    </li>
+   </ul>
+  </nav>
+  <div class="hfeed " id="wrapper">
+   <div class="navheaderbg">
+    <div>
+     <div id="header">
+      <div class="header-top">
+       <a href="http://oreilly.com/" title="oreilly.com">
+        oreilly.com
+       </a>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="head-inner">
+       <div class="logo">
+        <a href="http://radar.oreilly.com/" rel="home" title="O'Reilly Radar">
+         O'Reilly Radar
+        </a>
+       </div>
+       <div id="search-box">
+        <div id="header-social-wrap">
+         <div id="header-social-btn">
+          <a class="rss-btn" href="http://feeds.feedburner.com/oreilly/radar/atom">
+           RSS Feed
+          </a>
+          <a class="twitter-btn" href="http://twitter.com/radar">
+           Twitter
+          </a>
+          <a class="fb-btn" href="https://www.facebook.com/OReillyRadar">
+           Facebook
+          </a>
+          <a class="gps-btn" href="https://plus.google.com/105451978536505503907">
+           Google+
+          </a>
+          <a class="yt-btn" href="http://www.youtube.com/user/OreillyMedia">
+           Youtube
+          </a>
+          <div class="clear">
+          </div>
+         </div>
+        </div>
+        <script type="text/javascript">
+         function checkIfDefault(keyword) {
+							var defaultSearchTerm = "Search";
+							var defaultEmailTerm = "Enter Email";
+								if((keyword == defaultSearchTerm) || (keyword == defaultEmailTerm)) {
+									return '';
+								}
+								else {
+									return keyword;
+								}
+							}
+        </script>
+        <script type="text/javascript">
+         jQuery(document).ready(function($) { 
+						$("#search-form").submit(function() { 
+						window.location = " /search#/search/q="+$("#q").val(); 
+						return false; 
+						}); 
+					});
+        </script>
+        <div class="yui-skin-sam">
+         <form action="http://search.oreilly.com/" id="search-form" method="get" name="searchform">
+          <div class="search">
+           <fieldset>
+            <span id="search-input">
+             <div class="searchInput">
+              <span id="search-field">
+               <input id="q" maxlength="64" name="q" onfocus="this.value=checkIfDefault(this.value);" type="text" value="Search"/>
+              </span>
+             </div>
+             <span id="search-button">
+              <input align="top" alt="Search" border="0" src="http://cdn.oreillystatic.com/images/sitewide-headers/search_btn.gif" style="float:left" type="image" value="SEARCH"/>
+              <input name="tmpl" type="hidden" value="radar"/>
+             </span>
+            </span>
+           </fieldset>
+          </div>
+         </form>
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <!-- #header -->
+     <div id="access" role="navigation">
+      <div class="menu-header">
+       <ul class="menu" id="menu-main-nav-1">
+        <li class="first menu-item menu-item-type-custom menu-item-object-custom menu-item-48418">
+         <a href="http://oreilly.com/">
+          Home
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48419">
+         <a href="http://shop.oreilly.com/">
+          Shop Video Training &amp; Books
+         </a>
+        </li>
+        <li class="current_page_item menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-has-children menu-item-48420">
+         <a href="http://radar.oreilly.com/">
+          Radar
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-67912" id="menu-item-67912">
+           <a href="http://radar.oreilly.com/">
+            Radar
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-67913" id="menu-item-67913">
+           <a href="http://animals.oreilly.com/">
+            Animals
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48422">
+         <a href="http://www.safaribooksonline.com/?utm_source=oreilly&amp;utm_medium=referral&amp;utm_campaign=publisher&amp;utm_content=nav">
+          Safari Books Online
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48423">
+         <a href="http://oreilly.com/conferences/">
+          Conferences
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48426">
+         <a href="http://www.oreillyschool.com/">
+          IT Courses &amp; Certificates
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <!-- #access -->
+     <div class="clear">
+     </div>
+     <div id="menu-wrap">
+      <div id="sub">
+       <div class="nav">
+        <div class="name">
+         More Topics
+         <span class="arrow-down">
+         </span>
+        </div>
+        <div class="sub-menu">
+         <ul class="nav-bar">
+          <li>
+           <a href="http://radar.oreilly.com/data">
+            Data
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/design">
+            Design
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/emerging-tech">
+            Emerging Tech
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/iot">
+            IoT
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/programming">
+            Programming
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/webops-perf">
+            Web Ops &amp; Performance
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/web-platform">
+            Web Platform
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <!-- PROTOTYPE MESSAGE CODE -->
+     <div id="visit-beta">
+      <div class="table">
+       <a class="hide" href="#">
+       </a>
+       <a class="message" href="https://beta.oreilly.com/topics/data">
+        Help us test a new look for OReilly.
+        <span class="underline">
+         Visit our beta site.
+        </span>
+       </a>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <!-- PROTOTYPE MESSAGE CODE End-->
+    </div>
+   </div>
+   <div id="sww-content">
+    <div class="textwidget">
+     <!-- Either there are no banners, they are disabled or none qualified for this location! -->
+    </div>
+    <div class="clear">
+    </div>
+   </div>
+   <div id="main">
+    <style type="text/css">
+     .single .hentry { padding-bottom:20px; }
+		  #content #newsletter { padding:0; margin:0 0 20px; border-bottom:1px solid #888; }
+		  #content #newsletter &gt; h3 { margin:15px 0 0 0; padding:0; font-size:22px; line-height:1.1em; font-weight:bold; }
+		  #content #newsletter &gt; h4 { margin:0 0 5px; padding:0; font-size:15px; line-height:1.3em; font-weight:normal; }
+		  #content #newsletter &gt; p { margin:0 0 20px; padding:0; font-size:15px; line-height:1.3em; font-weight:normal; }
+    </style>
+    <div id="container">
+     <div class="post_block" id="content" role="main">
+      <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/rs_embhl_v2_en_us.js" type="text/javascript">
+      </script>
+      <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/jquery.cookie.js" type="text/javascript">
+      </script>
+      <div class="post-42868 post type-post status-publish format-standard hentry category-uncategorized tag-home tag-top tag-api tag-location tag-maps" id="post-42868">
+       <ul class="entry-tools">
+        <span class="tool-block">
+         <li class="button print">
+          <a href="#" onclick="window.open('http://radar.oreilly.com/print/?print_bc=42868','print','width=800,height=600,menubar=no,status=no,location=yes,toolbar=yes,scrollbars=yes'); return false;" rel="nofollow" target="_new">
+           Print
+          </a>
+         </li>
+         <li class="button listen">
+          <div class="rs_skip en_us" id="readspeaker_button1">
+           <a accesskey="L" href="http://app.readspeaker.com/cgi-bin/rsent?customerid=14&amp;lang=en_us&amp;readid=body-content&amp;url=http://radar.oreilly.com/2010/09/the-state-of-mapping-apis-five.html" onclick="readpage(this.href, 'content_start'); return false;" target="_blank">
+            Listen
+           </a>
+          </div>
+         </li>
+         <div id="content_start" style="display: block; ">
+         </div>
+        </span>
+       </ul>
+       <a href="http://radar.oreilly.com/adamd">
+        <img alt="" class="au-photo" src="http://cdn.oreillystatic.com/radar/images/people/photo_adamd_s.jpg" title="Adam DuVander"/>
+       </a>
+       <!-- RSPEAK_START -->
+       <div id="body-content">
+        <h1 class="entry-title">
+         The state of mapping APIs
+        </h1>
+        <h2 class="subhead">
+         Mobile, utility and server-side development will define the future of maps.
+        </h2>
+        <div class="entry-meta">
+         <span class="meta-sep">
+          by
+         </span>
+         <span class="author vcard">
+          <a class="url fn n" href="http://radar.oreilly.com/adamd" rel="author" title="View all posts by Adam DuVander">
+           Adam DuVander
+          </a>
+         </span>
+         |
+         <!-- RSPEAK_STOP -->
+         <a href="http://twitter.com/adamd">
+          @adamd
+         </a>
+         |
+         <span class="entry-date">
+          September 7, 2010
+         </span>
+        </div>
+        <!-- .entry-meta -->
+        <div class="entry-utility social">
+         <div class="et_social_inline et_social_mobile_on et_social_inline_bottom">
+          <div class="et_social_networks et_social_autowidth et_social_slide et_social_rectangle et_social_left et_social_no_animation et_social_outer_dark">
+           <ul class="et_social_icons_container">
+            <li class="et_social_twitter">
+             <a class="et_social_share" data-post_id="42868" data-social_name="twitter" data-social_type="share" href="http://twitter.com/share?text=The state of mapping APIs&amp;url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;via=" rel="nofollow">
+              <i class="et_social_icon et_social_icon_twitter">
+              </i>
+              <span class="et_social_overlay">
+              </span>
+             </a>
+            </li>
+            <li class="et_social_googleplus">
+             <a class="et_social_share" data-post_id="42868" data-social_name="googleplus" data-social_type="share" href="https://plus.google.com/share?url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;t=The state of mapping APIs" rel="nofollow">
+              <i class="et_social_icon et_social_icon_googleplus">
+              </i>
+              <span class="et_social_overlay">
+              </span>
+             </a>
+            </li>
+            <li class="et_social_facebook">
+             <a class="et_social_share" data-post_id="42868" data-social_name="facebook" data-social_type="share" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;t=The state of mapping APIs" rel="nofollow">
+              <i class="et_social_icon et_social_icon_facebook">
+              </i>
+              <span class="et_social_overlay">
+              </span>
+             </a>
+            </li>
+            <li class="et_social_linkedin">
+             <a class="et_social_share" data-post_id="42868" data-social_name="linkedin" data-social_type="share" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;title=The state of mapping APIs" rel="nofollow">
+              <i class="et_social_icon et_social_icon_linkedin">
+              </i>
+              <span class="et_social_overlay">
+              </span>
+             </a>
+            </li>
+           </ul>
+          </div>
+         </div>
+         <div class="clear">
+         </div>
+        </div>
+        <!-- .entry-utility -->
+        <div class="entry-content">
+         <!-- RSPEAK_START -->
+         <p>
+          <em>
+           Guest blogger Adam DuVander is the author of 
+           <a href="http://oreilly.com/catalog/9781593272715">
+            Map Scripting 101
+           </a>
+           , an example-driven guide to building interactive maps on multiple platforms. He also serves as executive editor of
+           <a href="http://www.programmableweb.com/">
+            ProgrammableWeb
+           </a>
+           .
+          </em>
+         </p>
+         <hr/>
+         <p>
+          Maps took over the web in mid-2005, shortly after the
+          <a href="http://conferences.oreillynet.com/where2005/">
+           first Where 2.0 conference
+          </a>
+          . They quickly moved from fancy feature to necessary element of any site that contained even a trace of geographic content. Today were amidst another location and mapping revolution, with mobile making its impact on the web. And with it, were seeing even more geo services provided by both the old guard and innovative new mapping platforms.
+         </p>
+         <p>
+          Though the map itself continues to be important, other geographic data is having a larger impact. Providers are making this data, such as driving directions and business listings, available in increasingly open ways.
+         </p>
+         <h2>
+          The old guard
+         </h2>
+         <p>
+         </p>
+         <div style="float: right;width: 300px;height: auto;padding: 10px;margin: 0 0 12px 12px;border: 1px solid #ddd;font-style: italic;text-align: left">
+          <a href="http://maps.forum.nu/v3/gm_customTiles.html">
+           <img alt="This screen is from Marcelo Montagna's Custom Tile Layers with Opacity Google Maps demo." border="0" src="http://s.radar.oreilly.com/2010/09/03/custom-tiles-example.png" style="margin: 0 0 10px 0" width="300"/>
+          </a>
+          <br/>
+          A screenshot from Marcelo Montagnas 
+          <a href="http://maps.forum.nu/v3/gm_customTiles.html">
+           Custom Tile Layers with Opacity
+          </a>
+           Google Maps demo.
+         </div>
+         <p>
+          Google had the first mapping API and continues to keep its lead by adding useful new features. The companys
+          <a href="http://code.google.com/apis/maps/documentation/javascript/">
+           Maps V3
+          </a>
+          was originally optimized for mobile, but in May Google made it the go-to platform for the web as well. With this move, Google showed that the mobile web is at least as important as the web we access from our homes and offices.
+         </p>
+         <p>
+          Another sign of mobiles influence on mobile appears in how Google is making some of its newest services available. Geocoding, driving directions and business listings are no longer confined to access via JavaScript. Instead, Google has made these all available via web services, giving developers the freedom to use the results in multiple ways, such as in a native smart phone application.
+         </p>
+         <p>
+          Yahoo has done little to expand its mapping platform in recent years, though it is almost as old as Googles. Due to Yahoos more lenient terms, its auxiliary geo services, such as geocoding and static maps, get consistent interest from developers. And the company has made improvements, such as its next-generation geocoder,
+          <a href="http://developer.yahoo.com/geo/placefinder/">
+           PlaceFinder
+          </a>
+          , which it announced in June.
+         </p>
+         <p>
+          Yet, with Yahoos tremendous potential, the mapping platform remains untouched. Theres hope, given the
+          <a href="http://conversations.nokia.com/2010/05/24/nokia-and-yahoo-team-up-in-online-services/">
+           recent deal with Nokia
+          </a>
+          to provide maps on Yahoo proper. Both Yahoo and Nokia are mum on whether the deal will extend to Yahoos developer platform, which makes me wonder if it will leave behind an industry it helped create.
+         </p>
+         <p>
+          MapQuest is oft-forgotten by developers, though it has made some of the largest strides with its mapping platform in the last year. A sixth version of its
+          <a href="http://developer.mapquest.com/web/products/featured/javascript">
+           JavaScript API
+          </a>
+          , written from the ground up, recently came out of beta. The new platform takes advantage of the web services that MapQuest has released. Its an attempt to make the thin client code even thinner.
+         </p>
+         <p>
+          One of these web services,
+          <a href="http://open.mapquestapi.com/directions/">
+           Directions
+          </a>
+          , made MapQuest a leader among mapping APIs. Launched a year ago, Directions marked the first time routing was available for free without being constricted with JavaScript-only access. Most recently MapQuest made the same service available built on top of
+          <a href="http://www.openstreetmap.org/">
+           OpenStreetMap
+          </a>
+          data.
+         </p>
+         <h2>
+          The newcomers
+         </h2>
+         <p>
+          Bing may seem like a strange newcomer, since Microsoft has had a mapping API for some time. Previously called Virtual Earth, it was re-branded in 2009 along with the launch of Microsofts new search engine. But its not just surface-level changes. Microsoft has
+          <a href="http://www.microsoft.com/maps/developers/">
+           continued to launch new developer services with Bing
+          </a>
+          .
+         </p>
+         <p>
+          In addition to the JavaScript SDK, Bing Maps can also be created with Silverlight, which makes for smoother transitions and animation. The Bing Maps site itself runs on Silverlight, and in June Microsoft launched the ability to create
+          <a href="http://www.bing.com/community/blogs/maps/archive/2010/06/07/announcing-the-bing-map-app-sdk-and-3-new-bing-map-apps.aspx">
+           map apps
+          </a>
+          , which can run on the main Bing Maps site.
+         </p>
+         <p>
+          <a href="http://cloudmade.com/">
+           CloudMade
+          </a>
+          is a company built upon OpenStreetMap, the project creating a wiki-like map that anyone can edit. Using this open data, CloudMades API gives you access to the Open Street Map tiles in a way that is more reliable  and style-able  than the project itself.
+         </p>
+         <p>
+          CloudMades Map Style Editor lets you set colors for features, such as roads and parks. Then, make your own style available for embedding using the JavaScript API. CloudMade supplies much of the same power that super-users have when making map tiles server-side in a point-and-click interface.
+         </p>
+         <h2>
+          Where have all the hackers gone?
+         </h2>
+         <p>
+          With so many official mapping APIs available, its easy to forget that the map mashup culture was founded upon hacking. Paul Rademacher created
+          <a href="http://www.housingmaps.com/">
+           HousingMaps
+          </a>
+          to show Craigslist rentals and homes for sale on a Google Map before Google had an API. Adrian Holovaty made
+          <a href="http://chicago.everyblock.com/crime/">
+           Chicago Crime
+          </a>
+          to show crime data (which he scraped from the police bureaus website) on a hacked and embedded Google Map.
+         </p>
+         <p>
+          Rademacher joined Google in 2005, created the
+          <a href="http://earth.google.com/plugin/">
+           Google Earth plugin
+          </a>
+          and now is part of the team that makes Google Maps. Holovatys Chicago Crime project became part of
+          <a href="http://www.everyblock.com/">
+           EveryBlock
+          </a>
+          , a local news aggregator that
+          <a href="http://blog.everyblock.com/2009/aug/17/acquisition/">
+           sold to MSNBC
+          </a>
+          last year. Ironically, EveryBlock doesnt use any mapping API, instead opting for using its own minimalist map tiles.
+         </p>
+         <p>
+          The mapping hackers of 2010 have also gone server-side, away from the APIs. Using tools like
+          <a href="http://mapnik.org/">
+           Mapnik
+          </a>
+          , theyre styling their own maps, almost always with OpenStreetMap data. Sometimes its for fun, like Brett Campers
+          <a href="http://8bitcity.com/map?New%20York">
+           8-Bit City
+          </a>
+          . And when an earthquake struck Haiti,
+          <a href="http://en.oreilly.com/where2010/public/schedule/detail/13201">
+           map hackers responded
+          </a>
+          .
+         </p>
+         <h2>
+          Mapping the future
+         </h2>
+         <p>
+          Mapping providers will likely make it easier to create your own customized maps. Already Google Maps V3 has simple styling via CSS-like code. And the process of creating OpenStreetMap tiles is greatly simplified by
+          <a href="http://tiledrawer.com/">
+           Tile Drawer
+          </a>
+          .
+         </p>
+         <p>
+          But its not just making the map itself that needs simplification, but storing and accessing the data on top of it. For years developers have had to set up their own databases of locations, which raises the bar for the type of developer who can use maps. Now there are tools like
+          <a href="http://simplegeo.com/">
+           SimpleGeo
+          </a>
+          to make the process easier. However, it would be useful to see these tools baked into the mapping APIs and we likely will soon.
+         </p>
+         <p>
+          Similarly, we need easier ways of expressing data without just adding more markers. Graphic overlays, such as
+          <a href="http://en.wikipedia.org/wiki/Choropleth_map">
+           choropleths
+          </a>
+          (regions shaded based on data) and heatmaps, are not accessible to most developers. The processes need to run on a server capable of geo-referencing the graphic it outputs. And services available to do this tend to charge. The
+          <a href="http://radar.oreilly.com/gov2">
+           open government
+          </a>
+          movement is already tied closely to mapping. Hopefully projects for the greater good will fill in feature gaps where mapping providers dont see business opportunities.
+         </p>
+         <p>
+          Obviously, mobile will play a huge role in the future of mapping. Already weve seen an impact, yet there are far fewer sites taking advantage of the users location than could. Expect the next generation of
+          <a href="http://radar.oreilly.com/2010/09/lets-pull-it-together.html">
+           store locators
+          </a>
+          , for example, to be much more exciting. But thats just the beginning.
+         </p>
+         <p>
+         </p>
+         <p>
+          <strong>
+           Related:
+          </strong>
+         </p>
+         <ul>
+          <li>
+           <a href="http://radar.oreilly.com/2010/09/lets-pull-it-together.html">
+            Toward a local syzygy: aligning deals, check-ins and places
+           </a>
+          </li>
+          <li>
+           <a href="http://www.youtube.com/watch?v=K0leehDhiHk">
+            Video: Jack Dangermond, ESRI founder and president, on the future of mapping
+           </a>
+          </li>
+          <li>
+           <a href="http://www.youtube.com/watch?v=VwnjfEaaMvg">
+            Video: Matt Galligan, Getting to Know SimpleGeo
+           </a>
+          </li>
+          <li>
+           <a href="http://radar.oreilly.com/2009/08/waze-make-your-own-maps-in-rea.html">
+            Waze: Make your own maps in realtime
+           </a>
+          </li>
+         </ul>
+         <!-- RSPEAK_STOP -->
+         <div class="ctx-clearfix" id="ctx-sl-subscribe">
+         </div>
+         <div class="ctx-module-container ctx-clearfix" id="ctx-module">
+         </div>
+        </div>
+        <!-- .entry-content -->
+       </div>
+       <div class="entry-utility">
+        tags:
+        <a href="http://radar.oreilly.com/tag/api" rel="tag" title="API Tag">
+         API
+        </a>
+        ,
+        <a href="http://radar.oreilly.com/tag/location" rel="tag" title="location Tag">
+         location
+        </a>
+        ,
+        <a href="http://radar.oreilly.com/tag/maps" rel="tag" title="maps Tag">
+         maps
+        </a>
+       </div>
+       <!-- .entry-utility -->
+       <div class="entry-utility social">
+        <div class="et_social_inline et_social_mobile_on et_social_inline_bottom">
+         <div class="et_social_networks et_social_autowidth et_social_slide et_social_rectangle et_social_left et_social_no_animation et_social_outer_dark">
+          <ul class="et_social_icons_container">
+           <li class="et_social_twitter">
+            <a class="et_social_share" data-post_id="42868" data-social_name="twitter" data-social_type="share" href="http://twitter.com/share?text=The state of mapping APIs&amp;url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;via=" rel="nofollow">
+             <i class="et_social_icon et_social_icon_twitter">
+             </i>
+             <span class="et_social_overlay">
+             </span>
+            </a>
+           </li>
+           <li class="et_social_googleplus">
+            <a class="et_social_share" data-post_id="42868" data-social_name="googleplus" data-social_type="share" href="https://plus.google.com/share?url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;t=The state of mapping APIs" rel="nofollow">
+             <i class="et_social_icon et_social_icon_googleplus">
+             </i>
+             <span class="et_social_overlay">
+             </span>
+            </a>
+           </li>
+           <li class="et_social_facebook">
+            <a class="et_social_share" data-post_id="42868" data-social_name="facebook" data-social_type="share" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;t=The state of mapping APIs" rel="nofollow">
+             <i class="et_social_icon et_social_icon_facebook">
+             </i>
+             <span class="et_social_overlay">
+             </span>
+            </a>
+           </li>
+           <li class="et_social_linkedin">
+            <a class="et_social_share" data-post_id="42868" data-social_name="linkedin" data-social_type="share" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fradar.oreilly.com%2F2010%2F09%2Fthe-state-of-mapping-apis-five.html&amp;title=The state of mapping APIs" rel="nofollow">
+             <i class="et_social_icon et_social_icon_linkedin">
+             </i>
+             <span class="et_social_overlay">
+             </span>
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <!-- .entry-utility -->
+       <!-- AddThis Button END -->
+      </div>
+      <!-- #post-## -->
+      <a name="comments">
+      </a>
+      <a name="respond">
+      </a>
+      <div id="disqus_thread">
+       <div id="dsq-content">
+        <ul id="dsq-comments">
+         <li class="comment even thread-even depth-1" id="dsq-comment-35268">
+          <div class="dsq-comment-header" id="dsq-comment-header-35268">
+           <cite id="dsq-cite-35268">
+            http://www.sustainableGIS.com/blog/cfg11n/
+            <span id="dsq-author-user-35268">
+             PaulH
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35268">
+           <div class="dsq-comment-message" id="dsq-comment-message-35268">
+            <p>
+             i really dont think theres tremendous potential when it comes to yahoos dataonce you leave the US &amp; i guess europe, it isnt very good.
+            </p>
+            <p>
+             while you mention silverlight, you seem to have skipped right over google maps flex/flash API which work quite well. something against flash?
+            </p>
+            <p>
+             and while crowd sourcing sounds swell in theory &amp; certainly works in emergency situations, ive been mostly disappointed by crowd sourced data when it comes to practical uses (again, outside the US).
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35269">
+          <div class="dsq-comment-header" id="dsq-comment-header-35269">
+           <cite id="dsq-cite-35269">
+            http://www.tile5.org/
+            <span id="dsq-author-user-35269">
+             Damon Oehlman
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35269">
+           <div class="dsq-comment-message" id="dsq-comment-message-35269">
+            <p>
+             Nice article Adam  nice to hear your thoughts on the future of mapping and I definitely agree with what you have to say.  Additionally, thanks for the heads up on Tile Drawer as that it looks extremely useful (Im a little embarrassed I didnt know about it already).
+            </p>
+            <p>
+             If you get a chance Id certainly appreciate your feedback on a generic HTML5 javascript mapping API that Im writing with the goal of reducing the lock in that developers may feel with any particular map provider.  Its early days yet, but so far so good.
+            </p>
+            <p>
+             Cheers,
+             <br/>
+             Damon.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35270">
+          <div class="dsq-comment-header" id="dsq-comment-header-35270">
+           <cite id="dsq-cite-35270">
+            http://www.startreknewvoyages.com/
+            <span id="dsq-author-user-35270">
+             RobertMfromLI
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35270">
+           <div class="dsq-comment-message" id="dsq-comment-message-35270">
+            <p>
+             I suspect the government and the various contractors and outside programmers who worked with them or with their data had the first mapping API. It was used for the TigerLINE data that all the rest of this data is originally based off of. It wasnt some internal govt only project, but something anyone could either download (free) or purchase and use. There are a variety of such tools, numerous ancient (Win 3.1/Win95) which far predates Googles tools and APIs.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35271">
+          <div class="dsq-comment-header" id="dsq-comment-header-35271">
+           <cite id="dsq-cite-35271">
+            <span id="dsq-author-user-35271">
+             Scott
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35271">
+           <div class="dsq-comment-message" id="dsq-comment-message-35271">
+            <p>
+             Bing maps Virtual Earth was originally an independent operation (www.mapblast.com) that MS purchased and promptly trashed by mis-commercializing it (big surprise), at which point it sank beneath the waves for some time.
+            </p>
+            <p>
+             It was one of the few sites that would give you an accurate GPS-usable fix (if only in lat/long form) in the late 1990s.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35272">
+          <div class="dsq-comment-header" id="dsq-comment-header-35272">
+           <cite id="dsq-cite-35272">
+            <span id="dsq-author-user-35272">
+             Al
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35272">
+           <div class="dsq-comment-message" id="dsq-comment-message-35272">
+            <p>
+             Scott, the MapPoint Web Service (which is still under Bing) was Microsofts web mapping API.  Mapblast was the mapping system in the Vicinity acqusition  which also brought along a a number of paying customers.
+            </p>
+            <p>
+             I dont think you can say they miscomercialized. They learned from the acqusition and moved customers over to the MapPoint Web Service, then Virtual Earth and now Bing.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35273">
+          <div class="dsq-comment-header" id="dsq-comment-header-35273">
+           <cite id="dsq-cite-35273">
+            <span id="dsq-author-user-35273">
+             TR
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35273">
+           <div class="dsq-comment-message" id="dsq-comment-message-35273">
+            <p>
+             Scott, you are an idiot.
+            </p>
+            <p>
+             Sincerely,
+             <br/>
+             The internet.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35274">
+          <div class="dsq-comment-header" id="dsq-comment-header-35274">
+           <cite id="dsq-cite-35274">
+            <span id="dsq-author-user-35274">
+             TR
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35274">
+           <div class="dsq-comment-message" id="dsq-comment-message-35274">
+            <p>
+             Scott, you are an idiot.
+            </p>
+            <p>
+             Sincerely,
+             <br/>
+             The internet.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35275">
+          <div class="dsq-comment-header" id="dsq-comment-header-35275">
+           <cite id="dsq-cite-35275">
+            <span id="dsq-author-user-35275">
+             Bolo
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35275">
+           <div class="dsq-comment-message" id="dsq-comment-message-35275">
+            <p>
+             What about OpenLayers?. Today is one of the most powerful Maps API and more used, with the advantage that is open source.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35276">
+          <div class="dsq-comment-header" id="dsq-comment-header-35276">
+           <cite id="dsq-cite-35276">
+            <span id="dsq-author-user-35276">
+             Jackaranda
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35276">
+           <div class="dsq-comment-message" id="dsq-comment-message-35276">
+            <p>
+             Have to second the comment on OpenLayers.  Have switched to it for a number of projects after frustrations with Google Maps API.  Quite a major omission from the article!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35277">
+          <div class="dsq-comment-header" id="dsq-comment-header-35277">
+           <cite id="dsq-cite-35277">
+            <span id="dsq-author-user-35277">
+             RW
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35277">
+           <div class="dsq-comment-message" id="dsq-comment-message-35277">
+            <p>
+             TR,
+            </p>
+            <p>
+             you, Sir, seem to not be able to argue.
+            </p>
+            <p>
+             Best,
+             <br/>
+             The real word.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35278">
+          <div class="dsq-comment-header" id="dsq-comment-header-35278">
+           <cite id="dsq-cite-35278">
+            <span id="dsq-author-user-35278">
+             Or
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35278">
+           <div class="dsq-comment-message" id="dsq-comment-message-35278">
+            <p>
+             Great review, thanks!
+            </p>
+            <p>
+             Im interested in navigation APIs. No real progress in that direction for some time Google maps navigation for Android dont have an API AFAIK, and Nokia presented Ovi Maps SDK a year ago, but it is still under development.
+            </p>
+            <p>
+             Any other developments in that front, anyone?
+            </p>
+            <p>
+             Thanks!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35279">
+          <div class="dsq-comment-header" id="dsq-comment-header-35279">
+           <cite id="dsq-cite-35279">
+            <span id="dsq-author-user-35279">
+             BQ
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35279">
+           <div class="dsq-comment-message" id="dsq-comment-message-35279">
+            <p>
+             Or,
+            </p>
+            <p>
+             You might want to have a look at:
+            </p>
+            <p>
+             <a href="http://open.mapquestapi.com/directions/" rel="nofollow">
+              http://open.mapquestapi.com/directions/
+             </a>
+            </p>
+            <p>
+             Still very much in beta but under active development.
+            </p>
+            <p>
+             
+             <br/>
+             Brian
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35280">
+          <div class="dsq-comment-header" id="dsq-comment-header-35280">
+           <cite id="dsq-cite-35280">
+            <span id="dsq-author-user-35280">
+             Kristin
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35280">
+           <div class="dsq-comment-message" id="dsq-comment-message-35280">
+            <p>
+             Interesting, Thanks.
+            </p>
+            <p>
+             But I still await a fully functional GIS that I can edit or query from anywhere in a secure manner if I wish, that doesnt cost an arm and a leg! We are seriously under serving the whole of the charitable and community groups sectors still, and with the UK pushing for the big society may need this very soon!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35281">
+          <div class="dsq-comment-header" id="dsq-comment-header-35281">
+           <cite id="dsq-cite-35281">
+            http://@kristinstweets
+            <span id="dsq-author-user-35281">
+             Kristin
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35281">
+           <div class="dsq-comment-message" id="dsq-comment-message-35281">
+            <p>
+             Interesting, Thanks.
+            </p>
+            <p>
+             But I still await a fully functional GIS that I can edit or query from anywhere in a secure manner if I wish, that doesnt cost an arm and a leg! We are seriously under serving the whole of the charitable and community groups sectors still, and with the UK pushing for the big society may need this very soon!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35282">
+          <div class="dsq-comment-header" id="dsq-comment-header-35282">
+           <cite id="dsq-cite-35282">
+            <span id="dsq-author-user-35282">
+             Kay Murray
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35282">
+           <div class="dsq-comment-message" id="dsq-comment-message-35282">
+            <p>
+             Kristin,
+            </p>
+            <p>
+             esri have a non profit scheme for such groups.
+             <br/>
+             See
+             <a href="http://www.esri.com/nonprofit/index.html" rel="nofollow">
+              http://www.esri.com/nonprofit/index.html
+             </a>
+             <br/>
+             All a bonifide organisation need do is apply, and hey prestow, you can get fully fuctional ArcGIs with extensions.  What more could you ever want.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35283">
+          <div class="dsq-comment-header" id="dsq-comment-header-35283">
+           <cite id="dsq-cite-35283">
+            <span id="dsq-author-user-35283">
+             JohnC
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35283">
+           <div class="dsq-comment-message" id="dsq-comment-message-35283">
+            <p>
+             Unfortunately mapping while exciting and full of possibility in the browsing world is utterly dead in the desktop application world due to draconian licensing rules from all the main players despite technically being easy to work with.
+            </p>
+            <p>
+             Unless your mapping app is hosted on a web server you are screwed as a developer.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35284">
+          <div class="dsq-comment-header" id="dsq-comment-header-35284">
+           <cite id="dsq-cite-35284">
+            <span id="dsq-author-user-35284">
+             sam
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35284">
+           <div class="dsq-comment-message" id="dsq-comment-message-35284">
+            <p>
+             @JohnC
+            </p>
+            <p>
+             Not so: theres GRASS, MapWindow, QGIS, uDIG, OpenJump and gvSIG  all fine desktop GIS applications that have zero draconian licensing rules. So: take your pick based on your language skillset and start contributing new code or bug fixes to the codebase
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35285">
+          <div class="dsq-comment-header" id="dsq-comment-header-35285">
+           <cite id="dsq-cite-35285">
+            http://www.web-gis.co.uk
+            <span id="dsq-author-user-35285">
+             Chris
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35285">
+           <div class="dsq-comment-message" id="dsq-comment-message-35285">
+            <p>
+             Great article  agree with above  you should have OpenLayers in there. Ive linked to this article from my website  see
+             <a href="http://www.web-gis.co.uk/phurl/h" rel="nofollow">
+              http://www.web-gis.co.uk/phurl/h
+             </a>
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35286">
+          <div class="dsq-comment-header" id="dsq-comment-header-35286">
+           <cite id="dsq-cite-35286">
+            http://www.web-gis.co.uk
+            <span id="dsq-author-user-35286">
+             Chris
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35286">
+           <div class="dsq-comment-message" id="dsq-comment-message-35286">
+            <p>
+             Great article  agree with above  you should have OpenLayers in there. Ive linked to this article from my website  see
+             <a href="http://www.web-gis.co.uk/phurl/h" rel="nofollow">
+              http://www.web-gis.co.uk/phurl/h
+             </a>
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35287">
+          <div class="dsq-comment-header" id="dsq-comment-header-35287">
+           <cite id="dsq-cite-35287">
+            http://www.FurlanGo.com
+            <span id="dsq-author-user-35287">
+             Ryan
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35287">
+           <div class="dsq-comment-message" id="dsq-comment-message-35287">
+            <p>
+             Nice article. Btw, FurlanGo.com is new mash up result of google maps and some events API nicely showing events around u
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35288">
+          <div class="dsq-comment-header" id="dsq-comment-header-35288">
+           <cite id="dsq-cite-35288">
+            http://highearthorbit.com
+            <span id="dsq-author-user-35288">
+             Andrew Turner
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35288">
+           <div class="dsq-comment-message" id="dsq-comment-message-35288">
+            <p>
+             I think whats also particularly interesting is that the hackers of 5-years ago are now running venture backed companies or within larger organizations. These projects and hacks have emerged to become the tools powering many web-based mapping tools.
+            </p>
+            <p>
+             Can innovation happen as quickly when youre building products? Is the technology settled enough, and companies agile enough to now take back the lead in developing the cutting edge technology, oOr are we going to see a settling as the current wave of Where2.0 innovators get pulled deep and there needs to be another wave of eternal hackers to push the envelope.
+            </p>
+            <p>
+             Mapnik, OpenLayers, et al. all occured in
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35289">
+          <div class="dsq-comment-header" id="dsq-comment-header-35289">
+           <cite id="dsq-cite-35289">
+            http://mapscripting.com
+            <span id="dsq-author-user-35289">
+             AdamD
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35289">
+           <div class="dsq-comment-message" id="dsq-comment-message-35289">
+            <p>
+             Thanks everyone for the great comments. Youre right that I should have included OpenLayers, especially since I mentioned Mapnik and Open Street Map.
+            </p>
+            <p>
+             @Andrew, I agree with you about the hackers finding more mainstream gigs. The map hacking also seems to be following this pattern of being less on the fringe, as the tools have matured. Everything is more usable, which is great because it means more developers can use them.
+            </p>
+            <p>
+             @PaulH, I appreciate all of your points. Thank you.
+            </p>
+            <p>
+             @RobertMfromLI, I suppose I should have specified open web mapping APIs, not just mapping APIs in general. This post is really meant to be viewed from the context of the geo web frenzy that Google Maps caused in early-mid 2005. That said, its important to note that many knowledgeable people have been working with maps on the web for some time and maps in general for much longer.
+            </p>
+            <p>
+             Thanks again for all the interest and conversation.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35290">
+          <div class="dsq-comment-header" id="dsq-comment-header-35290">
+           <cite id="dsq-cite-35290">
+            http://vaporizer-store.net
+            <span id="dsq-author-user-35290">
+             Michael Fever
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35290">
+           <div class="dsq-comment-message" id="dsq-comment-message-35290">
+            <p>
+             If you want to see how maps can be implemented into interactive websites, take a look at the google html5 experiment with the Arcade Fire.   You enter in your address of where you grew up as a child and it integrates it into the multimedia presentation in the video.  Worth checking out.   I think they could have done more with the mapping aspect of it, but its still pretty cool.  I think mapping APIs are going to blow up really soon.
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35291">
+          <div class="dsq-comment-header" id="dsq-comment-header-35291">
+           <cite id="dsq-cite-35291">
+            http://yserver.blogspot.com
+            <span id="dsq-author-user-35291">
+             Rapideo
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35291">
+           <div class="dsq-comment-message" id="dsq-comment-message-35291">
+            <p>
+             Keep Posting, Thumbs Up!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35292">
+          <div class="dsq-comment-header" id="dsq-comment-header-35292">
+           <cite id="dsq-cite-35292">
+            http://developer.decarta.com
+            <span id="dsq-author-user-35292">
+             Steven Citron-Pousty
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35292">
+           <div class="dsq-comment-message" id="dsq-comment-message-35292">
+            <p>
+             Or:
+             <br/>
+             You can look at the deCarta APIs. Adam deCarta has APIs and we have them on mobile as well as web. More APIs coming in time for CTIA.
+             <br/>
+             Thanks
+             <br/>
+             Steve
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35293">
+          <div class="dsq-comment-header" id="dsq-comment-header-35293">
+           <cite id="dsq-cite-35293">
+            http://www.bortignon.org/
+            <span id="dsq-author-user-35293">
+             Adrian
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35293">
+           <div class="dsq-comment-message" id="dsq-comment-message-35293">
+            <p>
+             Excellent Post, thanks
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35294">
+          <div class="dsq-comment-header" id="dsq-comment-header-35294">
+           <cite id="dsq-cite-35294">
+            http://www.totallyawesomemapping.com
+            <span id="dsq-author-user-35294">
+             Drew Kesler
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35294">
+           <div class="dsq-comment-message" id="dsq-comment-message-35294">
+            <p>
+             Hi! This is a really good article. Even some of the comments are informative too!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-35295">
+          <div class="dsq-comment-header" id="dsq-comment-header-35295">
+           <cite id="dsq-cite-35295">
+            http://www.cartologic.com
+            <span id="dsq-author-user-35295">
+             Ahmed
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35295">
+           <div class="dsq-comment-message" id="dsq-comment-message-35295">
+            <p>
+             Not all hackers are gone server side.
+             <br/>
+             Check out CartoView, you can do a lot of map authoring on the client
+             <br/>
+             <a href="http://www.cartologic.com/cartoview/demos.aspx" rel="nofollow">
+              http://www.cartologic.com/cartoview/demos.aspx
+             </a>
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="dsq-comment-35296">
+          <div class="dsq-comment-header" id="dsq-comment-header-35296">
+           <cite id="dsq-cite-35296">
+            http://quebec-canada.ru
+            <span id="dsq-author-user-35296">
+             Dzianis
+            </span>
+           </cite>
+          </div>
+          <div class="dsq-comment-body" id="dsq-comment-body-35296">
+           <div class="dsq-comment-message" id="dsq-comment-message-35296">
+            <p>
+             thanks for a good article!
+            </p>
+           </div>
+          </div>
+         </li>
+         <!-- #comment-## -->
+        </ul>
+       </div>
+      </div>
+      <script type="text/javascript">
+       var disqus_url = 'http://radar.oreilly.com/2010/09/the-state-of-mapping-apis-five.html';
+var disqus_identifier = '42868 http://blogs.oreilly.com/radar/2010/09/the-state-of-mapping-apis-five.html';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'oreillyradar';
+var disqus_title = "The state of mapping APIs";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&amp;post_id=42868';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+      </script>
+     </div>
+     <!-- #content -->
+     <div class="widget-area" id="sidebar">
+      <div class="widget-container widget_text" id="text-51">
+       <h3 class="widget-title">
+        Featured Video
+       </h3>
+       <div class="textwidget">
+        <div class="js-lazyYT" data-ratio="16:9" data-youtube-id="jayTknqC2uc">
+        </div>
+        <p style="padding-top: 5px; font-size: 12px;  line-height: 1.5; font-weight: normal;">
+         <strong>
+          The Internet of Things That Do What You Tell Them:
+         </strong>
+         Cory Doctorow passionately explains how computers are already entwined in our lives, which means laws that support lock-in are much more than inconveniences.
+        </p>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="widget-container widget_text" id="text-82">
+       <h3 class="widget-title">
+        Featured Download
+       </h3>
+       <div class="textwidget">
+        <p align="center">
+         <a href="http://www.oreilly.com/programming/free/software-architecture-patterns.csp" onclick="var s=s_gi(s_account); s.eVar23='radar-home-rcolbot-free-0636920039198'; s.events='event5'; s.linkTrackVars='eVar23,events'; s.linkTrackEvents='event5'; s.tl(this,'o','Internal Ad Click');">
+          <img src="http://akamaicovers.oreilly.com/images/0636920039198/cat.gif"/>
+         </a>
+         <br/>
+         <a href="http://www.oreilly.com/programming/free/software-architecture-patterns.csp" onclick="var s=s_gi(s_account); s.eVar23='radar-home-rcolbot-free-0636920039198'; s.events='event5'; s.linkTrackVars='eVar23,events'; s.linkTrackEvents='event5'; s.tl(this,'o','Internal Ad Click');">
+          Download the free ebook &gt;
+         </a>
+        </p>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="widget-container widget_text" id="text-5">
+       <h3 class="widget-title">
+        Most Recently Discussed
+       </h3>
+       <div class="textwidget">
+        <div class="dsq-widget" id="recentcomments">
+         <script src="http://oreillyradar.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=100" type="text/javascript">
+         </script>
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="widget-container radar-archives">
+       <h3 class="widget-title">
+        Archives
+       </h3>
+       <ul>
+        <li>
+         <select id="archive_id" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+          <option value="">
+           Archives by Month...
+          </option>
+          <option value="http://radar.oreilly.com/2015/07">
+           July 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/06">
+           June 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/05">
+           May 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/04">
+           April 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/03">
+           March 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/02">
+           February 2015
+          </option>
+          <option value="http://radar.oreilly.com/2015/01">
+           January 2015
+          </option>
+          <option value="http://radar.oreilly.com/2014/12">
+           December 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/11">
+           November 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/10">
+           October 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/09">
+           September 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/08">
+           August 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/07">
+           July 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/06">
+           June 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/05">
+           May 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/04">
+           April 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/03">
+           March 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/02">
+           February 2014
+          </option>
+          <option value="http://radar.oreilly.com/2014/01">
+           January 2014
+          </option>
+          <option value="http://radar.oreilly.com/2013/12">
+           December 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/11">
+           November 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/10">
+           October 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/09">
+           September 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/08">
+           August 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/07">
+           July 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/06">
+           June 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/05">
+           May 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/04">
+           April 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/03">
+           March 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/02">
+           February 2013
+          </option>
+          <option value="http://radar.oreilly.com/2013/01">
+           January 2013
+          </option>
+          <option value="http://radar.oreilly.com/2012/12">
+           December 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/11">
+           November 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/10">
+           October 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/09">
+           September 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/08">
+           August 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/07">
+           July 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/06">
+           June 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/05">
+           May 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/04">
+           April 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/03">
+           March 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/02">
+           February 2012
+          </option>
+          <option value="http://radar.oreilly.com/2012/01">
+           January 2012
+          </option>
+          <option value="http://radar.oreilly.com/2011/12">
+           December 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/11">
+           November 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/10">
+           October 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/09">
+           September 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/08">
+           August 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/07">
+           July 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/06">
+           June 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/05">
+           May 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/04">
+           April 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/03">
+           March 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/02">
+           February 2011
+          </option>
+          <option value="http://radar.oreilly.com/2011/01">
+           January 2011
+          </option>
+          <option value="http://radar.oreilly.com/2010/12">
+           December 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/11">
+           November 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/10">
+           October 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/09">
+           September 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/08">
+           August 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/07">
+           July 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/06">
+           June 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/05">
+           May 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/04">
+           April 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/03">
+           March 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/02">
+           February 2010
+          </option>
+          <option value="http://radar.oreilly.com/2010/01">
+           January 2010
+          </option>
+          <option value="http://radar.oreilly.com/2009/12">
+           December 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/11">
+           November 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/10">
+           October 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/09">
+           September 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/08">
+           August 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/07">
+           July 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/06">
+           June 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/05">
+           May 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/04">
+           April 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/03">
+           March 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/02">
+           February 2009
+          </option>
+          <option value="http://radar.oreilly.com/2009/01">
+           January 2009
+          </option>
+          <option value="http://radar.oreilly.com/2008/12">
+           December 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/11">
+           November 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/10">
+           October 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/09">
+           September 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/08">
+           August 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/07">
+           July 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/06">
+           June 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/05">
+           May 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/04">
+           April 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/03">
+           March 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/02">
+           February 2008
+          </option>
+          <option value="http://radar.oreilly.com/2008/01">
+           January 2008
+          </option>
+          <option value="http://radar.oreilly.com/2007/12">
+           December 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/11">
+           November 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/10">
+           October 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/09">
+           September 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/08">
+           August 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/07">
+           July 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/06">
+           June 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/05">
+           May 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/04">
+           April 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/03">
+           March 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/02">
+           February 2007
+          </option>
+          <option value="http://radar.oreilly.com/2007/01">
+           January 2007
+          </option>
+          <option value="http://radar.oreilly.com/2006/12">
+           December 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/11">
+           November 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/10">
+           October 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/09">
+           September 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/08">
+           August 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/07">
+           July 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/06">
+           June 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/05">
+           May 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/04">
+           April 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/03">
+           March 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/02">
+           February 2006
+          </option>
+          <option value="http://radar.oreilly.com/2006/01">
+           January 2006
+          </option>
+          <option value="http://radar.oreilly.com/2005/12">
+           December 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/11">
+           November 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/10">
+           October 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/09">
+           September 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/08">
+           August 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/07">
+           July 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/06">
+           June 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/05">
+           May 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/04">
+           April 2005
+          </option>
+          <option value="http://radar.oreilly.com/2005/03">
+           March 2005
+          </option>
+         </select>
+        </li>
+        <li>
+         <form action="http://radar.oreilly.com/" method="get">
+          <div>
+           <select class="postform" id="cat" name="cat" onchange="return this.form.submit()">
+            <option value="-1">
+             Archives by Topic
+            </option>
+            <option class="level-0" value="3">
+             Data
+            </option>
+            <option class="level-0" value="5443">
+             Design
+            </option>
+            <option class="level-0" value="5444">
+             Emerging Tech
+            </option>
+            <option class="level-0" value="4871">
+             IoT
+            </option>
+            <option class="level-0" value="9">
+             Programming
+            </option>
+            <option class="level-0" value="12">
+             Web Ops &amp; Performance
+            </option>
+            <option class="level-0" value="5355">
+             Web Platform
+            </option>
+           </select>
+           <noscript>
+            <div>
+             <input type="submit" value="View"/>
+            </div>
+           </noscript>
+          </div>
+         </form>
+        </li>
+        <li id="users">
+         <form action="http://radar.oreilly.com/" method="get">
+          <div>
+           <select class="" id="author" name="author" onchange="return this.form.submit()">
+            <option value="-1">
+             Archives by Author...
+            </option>
+            <option value="507">
+             A. Sinan Unur
+            </option>
+            <option value="508">
+             Aaron Sumner
+            </option>
+            <option value="4">
+             Adam DuVander
+            </option>
+            <option value="376">
+             Adam Flaherty
+            </option>
+            <option value="3">
+             Adam Messinger
+            </option>
+            <option value="5">
+             Adam Witwer
+            </option>
+            <option value="643">
+             Adrian Mendoza
+            </option>
+            <option value="686">
+             Akmal Chaudhri
+            </option>
+            <option value="2">
+             Alasdair Allan
+            </option>
+            <option value="588">
+             Alex Bordei
+            </option>
+            <option value="7">
+             Alex Bowyer
+            </option>
+            <option value="9">
+             Alex Iskold
+            </option>
+            <option value="6">
+             Alexander Macgillivray
+            </option>
+            <option value="607">
+             Alice Zheng
+            </option>
+            <option value="10">
+             Alistair Croll
+            </option>
+            <option value="471">
+             Allen Downey
+            </option>
+            <option value="11">
+             Allen Noren
+            </option>
+            <option value="12">
+             Allison Randal
+            </option>
+            <option value="482">
+             Ally MacDonald
+            </option>
+            <option value="477">
+             Alois Reitbauer
+            </option>
+            <option value="347">
+             Alysa Hutnik
+            </option>
+            <option value="605">
+             Amelia Bellamy-Royds
+            </option>
+            <option value="625">
+             Amr Awadallah
+            </option>
+            <option value="358">
+             Amy Heineike
+            </option>
+            <option value="467">
+             Amy Jollymore
+            </option>
+            <option value="426">
+             Amy Unruh
+            </option>
+            <option value="13">
+             Anant Jhingran
+            </option>
+            <option value="414">
+             Andreas Antonopoulos
+            </option>
+            <option value="501">
+             Andrew Collette
+            </option>
+            <option value="15">
+             Andrew Odewahn
+            </option>
+            <option value="14">
+             Andrew Savikas
+            </option>
+            <option value="16">
+             Andrew Shafer
+            </option>
+            <option value="619">
+             Andrew T Baker
+            </option>
+            <option value="510">
+             Andy Fitzgerald
+            </option>
+            <option value="18">
+             Andy Kirk
+            </option>
+            <option value="355">
+             Andy Konwinski
+            </option>
+            <option value="19">
+             Andy Oram
+            </option>
+            <option value="656">
+             Angela Rufino
+            </option>
+            <option value="309">
+             Ann Spencer
+            </option>
+            <option value="262">
+             Ann Waldo
+            </option>
+            <option value="359">
+             Anna Smith
+            </option>
+            <option value="562">
+             Anne Gentle
+            </option>
+            <option value="574">
+             Anni Ylagan
+            </option>
+            <option value="21">
+             Ari Gesher
+            </option>
+            <option value="20">
+             Aria Haghighi
+            </option>
+            <option value="410">
+             Ariya Hidayat
+            </option>
+            <option value="664">
+             Arnold Robbins
+            </option>
+            <option value="22">
+             Artur Bergman
+            </option>
+            <option value="658">
+             Arun Gupta
+            </option>
+            <option value="23">
+             Audrey Watters
+            </option>
+            <option value="293">
+             Avi Bryant
+            </option>
+            <option value="571">
+             Barb Edson
+            </option>
+            <option value="421">
+             Barbara Bermes
+            </option>
+            <option value="486">
+             Baron Schwartz
+            </option>
+            <option value="26">
+             Barry Devlin
+            </option>
+            <option value="624">
+             Barry O'Reilly
+            </option>
+            <option value="390">
+             Beau Cronin
+            </option>
+            <option value="419">
+             Ben Christensen
+            </option>
+            <option value="587">
+             Ben Evans
+            </option>
+            <option value="665">
+             Ben Henick
+            </option>
+            <option value="27">
+             Ben Lorica
+            </option>
+            <option value="610">
+             Benjamin Hindman
+            </option>
+            <option value="684">
+             Beth Massi
+            </option>
+            <option value="462">
+             Bill Higgins
+            </option>
+            <option value="591">
+             Bill Lubanovic
+            </option>
+            <option value="28">
+             Bill McCoy
+            </option>
+            <option value="461">
+             Bonnie Feldman
+            </option>
+            <option value="30">
+             Bradley Voytek
+            </option>
+            <option value="31">
+             Brady Forrest
+            </option>
+            <option value="539">
+             Brandon Satrom
+            </option>
+            <option value="32">
+             Brett McLaughlin
+            </option>
+            <option value="33">
+             Brett Sandusky
+            </option>
+            <option value="34">
+             Brett Sheppard
+            </option>
+            <option value="25">
+             Brian Ahier
+            </option>
+            <option value="480">
+             Brian Anderson
+            </option>
+            <option value="35">
+             Brian Boyer
+            </option>
+            <option value="533">
+             brian d foy
+            </option>
+            <option value="494">
+             Brian d'Alessandro
+            </option>
+            <option value="648">
+             Brian Foster
+            </option>
+            <option value="244">
+             Brian Jepson
+            </option>
+            <option value="646">
+             Brian Kardell
+            </option>
+            <option value="481">
+             Brian MacDonald
+            </option>
+            <option value="36">
+             Brian O'Leary
+            </option>
+            <option value="677">
+             Brian Rinaldi
+            </option>
+            <option value="38">
+             Brian Sawyer
+            </option>
+            <option value="672">
+             Brigitte Piniewski
+            </option>
+            <option value="37">
+             Bruce Stewart
+            </option>
+            <option value="666">
+             Carin Meier
+            </option>
+            <option value="39">
+             Carl Hewitt
+            </option>
+            <option value="40">
+             Carl Malamud
+            </option>
+            <option value="328">
+             Cathy O'Neil
+            </option>
+            <option value="483">
+             Chao (Ray) Feng
+            </option>
+            <option value="448">
+             Chiu-ki Chan
+            </option>
+            <option value="516">
+             Chris Cornutt
+            </option>
+            <option value="41">
+             Chris Meade
+            </option>
+            <option value="284">
+             Chris Vander Mey
+            </option>
+            <option value="300">
+             Chris Wiggins
+            </option>
+            <option value="44">
+             Christine Perey
+            </option>
+            <option value="42">
+             Ciara Byrne
+            </option>
+            <option value="43">
+             Cliff Miller
+            </option>
+            <option value="479">
+             Colt McAnlis
+            </option>
+            <option value="634">
+             Cornelia Lvy-Bencheton
+            </option>
+            <option value="640">
+             Cory Doctorow
+            </option>
+            <option value="306">
+             Courtney Nash
+            </option>
+            <option value="45">
+             Dale Dougherty
+            </option>
+            <option value="422">
+             Dan Saffer
+            </option>
+            <option value="577">
+             Danese Cooper
+            </option>
+            <option value="46">
+             Darren Barefoot
+            </option>
+            <option value="430">
+             Dave Himrod
+            </option>
+            <option value="47">
+             Dave McClure
+            </option>
+            <option value="556">
+             Dave Zwieback
+            </option>
+            <option value="663">
+             David Beyer
+            </option>
+            <option value="653">
+             David Cranor
+            </option>
+            <option value="435">
+             David Elfi
+            </option>
+            <option value="49">
+             David Leinweber
+            </option>
+            <option value="50">
+             David Recordon
+            </option>
+            <option value="48">
+             David Sims
+            </option>
+            <option value="559">
+             David Stephenson
+            </option>
+            <option value="51">
+             DC Denison
+            </option>
+            <option value="242">
+             Deni Auclair
+            </option>
+            <option value="313">
+             Derek Jacoby
+            </option>
+            <option value="660">
+             Dinesh Subhraveti
+            </option>
+            <option value="427">
+             Dino Esposito
+            </option>
+            <option value="53">
+             DJ Patil
+            </option>
+            <option value="416">
+             Doug Finke
+            </option>
+            <option value="52">
+             Doug Hill
+            </option>
+            <option value="695">
+             Doug Sillars
+            </option>
+            <option value="512">
+             Dr. Venkat Subramaniam
+            </option>
+            <option value="575">
+             Drew Dara-Abrams
+            </option>
+            <option value="698">
+             Duncan DeVore
+            </option>
+            <option value="348">
+             Duncan Ross
+            </option>
+            <option value="491">
+             Dusty Phillips
+            </option>
+            <option value="569">
+             DW Wheeler
+            </option>
+            <option value="54">
+             Dylan Field
+            </option>
+            <option value="55">
+             E.A. Vander Veer
+            </option>
+            <option value="56">
+             Edd Dumbill
+            </option>
+            <option value="236">
+             Edie Freedman
+            </option>
+            <option value="465">
+             Eli Goodman
+            </option>
+            <option value="392">
+             Elisabeth Robson
+            </option>
+            <option value="58">
+             Elizabeth Corcoran
+            </option>
+            <option value="544">
+             Ellen Friedman
+            </option>
+            <option value="570">
+             Elliott Hauser
+            </option>
+            <option value="514">
+             Elliotte Rusty Harold
+            </option>
+            <option value="434">
+             Emma Jane Westby
+            </option>
+            <option value="59">
+             Eoin Purcell
+            </option>
+            <option value="393">
+             Eric Freeman
+            </option>
+            <option value="682">
+             Eric Lippert
+            </option>
+            <option value="451">
+             Eric Redmond
+            </option>
+            <option value="60">
+             Eric Ries
+            </option>
+            <option value="500">
+             Ezra Haber Glenn
+            </option>
+            <option value="541">
+             Faye Williams
+            </option>
+            <option value="578">
+             Federico Castanedo
+            </option>
+            <option value="503">
+             Federico Lucifredi
+            </option>
+            <option value="62">
+             Fred Trotter
+            </option>
+            <option value="515">
+             Fred van den Bosch
+            </option>
+            <option value="68">
+             Gabe Zichermann
+            </option>
+            <option value="63">
+             Gavin Starks
+            </option>
+            <option value="463">
+             George Reese
+            </option>
+            <option value="627">
+             Gilad Rosner
+            </option>
+            <option value="519">
+             Glen Martin
+            </option>
+            <option value="67">
+             Greg Whisenant
+            </option>
+            <option value="680">
+             Gretchen Anderson
+            </option>
+            <option value="66">
+             Gretchen Giles
+            </option>
+            <option value="436">
+             Gustavo Franco
+            </option>
+            <option value="597">
+             Gwen Shapira
+            </option>
+            <option value="581">
+             Hadley Wickham
+            </option>
+            <option value="675">
+             Hagen Finley
+            </option>
+            <option value="513">
+             Hari K Gottipati
+            </option>
+            <option value="69">
+             Heather McCormack
+            </option>
+            <option value="670">
+             Helen Papagiannis
+            </option>
+            <option value="511">
+             Hew Wolff
+            </option>
+            <option value="70">
+             Howard Wen
+            </option>
+            <option value="71">
+             Hugh McGuire
+            </option>
+            <option value="668">
+             Ilya Grigorik
+            </option>
+            <option value="72">
+             Imran Ali
+            </option>
+            <option value="470">
+             J. Paul Reed
+            </option>
+            <option value="700">
+             James Bond
+            </option>
+            <option value="73">
+             James Bridle
+            </option>
+            <option value="74">
+             James Turner
+            </option>
+            <option value="338">
+             Janaya Williams
+            </option>
+            <option value="558">
+             Jane Sarasohn-Kahn
+            </option>
+            <option value="75">
+             Jason Grigsby
+            </option>
+            <option value="596">
+             Jason Strimpel
+            </option>
+            <option value="573">
+             Jay Kreps
+            </option>
+            <option value="529">
+             Jay McGavren
+            </option>
+            <option value="350">
+             Jayant Shekar
+            </option>
+            <option value="77">
+             Jeevan Padiyar
+            </option>
+            <option value="429">
+             Jeff Gothelf
+            </option>
+            <option value="375">
+             Jeff Needham
+            </option>
+            <option value="78">
+             Jeffrey Carr
+            </option>
+            <option value="530">
+             Jeffrey Carr
+            </option>
+            <option value="80">
+             Jenn Webb
+            </option>
+            <option value="81">
+             Jennifer Pahlka
+            </option>
+            <option value="583">
+             Jeremy Freeman
+            </option>
+            <option value="82">
+             Jeremy Howard
+            </option>
+            <option value="679">
+             Jeroen Janssens
+            </option>
+            <option value="83">
+             Jesper Andersen
+            </option>
+            <option value="438">
+             Jesse Anderson
+            </option>
+            <option value="84">
+             Jesse Robbins
+            </option>
+            <option value="391">
+             Jessica McKellar
+            </option>
+            <option value="594">
+             Jesus M. Gonzalez-Barahona
+            </option>
+            <option value="534">
+             Jez Humble
+            </option>
+            <option value="636">
+             Jim Scott
+            </option>
+            <option value="88">
+             Jim Stogdill
+            </option>
+            <option value="87">
+             Jimmy Guterman
+            </option>
+            <option value="342">
+             Jo Prichard
+            </option>
+            <option value="638">
+             Joanne Molesky
+            </option>
+            <option value="89">
+             JodeeRich
+            </option>
+            <option value="340">
+             Joe Procopio
+            </option>
+            <option value="413">
+             Johan Bergstrm
+            </option>
+            <option value="673">
+             John Adams
+            </option>
+            <option value="92">
+             John Allspaw
+            </option>
+            <option value="93">
+             John Battelle
+            </option>
+            <option value="457">
+             John Boxall
+            </option>
+            <option value="349">
+             John Feland
+            </option>
+            <option value="351">
+             John Foreman
+            </option>
+            <option value="86">
+             John Geraci
+            </option>
+            <option value="85">
+             John Graham-Cumming
+            </option>
+            <option value="678">
+             John Jay Hilfiger
+            </option>
+            <option value="611">
+             John King
+            </option>
+            <option value="94">
+             John Labovitz
+            </option>
+            <option value="564">
+             John Lindquist
+            </option>
+            <option value="495">
+             John Myles White
+            </option>
+            <option value="628">
+             John Piekos
+            </option>
+            <option value="635">
+             John Russell
+            </option>
+            <option value="95">
+             John Warren
+            </option>
+            <option value="561">
+             John Wilbanks
+            </option>
+            <option value="255">
+             Jon Bruner
+            </option>
+            <option value="498">
+             Jon Callas
+            </option>
+            <option value="555">
+             Jon Cowie
+            </option>
+            <option value="444">
+             Jon Roberts
+            </option>
+            <option value="101">
+             Jon Spinney
+            </option>
+            <option value="98">
+             Jon Udell
+            </option>
+            <option value="585">
+             Jonas Luster
+            </option>
+            <option value="96">
+             Jonathan Alexander
+            </option>
+            <option value="177">
+             Jonathan Reichental, Ph.D.
+            </option>
+            <option value="499">
+             Jonathon Thurman
+            </option>
+            <option value="97">
+             Jono Bacon
+            </option>
+            <option value="90">
+             Joseph Hellerstein
+            </option>
+            <option value="99">
+             Joseph J. Esposito
+            </option>
+            <option value="546">
+             Josh Lockhart
+            </option>
+            <option value="509">
+             Josh Simmons
+            </option>
+            <option value="683">
+             Josha Stella
+            </option>
+            <option value="100">
+             Joshua-Michle Ross
+            </option>
+            <option value="464">
+             Joy Beatty
+            </option>
+            <option value="103">
+             Jud Valeski
+            </option>
+            <option value="104">
+             Julie Steele
+            </option>
+            <option value="651">
+             Justin Dombrowski
+            </option>
+            <option value="106">
+             Justin Hall
+            </option>
+            <option value="107">
+             Justo Hidalgo
+            </option>
+            <option value="117">
+             Karl Fogel
+            </option>
+            <option value="108">
+             Kassia Krozser
+            </option>
+            <option value="112">
+             Kat Meyer
+            </option>
+            <option value="109">
+             Kate Eltham
+            </option>
+            <option value="110">
+             Kate Pullinger
+            </option>
+            <option value="453">
+             Kathryn Barrett
+            </option>
+            <option value="645">
+             Kathy Sierra
+            </option>
+            <option value="111">
+             Kathy Walrath
+            </option>
+            <option value="458">
+             Katie Cunningham
+            </option>
+            <option value="557">
+             Katie Miller
+            </option>
+            <option value="525">
+             Keith Comito
+            </option>
+            <option value="113">
+             Keith Fahlgren
+            </option>
+            <option value="114">
+             Ken Yarmosh
+            </option>
+            <option value="690">
+             Kevin Czinger
+            </option>
+            <option value="115">
+             Kevin Shockey
+            </option>
+            <option value="647">
+             Kevin Sitto
+            </option>
+            <option value="116">
+             Kevin Smokler
+            </option>
+            <option value="454">
+             Khaled El Emam
+            </option>
+            <option value="621">
+             Kieren James-Lubin
+            </option>
+            <option value="424">
+             Kipp Bradford
+            </option>
+            <option value="469">
+             Kit Seeborg
+            </option>
+            <option value="655">
+             Kiyoto Tamura
+            </option>
+            <option value="492">
+             kmatsudaira
+            </option>
+            <option value="118">
+             Kurt Cagle
+            </option>
+            <option value="523">
+             Lara Swanson
+            </option>
+            <option value="121">
+             Laura Dawson
+            </option>
+            <option value="412">
+             Laura Klein
+            </option>
+            <option value="339">
+             Laurel Ruma
+            </option>
+            <option value="122">
+             Laurie Petrycki
+            </option>
+            <option value="667">
+             Leah Hunter
+            </option>
+            <option value="123">
+             Leigh Dodds
+            </option>
+            <option value="125">
+             Liliana Bounegru
+            </option>
+            <option value="126">
+             Linda Stone
+            </option>
+            <option value="446">
+             Lisa Mann
+            </option>
+            <option value="127">
+             Liza Daly
+            </option>
+            <option value="626">
+             Lorna Jane Mitchell
+            </option>
+            <option value="623">
+             Lorne Lantz
+            </option>
+            <option value="593">
+             Luciano Ramalho
+            </option>
+            <option value="128">
+             Lucy Gray
+            </option>
+            <option value="129">
+             Lukas Biewald
+            </option>
+            <option value="151">
+             Mac Slocum
+            </option>
+            <option value="130">
+             Madhusudhan Konda
+            </option>
+            <option value="396">
+             Mandi Walls
+            </option>
+            <option value="489">
+             Manish Lachwani
+            </option>
+            <option value="132">
+             Marc Goodman
+            </option>
+            <option value="131">
+             Marc Hedlund
+            </option>
+            <option value="616">
+             Marie Beaugureau
+            </option>
+            <option value="133">
+             Marie Bjerede
+            </option>
+            <option value="134">
+             Mark Drapeau
+            </option>
+            <option value="447">
+             Mark Grover
+            </option>
+            <option value="652">
+             Mark Jeftovic
+            </option>
+            <option value="688">
+             Mark Lustig
+            </option>
+            <option value="431">
+             Mark Lutz
+            </option>
+            <option value="135">
+             Mark Nelson
+            </option>
+            <option value="554">
+             Mark Pacelle
+            </option>
+            <option value="150">
+             Mark Sigal
+            </option>
+            <option value="676">
+             Mark Zeman
+            </option>
+            <option value="136">
+             Marko Gargenta
+            </option>
+            <option value="612">
+             Martin Kalin
+            </option>
+            <option value="613">
+             Martin Kleppmann
+            </option>
+            <option value="291">
+             Mary Treseler
+            </option>
+            <option value="142">
+             Matt Garrish
+            </option>
+            <option value="567">
+             Matt Makai
+            </option>
+            <option value="473">
+             Matt Neuburg
+            </option>
+            <option value="140">
+             Matt Wood
+            </option>
+            <option value="137">
+             Matthew Burton
+            </option>
+            <option value="460">
+             Matthew Gast
+            </option>
+            <option value="408">
+             Matthew McCullough
+            </option>
+            <option value="468">
+             Matthew Russell
+            </option>
+            <option value="138">
+             Matthew Russell
+            </option>
+            <option value="387">
+             Max Kanat-Alexander
+            </option>
+            <option value="669">
+             Max Meyers
+            </option>
+            <option value="694">
+             Max Neunhffer
+            </option>
+            <option value="388">
+             Max Shron
+            </option>
+            <option value="637">
+             Meghan Athavale
+            </option>
+            <option value="289">
+             Meghan Blanchette
+            </option>
+            <option value="579">
+             Mehdi Daoudi
+            </option>
+            <option value="687">
+             Melissa DiEgidio
+            </option>
+            <option value="681">
+             Micah Godbolt
+            </option>
+            <option value="445">
+             Michael DeHaan
+            </option>
+            <option value="144">
+             Michael Driscoll
+            </option>
+            <option value="145">
+             Michael Ferrari
+            </option>
+            <option value="650">
+             Michael Freeman
+            </option>
+            <option value="456">
+             Michael Gold
+            </option>
+            <option value="450">
+             Michael Hunger
+            </option>
+            <option value="146">
+             Michael Jon Jensen
+            </option>
+            <option value="476">
+             Michael Lopp
+            </option>
+            <option value="532">
+             Michael McMillan
+            </option>
+            <option value="537">
+             Michael Scroggins
+            </option>
+            <option value="406">
+             Mike Amundsen
+            </option>
+            <option value="418">
+             Mike Barlow
+            </option>
+            <option value="147">
+             Mike Hendrickson
+            </option>
+            <option value="143">
+             Mike Honda
+            </option>
+            <option value="148">
+             Mike Loukides
+            </option>
+            <option value="487">
+             Mike Petrovich
+            </option>
+            <option value="149">
+             Mike Shatzkin
+            </option>
+            <option value="493">
+             Mitchell Hashimoto
+            </option>
+            <option value="352">
+             Naomi Robbins
+            </option>
+            <option value="152">
+             Nat Torkington
+            </option>
+            <option value="214">
+             Nate Osit
+            </option>
+            <option value="308">
+             Nathan Jepson
+            </option>
+            <option value="630">
+             Neal Ford
+            </option>
+            <option value="654">
+             Nicholas Tollervey
+            </option>
+            <option value="155">
+             Nick Bilton
+            </option>
+            <option value="156">
+             Nick Farina
+            </option>
+            <option value="420">
+             Nick Kolegraff
+            </option>
+            <option value="603">
+             Nick Lombardi
+            </option>
+            <option value="157">
+             Nick Ruffilo
+            </option>
+            <option value="341">
+             Nicolas Garcia Belmonte
+            </option>
+            <option value="697">
+             Nikhil Buduma
+            </option>
+            <option value="158">
+             Nikolaj Nyholm
+            </option>
+            <option value="159">
+             O'Reilly Radar
+            </option>
+            <option value="354">
+             O'Reilly Strata
+            </option>
+            <option value="497">
+             Ohad Samet
+            </option>
+            <option value="160">
+             Osman Rashid
+            </option>
+            <option value="161">
+             Pablo Francisco Arrieta Gomez
+            </option>
+            <option value="518">
+             Paco Nathan
+            </option>
+            <option value="693">
+             Pamela Pavliscak
+            </option>
+            <option value="162">
+             Pamela Samuelson
+            </option>
+            <option value="589">
+             Paris Buttfield-Addison
+            </option>
+            <option value="549">
+             Patrick Mulder
+            </option>
+            <option value="553">
+             Patrick Reynolds
+            </option>
+            <option value="671">
+             Paul Kedrosky
+            </option>
+            <option value="163">
+             Paul Spinrad
+            </option>
+            <option value="524">
+             Pete Hodgson
+            </option>
+            <option value="167">
+             Pete Warden
+            </option>
+            <option value="615">
+             Peter Arijs
+            </option>
+            <option value="166">
+             Peter Bennett
+            </option>
+            <option value="307">
+             Peter Cooper
+            </option>
+            <option value="371">
+             Peter Krautzberger
+            </option>
+            <option value="294">
+             Peter Laflin
+            </option>
+            <option value="590">
+             Peter Lewis
+            </option>
+            <option value="164">
+             Peter Meyers
+            </option>
+            <option value="521">
+             Philip Guo
+            </option>
+            <option value="455">
+             Philipp Janert
+            </option>
+            <option value="404">
+             Q Ethan McCallum
+            </option>
+            <option value="169">
+             Quinn Norton
+            </option>
+            <option value="172">
+             Rachel Roumeliotis
+            </option>
+            <option value="173">
+             Rael Dornfest
+            </option>
+            <option value="657">
+             Raffael Marty
+            </option>
+            <option value="522">
+             Rajat Bhargava
+            </option>
+            <option value="174">
+             Ramez Naam
+            </option>
+            <option value="175">
+             Randy Bias
+            </option>
+            <option value="176">
+             Raven Zachary
+            </option>
+            <option value="443">
+             Ray DiGiacomo, Jr.
+            </option>
+            <option value="263">
+             Renee DiResta
+            </option>
+            <option value="639">
+             Reynold Xin
+            </option>
+            <option value="485">
+             Richard Cook
+            </option>
+            <option value="439">
+             Richard Dallaway
+            </option>
+            <option value="423">
+             Richard Reese
+            </option>
+            <option value="552">
+             Richard Warburton
+            </option>
+            <option value="183">
+             Rob Tucker
+            </option>
+            <option value="179">
+             Robbie Allen
+            </option>
+            <option value="182">
+             Robert Kaye
+            </option>
+            <option value="181">
+             Robert Passarella
+            </option>
+            <option value="180">
+             Roberta Cairney
+            </option>
+            <option value="548">
+             Roger Chen
+            </option>
+            <option value="184">
+             Roger Magoulas
+            </option>
+            <option value="662">
+             Rogier DocWilco Mulhuijzen
+            </option>
+            <option value="287">
+             Ron Miller
+            </option>
+            <option value="178">
+             Roseanne Fallin
+            </option>
+            <option value="644">
+             Rune Madsen
+            </option>
+            <option value="661">
+             Russell J.T. Dyer
+            </option>
+            <option value="691">
+             Russell Jurney
+            </option>
+            <option value="484">
+             Ryan Bethencourt
+            </option>
+            <option value="551">
+             Ryan Neufeld
+            </option>
+            <option value="185">
+             Ryan Stewart
+            </option>
+            <option value="568">
+             Sam Newman
+            </option>
+            <option value="540">
+             Samuel Mullen
+            </option>
+            <option value="186">
+             Sanders Kleinfeld
+            </option>
+            <option value="191">
+             Sara Peyton
+            </option>
+            <option value="187">
+             Sara Winge
+            </option>
+            <option value="189">
+             Sarah Milstein
+            </option>
+            <option value="190">
+             Sarah Novotny
+            </option>
+            <option value="531">
+             Scott Jenson
+            </option>
+            <option value="566">
+             Scott Murray
+            </option>
+            <option value="563">
+             Scott Rich
+            </option>
+            <option value="192">
+             Scott Ruthfield
+            </option>
+            <option value="449">
+             Sean McGregor
+            </option>
+            <option value="649">
+             Sean O Sullivan
+            </option>
+            <option value="699">
+             Sebastien Goasguen
+            </option>
+            <option value="194">
+             Sbastien Pierre
+            </option>
+            <option value="547">
+             Semmy Purewal
+            </option>
+            <option value="409">
+             Seth Ladd
+            </option>
+            <option value="195">
+             Shahid Shah
+            </option>
+            <option value="617">
+             Shahin Farshchi
+            </option>
+            <option value="504">
+             Shai Almog
+            </option>
+            <option value="633">
+             Shannon Cutt
+            </option>
+            <option value="586">
+             Shyam Seshadri
+            </option>
+            <option value="196">
+             Silona Bonewald
+            </option>
+            <option value="576">
+             Simon Chan
+            </option>
+            <option value="215">
+             Simon Phipps
+            </option>
+            <option value="198">
+             Simon St. Laurent
+            </option>
+            <option value="197">
+             Simon Wardley
+            </option>
+            <option value="632">
+             Spencer Critchley
+            </option>
+            <option value="659">
+             Stefan Thies
+            </option>
+            <option value="620">
+             Stephen Elston
+            </option>
+            <option value="475">
+             Stephen O'Grady
+            </option>
+            <option value="363">
+             Stephen O'Grady
+            </option>
+            <option value="199">
+             Steve Souders
+            </option>
+            <option value="560">
+             Steven Citron-Pousty
+            </option>
+            <option value="602">
+             Steven Shorrock
+            </option>
+            <option value="417">
+             Stoyan Stefanov
+            </option>
+            <option value="674">
+             Susan Conant
+            </option>
+            <option value="200">
+             Suzanne Axtell
+            </option>
+            <option value="202">
+             Tara Hunt
+            </option>
+            <option value="572">
+             Terrence Dorsey
+            </option>
+            <option value="203">
+             Terry Jones
+            </option>
+            <option value="201">
+             Tim Anderson
+            </option>
+            <option value="606">
+             Tim Busbice
+            </option>
+            <option value="459">
+             Tim Darling
+            </option>
+            <option value="204">
+             Tim O'Reilly
+            </option>
+            <option value="205">
+             Timothy M. O'Brien
+            </option>
+            <option value="622">
+             Timothy McGovern
+            </option>
+            <option value="206">
+             Tish Shute
+            </option>
+            <option value="526">
+             Toby Inkster
+            </option>
+            <option value="207">
+             Todd Sattersten
+            </option>
+            <option value="432">
+             Tom Eisenmann
+            </option>
+            <option value="692">
+             Tom Pincince
+            </option>
+            <option value="208">
+             Tom Steinberg
+            </option>
+            <option value="209">
+             Tony Quartarolo
+            </option>
+            <option value="689">
+             Tony Shakib
+            </option>
+            <option value="502">
+             Trisha Gee
+            </option>
+            <option value="210">
+             Troy Topnik
+            </option>
+            <option value="211">
+             Tyler Bell
+            </option>
+            <option value="538">
+             Valeri Karpov
+            </option>
+            <option value="474">
+             Vandad Nahvandipoor
+            </option>
+            <option value="212">
+             Vanessa Fox
+            </option>
+            <option value="535">
+             Varun Nagaraj
+            </option>
+            <option value="696">
+             Vasant Dhar
+            </option>
+            <option value="346">
+             Will Cukierski
+            </option>
+            <option value="618">
+             William Mougayar
+            </option>
+            <option value="580">
+             William O'Connor
+            </option>
+            <option value="701">
+             Yanpei Chen
+            </option>
+            <option value="401">
+             Zigurd Mednieks
+            </option>
+           </select>
+           <noscript>
+            <div>
+             <input type="submit" value="View"/>
+            </div>
+           </noscript>
+          </div>
+         </form>
+        </li>
+       </ul>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="widget-container widget_text" id="text-10">
+       <h3 class="widget-title">
+        CONTACT US
+       </h3>
+       <div class="textwidget">
+        <p style=" font-size: 12px;  line-height: 1.3; font-weight: bold;">
+         Radar managing editor
+         <br/>
+         <a href="mailto:contactradar@oreilly.com?subject=Contact Radar">
+          Jenn Webb
+         </a>
+        </p>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+    </div>
+    <!-- #container -->
+   </div>
+   <!-- #main -->
+   <div id="footer" role="contentinfo">
+    <div id="colophon">
+     <div id="footer-top">
+      <div class="menu-social-btm">
+       <ul class="menu" id="menu-social-btn-bottom">
+        <li class="social twitter menu-item menu-item-type-custom menu-item-object-custom menu-item-48494" id="menu-item-48494">
+         <a href="http://twitter.com/oreillymedia">
+          Twitter
+         </a>
+        </li>
+        <li class="social youtube menu-item menu-item-type-custom menu-item-object-custom menu-item-48491" id="menu-item-48491">
+         <a href="http://youtube.com/oreillymedia">
+          YouTube
+         </a>
+        </li>
+        <li class="social slideshare menu-item menu-item-type-custom menu-item-object-custom menu-item-48492" id="menu-item-48492">
+         <a href="http://slideshare.net/oreillymedia">
+          Slideshare
+         </a>
+        </li>
+        <li class="social facebook menu-item menu-item-type-custom menu-item-object-custom menu-item-48493" id="menu-item-48493">
+         <a href="https://www.facebook.com/OReillyRadar">
+          Facebook
+         </a>
+        </li>
+        <li class="social googleplus menu-item menu-item-type-custom menu-item-object-custom menu-item-48495" id="menu-item-48495">
+         <a href="https://plus.google.com/105451978536505503907">
+          Google+
+         </a>
+        </li>
+        <li class="social rss menu-item menu-item-type-custom menu-item-object-custom menu-item-48496" id="menu-item-48496">
+         <a href="http://feeds.feedburner.com/oreilly/news">
+          RSS
+         </a>
+        </li>
+        <li class="all-rss menu-item menu-item-type-custom menu-item-object-custom menu-item-48497" id="menu-item-48497">
+         <a href="http://oreilly.com/feeds">
+          View All RSS Feeds &gt;
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <div class="execphpwidget">
+      <div id="multiColumnFooter">
+       <div id="footer-branding">
+        <p class="copyright">
+          2015, O'Reilly Media, Inc.
+        </p>
+        <p>
+         <span class="phone-number">
+          (707) 827-7019
+         </span>
+         <span class="phone-number">
+          (800) 889-8969
+         </span>
+        </p>
+        <p class="trademarks">
+         All trademarks and registered trademarks appearing on oreilly.com are the property of their respective owners.
+        </p>
+       </div>
+       <div class="contentSectionBlock">
+        <!-- style="width:25%;" -->
+        <div class="contentSectionContainer">
+         <h3>
+          About O'Reilly
+         </h3>
+         <div class="menu-about-oreilly-container">
+          <ul class="menu" id="menu-about-oreilly">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-50110" id="menu-item-50110">
+            <a href="http://radar.oreilly.com/about/">
+             About OReilly Radar
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-67911" id="menu-item-67911">
+            <a href="http://radar.oreilly.com/radar-contributors/">
+             Radar Contributors
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48510" id="menu-item-48510">
+            <a href="http://oreilly.com/academic/">
+             Academic Solutions
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48511" id="menu-item-48511">
+            <a href="http://oreilly.com/jobs/">
+             Jobs
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48512" id="menu-item-48512">
+            <a href="http://oreilly.com/contact.html">
+             Contacts
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48513" id="menu-item-48513">
+            <a href="http://oreilly.com/about/">
+             Corporate Information
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48514" id="menu-item-48514">
+            <a href="http://press.oreilly.com/index.html">
+             Press Room
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48515" id="menu-item-48515">
+            <a href="http://oreilly.com/oreilly/privacy.csp">
+             Privacy Policy
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48516" id="menu-item-48516">
+            <a href="http://oreilly.com/terms/">
+             Terms of Service
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48517" id="menu-item-48517">
+            <a href="http://oreilly.com/oreilly/author/intro.csp">
+             Writing for OReilly
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-68743" id="menu-item-68743">
+            <a href="http://www.oreilly.com/about/editorial_independence.html">
+             Editorial Independence
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <!-- style="width:25%;" -->
+        <div class="contentSectionContainer">
+         <h3>
+          Community
+         </h3>
+         <div class="menu-community-2-container">
+          <ul class="menu" id="menu-community-2">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48518" id="menu-item-48518">
+            <a href="http://oreilly.com/authors/">
+             Authors
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48519" id="menu-item-48519">
+            <a href="http://oreilly.com/community/">
+             Community &amp; Featured Users
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48520" id="menu-item-48520">
+            <a href="http://forums.oreilly.com/">
+             Forums
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48521" id="menu-item-48521">
+            <a href="https://members.oreilly.com/">
+             Membership
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48522" id="menu-item-48522">
+            <a href="http://elists.oreilly.com/">
+             Newsletters
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48523" id="menu-item-48523">
+            <a href="http://answers.oreilly.com/">
+             OReilly Answers
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48524" id="menu-item-48524">
+            <a href="http://oreilly.com/feeds/">
+             RSS Feeds
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-56120" id="menu-item-56120">
+            <a href="http://chimera.labs.oreilly.com/">
+             OReilly Chimera (beta)
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <!-- style="width:25%;" -->
+        <div class="contentSectionContainer">
+         <h3>
+          Partner Sites
+         </h3>
+         <div class="menu-partner-sites-container">
+          <ul class="menu" id="menu-partner-sites">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48503" id="menu-item-48503">
+            <a href="http://makezine.com/" target="_blank">
+             makezine.com
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48504" id="menu-item-48504">
+            <a href="http://makerfaire.com/" target="_blank">
+             makerfaire.com
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55273" id="menu-item-55273">
+            <a href="http://craftzine.com/" target="_blank">
+             craftzine.com
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55274" id="menu-item-55274">
+            <a href="http://igniteshow.com/" target="_blank">
+             igniteshow.com
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55275" id="menu-item-55275">
+            <a href="https://developer.paypal.com/" target="_blank">
+             PayPal Developer Zone
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-55276" id="menu-item-55276">
+            <a href="http://blogs.forbes.com/oreillymedia/" target="_blank">
+             OReilly Insights on Forbes.com
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <!-- style="width:24%;" -->
+        <div class="contentSectionContainer">
+         <h3>
+          Shop O'Reilly
+         </h3>
+         <div class="menu-shop-oreilly-container">
+          <ul class="menu" id="menu-shop-oreilly">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48505" id="menu-item-48505">
+            <a href="http://shop.oreilly.com/category/customer-service.do">
+             Customer Service
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48506" id="menu-item-48506">
+            <a href="http://shop.oreilly.com/category/customer-service.do">
+             Contact Us
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48507" id="menu-item-48507">
+            <a href="http://shop.oreilly.com/category/customer-service/shipping-information.do">
+             Shipping Information
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48508" id="menu-item-48508">
+            <a href="http://shop.oreilly.com/category/customer-service/ordering-payment.do">
+             Ordering &amp; Payment
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-56665" id="menu-item-56665">
+            <a href="http://oreilly.com/affiliates/">
+             Affiliate Program
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-48509" id="menu-item-48509">
+            <a href="http://shop.oreilly.com/category/customer-service/oreilly-guarantee.do">
+             The OReilly Guarantee
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- #colophon -->
+   </div>
+   <!-- #footer -->
+  </div>
+  <!-- #wrapper -->
+  <script language="JavaScript" type="text/javascript">
+   var s_account="orradar,orglobal" // change report suite ID accordingly
+  </script>
+  <!-- SiteCatalyst code version: H.20.3. Copyright 1997-2009 Omniture, Inc. More info available at http://www.omniture.com -->
+  <script language="JavaScript" src="http://cdn.oreillystatic.com/assets/js/s_code.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" type="text/javascript">
+   s.pageName="radar:the state of mapping apis"
+s.channel= "radar"
+s.prop1="radar:radar"
+s.prop2="radar:radar:radar"
+s.prop3="radar:radar:radar:radar"
+s.prop4="article"
+s.hier1="radar,radar,radar,radar"
+s.prop5="the state of mapping apis"
+s.prop6="RD42868"
+s.prop7="09/07/2010" // publish date
+//s.prop15=""
+//These props should be set when a blog/article is read, post or reply made.
+s.prop21="adam duvander" // author name
+s.prop22="radar" // blog name
+s.prop23="the state of mapping apis" // entry title
+s.prop24="09/07/2010" // post date
+//s.prop25="" // days since last post
+s.prop26="tuesday" // day of week
+s.prop27="" // Level
+/* Conversion Variables */
+s.campaign=""
+s.events=""
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//--&gt;
+  </script>
+  <!-- End SiteCatalyst code version: H.20.2. -->
+  <script type="text/javascript">
+   var _sf_async_config={uid:1632,domain:"radar.oreilly.com"};
+(function(){
+  function loadChartbeat() {
+    window._sf_endpt=(new Date()).getTime();
+    var e = document.createElement('script');
+    e.setAttribute('language', 'javascript');
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src',
+       (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+       "js/chartbeat.js");
+    document.body.appendChild(e);
+  }
+  var oldonload = window.onload;
+  window.onload = (typeof window.onload != 'function') ?
+     loadChartbeat : function() { oldonload(); loadChartbeat(); };
+})();
+  </script>
+  <script type="text/javascript">
+   setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0011/6381.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <style type="text/css">
+   #newsletter-popup-overlay { display: none; position: absolute; z-index: 200; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); background: none\9; }
+#newsletter-popup-overlay .popup { overflow: hidden; margin: 10% auto 0; background-color: #f9f9f9; text-align: center; width: 740px; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.3); -moz-box-shadow: 0 0 15px rgba(0,0,0,0.3); box-shadow: 0 0 15px rgba(0,0,0,0.3); border: 2px solid #ddd; }
+#newsletter-popup-overlay .popup .popup-header { background-color: #fff; padding: 10px; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.3); -moz-box-shadow: 0 0 15px rgba(0,0,0,0.3); box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+#newsletter-popup-overlay .popup.data .popup-header { background: #fff url('//cdn.oreillystatic.com/oreilly/images/data-nl-popup-fish.jpg') -4px center no-repeat; }
+#newsletter-popup-overlay .popup.programming .popup-header { background: #fff url('//cdn.oreillystatic.com/oreilly/images/code-nl-popup-jerboa.jpg') -4px center no-repeat; }
+#newsletter-popup-overlay .popup.solid .popup-header { background: #fff url('//cdn.oreillystatic.com/oreilly/images/code-nl-popup-jerboa.jpg') -4px center no-repeat; }
+#newsletter-popup-overlay .popup.velocity .popup-header { background: #fff url('//cdn.oreillystatic.com/oreilly/images/velocity-nl-popup-greyhound.jpg') -4px bottom no-repeat; }
+#newsletter-popup-overlay .popup .popup-header a.close { font-size: 16px; line-height: 19px; color: #999; display: block; padding-right: 24px; float: right; background: transparent url('//cdn.oreillystatic.com/oreilly/images/close-icon-19x19.png') right 0 no-repeat; }
+#newsletter-popup-overlay .popup .popup-header a.close:hover { color: #666; text-decoration: none; background: transparent url('//cdn.oreillystatic.com/oreilly/images/close-icon-19x19.png') right -100px no-repeat; }
+#newsletter-popup-overlay .popup .popup-header h3 { max-width: 500px; width: 100%; margin: 20px auto 5px auto; padding: 0; font-size: 40px; line-height: 44px; font-weight: normal; }
+#newsletter-popup-overlay .popup .popup-header p { max-width: 500px; width: 100%; margin: 0 auto 10px; padding: 0; font-size: 20px; line-height: 28px; font-weight: normal; }
+#newsletter-popup-overlay .popup-form { margin: 15px auto 0; padding: 10px 10px 5px 10px; text-align: left; }
+#newsletter-popup-overlay #newsletter-popup-frame { display: block; border: none; padding: 0; margin: 0 auto; width: 100%; max-width: 450px; height: 100px; text-align: left; }
+@media screen and (max-width: 950px) {
+  #newsletter-popup-overlay .popup{ width: 96% !important; }
+}
+@media screen and (max-width:740px) {
+  #newsletter-popup-overlay .popup.data .popup-header, #newsletter-popup-overlay .popup.programming .popup-header, #newsletter-popup-overlay .popup.solid .popup-header, #newsletter-popup-overlay .popup.velocity .popup-header { background: #fff; }
+  #newsletter-popup-overlay .popup .popup-header h3 { font-size:30px; line-height:32px; }
+}
+  </style>
+  <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/newsletter.js" type="text/javascript">
+  </script>
+  <!--Plugin WP Missed Schedule 2011.0920.2011 Active-->
+  <script type="text/javascript">
+   // &lt;![CDATA[
+        var disqus_shortname = 'oreillyradar';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i &lt; nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]&gt;
+  </script>
+  <!-- MathJax Latex Plugin installed: Disabled as no shortcodes on this page -->
+  <script src="http://s.radar.oreilly.com/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://contextlysitescripts.contextly.com/kit/assets/2.4/libraries--easy-xdm.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var Contextly = [];
+Contextly = {"ajax_url":"http:\/\/radar.oreilly.com\/wp-admin\/admin-ajax.php","api_server":"http:\/\/rest.contextly.com\/","main_server":"https:\/\/contextly.com\/","editor_url":"http:\/\/radar.oreilly.com\/wp-admin\/admin.php?page=contextly_overlay_dialog&amp;noheader","app_id":"radaroreilly","settings":[],"admin":false,"mode":"live","https":false,"version":"1.4.2","ajax_nonce":"c79d2b2c98","render_link_widgets":true};;
+/* ]]&gt; */
+  </script>
+  <script src="http://contextlysitescripts.contextly.com/kit/assets/2.4/widgets--page-view.js" type="text/javascript">
+  </script>
+  <script src="http://contextlysitescripts.contextly.com/wp_plugin/1.4.2/js/contextly-wordpress.js" type="text/javascript">
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/plugins/monarch/js/idle-timer.min.js?ver=1.2.3" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var monarchSettings = {"ajaxurl":"http:\/\/radar.oreilly.com\/wp-admin\/admin-ajax.php","pageurl":"http:\/\/radar.oreilly.com\/2010\/09\/the-state-of-mapping-apis-five.html","stats_nonce":"7d1e5ff6f5","share_counts":"70641ed815","follow_counts":"3a94d8ef6d","total_counts":"10fa3ead96","media_single":"bb7576bcd2","media_total":"06a4800dad","generate_all_window_nonce":"2dbb4a44ef","no_img_message":"No images available for sharing on this page"};
+/* ]]&gt; */
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/plugins/monarch/js/custom.js?ver=1.2.3" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   jQuery(document).ready(function(){
+  jQuery('.fluid-width-video-wrapper iframe').each(function(){
+    var youtube_url = jQuery(this).attr('src');
+    if(youtube_url.substring(0,2) == "//"){
+      youtube_url = youtube_url.substring(2);
+    }
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&amp;v=))((\w|-){11})(?:\S+)?$/;
+    if(youtube_url.match(p)){
+      var youtube = youtube_url.split('/');
+      var youtube_last_index = youtube[4].split('?');
+      var youtube_id = youtube_last_index[0];
+      var new_div = document.createElement("div");
+      jQuery(new_div).addClass('js-lazyYT');
+      jQuery(new_div).attr('data-youtube-id',youtube_id);
+      jQuery(new_div).attr('data-ratio','16:9');
+      jQuery(this).after(new_div);
+      jQuery(this).parent().css("padding","0");
+      jQuery(this).remove();
+      jQuery('.lazyYT-title').hide();
+    }
+  });
+  jQuery('.js-lazyYT').lazyYT();
+});
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/jquery.js" type="text/javascript">
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/jquery.fitvids.js" type="text/javascript">
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/lazyYT.min.js" type="text/javascript">
+  </script>
+  <script src="http://s.radar.oreilly.com/wp-content/themes/radar/js/script.js??ss=1" type="text/javascript">
+  </script>
+  <!-- PROTOTYPE MESSAGE CODE -->
+  <script type="text/javascript">
+   var visitBetaCookie = false;
+
+  function checkBetaCookie() {
+    //Check for visitbeta cookie
+    var cookieArray = document.cookie.split(";");
+    var x,y;
+    for (var i = 0 ; i &lt; cookieArray.length; i++) {
+        x = cookieArray[i].substr(0, cookieArray[i].indexOf("="));
+        y = cookieArray[i].substr(cookieArray[i].indexOf("=") + 1);
+        x = x.replace(/^\s+|\s+$/g,"");
+        if (x == "visitbeta") {
+            if (y == "viewed") {
+                visitBetaCookie = true;
+            }
+        }
+    }
+  }
+  checkBetaCookie();
+
+  function setBetaCookie() {
+    var cookieDate = new Date();
+    cookieDate.setTime(cookieDate.getTime()+(360*24*60*60*1000));
+    var cookieExpires = "; expires="+cookieDate.toGMTString();
+    document.cookie = "visitbeta=viewed; " + cookieExpires + "; path=/";
+  }
+
+  jQuery('document').ready(function() {
+    var visitBeta =  $('#visit-beta');
+    if (!visitBetaCookie) {
+      visitBeta.css('display','block');
+    }
+    visitBeta.find('.hide').on('click', function(e) {
+      e.preventDefault();
+      visitBeta.css('display','none');
+
+      //Track click
+      var s=s_gi(s_account); s.eVar23='radar-visit-beta-hide'; s.events='event5'; s.linkTrackVars='eVar23,events'; s.linkTrackEvents='event5'; s.tl(true,'o','Click');
+
+      //Hide banner permanently
+      setBetaCookie();
+    });
+
+    visitBeta.find('.message').on('click', function() {
+      //Track click
+      var s=s_gi(s_account); s.eVar23='radar-visit-beta-go'; s.events='event5'; s.linkTrackVars='eVar23,events'; s.linkTrackEvents='event5'; s.tl(true,'o','Click');
+    });
+
+  });
+  </script>
+  <!-- PROTOTYPE MESSAGE CODE End-->
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() 
+  { (i[r].q=i[r].q||[]).push(arguments)} 
+  ,i[r].l=1*new 
+  Date();a=s.createElement(o), 
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) 
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); 
+  ga('create', 'UA-22979035-1', 'auto'); 
+  ga('send', 'pageview');
+  </script>
+ </body>
+</html>

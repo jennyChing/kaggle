@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Partager trs simplement des fichiers avec Python SimpleHTTPServer | Le blog de Seboss666
+  </title>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://blog.seboss666.info/xmlrpc.php" rel="pingback"/>
+  <link href="http://blog.seboss666.info/feed/" rel="alternate" title="Le blog de Seboss666  Flux" type="application/rss+xml"/>
+  <link href="http://blog.seboss666.info/comments/feed/" rel="alternate" title="Le blog de Seboss666  Flux des commentaires" type="application/rss+xml"/>
+  <link href="http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/feed/" rel="alternate" title="Le blog de Seboss666  Partager trs simplement des fichiers avec Python SimpleHTTPServer Flux des commentaires" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/blog.seboss666.info\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://blog.seboss666.info/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css" id="crayon-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/plugins/crayon-syntax-highlighter/themes/monokai/monokai.css" id="crayon-theme-monokai-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/plugins/crayon-syntax-highlighter/fonts/monaco.css" id="crayon-font-monaco-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/plugins/responsive-lightbox/assets/swipebox/css/swipebox.min.css" id="responsive-lightbox-swipebox-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/themes/simone/style.css" id="simone-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/themes/simone/layouts/content-sidebar.css" id="simone-layout-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/plugins/bl-google-fonts/css/lato.css" id="simone-google-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.seboss666.info/wp-content/themes/simone/fonts/font-awesome/css/font-awesome.min.css" id="simone_fontawesome-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://blog.seboss666.info/wp-includes/js/jquery/jquery.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-includes/js/jquery/jquery-migrate.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.7.1","is_admin":"0","ajaxurl":"http:\/\/blog.seboss666.info\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Faites %s pour copier, %s pour coller","minimize":"Click To Expand Code"};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/plugins/responsive-lightbox/assets/swipebox/js/jquery.swipebox.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var rlArgs = {"script":"swipebox","selector":"lightbox","customEvents":"","activeGalleries":"1","animation":"1","hideCloseButtonOnMobile":"0","removeBarsOnMobile":"0","hideBars":"1","hideBarsDelay":"5000","videoMaxWidth":"1080","useSVG":"1","loopAtEnd":"0"};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/plugins/responsive-lightbox/js/front.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/picturefill.min.js" type="text/javascript">
+  </script>
+  <link href="http://blog.seboss666.info/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://blog.seboss666.info/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://blog.seboss666.info/2015/04/tutoyer-veut-il-dire-manquer-de-respect/" rel="prev" title="Tutoyer veut-il dire manquer de respect ?"/>
+  <link href="http://blog.seboss666.info/2015/04/linux-dans-votre-vie-quotidienne/" rel="next" title="Linux dans votre vie quotidienne"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/" rel="canonical"/>
+  <link href="http://blog.seboss666.info/?p=1747" rel="shortlink"/>
+  <style type="text/css">
+   .single-post-thumbnail { background-color: #eaeaea; }
+  </style>
+  <style type="text/css">
+   .site-branding {
+            background: ;
+        }
+
+        .category-list a:hover,
+        .entry-meta a:hover,
+        .tag-links a:hover,
+        .widget-area a:hover,
+        .nav-links a:hover,
+        .comment-meta a:hover,
+        .continue-reading a,
+        .entry-title a:hover,
+        .entry-content a,
+        .comment-content a {
+            color: ;
+        }
+
+        .border-custom {
+            border:  solid 1px;
+        }
+  </style>
+  <style id="custom-background-css" type="text/css">
+   body.custom-background { background-color: #eaeaea; background-image: url('http://blog.seboss666.info/wp-content/uploads/2015/01/pattern.gif'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+  </style>
+ </head>
+ <body class="single single-post postid-1747 single-format-standard custom-background">
+  <div class="hfeed site" id="page">
+   <header class="site-header" id="masthead" role="banner">
+    <a class="skip-link screen-reader-text" href="#content">
+     Passer directement au contenu
+    </a>
+    <div class="site-branding header-background-image" style="background-image: url(http://blog.seboss666.info/wp-content/uploads/2015/01/cropped-matrix-twbanner.jpg)">
+     <div class="title-box">
+      <h1 class="site-title">
+       <a href="http://blog.seboss666.info/" rel="home">
+        Le blog de Seboss666
+       </a>
+      </h1>
+      <h2 class="site-description">
+       Les divagations d'un pseudo-geek curieux
+      </h2>
+     </div>
+    </div>
+    <nav class="main-navigation clear" id="site-navigation" role="navigation">
+     <h1 class="menu-toggle">
+      <a href="#">
+       Menu
+      </a>
+     </h1>
+     <div class="menu-menu-principal-container">
+      <ul class="menu" id="menu-menu-principal">
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-79" id="menu-item-79">
+        <a href="http://blog.seboss666.info">
+         Accueil
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-78" id="menu-item-78">
+        <a href="http://blog.seboss666.info/category/astuces/">
+         Astuces
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-77" id="menu-item-77">
+        <a href="http://blog.seboss666.info/category/sysadmin/">
+         Sysadmin
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1366" id="menu-item-1366">
+        <a href="http://blog.seboss666.info/category/vulgarisation/">
+         Vulgarisation
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1120" id="menu-item-1120">
+        <a href="http://blog.seboss666.info/category/web/">
+         Web
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-480" id="menu-item-480">
+        <a href="http://blog.seboss666.info/category/mobilite/">
+         Mobilit
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-100" id="menu-item-100">
+        <a href="http://blog.seboss666.info/category/humeur/">
+         Humeur
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-191" id="menu-item-191">
+        <a href="http://blog.seboss666.info/category/projets/">
+         Projets
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-80" id="menu-item-80">
+        <a href="http://blog.seboss666.info/category/divers/">
+         Divers
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-670" id="menu-item-670">
+        <a href="http://blog.seboss666.info/dogecoin/">
+         Dogecoin
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1427" id="menu-item-1427">
+        <a href="http://blog.seboss666.info/feed" title="RSS">
+         RSS
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="search-toggle">
+      <i class="fa fa-search">
+      </i>
+      <a class="screen-reader-text" href="#search-container">
+       Rechercher
+      </a>
+     </div>
+     <div class="menu-social" id="menu-social">
+      <ul class="menu-items" id="menu-social-items">
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1276" id="menu-item-1276">
+        <a href="https://twitter.com/Seboss666">
+         <span class="screen-reader-text">
+          lment du menu
+         </span>
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1277" id="menu-item-1277">
+        <a href="https://youtube.com/user/tocmorpheus/">
+         <span class="screen-reader-text">
+          lment du menu
+         </span>
+        </a>
+       </li>
+      </ul>
+     </div>
+    </nav>
+    <!-- #site-navigation -->
+    <div class="search-box-wrapper clear hide" id="header-search-container">
+     <div class="search-box clear">
+      <form action="http://blog.seboss666.info/" class="search-form" method="get" role="search">
+       <label>
+        <span class="screen-reader-text">
+         Rechercher:
+        </span>
+        <input class="search-field" name="s" placeholder="Recherche" title="Rechercher:" type="search" value=""/>
+       </label>
+       <input class="search-submit" type="submit" value="Rechercher"/>
+      </form>
+     </div>
+    </div>
+   </header>
+   <!-- #masthead -->
+   <div class="site-content" id="content">
+    <div class="content-area" id="primary">
+     <main class="site-main" id="main" role="main">
+      <article class="post-1747 post type-post status-publish format-standard has-post-thumbnail hentry category-astuces tag-fichiers tag-http tag-linux tag-partage tag-python tag-windows" id="post-1747">
+       <div class="single-post-thumbnail clear">
+        <div class="image-shifter">
+         <picture>
+          <!--[if IE 9]&gt;&lt;video style="display: none;"&gt;&lt;![endif]-->
+          <source media="(min-width: 800px)" srcset="http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic.jpg, http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic.jpg 2x">
+           <source media="(min-width: 400px)" srcset="http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic-800x237.jpg, http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic.jpg 2x">
+            <source srcset="http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic-400x118.jpg, http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic-800x237.jpg 2x">
+             <!--[if IE 9]&gt;&lt;/video&gt;&lt;![endif]-->
+             <img alt="Partager trs simplement des fichiers avec Python SimpleHTTPServer" srcset="http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic-400x118.jpg, http://blog.seboss666.info/wp-content/uploads/2015/03/python-logo-generic-800x237.jpg 2x"/>
+            </source>
+           </source>
+          </source>
+         </picture>
+        </div>
+       </div>
+       <header class="entry-header clear">
+        <div class="category-list">
+         <a href="http://blog.seboss666.info/category/astuces/" rel="category tag">
+          Astuces
+         </a>
+        </div>
+        <h1 class="entry-title">
+         Partager trs simplement des fichiers avec Python SimpleHTTPServer
+        </h1>
+        <div class="entry-meta">
+         <span class="byline">
+          Rdig par
+          <span class="author vcard">
+           <a class="url fn n" href="http://blog.seboss666.info/author/seboss666/">
+            Seboss666
+           </a>
+          </span>
+         </span>
+         <span class="mobile-hide">
+          le
+         </span>
+         <span class="posted-on">
+          <a href="http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/" rel="bookmark">
+           <time class="entry-date published" datetime="2015-04-08T18:00:22+00:00">
+            8 avril, 2015
+           </time>
+           <time class="updated" datetime="2015-04-28T13:55:13+00:00">
+            28 avril, 2015
+           </time>
+          </a>
+         </span>
+         <span class="mobile-hide">
+          .
+         </span>
+         <span class="comments-link">
+          <a href="http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/#respond">
+           <span class="dsq-postid" data-dsqidentifier="1747 http://blog.seboss666.info/?p=1747">
+            Laissez un commentaire
+           </span>
+          </a>
+         </span>
+        </div>
+        <!-- .entry-meta -->
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <div style="text-align: left">
+         <div style="width: 100%;">
+          <a href="https://twitter.com/share?url=http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/&amp;text=Partager trs simplement des fichiers avec Python SimpleHTTPServer&amp;via=seboss666" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=700');return false;" rel="nofollow" target="_blank" title="Twitter">
+           <img alt="Twitter" src="http://blog.seboss666.info/wp-content/uploads/2013/10/sb_twitter_icon.png"/>
+          </a>
+          <a href="https://www.facebook.com/sharer.php?u=http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/&amp;t=Partager trs simplement des fichiers avec Python SimpleHTTPServer" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=500,width=700');return false;" rel="nofollow" target="_blank" title="Facebook">
+           <img alt="Facebook" src="http://blog.seboss666.info/wp-content/uploads/2013/10/sb_facebook_icon.png"/>
+          </a>
+          <a href="https://plus.google.com/share?url=http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/&amp;hl=fr" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=650');return false;" rel="nofollow" target="_blank" title="Google +">
+           <img alt="Google Plus" src="http://blog.seboss666.info/wp-content/uploads/2013/10/sb_gplus_icon.png"/>
+          </a>
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/&amp;title=Partager trs simplement des fichiers avec Python SimpleHTTPServer" onclick="javascript:window.open(this.href, '','menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=650');return false;" rel="nofollow" target="_blank" title="Linkedin">
+           <img alt="Linkedin" src="http://blog.seboss666.info/wp-content/uploads/2013/10/sb_linkedin_icon.png"/>
+          </a>
+          <a href="mailto:?subject=Partager trs simplement des fichiers avec Python SimpleHTTPServer&amp;body=http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/" rel="nofollow" target="_blank" title="Envoyer par mail">
+           <img alt="email" src="http://blog.seboss666.info/wp-content/uploads/2013/10/sb_email_icon.png"/>
+          </a>
+          <a href="http://blog.seboss666.info/dogecoin/" rel="nofollow" style="margin-right:0px;" target="_blank" title="Tip DogeCoin">
+           <img alt="dogecoin" src="http://blog.seboss666.info/wp-content/uploads/2014/03/doge_icon.png"/>
+          </a>
+         </div>
+        </div>
+        <p style="text-align: justify;">
+         Les mthodes pour partager des dossiers/fichiers sont nombreuses pour nos machines, que ce soit sous Windows ou Linux : CIFS/Samba, SSH, FTP, NFS et mine de rien, ce bon vieux HTTP. Aussi surprenant que a paraisse, pour du partage simple, cest probablement la mthode la plus simple, la plus rapide, si lon dispose de Python.
+        </p>
+        <p style="text-align: justify;">
+         <span id="more-1747">
+         </span>
+        </p>
+        <p style="text-align: justify;">
+         Configurer un partage de dossiers sous Windows ou Linux nest pas toujours sans difficult. Je nvoque mme pas SSH, surtout si vous suivez
+         <a href="http://blog.seboss666.info/2015/03/quelques-bonnes-pratiques-de-securisation-dun-serveur-linux-partie-1/" target="_blank" title="Quelques bonnes pratiques de scurisation dun serveur Linux, partie 1">
+          mes recommandations
+         </a>
+         , et les Windowsiens sont exclus de cette mthode. FTP demande aussi beaucoup dattention. NFS est assez lourd  mettre en place et plutt rigide, et en plus, demande un peu de travail pour rester en scurit. Reste donc lHTTP.
+        </p>
+        <h3 style="text-align: justify;">
+         Un petit serveur Web, mais pas celui que vous croyez
+        </h3>
+        <p style="text-align: justify;">
+         Les gens qui pensent serveur Web/HTTP clameront tout de suite Apache, Nginx, Lighttpd ou que sais-je encore. Tous ces serveurs ont besoin dune configuration minimale qui prend  peu prs autant de temps que les solutions voques plus haut, donc ne conviennent pas  du trs rapide.
+        </p>
+        <p style="text-align: justify;">
+         En effet, Python 2.6 et suivants disposent dun module diablement pratique, appel
+         <span style="font-family: courier new,courier;">
+          SimpleHTTPServer
+         </span>
+         pour Python 2, et plus sobrement
+         <span style="font-family: courier new,courier;">
+          http.server
+         </span>
+         pour Python 3, qui comme son nom lindique, est un serveur HTTP simple. Et il ne vole pas son nom, tellement les fonctions sont limites. En contrepartie, non seulement il est vite lanc (une seule ligne de commande suffit), mais en plus, a le rend portable comme jamais.
+        </p>
+        <h3 style="text-align: justify;">
+         Une seule commande pour les gouverner tous
+        </h3>
+        <p style="text-align: justify;">
+         Il vous suffit donc de disposer dune version de Python au minimum pas trop ancienne (2.7.3 sous Debian Wheezy fonctionne), et dune fentre avec une invite de commandes, et la possibilit dobtenir des droits administrateurs avec (root ou
+         <strong>
+          <span style="font-family: courier new,courier;">
+           sudo
+          </span>
+         </strong>
+         pour les linuxiens, console en mode administrateur sous Windows).
+        </p>
+        <p style="text-align: justify;">
+         <a data-rel="lightbox-0" href="http://blog.seboss666.info/wp-content/uploads/2015/03/pythonshare-windowscmdadmin.png">
+          <img alt="pythonshare-windowscmdadmin" class="aligncenter size-medium wp-image-1751" height="300" src="http://blog.seboss666.info/wp-content/uploads/2015/03/pythonshare-windowscmdadmin-256x300.png" width="256"/>
+         </a>
+        </p>
+        <p style="text-align: justify;">
+         Dans cette console, il faut vous rendre dans le dossier que vous souhaitez partager (au moyen de la commande
+         <strong>
+          <span style="font-family: courier new,courier;">
+           cd
+          </span>
+         </strong>
+         ), et de saisir la commande suivante :
+        </p>
+        <p>
+        </p>
+        <!-- Crayon Syntax Highlighter v2.7.1 -->
+        <div class="crayon-syntax crayon-theme-monokai crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" id="crayon-55a57cb67fbf3653542946" style=" margin-top: 12px; margin-bottom: 12px; font-size: 14px !important; line-height: 17px !important;">
+         <div class="crayon-toolbar" data-settings=" show" style="font-size: 14px !important;height: 21px !important; line-height: 21px !important;">
+          <span class="crayon-title">
+          </span>
+          <div class="crayon-tools" style="font-size: 14px !important;height: 21px !important; line-height: 21px !important;">
+           <div class="crayon-button crayon-nums-button" title="Afficher/cacher numros de lignes">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-plain-button" title="Basculer vers code brut">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-expand-button" title="Expand Code">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-copy-button" title="Copy">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-popup-button" title="Ouvrir le code dans une nouvelle fentre">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <span class="crayon-language">
+            Shell
+           </span>
+          </div>
+         </div>
+         <div class="crayon-info" style="min-height: 19.6px !important; line-height: 19.6px !important;">
+         </div>
+         <div class="crayon-plain-wrap">
+          <textarea class="crayon-plain print-no" data-settings="dblclick" readonly="" style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 14px !important; line-height: 17px !important;" wrap="soft">
+           root@Seboss666FS:/media/vbox$ python -m SimpleHTTPServer 9999
+Serving HTTP on 0.0.0.0 port 9999 ...
+          </textarea>
+         </div>
+         <div class="crayon-main" style="">
+          <table class="crayon-table">
+           <tr class="crayon-row">
+            <td class="crayon-nums " data-settings="show">
+             <div class="crayon-nums-content" style="font-size: 14px !important; line-height: 17px !important;">
+              <div class="crayon-num" data-line="crayon-55a57cb67fbf3653542946-1">
+               1
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a57cb67fbf3653542946-2">
+               2
+              </div>
+             </div>
+            </td>
+            <td class="crayon-code">
+             <div class="crayon-pre" style="font-size: 14px !important; line-height: 17px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;">
+              <div class="crayon-line" id="crayon-55a57cb67fbf3653542946-1">
+               <span class="crayon-v">
+                root
+               </span>
+               <span class="crayon-sy">
+                @
+               </span>
+               <span class="crayon-v">
+                Seboss666FS
+               </span>
+               <span class="crayon-o">
+                :
+               </span>
+               <span class="crayon-o">
+                /
+               </span>
+               <span class="crayon-v">
+                media
+               </span>
+               <span class="crayon-o">
+                /
+               </span>
+               <span class="crayon-v">
+                vbox
+               </span>
+               <span class="crayon-sy">
+                $
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                python
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-o">
+                -
+               </span>
+               <span class="crayon-i">
+                m
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-i">
+                SimpleHTTPServer
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                9999
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a57cb67fbf3653542946-2">
+               <span class="crayon-e">
+                Serving
+               </span>
+               <span class="crayon-e">
+                HTTP
+               </span>
+               <span class="crayon-i">
+                on
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                0.0.0.0
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-i">
+                port
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                9999
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+              </div>
+             </div>
+            </td>
+           </tr>
+          </table>
+         </div>
+        </div>
+        <!-- [Format Time: 0.0009 seconds] -->
+        <p>
+        </p>
+        <p style="text-align: justify;">
+         Ou en Python 3 :
+        </p>
+        <p>
+        </p>
+        <!-- Crayon Syntax Highlighter v2.7.1 -->
+        <div class="crayon-syntax crayon-theme-monokai crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" id="crayon-55a57cb67fbfc177604176" style=" margin-top: 12px; margin-bottom: 12px; font-size: 14px !important; line-height: 17px !important;">
+         <div class="crayon-toolbar" data-settings=" show" style="font-size: 14px !important;height: 21px !important; line-height: 21px !important;">
+          <span class="crayon-title">
+          </span>
+          <div class="crayon-tools" style="font-size: 14px !important;height: 21px !important; line-height: 21px !important;">
+           <div class="crayon-button crayon-nums-button" title="Afficher/cacher numros de lignes">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-plain-button" title="Basculer vers code brut">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-expand-button" title="Expand Code">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-copy-button" title="Copy">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-popup-button" title="Ouvrir le code dans une nouvelle fentre">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <span class="crayon-language">
+            Shell
+           </span>
+          </div>
+         </div>
+         <div class="crayon-info" style="min-height: 19.6px !important; line-height: 19.6px !important;">
+         </div>
+         <div class="crayon-plain-wrap">
+          <textarea class="crayon-plain print-no" data-settings="dblclick" readonly="" style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 14px !important; line-height: 17px !important;" wrap="soft">
+           root@Seboss666FS:/media/vbox$ python -m http.server 9999
+Serving HTTP on 0.0.0.0 port 9999 ...
+          </textarea>
+         </div>
+         <div class="crayon-main" style="">
+          <table class="crayon-table">
+           <tr class="crayon-row">
+            <td class="crayon-nums " data-settings="show">
+             <div class="crayon-nums-content" style="font-size: 14px !important; line-height: 17px !important;">
+              <div class="crayon-num" data-line="crayon-55a57cb67fbfc177604176-1">
+               1
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a57cb67fbfc177604176-2">
+               2
+              </div>
+             </div>
+            </td>
+            <td class="crayon-code">
+             <div class="crayon-pre" style="font-size: 14px !important; line-height: 17px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;">
+              <div class="crayon-line" id="crayon-55a57cb67fbfc177604176-1">
+               <span class="crayon-v">
+                root
+               </span>
+               <span class="crayon-sy">
+                @
+               </span>
+               <span class="crayon-v">
+                Seboss666FS
+               </span>
+               <span class="crayon-o">
+                :
+               </span>
+               <span class="crayon-o">
+                /
+               </span>
+               <span class="crayon-v">
+                media
+               </span>
+               <span class="crayon-o">
+                /
+               </span>
+               <span class="crayon-v">
+                vbox
+               </span>
+               <span class="crayon-sy">
+                $
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                python
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-o">
+                -
+               </span>
+               <span class="crayon-i">
+                m
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                http
+               </span>
+               <span class="crayon-e">
+                .server
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                9999
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a57cb67fbfc177604176-2">
+               <span class="crayon-e">
+                Serving
+               </span>
+               <span class="crayon-e">
+                HTTP
+               </span>
+               <span class="crayon-i">
+                on
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                0.0.0.0
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-i">
+                port
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                9999
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+              </div>
+             </div>
+            </td>
+           </tr>
+          </table>
+         </div>
+        </div>
+        <!-- [Format Time: 0.0009 seconds] -->
+        <p>
+        </p>
+        <p style="text-align: justify;">
+         Par dfaut, il coute sur le port 8000, sauf si comme dans lexemple on spcifie un port diffrent. Il suffit ensuite douvrir un navigateur Web sur la machine de destination et dy saisir ladresse IP suivie du port dfini, 9999 dans lexemple :
+        </p>
+        <p style="text-align: justify;">
+         <a data-rel="lightbox-1" href="http://blog.seboss666.info/wp-content/uploads/2015/03/pythonshare-browser.jpg">
+          <img alt="pythonshare-browser" class="aligncenter size-medium wp-image-1753" height="191" src="http://blog.seboss666.info/wp-content/uploads/2015/03/pythonshare-browser-300x191.jpg" width="300"/>
+         </a>
+        </p>
+        <p style="text-align: justify;">
+         Et voil ! Pour arrter le partage, il suffit de couper le serveur, soit en fermant la fentre de la console, soit en usant de ce bon vieux raccourci clavier
+         <strong>
+          Ctrl+C
+         </strong>
+         .
+        </p>
+        <h3 style="text-align: justify;">
+         Idal seulement pour du ponctuel
+        </h3>
+        <p style="text-align: justify;">
+         Cette mthode est certes  la limite du simpliste (et encore, qui aurait pari sur un module Python pour du partage de fichiers ?), et videmment trs peu souple. En effet, le partage ne fonctionne que dans un seul sens, videmment, vu quon est en mode client-serveur, et en lecture seule qui plus est, HTTP oblige. Pour du persistant on se penchera plus srieusement sur les protocoles cits en introduction. Par exemple, jai utilis Samba/CIFS (les deux noms se rapportant au mme protocole, celui utilis par Windows) sur mon serveur pour partager les nombreux dossiers et fichiers qui y sont stocks, afin quils soient accessibles depuis mes ordinateurs, quils soient sous Windows ou Linux, mais aussi mes appareils Android. Pour du montage scuris au-del du rseau local, NFS et SSHFS seront plus adapts  la confidentialit ncessaire  ce type de topologie.
+        </p>
+       </div>
+       <!-- .entry-content -->
+       <footer class="entry-footer">
+        <ul>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/fichiers/" rel="tag">
+           fichiers
+          </a>
+         </li>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/http/" rel="tag">
+           http
+          </a>
+         </li>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/linux/" rel="tag">
+           linux
+          </a>
+         </li>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/partage/" rel="tag">
+           partage
+          </a>
+         </li>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/python/" rel="tag">
+           python
+          </a>
+         </li>
+         <li>
+          <i class="fa fa-tag">
+          </i>
+          <a href="http://blog.seboss666.info/tag/windows/" rel="tag">
+           windows
+          </a>
+         </li>
+        </ul>
+       </footer>
+       <!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <hr/>
+      <div class="author-index shorter">
+       <div class="reveal-bio">
+        <a class="fa fa-minus-circle" href="#" title="Masquer la biographie de l'Auteur">
+         <span class="screen-reader-text">
+          Masquer la biographie de l'Auteur
+         </span>
+        </a>
+       </div>
+       <div class="author-info">
+        <div class="author-avatar">
+         <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/ac5cf9b8c56666785aec4ee01f96f589?s=96&amp;d=retro&amp;r=g" srcset="http://1.gravatar.com/avatar/ac5cf9b8c56666785aec4ee01f96f589?s=192&amp;d=retro&amp;r=g 2x" width="96"/>
+        </div>
+        <!-- .author-avatar -->
+        <div class="author-meta">
+         <h2 class="author-title">
+          Au sujet de Seboss666
+         </h2>
+         <div class="share-and-more">
+          181 articles et d'autres  venir.
+         </div>
+        </div>
+        <div class="author-description">
+         <p class="author-bio">
+          Mangeur d'infos de toute sorte. Codeur maladroit. Sysadmin dans l'me. Drogu  Twitter. Procrastineur de l'extrme. Heureux utilisateur de Manjaro Linux.
+         </p>
+         <a class="author-link" href="http://blog.seboss666.info/author/seboss666/" rel="author">
+          Articles par
+          <i class="fa fa-arrow-circle-o-right">
+          </i>
+         </a>
+        </div>
+        <!-- .author-description -->
+       </div>
+       <!-- .author-info -->
+      </div>
+      <nav class="navigation post-navigation" role="navigation">
+       <div class="post-nav-box clear">
+        <h1 class="screen-reader-text">
+         Parcourir l'article
+        </h1>
+        <div class="nav-links">
+         <div class="nav-previous">
+          <div class="nav-indicator">
+           Article prcdent:
+          </div>
+          <h1>
+           <a href="http://blog.seboss666.info/2015/04/tutoyer-veut-il-dire-manquer-de-respect/" rel="prev">
+            Tutoyer veut-il dire manquer de respect ?
+           </a>
+          </h1>
+         </div>
+         <div class="nav-next">
+          <div class="nav-indicator">
+           Article Suivant:
+          </div>
+          <h1>
+           <a href="http://blog.seboss666.info/2015/04/linux-dans-votre-vie-quotidienne/" rel="next">
+            Linux dans votre vie quotidienne
+           </a>
+          </h1>
+         </div>
+        </div>
+        <!-- .nav-links -->
+       </div>
+       <!-- .post-nav-box -->
+      </nav>
+      <!-- .navigation -->
+      <div id="disqus_thread">
+      </div>
+      <script type="text/javascript">
+       var disqus_url = 'http://blog.seboss666.info/2015/04/partager-tres-simplement-des-fichiers-avec-python-simplehttpserver/';
+var disqus_identifier = '1747 http://blog.seboss666.info/?p=1747';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'leblogdeseboss666';
+var disqus_title = "Partager trs simplement des fichiers avec Python SimpleHTTPServer";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&amp;post_id=1747';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+      </script>
+     </main>
+     <!-- #main -->
+    </div>
+    <!-- #primary -->
+    <div class="widget-area" id="secondary" role="complementary">
+     <aside class="widget widget_archive" id="archives-4">
+      <h1 class="widget-title">
+       Archives
+      </h1>
+      <label class="screen-reader-text" for="archives-dropdown-4">
+       Archives
+      </label>
+      <select id="archives-dropdown-4" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+       <option value="">
+        Choisir un mois
+       </option>
+       <option value="http://blog.seboss666.info/2015/07/">
+        juillet 2015 (6)
+       </option>
+       <option value="http://blog.seboss666.info/2015/06/">
+        juin 2015 (16)
+       </option>
+       <option value="http://blog.seboss666.info/2015/05/">
+        mai 2015 (15)
+       </option>
+       <option value="http://blog.seboss666.info/2015/04/">
+        avril 2015 (16)
+       </option>
+       <option value="http://blog.seboss666.info/2015/03/">
+        mars 2015 (18)
+       </option>
+       <option value="http://blog.seboss666.info/2015/02/">
+        fvrier 2015 (14)
+       </option>
+       <option value="http://blog.seboss666.info/2015/01/">
+        janvier 2015 (13)
+       </option>
+       <option value="http://blog.seboss666.info/2014/12/">
+        dcembre 2014 (10)
+       </option>
+       <option value="http://blog.seboss666.info/2014/11/">
+        novembre 2014 (11)
+       </option>
+       <option value="http://blog.seboss666.info/2014/10/">
+        octobre 2014 (6)
+       </option>
+       <option value="http://blog.seboss666.info/2014/09/">
+        septembre 2014 (4)
+       </option>
+       <option value="http://blog.seboss666.info/2014/08/">
+        aot 2014 (3)
+       </option>
+       <option value="http://blog.seboss666.info/2014/07/">
+        juillet 2014 (2)
+       </option>
+       <option value="http://blog.seboss666.info/2014/06/">
+        juin 2014 (3)
+       </option>
+       <option value="http://blog.seboss666.info/2014/05/">
+        mai 2014 (3)
+       </option>
+       <option value="http://blog.seboss666.info/2014/04/">
+        avril 2014 (5)
+       </option>
+       <option value="http://blog.seboss666.info/2014/03/">
+        mars 2014 (5)
+       </option>
+       <option value="http://blog.seboss666.info/2014/02/">
+        fvrier 2014 (3)
+       </option>
+       <option value="http://blog.seboss666.info/2014/01/">
+        janvier 2014 (5)
+       </option>
+       <option value="http://blog.seboss666.info/2013/12/">
+        dcembre 2013 (4)
+       </option>
+       <option value="http://blog.seboss666.info/2013/11/">
+        novembre 2013 (6)
+       </option>
+       <option value="http://blog.seboss666.info/2013/10/">
+        octobre 2013 (7)
+       </option>
+       <option value="http://blog.seboss666.info/2013/09/">
+        septembre 2013 (6)
+       </option>
+      </select>
+     </aside>
+     <aside class="widget widget_text" id="text-8">
+      <h1 class="widget-title">
+       Favoris
+      </h1>
+      <div class="textwidget">
+       <p>
+        <a href="http://www.manjaro.org/" target="_blank">
+         Manjaro.org
+        </a>
+        <br/>
+        <a href="http://www.nextinpact.com" target="_blank">
+         Next INpact
+        </a>
+        <br/>
+        <a href="http://www.gamalive.com" target="_blank">
+         GamAlive
+        </a>
+        <br/>
+        <a href="http://linuxfr.org" target="_blank">
+         LinuxFr.org
+        </a>
+        <br/>
+        <a href="http://homeserver-diy.net" target="_blank">
+         HomeServer.DIY
+        </a>
+        <br/>
+        <a href="http://blog-libre.org" target="_blank">
+         Blog Libre
+        </a>
+        <br/>
+        <a href="http://la-vache-libre.org" target="_blank">
+         La Vache Libre
+        </a>
+        <br/>
+        <a href="http://www.it-connect.fr" target="_blank">
+         IT-Connect
+        </a>
+        <br/>
+        <a href="http://computerz.solutions/" target="_blank">
+         Computerz Solutions
+        </a>
+        <br/>
+        <a href="http://maviesansgluten.over-blog.com/" target="_blank">
+         Ma vie sans gluten
+        </a>
+       </p>
+      </div>
+     </aside>
+     <aside class="widget widget_tag_cloud" id="tag_cloud-5">
+      <h1 class="widget-title">
+       tiquettes
+      </h1>
+      <div class="tagcloud">
+       <a class="tag-link-52" href="http://blog.seboss666.info/tag/android/" style="font-size: 8pt;" title="5 sujets">
+        android
+       </a>
+       <a class="tag-link-220" href="http://blog.seboss666.info/tag/api/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        api
+       </a>
+       <a class="tag-link-53" href="http://blog.seboss666.info/tag/application/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        application
+       </a>
+       <a class="tag-link-25" href="http://blog.seboss666.info/tag/authentification/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        authentification
+       </a>
+       <a class="tag-link-169" href="http://blog.seboss666.info/tag/blog/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        blog
+       </a>
+       <a class="tag-link-74" href="http://blog.seboss666.info/tag/bricolage/" style="font-size: 8pt;" title="5 sujets">
+        bricolage
+       </a>
+       <a class="tag-link-222" href="http://blog.seboss666.info/tag/collect/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        collect
+       </a>
+       <a class="tag-link-62" href="http://blog.seboss666.info/tag/confidentialite/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        confidentialit
+       </a>
+       <a class="tag-link-86" href="http://blog.seboss666.info/tag/conversion/" style="font-size: 10.559139784946pt;" title="8 sujets">
+        conversion
+       </a>
+       <a class="tag-link-9" href="http://blog.seboss666.info/tag/debian/" style="font-size: 12.516129032258pt;" title="11 sujets">
+        debian
+       </a>
+       <a class="tag-link-18" href="http://blog.seboss666.info/tag/depannage-2/" style="font-size: 12.516129032258pt;" title="11 sujets">
+        depannage
+       </a>
+       <a class="tag-link-111" href="http://blog.seboss666.info/tag/developpement/" style="font-size: 8pt;" title="5 sujets">
+        developpement
+       </a>
+       <a class="tag-link-61" href="http://blog.seboss666.info/tag/disque-dur/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        disque dur
+       </a>
+       <a class="tag-link-49" href="http://blog.seboss666.info/tag/espace-disque/" style="font-size: 10.559139784946pt;" title="8 sujets">
+        espace disque
+       </a>
+       <a class="tag-link-174" href="http://blog.seboss666.info/tag/fichiers/" style="font-size: 8pt;" title="5 sujets">
+        fichiers
+       </a>
+       <a class="tag-link-139" href="http://blog.seboss666.info/tag/firefox/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        Firefox
+       </a>
+       <a class="tag-link-123" href="http://blog.seboss666.info/tag/futur/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        futur
+       </a>
+       <a class="tag-link-100" href="http://blog.seboss666.info/tag/internet/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        Internet
+       </a>
+       <a class="tag-link-29" href="http://blog.seboss666.info/tag/linux/" style="font-size: 22pt;" title="50 sujets">
+        linux
+       </a>
+       <a class="tag-link-7" href="http://blog.seboss666.info/tag/mariadb/" style="font-size: 10.559139784946pt;" title="8 sujets">
+        mariadb
+       </a>
+       <a class="tag-link-98" href="http://blog.seboss666.info/tag/materiel/" style="font-size: 11.311827956989pt;" title="9 sujets">
+        matriel
+       </a>
+       <a class="tag-link-8" href="http://blog.seboss666.info/tag/migration/" style="font-size: 13.569892473118pt;" title="13 sujets">
+        migration
+       </a>
+       <a class="tag-link-223" href="http://blog.seboss666.info/tag/mongodb/" style="font-size: 10.559139784946pt;" title="8 sujets">
+        mongodb
+       </a>
+       <a class="tag-link-85" href="http://blog.seboss666.info/tag/musique/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        musique
+       </a>
+       <a class="tag-link-6" href="http://blog.seboss666.info/tag/mysql/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        mysql
+       </a>
+       <a class="tag-link-50" href="http://blog.seboss666.info/tag/nettoyage/" style="font-size: 8pt;" title="5 sujets">
+        nettoyage
+       </a>
+       <a class="tag-link-31" href="http://blog.seboss666.info/tag/opensource/" style="font-size: 12.967741935484pt;" title="12 sujets">
+        opensource
+       </a>
+       <a class="tag-link-47" href="http://blog.seboss666.info/tag/partage/" style="font-size: 14.021505376344pt;" title="14 sujets">
+        partage
+       </a>
+       <a class="tag-link-21" href="http://blog.seboss666.info/tag/pratique/" style="font-size: 8pt;" title="5 sujets">
+        pratique
+       </a>
+       <a class="tag-link-4" href="http://blog.seboss666.info/tag/presentation/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        prsentation
+       </a>
+       <a class="tag-link-221" href="http://blog.seboss666.info/tag/python/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        python
+       </a>
+       <a class="tag-link-19" href="http://blog.seboss666.info/tag/reparation/" style="font-size: 8pt;" title="5 sujets">
+        reparation
+       </a>
+       <a class="tag-link-36" href="http://blog.seboss666.info/tag/retour/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        retour
+       </a>
+       <a class="tag-link-95" href="http://blog.seboss666.info/tag/reseau/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        rseau
+       </a>
+       <a class="tag-link-72" href="http://blog.seboss666.info/tag/salon/" style="font-size: 8pt;" title="5 sujets">
+        salon
+       </a>
+       <a class="tag-link-92" href="http://blog.seboss666.info/tag/serveur/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        serveur
+       </a>
+       <a class="tag-link-27" href="http://blog.seboss666.info/tag/ssd/" style="font-size: 8pt;" title="5 sujets">
+        ssd
+       </a>
+       <a class="tag-link-90" href="http://blog.seboss666.info/tag/ssh/" style="font-size: 8pt;" title="5 sujets">
+        ssh
+       </a>
+       <a class="tag-link-23" href="http://blog.seboss666.info/tag/securite/" style="font-size: 15.225806451613pt;" title="17 sujets">
+        scurit
+       </a>
+       <a class="tag-link-12" href="http://blog.seboss666.info/tag/tuto/" style="font-size: 10.559139784946pt;" title="8 sujets">
+        tuto
+       </a>
+       <a class="tag-link-138" href="http://blog.seboss666.info/tag/video/" style="font-size: 9.8064516129032pt;" title="7 sujets">
+        vido
+       </a>
+       <a class="tag-link-75" href="http://blog.seboss666.info/tag/vie-privee/" style="font-size: 11.913978494624pt;" title="10 sujets">
+        vie prive
+       </a>
+       <a class="tag-link-28" href="http://blog.seboss666.info/tag/windows/" style="font-size: 16.731182795699pt;" title="22 sujets">
+        windows
+       </a>
+       <a class="tag-link-67" href="http://blog.seboss666.info/tag/wordpress/" style="font-size: 13.569892473118pt;" title="13 sujets">
+        wordpress
+       </a>
+       <a class="tag-link-71" href="http://blog.seboss666.info/tag/youtube/" style="font-size: 9.0537634408602pt;" title="6 sujets">
+        youtube
+       </a>
+      </div>
+     </aside>
+    </div>
+    <!-- #secondary -->
+   </div>
+   <!-- #content -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div id="supplementary">
+     <div class="footer-widgets widget-area clear" id="footer-widgets" role="complementary">
+      <aside class="widget widget_text" id="text-6">
+       <h1 class="widget-title">
+        Licence
+       </h1>
+       <div class="textwidget">
+        <p style="text-align: center;font-weight:bold;">
+         <a href="http://creativecommons.org/licenses/by-nc/3.0/fr/" rel="license">
+          <img alt="Licence Creative Commons" src="https://licensebuttons.net/l/by-nc/3.0/fr/88x31.png" style="border-width:0"/>
+         </a>
+         <br/>
+         Sauf mention contraire, le contenu de ce site est mis  disposition sous licence
+         <a href="http://creativecommons.org/licenses/by-nc/3.0/fr/" target="_blank">
+          Creative Commons BY-NC v3.0
+         </a>
+        </p>
+       </div>
+      </aside>
+      <aside class="widget widget_text" id="text-10">
+       <h1 class="widget-title">
+        Cookies
+       </h1>
+       <div class="textwidget">
+        Bien videmment ce site utilise des cookies. J'ai dtaill leur utilisation et la faon de s'en passer dans
+        <a href="http://blog.seboss666.info/2015/01/a-propos-des-cookies-sur-ce-blog-et-comment-les-interdire-si-besoin/">
+         cet article
+        </a>
+        .
+       </div>
+      </aside>
+     </div>
+     <!-- #footer-sidebar -->
+    </div>
+    <!-- #supplementary -->
+    <div class="site-info">
+     Firement propuls par
+     <a href="http://wordpress.org/" rel="generator">
+      WordPress
+     </a>
+     <span class="sep">
+      |
+     </span>
+     Theme:
+     <a href="http://wordpress.org/themes/simone/" rel="nofollow">
+      Simone
+     </a>
+     par
+     <a href="http://mor10.com/" rel="designer nofollow">
+      mor10.com
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <script type="text/javascript">
+   // &lt;![CDATA[
+        var disqus_shortname = 'leblogdeseboss666';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i &lt; nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]&gt;
+  </script>
+  <!-- Piwik -->
+  <script type="text/javascript">
+   var _paq = _paq || [];
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.seboss666.info/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 1]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+  </script>
+  <!-- End Piwik Code -->
+  <noscript>
+   <p>
+    <img alt="" src="//analytics.seboss666.info/piwik.php?idsite=1" style="border:0;"/>
+   </p>
+  </noscript>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/navigation.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/hide-search.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/superfish.min.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/superfish-settings.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-includes/js/masonry.min.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/masonry-settings.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/enquire.min.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/hide.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-content/themes/simone/js/skip-link-focus-fix.js" type="text/javascript">
+  </script>
+  <script src="http://blog.seboss666.info/wp-includes/js/comment-reply.min.js" type="text/javascript">
+  </script>
+ </body>
+</html>

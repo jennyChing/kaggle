@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;YDreams&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;This site requires Internet Explorer 9 or later - please upgrade your browser here:
+&lt;a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"&gt;http://windows.microsoft.com/en-us/internet-explorer/download-ie&lt;/a&gt;
+or use a recent version of Chrome, Firefox or similar.&lt;/body&gt;
+&lt;/html&gt;
+&lt;![endif]-->
+<!--[if gt IE 8]&gt;&lt;!-->
+<html data-ng-app="site" data-ng-controller="appController" lang="en">
+ <head>
+  <title data-ng-bind="og.title">
+   YDreams
+  </title>
+  <meta content="!" name="fragment"/>
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta charset="utf-8"/>
+  <!-- scale to mobile -->
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link href="img/ydreams-icon.png" rel="icon" type="image/png"/>
+  <link href="lib/lightbox/css/lightbox.css" rel="stylesheet"/>
+  <link href="lib/bootstrap-default/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="css/app.css" rel="stylesheet"/>
+  <!-- jQuery (for Bootstrap/Isotope) -->
+  <script src="lib/jquery-1.10.2.min.js">
+  </script>
+  <!--&lt;script src="lib/modernizr.custom.js"&gt;&lt;/script&gt;-->
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-45572439-1', 'ydreams.com');
+  </script>
+  <!-- core lib+resource used for ajax calls -->
+  <script src="lib/jquery-migrate-1.2.1.min.js">
+  </script>
+  <script src="lib/angular-1.2.0/angular.min.js">
+  </script>
+  <script src="lib/angular-1.2.0/angular-resource.min.js">
+  </script>
+  <script src="lib/angular-1.2.0/angular-route.min.js">
+  </script>
+  <script src="lib/angular-1.2.0/angular-animate.min.js">
+  </script>
+  <meta content="YDreams" property="og:site_name"/>
+  <meta content="website" property="og:type"/>
+  <meta content="{{og.url}}" property="og:url"/>
+  <meta content="{{og.title}}" property="og:title"/>
+  <meta content="{{og.image}}" property="og:image"/>
+  <meta content="{{og.description}}" property="og:description"/>
+ </head>
+ <body id="body">
+  <noscript>
+   You must enable JavaScript to use this site or try our
+   <a href="http://company.ydreams.com">
+    company site
+   </a>
+   .
+  </noscript>
+  <!-- common navigation -->
+  <div data-ng-cloak="" data-ng-controller="navController" id="appnav" role="navigation">
+   <div>
+    <div id="logo">
+     <a data-ng-click="indexFilter('c',app.country_id);" href="./">
+      <img alt="YDreams Logo" src="img/ydreams-logo.png"/>
+     </a>
+    </div>
+    <div id="homenav">
+     <ul class="appnav">
+      <li data-ng-class="{active: app.route=='about'}">
+       <a href="#!/{{app.lang}}/page/about">
+        {{app.tokens['about']}}
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ydreams.com/products/" target="products">
+        {{app.tokens['products']}}
+       </a>
+      </li>
+      <li data-ng-class="{active: app.route=='work'}">
+       <a href="#!/{{app.lang}}/home/{{app.country_id}}">
+        {{app.tokens['work']}}
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div id="spinouts">
+     <ul class="appnav">
+      <li>
+       <a href="http://www.ynvisible.com/" target="_blank" title="Things Alive">
+        <img alt="Ynvisible Logo" src="img/logos/logo-ynvisible.png"/>
+       </a>
+      </li>
+      <li>
+       <a href="http://azorean.eu/" target="_blank" title="Aquatic Technologies">
+        <img alt="Azorean Logo" src="img/logos/logo-azorean.png"/>
+       </a>
+      </li>
+      <li>
+       <a href="http://www.audienceentertainment.com/" target="_blank" title="The Advergaming Specialists">
+        <img alt="AE Logo" src="img/logos/logo-ae.png"/>
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ydreamsrobotics.com/" target="_blank" title="Augmenting Robotics">
+        <img alt="Robotics Logo" src="img/logos/logo-robotics.png"/>
+       </a>
+      </li>
+      <li>
+       <a href="http://www.yvision.com/" target="_blank" title="Natural User Interfaces">
+        <img alt="Yvision Logo" src="img/logos/logo-yvision.png"/>
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div class="clearfix">
+   </div>
+   <!--&lt;ul class="appnav appnav-tabs top-right"&gt;
+            &lt;li ng-repeat="l in langs[app.country_id]" data-ng-class="{active: app.lang==l}"&gt;&lt;a data-ng-click="selectLang(l)" href=""&gt;{{l}}&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;-->
+   <!--&lt;div class="country-menu"&gt;
+            &lt;a href="./#!/en/home/1"&gt;Portugal&lt;/a&gt; | &lt;a href="./#!/br/home/2"&gt;Brasil&lt;/a&gt;
+        &lt;/div&gt;-->
+   <!-- Work specific navigation - will need to be hidden in About -->
+   <div class="row-fluid" id="menu-work">
+    <div data-ng-show="app.route=='work'">
+     <ul class="span10 appnav appnav-tabs markets">
+      <li data-ng-class="{active: app.gridFilter.type=='c'}">
+       <a data-ng-click="indexFilter('c',app.country_id)" href="" style="border-left: thin solid gray; margin-left:15px;">
+        {{app.tokens['featured']}}
+       </a>
+      </li>
+      <li data-ng-class="{active: app.gridFilter.type=='m' &amp;&amp; market.id==app.gridFilter.id}" data-ng-repeat="market in api.market">
+       <a data-ng-click="indexFilter('m',market.id)" data-ng-style="{borderLeft: 'thin solid ' + market.colour }" href="">
+        {{market.label}}
+       </a>
+      </li>
+     </ul>
+     <ul class="span2 appnav appnav-tabs filters">
+      <li data-ng-class="{active: app.gridFilter.type=='l'}">
+       <a data-ng-click="indexFilter('l',app.client_id)" href="">
+        {{app.tokens['clients']}}
+       </a>
+      </li>
+      <li data-ng-class="{active: app.gridFilter.type=='t'}">
+       <a data-ng-click="indexFilter('t',app.tag_id)" href="">
+        {{app.tokens['tags']}}
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div data-ng-show="app.route=='about'">
+     <ul class="span12 appnav appnav-tabs markets">
+      <li data-ng-class="{active: page.id==app.page_id}" data-ng-repeat="page in pages">
+       <a data-ng-style="{borderLeft: 'thin solid ' + page.colour, marginLeft:'15px'}" href="#!/{{app.lang}}/page/{{page.id}}">
+        {{page.label}}
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+  </div>
+  <div class="clearfix">
+  </div>
+  <!-- div that holds content from partials via controllers defined in app.js router -->
+  <div id="loading">
+   Loading...
+  </div>
+  <div data-ng-view="" id="content">
+  </div>
+  <div data-ng-include="'views/footer.html'">
+  </div>
+  <script src="lib/angulartics/angulartics.js">
+  </script>
+  <script src="lib/angulartics/angulartics-google-analytics.js">
+  </script>
+  <script src="lib/flowplayer/flowplayer-3.2.12.min.js">
+  </script>
+  <script src="lib/flowplayer/flowplayer.ipad-3.2.12.js">
+  </script>
+  <script src="lib/bootstrap-default/js/bootstrap.min.js">
+  </script>
+  <script src="lib/ui-bootstrap-tpls-0.6.0.min.js">
+  </script>
+  <script src="lib/showdown.min.js">
+  </script>
+  <script src="lib/isotope/jquery.isotope.min.js">
+  </script>
+  <script src="lib/jquery.lazyload.js">
+  </script>
+  <script src="lib/lightbox/js/lightbox.js">
+  </script>
+  <!-- app specific code -->
+  <script>
+   var php_country=1;
+  </script>
+  <script src="app.min.js">
+  </script>
+ </body>
+</html>
+<!--&lt;![endif]-->

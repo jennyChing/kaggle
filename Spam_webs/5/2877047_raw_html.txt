@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+ <!-- head prefix is used for Facebook Open Graph integration -->
+ <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# pandawhale: http://ogp.me/ns/fb/pandawhale#">
+  <script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js">
+  </script>
+  <script>
+   WebFont.load({
+    google: {
+      families: ['Michroma']
+    }
+  });
+  </script>
+  <title>
+   25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn - PandaWhale
+  </title>
+  <link charset="utf-8" href="/css/pandawhale_browser.css?mt=1436297192" media="screen" rel="stylesheet" type="text/css"/>
+  <link charset="utf-8" href="/dojo/dijit/themes/tundra/tundra.css?mt=1436307379" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+  <meta content="18981369756" property="fb:app_id"/>
+  <meta content="PandaWhale" property="og:site_name"/>
+  <meta content="http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin" property="og:url"/>
+  <meta content="25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn" property="og:title"/>
+  <meta content="I didn't realize people see colors differently. You see less than 20 color nuances: you are a dichromats, like dogs, which means you have 2 types of cones only. You are likely to wear black, beige, an" property="og:description"/>
+  <meta content="//img.pandawhale.com/mL2Ko0-25-of-the-people-have-a-4th-co-HhW4.jpeg" property="og:image"/>
+  <meta content="pandawhale:post" property="og:type"/>
+  <script data-dojo-config="parseOnLoad: true, async: true" src="/dojo/dojo/dojo.js?mt=1436307409" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   // needs to be global for now
+var cmIdToProps = "";
+
+require(
+[
+    "dojo/ready",
+    "dojo/query",
+    "dojo/on",
+    "dojo/cookie",
+    "dojo/_base/json",
+    "dojo/_base/xhr",
+    "dojo/_base/lang",
+    "dojo/_base/event",
+    "dojo/_base/window",
+    "dojo/dom",
+    "dojo/dom-class",
+    "dojo/dom-construct",
+    "dojo/domReady",
+    "dojox/fx/scroll",
+    "dijit/registry",
+    "pandawhale/widget/commentManager",
+    "pandawhale/widget/commentSubmitterBox",
+    "pandawhale/widget/inlineEdit",
+    "pandawhale/widget/convoStasher",
+    "pandawhale/widget/facebookImageSharer",
+    "pandawhale/widget/tweetDialog",
+    "pandawhale/widget/emailShareDialog",
+    "pandawhale/widget/imageUploadForm",
+    "pandawhale/widget/staticDialog",
+    "pandawhale/widget/followUnfollow",
+    "pandawhale/widget/commentSubmitterBox",
+    "pandawhale/widget/mouseoverShare",
+    "pandawhale/widget/saveButton",
+    "pandawhale/widget/propsButton",
+    "pandawhale/widget/tumblrShareButton"
+],
+
+function(
+    ready,
+    query,
+    on,
+    cookie,
+    json,
+    xhr,
+    lang,
+    event,
+    win,
+    dom,
+    domClass,
+    domConstruct,
+    domReady,
+    scroll,
+    registry,
+    commentManager,
+    commentSubmitterBox,
+    inlineEdit,
+    convoStasher,
+    facebookImageSharer,
+    tweetDialog,
+    emailShareDialog,
+    imageUploadForm,
+    staticDialog,
+    followUnfollow,
+    commentSubmitterBox,
+    mouseoverShare,
+    saveButton,
+    propsButton,
+    tumblrShareButton
+) {
+
+var scrollComment = "";
+
+ready(function(){
+    var stashConvoNode = dom.byId("stashbutton-root");
+    var convoStasherWidget = new convoStasher({
+        authString: stashConvoNode.getAttribute("data-auth"),
+        cvId: stashConvoNode.getAttribute("data-id"),
+        stashes: [],
+        restashMode: true
+    }, stashConvoNode);
+
+    var newThreadWidget = new commentSubmitterBox({
+        auth: "",
+        uname: "",
+        isDeletable: true,
+        isEditable: true,
+        cvId: 59306,
+        newThreadModeReplyButton: dom.byId("commentbutton"),
+        thumbnailUrl: "",
+        twitterUname: "",
+        defaultTweet: "25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin",
+        hasFacebook: "",
+        isMobile: ""
+    }, domConstruct.place(
+        domConstruct.create("div"),
+        "tlcmInsertMarker",
+        "before"
+    ));
+
+    var sb = new saveButton({
+        auth: "",
+        alreadySaved: false,
+        type: "saved",
+        cvId: 59306
+    }, "saveButton");
+
+    var toplevelProps = new propsButton({
+        auth: "",
+        cvId: "59306",
+        alreadyProps: false,
+        props_count: 1,
+        mixpanel: mixpanel
+    }, "topPropsButton");
+
+    var tsb = new tumblrShareButton({
+        auth: "",
+        blogsJSON: 'null',
+        rootContentNode: document.querySelector(".stashedmarkup_wrapper").querySelector('[data-dojo-attach-point="commentDisplayNode"]')
+    }, "tumblrShareButton");
+
+    on(dom.byId("pinterestshare"), "click", lang.hitch(this, function() {
+        domConstruct.place(domConstruct.create("script", {
+            type: "text/javascript",
+            charset: "UTF-8",
+            src: "http://assets.pinterest.com/js/pinmarklet.js?r="+Math.random()*99999999
+        }), win.body(), "last");
+    }));
+
+    // scroll to requested comment when 'comment' GET param is present
+    domReady(lang.hitch(this, function() {
+        if (scrollComment.length) {
+            var aList = query("a[name='"+scrollComment+"']");
+            if (aList.length) {
+                window.setTimeout(lang.hitch(this, function() {
+                    dojox.fx.smoothScroll({
+                        node: aList.pop(),
+                        win: window,
+                        duration: 900
+                    }).play();
+                }, 500));
+            }
+        }
+    }));
+
+        window.fbAsyncInit = function() {
+        FB.init({appId: "18981369756", status: true, cookie: true});
+    };
+    (function() {
+        var e = document.createElement('script');
+        e.async = true;
+        e.src = document.location.protocol +
+          '//connect.facebook.net/en_US/all.js';
+        document.getElementById('fb-root').appendChild(e);
+    }());
+    on(dom.byId("facebookshare"), "click", lang.hitch(this, function() {
+        var fbUIparams = {
+            method: 'feed',
+            link: "http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin",
+            caption: "pandawhale.com",
+            description: "I didn't realize people see colors differently. You see less than 20 color nuances: you are a dichromats, like dogs, which means you have 2 types of cones only. You are likely to wear black, beige, an",
+            message: ''
+        };
+
+        /*
+        if (dom.byId("shareable-image")) {
+            fbUIparams.picture = dom.byId("shareable-image").src;
+        } else if (!dom.byId("stashed-video")) {
+            // leave this alone if we have a video on the page
+            fbUIparams.picture = "http://pandawhale.com/images/Surfing_header_facebook_crop.png?mt=1348006528";
+        }
+        */
+
+        FB.ui(
+        fbUIparams,
+        function(response) {
+            if (response &amp;&amp; response.post_id) {
+                mixpanel.track("FB_Standard_Share", {'ConvoID': 59306});
+            }
+        });
+    }));
+
+        on(dom.byId("twittershare"), "click", lang.hitch(this, function() {
+        var tweetUrl = "https://twitter.com/intent/tweet?text=25%25+of+the+people+have+a+4th+cone+and+see+colors+as+they+are%2C+by+Prof.+Diana+Derval%2C+LinkedIn+http%3A%2F%2Fpandawhale.com%2Fpost%2F59306%2F25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin";
+        mixpanel.track("TweetOutButton", {'ConvoID': 59306}); // not necessarily successful (only tracks window.open event)
+        window.open(tweetUrl, "pandawhaleTweetWindow" + Math.random()*99999999, 'scrollbars=1,toolbar=0,width=600,height=300');
+    }));
+
+    
+
+    var emailShareWidget = new emailShareDialog({
+        authString: "",
+        convoId: 59306,
+        mode: "shareconvo"
+    }, domConstruct.place(domConstruct.create("div"), win.body(), "last"));
+    on(dom.byId("emailshare"), "click", lang.hitch(emailShareWidget, emailShareWidget.showEmailShareDialog));
+
+    
+
+    var sharer = new mouseoverShare({
+        auth: cookie("s"),
+        twitterUname: "",
+        defaultTweet: "25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin",
+        hasFacebook: "",
+        imageNode: dom.byId("shareable-image"),
+    });
+});
+});
+
+// google plus
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+require(
+[
+    "dojo/ready",
+    "dojo/cookie",
+    "dojo/_base/lang",
+    "dojo/_base/event",
+    "dojo/on",
+    "dojo/dom",
+    "dojo/query"
+],
+
+function(
+    ready,
+    cookie,
+    lang,
+    event,
+    on,
+    dom,
+    query
+) {
+ready(function() {
+    // override form behavior
+    query(".searchbox-form").forEach(lang.hitch(this, function(form) {
+        on(form, "submit", lang.hitch(this, function(e) {
+            event.stop(e);
+            var terms = form.querySelector(".searchbox-input").value;
+            terms = terms.replace(/ /g, "-");
+            window.location = "/search/"+encodeURIComponent(terms);
+        }));
+    }));
+
+    var loginPlatform = cookie("login-platform");
+    if (loginPlatform) {
+        // user just logged in
+        mixpanel.track("Login");
+        var emailForMP = "";
+        if (!emailForMP) {
+            emailForMP = "";
+        }
+        mixpanel.register({ Platform: loginPlatform, UserID: "", Username: "" });
+        mixpanel.people.set({
+            "$username" : "",
+            "$first_name" : "",
+            "$last_name" : "",
+            "$created" : "",
+            "$last_login" : new Date(),
+            "$email" : emailForMP
+        });
+        mixpanel.identify("");
+        mixpanel.name_tag("");
+        cookie("login-platform", "", {expire: -1});
+    }
+});
+
+});
+  </script>
+  <!-- start Mixpanel -->
+  <script type="text/javascript">
+   (function(c,a){var b,d,h,e;b=c.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===c.location.protocol?"https:":"http:")+'//api.mixpanel.com/site_media/js/api/mixpanel.2.js';d=c.getElementsByTagName("script")[0];d.parentNode.insertBefore(b,d);a._i=[];a.init=function(b,c,f){function d(a,b){var c=b.split(".");2==c.length&amp;&amp;(a=a[c[0]],b=c[1]);a[b]=function(){a.push([b].concat(Array.prototype.slice.call(arguments,0)))}}var g=a;"undefined"!==typeof f?g= a[f]=[]:f="mixpanel";g.people=g.people||[];h="disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config people.set people.increment".split(" ");for(e=0;e&lt;h.length;e++)d(g,h[e]);a._i.push([b,c,f])};a.__SV=1.1;window.mixpanel=a})(document,window.mixpanel||[]); mixpanel.init("7ba8a65709a84b5a58163ed227fabbe2");
+  </script>
+  <!-- end Mixpanel -->
+ </head>
+ <body class="tundra">
+  <div class="main_wrapper">
+   <div class="signupbanner">
+    <a class="signupbannerlink" href="https://pandawhale.com/login.php?banner=v4">
+     Sign up FAST!
+    </a>
+    <a href="https://pandawhale.com/login.php?banner=login">
+     Login
+    </a>
+   </div>
+   <div class="mainlogo">
+    <a href="http://pandawhale.com">
+     <img alt="PandaWhale Logo" src="http://img.pandawhale.com/PandaWhaleLogo.png"/>
+    </a>
+   </div>
+   <div class="navmenu">
+    <a class="navbutton" href="/">
+     Home
+    </a>
+    <a class="navbutton" href="/login.php">
+     Profile
+    </a>
+    <a class="navbutton highlighted-navbutton" href="/login.php">
+     Create Page
+    </a>
+   </div>
+   <div class="clear_both">
+   </div>
+   <div class="searchbox-container">
+    <form action="searchresults.php" class="searchbox-form" method="GET">
+     <input class="searchbox-input" name="query" type="text"/>
+     <label class="searchbox-input-label mobile_display_none">
+      Search
+     </label>
+    </form>
+   </div>
+   <div class="clear_both">
+   </div>
+   <div id="fb-root">
+   </div>
+   <div class="convomain">
+    <h2 class="convoTopicHeader">
+     <span id="topicNode">
+      25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn
+     </span>
+    </h2>
+    <h4 class="stasher_byline">
+     <a href="/jdotp">
+      JP Schneider
+     </a>
+     stashed this in
+     <a href="/jdotp/theres-science-in-this-shit">
+      There's Science in This Shit
+     </a>
+     <span data-dojo-props="auth: '', isFollowing: false, stashId: 14551, uid: '', uname: '', thumbnail: '', first_name: '', last_name: ''" data-dojo-type="pandawhale.widget.followUnfollow">
+     </span>
+    </h4>
+    <div class="import_cm_container wide">
+     <div class="stashedmarkup_wrapper" data-dojo-props="auth: '', linkId: 57302, isEditable: false, hasFacebook: false, twitterUname: '', isAdmin: false, defaultTweet: '25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin', isMobile: 0" data-dojo-type="pandawhale.widget.commentManager">
+      <div data-dojo-attach-point="urlImportToolbarNode" data-link-id="57302">
+      </div>
+      <br class="clear_both"/>
+      <div class="stashedmarkup_container" data-dojo-attach-point="mouseoverRootNode">
+       <div data-dojo-attach-point="commentDisplayNode">
+        <p>
+         <a href="https://www.linkedin.com/pulse/25-people-have-4th-cone-see-colors-p-prof-diana-derval" rel="nofollow" target="_blank">
+          <img alt="25 of the people have a 4th cone and see colors as they are ;p Prof Diana Derval LinkedIn" src="//img.pandawhale.com/post-59306-25-of-the-people-have-a-4th-co-edCO.jpeg"/>
+         </a>
+        </p>
+        <p>
+         Source:
+         <a href="https://www.linkedin.com/pulse/25-people-have-4th-cone-see-colors-p-prof-diana-derval" rel="nofollow" target="_blank">
+          https://www.linkedin.com/pulse/25-people...
+         </a>
+        </p>
+       </div>
+       <textarea class="posttextarea display_none" data-dojo-attach-point="commentTextarea">
+        <p>
+         <a href="https://www.linkedin.com/pulse/25-people-have-4th-cone-see-colors-p-prof-diana-derval" rel="nofollow" target="_blank">
+          <img alt="25 of the people have a 4th cone and see colors as they are ;p Prof Diana Derval LinkedIn" src="//img.pandawhale.com/post-59306-25-of-the-people-have-a-4th-co-edCO.jpeg"/>
+         </a>
+        </p>
+        <p>
+         Source:
+         <a href="https://www.linkedin.com/pulse/25-people-have-4th-cone-see-colors-p-prof-diana-derval" rel="nofollow" target="_blank">
+          https://www.linkedin.com/pulse/25-people...
+         </a>
+        </p>
+       </textarea>
+       <div class="posteditbuttons">
+        <img class="display_none" data-dojo-attach-point="spinner" src="/images/stash-form-spinner.gif?mt=1348006528"/>
+        <input alt="Save Post" class="high-res-button display_none" data-dojo-attach-point="saveButton" src="/images/SaveBlue.png?mt=1362631965" type="image"/>
+        <input alt="Edit Post" class="high-res-button display_none" data-dojo-attach-point="editButton" src="/images/EditBlue.png?mt=1357346797" type="image"/>
+       </div>
+      </div>
+     </div>
+     <div style="margin-top:20px;">
+      <span class="convosharebuttons" id="facebookshare">
+       <img src="/images/share-facebook-small.png?mt=1348006528"/>
+      </span>
+      <span class="convosharebuttons" id="twittershare">
+       <img src="/images/share-twitter-small.png?mt=1348006528"/>
+      </span>
+      <g:plusone annotation="none">
+      </g:plusone>
+      <span class="convosharebuttons" id="pinterestshare">
+       <img src="/images/share-pinterest-small.png?mt=1348006528"/>
+      </span>
+      <span class="convosharebuttons" id="emailshare">
+       <img src="/images/share-email-small.png?mt=1348006528"/>
+      </span>
+     </div>
+    </div>
+    <div class="cm_actionbar">
+     <div class="commenter_info">
+      <div class="thumbnail">
+       <a href="/jdotp">
+        <img alt="JP Schneider" src="//img.pandawhale.com/avatar/6705-thumbnail-1421951733.jpeg" title="JP Schneider"/>
+       </a>
+      </div>
+      <div class="commenter_text">
+       <a class="timestamp" href="/jdotp">
+        JP Schneider
+       </a>
+       <br/>
+       <a class="timestamp" href="/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin">
+        8:45 PM Mar 01 2015
+       </a>
+      </div>
+     </div>
+     <div class="propsbuttoncontainer">
+      <span id="tumblrShareButton" style="display:inline-block;">
+      </span>
+      <span id="topPropsButton" style="display:inline-block;">
+      </span>
+      <span id="saveButton" style="display:inline-block;">
+      </span>
+     </div>
+    </div>
+    <div>
+     <p class="" id="restash-container">
+      <strong>
+       Stashed in:
+      </strong>
+      <span id="restashes-list">
+       <a href="/ifindkarma/linkedin">
+        LinkedIn
+       </a>
+       ,
+       <a href="/ifindkarma/science">
+        Science!
+       </a>
+       ,
+       <a href="/ifindkarma/colors">
+        Colors!
+       </a>
+       ,
+       <a href="/Chuko/fun-tidbits">
+        Fun Tidbits
+       </a>
+      </span>
+     </p>
+     <div id="stash-instructions">
+      To save this post, select a stash from drop-down menu or type in a new one:
+     </div>
+     <div data-auth="" data-id="59306" data-type="pandawhale-convo" id="stashbutton-root">
+     </div>
+    </div>
+    <div class="tlc" id="thread-159608">
+     <a name="159608">
+     </a>
+     <div class="cm_container" data-dojo-props="auth: '', tlcmId: 159608, cmId: 159608, isEditable: false, isDeletable: false, hasFacebook: false, twitterUname: '', isAdmin: false, defaultTweet: '25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin'" data-dojo-type="pandawhale.widget.commentManager" id="cm_container-159608">
+      <div class="cm_text">
+       <div data-cm-id="159608" data-dojo-attach-point="urlImportToolbarNode">
+       </div>
+       <div data-dojo-attach-point="mouseoverRootNode">
+        <div data-dojo-attach-point="commentDisplayNode">
+         <p>
+          I didn't realize people see colors differently.
+         </p>
+         <blockquote>
+          <p>
+           You see less than 20 color nuances: you are a dichromats, like dogs, which means you have 2 types of cones only. You are likely to wear black, beige, and blue. 25% of the population is dichromat.
+          </p>
+          <p>
+           You see between 20 and 32 color nuances: you are a trichromat, you have 3 types of cones (in the purple/blue, green and red area). You enjoy different colors as you can appreciate them. 50% of the population is trichromat.
+          </p>
+          <p>
+           You see between 33 and 39 colors: you are a tetrachromat, like bees, and have 4 types of cones (in the purple/blue, green, red plus yellow area). You are irritated by yellow, so this color will be nowhere to be found in your wardrobe. 25% of the population is tetrachromat.
+          </p>
+          <p>
+           You see more than 39 color nuances: come on, you are making up things! there are only 39 different colors in the test and probably only 35 are properly translated by your computer screen anyway :)
+          </p>
+         </blockquote>
+        </div>
+        <textarea class="commenteditortextarea display_none" data-dojo-attach-point="commentTextarea" name="tlc">
+         <p>
+          I didn't realize people see colors differently.
+         </p>
+         <blockquote>
+          <p>
+           You see less than 20 color nuances: you are a dichromats, like dogs, which means you have 2 types of cones only. You are likely to wear black, beige, and blue. 25% of the population is dichromat.
+          </p>
+          <p>
+           You see between 20 and 32 color nuances: you are a trichromat, you have 3 types of cones (in the purple/blue, green and red area). You enjoy different colors as you can appreciate them. 50% of the population is trichromat.
+          </p>
+          <p>
+           You see between 33 and 39 colors: you are a tetrachromat, like bees, and have 4 types of cones (in the purple/blue, green, red plus yellow area). You are irritated by yellow, so this color will be nowhere to be found in your wardrobe. 25% of the population is tetrachromat.
+          </p>
+          <p>
+           You see more than 39 color nuances: come on, you are making up things! there are only 39 different colors in the test and probably only 35 are properly translated by your computer screen anyway :)
+          </p>
+         </blockquote>
+        </textarea>
+        <div class="texteditbuttons">
+         <img class="display_none" data-dojo-attach-point="spinner" src="/images/stash-form-spinner.gif?mt=1348006528"/>
+         <input alt="Save Comment" class="high-res-button display_none" data-dojo-attach-point="saveButton" src="/images/SaveBlue.png?mt=1362631965" type="image"/>
+         <input alt="Edit Comment" class="high-res-button display_none" data-dojo-attach-point="editButton" src="/images/EditBlue.png?mt=1357346797" type="image"/>
+         <input alt="Delete Comment" class="high-res-button display_none" data-dojo-attach-point="deleteButton" src="/images/DeleteBlue.png?mt=1357346797" type="image"/>
+        </div>
+        <div class="cm_actionbar" data-dojo-attach-point="cmActionBar">
+         <div class="commenter_info">
+          <div class="thumbnail">
+           <a href="/ifindkarma">
+            <img alt="Adam Rifkin" src="http://d22zlbw5ff7yk5.cloudfront.net/avatar/1-thumbnail-1336509689.jpeg" title="Adam Rifkin"/>
+           </a>
+          </div>
+          <div class="commenter_text">
+           <a class="timestamp" href="/ifindkarma">
+            Adam Rifkin
+           </a>
+           <br/>
+           <a class="timestamp" href="/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin?comment=159608" id="permalink-159608">
+            9:24 PM Mar 01 2015
+           </a>
+          </div>
+         </div>
+         <div class="propsbuttoncontainer">
+          <span class="replyButtonAnchor">
+          </span>
+          <div data-dojo-props="auth: '', cmId: 159608, alreadyProps: false, thumbnail: '' , uname: '', displayname: ' ', props_count: '1', mixpanel: mixpanel, isMobile: 0" data-dojo-type="pandawhale.widget.propsButton" style="display:inline-block;">
+          </div>
+          <div data-dojo-props="auth: '', cmId: 159608, blogsJSON: 'null'" data-dojo-type="pandawhale.widget.tumblrShareButton" style="display:inline-block;">
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div data-dojo-props="auth: '', tlcmId: 159608, uname: '', isDeletable: false, mixpanel: mixpanel, thumbnailUrl: '', twitterUname: '', defaultTweet: '25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin', hasFacebook: '', isMobile: ''" data-dojo-type="pandawhale.widget.commentSubmitterBox">
+     </div>
+    </div>
+    <!-- close tlc div -->
+    <div class="tlc" id="thread-160089">
+     <a name="160089">
+     </a>
+     <div class="cm_container" data-dojo-props="auth: '', tlcmId: 160089, cmId: 160089, isEditable: false, isDeletable: false, hasFacebook: false, twitterUname: '', isAdmin: false, defaultTweet: '25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin'" data-dojo-type="pandawhale.widget.commentManager" id="cm_container-160089">
+      <div class="cm_text">
+       <div data-cm-id="160089" data-dojo-attach-point="urlImportToolbarNode">
+       </div>
+       <div data-dojo-attach-point="mouseoverRootNode">
+        <div data-dojo-attach-point="commentDisplayNode">
+         <p>
+          It is highly probable that people who have an additional 4th cone do not get tricked by blue/black or white/gold dresses, no matter the background light ;)
+         </p>
+         <blockquote>
+          <p>
+           <strong>
+            Important information about this post
+           </strong>
+           :
+          </p>
+          <p>
+           * the number and distribution of color cones can only be measured by a special device, therefore the categories proposed in this message areof coursejust indications.
+          </p>
+          <p>
+           * the shared percentages areas alwaysan approximation as the only way to have accurate data would be to measure everyone
+          </p>
+          <p>
+           The sources used are detailed in chapter 5 of Diana Derval's book and refer for instance to this published article
+           <a href="http://link.springer.com/article/10.3758%2FBF03196159" rel="nofollow" target="_blank">
+            http://link.springer.com/article/10.3758%2FBF03196159
+           </a>
+           ...
+          </p>
+          <p>
+           The royalties of the book are donating to a foundation.
+          </p>
+          <p>
+           See also:
+           <a href="http://www.springer.com/gp/book/9783642120923" rel="nofollow" target="_blank">
+            Diana Derval, The Right Sensory Mix: Targeting Consumer Product Development Scientifically, Springer 2010
+           </a>
+          </p>
+          <p>
+           And:
+           <a href="http://www.derval-research.com/" rel="nofollow" target="_blank">
+            http://www.derval-research.com
+           </a>
+          </p>
+         </blockquote>
+        </div>
+        <textarea class="commenteditortextarea display_none" data-dojo-attach-point="commentTextarea" name="tlc">
+         <p>
+          It is highly probable that people who have an additional 4th cone do not get tricked by blue/black or white/gold dresses, no matter the background light ;)
+         </p>
+         <blockquote>
+          <p>
+           <strong>
+            Important information about this post
+           </strong>
+           :
+          </p>
+          <p>
+           * the number and distribution of color cones can only be measured by a special device, therefore the categories proposed in this message areof coursejust indications.
+          </p>
+          <p>
+           * the shared percentages areas alwaysan approximation as the only way to have accurate data would be to measure everyone
+          </p>
+          <p>
+           The sources used are detailed in chapter 5 of Diana Derval's book and refer for instance to this published article
+           <a href="http://link.springer.com/article/10.3758%2FBF03196159" rel="nofollow" target="_blank">
+            http://link.springer.com/article/10.3758%2FBF03196159
+           </a>
+           ...
+          </p>
+          <p>
+           The royalties of the book are donating to a foundation.
+          </p>
+          <p>
+           See also:
+           <a href="http://www.springer.com/gp/book/9783642120923" rel="nofollow" target="_blank">
+            Diana Derval, The Right Sensory Mix: Targeting Consumer Product Development Scientifically, Springer 2010
+           </a>
+          </p>
+          <p>
+           And:
+           <a href="http://www.derval-research.com/" rel="nofollow" target="_blank">
+            http://www.derval-research.com
+           </a>
+          </p>
+         </blockquote>
+        </textarea>
+        <div class="texteditbuttons">
+         <img class="display_none" data-dojo-attach-point="spinner" src="/images/stash-form-spinner.gif?mt=1348006528"/>
+         <input alt="Save Comment" class="high-res-button display_none" data-dojo-attach-point="saveButton" src="/images/SaveBlue.png?mt=1362631965" type="image"/>
+         <input alt="Edit Comment" class="high-res-button display_none" data-dojo-attach-point="editButton" src="/images/EditBlue.png?mt=1357346797" type="image"/>
+         <input alt="Delete Comment" class="high-res-button display_none" data-dojo-attach-point="deleteButton" src="/images/DeleteBlue.png?mt=1357346797" type="image"/>
+        </div>
+        <div class="cm_actionbar" data-dojo-attach-point="cmActionBar">
+         <div class="commenter_info">
+          <div class="thumbnail">
+           <a href="/ifindkarma">
+            <img alt="Adam Rifkin" src="http://d22zlbw5ff7yk5.cloudfront.net/avatar/1-thumbnail-1336509689.jpeg" title="Adam Rifkin"/>
+           </a>
+          </div>
+          <div class="commenter_text">
+           <a class="timestamp" href="/ifindkarma">
+            Adam Rifkin
+           </a>
+           <br/>
+           <a class="timestamp" href="/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin?comment=160089" id="permalink-160089">
+            2:48 PM Mar 04 2015
+           </a>
+          </div>
+         </div>
+         <div class="propsbuttoncontainer">
+          <span class="replyButtonAnchor">
+          </span>
+          <div data-dojo-props="auth: '', cmId: 160089, alreadyProps: false, thumbnail: '' , uname: '', displayname: ' ', props_count: '1', mixpanel: mixpanel, isMobile: 0" data-dojo-type="pandawhale.widget.propsButton" style="display:inline-block;">
+          </div>
+          <div data-dojo-props="auth: '', cmId: 160089, blogsJSON: 'null'" data-dojo-type="pandawhale.widget.tumblrShareButton" style="display:inline-block;">
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div data-dojo-props="auth: '', tlcmId: 160089, uname: '', isDeletable: false, mixpanel: mixpanel, thumbnailUrl: '', twitterUname: '', defaultTweet: '25% of the people have a 4th cone and see colors as they are, by Prof. Diana Derval, LinkedIn http://pandawhale.com/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin', hasFacebook: '', isMobile: ''" data-dojo-type="pandawhale.widget.commentSubmitterBox">
+     </div>
+    </div>
+    <!-- close tlc div -->
+    <div id="tlcmInsertMarker">
+    </div>
+    <div class="post_actionbar">
+     <input class="new-comment-button" id="commentbutton" src="/images/comment-button.png?mt=1363045670" type="image"/>
+    </div>
+   </div>
+   <div>
+    <div class="featuredbox">
+     <h3>
+      You May Also Like:
+     </h3>
+    </div>
+    <div class="featuredstashescontainer">
+     <div class="featuredstashimagecontainer stashesgalleryview">
+      <div class="recommconvoimagepad">
+       <a href="/post/23287/13-of-venture-backed-startups-have-a-female-founder">
+        <img src="//img.pandawhale.com/post-23287-Business-Insider-SKkz.jpeg"/>
+       </a>
+      </div>
+      <div class="recommconvotopic">
+       <p class="recommconvolink">
+        <a href="/post/23287/13-of-venture-backed-startups-have-a-female-founder">
+         1.3% of venture-backed startups have a female founder.
+        </a>
+       </p>
+      </div>
+     </div>
+     <div class="featuredstashimagecontainer stashesgalleryview">
+      <div class="recommconvoimagepad">
+       <a href="/post/36064/a-survivors-guide-to-bullies-backstabbers-and-bastards">
+        <img src="//img.pandawhale.com/ylTXDZ-a-survivors-guide-to-bullies-b-6apr.jpeg"/>
+       </a>
+      </div>
+      <div class="recommconvotopic">
+       <p class="recommconvolink">
+        <a href="/post/36064/a-survivors-guide-to-bullies-backstabbers-and-bastards">
+         A Survivors Guide to Bullies, Backstabbers and Bastards
+        </a>
+       </p>
+      </div>
+     </div>
+     <div class="featuredstashimagecontainer stashesgalleryview">
+      <div class="recommconvoimagepad">
+       <a href="/post/64041/big-data-for-career-development">
+        <img src=""/>
+       </a>
+      </div>
+      <div class="recommconvotopic">
+       <p class="recommconvolink">
+        <a href="/post/64041/big-data-for-career-development">
+         Big data for career development
+        </a>
+       </p>
+      </div>
+     </div>
+     <div class="featuredstashimagecontainer stashesgalleryview">
+      <div class="recommconvoimagepad">
+       <a href="/post/43144/why-does-graphene-have-so-much-potential-quora">
+        <img src="http://qph.is.quoracdn.net/main-qimg-994c93c721756969faaf8a36d2cf6d5e?convert_to_webp=true"/>
+       </a>
+      </div>
+      <div class="recommconvotopic">
+       <p class="recommconvolink">
+        <a href="/post/43144/why-does-graphene-have-so-much-potential-quora">
+         Why does graphene have so much potential? - Quora
+        </a>
+       </p>
+      </div>
+     </div>
+     <div class="clear_both">
+     </div>
+    </div>
+   </div>
+   <div class="clear_both">
+   </div>
+   <div id="footer">
+    <a href="/about/story">
+     About
+    </a>
+    |
+    <a href="/about/tos">
+     Terms
+    </a>
+    |
+    <a href="/about/privacy">
+     Privacy
+    </a>
+    |
+    <a href="https://pandawhale.com/login.php">
+     Log In
+    </a>
+    |
+    <a href="http://m.pandawhale.com/force-browse-mode.php?mode=mobile&amp;next=%2Fpost%2F59306%2F25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin">
+     Mobile
+    </a>
+    |
+    <a class="red" href="/about/goodies">
+     Browser Extensions
+    </a>
+    |
+     PandaWhale, Inc. 2015. All rights reserved.
+   </div>
+  </div>
+  <!-- Close main_wrapper -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23159061-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+  <script type="text/javascript">
+   if (typeof mixpanel !== 'undefined') {
+    mixpanel.register_once({ 'initial referrer': document.referrer });
+}
+  </script>
+  <!-- Google +1 button -->
+  <script type="text/javascript">
+   (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+  </script>
+  <!-- twitter follow button -->
+  <script>
+   !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+  </script>
+  <div id="fb-root">
+  </div>
+  <!-- FB Like button -->
+  <script>
+   (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&amp;appId=18981369756";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+  </script>
+  <div class="cm_container display_none" data-dojo-props="" data-dojo-type="" id="cm_container-">
+   <div class="cm_text">
+    <div data-cm-id="" data-dojo-attach-point="urlImportToolbarNode">
+    </div>
+    <div data-dojo-attach-point="mouseoverRootNode">
+     <div data-dojo-attach-point="commentDisplayNode">
+     </div>
+     <textarea class="commenteditortextarea display_none" data-dojo-attach-point="commentTextarea" name="tlc">
+     </textarea>
+     <div class="texteditbuttons">
+      <img class="display_none" data-dojo-attach-point="spinner" src="/images/stash-form-spinner.gif?mt=1348006528"/>
+      <input alt="Save Comment" class="high-res-button display_none" data-dojo-attach-point="saveButton" src="/images/SaveBlue.png?mt=1362631965" type="image"/>
+      <input alt="Edit Comment" class="high-res-button display_none" data-dojo-attach-point="editButton" src="/images/EditBlue.png?mt=1357346797" type="image"/>
+      <input alt="Delete Comment" class="high-res-button display_none" data-dojo-attach-point="deleteButton" src="/images/DeleteBlue.png?mt=1357346797" type="image"/>
+     </div>
+     <div class="cm_actionbar" data-dojo-attach-point="cmActionBar">
+      <div class="commenter_info">
+       <div class="thumbnail">
+        <a href="/">
+         <img alt=" " src="" title=" "/>
+        </a>
+       </div>
+       <div class="commenter_text">
+        <a class="timestamp" href="/">
+        </a>
+        <br/>
+        <a class="timestamp" href="/post/59306/25-of-the-people-have-a-4th-cone-and-see-colors-as-they-are-by-prof-diana-derval-linkedin?comment=" id="permalink-">
+        </a>
+       </div>
+      </div>
+      <div class="propsbuttoncontainer">
+       <span class="replyButtonAnchor">
+       </span>
+       <div id="propsTemplateRoot">
+       </div>
+       <div id="tumblrButtonRoot">
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

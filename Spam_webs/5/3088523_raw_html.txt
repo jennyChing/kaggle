@@ -1,0 +1,872 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>
+   Compile time assertions in C
+  </title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="ct_assert static_assert compile time assertions" name="keywords"/>
+  <meta content="A C macro to provide compile time assertions" name="description"/>
+  <link href="/links.html" rel="author"/>
+  <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMzMzMzMzMzMxEzMzMzMzMzETMzMzMzMzMRMzMzMzMzMxEzMzMzMzMzESIAMxEiADMRIgAzESIAMxEiADMRIgAzESIAMxEiADMRIgAzESIAMxEiADMRIgAzMzMzMxEzMzMzMzMzETMzMzMzMzMRMzMzMzMzMxEzMzMzMzMzMzMzP//wAAn/8AAJ//AACf/wAAn/8AAIGBAACBgQAAgYEAAIGBAACBgQAAgYEAAP+fAAD/nwAA/58AAP+fAAD//wAA" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/feed/rss2.xml" rel="alternate" title="www.pixelbeat.org" type="application/rss+xml"/>
+  <style type="text/css">
+   acronym {
+    font-variant: normal; /* stop opera auto capitalising */
+    border-bottom: 1px dotted; /* chrome doesn't otherwise highlight */
+}
+acronym:hover {
+    cursor: help;
+}
+
+q {
+    font-style: italic;
+}
+
+/* logical styles:
+kbd  for user keyboard entry
+code for snippets of computer code
+samp for computer status messages
+
+I use kbd below to actually represent a key on a keyboard
+*/
+kbd {
+    padding: 0px 1px 0px 1px;
+    margin: 0px 1px 0px 0px;
+    background-color: rgb(255,255,192);
+    border-top: 1px solid rgb(255,255,64);
+    border-left: 1px solid rgb(255,255,64);
+    border-right: 2px solid rgb(180,200,86);
+    border-bottom: 2px solid rgb(180,200,86);
+    font-size: 85%;
+}
+
+/* Move headings closer to the following info */
+h1,h2 {
+    padding: 16px 0px 6px 0px;
+    margin: 0px 0px 0px 0px;
+}
+h3 {
+    padding: 10px 0px 2px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+font.snippet {
+    font-size: 90%;
+    background-color: rgb(255,255,192);
+    border: 1px dotted rgb(180,200,86);
+    padding: 0px 2px 0px 2px; /* tlbr */
+}
+
+pre.snippet {
+    font-size: 100%;
+    background-color: rgb(255,255,192);
+    border: 1px dotted rgb(180,200,86);
+    text-align: left;
+    padding: 3px;
+    width: 50em;
+    /*
+    position: relative;
+    left: 10%;
+    */
+}
+
+pre.snippet font.comment {
+    color: rgb(180,200,86);
+}
+
+pre.snippet .hl {
+    background-color: #000000;
+    color: rgb(255,255,192);
+}
+
+pre.shell {
+    color: #bbbbbb;
+    background-color: #000000;
+    border: 1px solid;
+    margin: 15px 0px 15px 0px;
+    text-indent: 0;
+    text-align: left;
+    padding: 3px;
+    width: 50em;
+}
+
+pre.shell font.comment {
+    color: rgb(128,128,128);
+}
+
+pre.shell font.so {
+    color: yellow;
+}
+
+/* shrink container to fit around contained text etc.
+ * Use with pre.shell if you've long lines.
+ * Note min-width ignored for display:table-cell on ff2 at least,
+ * hence why this additional class is needed.
+ * Note also that stuff doesn't break around a &lt;pre&gt; with this. */
+.shrink {
+    width: auto !important;
+    display: table-cell;
+}
+
+pre.shell .hl {
+    background-color: #bbbbbb;
+    color: #000000;
+}
+
+.monospace {
+    font-family: monospace;
+    white-space: pre;
+}
+.nw {
+    white-space: nowrap;
+}
+.fw {
+    width: 100%;
+}
+
+a { /*add :link for external links*/
+    text-decoration: none; /* don't underline links by default */
+    outline-style: none;   /* don't put dotted box around clicked links */
+}
+a:hover {
+    text-decoration: underline;
+}
+img { border-style: none; }
+a.blog {
+    background-color: rgb(180,200,86);
+    border: 1px solid;
+    font-size: 75%;
+}
+pre.shell a {
+    color: rgb(128,128,255); /* keep links visible on black background */
+}
+pre.shell b {
+    color: rgb(255,255,255); /* bold = white */
+    font-weight: normal;
+}
+
+table.pixelbeat {
+    margin: 2px 0 1px 0;
+    border-width: 0 0 1px 1px;
+    border-spacing: 0;
+    border-color: rgb(192,255,192);
+    border-style: solid;
+    background-color: rgb(255,255,192);
+    border-collapse: collapse;
+}
+table.pixelbeat td {
+    padding: 0px 1px 0px 2px;
+    border-width: 1px 1px 0 0;
+    border-color: rgb(192,255,192);
+    border-style: solid;
+}
+tr.pbtitle, td.pbtitle {
+    background-color: rgb(180,220,100);
+}
+.dark {
+    color: rgb(180,200,86) !important;
+}
+.darkbg {
+    background-color: rgb(180,200,86) !important;
+}
+.medium {
+    color: rgb(180,220,100) !important;
+}
+.mediumbg {
+    background-color: rgb(180,220,100) !important;
+}
+
+.icon {
+    padding: 2px 3px 1px 3px; /* t r b l */
+    margin: 0;
+    text-align: center;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-weight: bold;
+    color: #fff;
+    border: 1px solid;
+    cursor: pointer;
+}
+.blue {
+    background-color: #1845CC;
+    border-color: #c3cde8 #000033 #000033 #c3cde8;
+}
+
+.orange {
+    background-color: #ff8000;
+    border-color: #ffc8a4 #3f1a01 #3f1a01 #ffc8a4;
+}
+
+.preload {
+    display: none;
+}
+
+/* This is required when the reddit widget does not
+   have the expanded=1 parameter. Also hide header. */
+.score.dislikes, .score.likes, .reddit-header {
+    display:none !important;
+}
+/* The rest of the reddit stuff for when style=off */
+.reddit-voting-arrows {
+    display:none !important;
+}
+.rembeddit-content {
+    margin-top: 5px;
+}
+.reddit-entry {
+    padding: 0px 9px 10px; 9px; /* t r b l */
+}
+.rembeddit {
+    border: 1px solid rgb(180,220,100);
+    background-color: rgb(255,255,192);
+    max-width: 30em;
+}
+.rembeddit small {
+    color: gray;
+}
+.rembeddit a { text-decoration: none; } /* Don't underline links */
+
+/* Styling for google custom search widget
+   See: http://code.google.com/apis/ajaxsearch/documentation/reference.html */
+#cse {
+    padding: 0px 3px 0px 3px; /* t r b l */
+    border: 1px solid rgb(180,220,100);
+    border-top: none;
+    background-color: rgb(255,255,192);
+}
+#cse .gs-title { text-decoration: none; } /* Don't underline links */
+/* Remove the following if you want to show comments.pixelbeat.org and www.pixelbeat.org on each result.
+   Note, separate tabs don't seem to be shown if you add both {www,comments}.pixelbeat.org? */
+#cse .gs-webResult .gs-visibleUrl-short { display:none; }
+/* There is already branding shown in watermark */
+#cse .gsc-branding { display:none; }
+
+/* Styling for google +1 button to align to bottom */
+#___plusone_0 { vertical-align: bottom !important; }
+  </style>
+  <style media="screen, projection" type="text/css">
+   /* Based on http://jessey.net/simon/articles/007.html */
+
+body {
+    margin: 0em;
+    padding: 0em;
+    color: #222;
+    /* Hmm: these mess up some pics and ls.py.html
+       background: rgb(252,252,230) none;
+       background: rgb(252,255,224) none; */
+}
+
+.invisible {
+    display: none;
+}
+
+#sidebar {
+    top: 0;
+    float: left;
+    position: absolute !important;
+    width: 9em;
+    /* height: 100%; */
+    /* background: rgb(255,255,192); */
+    color: black;
+    z-index: -1;
+}
+
+#header,#menu,.dynamenu {
+    top: 0;
+    right: 100%;
+    width: 9em;
+    background: rgb(255,255,192);
+    color: black;
+    z-index: 0;
+}
+
+#header {
+    border-bottom: 1px solid rgb(180,200,86);
+    height: 24px;
+}
+#hnav {
+    height: 24px; width: 96px;
+    /* background: url(/images/header.png) no-repeat center; */
+    background: url(data:image/png;base64,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) no-repeat center; padding: 0;
+    margin: auto;
+    position: relative;
+}
+#hnav li {
+    margin:0; padding: 0;
+    list-style: none;
+    position: absolute;
+    top: 0;
+}
+#hnav li, #hnav a {
+    height: 24px;
+    display: block;
+}
+#p1 { left:0; width: 24px; }
+#p2 { left:25px; width: 24px; }
+#p3 { left:50px; width: 24px; }
+#p4 { left:75px; width: 24px; }
+
+#adds {
+    height: 100%;
+    width: 9em;
+    z-index: 0;
+    overflow: hidden;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 9em;
+    background: rgb(255,255,192);
+    color: black;
+    z-index: 1;
+}
+
+/* IE 6 doesn't support '&gt;',
+   hence the following will just apply to gecko.
+   Note "x &gt; y" means select any y that is a direct child of x.
+   Note it must be a child not a descendant.
+   Remove the &gt; to specify descendant.
+   Note also any children of the sidebar will be fixed.
+
+   Update 14 June 2010, Android doesn't auto change this
+   to absolute like iPhone does, so when one zooms in,
+   the sidebar obstructs the display. Therefore leave it
+   absolute for everyone.
+
+   Update 30 June 2010, Later android (since Froyo)
+   work like iOS, in that they auto change to absolute.
+   Froyo = 1.5% of android market currently, so leave
+   the following commented out for a while.
+
+   Update 16 Dec 2010, time has passed and I'm
+   assuming people visiting this site will have
+   a recent enough Android, so reenabling.
+*/
+body &gt; #sidebar {
+    position: fixed;
+}
+
+#content {
+    margin: auto; /* Center, adjusted in narrow.css as otherwise android browser doesn't overlap this with top left menu */
+    height: 100%;
+    margin-top: 2em; /* Was 11 em when sidebar always shown.  */
+    padding: 1em;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: small;
+    max-width: 68em; /* a little smaller than 1024 on normal text on linux at least */
+    width: auto;
+    text-align: justify;
+}
+
+#menu a,#footer a {
+    display: block;
+    text-decoration: none;
+    text-align: left;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.3em;
+    padding-right: 0.2em;
+    /* width: 12.2em; */ /* IE6 needs this for footer highlight? */
+    background: rgb(180,200,86) none;
+    color: rgb(255,255,192);
+    font-weight: bold;
+    font-size: x-small;
+    font-family: Verdana, Arial, sans-serif;
+    margin-bottom: 1px;
+}
+
+#menu a:hover,#footer a:hover {
+    /* background: rgb(180,220,100) none; */
+    background: rgb(180,220,100) none;
+    color: black;
+}
+  </style>
+  <style media="print" type="text/css">
+   .title	{ width : 100%;
+	  margin : 1cm;
+	  padding: 0cm;
+	  z-index : 0;}
+
+/* This hides all the menus etc so they aren't printed out*/
+#sidebar{	display:none;}
+
+.noprint { display:none; }
+
+.contentText {	padding : 0.5cm;
+		margin-top : 0.5cm;
+		margin-right : 0cm;
+		margin-left : 0cm;}
+  </style>
+  <style media="screen" type="text/css">
+   /* The android brower doesn't overlap the body with the top menu for some reason,
+   with margin: auto; Therefore remove the margin here which is uneeded on narrow devices anyway.
+   Also bump up the font size more appropriate for mobile displays.
+   It's surprising that mobile browsers don't give more control over text size/reflow.
+
+   Note higher resolution devices like the ipad 5th gen have device with of 768 no matter
+   what the orientation or native resolution. Best treat these the same for now as
+   the screen is still relatively small.  */
+
+/* Since we can resize a standard browser screen to test these,
+   order from high to low so precedence is correct.  Note browser resizing
+   only affects max-width, not max-device-width.  */
+
+/* Note this only tunes for portait mode on ipads at present,
+   since max-device-width is always for portait mode, no matter orientation there. */
+
+/* Note only use relative adjustments below or you'll have all sorts of issues
+   (sizes reverting on orientation change, too narrow body, ..) especially on android. */
+
+/* For future size tweaking see: http://stackoverflow.com/questions/17906057/html-responsive-font-size-for-mobile-devices */
+
+@media only screen
+and (max-device-width : 768px) {
+  #content {
+    margin-left: 0;
+    max-width: none;
+    font-size: 120%;
+}
+}
+
+@media only screen
+and (max-device-width : 480px) {
+  #content {
+    margin-left: 0;
+    max-width: none;
+    font-size: 140%;
+  }
+}
+
+@media only screen
+and (max-device-width : 320px) {
+ #content {
+   margin-left: 0;
+   max-width: none;
+   font-size: 160%;
+  }
+}
+  </style>
+  <!--[if IE 6]&gt;
+&lt;link rel="stylesheet" href="/IE6hack.css" type="text/css" media="screen, projection"/&gt;
+&lt;![endif]-->
+  <script type="text/javascript">
+   function add_to_any_url(type)
+{
+    url  = "http://www.addtoany.com/?"
+    url += "sitename="+document.domain+"&amp;"
+    url += "siteurl=http://"+document.domain+"/&amp;"
+    if (type == "feed") {
+        url += "linkname="+encodeURIComponent("The latest")+"&amp;"
+        url += "linkurl="+encodeURIComponent("http://"+document.domain+"/feed/rss2.xml")+"&amp;"
+    } else {
+        url += "linkname="+encodeURIComponent(document.title)+"&amp;"
+        url += "linkurl="+encodeURIComponent(document.URL)+"&amp;"
+    }
+    url += "type="+type
+    return url
+}
+function subscribe()
+{
+    url  = add_to_any_url("feed")
+    window.location = url
+}
+function bookmark()
+{
+    url  = add_to_any_url("page")
+    window.location = url
+}
+function comments()
+{
+    first_dot=document.domain.indexOf(".")
+    if (first_dot == -1) {
+        comments_domain="comments.pixelbeat.org"
+    } else {
+        comments_domain="comments" + document.domain.substring(first_dot)
+    }
+    url = document.URL.replace("://"+document.domain, "://"+comments_domain)
+    window.location = url
+}
+//--&gt;
+  </script>
+ </head>
+ <body>
+  <div id="content">
+   <div class="contentText">
+    Please see the last "yellow box" below for the latest version of STATIC_ASSERT,
+or read on for details...
+    <p>
+     C99 doesn't require support for "sizeof" in preprocessor conditionals
+and gcc for example doesn't support it. So we can't do something like
+     <font class="snippet">
+      #if (sizeof(my_struct)!=512)
+     </font>
+     for example.
+This prompted me into seeking a more general solution of getting the compiler to
+check constant expressions, and I came up with this macro
+to support compile time assertions.
+    </p>
+    <pre class="snippet">
+     <font class="comment">
+      /* Note we need the 2 concats below because arguments to ##
+ * are not expanded, so we need to expand __LINE__ with one indirection
+ * before doing the actual concatenation. */
+     </font>
+     #define ASSERT_CONCAT_(a, b) a##b
+#define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+#define ct_assert(e) enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }
+    </pre>
+    This macro has no runtime side affects as it just defines
+an enum whose name depends on the current line, and whose value
+will give a divide by zero error at compile time if the assertion is false.
+If you try to ct_assert() a non constant expression by mistake,
+this will also give an error and you can change to using a normal assert().
+Using this macro you can create a compile time check at any scope as in the following examples:
+    <pre class="snippet">
+     ct_assert(sizeof(my_struct)==512);
+ct_assert(sizeof(int)==4);
+ct_assert(M_PI/2);
+    </pre>
+    Note compile time assertions have advantages over runtime ones.
+    <ol>
+     <li>
+      They don't need to be called in a function and so can
+be defined at a structure declaration site for example.
+     </li>
+     <li>
+      You catch any errors earlier and there is no chance
+of missing the assertion in testing.
+     </li>
+     <li>
+      You obviate the need for
+exercising the code path at runtime which may be awkward.
+     </li>
+     <li>
+      It's handy to check/ensure a compiler is in fact computing
+an expression at compile time.
+     </li>
+    </ol>
+    <p>
+     <b>
+      UPDATE 1
+     </b>
+     : After writing this I noticed that this functionality is more
+commonly known as static assertion for some reason, and is
+a new proposal in the C++ 0X draft standard, which takes the form:
+    </p>
+    <pre class="snippet">
+     static_assert(constant-expression, "error message");
+    </pre>
+    This is also being considered for the C1X standard.
+The macro above will be useful for a long time to come though.
+    <p>
+     <b>
+      UPDATE 2
+     </b>
+     : Miguel Sofer
+     <a href="http://tcl.cvs.sourceforge.net/tcl/tcl/generic/tclInt.h?r1=1.398&amp;r2=1.399">
+      added this to TCL
+     </a>
+     and noticed that the above macro doesn't work in all places for traditional C,
+as enums must be declared at the start of scope. So he fixed that and simplified the macro as well to give:
+    </p>
+    <pre class="snippet">
+     #define ct_assert(e) {enum { ct_assert_value = 1/(!!(e)) };}
+    </pre>
+    <p>
+     Also it was pointed out on
+     <a href="http://www.reddit.com/r/programming/comments/724ln/a_compile_time_assert_hack_for_c/">
+      reddit
+     </a>
+     that the linux kernel uses something similar in it's BUILD_BUG_ON macro:
+    </p>
+    <pre class="snippet">
+     #define ct_assert(e) ((void)sizeof(char[1 - 2*!(e)]))
+    </pre>
+    <p>
+     <b>
+      UPDATE 3
+     </b>
+     : I just realised myself, and Keith Thompson and Jim Meyering also kindly pointed out,
+that the above kernel and TCL variants will not work at global scope as they're statements.
+Therefore for traditional C you need to have separate macros to support both cases,
+which one can see for example in the
+     <a href="http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/verify.h;hb=HEAD">
+      gnulib verify macros
+     </a>
+     .
+For C++, C99 or GCC though, my original version above works for all situations.
+    </p>
+    <p>
+     <b>
+      UPDATE 4
+     </b>
+     : It was pointed out by Bill Davy that ct_assert() would fail to compile
+if used twice on the same line, or is used on the same line in 2 files included into
+the same compilation unit (which could be the same file included twice if it's not protected
+by #ifdef clauses). I did try to use __FILE__ to distinguish the identifier, but this is
+not a valid token, and wouldn't work anyway in the case where a file is included twice.
+So therefore I got rid of the unique identifier altogether to get the following which works
+for C99 and C++ for gcc at least.
+    </p>
+    <pre class="snippet">
+     #define ct_assert(e) extern char (*ct_assert(void)) [sizeof(char[1 - 2*!(e)])]
+    </pre>
+    <p>
+     <b>
+      UPDATE 5
+     </b>
+     : Bill Davy again
+     <a href="http://comments.pixelbeat.org/programming/gcc/static_assert.html#comment-1728">
+      points out
+     </a>
+     that update 4 is very noisy
+under microsoft compilers. So how about:
+    </p>
+    <pre class="snippet">
+     #ifdef __COUNTER__
+  /* microsoft */
+  #define ASSERT_CONCAT_(a, b) a##b
+  #define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+  #define ct_assert(e) enum { ASSERT_CONCAT(assert_line_, __COUNTER__) = 1/(!!(e)) }
+#else
+  /* gnu */
+  #define ct_assert(e) extern char (*ct_assert(void)) [sizeof(char[1 - 2*!(e)])]
+#endif
+    </pre>
+    <p>
+     <b>
+      UPDATE 6
+     </b>
+     : Mrcio Faustino mentioned the
+     <a href="http://msdn.microsoft.com/en-us/library/ms679289.aspx">
+      Microsoft C_ASSERT
+     </a>
+     equivalent.
+However it does not detect non constant expressions, but then I realised that my
+     <q>
+      GNU
+     </q>
+     version in update 5 doesn't either!
+He also mentioned that we should probably add an unused
+     <q>
+      message
+     </q>
+     parameter so as to ease the transition
+to the official
+     <q>
+      static_assert
+     </q>
+     when it becomes available. So adding those mods to my original macro
+and noting the caveats in update 2, we get:
+    </p>
+    <pre class="snippet">
+     #define ASSERT_CONCAT_(a, b) a##b
+#define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+/* These can't be used after statements in c89. */
+#ifdef __COUNTER__
+  /* microsoft */
+  #define STATIC_ASSERT(e,m) \
+    enum { ASSERT_CONCAT(static_assert_, __COUNTER__) = 1/(!!(e)) }
+#else
+  /* This can't be used twice on the same line so ensure if using in headers
+   * that the headers are not included twice (by wrapping in #ifndef...#endif)
+   * Note it doesn't cause an issue when used on same line of separate modules
+   * compiled with gcc -combine -fwhole-program.  */
+  #define STATIC_ASSERT(e,m) \
+    enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }
+#endif
+    </pre>
+    <p>
+     <b>
+      UPDATE 7
+     </b>
+     : Microsoft Visual studio 2010 released 2010-04-12,
+supports
+     <a href="http://msdn.microsoft.com/en-us/library/dd293588(v=VS.100).aspx">
+      static_assert
+     </a>
+     .
+     <br/>
+     <font class="snippet">
+      g++ -std=c++0x
+     </font>
+     supports the static_assert keyword since version 4.3 released 2008-03-05.
+    </p>
+    <p>
+     <b>
+      UPDATE 8
+     </b>
+     : gcc supports the
+     <a href="http://lists.gnu.org/archive/html/bug-gnulib/2011-04/msg00092.html">
+      _Static_assert
+     </a>
+     keyword since version 4.6, released 2011-03-05,
+and doesn't need the -std=c1x option to do so. Note the C1X standard, defines static_assert as an alias for the _Static_assert
+keyword in assert.h, but that is less portable to use currently.
+    </p>
+    <p>
+     <b>
+      UPDATE 9
+     </b>
+     Nov 2012: Stephen Pitts mentioned that extra braces are required to support putting
+the STATIC_ASSERT() right after a case statement.  When testing this I also noticed that gcc since version 4.3.0 supports __COUNTER__ too.
+So adjusting accordingly we get:
+    </p>
+    <pre class="snippet">
+     #define ASSERT_CONCAT_(a, b) a##b
+#define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+/* These can't be used after statements in c89. */
+#ifdef __COUNTER__
+  #define STATIC_ASSERT(e,m) \
+    { enum { ASSERT_CONCAT(static_assert_, __COUNTER__) = 1/(!!(e)) }; }
+#else
+  /* This can't be used twice on the same line so ensure if using in headers
+   * that the headers are not included twice (by wrapping in #ifndef...#endif)
+   * Note it doesn't cause an issue when used on same line of separate modules
+   * compiled with gcc -combine -fwhole-program.  */
+  #define STATIC_ASSERT(e,m) \
+    { enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }; }
+#endif
+    </pre>
+    <p>
+     <b>
+      UPDATE 10
+     </b>
+     Feb 2015: The extra braces added in update 9 don't work.
+What's needed is an implicit statement to cater for an assert directly
+after a label or a case statement, as labels can't be associated with
+a declaration. That can be done with a leading ';' giving:
+    </p>
+    <pre class="snippet">
+     #define ASSERT_CONCAT_(a, b) a##b
+#define ASSERT_CONCAT(a, b) ASSERT_CONCAT_(a, b)
+/* These can't be used after statements in c89. */
+#ifdef __COUNTER__
+  #define STATIC_ASSERT(e,m) \
+    ;enum { ASSERT_CONCAT(static_assert_, __COUNTER__) = 1/(!!(e)) }
+#else
+  /* This can't be used twice on the same line so ensure if using in headers
+   * that the headers are not included twice (by wrapping in #ifndef...#endif)
+   * Note it doesn't cause an issue when used on same line of separate modules
+   * compiled with gcc -combine -fwhole-program.  */
+  #define STATIC_ASSERT(e,m) \
+    ;enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }
+#endif
+    </pre>
+    Code on the page is licensed under the GNU All-Permissive License.
+    <!-- google_ad_section_start(weight=ignore) -->
+    <div style="color: gray; padding-top: 1em; padding-bottom: .5em; width:728px;">
+     <span style="text-align:left;">
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="license">
+       
+      </a>
+      Sep 18 2008
+     </span>
+     <span class="noprint">
+      <script type="text/javascript">
+       &lt;!--
+        document.write('&lt;g:plusone size="small"&gt;&lt;/g:plusone&gt;')
+        document.write('&lt;div style="padding-top: 1em; font-size: 120%; font-weight: bold;"&gt;&lt;a href="javascript:comments()"&gt;Comments...&lt;/a&gt;&lt;/div&gt;')
+        //--&gt;
+      </script>
+      <!-- Place this tag after the last plusone tag -->
+      <script type="text/javascript">
+       window.___gcfg = {lang: 'en-GB'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+      </script>
+     </span>
+    </div>
+    <div class="noprint" id="linkunits" style="padding-top: 1em;">
+     <script type="text/javascript">
+      &lt;!--
+        google_ad_client = "pub-3527575214508372";
+        google_ad_width = 728;
+        google_ad_height = 15;
+        google_ad_format = "728x15_0ads_al";
+        //2007-01-15: link_units
+        google_ad_channel = "0445407648";
+        google_color_border = "FFFFC0";
+        google_color_bg = "FFFFC0";
+        google_color_link = "0000FF";
+        google_color_text = "000000";
+        google_color_url = "0000FF";
+        //--&gt;
+     </script>
+     <!-- Disabled on Dec 9th 2014
+        &lt;script type="text/javascript"
+        src="//pagead2.googlesyndication.com/pagead/show_ads.js"&gt;
+        &lt;/script&gt;
+-->
+    </div>
+    <script type="text/javascript">
+     /* Don't load adds on coreutils pages.  */
+        if (location.pathname.indexOf('coreutils') != -1)
+          document.getElementById("linkunits").style.display='none';
+    </script>
+    <!-- google_ad_section_end -->
+   </div>
+  </div>
+  <div id="sidebar">
+   <div id="header">
+    <ul id="hnav">
+     <li id="p1">
+      <a href="/" rel="me">
+      </a>
+     </li>
+     <li id="p2">
+      <a href="mailto:P@draigBrady.com">
+      </a>
+     </li>
+     <li id="p3">
+      <a href="http://twitter.com/pixelbeat_">
+      </a>
+     </li>
+     <li id="p4">
+      <a href="/feed/rss2.xml">
+      </a>
+     </li>
+    </ul>
+   </div>
+   <!-- vertical -->
+   <table cellpadding="0" cellspacing="0" height="100%" width="100%">
+    <tr>
+     <td align="center">
+      <script type="text/javascript">
+       &lt;!--
+google_ad_client = "ca-pub-3527575214508372";
+/* small (just text) */
+google_ad_slot = "3344111843";
+google_ad_width = 120;
+google_ad_height = 240;
+/* tall */
+google_ad_slot = "0942807618";
+google_ad_width = 120;
+google_ad_height = 600;
+//--&gt;
+      </script>
+      <!-- Disabled on June 2nd 2013
+&lt;script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js"&gt; &lt;/script&gt;
+-->
+      <!--[if IE]&gt;
+&lt;!-- IE specific content -->
+     </td>
+    </tr>
+   </table>
+   <!-- google_ad_section_start(weight=ignore) -->
+   <div id="footer">
+    <!--
+&lt;a href="/feed/rss2.xml"&gt;Subscribe&lt;/a&gt;&lt;span class="invisible"&gt;&nbsp;|&nbsp;&lt;/span&gt;
+&lt;a style="margin-bottom:0;" href="mailto:P@draigBrady.com"&gt;Email&lt;/a&gt;&lt;span class="invisible"&gt;&nbsp;|&nbsp;&lt;/span&gt;
+-->
+   </div>
+   <!-- google_ad_section_end -->
+  </div>
+ </body>
+</html>

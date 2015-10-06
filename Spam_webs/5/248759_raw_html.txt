@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <!-- HEAD part + BODY tag 
+	
+	-->
+ <head>
+  <title>
+   The Illustration Cupboard
+  </title>
+  <link href="lib/sty.css" rel="stylesheet" type="text/css"/>
+  <link href="lib/ICHomepageStyle.css" rel="stylesheet" type="text/css"/>
+  <script src="js/jquery-1.9.1.js" type="text/javascript">
+  </script>
+  <script src="js/jquery-ui-1.10.3.custom.js" type="text/javascript">
+  </script>
+  <link href="lib/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css"/>
+  <script src="js/jquery.fancybox-1.3.4.js" type="text/javascript">
+  </script>
+  <link href="lib/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css"/>
+  <script language="JavaScript" src="js/carousel-01.js">
+  </script>
+  <script language="JavaScript" src="lib/custom.js">
+  </script>
+  <script language="JavaScript" src="js/rightNav.js">
+  </script>
+  <script language="JavaScript" src="js/typeface.js">
+  </script>
+  <script language="JavaScript" src="js/fonts/Helvetica_regular.typeface.js">
+  </script>
+  <script language="JavaScript" src="js/jquery.pngFix.js">
+  </script>
+  <link href="lib/AutoComplete.css" rel="stylesheet" type="text/css"/>
+  <!--[if IE 8]&gt;
+    &lt;link rel="stylesheet" href="lib/ICHomepageStyle_ie8.css" type="text/css"&gt;    
+    &lt;![endif]-->
+  <!--[if IE 7]&gt;
+    &lt;link rel="stylesheet" href="lib/ICHomepageStyle_ie7.css" type="text/css"&gt;    
+    &lt;![endif]-->
+  <!--[if IE 6]&gt;
+    &lt;link rel="stylesheet" href="lib/ICHomepageStyle_ie6.css" type="text/css"&gt;    
+    &lt;![endif]-->
+  <meta content="" name="Description"/>
+  <meta content="" name="keywords"/>
+  <meta content="Created by Crystal Click Ltd. Crystal Click is a premiere Internet applications development company specializing in advanced technology Internet applications. Visit us at  http://www.crystalclick.com" name="Author"/>
+  <meta content="Microsoft Visual Studio 7.0" name="GENERATOR"/>
+  <meta content="C#" name="CODE_LANGUAGE"/>
+  <meta content="JavaScript" name="vs_defaultClientScript"/>
+  <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema"/>
+  <style type="text/css">
+   .ui-autocomplete-category {
+    font-weight: bold;
+    padding: .1em .2em;
+    margin: .6em 0 .2em;
+    line-height:1.0; 
+  }
+    
+   .sub-menu {
+padding-top: 13px;
+position: absolute;
+top: 20px;
+z-index: 1000;
+background: transparent;
+text-align: left;
+}
+  .menu-table {
+border: 1px solid #ccc;
+border-top: none;
+font-size: small;
+}
+.menu-table th {
+font-family: Verdana;
+font-weight: bold;
+}
+.menu-table td {
+background: #f2f0f1;
+}
+.menu-categories li{width:177px;float:left;}
+  </style>
+  <script type="text/javascript">
+   function show(id) {
+    document.getElementById(id).style.visibility = "visible";
+  }
+  function hide(id) {
+    document.getElementById(id).style.visibility = "hidden";
+  }
+
+ 
+	     $.widget("custom.catcomplete", $.ui.autocomplete, {
+
+	         _renderMenu: function(ul, items) {
+	             var self = this,
+                currentCategory = "";
+	             $.each(items, function(index, item) {
+	                 if ((item.Cat != undefined || item.Cat != "") &amp;&amp; item.Cat != currentCategory) {
+	                     ul.append("&lt;li class='ui-autocomplete-category'&gt;" + item.Cat + "&lt;/li&gt;");
+	                     currentCategory = item.Cat;
+	                 }
+	                 self._renderItemData(ul, item);
+	             });
+	         }
+	     });
+
+
+	     jQuery.support.cors = true;
+	     $(window).load(function() {
+	         hide('categories');
+	     $("#Search_keyWord").catcomplete({
+	             delay: 0,
+	             source: function(request, response) {
+	                 $.ajax({
+	                     url: "DataService.asmx/SearchIllustration",
+	                     data: "{ 'searchStr': '" + request.term + "' }",
+	                     dataType: "json",
+	                     type: "POST",
+	                     contentType: "application/json; charset=utf-8",
+	                     dataFilter: function(data) { return data; },
+	                     success: function(data) {
+	                         response($.map(data.d,
+                                function(item) {
+                                    return {
+                                        value: item.Title,
+                                        label: item.Title,
+                                        Cat: item.Cat,
+                                        Id: item.Id,
+                                        BookID: item.BookID,
+                                        ArtistID: item.ArtistID
+                                    }
+                                }
+                             ));
+	                     },
+	                     error: function(XMLHttpRequest, textStatus, errorThrown) {
+	                         alert(textStatus);
+	                     }
+	                 });
+	             },
+	             select: function(event, ui) {
+	                 var url = ui.item.Id;
+	                 if (url != '#') {
+	                     if (ui.item.Cat == "Illustrations") {
+	                         location.href = 'illustration.aspx?type=artist&amp;iId=' + url + '&amp;idValue=' + ui.item.ArtistID;
+	                     }
+	                     if (ui.item.Cat == "Books") {
+	                         location.href = 'illustration.aspx?type=book&amp;iId=' + url + '&amp;idValue=' + ui.item.BookID;
+	                     }
+	                     if (ui.item.Cat == "Artists") {
+	                         location.href = 'Artist.aspx?aId='  + ui.item.ArtistID;
+	                     }
+	                 }
+	             },open: function(event, ui) {
+            $(".ui-autocomplete").css("z-index", 1000).css("max-height","500px");
+        },
+	             minLength: 3
+	         });
+	     });
+  </script>
+ </head>
+ <body>
+  <div id="container">
+   <form action="/illustration.aspx?iId=577&amp;type=artist&amp;idValue=43&amp;aiPage=2" id="_ctl0" method="post" name="_ctl0">
+    <input id="__VIEWSTATE" name="__VIEWSTATE" type="hidden" value="/wEPDwUJNDMxMTc0NjA0D2QWAgICD2QWBgIBDxYCHglpbm5lcmh0bWwF/QE8ZGl2IGlkPSdoZWFkZXJUb3AnPjxhIGhyZWY9J2RlZmF1bHRfZmxhc2guYXNweCcgPjxkaXYgaWQ9J2ljTG9nbyc+PC9kaXY+PC9hPjxkaXYgaWQ9J2hlYWRlclJpZ2h0Jz48ZGl2IGlkPSd0b3BBZGRyZXNzJz4gKzQ0ICgwKTIwIDc5NzYgMTcyNyAgIHwgICAyMiBCdXJ5IFN0LCBMb25kb24gU1cxWSA2QUwgPC9kaXY+PGRpdiBpZD0ndG9wQmFza2V0Jz48aDE+QmFza2V0PC9oMT48YSBocmVmPSdteWNvbGxlY3Rpb24uYXNweCc+RW1wdHk8L2E+ZAIFDxYCHwAFlg48dWwgY2xhc3M9J3RvcG5hdic+PGxpPjxhIGNsYXNzPScnIGhyZWY9J2RlZmF1bHRfZmxhc2guYXNweCc+PGRpdiBjbGFzcz0nZm9udCB0eXBlZmFjZS1qcycgPkhvbWU8L2Rpdj48L2E+PC9saT48bGk+PGEgY2xhc3M9J2FjdGl2ZScgaHJlZj0nZ2FsbGVyeV9hcnRpc3RzLmFzcHgnPjxkaXYgY2xhc3M9J2ZvbnQgdHlwZWZhY2UtanMnID5BcnRpc3RzPC9kaXY+PC9hPjwvbGk+PGxpPjxhIG9uTW91c2VPdmVyPSJzaG93KCdjYXRlZ29yaWVzJyk7IiBvbk1vdXNlT3V0PSJoaWRlKCdjYXRlZ29yaWVzJyk7IiBjbGFzcz0nJyBocmVmPSdib29rLmFzcHg/ZUlkPTkwJmVQYWdlPTEnID48ZGl2IGNsYXNzPSdmb250IHR5cGVmYWNlLWpzJyA+Qm9va3M8L2Rpdj48L2E+PC9saT48ZGl2IG9uTW91c2VPdmVyPSJzaG93KCdjYXRlZ29yaWVzJyk7IiBvbk1vdXNlT3V0PSJoaWRlKCdjYXRlZ29yaWVzJyk7IiBpZD0nY2F0ZWdvcmllcycgY2xhc3M9J3N1Yi1tZW51Jz48dGFibGUgY2xhc3M9bWVudS10YWJsZT48dGhlYWQ+PHRyPjx0aD5DYXRlZ29yaWVzPC90aD48L3RyPjwvdGhlYWQ+IDx0Ym9keT4gPHRyPjx0ZCBjbGFzcz0nbWVudS1jYXRlZ29yaWVzJz48dWw+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9Mic+RWR1Y2F0aW9uPC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9Myc+QW5pbWF0aW9uPC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9NCc+SHVtb3VyPC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9NSc+UG9ldHJ5PC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9Nic+Q2xhc3NpY3M8L2E+PC9saT48bGk+PGEgaHJlZj0nYm9vay5hc3B4P2NhdD03Jz5GYW50YXN5PC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9OCc+WW91bmcgQ2hpbGRyZW48L2E+PC9saT48bGk+PGEgaHJlZj0nYm9vay5hc3B4P2NhdD05Jz5Gb2xpbyBTb2NpZXR5PC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9MTAnPkdyYXBoaWMgTm92ZWxzPC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9MTEnPkFkdWx0PC9hPjwvbGk+PGxpPjxhIGhyZWY9J2Jvb2suYXNweD9jYXQ9MTInPkF1dG9iaW9ncmFwaHk8L2E+PC9saT48bGk+PGEgaHJlZj0nYm9vay5hc3B4P2NhdD0xMyc+RWxtZXI8L2E+PC9saT48bGk+PGEgaHJlZj0nYm9vay5hc3B4P2NhdD0xNCc+TXIgQmVubjwvYT48L2xpPjxsaT48YSBocmVmPSdib29rLmFzcHg/Y2F0PTE1Jz5DaGlsZHJlbidzIExhdXJlYXRlPC9hPjwvbGk+PC91bD48L3RkPjwvdHI+PC90Ym9keT48L3RhYmxlPiA8L2Rpdj48bGk+PGEgY2xhc3M9JycgaHJlZj0nZXhoaWJpdGlvbi5hc3B4Jz48ZGl2IGNsYXNzPSdmb250IHR5cGVmYWNlLWpzJyA+RXhoaWJpdGlvbnM8L2Rpdj48L2E+PC9saT48bGk+PGEgY2xhc3M9JycgaHJlZj0nbmV3cy5hc3B4Jz48ZGl2IGNsYXNzPSdmb250IHR5cGVmYWNlLWpzJyA+TmV3cyBhbmQgZXZlbnRzPC9kaXY+PC9hPjwvbGk+PGxpPjxhIGNsYXNzPScnIGhyZWY9J2Fib3V0Z2FsbGVyeS5hc3B4JyA+PGRpdiBjbGFzcz0nZm9udCB0eXBlZmFjZS1qcycgPkFib3V0IHVzPC9kaXY+PC9hPjwvbGk+PGxpPjxhIGNsYXNzPScnIGhyZWY9J2h0dHA6Ly9pbGx1c3RyYXRpb25jdXBib2FyZC5ibG9nc3BvdC5jb20nPjxkaXYgY2xhc3M9J2ZvbnQgdHlwZWZhY2UtanMnID5CbG9nPC9kaXY+PC9hPjwvbGk+PGxpPjxhIGNsYXNzPScnIGhyZWY9J2xpbmtzLmFzcHgnPjxkaXYgY2xhc3M9J2ZvbnQgdHlwZWZhY2UtanMnID5MaW5rczwvZGl2PjwvYT48L2xpPjwvZGl2PmQCDQ8WAh8AZWRkwJstzlOhxmZlilXrCxYy6kYYeJc="/>
+    <input id="__EVENTVALIDATION" name="__EVENTVALIDATION" type="hidden" value="/wEWBAKu1ffNAwKXyr6KDgK3nIuxAwLEipncDNuCSD9CclD1DlOQ4CYeom7NTp+w"/>
+    <div id="header">
+     <div id="headerTop">
+      <a href="default_flash.aspx">
+       <div id="icLogo">
+       </div>
+      </a>
+      <div id="headerRight">
+       <div id="topAddress">
+        +44 (0)20 7976 1727   |   22 Bury St, London SW1Y 6AL
+       </div>
+       <div id="topBasket">
+        <h1>
+         Basket
+        </h1>
+        <a href="mycollection.aspx">
+         Empty
+        </a>
+       </div>
+       <select class="fld_100" id="Search_searchBy" name="Search:searchBy">
+        <option selected="selected" value="">
+         all
+        </option>
+        <option value="illustration">
+         illustration
+        </option>
+        <option value="artist">
+         by artist
+        </option>
+        <option value="book">
+         by book
+        </option>
+       </select>
+       <div id="leftSearch">
+       </div>
+       <input class="SearchBox" id="Search_keyWord" name="Search:keyWord" type="text" value="Search"/>
+       <input class="SearchButton" id="Search_searchButton" name="Search:searchButton" type="submit" value=""/>
+       <br/>
+       <span id="Search_lblSearch">
+       </span>
+      </div>
+     </div>
+     <div class="typeface-js" id="divTopMenu" style="font-family: Optimer">
+      <ul class="topnav">
+       <li>
+        <a class="" href="default_flash.aspx">
+         <div class="font typeface-js">
+          Home
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="active" href="gallery_artists.aspx">
+         <div class="font typeface-js">
+          Artists
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="" href="book.aspx?eId=90&amp;ePage=1" onmouseout="hide('categories');" onmouseover="show('categories');">
+         <div class="font typeface-js">
+          Books
+         </div>
+        </a>
+       </li>
+       <div class="sub-menu" id="categories" onmouseout="hide('categories');" onmouseover="show('categories');">
+        <table class="menu-table">
+         <thead>
+          <tr>
+           <th>
+            Categories
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td class="menu-categories">
+            <ul>
+             <li>
+              <a href="book.aspx?cat=2">
+               Education
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=3">
+               Animation
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=4">
+               Humour
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=5">
+               Poetry
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=6">
+               Classics
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=7">
+               Fantasy
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=8">
+               Young Children
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=9">
+               Folio Society
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=10">
+               Graphic Novels
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=11">
+               Adult
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=12">
+               Autobiography
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=13">
+               Elmer
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=14">
+               Mr Benn
+              </a>
+             </li>
+             <li>
+              <a href="book.aspx?cat=15">
+               Children's Laureate
+              </a>
+             </li>
+            </ul>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <li>
+        <a class="" href="exhibition.aspx">
+         <div class="font typeface-js">
+          Exhibitions
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="" href="news.aspx">
+         <div class="font typeface-js">
+          News and events
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="" href="aboutgallery.aspx">
+         <div class="font typeface-js">
+          About us
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="" href="http://illustrationcupboard.blogspot.com">
+         <div class="font typeface-js">
+          Blog
+         </div>
+        </a>
+       </li>
+       <li>
+        <a class="" href="links.aspx">
+         <div class="font typeface-js">
+          Links
+         </div>
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div id="bread">
+    </div>
+    <div id="pageTitle">
+    </div>
+    <div id="linkLetterList">
+    </div>
+    <div id="divIllustration">
+    </div>
+    <!-- Footer -->
+   </form>
+   <div id="footer">
+    <a href="mailto:gallery@illustrationcupboard.com">
+     Contact Us
+    </a>
+    Copyright  2010 Illustrationcupboard Gallery. All rights reserved.
+   </div>
+  </div>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _uacct = "UA-1438172-1"; 
+urchinTracker();
+  </script>
+ </body>
+</html>
+<!-- End Footer -->

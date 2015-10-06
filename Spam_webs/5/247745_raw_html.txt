@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   jQuery Template Markup Language (JTML) AJAX Demo
+  </title>
+  <meta content="jquery,jtml,template,rendering" name="Keywords"/>
+  <meta content="Ben Nadel demonstrates how to load remote data using AJAX in order to render a jQuery Template Mark Langauge (JTML) template." name="Description"/>
+  <link href="/favicon.png" rel="shortcut icon" type="image/ico"/>
+  <link href="/index.cfm?event=blog.rss" rel="alternate" title="Ben Nadel's ColdFusion, JavaScript, User Experience (UX), and Web Development RSS" type="application/rss+xml"/>
+  <link href="https://plus.google.com/108976367067760160494?rel=author" rel="publisher"/>
+  <meta content="4BMHbbVgHMewa8Orm/PNkp0/RtWXuI4Fh/IKPkE2y7A=" name="verify-v1"/>
+  <link href="//fonts.googleapis.com/css?family=Merriweather:300,400,700,900|Open+Sans:300,400,600,700,400italic,300italic" rel="stylesheet" type="text/css"/>
+  <link href="/linked/css/bennadel.css?v=2015-05-15" rel="stylesheet" type="text/css"/>
+ </head>
+ <body id="body">
+  <header class="l-site-header">
+   <div class="masthead">
+    <a class="title" href="/index.cfm" title="Ben Nadel on User Experience (UX), JavaScript, ColdFusion, Node.js, Life, and Love.">
+     Ben Nadel
+    </a>
+    <div class="tagline">
+     On User Experience (UX) Design, JavaScript, ColdFusion, Node.js, Life, and Love.
+    </div>
+   </div>
+   <nav class="active-blog">
+    <a class="root" href="#primary-navigation">
+     Navigation:
+    </a>
+    <ul class="items" id="primary-navigation">
+     <li class="blog">
+      <a href="/blog/recent-blog-entries.htm" title="Ben Nadel's Blog On Obsessively Thorough Web Application Development.">
+       Home
+      </a>
+     </li>
+     <!--
+-->
+     <li class="projects">
+      <a href="/projects/overview.htm" title="Ben Nadel's open source web development projects.">
+       Projects
+      </a>
+     </li>
+     <!--
+-->
+     <li class="about">
+      <a href="/about/about-ben-nadel.htm" title="Learn more about Ben Nadel, Co-founder of InVision App, Inc.">
+       About Me
+      </a>
+     </li>
+     <!--
+-->
+     <li class="ask_ben">
+      <a href="/ask-ben/ask-ben-nadel.htm" title="Ask Ben Nadel your web development questions.">
+       Ask Ben
+      </a>
+     </li>
+     <!--
+-->
+     <li class="contact">
+      <a href="/contact/contact-ben-nadel.htm" title="Contact Ben Nadel for any web development consutling.">
+       Contact
+      </a>
+     </li>
+     <!--
+-->
+     <li class="jobs">
+      <a href="/jobs/web-development-jobs.htm" title="Find your next web development job on Ben Nadel's job board.">
+       Jobs ( 6 )
+      </a>
+     </li>
+     <!--
+-->
+     <li class="people">
+      <a href="/people/who-rock-my-world.htm" title="The amazing people who rock Ben Nadel's world on the daily!">
+       People
+      </a>
+     </li>
+     <!--
+-->
+     <li class="rss">
+      <a class="rss" href="/index.cfm?event=blog.rss" title="The BenNadel.com RSS feed.">
+       RSS
+      </a>
+     </li>
+    </ul>
+   </nav>
+   <figure>
+    <img alt="Ben Nadel at the Stammari Suberbowl XLIV Party (Feb. 2010) with: Sabrina Abhyankar and David Stamm" data-rel="242" src="/images/header/photos/sabrina_abhyankar_david_stamm.jpg"/>
+    <figcaption>
+     Ben Nadel at the Stammari Suberbowl XLIV Party (Feb. 2010) with:
+     <span class="person">
+      <a href="http://www.facebook.com/profile.php?id=584364405" target="_blank">
+       Sabrina Abhyankar
+      </a>
+     </span>
+     and
+     <span class="person">
+      David Stamm (
+      <a href="https://twitter.com/davidstamm" target="_blank">
+       @davidstamm
+      </a>
+      )
+     </span>
+    </figcaption>
+   </figure>
+  </header>
+  <div class="l-site-body" id="site-content">
+   <div class="l-site-content content">
+    <article data-gist-id="9759713" data-id="1911" id="blog-post">
+     <header class="m-post-header">
+      <h1>
+       jQuery Template Markup Language (JTML) AJAX Demo
+      </h1>
+      <div class="meta">
+       By
+       <a class="author" href="https://plus.google.com/108976367067760160494?rel=author" title="Author: Ben Nadel on Google+">
+        Ben Nadel
+       </a>
+       on
+       <time datetime="2010-04-29">
+        April 29, 2010
+       </time>
+      </div>
+      <div class="tags">
+       Tags:
+       <a class="tag" href="/blog/tags/6-javascript-dhtml-blog-entries.htm">
+        Javascript / DHTML
+       </a>
+      </div>
+     </header>
+     <p>
+      After publishing the
+      <a href="http://www.bennadel.com/projects/jquery-template-markup-language-jtml.htm" target="_blank">
+       jQuery Template Markup Language (JTML) project
+      </a>
+      with a basic, single-page demo, I thought I'd put together a simple AJAX demo. In this example, the JTML template is still defined on the main page; but, the JSON data used to populate the template is being pulled down from the server using jQuery AJAX. Once the data is pulled down, it is merged with the template and appended to the page. I am not using the full breadth of JTML tags - neither the template nor the data is all that complex. This is simply meant to demonstrate the pulling of remote data to populate the template.
+     </p>
+     <table border="0" cellpadding="0" cellspacing="0" class="imageborder" width="100%">
+      <tr>
+       <td rowspan="3" width="50%">
+        <br/>
+       </td>
+       <td class="nw">
+        <br/>
+       </td>
+       <td class="n">
+        <br/>
+       </td>
+       <td class="ne">
+        <br/>
+       </td>
+       <td rowspan="3" width="50%">
+        <br/>
+       </td>
+      </tr>
+      <tr>
+       <td class="w">
+        <br/>
+       </td>
+       <td class="c">
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="586" width="545">
+         <param name="movie" value="http://www.bennadel.com/resources/jing/2010-04-29_0945.swf">
+         </param>
+         <param name="quality" value="high">
+         </param>
+         <param name="bgcolor" value="#FFFFFF">
+         </param>
+         <param name="flashVars" value="width=545&amp;height=586">
+         </param>
+         <param name="allowFullScreen" value="true">
+         </param>
+         <param name="scale" value="showall">
+         </param>
+         <param name="allowScriptAccess" value="always">
+         </param>
+         <embed allowfullscreen="true" allowscriptaccess="always" bgcolor="#FFFFFF" flashvars="width=545&amp;height=586" height="586" quality="high" scale="showall" src="http://www.bennadel.com/resources/jing/2010-04-29_0945.swf" type="application/x-shockwave-flash" width="545">
+         </embed>
+        </object>
+       </td>
+       <td class="e">
+        <br/>
+       </td>
+      </tr>
+      <tr>
+       <td class="sw">
+        <br/>
+       </td>
+       <td class="s">
+        <br/>
+       </td>
+       <td class="se">
+        <br/>
+       </td>
+      </tr>
+     </table>
+     <p>
+      For the demo, I set up a very simple ColdFusion page on the server that generates a random Girl object and returns it in JSON format. The code for this is listed farther down, but essentially, it returns a struct with randomly selected name, hair, eyes, weight, etc. values. This struct is then merged with the JTML Girl template and appended to the page:
+     </p>
+     <div class="code" data-gist-filename="code-1.htm">
+      <ul>
+       <li>
+        &lt;!DOCTYPE HTML&gt;
+       </li>
+       <li>
+        &lt;html&gt;
+       </li>
+       <li>
+        &lt;head&gt;
+       </li>
+       <li class="tab1">
+        &lt;title&gt;jQuery Template Markup Language (JTML) AJAX Demo&lt;/title&gt;
+       </li>
+       <li class="tab1">
+        &lt;style type="text/css"&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        #girls {
+       </li>
+       <li class="tab3">
+        list-style-type: none ;
+       </li>
+       <li class="tab3">
+        margin-left: 0px ;
+       </li>
+       <li class="tab3">
+        padding-left: 0px ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        li.girl {
+       </li>
+       <li class="tab3">
+        border-bottom: 1px dotted #CCCCCC ;
+       </li>
+       <li class="tab3">
+        padding-bottom: 14px ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        li.girl h4 {
+       </li>
+       <li class="tab3">
+        margin-bottom: 4px ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        li.girl p.description {
+       </li>
+       <li class="tab3">
+        margin: 0px 0px 7px 0px ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        li.girl p.age {
+       </li>
+       <li class="tab3">
+        font-size: 90% ;
+       </li>
+       <li class="tab3">
+        margin: 0px 0px 7px 0px ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        li.girl p.note {
+       </li>
+       <li class="tab3">
+        color: #999999 ;
+       </li>
+       <li class="tab3">
+        font-size: 90% ;
+       </li>
+       <li class="tab3">
+        font-style: italic ;
+       </li>
+       <li class="tab3">
+        }
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;/style&gt;
+       </li>
+       <li class="tab1">
+        &lt;script type="text/javascript" src="jquery-1.4.2.js"&gt;&lt;/script&gt;
+       </li>
+       <li class="tab1">
+        &lt;script type="text/javascript" src="jquery.jtml.js"&gt;&lt;/script&gt;
+       </li>
+       <li class="tab1">
+        &lt;script type="text/javascript"&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        // When the DOM is ready, initialize scripts.
+       </li>
+       <li class="tab2">
+        jQuery(function( $ ){
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        // Create a new JTML template renderer.
+       </li>
+       <li class="tab3">
+        var girlTemplate = new JTMLTemplate(
+       </li>
+       <li class="tab4">
+        $( "script.template.girlTemplate" )
+       </li>
+       <li class="tab3">
+        );
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        // Get a reference to the output.
+       </li>
+       <li class="tab3">
+        var girls = $( "#girls" );
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        // Get a reference to the 'create' link.
+       </li>
+       <li class="tab3">
+        var createGirl = $( "#createGirl" );
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        // Bind the create link to make a new girl (via AJAX).
+       </li>
+       <li class="tab3">
+        createGirl.click(
+       </li>
+       <li class="tab4">
+        function( event ){
+       </li>
+       <li class="tab5">
+        // Cancel the event since this isn't a real link.
+       </li>
+       <li class="tab5">
+        event.preventDefault();
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab5">
+        // Make the call to the server to get a new girl.
+       </li>
+       <li class="tab5">
+        // This will come back as JSON data.
+       </li>
+       <li class="tab5">
+        $.getJSON(
+       </li>
+       <li class="tab6">
+        "./random_girl.cfm",
+       </li>
+       <li class="tab6">
+        function( girl ){
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab7">
+        // Given the girl data, populate a girl
+       </li>
+       <li class="tab7">
+        // template and then just append to girls
+       </li>
+       <li class="tab7">
+        // output list.
+       </li>
+       <li class="tab7">
+        girls.append(
+       </li>
+       <li class="tab8">
+        girlTemplate.render( girl )
+       </li>
+       <li class="tab7">
+        );
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab6">
+        }
+       </li>
+       <li class="tab5">
+        );
+       </li>
+       <li class="tab4">
+        }
+       </li>
+       <li class="tab3">
+        );
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        });
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;/script&gt;
+       </li>
+       <li>
+        &lt;/head&gt;
+       </li>
+       <li>
+        &lt;body&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;h1&gt;
+       </li>
+       <li class="tab2">
+        jQuery Template Markup Language (JTML) AJAX Demo
+       </li>
+       <li class="tab1">
+        &lt;/h1&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;h2&gt;
+       </li>
+       <li class="tab2">
+        Random Girls
+       </li>
+       <li class="tab1">
+        &lt;/h2&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;p&gt;
+       </li>
+       <li class="tab2">
+        &lt;a id="createGirl" href="#"&gt;Create another girl&lt;/a&gt; already!
+       </li>
+       <li class="tab1">
+        &lt;/p&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;ul id="girls"&gt;
+       </li>
+       <li class="tab2">
+        &lt;!-- To be populated dynamically. --&gt;
+       </li>
+       <li class="tab1">
+        &lt;/ul&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;!-- --------------------------------------------------- --&gt;
+       </li>
+       <li class="tab1">
+        &lt;!-- --------------------------------------------------- --&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;!---
+       </li>
+       <li class="tab2">
+        Define the girl template.
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        NOTE: I am using UPPER case javascript keys because I am
+       </li>
+       <li class="tab2">
+        communicating with a ColdFusion server (which uses upper-
+       </li>
+       <li class="tab2">
+        case values). This has *nothing* to do with JTML.
+       </li>
+       <li class="tab1">
+        ---&gt;
+       </li>
+       <li class="tab1">
+        &lt;script type="text/jtml" class="template girlTemplate"&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        &lt;li class="girl"&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        &lt;h4&gt;
+       </li>
+       <li class="tab4">
+        ${NAME}
+       </li>
+       <li class="tab3">
+        &lt;/h4&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        &lt;p class="description"&gt;
+       </li>
+       <li class="tab4">
+        ${NAME}, affectionately known as "${NICKNAME}",
+       </li>
+       <li class="tab4">
+        has ${HAIRCOLOR} hair and ${EYECOLOR} eyes.
+       </li>
+       <li class="tab3">
+        &lt;/p&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        &lt;p class="age"&gt;
+       </li>
+       <li class="tab4">
+        Published Age:
+       </li>
+       <li class="tab4">
+        ${Math.floor( AGE - (7 * Math.random()) )}
+       </li>
+       <li class="tab3">
+        &lt;/p&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        &lt;!--
+       </li>
+       <li class="tab4">
+        For certain body types, I'm gonna borrow a phrase
+       </li>
+       <li class="tab4">
+        from the Flight of the Conchords.
+       </li>
+       <li class="tab4">
+        YouTube: http://www.youtube.com/watch?v=JT5AQIlmM0I
+       </li>
+       <li class="tab3">
+        --&gt;
+       </li>
+       <li class="tab3">
+        &lt;jtml:if test="(BODYTYPE == 'Athletic') || (BODYTYPE == 'Plump')"&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab4">
+        &lt;p class="note"&gt;
+       </li>
+       <li class="tab5">
+        She's so hot, she's making me sexist!
+       </li>
+       <li class="tab4">
+        &lt;/p&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab3">
+        &lt;/jtml:if&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab2">
+        &lt;/li&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li class="tab1">
+        &lt;/script&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;/body&gt;
+       </li>
+       <li>
+        &lt;/html&gt;
+       </li>
+      </ul>
+     </div>
+     <p>
+      As you can see, I have a "create girl" link which triggers the AJAX call to the server. Once the server returns the random girl JSON data, I use it to invoke the render() method on an instance of the JTMLTemplate class. This merges the JSON into the given template and returns the resultant HTML. This HTML is then appended to the girls UL element. After clicking on the "create girl" link a few times, this is the kind of output that we get:
+     </p>
+     <table border="0" cellpadding="0" cellspacing="0" class="imageborder" width="100%">
+      <tr>
+       <td rowspan="3" width="50%">
+        <br/>
+       </td>
+       <td class="nw">
+        <br/>
+       </td>
+       <td class="n">
+        <br/>
+       </td>
+       <td class="ne">
+        <br/>
+       </td>
+       <td rowspan="3" width="50%">
+        <br/>
+       </td>
+      </tr>
+      <tr>
+       <td class="w">
+        <br/>
+       </td>
+       <td class="c">
+        <img alt="jQuery Template Markup Language (JTML) AJAX Demo With ColdFusion." height="507" src="http://www.bennadel.com/resources/uploads/jquery_template_markup_language_ajax_demo.gif" width="545"/>
+       </td>
+       <td class="e">
+        <br/>
+       </td>
+      </tr>
+      <tr>
+       <td class="sw">
+        <br/>
+       </td>
+       <td class="s">
+        <br/>
+       </td>
+       <td class="se">
+        <br/>
+       </td>
+      </tr>
+     </table>
+     <p>
+      As you can see, the JSON data was successfully combined with the JTML template and appended to the page. And, while I didn't use too much logic in the template, you can see that the note in the template was conditionally rendered based on the girl's randomly selected bodyType value.
+     </p>
+     <p>
+      If you want to see the ColdFusion page that generates the random girl data, here it is:
+     </p>
+     <div class="code" data-gist-filename="code-2.cfm">
+      <ul>
+       <li>
+        &lt;!---
+       </li>
+       <li class="tab1">
+        This file is meant to be used with the AJAX demo. This returns
+       </li>
+       <li class="tab1">
+        a randomly created girl (ala Wierd Science) and returns it in
+       </li>
+       <li class="tab1">
+        JSON format.
+       </li>
+       <li>
+        ---&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define possible names. ---&gt;
+       </li>
+       <li>
+        &lt;cfset names = [
+       </li>
+       <li class="tab1">
+        "Vicky",
+       </li>
+       <li class="tab1">
+        "Erika",
+       </li>
+       <li class="tab1">
+        "Sarah",
+       </li>
+       <li class="tab1">
+        "Tricia",
+       </li>
+       <li class="tab1">
+        "Joanna"
+       </li>
+       <li class="tab1">
+        ] /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define possible nicknames. ---&gt;
+       </li>
+       <li>
+        &lt;cfset nickNames = [
+       </li>
+       <li class="tab1">
+        "Sweetie",
+       </li>
+       <li class="tab1">
+        "Pookie",
+       </li>
+       <li class="tab1">
+        "Sugar Bear",
+       </li>
+       <li class="tab1">
+        "Honey Bun",
+       </li>
+       <li class="tab1">
+        "Baby Cakes"
+       </li>
+       <li class="tab1">
+        ] /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define possible hair colors. ---&gt;
+       </li>
+       <li>
+        &lt;cfset hairColors = [
+       </li>
+       <li class="tab1">
+        "Brunette",
+       </li>
+       <li class="tab1">
+        "Blonde",
+       </li>
+       <li class="tab1">
+        "Black",
+       </li>
+       <li class="tab1">
+        "Red"
+       </li>
+       <li class="tab1">
+        ] /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define possible eye colors. ---&gt;
+       </li>
+       <li>
+        &lt;cfset eyeColors = [
+       </li>
+       <li class="tab1">
+        "Brown",
+       </li>
+       <li class="tab1">
+        "Blue",
+       </li>
+       <li class="tab1">
+        "Green",
+       </li>
+       <li class="tab1">
+        "Black"
+       </li>
+       <li class="tab1">
+        ] /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define possible body types. ---&gt;
+       </li>
+       <li>
+        &lt;cfset bodyTypes = [
+       </li>
+       <li class="tab1">
+        "Plump",
+       </li>
+       <li class="tab1">
+        "Athletic",
+       </li>
+       <li class="tab1">
+        "Voluptuous",
+       </li>
+       <li class="tab1">
+        "Curvey",
+       </li>
+       <li class="tab1">
+        "Thin",
+       </li>
+       <li class="tab1">
+        "Average"
+       </li>
+       <li class="tab1">
+        ] /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- ----------------------------------------------------- ---&gt;
+       </li>
+       <li>
+        &lt;!--- ----------------------------------------------------- ---&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!---
+       </li>
+       <li class="tab1">
+        Ok, now that we have a bunch of attributes to choose from,
+       </li>
+       <li class="tab1">
+        let's create a random girl. Mmaaa ha ha ha ha ha. It's Alive!
+       </li>
+       <li>
+        ---&gt;
+       </li>
+       <li>
+        &lt;cfset girl = {
+       </li>
+       <li class="tab1">
+        name = names[ randRange( 1, arrayLen( names ) ) ],
+       </li>
+       <li class="tab1">
+        nickName = nickNames[ randRange( 1, arrayLen( nickNames ) ) ],
+       </li>
+       <li class="tab1">
+        hairColor = hairColors[ randRange( 1, arrayLen( hairColors ) ) ],
+       </li>
+       <li class="tab1">
+        eyeColor = eyeColors[ randRange( 1, arrayLen( eyeColors ) ) ],
+       </li>
+       <li class="tab1">
+        bodyType = bodyTypes[ randRange( 1, arrayLen( bodyTypes ) ) ],
+       </li>
+       <li class="tab1">
+        weight = randRange( 100, 200 ),
+       </li>
+       <li class="tab1">
+        age = randRange( 25, 55 )
+       </li>
+       <li class="tab1">
+        } /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- ----------------------------------------------------- ---&gt;
+       </li>
+       <li>
+        &lt;!--- ----------------------------------------------------- ---&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Conver the response to binary for streaming. ---&gt;
+       </li>
+       <li>
+        &lt;cfset binaryResponse = toBinary(
+       </li>
+       <li class="tab1">
+        toBase64( serializeJSON( girl ) )
+       </li>
+       <li class="tab1">
+        ) /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Define the header for the client. ---&gt;
+       </li>
+       <li>
+        &lt;cfheader
+       </li>
+       <li class="tab1">
+        name="content-length"
+       </li>
+       <li class="tab1">
+        value="#arrayLen( binaryResponse )#"
+       </li>
+       <li class="tab1">
+        /&gt;
+       </li>
+       <li>
+        <br/>
+       </li>
+       <li>
+        &lt;!--- Stream the girl back as JSON data. ---&gt;
+       </li>
+       <li>
+        &lt;cfcontent
+       </li>
+       <li class="tab1">
+        type="text/json"
+       </li>
+       <li class="tab1">
+        variable="#binaryResponse#"
+       </li>
+       <li class="tab1">
+        /&gt;
+       </li>
+      </ul>
+     </div>
+     <p>
+      As you can see, not much going on here except for the heavy use of randRange() to select values.
+     </p>
+     <p>
+      As I was building this demo, I actually made a few small tweaks to the JTML library. Previously, if you wanted to perform Javascript operations inside of ${..} output, you needed to wrap the content in parenthesis. I updated the library to do that for you so you no longer need to do that directly within the template. All in all though, I hope this demonstrates the ease with which JTML might allow you to merge JSON data and HTML markup. Perhaps in the next demo, I'll fool around with loading the JTML template off the server as well (something I've never tried with any rendering engine).
+     </p>
+     <div class="m-tweet-this">
+      <a href="https://twitter.com/intent/tweet?text=Groovy%20post%20by%20%40BenNadel%20%2D%20jQuery%20Template%20Markup%20Language%20%28JTML%29%20AJAX%20Demo%20http%3A%2F%2Fbjam%2Ein%2F1911" onclick="window.open( this.href, 'tweetThis1911', 'width=600,height=425' ).focus()" target="tweetThis1911">
+       <span class="label">
+        Tweet This
+       </span>
+       <span class="message">
+        Groovy post by @BenNadel - jQuery Template Markup Language (JTML) AJAX Demo
+       </span>
+      </a>
+      <span class="thanks">
+       Thanks my man 
+       <strong>
+        you rock the party that rocks the body!
+       </strong>
+      </span>
+     </div>
+     <div class="hrule">
+      <br/>
+     </div>
+     <!-- BEGIN: Related Posts. -->
+     <aside class="m-related-posts">
+      <h3>
+       Enjoyed This? You Might Also Enjoy Reading:
+      </h3>
+      <ul>
+       <li>
+        <a href="/blog/2026-jquery-template-markup-langauge-jtml-vs-jquery-templates.htm">
+         jQuery Template Markup Langauge (JTML) vs. jQuery Templates
+        </a>
+       </li>
+       <li>
+        <a href="/blog/1912-loading-remote-jquery-template-markup-language-jtml-templates.htm">
+         Loading Remote jQuery Template Markup Language (JTML) Templates
+        </a>
+       </li>
+       <li>
+        <a href="/blog/1908-the-jquery-template-markup-language-jtml-project.htm">
+         The jQuery Template Markup Language (JTML) Project
+        </a>
+       </li>
+       <li>
+        <a href="/blog/1907-experimenting-with-the-jquery-template-markup-language-jtml.htm">
+         Experimenting With The jQuery Template Markup Language (JTML)
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <!-- END: Related Posts. -->
+     <div class="hrule">
+      <br/>
+     </div>
+     <!-- BEGIN: Job Listings. -->
+     <div class="m-recent-jobs">
+      <h3>
+       Looking For A
+       <em>
+        New Job
+       </em>
+       ?
+      </h3>
+      <div class="actions">
+       <a href="/jobs/web-development-jobs.htm" title="Find your next web development job on Ben Nadel's job board.">
+        View All Jobs
+       </a>
+       |
+       <a href="/jobs/post-a-job-listing.htm" title="Post a job now! Only $29!">
+        Post A Job - Only $29
+       </a>
+       
+      </div>
+      <ul>
+       <li>
+        <a href="/jobs/313-Web-Applications-Developer.htm" title="Your new job: Web Applications Developer">
+         <span class="title">
+          Web Applications Developer
+         </span>
+         <span class="company">
+          at University of California, Davis
+         </span>
+        </a>
+       </li>
+       <li>
+        <a href="/jobs/312-Advanced-ColdFusion-Developer.htm" title="Your new job: Advanced ColdFusion Developer">
+         <span class="title">
+          Advanced ColdFusion Developer
+         </span>
+         <span class="company">
+          at HD Web Studio
+         </span>
+        </a>
+       </li>
+       <li>
+        <a href="/jobs/311-ColdFusion-Developer-Programmer.htm" title="Your new job: ColdFusion Developer / Programmer">
+         <span class="title">
+          ColdFusion Developer / Programmer
+         </span>
+         <span class="company">
+          at Blue Tangerine Solutions
+         </span>
+        </a>
+       </li>
+       <li>
+        <a href="/jobs/310-ColdFusion-Web-Developer-Junior-or-Mid-Level-.htm" title="Your new job: ColdFusion Web Developer (Junior or Mid-Level)">
+         <span class="title">
+          ColdFusion Web Developer (Junior or Mid-Level)
+         </span>
+         <span class="company">
+          at Pomegranate
+         </span>
+        </a>
+       </li>
+       <li>
+        <a href="/jobs/309-Full-Stack-Software-Developer.htm" title="Your new job: Full-Stack Software Developer">
+         <span class="title">
+          Full-Stack Software Developer
+         </span>
+         <span class="company">
+          at ClearPoint Strategy
+         </span>
+        </a>
+       </li>
+      </ul>
+      <div class="kiva">
+       100% of job board revenue is donated to Kiva.
+       <em>
+        Loans that change lives
+       </em>
+       
+       <a href="/jobs/web-development-jobs.htm#kiva">
+        Find out more
+       </a>
+       
+      </div>
+     </div>
+     <!-- END: Job Listings. -->
+     <div class="hrule">
+      <br/>
+     </div>
+     <!-- BEGIN: Comments. -->
+     <section class="m-comments">
+      <h2>
+       Reader Comments
+      </h2>
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_26890">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/c7f82887e82bf347f524f8ee9777312f?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/3151-martin-m-dler.htm">
+         Martin Mdler
+        </a>
+        <a class="date" href="#comments_26890">
+         <time datetime="2010-04-29">
+          Apr 29, 2010 at 10:16 AM
+         </time>
+        </a>
+        <div class="count">
+         29 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Haha, nice Flight of the Conchords reference!
+         <br/>
+         I really dig this template concept. Thanks, this demo is really helpful.
+         <br/>
+         Is this the template engine which shall become part of jQuery core one day?
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_26891">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_26891">
+         <time datetime="2010-04-29">
+          Apr 29, 2010 at 10:20 AM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Martin,
+        </p>
+        <p>
+         Thanks my man. I know there is some template proposals for jQuery - this one is not even on the radar :) I'm not nearly that plugged into the jQuery world.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_26892">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/307e043e2042a2ab31d7192466c163e4?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/5933-chris.htm">
+         Chris
+        </a>
+        <a class="date" href="#comments_26892">
+         <time datetime="2010-04-29">
+          Apr 29, 2010 at 10:26 AM
+         </time>
+        </a>
+        <div class="count">
+         2 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Hey Ben, thank you for another nice demo. I'm looking forward to the next one where you will remotely load templates. Hopefully I will find time today to play around a bit with JTML - great stuff.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_26893">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_26893">
+         <time datetime="2010-04-29">
+          Apr 29, 2010 at 10:29 AM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Chris,
+        </p>
+        <p>
+         Thanks my man - I really appreciate the positive feedback.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_26988">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/453041bb203542928785dd4bb2f80e02?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/5969-davebowman.htm">
+         DaveBowman
+        </a>
+        <a class="date" href="#comments_26988">
+         <time datetime="2010-05-04">
+          May 4, 2010 at 9:15 PM
+         </time>
+        </a>
+        <div class="count">
+         1 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Sorry to note this, but it's not a demo, Ben, it's a descrption of a demo. Why not put the script online? A picture is worth a thousand words... and a click is worth a hundred pictures (plus a couple of videos) :)
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_26990">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_26990">
+         <time datetime="2010-05-04">
+          May 4, 2010 at 9:25 PM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Dave,
+        </p>
+        <p>
+         A couple of people have asked for "usable" demos (for lack of a better term) in the recent past. I have not philosophical issue with it; I definitely think it would add value - it's simply a time / effort thing. For the ColdFusion stuff, this makes less sense; but perhaps for the Javascript stuff, which is so much more tangible, I'll try to make some of this stuff happen.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_27140">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f3b0bcfcd8ffdca700bcf2d34e9cfdf0?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/6006-jason-guiditta.htm">
+         Jason Guiditta
+        </a>
+        <a class="date" href="#comments_27140">
+         <time datetime="2010-05-11">
+          May 11, 2010 at 11:36 AM
+         </time>
+        </a>
+        <div class="count">
+         1 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Ben, nice post.  Just starting to take a look at the actual code, but always glad to see new template engines for javascript, I much prefer this approach to the stand jquery inline string interpolation.  I have to echo the requests for making the demo code easily downloadable, but I will go a step further and suggest a solution - put it on github.  This is free and easy, you could have one repo for your library, and others for any examples you create.  An added benefit is that you may get people contributing to your code, so you don't have to do all the work.
+        </p>
+        <p>
+         Another question I have is - what is the license?  If you have not thought about this and want it to be open source, I woudl suggest MIT, as that is compatible with almost everything.
+        </p>
+        <p>
+         Lastly, you might want to add this to the jquery plugins site.  I took a quick look and did not see it, so if you have already done this, feel free to disregard  :)  Again, great post, you write some really good content
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_27292">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_27292">
+         <time datetime="2010-05-16">
+          May 16, 2010 at 10:09 PM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Jason,
+        </p>
+        <p>
+         I only just watched my first presentation on GIT the other week at a conference. As such, I don't know enough about GitHub to start using it just yet. Although in the future, perhaps that can be a good approach. I know that Git is really becoming a hot ticket item lately.
+        </p>
+        <p>
+         As far as licensing, I just post code as-is. I've never really thought of licensing. I suppose it's time that I put more thought into that. Of course, how does not one separate the code in a project vs. the code on a blog post? Do I have to up a license on each blog post?
+        </p>
+        <p>
+         Thanks for the jQuery plugins suggestion. I had not thought of that and you suggesting that is quite an endorsement :D
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_27293">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_27293">
+         <time datetime="2010-05-16">
+          May 16, 2010 at 10:12 PM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Jason,
+        </p>
+        <p>
+         Holy cow! I just checked the plugin site. They have 19 pages of results for the phrase "templates". Seems like this would just be lost in the noise.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_30002">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/66cdde9362465305bcdf2be5640b5df1?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/6825-clive.htm">
+         Clive
+        </a>
+        <a class="date" href="#comments_30002">
+         <time datetime="2010-09-08">
+          Sep 8, 2010 at 10:57 AM
+         </time>
+        </a>
+        <div class="count">
+         1 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Hi,Ben. I'm a Chinese web developer. I used your jtml plugin but I found it didn't work when json object contains Chinese character in json's value field. Would you fix this bug ? I'm so glad to use your plugin. Thank you very much.
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment ben" id="comments_30023">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/f9bbc701ca6770ef482cc1e172344e25?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/1851-ben-nadel.htm">
+         Ben Nadel
+        </a>
+        <a class="date" href="#comments_30023">
+         <time datetime="2010-09-09">
+          Sep 9, 2010 at 10:52 AM
+         </time>
+        </a>
+        <div class="count">
+         12,287 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         @Clive,
+        </p>
+        <p>
+         I'll have to experiment with high-ascii characters. I am not sure what part of it is breaking - the JSON or the string replace.
+        </p>
+        <p>
+         Is it actually throwing an error? Or is it simply not doing anything?
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_40999">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/2c9fb96c09805b4611a9b67a6145a79e?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/10385-tr-n-c-ng-nghi-p.htm">
+         tr?n cng nghi?p
+        </a>
+        <a class="date" href="#comments_40999">
+         <time datetime="2012-10-25">
+          Oct 25, 2012 at 2:42 AM
+         </time>
+        </a>
+        <div class="count">
+         2 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         nice post ! but i wonder use j template is faster than bind from server !
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_41416">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/6cc8bab0b3221e370868891d56e73e5f?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/10568-mahdi.htm">
+         mahdi
+        </a>
+        <a class="date" href="#comments_41416">
+         <time datetime="2013-01-09">
+          Jan 9, 2013 at 3:24 AM
+         </time>
+        </a>
+        <div class="count">
+         1 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Thanks
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <!-- BEGIN: Comment. -->
+      <article class="comment " id="comments_44263">
+       <div class="meta">
+        <img class="avatar" src="//www.gravatar.com/avatar/cda516b9bb23d3f6c0594e5562001f9e?s=120&amp;d=http%3A%2F%2Fwww%2Ebennadel%2Ecom%2Fimages%2Fgravatar%2Farnold%2Ejpg"/>
+        <a class="author" href="/members/11271-marialukas.htm">
+         Marialukas
+        </a>
+        <a class="date" href="#comments_44263">
+         <time datetime="2014-02-20">
+          Feb 20, 2014 at 4:58 AM
+         </time>
+        </a>
+        <div class="count">
+         2 Comments
+        </div>
+       </div>
+       <div class="content">
+        <p>
+         Really nice post! Thanks for posting the demo about jQuery Template Markup Language. jQuery plugin is used for loading and using templates. jQuery template is a javascript library.The advanced version of jquery is 1.9.1
+        </p>
+       </div>
+      </article>
+      <!-- END: Comment. -->
+      <div class="comments-disabled">
+       <div class="reason">
+        <span>
+         Oh my chickens, this post is old!
+        </span>
+       </div>
+       <div class="follow-up">
+        <a href="https://twitter.com/BenNadel" title="Ben Nadel's Twitter Account">
+         <em>
+          Hit me up on Twitter
+         </em>
+         if you want to discuss it further.
+        </a>
+       </div>
+      </div>
+     </section>
+     <!-- END: Comments. -->
+    </article>
+   </div>
+   <div class="l-site-aside">
+    <div class="m-ad-cluster">
+     <a class="nw" href="/blog/2439-My-Experience-With-AngularJS-The-Super-heroic-JavaScript-MVW-Framework.htm" title="My Experience With AngularJS - The Super-heroic JavaScript MVW Framework">
+      My Experience With AngularJS - The Super Heroic JavaScript MVW Framework
+     </a>
+     <a class="ne" href="/jobs/web-development-jobs.htm" title="Find your next web development job on the BenNadel.com job board.">
+      Find your next web development job on the BenNadel.com job board
+     </a>
+     <a class="sw" href="/blog/2192-One-Man-s-Search-For-Love-My-cf-Objective-2011-Lightning-Talk.htm" title="One Man's Search for Love, by Ben Nadel">
+      One Man's Search for Love - Lightning Talk
+     </a>
+     <a class="se" href="https://github.com/BenNadel" title="Ben Nadel's open-source development projects on GitHub.">
+      Fork Me on GitHub.com
+     </a>
+    </div>
+    <div class="m-invision-ad">
+     <a href="http://www.invisionapp.com?source=bennadel.com&amp;ad=large" title="UX Prototyping Made Beautiful - Create Interactive Wireframes &amp; High Fidelity Prototypes">
+      UX Prototyping Made Beautiful - Create Interactive Wireframes &amp; High Fidelity Prototypes
+     </a>
+    </div>
+   </div>
+   <br clear="both"/>
+  </div>
+  <footer class="l-site-footer">
+   <small>
+    <span class="copyright">
+     Ben Nadel  2015. All content is the property of Ben Nadel and BenNadel.com.
+    </span>
+    <a class="back-to-top" href="#body">
+     Back to Top
+    </a>
+   </small>
+   <section class="epilogue">
+    <div class="mini-resume">
+     <div class="avatar">
+      <img alt="Ben Nadel's avatar." src="/images/global/ben-nadel-avatar.jpg" title="Ben Nadel is co-founder of InVision App, Inc. and a passionate web-applications developer."/>
+     </div>
+     <div class="title">
+      About Ben Nadel
+     </div>
+     <div class="bio">
+      I am the co-founder and chief technical officer at InVision App, Inc  the world's leading prototyping, 
+						collaboration &amp; workflow platform. I also rock out in JavaScript and ColdFusion 24x7 and I dream about
+						promise resolving asynchronously.
+     </div>
+     <div class="social-media">
+      <a href="https://github.com/BenNadel" title="Follow Ben Nadel on GitHub.">
+       GitHub
+      </a>
+      |
+      <a href="https://www.twitter.com/BenNadel" title="Follow Ben Nadel on Twitter.">
+       Twitter
+      </a>
+      |
+      <a href="https://www.linkedin.com/in/BenNadel" title="Follow Ben Nadel on LinkedIn.">
+       LinkedIn
+      </a>
+      |
+      <a href="https://plus.google.com/108976367067760160494?rel=author" title="Follow Ben Nadel on Google Plus.">
+       Google+
+      </a>
+      |
+      <a href="https://www.facebook.com/BenNadel" title="Follow Ben Nadel on Facebook.">
+       Facebook
+      </a>
+     </div>
+    </div>
+   </section>
+  </footer>
+  <script src="/linked/vendor/jquery/jquery-2.1.0.min.js" type="text/javascript">
+  </script>
+  <script src="/linked/js/standard.js?v=2015-05-26" type="text/javascript">
+  </script>
+  <script src="/linked/js/jquery.gist.js" type="text/javascript">
+  </script>
+  <script src="/linked/js/blog.js?v=42198.3580324" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+				ga('create', 'UA-477521-1', 'auto');
+				ga('send', 'pageview');
+  </script>
+ </body>
+</html>

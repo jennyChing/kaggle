@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <base href="/"/>
+  <meta content="width=width=device-width, initial-scale=1, height=2000" name="viewport"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="no-cache" http-equiv="Pragma"/>
+  <meta content="monthly_pledge_notifications, post_page_v2, comment_reply_notifications, default_pledge_5" name="patreon-enabled-features"/>
+  <meta content="Patreon is empowering a new generation of creators.
+Support and engage with artists and creators as they live out their passions!" name="description"/>
+  <meta content="Patreon" name="title"/>
+  <meta content="artists, crowdfunding, patron, sponsor, music, videos, fundraise" name="keywords"/>
+  <meta content="no-cache" http-equiv="Pragma"/>
+  <link href="favicon.ico?v=4" rel="icon" type="image/ico"/>
+  <link href="favicon.ico" rel="shortcut icon"/>
+  <title>
+   Patreon
+  </title>
+  <meta content="Patreon" property="og:title"/>
+  <meta content="http://www.patreon.com/contentRemoved" property="og:url"/>
+  <meta content="Patreon" property="og:site_name"/>
+  <meta content="Patreon is empowering a new generation of creators.
+Support and engage with artists and creators as they live out their passions!" property="og:description"/>
+  <meta content="201564" property="fb:admins"/>
+  <meta content="130127590512253" property="fb:app_id"/>
+  <meta content="article" property="og:type"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,500,600,700|Just+Another+Hand" rel="stylesheet" type="text/css"/>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <link href="/scripts/static/fancybox/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css"/>
+  <link href="/css/menu_style.css?v=1436914043" rel="stylesheet" type="text/css"/>
+  <link href="/css/main.css?v=1436914043" rel="stylesheet" type="text/css"/>
+  <link href="/scripts/nocompile/tipuedrop/tipuedrop.css?v=2" rel="stylesheet"/>
+  <style>
+   /* TODO: Please move these to some legacy CSS file */
+        /* Used For ShareBox */
+
+        .legacy-activity-feed-buttons {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+
+        .legacy-activity-feed-buttons .legacy-activity-feed-buttons--left,
+        .legacy-activity-feed-buttons .btnOnShare.left {
+            margin: 0px;
+            display: inline-block;
+            vertical-align: top;
+            height: 18px;
+            padding: 5px 4px 6px 5px !important;
+        }
+
+        .legacy-activity-feed-buttons .legacy-activity-feed-buttons--right,
+        .legacy-activity-feed-buttons .btnOnShare.right {
+            display: inline-block;
+            margin: 0px;
+            vertical-align: top;
+        }
+
+        #watchCreation.legacy-override iframe{
+            /* Monkey patching the creation page because the video has no bounds */
+            width: 100%;
+            height: 430px;
+        }
+
+        /* TODO: For be a patron flow, remove once the new one is complete */
+        .patreon-legacy-block {
+            margin-top: 0px;
+            height: 0px;
+            overflow: hidden;
+            visibility: hidden;
+            padding: 0px;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            opacity: 0;
+            -webkit-transition: opacity 200ms ease;
+            transition: opacity 200ms ease;
+            -moz-transition: opacity 200ms ease;
+            max-width: 560px;
+        }
+
+        .patreon-legacy-block.active {
+            visibility: visible;
+            height: auto;
+            overflow: none;
+            margin-top: 20px;
+            padding: 20px;
+            opacity: 1;
+        }
+
+        .patreon-legacy-block p {
+            margin: 0;
+            margin-bottom: 0px;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .patreon-legacy-element-adjustments .rewardTail img {
+            max-width: 100%;
+        }
+  </style>
+  <style>
+   /* Admin mode styles, because I can't stand the way admin mode looks */
+        .patreon-tips-demo {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            left: 0;
+            display: block;
+            background: black;
+            color: white;
+            z-index: 200;
+            white-space: nowrap;
+            padding: 0 20px 0 20px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-box-shadow: 0 1px 3px #333;
+            -moz-box-shadow: 0 1px 3px #333;
+            box-shadow: 0 1px 3px #333;
+        }
+
+        .patreon-tips-demo.patreon-tips-demo-main {
+            background: -webkit-linear-gradient(90deg, #134E5E 10%, #71B280 90%); /* Chrome 10+, Saf5.1+ */
+            background:    -moz-linear-gradient(90deg, #134E5E 10%, #71B280 90%); /* FF3.6+ */
+            background:     -ms-linear-gradient(90deg, #134E5E 10%, #71B280 90%); /* IE10 */
+            background:      -o-linear-gradient(90deg, #134E5E 10%, #71B280 90%); /* Opera 11.10+ */
+            background:         linear-gradient(90deg, #134E5E 10%, #71B280 90%); /* W3C */
+        }
+
+        .patreon-tips-demo.patreon-tips-demo-action {
+            background: -webkit-linear-gradient(90deg, #1F1C2C 10%, #928DAB 90%); /* Chrome 10+, Saf5.1+ */
+            background:    -moz-linear-gradient(90deg, #1F1C2C 10%, #928DAB 90%); /* FF3.6+ */
+            background:     -ms-linear-gradient(90deg, #1F1C2C 10%, #928DAB 90%); /* IE10 */
+            background:      -o-linear-gradient(90deg, #1F1C2C 10%, #928DAB 90%); /* Opera 11.10+ */
+            background:         linear-gradient(90deg, #1F1C2C 10%, #928DAB 90%); /* W3C */
+        }
+
+        .patreon-tips-demo--text {
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            margin: 0;
+            margin-bottom: 0;
+        }
+
+        .patreon-tips-demo--text.patreon-tips-demo--text-link {
+            text-decoration: none;
+            margin: 0;
+            color: #1A9BDB;
+            margin-bottom: 0;
+        }
+  </style>
+  <link href="//s3-us-west-1.amazonaws.com/patreon-webclient-assets/c299abceee5f37de2c1798505d76e311c33ba4d9/css/app.css" rel="stylesheet" type="text/css"/>
+  <!--[if IE 9]&gt;
+    &lt;script src="//cdn.rawgit.com/jpillora/xdomain/0.7.3/dist/xdomain.min.js" data-slave="https://api.patreon.com/ie"&gt;&lt;/script&gt;
+    &lt;![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript">
+  </script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js" type="text/javascript">
+  </script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js" type="text/javascript">
+  </script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js" type="text/javascript">
+  </script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js" type="text/javascript">
+  </script>
+  <script src="//s3-us-west-1.amazonaws.com/patreon-webclient-assets/c299abceee5f37de2c1798505d76e311c33ba4d9/js/app.js" type="text/javascript">
+  </script>
+  <!--[if IE]&gt;
+    &lt;link rel="stylesheet" type="text/css" href="css/main-ie.css"/&gt;&lt;![endif]-->
+  <script type="text/javascript">
+   var osPage = 'None'; // tells what patreon page to execute
+  </script>
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAG4uXX_eucDtOjEE2DhSZbzpYmOUuGoT8&amp;sensor=false&amp;libraries=places" type="text/javascript">
+  </script>
+  <script src="/scripts/nocompile/jquery.fancybox-1.3.4.min.js" type="text/javascript">
+  </script>
+  <script src="/scripts/static.js?v=2" type="text/javascript">
+  </script>
+  <script src="/scripts/ourspot.js" type="text/javascript">
+  </script>
+  <script src="/scripts/nocompile/tipuedrop/tipuedrop.min.js?v=3" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   Modernizr.addTest('patreon-flexbox-ie10-adjustment', Modernizr.testAllProps('flexAlign', 'end', true));
+
+        $(document).ready(function () {
+
+                    
+            $('#tipue_drop_input').tipuedrop({
+                                'mode': 'json',
+                                'show': '8',
+                                'contentLocation': '/filterArt'
+                }).watermark('Search artists by name, location, or type of content', {useNative: false});
+            
+
+
+
+                window.triggerDeletePostModal = function(data) {
+                    var scope = angular.element("body");
+                    var injector = scope.injector();
+                    var modalService = injector.get("ModalsService");
+
+                    console.log(data);
+                    return modalService.showModal("make-post-delete-from-id", {
+                        id: data.id,
+                        name: data.name,
+                        avatar: data.avatar
+                    });
+                };
+
+                /* BEGIN HACK FOR FONT FACE WEB FONTS UNTIL CHROME FIX */
+                $('body').delay(500).queue(
+                    function (next) {
+                        $(this).css('padding-bottom', '1px');
+                    }
+                );
+                /* END HACK FOR FONT FACE WEB FONTS UNTIL CHROME FIX */
+
+                    $("#topPanWrapper").sticky();
+        });
+
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40726300-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
+                '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+  </script>
+  <script type="text/javascript">
+   var decodeEntities = (function () {
+            //create a new html document (doesn't execute script tags in child elements)
+            var doc = document.implementation.createHTMLDocument("");
+            var element = doc.createElement('div');
+
+            function getText(str) {
+                element.innerHTML = str;
+                str = element.textContent;
+                element.textContent = '';
+                return str;
+            }
+
+            function decodeHTMLEntities(str) {
+                if (str &amp;&amp; typeof str === 'string') {
+                    //called twice because initially text might be encoded like this: &lt;img src=fake onerror=&quot;prompt(1)&quot;&gt;
+                    return getText(getText(str));
+                }
+            }
+            return decodeHTMLEntities;
+        })();
+
+
+        window.facebookLogin = function(){
+            if(typeof(FB) != 'undefined' &amp;&amp; FB != null) {
+                FB.login(function(response){
+                    var serverString = "www.patreon.com";
+                    var queryString = "?";
+                    queryString = decodeEntities(queryString);
+                    if (response.authResponse) {
+                        window.location = 'https://'
+                                        + serverString
+                                        + '/fblogin?'
+                                        + queryString;
+                    } else {
+                        console.error("Facebook failed to provide auth response");
+                    }
+                }, {scope: 'user_photos'});
+            }
+        };
+  </script>
+  <!-- dependency injection from patreon_py into patreon_webclient -->
+  <script type="text/javascript">
+   // for es6 modules
+        window.patreon = {
+            apiServer: 'api.patreon.com'
+        };
+
+        // for angular modules
+        angular
+            .module('App.services')
+            .config(["ApiServerPathProvider", function(ApiServerPathProvider) {
+                ApiServerPathProvider.set("https://api.patreon.com");
+            }])
+            .config(['CurrentUserProvider', function(CurrentUserProvider) {
+                CurrentUserProvider.setCurrentUser({
+                    id: '',
+                    fullName: '',
+                    thumbUrl: '',
+                    email: ''
+                });
+            }]);
+  </script>
+ </head>
+ <body class="patreon-body-flex-support patreon-background" data-ng-app="App" data-root="true" id="ng-app">
+  <div class="patreon-body-legacy-override patreon-fonts-override" data-patreon-modals="">
+  </div>
+  <div class="patreon-body-legacy-override patreon-fonts-override" patreon-hover-messaging="">
+  </div>
+  <!-- Used for redirecting after logging in. -->
+  <input id="login-component-main-server" type="hidden" value="www.patreon.com"/>
+  <div id="white-overlay">
+  </div>
+  <div id="intro-overlay">
+  </div>
+  <div id="fb-root">
+  </div>
+  <script>
+   var fb_validated = false;
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '130127590512253', // App ID
+            version: 'v2.0',
+            channelURL: '//www.patreon.com/channel.php', // Channel File
+            status: false, // check login status
+            cookie: true, // enable cookies to allow the server to access the session
+            oauth: true, // enable OAuth 2.0
+            xfbml: true,  // parse XFBML
+            frictionlessRequests: true
+        });
+
+        FB.getLoginStatus(function (response) {
+            if (response.status === 'connected') {
+                /*FB.api({ method: 'fql.query',query: 'SELECT publish_stream FROM permissions WHERE uid=me()' },
+                 function(response) {
+                 if(response[0].publish_stream == 1)
+                 fb_validated = true;
+                 }
+                 );*/
+                fb_validated = true;
+            }
+        });
+        // Additional initialization code here
+
+        // This block of code supports urls that say something like
+        // https://www.patreon.com/signup?facebookSignup=yes
+        var queryDictionary = {};
+
+        location.search.substr(1).split("&amp;").forEach(function(item) {
+            queryDictionary[item.split("=")[0]] = item.split("=")[1];
+        });
+
+        // Hello
+        if (queryDictionary.facebookSignup === 'yes') {
+            var $scope = angular.element(document.getElementById('patreon-signup-component')).scope().$$childHead;
+
+            $scope.handleFacebookSignup();
+        }
+    };
+
+    // Load the SDK Asynchronously
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'))
+  </script>
+  <script>
+   var navigationData = {"display_name": "", "featured_link_name": "Featured", "image": {"fullsize_url": null, "thumbnail_url": null}, "is_creator": false, "is_https": "http", "is_logged_in": null, "is_vanity": false, "message_amount": 0, "no_share": false, "referer_url": null};
+
+   angular
+        .module('App.services')
+        .config(["NavigationProvider", function(NavigationProvider) {
+            NavigationProvider.setNavigationData(navigationData);
+    }]);
+  </script>
+  <!-- start Mixpanel -->
+  <script type="text/javascript">
+   (function (e, b) {
+        if (!b.__SV) {
+            var a, f, i, g;
+            window.mixpanel = b;
+            a = e.createElement("script");
+            a.type = "text/javascript";
+            a.async = !0;
+            a.src = ("https:" === e.location.protocol ? "https:" : "http:") +
+                '//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';
+            f = e.getElementsByTagName("script")[0];
+            f.parentNode.insertBefore(a, f);
+            b._i = [];
+            b.init = function (a, e, d) {
+                function f(b, h) {
+                    var a = h.split(".");
+                    2 == a.length &amp;&amp; (b = b[a[0]], h = a[1]);
+                    b[h] = function () {
+                        b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
+                    }
+                }
+
+                var c = b;
+                "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
+                c.people = c.people || [];
+                c.toString = function (b) {
+                    var a = "mixpanel";
+                    "mixpanel" !== d &amp;&amp; (a += "." + d);
+                    b || (a += " (stub)");
+                    return a
+                };
+                c.people.toString = function () {
+                    return c.toString(1) + ".people (stub)"
+                };
+                i =["disable",
+                    "track",
+                    "track_pageview",
+                    "track_links",
+                    "track_forms",
+                    "register",
+                    "register_once",
+                    "alias",
+                    "unregister",
+                    "identify",
+                    "name_tag",
+                    "set_config",
+                    "people.set",
+                    "people.set_once",
+                    "people.increment",
+                    "people.append",
+                    "people.track_charge",
+                    "people.clear_charges",
+                    "people.delete_user"];
+                for (g = 0; g &lt; i.length; g++)f(c, i[g]);
+                b._i.push([a, e, d])
+            };
+            b.__SV = 1.2
+        }
+    })(document, window.mixpanel || []);
+    mixpanel.init("cb7506f85e445f00907587f5033f7c6b");
+  </script>
+  <!-- end Mixpanel -->
+  <div class="patreon-body-legacy-override patreon-fonts-override" data-patreon-navigation="">
+  </div>
+  <div data-patreon-tooltip="">
+  </div>
+  <div class="patreon-navigation-gutter">
+  </div>
+  <script>
+   $(function () {
+        var updateCSRF = function () {
+            $.getJSON('/REST/auth/CSRFTicket', {uri: '/' + window.location.pathname.substr(1)}, function (tokenData) {
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    if ((originalOptions.type !== undefined &amp;&amp; originalOptions.type.toLowerCase() !== 'post') || options.type.toLowerCase() !== 'post') {
+                        return;
+                    }
+
+                    var data = originalOptions.data;
+                    if (originalOptions.data !== undefined) {
+                        if (Object.prototype.toString.call(originalOptions.data) === '[object String]') {
+                            data = $.deparam(originalOptions.data); // see http://benalman.com/code/projects/jquery-bbq/examples/deparam/
+                        }
+                    } else {
+                        data = {};
+                    }
+
+                    options.data = $.param($.extend(data, {CSRFToken: tokenData}));
+                });
+
+                $('.csrf_update').each(function () {
+                    $(this).find('#csrf_token').val(tokenData.token);
+                    $(this).find('#csrf_time').val(tokenData.time);
+                    $(this).find('#csrf_uri').val(tokenData.URI);
+                });
+            });
+        };
+
+        updateCSRF();
+
+        //Every 1.5 hours, update the csrf token
+        setInterval(updateCSRF, 1000 * 60 * 90);
+    });
+  </script>
+  <script type="text/javascript">
+   var myThumbUrl = '',
+            myName = '',
+            myUID = '';
+  </script>
+  <!-- TODO: MOBILE SUPPORTED PAGE -->
+  <div class="patreon-body-legacy-override patreon-page-content">
+   <div class="patreon-wrapper full-page patreon-fonts-override">
+    <div class="patreon-full-page-message">
+     <h2 class="patreon-full-page-message--heading ">
+      This page has been removed.
+     </h2>
+     <span class="patreon-full-page-message--description">
+      This page has been removed for not complying with Patreon Community Guidelines.
+      <br/>
+      Read our
+      <a alt="Patreon Community Guidelines" class="link" href="/guidelines">
+       <b>
+        Community Guidelines
+       </b>
+      </a>
+      to learn more.
+     </span>
+    </div>
+   </div>
+  </div>
+  <div data-patreon-footer="">
+  </div>
+ </body>
+</html>

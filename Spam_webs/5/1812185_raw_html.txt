@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html class="static contents" lang="en-US">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Rachel Appel - Building a relational data model in ASP.NET MVC 3 w/EF Code First
+  </title>
+  <link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin" rel="stylesheet" type="text/css"/>
+  <link href="/Themes/Metro/Styles/Site.css" rel="stylesheet" type="text/css"/>
+  <link href="/Themes/Metro/Styles/Metro.css" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;script src="/Core/Shapes/Scripts/html5.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <meta content="Orchard" name="generator"/>
+  <meta content="IE=edge,chrome=1" name="X-UA-Compatible"/>
+  <link href="/modules/orchard.themes/Content/orchard.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/rss?containerid=12" rel="alternate" title="Rachel Appel" type="application/rss+xml"/>
+  <link href="/rss?commentedoncontainer=12" rel="alternate" title="Rachel Appel - Comments" type="application/rss+xml"/>
+  <script>
+   (function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);
+  </script>
+  <meta content="XoX3I5OfTbD_R8XH-S759RnKBgHmB5gxELAkmQjzEEI" name="google-site-verification"/>
+  <meta content="F960FE497385BCDB8F329FA28B4E72A5" name="msvalidate.01"/>
+  <link href="http://rachelappel.com/media/default/images/vsfavicon.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="http://rachelappel.com/images/vsfavicon.ico" rel="icon" type="image/ico"/>
+  <meta content="./" name="msapplication-starturl"/>
+  <meta content="Rachel's Blog" name="msapplication-tooltip"/>
+  <meta content="name=Rachel on the Web;action-uri=http://rachelappel.com;icon-uri=http://rachelappel.com/media/default/images/rachfavicon.ico" name="msapplication-task"/>
+  <meta content="name=Rachel on Twitter;action-uri=http://twitter.com/rachelappel;icon-uri=http://rachelappel.com/media/default/images/twitter_16.ico" name="msapplication-task"/>
+  <meta content="name=Rachel on Facebook;action-uri=http://facebook.com/RachelAppel;icon-uri=http://rachelappel.com/media/default/images/facebook.ico" name="msapplication-task"/>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <title>
+   Building a relational data model in ASP.NET MVC 3 w/EF Code First
+  </title>
+  <link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin" rel="stylesheet" type="text/css"/>
+  <link href="/Themes/Metro/Styles/Site.css" rel="stylesheet" type="text/css"/>
+  <link href="/Themes/Metro/Styles/Metro.css" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;script src="/Core/Shapes/Scripts/html5.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <meta content="Orchard" name="generator"/>
+  <meta content="IE=edge,chrome=1" name="X-UA-Compatible"/>
+  <link href="/modules/orchard.themes/Content/orchard.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/rss?containerid=12" rel="alternate" title="Rachel Appel" type="application/rss+xml"/>
+  <link href="/rss?commentedoncontainer=12" rel="alternate" title="Rachel Appel - Comments" type="application/rss+xml"/>
+  <script>
+   (function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);
+  </script>
+  <!-- ShareThis social networking widget -->
+  <script type="text/javascript">
+   var switchTo5x=false;
+  </script>
+  <script src="http://w.sharethis.com/button/buttons.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   stLight.options({publisher:'b02b1d5b-b549-406a-8f2d-5fbb8db818ed'});
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-42208393-1', 'rachelappel.com');
+      ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div id="layout-wrapper">
+   <header class="group" id="layout-header">
+    <div id="header">
+     <div class="zone zone-header">
+      <header id="branding">
+       <a href="/">
+        Rachel Appel
+       </a>
+      </header>
+     </div>
+    </div>
+   </header>
+   <div id="layout-main-container">
+    <div class="group" id="layout-main">
+     <div class="group" id="layout-content">
+      <div id="before-content">
+       <div class="zone zone-before-content">
+        <article class="widget-WintellectNOW widget-before-content widget-html-widget widget">
+         <p>
+          <span id="advert1" style="margin: 0 auto;">
+           <a href="http://bit.ly/Rachel-WintellectNOW">
+            <img alt="14 Days Free Technical Video Training from WintellectNOW" src="/Media/Default/Images/WintellectNOW-banner.jpg" width="250px"/>
+           </a>
+           <span>
+           </span>
+          </span>
+          <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" type="text/javascript">
+          </script>
+          <!-- Ads -->
+          <ins class="adsbygoogle" data-ad-client="ca-pub-5277351511289319" data-ad-slot="1097057987" style="display: inline-block; width: 468px; height: 60px;">
+          </ins>
+          <script type="text/javascript">
+           // &lt;![CDATA[
+(adsbygoogle = window.adsbygoogle || []).push({});
+// ]]&gt;
+          </script>
+         </p>
+        </article>
+        <article class="widget-before-content widget-html-widget widget">
+         <p>
+          <span class="st_twitter_hcount" displaytext="Tweet">
+          </span>
+          <span class="st_linkedin_hcount" displaytext="LinkedIn">
+          </span>
+          <span class="st_facebook_hcount" displaytext="Facebook">
+          </span>
+          <span class="st_delicious_hcount" displaytext="Delicious">
+          </span>
+          <span class="st_stumbleupon_hcount" displaytext="StumbleUpon">
+          </span>
+          <span class="st_email_hcount" displaytext="Email">
+          </span>
+          <span class="st_plusone_hcount">
+          </span>
+         </p>
+        </article>
+       </div>
+      </div>
+      <div class="group" id="content">
+       <div class="zone zone-content">
+        <article class="content-item blog-post">
+         <header>
+          <h1>
+           Building a relational data model in ASP.NET MVC 3 w/EF Code First
+          </h1>
+          <p class="tags">
+           <span>
+            Tags:
+           </span>
+           <a href="/Tags/ASP.NET">
+            ASP.NET
+           </a>
+           ,
+           <a href="/Tags/ASP.NET%20MVC">
+            ASP.NET MVC
+           </a>
+           ,
+           <a href="/Tags/Razor">
+            Razor
+           </a>
+           ,
+           <a href="/Tags/MVC">
+            MVC
+           </a>
+           ,
+           <a href="/Tags/Entity%20Framework">
+            Entity Framework
+           </a>
+          </p>
+          <div class="metadata">
+           <div class="published">
+            May 9 2011 1:22 PM
+           </div>
+          </div>
+         </header>
+         <p>
+          Just about every application uses some sort of data model, and .NET developers have been using POCOs (Plain Old CLR Objects) for some time now. You can use either new or existing POCOs in MVC 3 applications and still take advantage of
+          <a href="http://msdn.microsoft.com/en-us/library/bb399572.aspx" target="_blank">
+           EF (Entity Framework)
+          </a>
+          , and in particular, EF's Code First feature. EF's Code First feature allows you to base both an application and a database from your data model. EF additionally carries features for database and model first development.
+         </p>
+         <h2>
+          <font style="font-weight: bold">
+           Data Models, ORMs &amp; Entity Framework
+          </font>
+         </h2>
+         <p>
+          As with most business apps of any type, data models are at the heart of an application. When developing ASP.NET MVC applications it's best to go with an
+          <a href="http://en.wikipedia.org/wiki/Object-relational_mapping" target="_blank">
+           ORM
+          </a>
+          (Object-Relational Mapper) such as EF, as ORMs alleviate many pains in dealing with databases and their objects. Since MVC is extensible and pluggable, you also have the choice of using 3rd party or open source ORMs, for example, the widely used
+          <a href="http://nhforge.org/" target="_blank">
+           nHibernate
+          </a>
+          .
+         </p>
+         <p>
+          That's where things can get complex, and that's where EF fits in with multiple strategies to help alleviate common pains in modeling. There are many ways you can model data to represent and manipulate it the way you need to, either visually with a designer, or by using code. EF supports these data access options:
+         </p>
+         <ul>
+          <li>
+           Database first
+           <ul>
+            <li>
+             You can use Visual Studio to connect to a data source and visually generate a data model from an existing database(s).
+            </li>
+           </ul>
+          </li>
+          <li>
+           Model first
+           <ul>
+            <li>
+             Using model first you can build brand new databases from models you've created using the designers in Visual Studio.
+            </li>
+           </ul>
+          </li>
+          <li>
+           Code First
+           <ul>
+            <li>
+             With code first, you start with your own POCOs, just add a small amount of code, and voil, instant ORM.
+            </li>
+           </ul>
+          </li>
+         </ul>
+         <p>
+          In addition to these features, EF has more advanced features, such as a XML based schema mappings and fluent APIs. EF is flexible enough to cover the spectrum of applications from the smallest of web sites to enterprise applications.
+         </p>
+         <p>
+          Before coding EF classes, you must add a
+          <a href="http://rachelappel.com/nuget/find-amp-install-3rd-party-libraries-lightning-fast-with-nuget-for-visual-studio-2010/" target="_blank">
+           NuGet package reference
+          </a>
+          to
+          <strong>
+           EntityFramework
+          </strong>
+          by selecting "
+          <em>
+           Add Library Package Reference
+          </em>
+          " from the Project menu, and before using SQL CE 4.0 you'll need to add a regular reference to the System.Data.SqlServerCe library.
+         </p>
+         <h2>
+          <font style="font-weight: bold">
+           Building the basic data model
+          </font>
+         </h2>
+         <p>
+          Code First is a feature of EF that maps POCOs containing classes, relationships, data annotations, etc..., to database tables, columns, constraints, and relationships in physical databases. EF CF creates the database by examining the code in the data model, then building the corresponding physical database and its objects. You have the option to merge or drop/recreate any databases generated by EF Code First, and you can additionally seed the database with data (coming in a later post).
+         </p>
+         <p>
+          Since the controller returns the model to the view, you can send validation information to the view by using
+          <a href="http://rachelappel.com/asp-net-mvc/how-data-annotations-for-asp-net-mvc-validation-work/" target="_blank">
+           Data Annotations
+          </a>
+          . Data annotations are attributes that you can apply to a model to perform common types of validation at the property level, as shown below in two basic POCO classes.
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             class
+            </span>
+            Category
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            {
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             int
+            </span>
+            Id { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Category"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The product category is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             string
+            </span>
+            Name { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             class
+            </span>
+            Product
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            {
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             int
+            </span>
+            Id { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Delicious Treat"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The product name field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             string
+            </span>
+            Name { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The product description field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             string
+            </span>
+            Description { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Sale Price"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The Sale Price field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             decimal
+            </span>
+            Price { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Made fresh on"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The Freshly Baked On field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            DateTime CreationDate { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Don't Sell After"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The Expiration Date field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            DateTime ExpirationDate { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Qty Available"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Required(ErrorMessage =
+            <span style="color: #006080">
+             "The Qty Available field is required."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [Range(0, 120,ErrorMessage=
+            <span style="color: #006080">
+             "The Qty Available must be between 0 and 120."
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             int
+            </span>
+            QtyOnHand { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            [DisplayName(
+            <span style="color: #006080">
+             "Product Image"
+            </span>
+            )]
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             string
+            </span>
+            ImageName { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            }
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          Now that you have a model, you can add a few lines of code to tell EF to generate the database for you, and even seed it with data if you want to. In order for EF to know what classes in a project it should use as a model to generate the database, you need to tap into two classes from the System.Data.Entity namespace:
+         </p>
+         <ul>
+          <li>
+           <strong>
+            DBContext class.
+           </strong>
+           <ul>
+            <li>
+             The DbContext is a lot like a connection, except it manages database connectivity for you automatically (i.e., no need to explicitly call open/close on connections). Additionally, there are many properties methods on the DbContext class to work directly with the model and/or database, such as the SaveChanges method or the ValidateEntity method.
+            </li>
+           </ul>
+          </li>
+          <li>
+           <strong>
+            DbSet class
+           </strong>
+           <ul>
+            <li>
+             This object knows how to deal with CRUD operations on the entity class itself (i.e., Category or Product), and works in tandem with the DbContext object to perform those operations.
+            </li>
+           </ul>
+          </li>
+         </ul>
+         <p>
+          A data model is not
+          <em>
+           just
+          </em>
+          a set of POCO classes, though. Models need a class to manage the POCOs, perform connection management, or other duties that an ORM would do. These management classes are often called a context or repository[1]. Rather than writing the database and connection management code yourself, you can take advantage of EF and receive features provided automatically by inheriting from the DbContext class in your repository class.
+         </p>
+         <p>
+          The DbContext also needs to know what POCO collections to work with. You can do this by adding properties of type DbSet&lt;T&gt; for each of your collection types, as the code below demonstrates.
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             class
+            </span>
+            FourthCoffeeWebContext : DbContext
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            {
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            DbSet&lt;Category&gt; Categories { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            DbSet&lt;Product&gt; Products { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            }
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          At this point, the two POCO classes and DbContext are all you need to see EF in action, and you can move onto running the application and generating the physical database.
+         </p>
+         <h2>
+          <font style="font-weight: bold">
+           Generating the database from the model
+          </font>
+         </h2>
+         <p>
+          Assuming you have the controllers and views in place to perform CRUD operations on the Categories and Products collections, running the MVC application will create a SQL (Express or CE 4.0) database automatically for you. Of course, there's no data, just the schema, but the site and database are both up, running, and completely functional. Navigating to the create action on the products controller in a browser renders the create view like the one below (including validation!):
+         </p>
+         <p>
+          <a href="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_6.png">
+           <img alt="image" border="0" height="244" src="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_thumb_2.png" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="image" width="220"/>
+          </a>
+         </p>
+         <p>
+          Once you save a product, the app takes you back to the listing of products, where you can see the results.
+         </p>
+         <p>
+          <a href="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_8.png">
+           <img alt="image" border="0" height="72" src="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_thumb_3.png" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="image" width="454"/>
+          </a>
+         </p>
+         <p>
+          Although you can see the data on in the browser, you probably can't find the database in the Solution Explorer. Checking out the customary App_Data folder reveals nothing, and examining the Web.Config file comes up empty. Since EF could find no information about the database, it created a SQL Express[2] database with the a default name and path shown here:
+         </p>
+         <p>
+          <em>
+           C:\Program Files\Microsoft SQL Server\MSSQL10_50.SQLEXPRESS\MSSQL\DATA\
+           <strong>
+            FourthCoffee.Web.Models.FourthCoffeeWebContext.mdf
+           </strong>
+           .
+          </em>
+         </p>
+         <p>
+          If you want to name your database something different, modify the &lt;connectionStrings&gt; section of the Web.Config file to point to the preferred database name and location. This connection string connects to the \App_Data\bakery.sdf database.
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             &lt;
+            </span>
+            <span style="color: #800000">
+             connectionStrings
+            </span>
+            <span style="color: #0000ff">
+             &gt;
+            </span>
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             &lt;
+            </span>
+            <span style="color: #800000">
+             add
+            </span>
+            <span style="color: #ff0000">
+             name
+            </span>
+            <span style="color: #0000ff">
+             ="FourthCoffeeWebContext"
+            </span>
+            <span style="color: #ff0000">
+             connectionString
+            </span>
+            <span style="color: #0000ff">
+             ="Data Source=|DataDirectory|bakery.sdf"
+            </span>
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #ff0000">
+             providerName
+            </span>
+            <span style="color: #0000ff">
+             ="System.Data.SqlServerCe.4.0"
+            </span>
+            <span style="color: #0000ff">
+             /&gt;
+            </span>
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             &lt;/
+            </span>
+            <span style="color: #800000">
+             connectionStrings
+            </span>
+            <span style="color: #0000ff">
+             &gt;
+            </span>
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          By convention, the name of this connection string needs to match the name of your context/repository class, in this case, FourthCoffeeWebContext, so EF can identify the connection string to use. Notice that the connection string points to the data directory (App_Data) and it's a SQL CE 4.0 database. If you wish to use a different edition of SQL, feel free to change the connection string and provider name to point to other locations.
+         </p>
+         <p>
+          Once the changes are in place, run the application, enter some data, and return to Visual Studio where you can see the App_Data folder now contains the bakery.sdf database.
+         </p>
+         <p>
+          <a href="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_10.png">
+           <img alt="image" border="0" height="163" src="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_thumb_4.png" style="background-image: none; border-right-width: 0px; margin: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="image" width="244"/>
+          </a>
+         </p>
+         <p>
+          Since the option to drop and recreate the database exists, you can design your data model through code and tests to verify that it works in a repetitive cycle, so relating the classes and regenerating the database is easy.
+         </p>
+         <h2>
+          <font style="font-weight: bold">
+           Relating classes in the data model
+          </font>
+         </h2>
+         <p>
+          The Category and Product classes relate to each other in a one-(zero or)many relationship. You can express this relationship in code by adding a property in the Category class to represent the collection of related products, as shown here:
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             virtual
+            </span>
+            ICollection&lt;Product&gt; Products { get; set; }
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          The Product class needs two lines of code, so you'll need to add the following properties below to the Product class.
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             int
+            </span>
+            CategoryId { get; set; }
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #0000ff">
+             public
+            </span>
+            <span style="color: #0000ff">
+             virtual
+            </span>
+            Category Category { get; set; }
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          While the data model is complete, the code in controllers and views does not reflect the updates made to the model. The Edit and Create views associated with the Product need to include a dropdown of the categories, with the current product's category selected, similar to the code below:
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            &lt;div
+            <span style="color: #0000ff">
+             class
+            </span>
+            =
+            <span style="color: #006080">
+             "editor-label"
+            </span>
+            &gt;
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            Category
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            &lt;/div&gt;
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            &lt;div
+            <span style="color: #0000ff">
+             class
+            </span>
+            =
+            <span style="color: #006080">
+             "editor-field"
+            </span>
+            &gt;
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            @Html.DropDownListFor(model =&gt; model.CategoryId,
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            ((IEnumerable&lt;FourthCoffee.Models.Category&gt;)ViewBag.PossibleCategories)
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            .Select(option =&gt;
+            <span style="color: #0000ff">
+             new
+            </span>
+            SelectListItem {
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            Text = (option ==
+            <span style="color: #0000ff">
+             null
+            </span>
+            ?
+            <span style="color: #006080">
+             "None"
+            </span>
+            : option.Name),
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            Value = option.Id.ToString(),
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            Selected = (Model !=
+            <span style="color: #0000ff">
+             null
+            </span>
+            ) &amp;&amp; (option.Id == Model.CategoryId)
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            }),
+            <span style="color: #006080">
+             "Choose..."
+            </span>
+            )
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            @Html.ValidationMessageFor(model =&gt; model.CategoryId)
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            &lt;/div&gt;
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <p>
+          Since the view is counting on the controller to pass in a ViewBag.PossibleCategories, you'll now need to wire up the Create/Edit action methods of the Products controller so the view can use it. Just create a dynamic property on the ViewBag object and set it to the context's Categories property.
+         </p>
+         <div id="codeSnippetWrapper">
+          <div id="codeSnippet" style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: white; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            <span style="color: #008000">
+             // the context variable is of type FourthCoffeeWebContext (Inherits from DbContext)
+            </span>
+           </pre>
+           <!--CRLF-->
+           <pre style="border-bottom-style: none; text-align: left; padding-bottom: 0px; line-height: 12pt; background-color: #f4f4f4; margin: 0em; border-left-style: none; padding-left: 0px; width: 100%; padding-right: 0px; font-family: 'Courier New', courier, monospace; direction: ltr; border-top-style: none; color: black; border-right-style: none; font-size: 8pt; overflow: visible; padding-top: 0px">
+            ViewBag.PossibleCategories = context.Categories;
+           </pre>
+           <!--CRLF-->
+          </div>
+         </div>
+         <h2>
+          <font style="font-weight: bold">
+           Generating an app from the finished model
+          </font>
+         </h2>
+         <p>
+          The application at run time produces 100% supported CRUD operations, but now with relational operations and validation as well. This is evident in the Product's Edit or Create view.
+         </p>
+         <p>
+          <a href="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_11.png">
+           <img alt="image" border="0" height="356" src="http://rachelappel.com/Media/Default/Windows-Live-Writer/Dealing-with-relational-data-in-MVC-3_B76C/image_thumb.png" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="image" width="176"/>
+          </a>
+         </p>
+         <p>
+          Note: Before running the application, you'll need to delete the database or you'll receive an error message.
+         </p>
+         <h2>
+          <font style="font-weight: bold">
+           Summary
+          </font>
+         </h2>
+         <p>
+          MVC with Entity Framework Code First enables you to rapidly build sites with easy to understand data models.
+         </p>
+         <p>
+          Resources:
+         </p>
+         <p>
+          <a href="http://weblogs.asp.net/scottgu/archive/2010/08/03/using-ef-code-first-with-an-existing-database.aspx" target="_blank">
+           Code First w/existing DB
+          </a>
+         </p>
+         <p>
+          <a href="http://weblogs.asp.net/scottgu/archive/2010/07/16/code-first-development-with-entity-framework-4.aspx" target="_blank">
+           Code First
+          </a>
+         </p>
+         <p>
+         </p>
+         <p>
+          <sup>
+           <font size="2">
+            [1] Dear purists: I am not going to be pedantic about the repository pattern in this blog post.
+           </font>
+          </sup>
+         </p>
+         <p>
+          <sup>
+           <font size="2">
+            [2] If you don't have SQL Express installed, you might get an error. If that's the case modify the web config to use SQL CE 4.0 instead, as it does not need to be installed.
+           </font>
+          </sup>
+          <font size="1">
+          </font>
+         </p>
+         <div id="comments">
+          <h2 class="comment-count">
+           12 Comments
+          </h2>
+          <ul class="comments">
+           <li>
+            <article class="comment" id="comment-162">
+             <header>
+              <h4>
+               <span class="who">
+                Balakrishna
+               </span>
+               <span class="when">
+                said
+                <time datetime="5/11/2011 2:02:25 PM">
+                 <a href="#comment-162">
+                  on May 11 2011 at 10:02 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Hi,
+              <br/>
+              <br/>
+              It is nice post thank you for the information,
+              <br/>
+              <br/>
+              I have a small query regarding a scenario where i have one more field in the Category; i.e. a Desc field which is also decorated with the [Required] annotation,
+              <br/>
+              <br/>
+              Now when i am running the products Page, I am getting Error Message for the Field of desc in the Products Page Validation Summary.
+              <br/>
+              <br/>
+              can you please help with this scenario, please let me know if you want me to send a Complete Sample project to validate.
+              <br/>
+              <br/>
+              please do the needful.
+              <br/>
+              <br/>
+              thanks &amp; regards
+              <br/>
+              BK
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-178">
+             <header>
+              <h4>
+               <span class="who">
+                Rachel
+               </span>
+               <span class="when">
+                said
+                <time datetime="5/17/2011 4:03:08 AM">
+                 <a href="#comment-178">
+                  on May 17 2011 at 12:03 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              @Balakrishna
+              <br/>
+              <br/>
+              You can toggle the @ValidationSummary(true/false) in your view. That controls the summary list display.
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-182">
+             <header>
+              <h4>
+               <span class="who">
+                Java Whiz
+               </span>
+               <span class="when">
+                said
+                <time datetime="5/19/2011 7:40:23 PM">
+                 <a href="#comment-182">
+                  on May 19 2011 at 3:40 PM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Thank you so much for this post. I was doing the dropdownlist differently but was running into issues when I wanted to have the dropdownlist text value combine two db columns instead of the standard one. Your method remedied that issue. Cool!
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-191">
+             <header>
+              <h4>
+               <span class="who">
+                <a href="http://jamesrskemp.com" rel="nofollow">
+                 James Skemp
+                </a>
+               </span>
+               <span class="when">
+                said
+                <time datetime="5/28/2011 2:52:57 PM">
+                 <a href="#comment-191">
+                  on May 28 2011 at 10:52 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Is there any particular reason you recommend using a normal reference to System.Data.SqlServerCe instead of using Nuget to add the reference?
+              <br/>
+              <br/>
+              Initially when I was playing with this yesterday I was running into issues, after adding the reference via Nuget, but it turned out my particular issue was because EF Code First and Database First don't get along. (Although it's unfortunate I didn't see this workaround - http://blogs.msdn.com/b/wriju/archive/2011/05/17/using-ado-net-ef-4-1-code-first-with-existing-database.aspx - before I reverted all my changes back.)
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-193">
+             <header>
+              <h4>
+               <span class="who">
+                Rachel
+               </span>
+               <span class="when">
+                said
+                <time datetime="5/31/2011 6:02:16 PM">
+                 <a href="#comment-193">
+                  on May 31 2011 at 2:02 PM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              @James,
+              <br/>
+              <br/>
+              It's just a force of habit for me to add a Reference rather get it through Nuget in this case. There's not really any difference in the end result (i.,e, a reference).
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-357">
+             <header>
+              <h4>
+               <span class="who">
+                Jeswin James
+               </span>
+               <span class="when">
+                said
+                <time datetime="9/30/2011 4:04:32 AM">
+                 <a href="#comment-357">
+                  on Sep 30 2011 at 12:04 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Hi,
+              <br/>
+              Gr8 Article,
+              <br/>
+              <br/>
+              Can you please explain me the following
+              <br/>
+              <br/>
+              ViewBag.PossibleCategories = context.Categories;
+              <br/>
+              //How should i be using this.
+              <br/>
+              <br/>
+              Its giving me problem with the DropDownList
+              <br/>
+              <br/>
+              error msg:
+              <br/>
+              <br/>
+              {"Value cannot be null.\r\nParameter name: source"}
+              <br/>
+              <br/>
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-359">
+             <header>
+              <h4>
+               <span class="who">
+                Rachel
+               </span>
+               <span class="when">
+                said
+                <time datetime="10/4/2011 1:02:02 AM">
+                 <a href="#comment-359">
+                  on Oct 3 2011 at 9:02 PM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Jeswin,
+              <br/>
+              <br/>
+              That is how you should be using it in the controller. Be sure the context and Categories aren't null before trying to assign a value to it.
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-387">
+             <header>
+              <h4>
+               <span class="who">
+                lakshmi
+               </span>
+               <span class="when">
+                said
+                <time datetime="10/28/2011 5:21:31 AM">
+                 <a href="#comment-387">
+                  on Oct 28 2011 at 1:21 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              i am creating a dropdownlist but dropdown selected item is not saved in db
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-390">
+             <header>
+              <h4>
+               <span class="who">
+                <a href="http://www.monclerfans.co.uk" rel="nofollow">
+                 moncler
+                </a>
+               </span>
+               <span class="when">
+                said
+                <time datetime="10/29/2011 8:29:28 AM">
+                 <a href="#comment-390">
+                  on Oct 29 2011 at 4:29 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              As with most business apps of any type, data models are at the heart of an application. When developing ASP.NET MVC applications it's best to go with an ORM (Object-Relational Mapper) such as EF, as ORMs alleviate many pains in dealing with databases and their objects. Since MVC is extensible and pluggable, you also have the choice of using 3rd party or
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-483">
+             <header>
+              <h4>
+               <span class="who">
+                Nick Lachey
+               </span>
+               <span class="when">
+                said
+                <time datetime="1/29/2012 4:43:46 PM">
+                 <a href="#comment-483">
+                  on Jan 29 2012 at 11:43 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Nice post. Heres a tutorial that shows how you can easily build an online database-driven web application with a parent-child table relationship, without codinghttp://blog.caspio.com/web-database/creating-one-to-many-relational-datapages/
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-493">
+             <header>
+              <h4>
+               <span class="who">
+                Classie
+               </span>
+               <span class="when">
+                said
+                <time datetime="2/20/2012 12:21:34 PM">
+                 <a href="#comment-493">
+                  on Feb 20 2012 at 7:21 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Hi, thanks for the awesome post. I got this working for create and edit. Is it possible to use the same concept and instead having it for @Html.DropDownListFor can one use the same for use in @Html.DisplayFor so that on my Index view I do not have an Id but a name. Thanks
+             </p>
+            </article>
+           </li>
+           <li>
+            <article class="comment" id="comment-502">
+             <header>
+              <h4>
+               <span class="who">
+                Rachel
+               </span>
+               <span class="when">
+                said
+                <time datetime="2/25/2012 3:25:35 PM">
+                 <a href="#comment-502">
+                  on Feb 25 2012 at 10:25 AM
+                 </a>
+                </time>
+               </span>
+              </h4>
+             </header>
+             <p class="text">
+              Classie,
+              <br/>
+              <br/>
+              You can, and you can do it within the DropDownList or DropDownListFor - there are severl overloads to those that will allow you to hide the ID and show the friendly text to the user.
+             </p>
+            </article>
+           </li>
+          </ul>
+         </div>
+         <div id="comments">
+          <p class="comment-disabled">
+           Comments have been disabled for this content.
+          </p>
+         </div>
+        </article>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="group" id="layout-footer">
+    <footer id="footer">
+     <div class="group" id="footer-quad">
+     </div>
+     <div class="group" id="footer-sig">
+      <div class="zone zone-footer">
+       <div class="user-display">
+        <span class="user-actions">
+         <a href="/Users/Account/LogOn?ReturnUrl=%2Fbuilding-a-relational-data-model-in-asp.net-mvc-3-w-ef-code-first" rel="nofollow">
+          Sign In
+         </a>
+        </span>
+       </div>
+      </div>
+     </div>
+    </footer>
+   </div>
+  </div>
+ </body>
+</html>

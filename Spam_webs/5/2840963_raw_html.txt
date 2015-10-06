@@ -1,0 +1,769 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Widdjit - Reddit widget
+  </title>
+  <meta content="Procrastinate more efficiently. MORE CATS in LESS Time! more More MORE!" name="description"/>
+  <link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" rel="stylesheet" type="text/css"/>
+  <link href="layout-default-latest.css" rel="stylesheet" type="text/css"/>
+  <link href="bootstrap.css" rel="stylesheet" type="text/css"/>
+  <link href="simple-sidebar.css" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+   /* set some minimum dimensions to the page/layout */
+		html { overflow:	auto !important; }
+		body { min-width:	500px; min-height: 300px; }
+		/* add some colors to distinguish outer from inner layout */
+		body									{ background:	#232326; }
+		body&gt;.ui-layout-pane 					{ background:	#242429; }
+		body&gt;.ui-layout-pane&gt;.ui-layout-pane	{ background:	#efefef; }
+		/* outer-center pane is a 'container - remove padding &amp; scrollbar */
+		.col234 { padding: 0; overflow: hidden; }
+		.fill {
+	width:100%;
+	height:100%;
+	margin-top:0px;
+	background-position: center;
+	background-size: cover;
+}
+.parentff{
+    margin-top: 40px;
+    position: absolute; 
+    top: 0px; 
+    left: 0px;
+    right: 0px; 
+    bottom: 0px;
+}
+.bdls {
+	font: 40px/1.0 'Yanone Kaffeesatz', sans-serif;
+	font-weight: 600;
+	text-shadow: 1px 2px 1px #36f;
+
+	margin: 0;
+}
+  </style>
+  <script src="jquery-latest.js" type="text/javascript">
+  </script>
+  <script src="jquery-ui-latest.js" type="text/javascript">
+  </script>
+  <script src="jquery.layout-latest.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   function customSaveState (Instance, state, options, name) {
+		// get the state and save it in a database...
+		var state_JSON = Instance.readState();
+		// use Layout utilities to stringify the JSON - IF NECESSARY
+		var state_String = Instance.encodeJSON( state_JSON );
+		// now can save the data in the database string field
+	};
+
+	function customLoadState (Instance, state, options, name) {
+		/* if state loaded as a 'string', convert back to a hash
+		var savedState_String = "{ west: { size: 200 } }";
+		var savedState_JSON = Instance.decodeJSON( state_JSON );
+		Instance.loadState( savedState_JSON, true ); // true = animate open/close/resize
+		*/
+
+		// create a custom 'load state' - this could come from the server
+		var savedState_JSON = {
+			east: {
+				initClosed:	false
+			,	size:		350
+			}
+		,	south: {
+				initClosed:	false
+			}
+		}
+
+		// load the custom state
+		Instance.loadState( savedState_JSON, false ); // false = DO NOT animate open/close/resize (default)
+	};
+    // set EVERY 'state' here so will undo ALL layout changes
+	// used by the 'Reset State' button: myLayout.loadState( stateResetSettings )
+	var stateResetSettings = {
+		north__size:		"auto"
+	,	north__initClosed:	false
+	,	north__initHidden:	false
+	,	south__size:		"auto"
+	,	south__initClosed:	false
+	,	south__initHidden:	false
+	,	west__size:			"auto"
+	,	west__initClosed:	false
+	,	west__initHidden:	false
+	,	east__size:			"auto"
+	,	east__initClosed:	false
+	,	east__initHidden:	false
+	};
+
+	
+	
+	// clear the cookie, change option so a new one is not created, then reload the page
+	function resetPage () {
+		myLayout.deleteCookie();
+		myLayout.options.stateManagement.autoSave=false;
+		$('#autoSaveState').attr('checked', false);
+		self.location.reload();
+	};
+
+
+	var outerLayout, innerLayout;
+
+	$(document).ready(function(){
+
+		outerLayout = $('body').layout({ 
+			name:					'outerLayout' // for debugging &amp; auto-adding buttons (see below)
+		,	autoResize:				true	// try to maintain pane-percentages
+		,	autoReopen:				true	// auto-open panes that were previously auto-closed due to 'no room'
+		,	autoBindCustomButtons:	true
+		,	west__paneSelector: 	'.col1' 
+		,	center__paneSelector: 	'.col234' 
+		,	east__paneSelector: 	'.col5' 
+		,	west__size:				150
+		,	east__size:				160
+		,	minSize:				15
+		,	center__minWidth:		400 // 3 x 75 (panes) + 2 x 6 (spacing) + 2 x 1 (center-border)
+		,	noRoomToOpenAction:		"hide" // 'close' or 'hide' when no room to open a pane at minSize
+		,	stateManagement__enabled:	true // enable stateManagement - automatic cookie load &amp; save enabled by default
+		}); 
+
+		innerLayout = outerLayout.panes.center.layout({ 
+			name:					'innerLayout' // for debugging &amp; auto-adding buttons (see below)
+		,	west__paneSelector: 	'.col2'
+		,	center__paneSelector: 	'.col3'
+		,	east__paneSelector: 	'.col4'
+		,	west__size: 			400	// percentage size expresses as a string
+		,	east__size: 			200
+		,	autoResize:				true	// try to maintain pane-percentages
+		,	togglerLength_open:		0	// hide toggler-buttons
+		,	spacing_closed:			0	// hide resizer/slider bar when closed
+		,	autoReopen:				true	// auto-open panes that were previously auto-closed due to 'no room'
+		,	autoBindCustomButtons:	true
+		,	minSize:				75
+		,	center__minWidth:		400
+		,	stateManagement__enabled:	false // enable stateManagement - automatic cookie load &amp; save enabled by default
+		}); 
+        window.fullState = myLayout.readState(
+			"north.size,south.size,east.size,west.size,"+
+			"north.isClosed,south.isClosed,east.isClosed,west.isClosed,"+
+			"north.isHidden,south.isHidden,east.isHidden,west.isHidden"
+		);
+	});
+  </script>
+ </head>
+ <body>
+  <div class="col1" style="background-color:#232326;">
+   <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+     <li class="bdls" style="padding-top:15px; padding-bottom:15px;">
+      widdjit
+     </li>
+     <li>
+      <a href="index.cfm?sub=front">
+       Front
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=pics" style="color: #fff;  background: rgba(66,139,202,1);">
+       Pics
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=funny">
+       Funny
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=gaming">
+       Gaming
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=askreddit">
+       AskReddit
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=worldnews">
+       WorldNews
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=news">
+       News
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=videos">
+       Videos
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=iama">
+       IAmA
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=todayilearned">
+       TodayILearned
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=wtf">
+       WTF
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=aww">
+       AWW
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=technology">
+       Technology
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=adviceanimals">
+       AdviceAnimals
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=science">
+       Science
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=music">
+       Music
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=movies">
+       Movies
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=bestof">
+       BestOf
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=books">
+       Books
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=earthporn">
+       EarthPorn
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=explainlikeimfive">
+       ExplainLikeImFive
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=gifs">
+       GIFS
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=television">
+       Television
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=askscience">
+       AskScience
+      </a>
+     </li>
+     <li>
+      <form action="index.cfm" method="get">
+       <input class="btn btn-xs" id="e" name="e" placeholder="Add SubReddit" style="text-align:left; width:90px;" type="text"/>
+       <input class="btn btn-xs btn-primary" type="submit" value="GO"/>
+      </form>
+     </li>
+    </ul>
+   </div>
+  </div>
+  <div class="ui-layout-center col234">
+   <div class="col2" style="background-color:#232326;">
+    <ol class="breadcrumb">
+     <li>
+      /r/pics
+     </li>
+     <li>
+      <a class="active" href="index.cfm?sub=pics&amp;f=n">
+       New
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=pics&amp;f=t">
+       Top
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=pics&amp;f=r">
+       Rising
+      </a>
+     </li>
+     <li>
+      <a href="index.cfm?sub=pics&amp;f=c">
+       Controversial
+      </a>
+     </li>
+    </ol>
+    <div class="bs-example" style="padding:3px;">
+     <div class="list-group hideOverflow">
+      <a class="list-group-item" href="score##">
+       <div style="display:inline-block; width:32px; color:##fff;">
+        Score
+       </div>
+       <div style="display:inline-block; width:32px; color:##CCC;">
+        Title
+       </div>
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fwww%2Ereddit%2Ecom%2Fr%2Fpics%2Fcomments%2F3d12ek%2Ftraffic%5Fstats%5Ffor%5Frpics%5Fare%5Fnow%5Fpublic%2F&amp;com=%2Fr%2Fpics%2Fcomments%2F3d12ek%2Ftraffic%5Fstats%5Ffor%5Frpics%5Fare%5Fnow%5Fpublic%2F&amp;title=Traffic%20stats%20for%20%2Fr%2Fpics%20are%20now%20public&amp;ID=39331216">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        59
+       </div>
+       Traffic stats for /r/pics are now public
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2F3Iqitqw%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8zy0%2Fthis%5Fis%5Fthe%5Fbumper%5Fsticker%5Fnasas%5Fnew%5Fhorizon%5Fteam%2F&amp;title=This%20is%20the%20bumper%20sticker%20NASA%27s%20New%20Horizon%20team%20have%20on%20their%20cars&amp;ID=39331217">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        6441
+       </div>
+       This is the bumper sticker NASA's New Horizon team have on their cars
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FobvnJ1a%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d99io%2Fin%5Fthe%5Fcockpit%2F&amp;title=In%20the%20cockpit%2E&amp;ID=39331218">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3175
+       </div>
+       In the cockpit.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FHkaxdvl&amp;com=%2Fr%2Fpics%2Fcomments%2F3d94vb%2Ffound%5Fthis%5Fsweet%5Fgirl%5Fwandering%5Fthe%5Fstreets%5Fof%2F&amp;title=Found%20this%20sweet%20girl%20wandering%20the%20streets%20of%20San%20Diego%2E%20Hoping%20her%20family%20are%20redditors%2E&amp;ID=39331219">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3606
+       </div>
+       Found this sweet girl wandering the streets of San Diego. Hoping her family are redditors.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FrbH8y7f&amp;com=%2Fr%2Fpics%2Fcomments%2F3d92pa%2Fgirlfriend%5Fpainted%5Fthis%5Ffor%5Fmy%5Fbirthday%5Fshes%2F&amp;title=Girlfriend%20painted%20this%20for%20my%20birthday%2E%20She%27s%20definitely%20a%20keeper&amp;ID=39331220">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3613
+       </div>
+       Girlfriend painted this for my birthday. She's definitely a keeper
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2F3yAstSs%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d91qm%2Fsolar%5Fstadium%5Fin%5Ftaiwan%2F&amp;title=Solar%20Stadium%20in%20Taiwan&amp;ID=39331221">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3545
+       </div>
+       Solar Stadium in Taiwan
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=https%3A%2F%2Fpbs%2Etwimg%2Ecom%2Fmedia%2FCJ4Ay%5FWUsAAJzB1%2Epng&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8yb0%2Fthe%5Ffamily%5Fportrait%5Fis%5Ffinally%5Fcomplete%2F&amp;title=The%20family%20portrait%20is%20finally%20complete&amp;ID=39331222">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3677
+       </div>
+       The family portrait is finally complete
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FGDcH5uA%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8q4t%2Fthe%5Fmost%5Fdetailed%5Fpicture%5Fof%5Fpluto%5Fyet%5Ftaken%5Ffrom%2F&amp;title=The%20most%20detailed%20picture%20of%20Pluto%20yet%2E%20Taken%20from%20a%20distance%20of%20476%2C000%20miles%20by%20New%20Horizons%2E&amp;ID=39331223">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4839
+       </div>
+       The most detailed picture of Pluto yet. Taken from a distance of 476,000 miles by New Horizons.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fwww%2Eimgur%2Ecom%2FN3KF6ef%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8kj8%2Fso%5Fwant%5Fthis%5Fone%5Ffire%5Fto%5Frule%5Fthem%5Fall%2F&amp;title=So%20want%20this%2E%20One%20fire%20to%20rule%20them%20all&amp;ID=39331224">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4661
+       </div>
+       So want this. One fire to rule them all
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=https%3A%2F%2Fi%2Eimgur%2Ecom%2Fy7KO5au%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8vwu%2Flion%5Fkilling%5Fan%5Fantelope%5Fbetween%5Ftourists%5Fcars%5Fin%2F&amp;title=Lion%20killing%20an%20antelope%20between%20tourists%20cars%20in%20Kruger%20National%20Park%2C%20South%20Africa&amp;ID=39331225">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2001
+       </div>
+       Lion killing an antelope between tourists cars in Kruger National Park, South Africa
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2F1QBfpjg%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8pg4%2Fapple%5Fart%2F&amp;title=Apple%20Art&amp;ID=39331226">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2031
+       </div>
+       Apple Art
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FIb3E3d7&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8icg%2Fstreet%5Fart%2F&amp;title=Street%20art&amp;ID=39331227">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2186
+       </div>
+       Street art
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2F93byPK3%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9ekt%2Fwhen%5Fyou%5Fget%5Fa%5Fnew%5Fpiece%5Fof%5Farmor%5Fbut%5Fit%5Fdoesnt%2F&amp;title=When%20You%20Get%20A%20New%20Piece%20of%20Armor%2C%20But%20It%20Doesn%27t%20Match%20Your%20Current%20Set%2E&amp;ID=39331228">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        726
+       </div>
+       When You Get A New Piece of Armor, But It Doesn't Match Your Current Set.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2Fa%2F9QgnT&amp;com=%2Fr%2Fpics%2Fcomments%2F3d7jqc%2Fthese%5Fphotos%5Ffrom%5Fnasas%5Fcassini%5Fprobe%5Fdont%5Feven%2F&amp;title=These%20photos%20from%20NASA%27s%20Cassini%20probe%20don%27t%20even%20look%20real&amp;ID=39331229">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        6138
+       </div>
+       These photos from NASA's Cassini probe don't even look real
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2F8UFpJhb%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9ama%2Fso%5Fmy%5Fson%5Fwas%5Fdoing%5Fa%5Fmagic%5Ftrick%5Ffor%5Fhis%5Ffriends%2F&amp;title=So%20my%20son%20was%20doing%20a%20magic%20trick%20for%20his%20friends%2C%20and%20then%20%22someone%20%22%20walks%20in%20the%20door%2E%2E%2E%21&amp;ID=39331230">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        712
+       </div>
+       So my son was doing a magic trick for his friends, and then "someone " walks in the door...!
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2F88EVOUi%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d7161%2F3d%5Fprinted%5Frims%2F&amp;title=3D%20Printed%20Rims&amp;ID=39331231">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4985
+       </div>
+       3D Printed Rims
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2F3xiCdc8%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8q9t%2Fhan%5Fsolo%5Fwith%5Fchewbacca%5Fthen%5Fand%5Fnow%2F&amp;title=Han%20Solo%20with%20Chewbacca%2C%20then%20and%20now%2E&amp;ID=39331232">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        659
+       </div>
+       Han Solo with Chewbacca, then and now.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FHsUhakc%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d97hg%2Fthe%5Ffirst%5Fpicture%5Fi%5Ftook%5Fwhen%5Fi%5Farrived%5Fin%2F&amp;title=The%20first%20picture%20I%20took%20when%20I%20arrived%20in%20Iceland%2E%20jaw%20dropping%20J%C3%B6kuls%C3%A1rl%C3%B3n%20%2D%20Glacier%20Lagoon%20is%20so%20unreal%20and%20magical%20I%20couldn%27t%20believe%20my%20eyes%2E&amp;ID=39331233">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        385
+       </div>
+       The first picture I took when I arrived in Iceland. jaw dropping Jkulsrln - Glacier Lagoon is so unreal and magical I couldn't believe my eyes.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2Fka8xBHW&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6t4b%2Fon%5Faziz%5Fansaris%5Ftwitter%2F&amp;title=On%20Aziz%20Ansaris%20Twitter&amp;ID=39331234">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4890
+       </div>
+       On Aziz Ansaris Twitter
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FhUU4ulH&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9nop%2Flets%5Fnot%5Fforget%5Fthe%5Foriginal%5Finspiration%5Ffor%5Fthe%2F&amp;title=Let%27s%20not%20forget%20the%20original%20inspiration%20for%20The%20Joker%3A%20Conrad%20Veidt%20in%20The%20Man%20Who%20Laughs%20%281928%29&amp;ID=39331235">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        230
+       </div>
+       Let's not forget the original inspiration for The Joker: Conrad Veidt in The Man Who Laughs (1928)
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2Fp0euBKt&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9cct%2Fmy%5Fbadass%5Fcousins%5Ftake%5Fon%5Fa%5Ffemale%5Fsauron%2F&amp;title=My%20badass%20cousins%20take%20on%20a%20female%20Sauron%2E&amp;ID=39331236">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        279
+       </div>
+       My badass cousins take on a female Sauron.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FwMzIzld%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9yz5%2Fpart%5Fof%5Fmy%5Fjob%5Finvolves%5Fphotographing%5Ftanker%2F&amp;title=Part%20of%20my%20job%20involves%20photographing%20tanker%20ships%20from%20helicopters%20%5BOC%5D&amp;ID=39331237">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        166
+       </div>
+       Part of my job involves photographing tanker ships from helicopters [OC]
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FFsGwfZv%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9cs9%2Fwhat%5Fhappens%5Fwhen%5Fan%5F8000%5Flb%5F3600%5Fkg%5Felephant%2F&amp;title=What%20happens%20when%20an%208%2C000%20lb%20%283%2C600%20kg%29%20Elephant%20Seal%20mistakes%20you%20for%20a%20rival%20breeding%20male%20%5Bby%20Paul%20Nicklen%2C%20NatGeo%5D&amp;ID=39331238">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        254
+       </div>
+       What happens when an 8,000 lb (3,600 kg) Elephant Seal mistakes you for a rival breeding male [by Paul Nicklen, NatGeo]
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FAXoLYBl&amp;com=%2Fr%2Fpics%2Fcomments%2F3d8otw%2Fmy%5Fmom%5Fand%5Fdad%5Fboth%5Fcancer%5Fpatients%5Freunited%2F&amp;title=My%20mom%20and%20dad%2C%20both%20cancer%20patients%2C%20reunited%20after%20many%20days%20apart%2E%20High%20risk%20surgery%20for%20my%20mom%20today%20at%20noon%2E&amp;ID=39331239">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        472
+       </div>
+       My mom and dad, both cancer patients, reunited after many days apart. High risk surgery for my mom today at noon.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FhhOje8L%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d79uy%2Fawesome%5Fseethrough%5Fguitar%2F&amp;title=Awesome%20see%2Dthrough%20guitar&amp;ID=39331240">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2495
+       </div>
+       Awesome see-through guitar
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FkKizOAq%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6s6p%2Fa%5Fprogressive%5Fchristian%5Fseminary%5Fhanded%5Fthese%2F&amp;title=A%20progressive%20Christian%20seminary%20handed%20these%20condoms%20out%20at%20Chicago%20Pride%2E&amp;ID=39331241">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3786
+       </div>
+       A progressive Christian seminary handed these condoms out at Chicago Pride.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FAjmLUmZ%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d9nya%2Fjust%5Fa%5Ffox%2F&amp;title=Just%20a%20fox&amp;ID=39331242">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        147
+       </div>
+       Just a fox
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FtIIh62V%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6ids%2Fa%5Ffew%5Freddit%5Ffavourites%2F&amp;title=A%20few%20Reddit%20favourites%2E&amp;ID=39331243">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3858
+       </div>
+       A few Reddit favourites.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2Fa%2FqQfvZ&amp;com=%2Fr%2Fpics%2Fcomments%2F3d7byf%2Ftheres%5Fa%5Fpostit%5Fwar%5Fin%5Fmy%5Ftown%2F&amp;title=There%27s%20a%20Post%2Dit%20War%20in%20my%20town&amp;ID=39331244">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        1745
+       </div>
+       There's a Post-it War in my town
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FER1XB1x%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d697a%2Ftracy%5Fmorgan%5Fis%5Fdriving%5Fagain%2F&amp;title=Tracy%20Morgan%20is%20driving%20again&amp;ID=39331245">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4294
+       </div>
+       Tracy Morgan is driving again
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=https%3A%2F%2Fi%2Eimgur%2Ecom%2Fnz9W3x3%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6tlc%2Fenji%5Fnight%2F&amp;title=Enji%20Night&amp;ID=39331246">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2452
+       </div>
+       Enji Night
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=https%3A%2F%2Fpbs%2Etwimg%2Ecom%2Fmedia%2FCHRGxnhUkAAxIfJ%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d7z6q%2Ffamily%5Fshopping%2F&amp;title=Family%20shopping&amp;ID=39331247">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        705
+       </div>
+       Family shopping
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2F7an849n&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6431%2Fi%5Fwas%5Ftold%5Fi%5Fneed%5Fto%5Fget%5Fthis%5Fout%5Fof%5Fmy%5Fstore%5Fif%2F&amp;title=I%20was%20told%20I%20need%20to%20get%20this%20out%20of%20my%20store%20if%20I%20wanted%20any%20black%20people%20to%20shop%20here%2E%2E%2E&amp;ID=39331248">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        3504
+       </div>
+       I was told I need to get this out of my store if I wanted any black people to shop here...
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FDWsxck9&amp;com=%2Fr%2Fpics%2Fcomments%2F3d978q%2Fmeet%5Fmj%5Fa%5Fpitlab%5Fmix%2F&amp;title=Meet%20MJ%20a%20pit%2Flab%20mix&amp;ID=39331249">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        127
+       </div>
+       Meet MJ a pit/lab mix
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FstzhM6X%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d93tz%2Ffarm%5Fin%5Fswitzerland%2F&amp;title=Farm%20in%20Switzerland&amp;ID=39331250">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        131
+       </div>
+       Farm in Switzerland
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=https%3A%2F%2Fi%2Eimgur%2Ecom%2FPW36wi5%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d6ra1%2Fzero%5Fsuit%5Fsamus%5Fcosplay%2F&amp;title=Zero%20Suit%20Samus%20Cosplay&amp;ID=39331251">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        1604
+       </div>
+       Zero Suit Samus Cosplay
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FgDBaq1h%2Ejpg%3F1&amp;com=%2Fr%2Fpics%2Fcomments%2F3d5zom%2Fmy%5Faunt%5Fturned%5F41%5Ftoday%5Fhopefully%5Fim%5Fthis%5Fbadass%2F&amp;title=My%20Aunt%20turned%2041%20today%2C%20hopefully%20I%27m%20this%20badass%20at%20her%20age%2E&amp;ID=39331252">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        2850
+       </div>
+       My Aunt turned 41 today, hopefully I'm this badass at her age.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fi%2Eimgur%2Ecom%2FSugxzzg%2Ejpg&amp;com=%2Fr%2Fpics%2Fcomments%2F3d92de%2Fcastle%5Foberhofen%5Fbeautiful%5Fswitzerland%2F&amp;title=Castle%20Oberhofen%2E%2E%2E%2E%20Beautiful%20Switzerland&amp;ID=39331253">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        114
+       </div>
+       Castle Oberhofen.... Beautiful Switzerland
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FjAABhWx&amp;com=%2Fr%2Fpics%2Fcomments%2F3d58eg%2Fhow%5Fa%5F20%5Fyear%5Fold%5Ftruck%5Flets%5Fyou%5Fknow%5Fits%5Ftime%2F&amp;title=How%20a%2020%20year%20old%20truck%20lets%20you%20know%20its%20time&amp;ID=39331254">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4929
+       </div>
+       How a 20 year old truck lets you know its time
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FKPUQt9r&amp;com=%2Fr%2Fpics%2Fcomments%2F3d5dfw%2Fthis%5Fpicture%5Fis%5Fgoing%5Fviral%5Fin%5Fmy%5Ftown%2F&amp;title=This%20picture%20is%20going%20viral%20in%20my%20town%2E&amp;ID=39331255">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        4339
+       </div>
+       This picture is going viral in my town.
+      </a>
+      <a class="list-group-item" href="index.cfm?sub=pics&amp;f=&amp;link=http%3A%2F%2Fimgur%2Ecom%2FPkwFCGl&amp;com=%2Fr%2Fpics%2Fcomments%2F3d732r%2Fwish%5Fme%5Fluck%5Ftoday%5Fi%5Fhave%5Frealized%5Fmy%5Fproblem%2F&amp;title=Wish%20me%20luck%2E%20Today%20I%20have%20realized%20my%20problem%20isn%27t%20the%20world%2C%20it%27s%20myself%2E%20Fix%20yourself%20first%2C%20then%20fix%20the%20rest%2E&amp;ID=39331256">
+       <div style="display:inline-block; width:32px; color:#fff;">
+        997
+       </div>
+       Wish me luck. Today I have realized my problem isn't the world, it's myself. Fix yourself first, then fix the rest.
+      </a>
+     </div>
+    </div>
+   </div>
+   <div class="col4" style="background-color:#232326;">
+    <ol class="breadcrumb">
+     Comments
+    </ol>
+    <div style="padding:12px;">
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       40
+      </b>
+      <a href="http://www.reddit.com/u/Charlemagne712">
+       Charlemagne712
+      </a>
+      /r/somethingimade
+
+This is really awesome.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       26
+      </b>
+      <a href="http://www.reddit.com/u/ChorroVon">
+       ChorroVon
+      </a>
+      The guys over at /r/woodworking would appreciate this.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       7
+      </b>
+      <a href="http://www.reddit.com/u/FruitbatNT">
+       FruitbatNT
+      </a>
+      How did you clean and dry it?  A few people I know have done "stump" furniture with big chunks, and it has always ended up with a huge split within 2-3 years.
+
+One especially bad one was an uncle of mine who got a 7' tall bear sculpture carved out of a single piece of maple.  It cracked straight down the middle 2 years later (sitting in his cabin, we have long, dry winters).  He spent at least a couple grand getting it made. Since both sides had curled pretty badly it couldn't be repaired (the 2 sides of the head were 5 inches apart).  It got turned into fire wood.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       11
+      </b>
+      <a href="http://www.reddit.com/u/rex8499">
+       rex8499
+      </a>
+      I made this myself using my chainsaw, hand planer, circular saw, rasp, and sander.  Took about 25 hours.
+
+I did buy the lumber for the shelves because I'm not THAT amazing with a chainsaw.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       3
+      </b>
+      <a href="http://www.reddit.com/u/Milutin">
+       Milutin
+      </a>
+      How did you attach shelves?
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       3
+      </b>
+      <a href="http://www.reddit.com/u/procrastablasta">
+       procrastablasta
+      </a>
+      Kinda shocked I've never really seen this before!  Does it weigh 300 pounds?
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       3
+      </b>
+      <a href="http://www.reddit.com/u/G19Gen3">
+       G19Gen3
+      </a>
+      What's with
+
+Gallery
+
+?
+
+Of the
+
+
+Order
+
+The
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/TDO1">
+       TDO1
+      </a>
+      Roy Underhill would be proud.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/[deleted]">
+       [deleted]
+      </a>
+      oh I love it very clever use of the stump!
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/generalginger100">
+       generalginger100
+      </a>
+      Put it on your shelf?
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/Gameslasher">
+       Gameslasher
+      </a>
+      Would you go as far as calling it an "entertainment cedar"?
+
+damn you /r/dadjokes
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/Moos_Mumsy">
+       Moos_Mumsy
+      </a>
+      At least 3,241 people want your cedar stump bookshelf.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/McKrakahonkey">
+       McKrakahonkey
+      </a>
+      This is awesome! My grandmother had 2 cedar trees in her yard cut down years ago and they have just been sitting there taking up space. My Uncle wants to burn it all. I told him I would take car of it because I like working with wood. This would be perfect for a few of the logs.
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       6
+      </b>
+      <a href="http://www.reddit.com/u/bobsco">
+       bobsco
+      </a>
+      Good work mang! That looks heavy as fuck!
+     </div>
+     <div class="well well-sm" style="font-size:12px; color:#CCC;">
+      <b class="label label-success">
+       2
+      </b>
+      <a href="http://www.reddit.com/u/justinsayin">
+       justinsayin
+      </a>
+      That's one of the most attractive projects I've seen on here.
+     </div>
+    </div>
+   </div>
+   <div class="col3" style="border:0px; overflow:hidden; white-space:nowrap;">
+    <ol class="breadcrumb">
+     <li>
+      <a class="btn-xs btn-success" href="index.cfm?sub=&amp;f=&amp;link=&amp;com=&amp;title=&amp;ID=">
+       Next Link
+      </a>
+     </li>
+     <li>
+      <a href="http://imgur.com/a/Ly4QK" target="_blank">
+       Source Link
+      </a>
+     </li>
+     <font style="font-size:12px; color:#CCC;">
+      What to do with that cedar tree stump....hmmm....
+     </font>
+    </ol>
+    <div class="parentff">
+     <iframe frameborder="0" src="http://imgur.com/a/Ly4QK" style="position: absolute; height: 100%; width:100%;">
+     </iframe>
+    </div>
+   </div>
+  </div>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1548821-40', 'auto');
+  ga('send', 'pageview');
+  </script>
+ </body>
+</html>

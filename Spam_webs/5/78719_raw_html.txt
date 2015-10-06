@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+ <head>
+  <!--&lt;meta charset="UTF-8" /&gt;-->
+  <meta charset="utf-8"/>
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
+  <title>
+   An Introduction to PowerShell - Intertech Blog
+  </title>
+  <link href="http://www.intertech.com/Blog/xmlrpc.php" rel="pingback"/>
+  <!-- favicon -->
+  <!--
+		&lt;link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700" /&gt;
+		-->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700" rel="stylesheet" type="text/css"/>
+  <!-- scripts and wp_head() here -->
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.4 - https://yoast.com/wordpress/plugins/seo/ -->
+  <meta content="noodp,noydir" name="robots"/>
+  <meta content="This introduction to PowerShell walks you through the basics and helps you get started with this powerful scripting tool used by IT administrators." name="description"/>
+  <link href="http://www.intertech.com/Blog/introduction-to-powershell/" rel="canonical"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="An Introduction to PowerShell - Intertech Blog" property="og:title"/>
+  <meta content="This introduction to PowerShell walks you through the basics and helps you get started with this powerful scripting tool used by IT administrators." property="og:description"/>
+  <meta content="http://www.intertech.com/Blog/introduction-to-powershell/" property="og:url"/>
+  <meta content="Intertech Blog" property="og:site_name"/>
+  <meta content="General" property="article:section"/>
+  <meta content="2014-08-12T06:00:32+00:00" property="article:published_time"/>
+  <meta content="2014-08-08T14:03:51+00:00" property="article:modified_time"/>
+  <meta content="2014-08-08T14:03:51+00:00" property="og:updated_time"/>
+  <meta content="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/logo-powershell1.png" property="og:image"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="http://www.intertech.com/Blog/feed/" rel="alternate" title="Intertech Blog  Feed" type="application/rss+xml"/>
+  <link href="http://www.intertech.com/Blog/comments/feed/" rel="alternate" title="Intertech Blog  Comments Feed" type="application/rss+xml"/>
+  <link href="http://www.intertech.com/Blog/introduction-to-powershell/feed/" rel="alternate" title="Intertech Blog  An Introduction to PowerShell Comments Feed" type="application/rss+xml"/>
+  <link href="http://cdn.intertech.com/Blog/wp-content/plugins/mailchimp//css/flick/flick.css?ver=4.0.5" id="flick-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.intertech.com/Blog/?mcsf_action=main_css&amp;ver=4.0.5" id="mailchimpSF_main_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if IE]&gt;
+&lt;link rel='stylesheet' id='mailchimpSF_ie_css-css'  href='http://cdn.intertech.com/Blog/wp-content/plugins/mailchimp/css/ie.css?ver=4.0.5' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://cdn.intertech.com/Blog/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=2.6.8" id="crayon-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://cdn.intertech.com/Blog/wp-content/themes/rework/theme/compressed/theme.min.css?ver=1417801708" id="pe_theme_compressed-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://cdn.intertech.com/Blog/wp-content/themes/rework/style.css?ver=1418327648" id="pe_theme_init-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/postratings-css.css?ver=1.79" id="wp-postratings-css" media="all" rel="stylesheet" type="text/css"/>
+  <!-- This site uses the Yoast Google Analytics plugin v5.1.2 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-325338-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+  </script>
+  <!-- / Yoast Google Analytics -->
+  <script src="http://cdn.intertech.com/Blog/wp-includes/js/jquery/jquery.js?ver=1.11.1" type="text/javascript">
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var obj_lz = {"ifd_pixel":"50","ifd_duration":"1000"};
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/Advanced_lazyload.js?ver=advacned" type="text/javascript">
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-includes/js/jquery/ui/jquery.ui.core.min.js?ver=1.10.4" type="text/javascript">
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/mailchimp//js/datepicker.js?ver=4.0.5" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.6.8","is_admin":"0","ajaxurl":"http:\/\/www.intertech.com\/Blog\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=2.6.8" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var peContactForm = {"url":"http%3A%2F%2Fwww.intertech.com%2FBlog%2Fwp-admin%2Fadmin-ajax.php"};
+var peNewsletter = {"url":"http%3A%2F%2Fwww.intertech.com%2FBlog%2Fwp-admin%2Fadmin-ajax.php"};
+var peFallBackPlayer = {"url":"http%3A%2F%2Fwww.intertech.com%2FBlog%2Fwp-content%2Fthemes%2Frework%2Fframework%2Fjs%2Fvideo%2Fjarisplayer.swf"};
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/themes/rework/theme/compressed/theme.min.js?ver=1367859755" type="text/javascript">
+  </script>
+  <link href="http://www.intertech.com/Blog/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://cdn.intertech.com/Blog/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <meta content="WordPress 4.0.5" name="generator"/>
+  <link href="http://www.intertech.com/Blog/?p=4502" rel="shortlink"/>
+  <script type="text/javascript">
+   jQuery(function($) {
+			$('.date-pick').each(function() {
+				var format = $(this).data('format') || 'mm/dd/yyyy';
+				format = format.replace(/yyyy/i, 'yy');
+				$(this).datepicker({
+					autoFocusNextInput: true,
+					constrainInput: false,
+					changeMonth: true,
+					changeYear: true,
+					beforeShow: function(input, inst) { $('#ui-datepicker-div').addClass('show'); },
+					dateFormat: format.toLowerCase(),
+				});
+			});
+			d = new Date();
+			$('.birthdate-pick').each(function() {
+				var format = $(this).data('format') || 'mm/dd';
+				format = format.replace(/yyyy/i, 'yy');
+				$(this).datepicker({
+					autoFocusNextInput: true,
+					constrainInput: false,
+					changeMonth: true,
+					changeYear: false,
+					minDate: new Date(d.getFullYear(), 1-1, 1),
+					maxDate: new Date(d.getFullYear(), 12-1, 31),
+					beforeShow: function(input, inst) { $('#ui-datepicker-div').removeClass('show'); },
+					dateFormat: format.toLowerCase(),
+				});
+
+			});
+
+		});
+  </script>
+  <style type="text/css">
+   .sfs-subscriber-count { width: 88px; overflow: hidden; height: 26px; color: #424242; font: 9px Verdana, Geneva, sans-serif; letter-spacing: 1px; }
+.sfs-count { width: 86px; height: 17px; line-height: 17px; margin: 0 auto; background: #ccc; border: 1px solid #909090; border-top-color: #fff; border-left-color: #fff; }
+.sfs-count span { display: inline-block; height: 11px; line-height: 12px; margin: 2px 1px 2px 2px; padding: 0 2px 0 3px; background: #e4e4e4; border: 1px solid #a2a2a2; border-bottom-color: #fff; border-right-color: #fff; }
+.sfs-stats { font-size: 6px; line-height: 6px; margin: 1px 0 0 1px; word-spacing: 2px; text-align: center; text-transform: uppercase; }
+  </style>
+  <style type="text/css">
+   ul.scfw_16px li, ul.scfw_24px li, ul.scfw_32px li, ul.scfw_16px li a, ul.scfw_24px li a, ul.scfw_32px li a {
+	display:inline !important;
+	float:none !important;
+	border:0 !important;
+	background:transparent none !important;
+	margin:0 !important;
+	padding:0 !important;
+}
+ul.scfw_16px li {
+	margin:0 2px 0 0 !important;
+}
+ul.scfw_24px li {
+	margin:0 3px 0 0 !important;
+}
+ul.scfw_32px li {
+	margin:0 5px 0 0 !important;
+}
+ul.scfw_text_img li:before, ul.scfw_16px li:before, ul.scfw_24px li:before, ul.scfw_32px li:before {
+	content:none !important;
+}
+.scfw img {
+	float:none !important;
+}
+  </style>
+  <script type="text/javascript">
+   window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "http://www.intertech.com/Blog/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.5.2';
+	window._wp_rp_post_id = '4502';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'An+Introduction+to+PowerShell';
+	window._wp_rp_post_tags = ['general', 'administr', 'os', 'window', 'unix', 'system', 'powershel', 'server', 'web', 'blog', 'network', 'parti', 'linux', 'classic', 'bash', 'shell'];
+	window._wp_rp_promoted_content = true;
+  </script>
+  <script async="" src="https://wprp.zemanta.com/static/js/loader.js?version=3.5.2" type="text/javascript">
+  </script>
+  <link href="http://cdn.intertech.com/Blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.5.2" rel="stylesheet"/>
+  <!--[if (gte IE 6)&amp;(lte IE 8)]&gt;&lt;script type="text/javascript" src="http://cdn.intertech.com/Blog/wp-content/themes/rework/js/selectivizr-min.js"&gt;&lt;/script&gt;&lt;![endif]-->
+  <style type="text/css">
+   body,p,input[type="text"],textarea,input[type="submit"],input[type="reset"],input[type="button"],button,.button,#navigation a{font-family:'Open Sans';}h1{font-family:'Open Sans';}h2{font-family:'Open Sans';}h3{font-family:'Open Sans';}h4{font-family:'Open Sans';}h5{font-family:'Open Sans';}h6{font-family:'Open Sans';}
+  </style>
+  <style type="text/css">
+   a:hover{color:#7fb3e0;}a&gt;*:hover{color:#7fb3e0;}#navigation a:hover{color:#7fb3e0;}#navigation .hover&gt;a{color:#7fb3e0;}#navigation .current&gt;a{color:#7fb3e0;}#navigation ul{background-color:#7fb3e0;}#back-top a:hover{background-color:#7fb3e0;}.page-title-inner .accent{color:#7fb3e0;}.blog-carousel .comments:hover{color:#7fb3e0;}.jcarousel-prev:hover{background-color:#7fb3e0;}.jcarousel-prev:focus{background-color:#7fb3e0;}.jcarousel-prev:active{background-color:#7fb3e0;}#project-wrapper-alt .jcarousel-next:hover{background-color:#7fb3e0;}#project-wrapper-alt .jcarousel-next:focus{background-color:#7fb3e0;}#project-wrapper-alt .jcarousel-next:active{background-color:#7fb3e0;}.work-more a:hover{color:#7fb3e0;}.team-member:hover{border-bottom-color:#7fb3e0;}.member-info h4{color:#7fb3e0;}.member-social-links a:hover{color:#7fb3e0;}.service-icon{background-color:#7fb3e0;}.pricing-table-extended .level-max .header {background-color:#7fb3e0;}.pricing-table-simple .level-max h2{color:#7fb3e0;}.pricing-table-simple .level-max h2 span{color:#7fb3e0;}.on a{color:#7fb3e0;}#tabs li a:hover{border-top-color:#7fb3e0;}#tabs li.active a{border-top-color:#7fb3e0;}#tabs li.active a:hover{color:#7fb3e0;}.error{background-color:#7fb3e0;}blockquote .person .accent{color:#7fb3e0;}.post-meta .author a{color:#7fb3e0;}.post-meta .date a:hover{color:#7fb3e0;}.post-meta .tags a:hover{color:#7fb3e0;}.post-meta .comments a:hover{color:#7fb3e0;}.post-entry a{color:#7fb3e0;}.pagination .current{background-color:#7fb3e0;}.pagination a:hover{color:#7fb3e0;}.comment .author .reply:hover{color:#7fb3e0;}.post-block{background-color:#7fb3e0;}.post-more a:hover{color:#7fb3e0;}.project-feed-filter a:hover{color:#7fb3e0;}.project-feed-filter .current{color:#7fb3e0;}.project-item .overlay{background-color:#7fb3e0;background-color:rgba(127,179,224,0.75);}.project-item:hover .project-title{background-color:#7fb3e0;}.project-nav .prev:hover{background-color:#7fb3e0;}.project-nav .next:hover{background-color:#7fb3e0;}.project-nav .back:hover{background-color:#7fb3e0;}.widget.widget_categories li a:hover{color:#7fb3e0;}#footer .widget_categories li a:hover{color:#7fb3e0;}#footer .widget_recent_entries a:hover{color:#7fb3e0;}.twitter-feed a:hover{color:#7fb3e0;}#sidebar .twitter-feed a{color:#7fb3e0;}.photo-stream a:hover{outline-color:#7fb3e0;}#footer a:hover{color:#7fb3e0;}#footer .twitter-feed a:hover{color:#7fb3e0;}.flexslider:hover .flex-next:hover{background-color:#7fb3e0;}.flexslider:hover .flex-prev:hover{background-color:#7fb3e0;}#lang_sel ul ul li:hover a{background-color:#7fb3e0;}#lang_sel_list a:hover span{color:#7fb3e0;}
+  </style>
+  <style type="text/css">
+   #navigation a{
+color: #264385;
+}
+
+.post-entry ol, .post-entry ul {
+display: block;
+list-style-type: disc;
+margin: 0 1em;
+padding-left: 40px;
+margin-bottom: 15px;
+font-size: 14px;
+}
+
+.post-entry ol{
+list-style-type: decimal;
+}
+
+.flex-caption {
+bottom: 16px;
+background-color:transparent;
+width: 323px;
+left: 458px;
+}
+
+.red {
+background: #ec4c1a;
+background: -webkit-linear-gradient(#ec4c1a,#a32700);
+background: -moz-linear-gradient(#ec4c1a,#a32700);
+background: -ms-linear-gradient(#ec4c1a,#a32700);
+background: -o-linear-gradient(#ec4c1a,#a32700);
+background: -webkit-gradient(#ec4c1a,#a32700);
+background: linear-gradient(#ec4c1a,#a32700);
+background: #c1c1c1;
+background: -moz-linear-gradient(top, #c1c1c1 0%, #e5e5e5 32%, #e2e2e2 65%, #bbbdc1 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c1c1c1), color-stop(32%,#e5e5e5), color-stop(65%,#e2e2e2), color-stop(100%,#bbbdc1));
+background: -webkit-linear-gradient(top, #c1c1c1 0%,#e5e5e5 32%,#e2e2e2 65%,#bbbdc1 100%);
+background: -o-linear-gradient(top, #c1c1c1 0%,#e5e5e5 32%,#e2e2e2 65%,#bbbdc1 100%);
+background: -ms-linear-gradient(top, #c1c1c1 0%,#e5e5e5 32%,#e2e2e2 65%,#bbbdc1 100%);
+background: linear-gradient(to bottom, #c1c1c1 0%,#e5e5e5 32%,#e2e2e2 65%,#bbbdc1 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c1c1c1', endColorstr='#bbbdc1',GradientType=0 );
+}
+
+input.red{color: #264385;}
+@media screen and (max-width: 1185px) {
+  #socialBar {
+    display: none;
+  }
+}
+
+input[type="text"], input[type="password"], textarea {
+border: 1px solid #ddd;
+}
+
+.breadcrumbs{
+top: -35px;
+position: relative;
+}
+
+.breadcrumbs &gt; div{
+display: inline;
+}
+
+.ratings{
+color: #959595;
+display: inline-block;
+margin-right: 15px;
+width: auto;
+}
+
+.post-ratings img{
+display: inline-block;
+top: 2px;
+position: relative;
+}
+.post-ratings-text{position: absolute;}
+.post-ratings-loading img{
+display: inline-block;
+position: relative;
+top: 4px;
+}
+
+.post-meta .date, .post-meta .tags, .post-meta .comments {
+padding-bottom: 0;
+}
+
+.post-entry {
+margin-top: 20px;
+}
+
+@media all and (max-width: 1185px)
+{
+    div#socialBar &gt; div &gt; div.addthis_toolbox
+    {
+        display: none;
+    }
+}
+  </style>
+  <script type="text/javascript">
+   jQuery(window).load(function () {
+    jQuery.get("http://www.intertech.com/ShareBar", null, function (data) {
+        jQuery("body").append(data);
+    });
+        });
+  </script>
+ </head>
+ <body class="single single-post postid-4502 single-format-standard">
+  <!-- Main Container -->
+  <div id="body-wrapper">
+   <!-- Header -->
+   <div class="container clearfix" id="header">
+    <a href="http://www.intertech.com" id="logo">
+     <img alt="logo" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2013/05/interlogo.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif"/>
+    </a>
+    <!--main nav-->
+    <ul id="navigation">
+     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2311" id="menu-item-2311">
+      <a href="http://www.intertech.com/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/', 'Home']);">
+       Home
+      </a>
+     </li>
+     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1225" id="menu-item-1225">
+      <a href="http://www.intertech.com/Blog/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Blog/', 'Blog']);" title="Intertechs Latest Technology Blog Posts">
+       Blog
+      </a>
+     </li>
+     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1233" id="menu-item-1233">
+      <a href="http://www.intertech.com/Training" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Training', 'Training']);" title="Intertech Training">
+       Training
+      </a>
+     </li>
+     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1234" id="menu-item-1234">
+      <a href="http://www.intertech.com/Consulting" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Consulting', 'Consulting']);" title="Intertech Consulting">
+       Consulting
+      </a>
+     </li>
+     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1621" id="menu-item-1621">
+      <a href="http://www.intertech.com/Blog/about-us/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Blog/about-us/', 'About Us']);" title="About Intertech">
+       About Us
+      </a>
+     </li>
+    </ul>
+    <!--wpml lang selection-->
+   </div>
+   <!-- /Header -->
+   <!-- Content -->
+   <div class="container clearfix" id="content">
+    <div style="width: 100%; height: 80px;">
+    </div>
+    <!-- Main Content -->
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+     <!-- RDFa Breadcrumbs Plugin by Mallikarjun Yawalkar -->
+     <div class="breadcrumb breadcrumbs">
+      <div class="rdfa-breadcrumb">
+       <div xmlns:v="http://rdf.data-vocabulary.org/#">
+        <span class="breadcrumbs-title">
+        </span>
+        <span typeof="v:Breadcrumb">
+         <a class="home" href="http://www.intertech.com/Blog/" property="v:title" rel="v:url">
+          Blog
+         </a>
+        </span>
+        <span class="separator">
+         
+        </span>
+        <span typeof="v:Breadcrumb">
+         <a href="http://www.intertech.com/Blog/category/uncategorized/" property="v:title" rel="v:url" title="General">
+          General
+         </a>
+        </span>
+        <span class="separator">
+         
+        </span>
+        An Introduction to PowerShell
+       </div>
+      </div>
+     </div>
+     <!-- RDFa Breadcrumbs Plugin by Mallikarjun Yawalkar -->
+    </div>
+    <!-- /Breadcrumbs -->
+    <div id="main">
+     <!--post-->
+     <div class="post single clearfix">
+      <a href="http://www.intertech.com/Blog/introduction-to-powershell/">
+       <h1>
+        An Introduction to PowerShell
+       </h1>
+      </a>
+      <ul class="post-meta">
+       <li class="author">
+        By
+        <a href="http://www.intertech.com/Blog/author/davin-mickelson/" rel="author" title="Posts by Davin Mickelson">
+         Davin Mickelson
+        </a>
+        <a href="" plugin="Google Plus Authorship" rel="author" title="Google Plus Profile for +">
+         +
+        </a>
+       </li>
+       <li class="date">
+        August 12, 2014
+       </li>
+       <li class="comments">
+        <a href="http://www.intertech.com/Blog/introduction-to-powershell/#comments">
+         <span class="dsq-postid" data-dsqidentifier="4502 http://www.intertech.com/Blog/?p=4502">
+          0
+         </span>
+         Comments
+        </a>
+       </li>
+       <li class="ratings">
+        <div class="post-ratings" data-nonce="6a7c487539" id="post-ratings-4502" itemscope="" itemtype="http://schema.org/Article">
+         <img alt="1 Star" id="rating_4502_1" onclick="rate_post();" onkeypress="rate_post();" onmouseout="ratings_off(5, 0, 0);" onmouseover="current_rating(4502, 1, '1 Star');" src="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/stars/rating_on.gif" style="cursor: pointer; border: 0px;" title="1 Star"/>
+         <img alt="2 Stars" id="rating_4502_2" onclick="rate_post();" onkeypress="rate_post();" onmouseout="ratings_off(5, 0, 0);" onmouseover="current_rating(4502, 2, '2 Stars');" src="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/stars/rating_on.gif" style="cursor: pointer; border: 0px;" title="2 Stars"/>
+         <img alt="3 Stars" id="rating_4502_3" onclick="rate_post();" onkeypress="rate_post();" onmouseout="ratings_off(5, 0, 0);" onmouseover="current_rating(4502, 3, '3 Stars');" src="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/stars/rating_on.gif" style="cursor: pointer; border: 0px;" title="3 Stars"/>
+         <img alt="4 Stars" id="rating_4502_4" onclick="rate_post();" onkeypress="rate_post();" onmouseout="ratings_off(5, 0, 0);" onmouseover="current_rating(4502, 4, '4 Stars');" src="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/stars/rating_on.gif" style="cursor: pointer; border: 0px;" title="4 Stars"/>
+         <img alt="5 Stars" id="rating_4502_5" imageholder="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/stars/rating_on.gif" onclick="rate_post();" onkeypress="rate_post();" onmouseout="ratings_off(5, 0, 0);" onmouseover="current_rating(4502, 5, '5 Stars');" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="cursor: pointer; border: 0px;" title="5 Stars"/>
+         <meta content="An Introduction to PowerShell" itemprop="name"/>
+         <meta content="Introduction to PowerShell
+PowerShell is a scripting tool used by IT administrators who manage applications, servers, networks, users, and operating systems. It is task-based, meaning the scripts you..." itemprop="description"/>
+         <meta content="http://www.intertech.com/Blog/introduction-to-powershell/" itemprop="url"/>
+         <div itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating" style="display: none;">
+          <meta content="5" itemprop="bestRating"/>
+          <meta content="5" itemprop="ratingValue"/>
+          <meta content="1" itemprop="ratingCount"/>
+         </div>
+        </div>
+        <div class="post-ratings-loading" id="post-ratings-4502-loading">
+         <img alt="Loading..." class="post-ratings-image" height="16" imageholder="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/images/loading.gif" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" title="Loading..." width="16"/>
+         Loading...
+        </div>
+       </li>
+      </ul>
+      <div class="post-entry">
+       <a href="http://www.intertech.com/Blog/introduction-to-powershell/">
+        <img class="image" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/logo-powershell1-300x224.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif"/>
+       </a>
+       <h3>
+        <strong>
+         Introduction to PowerShell
+        </strong>
+       </h3>
+       <p>
+        PowerShell is a scripting tool used by IT administrators who manage applications, servers, networks, users, and operating systems. It is task-based, meaning the scripts you run can accomplish many complex and repetitive administrative tasks that would otherwise be complicated, cumbersome, and time consuming to perform without it. This introduction to PowerShell walks you through the basics andhelps you get started with the tool.
+       </p>
+       <h3>
+        <strong>
+         The Basics
+        </strong>
+       </h3>
+       <p>
+        PowerShell is an advanced command line shell, similar in many ways to a Linux or UNIX command line shell. Many of the commands from these OS shells exists in PowerShell, making it an easy transition for UNIX/Linux administrators. Previously, Windows IT administrators were limited to using the DOS Command Prompt, VBScript, COM objects, or a third party shell, such as Bash shell. The classic Command Prompt isnt nearly as powerful as what UNIX/Linux administrators have had all along. A simple search on the web returns several articles and blog entries specifying the similarities and differences between PowerShell and the UNIX/Linux shells.
+       </p>
+       <h3>
+        <strong>
+         Versions
+        </strong>
+       </h3>
+       <p>
+        Because PowerShell tasks are so closely related to certain versions of the Windows operating system and the types of tasks that can be performed on them, only certain versions of PowerShell are supported with the different versions of Windows. Note that PowerShell has been included with the latest versions of Windows. As well, it has since been packaged as being a major component of the Windows Management Framework (WMF), used by IT administrators.
+       </p>
+       <p>
+        Currently, there are five different versions of PowerShell, with Version 4 being the latest officially released edition. There is a public preview version available for version 5 that can be downloaded today as part of the WMF.
+       </p>
+       <p>
+        Version 1 was released in 2006 for Windows XP SP2, Windows Vista, and Windows Server 2003. It was also an optionally installed feature of Windows Server 2008.
+       </p>
+       <p>
+        Version 2 was a huge upgrade for PowerShell in 2009. It included many new features and a new Integrated Script Environment (ISE 2.0) for writing script. It is available for download for the older operating systems. It was also included with Windows 7 and Windows Server 2008 R2. Version 2 has since been rolled in to be a part of the Windows Management Framework, which includes Windows PowerShell 2.0, Windows Remote Management 2.0 (WinRM), and Background Intelligent Transfer Service 4.0 (BITS).
+       </p>
+       <p>
+        Version 3 was a minor upgrade and was included with Windows 8 and Windows Server 2012. It was made available for download for Windows 7 and Windows Server 2008 (R2). It was also included with the larger management pack Windows management Framework 3.0 (WMF3).
+       </p>
+       <p>
+        Version 4 is the current version of PowerShell. It was included with the release of Windows 8.1 and Windows Server 2012 R2. It is also available for download for Windows 7, Windows Server 2008 R2, and Windows Server 2012.
+       </p>
+       <p>
+        Version 5, including WMF 5.0 and PowerShell ISE was released as a technology review version in May, 2014. It is available here:
+        <a href="http://www.microsoft.com/en-us/download/details.aspx?id=42936" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.microsoft.com/en-us/download/details.aspx?id=42936', 'http://www.microsoft.com/en-us/download/details.aspx?id=42936']);">
+         http://www.microsoft.com/en-us/download/details.aspx?id=42936
+        </a>
+       </p>
+       <h3>
+        <strong>
+         Starting PowerShell
+        </strong>
+       </h3>
+       <p>
+        PowerShell can be launched in various ways. From the Start screen, a user can simply start typing powershell to start the command window. Note the user should be cautious because it will not automatically start with administrative privileges, without right-clicking it and choosing to do so.
+       </p>
+       <div class="wp-caption alignnone" id="attachment_4503" style="width: 356px">
+        <a href="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-52-35.png" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-52-35.png', '']);">
+         <img alt="Launching PowerShell in Windows 8.1" class="wp-image-4503 size-medium" height="396" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-52-35-346x396.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="346"/>
+        </a>
+        <p class="wp-caption-text">
+         Launching PowerShell in Windows 8.1
+        </p>
+       </div>
+       <p>
+        The window will appear with the Administrator account appearing in the title bar. Note the PS prefix to the left of the command prompt, reminding us that we are in PowerShell  not the normal Command Prompt.
+       </p>
+       <div class="wp-caption alignnone" id="attachment_4504" style="width: 690px">
+        <a href="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-54-51.png" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-54-51.png', '']);">
+         <img alt="The PowerShell Console" class="size-large wp-image-4504" height="224" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_6-54-51-680x224.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="680"/>
+        </a>
+        <p class="wp-caption-text">
+         The PowerShell Console
+        </p>
+       </div>
+       <p>
+        All of the classic DOS commands will work in PowerShell, including many of the commands you may have used in UNIX/Linux shells. For example, you can perform a DIR listing as well as an ls listing. In UNIX/Linus, you may have used a grep command to search for text within a document. In PowerShell, you can use the Select-String command. For those with experience with the classic shells, learning PowerShell commands will be required to make the transition easier. There is a great chart comparing the commands of the Command Prompt, PowerShell, and UNIX shell here:
+        <a href="http://en.wikipedia.org/wiki/Powershell#Comparison_of_cmdlets_with_similar_commands" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Powershell#Comparison_of_cmdlets_with_similar_commands', 'http://en.wikipedia.org/wiki/Powershell#Comparison_of_cmdlets_with_similar_commands']);">
+         http://en.wikipedia.org/wiki/Powershell#Comparison_of_cmdlets_with_similar_commands
+        </a>
+       </p>
+       <h3>
+        <strong>
+         Cmdlets
+        </strong>
+       </h3>
+       <p>
+        Before PowerShell was released, most IT administrators used VBScript to manage their network. PowerShell has the power of the entire .NET framework. It is largely made up of task-based commands called cmdlets (pronounced command-lets). Scripts can be created that include calling cmdlets. Many cmdlets were released by Microsoft for managing their server products including Windows Server, Microsoft SharePoint Server, Microsoft SQL Server, Microsoft Exchange Server, and more. As well, many third party developers have also created custom cmdlets for their products such as IBM WebSphere and VMWare. Custom cmdlets can be created using C# or VB.NET.
+       </p>
+       <p>
+        Cmdlets take on a naming convention based on a verb-noun naming convention, with a hyphen always being used between the verb and the noun. For example, if you would like to learn more about the Select-String cmdlet, you can use the Get-Help cmdlet, like this:
+       </p>
+       <div class="wp-caption alignnone" id="attachment_4505" style="width: 490px">
+        <a href="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-14-30.png" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-14-30.png', '']);">
+         <img alt="PowerShell's Grep" class="size-medium wp-image-4505" height="396" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-14-30-480x396.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="480"/>
+        </a>
+        <p class="wp-caption-text">
+         PowerShells Grep
+        </p>
+       </div>
+       <p>
+        There are many core cmdlets available. You can see a list of the core cmdlets here:
+       </p>
+       <p>
+        <a href="http://technet.microsoft.com/en-us/library/hh849695.aspx" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://technet.microsoft.com/en-us/library/hh849695.aspx', 'http://technet.microsoft.com/en-us/library/hh849695.aspx']);">
+         http://technet.microsoft.com/en-us/library/hh849695.aspx
+        </a>
+       </p>
+       <p>
+        Besides cmdlets, there are also functions that can be called from scripts and modules. You can find all the functions, modules, and cmdlets installed on your machine by opening a PowerShell window and typing Get-Command.
+       </p>
+       <p>
+        <a href="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/Capture.png" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/Capture.png', '']);">
+         <img alt="Capture" class="alignnone wp-image-4508 size-full" height="642" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/Capture.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="997"/>
+        </a>
+       </p>
+       <h3>
+        <strong>
+         Integrated Shell Environment (ISE)
+        </strong>
+       </h3>
+       <p>
+        Scripts can be created to combine several PowerShell commands together. Starting with PowerShell 2, Microsoft released a new editor called the Integrated Shell Environment (ISE) that allows the developer to develop, edit, and debug PowerShell scripts. PowerShell scripts use the *.ps1 file extension.
+       </p>
+       <p>
+        ISE can be launched from within PowerShell by simply typing ISE and hitting &lt;Enter&gt;. Alternately, it can launched from the Start screen by simply typing ISE, or even from a classic Command prompt by typing PowerShell_ISE.
+       </p>
+       <p>
+        When launched, it will start a script editor that can be used to edit and debug your PowerShell scripts, PowerShell modules, and PowerShell data files. Besides giving you an editor with color coding and auto-completion (IntelliSense), it also includes a PowerShell window near the bottom. Custom Add-ons can also be installed in ISE for unique functionality.
+       </p>
+       <p>
+        There are several PowerShell scripts already installed on your machine. If you do a simple search for *.ps1 files on your hard drive, you will find several management files. Here is ISE with one of Microsofts included scripts for managing IE Browser add-ons.
+       </p>
+       <div class="wp-caption alignnone" id="attachment_4507" style="width: 690px">
+        <a href="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-33-36.png" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-33-36.png', '']);">
+         <img alt="The ISE" class="size-large wp-image-4507" height="224" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/08/2014-08-07_7-33-36-680x224.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="680"/>
+        </a>
+        <p class="wp-caption-text">
+         The ISE
+        </p>
+       </div>
+       <h3>
+        <strong>
+         Web Sites
+        </strong>
+       </h3>
+       <p>
+        Usually, learning PowerShell has been out of necessity by administrators but it should be considered a very powerful tool in every administrators toolbox. Some tasks can only be performed using PowerShell when managing Windows or servers. Along withthis introduction to PowerShell, there are several web sites available to help you get started including tutorial sites to help you learn it. Here are just a few of them. Good luck and best wishes.
+       </p>
+       <p>
+        The main PowerShell site:
+       </p>
+       <p>
+        <a href="http://www.microsoft.com/powershell" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.microsoft.com/powershell', 'http://www.microsoft.com/powershell']);">
+         http://www.microsoft.com/powershell
+        </a>
+       </p>
+       <p>
+        Microsoft Script Center:
+       </p>
+       <p>
+        <a href="http://technet.microsoft.com/en-us/scriptcenter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://technet.microsoft.com/en-us/scriptcenter', 'http://technet.microsoft.com/en-us/scriptcenter']);">
+         http://technet.microsoft.com/en-us/scriptcenter
+        </a>
+       </p>
+       <p>
+        Windows PowerShell Team Blog:
+       </p>
+       <p>
+        <a href="http://blogs.msdn.com/b/powershell/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://blogs.msdn.com/b/powershell/', 'http://blogs.msdn.com/b/powershell/']);">
+         http://blogs.msdn.com/b/powershell/
+        </a>
+       </p>
+       <p>
+        Microsoft Virtual Academy PowerShell training:
+       </p>
+       <p>
+        <a href="http://www.microsoftvirtualacademy.com/Studies/SearchResult.aspx?q=powershell" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.microsoftvirtualacademy.com/Studies/SearchResult.aspx?q=powershell', 'http://www.microsoftvirtualacademy.com/Studies/SearchResult.aspx?q=powershell']);">
+         http://www.microsoftvirtualacademy.com/Studies/SearchResult.aspx?q=powershell
+        </a>
+       </p>
+       <div class="wp_rp_wrap wp_rp_vertical_m" id="wp_rp_first">
+        <div class="wp_rp_content">
+         <h3 class="related_post_title">
+          More from Intertech
+         </h3>
+         <ul class="related_post wp_rp">
+          <li data-poid="in-4628" data-position="0" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/fridays-developer-picks-week-august-25th/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/fridays-developer-picks-week-august-25th/', '']);">
+            <img alt="Fridays Developer Picks  Week of August 25th" height="150" src="http://cdn.intertech.com/Blog/wp-content/uploads/2014/07/friday_picks.png" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/fridays-developer-picks-week-august-25th/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/fridays-developer-picks-week-august-25th/', 'Fridays Developer Picks  Week of August 25th']);">
+            Fridays Developer Picks  Week of August 25th
+           </a>
+          </li>
+          <li data-poid="in-5712" data-position="1" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/json-service-mocks/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/json-service-mocks/', '']);">
+            <img alt="JSON Service Mocks" height="150" src="http://cdn.intertech.com/Blog/wp-content/uploads/2015/01/jsonmock-150x150.png" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/json-service-mocks/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/json-service-mocks/', 'JSON Service Mocks']);">
+            JSON Service Mocks
+           </a>
+          </li>
+          <li data-poid="in-446" data-position="2" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/monodevelop-a-cross-platform-net-ide/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/monodevelop-a-cross-platform-net-ide/', '']);">
+            <img alt="MonoDevelopa Cross Platform .NET IDE" height="150" src="http://cdn.intertech.com/Blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/monodevelop-a-cross-platform-net-ide/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/monodevelop-a-cross-platform-net-ide/', 'MonoDevelopa Cross Platform .NET IDE']);">
+            MonoDevelopa Cross Platform .NET IDE
+           </a>
+          </li>
+          <li data-poid="in-408" data-position="3" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/silverlight-on-linux/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/silverlight-on-linux/', '']);">
+            <img alt="Silverlight on Linux" height="150" src="http://cdn.intertech.com/Blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/silverlight-on-linux/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/silverlight-on-linux/', 'Silverlight on Linux']);">
+            Silverlight on Linux
+           </a>
+          </li>
+          <li data-poid="in-259" data-position="4" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/windows-azure-startup-tasks/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/windows-azure-startup-tasks/', '']);">
+            <img alt="Windows Azure Startup Tasks" height="150" src="http://cdn.intertech.com/Blog/wp-content/uploads/2011/05/image_thumb_3-150x150.png" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/windows-azure-startup-tasks/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/windows-azure-startup-tasks/', 'Windows Azure Startup Tasks']);">
+            Windows Azure Startup Tasks
+           </a>
+          </li>
+          <li data-poid="in-324" data-position="5" data-post-type="none">
+           <a class="wp_rp_thumbnail" href="http://www.intertech.com/Blog/an-overview-of-the-moonlight-roadmap/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/an-overview-of-the-moonlight-roadmap/', '']);">
+            <img alt="An Overview of the Moonlight Roadmap" height="150" imageholder="http://cdn.intertech.com/Blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" width="150"/>
+           </a>
+           <a class="wp_rp_title" href="http://www.intertech.com/Blog/an-overview-of-the-moonlight-roadmap/" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://www.intertech.com/Blog/an-overview-of-the-moonlight-roadmap/', 'An Overview of the Moonlight Roadmap']);">
+            An Overview of the Moonlight Roadmap
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!--end post-->
+     <div id="disqus_thread">
+     </div>
+    </div>
+    <!-- /Main Content -->
+    <!-- Sidebar -->
+    <div id="sidebar">
+     <!-- Sidebar -->
+     <div id="sidebar">
+      <div class="widget widget_mailchimpsf_widget">
+       <h3>
+        Subscribe to our Blog
+       </h3>
+       <style>
+        .widget_mailchimpsf_widget .widget-title {
+		line-height: 1.4em;
+		margin-bottom: 0.75em;
+	}
+	#mc_subheader {
+		line-height: 1.25em;
+		margin-bottom: 18px;
+	}
+	.mc_merge_var {
+		margin-bottom: 1.0em;
+	}
+	.mc_var_label,
+	.mc_interest_label {
+		display: block;
+		margin-bottom: 0.5em;
+	}
+	.mc_input {
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 100%;
+	}
+	.mc_input.mc_phone {
+		width: auto;
+	}
+	select.mc_select {
+		margin-top: 0.5em;
+		width: 100%;
+	}
+	.mc_address_label {
+		margin-top: 1.0em;
+		margin-bottom: 0.5em;
+		display: block;
+	}
+	.mc_address_label ~ select {
+		width: 100%;		
+	}
+	.mc_list li {
+		list-style: none;
+		background: none !important;
+	}
+	.mc_interests_header {
+		margin-top: 1.0em;
+		margin-bottom: 0.5em;
+	}
+	.mc_interest label,
+	.mc_interest input {
+		margin-bottom: 0.4em;
+	}
+	#mc_signup_submit {
+		margin-top: 1.5em;
+		width: 80%;
+	}
+	#mc_unsub_link a {
+		font-size: 0.75em;
+	}
+	#mc_unsub_link {
+		margin-top: 1.0em;
+	}
+	.mc_header_address,
+	.mc_email_format {
+		display: block;
+		font-weight: bold;
+		margin-top: 1.0em;
+		margin-bottom: 0.5em;
+	}
+	.mc_email_options {
+		margin-top: 0.5em;
+	}
+	.mc_email_type {
+		padding-left: 4px;
+	}
+       </style>
+       <div id="mc_signup">
+        <form action="#mc_signup" id="mc_signup_form" method="post">
+         <input id="mc_submit_type" name="mc_submit_type" type="hidden" value="html"/>
+         <input name="mcsf_action" type="hidden" value="mc_submit_signup_form"/>
+         <input id="_mc_submit_signup_form_nonce" name="_mc_submit_signup_form_nonce" type="hidden" value="220fe441c9"/>
+         <div class="mc_form_inside">
+          <div class="updated" id="mc_message">
+          </div>
+          <!-- /mc_message -->
+          <div class="mc_merge_var">
+           <label class="mc_var_label mc_header mc_header_email" for="mc_mv_EMAIL">
+            Email Address
+           </label>
+           <input class="mc_input" id="mc_mv_EMAIL" name="mc_mv_EMAIL" placeholder="" size="18" type="text"/>
+          </div>
+          <!-- /mc_merge_var -->
+          <div style="display:none;">
+          </div>
+          <div style="display:none;">
+          </div>
+          <div style="display:none;">
+          </div>
+          <div style="display:none;">
+          </div>
+          <div class="mc_signup_submit">
+           <input class="button" id="mc_signup_submit" name="mc_signup_submit" type="submit" value="Subscribe"/>
+          </div>
+          <!-- /mc_signup_submit -->
+         </div>
+         <!-- /mc_form_inside -->
+        </form>
+        <!-- /mc_signup_form -->
+       </div>
+       <!-- /mc_signup_container -->
+      </div>
+      <div class="widget widget_text">
+       <h3>
+        Connect with Us
+       </h3>
+       <div class="textwidget">
+        <p class="connect">
+         <a href="http://feeds.feedburner.com/intertech/xgZI" rel="alternate" title="Subscribe to my feed" type="application/rss+xml">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/rss-e1399297029808.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="width: auto; height: auto; opacity: 1;"/>
+         </a>
+         <a href="https://twitter.com/IntertechInc" title="Follow us on Twitter">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/twitter-e1399297077823.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border: 0px; width: auto; height: auto; opacity: 1;"/>
+         </a>
+         <a href="https://www.facebook.com/Intertech" title="Like us on Facebook">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/facebook-e1399296749601.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border: 0px; width: auto; height: auto; opacity: 1;"/>
+         </a>
+         <br/>
+         <a href="https://www.youtube.com/user/IntertechTraining" title="Follow us on YouTube">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/youtube-e1399297117722.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border: 0px; width: auto; height: auto; opacity: 1;"/>
+         </a>
+         <a href="https://plus.google.com/+IntertechInc/posts" rel="publisher" title="Follow us on Google+">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/googleplus-e1399296849739.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border: 0px; width: auto; height: auto; opacity: 1;"/>
+         </a>
+         <a href="https://www.linkedin.com/company/intertech" title="Join us on LinkedIn">
+          <img imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2014/05/linkedin-e1399296884129.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border: 0px; width: auto; height: auto; opacity: 1;"/>
+         </a>
+        </p>
+        <style>
+         .connect {
+            text-align: center;
+        }
+            .connect a {
+                display: inline-block;
+                opacity: 0.7;
+                margin: 0 10px;
+            }
+        .connect a:hover {
+            opacity: 1;
+        }
+        .burner {
+            border: 1px solid #ccc;
+            padding: 3px;
+            text-align: center;
+        }
+
+            .burner input[type='text'] {
+                display: inline-block;
+            }
+
+            .burner input[type='submit'] {
+                display: inline-block;
+                background-color: #888;
+            }
+
+            .burner input[type='submit']:hover {
+                display: inline-block;
+                background-color: #555;
+            }
+        </style>
+       </div>
+      </div>
+      <div class="widget widget_search">
+       <form action="http://www.intertech.com/Blog/" class="form-inline" id="searchform" method="get" role="search">
+        <input class="search" default-value="Search" id="s" name="s" type="text" value="Search"/>
+       </form>
+      </div>
+      <div class="widget widget_recent_entries">
+       <h3>
+        Recent Posts
+       </h3>
+       <ul>
+        <li>
+         <a href="http://www.intertech.com/Blog/intertech-awards-stem-scholarship-to-stanford-student/">
+          Intertech Awards STEM Scholarship to Stanford Student
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/new-employee-introduction-phil-d/">
+          New Employee Introduction  Phil D.
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/dev-digest-week-of-june-15th/">
+          Dev Digest  Week of June 15th
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/most-read-net-java-mobile-blog-posts/">
+          Most Read .NET, Java, &amp; Mobile Blog Posts
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/can-business-save-the-world-effective-csr/">
+          Can Business Save the World? Effective CSR
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="widget related_offering">
+       <script>
+        var relatedBlogInfo = [];
+	    	jQuery(window).load(function() {
+		    	relatedBlogInfo.NumberOfLinks = 5;
+		    	relatedBlogInfo.BlogPost = "An Introduction to PowerShell";
+		    	relatedBlogInfo.Categories = ["General"];
+		    	relatedBlogInfo.Difficulty = "None";
+
+	    	jQuery.get("http://www.intertech.com/Blog/wp-content/plugins/Related_Offerings/Related_Offerings.html", 
+	          function(data)
+	          {
+	          	var id = "#relatedTraining4749";
+	            jQuery(id).append(data);
+              	GetRelatedOfferings(id, 'http://www.Intertech.com/Training/GetRelated', 'Training');
+	          });
+
+		    });
+       </script>
+       <div id="relatedTraining4749">
+        <h3>
+         Related Training
+        </h3>
+       </div>
+       <style>
+        #relatedTraining4749			{
+				overflow: hidden;
+				height: 0px;
+				opacity: 0;
+				-moz-transition: opacity 0.4s ease, height 0.4s ease;
+		        -o-transition: opacity 0.4s ease, height 0.4s ease;
+		        -webkit-transition: opacity 0.4s ease, height 0.4s ease;
+		        transition: opacity 0.4s ease, height 0.4s ease;
+			}
+
+			#relatedTraining4749.visible
+			{
+				height: auto;
+				opacity: 1;
+			}
+
+			#relatedTraining4749 ul li
+        {
+        margin: 0 0 9px;
+        }
+
+        .widget ul.special li a {
+        padding: 2px 2%;
+        width: 96%;
+        display: inline-block;
+        background-color: #7fb3e0;
+        border-radius: 3px;
+        font-size: 9pt;
+        color: #fff;
+        -moz-transition: opacity 0.3s ease;
+        -o-transition: opacity 0.3s ease;
+        -webkit-transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease;
+        }
+
+        .widget ul.special li ul li {
+        color: #1d4587;
+        font-weight: bold;
+        }
+
+        .widget ul.special li a:hover
+        {
+        opacity: 0.7;
+        }
+
+        .widget ul.special li a &gt; span:hover
+        {
+          color: #333;
+        }
+       </style>
+      </div>
+      <div class="widget related_offering">
+       <script>
+        var relatedBlogInfo = [];
+	    	jQuery(window).load(function() {
+		    	relatedBlogInfo.NumberOfLinks = 5;
+		    	relatedBlogInfo.BlogPost = "An Introduction to PowerShell";
+		    	relatedBlogInfo.Categories = ["General"];
+		    	relatedBlogInfo.Difficulty = "None";
+
+	    	jQuery.get("http://www.intertech.com/Blog/wp-content/plugins/Related_Offerings/Related_Offerings.html", 
+	          function(data)
+	          {
+	          	var id = "#relatedConsulting2226";
+	            jQuery(id).append(data);
+              	GetRelatedOfferings(id, 'http://www.Intertech.com/Consulting/GetRelated', 'Consulting');
+	          });
+
+		    });
+       </script>
+       <div id="relatedConsulting2226">
+        <h3>
+         Related Consulting
+        </h3>
+       </div>
+       <style>
+        #relatedConsulting2226			{
+				overflow: hidden;
+				height: 0px;
+				opacity: 0;
+				-moz-transition: opacity 0.4s ease, height 0.4s ease;
+		        -o-transition: opacity 0.4s ease, height 0.4s ease;
+		        -webkit-transition: opacity 0.4s ease, height 0.4s ease;
+		        transition: opacity 0.4s ease, height 0.4s ease;
+			}
+
+			#relatedConsulting2226.visible
+			{
+				height: auto;
+				opacity: 1;
+			}
+
+			#relatedConsulting2226 ul li
+        {
+        margin: 0 0 9px;
+        }
+
+        .widget ul.special li a {
+        padding: 2px 2%;
+        width: 96%;
+        display: inline-block;
+        background-color: #7fb3e0;
+        border-radius: 3px;
+        font-size: 9pt;
+        color: #fff;
+        -moz-transition: opacity 0.3s ease;
+        -o-transition: opacity 0.3s ease;
+        -webkit-transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease;
+        }
+
+        .widget ul.special li ul li {
+        color: #1d4587;
+        font-weight: bold;
+        }
+
+        .widget ul.special li a:hover
+        {
+        opacity: 0.7;
+        }
+
+        .widget ul.special li a &gt; span:hover
+        {
+          color: #333;
+        }
+       </style>
+      </div>
+      <div class="widget widget_categories">
+       <h3>
+        Categories
+       </h3>
+       <ul>
+        <li class="cat-item cat-item-2">
+         <a href="http://www.intertech.com/Blog/category/net/">
+          .NET
+         </a>
+        </li>
+        <li class="cat-item cat-item-3">
+         <a href="http://www.intertech.com/Blog/category/agile-scrum/">
+          Agile / Scrum
+         </a>
+        </li>
+        <li class="cat-item cat-item-4">
+         <a href="http://www.intertech.com/Blog/category/android/">
+          Android
+         </a>
+        </li>
+        <li class="cat-item cat-item-5">
+         <a href="http://www.intertech.com/Blog/category/asp-net/">
+          ASP.NET
+         </a>
+        </li>
+        <li class="cat-item cat-item-7">
+         <a href="http://www.intertech.com/Blog/category/c-sharp/">
+          C#
+         </a>
+        </li>
+        <li class="cat-item cat-item-8">
+         <a href="http://www.intertech.com/Blog/category/career-advice/">
+          Career Advice
+         </a>
+        </li>
+        <li class="cat-item cat-item-9">
+         <a href="http://www.intertech.com/Blog/category/cloud-computing/">
+          Cloud Computing
+         </a>
+        </li>
+        <li class="cat-item cat-item-10">
+         <a href="http://www.intertech.com/Blog/category/database/">
+          Database
+         </a>
+        </li>
+        <li class="cat-item cat-item-11">
+         <a href="http://www.intertech.com/Blog/category/eclipse/">
+          Eclipse
+         </a>
+        </li>
+        <li class="cat-item cat-item-1">
+         <a href="http://www.intertech.com/Blog/category/uncategorized/">
+          General
+         </a>
+        </li>
+        <li class="cat-item cat-item-12">
+         <a href="http://www.intertech.com/Blog/category/ios-ipad-iphone/">
+          iOS / iPad / iPhone
+         </a>
+        </li>
+        <li class="cat-item cat-item-13">
+         <a href="http://www.intertech.com/Blog/category/java/">
+          Java
+         </a>
+        </li>
+        <li class="cat-item cat-item-6">
+         <a href="http://www.intertech.com/Blog/category/business/">
+          Leadership
+         </a>
+        </li>
+        <li class="cat-item cat-item-14">
+         <a href="http://www.intertech.com/Blog/category/mobile/">
+          Mobile
+         </a>
+        </li>
+        <li class="cat-item cat-item-15">
+         <a href="http://www.intertech.com/Blog/category/sharepoint/">
+          SharePoint
+         </a>
+        </li>
+        <li class="cat-item cat-item-16">
+         <a href="http://www.intertech.com/Blog/category/silverlight/">
+          Silverlight
+         </a>
+        </li>
+        <li class="cat-item cat-item-17">
+         <a href="http://www.intertech.com/Blog/category/soa-web-services/">
+          SOA / Web Services
+         </a>
+        </li>
+        <li class="cat-item cat-item-18">
+         <a href="http://www.intertech.com/Blog/category/source-control/">
+          Source Control
+         </a>
+        </li>
+        <li class="cat-item cat-item-19">
+         <a href="http://www.intertech.com/Blog/category/spring-framework/">
+          Spring Framework
+         </a>
+        </li>
+        <li class="cat-item cat-item-20">
+         <a href="http://www.intertech.com/Blog/category/sqlserver/">
+          SQL Server
+         </a>
+        </li>
+        <li class="cat-item cat-item-21">
+         <a href="http://www.intertech.com/Blog/category/tfs/">
+          Team Foundation Server
+         </a>
+        </li>
+        <li class="cat-item cat-item-22">
+         <a href="http://www.intertech.com/Blog/category/testing-qa/">
+          Testing / QA
+         </a>
+        </li>
+        <li class="cat-item cat-item-23">
+         <a href="http://www.intertech.com/Blog/category/visual-basic/">
+          Visual Basic
+         </a>
+        </li>
+        <li class="cat-item cat-item-24">
+         <a href="http://www.intertech.com/Blog/category/visual-studio/">
+          Visual Studio
+         </a>
+        </li>
+        <li class="cat-item cat-item-25">
+         <a href="http://www.intertech.com/Blog/category/web-development/">
+          Web Development
+         </a>
+        </li>
+        <li class="cat-item cat-item-26">
+         <a href="http://www.intertech.com/Blog/category/windows-azure/">
+          Windows Azure
+         </a>
+        </li>
+        <li class="cat-item cat-item-27">
+         <a href="http://www.intertech.com/Blog/category/windows-store-apps/">
+          Windows Store Apps
+         </a>
+        </li>
+        <li class="cat-item cat-item-28">
+         <a href="http://www.intertech.com/Blog/category/wpf/">
+          WPF
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="widget widget_archive">
+       <h3>
+        Archives
+       </h3>
+       <select name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+        <option value="">
+         Select Month
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/06/">
+         June 2015 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/05/">
+         May 2015 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/04/">
+         April 2015 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/03/">
+         March 2015 (15)
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/02/">
+         February 2015 (15)
+        </option>
+        <option value="http://www.intertech.com/Blog/2015/01/">
+         January 2015 (13)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/12/">
+         December 2014 (13)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/11/">
+         November 2014 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/10/">
+         October 2014 (16)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/09/">
+         September 2014 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/08/">
+         August 2014 (14)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/07/">
+         July 2014 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/06/">
+         June 2014 (4)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/05/">
+         May 2014 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/04/">
+         April 2014 (7)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/03/">
+         March 2014 (13)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/02/">
+         February 2014 (5)
+        </option>
+        <option value="http://www.intertech.com/Blog/2014/01/">
+         January 2014 (22)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/12/">
+         December 2013 (25)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/11/">
+         November 2013 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/10/">
+         October 2013 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/09/">
+         September 2013 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/08/">
+         August 2013 (7)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/07/">
+         July 2013 (6)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/06/">
+         June 2013 (6)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/05/">
+         May 2013 (7)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/04/">
+         April 2013 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/03/">
+         March 2013 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/02/">
+         February 2013 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2013/01/">
+         January 2013 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/12/">
+         December 2012 (14)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/11/">
+         November 2012 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/10/">
+         October 2012 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/09/">
+         September 2012 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/08/">
+         August 2012 (7)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/07/">
+         July 2012 (5)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/06/">
+         June 2012 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/05/">
+         May 2012 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/04/">
+         April 2012 (6)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/03/">
+         March 2012 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/02/">
+         February 2012 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2012/01/">
+         January 2012 (5)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/12/">
+         December 2011 (14)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/11/">
+         November 2011 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/10/">
+         October 2011 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/09/">
+         September 2011 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/08/">
+         August 2011 (18)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/07/">
+         July 2011 (18)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/06/">
+         June 2011 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/05/">
+         May 2011 (12)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/04/">
+         April 2011 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/03/">
+         March 2011 (6)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/02/">
+         February 2011 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2011/01/">
+         January 2011 (6)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/12/">
+         December 2010 (11)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/11/">
+         November 2010 (24)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/10/">
+         October 2010 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/09/">
+         September 2010 (19)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/08/">
+         August 2010 (10)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/07/">
+         July 2010 (9)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/06/">
+         June 2010 (21)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/05/">
+         May 2010 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/04/">
+         April 2010 (14)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/03/">
+         March 2010 (15)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/02/">
+         February 2010 (8)
+        </option>
+        <option value="http://www.intertech.com/Blog/2010/01/">
+         January 2010 (9)
+        </option>
+       </select>
+      </div>
+     </div>
+     <!-- /Sidebar -->
+    </div>
+    <!-- /Sidebar -->
+   </div>
+   <!-- /Content -->
+   <!-- Footer -->
+   <div id="footer">
+    <div class="container clearfix">
+     <div class="one-fourth footer">
+      <div class="widget pethemewidgetreworkinfo">
+       <a class="logo" href="http://www.intertech.com/Blog" title="Home">
+        <img alt="logo" imageholder="http://cdn.intertech.com/Blog/wp-content/uploads/2013/05/Transparent-Blog-Footer-Logo-176x36-05092013.png" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif"/>
+       </a>
+       <p>
+        Practical insights, tips, and examples from Instructors Who Consult. Consultants Who Teach.
+       </p>
+      </div>
+     </div>
+     <div class="one-fourth footer">
+      <div class="widget widget_nav_menu">
+       <h3>
+        Browse Site
+       </h3>
+       <div class="menu-footer-nav-container">
+        <ul class="menu" id="menu-footer-nav">
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1316" id="menu-item-1316">
+          <a href="http://www.intertech.com" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com', 'Intertech Home']);" title="Intertechs Main Site">
+           Intertech Home
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1312" id="menu-item-1312">
+          <a href="http://www.intertech.com/Blog/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Blog/', 'Latest Posts']);" title="Intertechs Latest Blog Posts">
+           Latest Posts
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1315" id="menu-item-1315">
+          <a href="http://www.intertech.com/Training/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Training/', 'Training Services']);" title="Intertechs Live Instructor Led Training Courses">
+           Training Services
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1314" id="menu-item-1314">
+          <a href="http://www.intertech.com/Consulting/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Consulting/', 'Consulting Services']);" title="Intertechs Consulting Services">
+           Consulting Services
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1620" id="menu-item-1620">
+          <a href="http://www.intertech.com/Blog/about-us/" onclick="_gaq.push(['_trackEvent', 'outbound-widget-int', 'http://www.intertech.com/Blog/about-us/', 'About Us']);" title="About Intertech">
+           About Us
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+     <div class="one-fourth footer">
+      <div class="widget pethemewidgetreworkhtml">
+       <h3>
+        Contact Details
+       </h3>
+       <p>
+        1575 Thomas Center Dr
+        <br/>
+        Eagan, MN 55122
+       </p>
+       <p>
+        Training:
+        <a href="tel:6512887100">
+         651-288-7100
+        </a>
+        <br/>
+        Consulting:
+        <a href="tel:6512887001">
+         651-288-7001
+        </a>
+        <br/>
+        General:
+        <a href="tel:6512887000">
+         651-288-7000
+        </a>
+        <br/>
+        Toll Free:
+        <a href="tel:8008669884">
+         800-866-9884
+        </a>
+        <br/>
+        Fax:
+        <a href="tel:6512881250">
+         651-288-1250
+        </a>
+        <br/>
+       </p>
+      </div>
+     </div>
+     <div class="one-fourth last last footer">
+      <div class="widget widget_recent_entries">
+       <h3>
+        Recent Posts
+       </h3>
+       <ul>
+        <li>
+         <a href="http://www.intertech.com/Blog/intertech-awards-stem-scholarship-to-stanford-student/">
+          Intertech Awards STEM Scholarship to Stanford Student
+         </a>
+         <span class="post-date">
+          June 23, 2015
+         </span>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/new-employee-introduction-phil-d/">
+          New Employee Introduction  Phil D.
+         </a>
+         <span class="post-date">
+          June 22, 2015
+         </span>
+        </li>
+        <li>
+         <a href="http://www.intertech.com/Blog/dev-digest-week-of-june-15th/">
+          Dev Digest  Week of June 15th
+         </a>
+         <span class="post-date">
+          June 19, 2015
+         </span>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="info container clearfix">
+     <!-- Copyright -->
+     <ul class="copyright">
+      <li>
+        2015 Intertech, Inc. All rights reserved
+      </li>
+     </ul>
+     <!-- /Copyright -->
+     <!-- Social Links -->
+     <ul class="social-links">
+     </ul>
+     <!-- /Social Links -->
+    </div>
+   </div>
+   <!-- /Footer -->
+  </div>
+  <!-- /Main Container -->
+  <!-- Back to Top -->
+  <div id="back-top">
+   <a href="#top">
+   </a>
+  </div>
+  <!-- /Back to Top -->
+  <script type="text/javascript">
+   jQuery(window).load(function () {
+		jQuery.ajax({
+			url: 'http://www.intertech.com/Offers/GetOffer',
+        	type: 'POST',
+        	data: '{"categories":["General"],"difficulty":"None"}',
+          dataType: 'json',
+          contentType: 'application/json; charset=UTF-8',
+          success: function (data) {
+          	var ad = jQuery.parseJSON(data.d);
+          	if (ad === null)
+          		ad = data;
+          	jQuery('.smallAdWidget').text(ad.url);
+          	jQuery('.smallOffer').attr("href", ad.url);
+          	jQuery('.smallOfferText').text(ad.name);
+          	jQuery('#small-offer-container').toggle('slow');
+          }
+        });
+
+        	jQuery.ajax({
+		url: 'http://www.intertech.com/Offers/GetOffer',
+        	type: 'POST',
+        	data: '{"categories":["General"],"difficulty":"None"}',
+          dataType: 'json',
+          contentType: 'application/json; charset=UTF-8',
+          success: function (data) {
+          	var ad = jQuery.parseJSON(data.d);
+          	if (ad === null)
+          		ad = data;
+          	var temp = jQuery('#ad-template').html().replace('{Offer-Title}', ad.name).replace('#{Offer-Link}', ad.url).replace('{Offer-Image}', ad.image).replace('{Offer-PageContent}', ad.PageContent);
+            jQuery('#ad-template').html(temp);
+
+            jQuery("[data-OfferImage]").each(function () {
+            	jQuery(this).attr('src', jQuery(this).data('offerimage'))
+            });
+            jQuery('div.post.single.clearfix').after(jQuery("#ad-template").html());
+          }
+        });
+	});
+  </script>
+  <style>
+   #ad-template {
+		display: none;
+	}
+
+	  .inter-ad
+  {
+    float:  left;
+    position: relative;
+  }
+
+  .inter-ad .left
+  {
+    float: left; 
+    width: 340px; 
+    padding-bottom: 50px;
+    position: relative;
+  }
+  .inter-ad .left &gt; div
+  {
+    position: absolute;
+    top: 100%;
+  }
+  .inter-ad h3
+  {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .inter-ad a
+  {
+    background-color: #7fb3e0;
+    padding: 5px 20px;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+  .inter-ad a:hover
+  {
+    background-color: #264385;
+  }
+  .inter-ad ul
+  {
+    list-style: disc;
+  }
+  .inter-ad img
+  {
+    box-shadow: 3px 3px rgba(0,0,0, 0.3);
+  }  
+
+ @media all and (max-width: 959px)
+{
+   .inter-ad .left&gt;div
+    {
+          position: relative;
+    }
+}
+  </style>
+  <div id="ad-template">
+   <div class="inter-ad">
+    <h3>
+     {Offer-Title}
+    </h3>
+    <div class="left">
+     <img data-offerimage="{Offer-Image}"/>
+    </div>
+    <div class="left">
+     <div class="ad-content">
+      {Offer-PageContent}
+      <br/>
+      <a href="#{Offer-Link}">
+       Click Here
+      </a>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+    var google_conversion_id = 1067522706;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]&gt; */
+  </script>
+  <script src="//www.googleadservices.com/pagead/conversion.js" type="text/javascript">
+  </script>
+  <noscript>
+   <div style="display:inline;">
+    <img alt="" height="1" imageholder="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1067522706/?value=0&amp;guid=ON&amp;script=0" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="border-style:none;" width="1"/>
+   </div>
+  </noscript>
+  <script src="http://cdn.intertech.com/Blog/wp-includes/js/comment-reply.min.js?ver=4.0.5" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var ratingsL10n = {"plugin_url":"http:\/\/www.intertech.com\/Blog\/wp-content\/plugins\/wp-postratings","ajax_url":"http:\/\/www.intertech.com\/Blog\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 post at a time.","image":"stars","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src=ratingsL10n.plugin_url+"/images/"+ratingsL10n.image+"/rating_over."+ratingsL10n.image_ext;;
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/wp-postratings/postratings-js.js?ver=1.79" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.0.5","language":"","remote_auth_s3":"W10= fe38530748d32e0b0a2dd2616d4a6f908767f2ee 1435192799","api_key":"QyNNpAQ8Kn0mBDB2HMI9Ry4ko0MzZHG4UUYc7Ny0cDzl8prmDxJ3nI4YqH0VSdKv","sso":{"name":"Intertech Blog","button":false,"url":"http:\/\/www.intertech.com\/Blog\/wp-login.php","logout":"http:\/\/www.intertech.com\/Blog\/wp-login.php?action=logout","width":"800","height":"700"}},"disqusIdentifier":"4502 http:\/\/www.intertech.com\/Blog\/?p=4502","disqusShortname":"intertechblog","disqusTitle":"An Introduction to PowerShell","disqusUrl":"http:\/\/www.intertech.com\/Blog\/introduction-to-powershell\/","options":{"manualSync":false},"postId":"4502"};
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/disqus-comment-system/media/js/disqus.js?ver=4.0.5" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var countVars = {"disqusShortname":"intertechblog"};
+/* ]]&gt; */
+  </script>
+  <script src="http://cdn.intertech.com/Blog/wp-content/plugins/disqus-comment-system/media/js/count.js?ver=4.0.5" type="text/javascript">
+  </script>
+  <div id="socialBar">
+  </div>
+  <script>
+   (function () {
+    var _fbq = window._fbq || (window._fbq = []);
+    if (!_fbq.loaded) {
+        var fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+    }
+    _fbq.push(['addPixelId', '318544764994824']);
+})();
+    window._fbq = window._fbq || [];
+    window._fbq.push(['track', 'PixelInitialized', {}]);
+  </script>
+  <noscript>
+   <img alt="" height="1" imageholder="https://www.facebook.com/tr?id=318544764994824&amp;ev=PixelInitialized" src="http://cdn.intertech.com/Blog/wp-content/plugins/advanced-lazy-load/shade.gif" style="display:none" width="1"/>
+  </noscript>
+ </body>
+</html>
+<!-- Dynamic page generated in 0.406 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2015-06-24 19:39:59 -->

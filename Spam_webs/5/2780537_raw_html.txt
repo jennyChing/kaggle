@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="no-js csstransitions" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Garage Door Menu with jQuery
+  </title>
+  <link href="css/style.css" rel="stylesheet"/>
+  <script src="js/modernizr-1.5.min.js">
+  </script>
+ </head>
+ <body>
+  <div id="demo-top-bar">
+   <div id="demo-bar-inside">
+    <h2 id="demo-bar-badge">
+     <a href="/">
+      CSS-Tricks Example
+     </a>
+    </h2>
+    <div id="demo-bar-buttons">
+     <a class="header-button" href="/garage-door-style-menu/">
+       Back to Article
+     </a>
+     <a class="header-button" href="/examples/">
+      More Demos 
+     </a>
+    </div>
+   </div>
+  </div>
+  <h1>
+   Garage Door Menu
+  </h1>
+  <h2>
+   This Browser is using CSS3 Transitions for this effect.
+  </h2>
+  <ul id="garagedoor">
+   <li id="shutter1">
+    <a href="#1">
+     Link 1
+    </a>
+   </li>
+   <li id="shutter2">
+    <a href="#2">
+     Link 2
+    </a>
+   </li>
+   <li id="shutter3">
+    <a href="#3">
+     Link 3
+    </a>
+   </li>
+   <li id="shutter4">
+    <a href="#4">
+     Link 4
+    </a>
+   </li>
+  </ul>
+  <script>
+   var jQueryScriptOutputted = false;
+
+		function initJQuery() {
+
+		    if (typeof(jQuery) == 'undefined') {
+
+		        if (!jQueryScriptOutputted) {
+		            jQueryScriptOutputted = true;
+
+		            // Primitive way of loading scripts (no library yet)
+		            document.write("&lt;scr" + "ipt src=\"//ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js\"&gt;&lt;/scr" + "ipt&gt;");
+		        }
+		        setTimeout("initJQuery()", 50);
+
+		    } else {
+
+		    	// jQuery way of loading scripts
+		    	$.getScript('js/jquery.backgroundPosition.js', function() {
+
+		    		// Just for demo
+		    		$("h2").text('This Browser is using a jQuery fallback for this effect.');
+
+		    		$("html").removeClass("csstransitions");
+
+		            // Set CSS in Firefox (Required to use the backgroundPosition js)
+					$('#shutter1').css({backgroundPosition: '0px 0px'});
+					$('#shutter2').css({backgroundPosition: '0px 0px'});
+					$('#shutter3').css({backgroundPosition: '0px 0px'});
+					$('#shutter4').css({backgroundPosition: '0px 0px'});
+
+					// Animate the Shutter
+					$("#garagedoor a").hover(function() {
+					      $(this).parent().stop().animate({backgroundPosition: '(0px -100px)'}, 500);
+					    }, function() {
+					      $(this).parent().stop().animate({backgroundPosition: '(0px 0px)'}, 500);
+					});
+
+		    	});
+
+		    }
+
+		}
+
+		if (!Modernizr.csstransitions) {
+			initJQuery();
+		}
+  </script>
+  <style style="display: none !important;" type="text/css">
+   * {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	#demo-top-bar {
+		text-align: left;
+		background: #222;
+		position: relative;
+		zoom: 1;
+		width: 100% !important;
+		z-index: 6000;
+		padding: 20px 0 20px;
+	}
+	#demo-bar-inside {
+		width: 960px;
+		margin: 0 auto;
+		position: relative;
+		overflow: hidden;
+	}
+	#demo-bar-buttons {
+		padding-top: 10px;
+		float: right;
+	}
+	#demo-bar-buttons a {
+		font-size: 12px;
+		margin-left: 20px;
+		color: white;
+		margin: 2px 0;
+		text-decoration: none;
+		font: 14px "Lucida Grande", Sans-Serif !important;
+	}
+	#demo-bar-buttons a:hover,
+	#demo-bar-buttons a:focus {
+		text-decoration: underline;
+	}
+	#demo-bar-badge {
+		display: inline-block;
+		width: 302px;
+		padding: 0 !important;
+		margin: 0 !important;
+		background-color: transparent !important;
+	}
+	#demo-bar-badge a {
+		display: block;
+		width: 100%;
+		height: 38px;
+		border-radius: 0;
+		bottom: auto;
+		margin: 0;
+		background: url(/images/examples-logo.png) no-repeat;
+		background-size: 100%;
+		overflow: hidden;
+		text-indent: -9999px;
+	}
+	#demo-bar-badge:before, #demo-bar-badge:after {
+		display: none !important;
+	}
+  </style>
+ </body>
+</html>

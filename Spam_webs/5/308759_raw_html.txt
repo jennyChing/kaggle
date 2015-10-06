@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   chris blogs: A Tagged Filesystem
+  </title>
+  <link href="../../../archive/2005/04/hypotheken-benzin-und-diarr-h.html" rel="prev"/>
+  <link href="../../../archive/2005/04/individual-i.html" rel="next"/>
+  <link href="../04.html" rel="up"/>
+  <link href="../../../style.css" rel="stylesheet"/>
+  <link href="http://chneukirchen.org/chrisblogs/index.atom" rel="alternate" title="Atom" type="application/atom+xml"/>
+ </head>
+ <body>
+  <div class="hfeed">
+   <h1>
+    <a href="../../../">
+     chris blogs
+    </a>
+   </h1>
+   <small class="top nav">
+    <a class="prev" href="../../../archive/2005/04/hypotheken-benzin-und-diarr-h.html">
+      Hypotheken, Benzin und Diarrh
+    </a>
+    <a class="month" href="../04.html">
+     April 2005
+    </a>
+    <a class="next" href="../../../archive/2005/04/individual-i.html">
+     Individual-i 
+    </a>
+   </small>
+   <div class="hentry">
+    <h2 class="entry-title">
+     <abbr class="published" title="2005-04-17T19:48:25+02:00">
+      17apr2005 
+     </abbr>
+     <a href="../../../archive/2005/04/a-tagged-filesystem.html" rel="bookmark">
+      A Tagged Filesystem
+     </a>
+    </h2>
+    <div class="entry-content">
+     <p>
+      I often notice that computer users, mostly the ones of the novice
+kind, have trouble understanding the filesystem, organizing and
+therefore (re)finding their files.
+     </p>
+     <p>
+      Usually, this results in the user saving the file into whatever the
+current path of the Save dialog is, alternatively stuffing it all
+into one large directory
+     </p>
+     <p>
+      Tags to the rescue!  We can build a Tagged File System, which doesnt
+have a hierarchy, but only tags that can be attached to files.  This
+would even be possible to represent in Unix, provided you can alter
+the file dialogs of your applications: All files get saved into a
+hidden directory,
+      <code>
+       .everything
+      </code>
+      .  By tagging a file, it will be
+hardlinked into a directory with the name of the tag.  Now you can
+simply copy, move and delete the file, thereby only changing
+tags.  To unlink the file, a tool would need to look into
+      <code>
+       .everything
+      </code>
+      for files that dont have a link in a tag
+folder. (Actually, you can only use tag folders, and no
+      <code>
+       .everything
+      </code>
+      ,
+but this may be a bad idea, read on.)
+     </p>
+     <p>
+      The problem now is that because all files reside in
+      <code>
+       .everything
+      </code>
+      , they
+      <em>
+       all
+      </em>
+      need to have a different basename.  I first played with the idea
+of moving the complete system into a Tagged File System, but then I
+analyzed my disks: My root directory (Mac OS X 10.3.8 installation
+with a big home and lots of cra^Wstuff installed) has 603484 files,
+and there are 81498 basename clashes, every seventh file clashes.
+Additionally, there are 17807 different parts of directory names used.
+That would be 17807 tags!
+     </p>
+     <p>
+      When I reduced the analysis to my home directory, it still was 25092
+clashes in 204372 files, every eigth file (mostly due to files like
+      <code>
+       Makefile
+      </code>
+      ,
+      <code>
+       COPYING
+      </code>
+      ,
+      <code>
+       info.nib
+      </code>
+      that can be found in developers
+homes).
+     </p>
+     <p>
+      Of course, Im not the target user of this, but these results
+nevertheless tell me that one better only uses Tagged Filesystems for
+directories like Documents or Music (assuming your files arent
+called
+      <code>
+       01.ogg
+      </code>
+      ,
+      <code>
+       02.ogg
+      </code>
+      ).  In these kinds of directories, name
+clashes are rather rare, so here tagging can fully pay out.
+     </p>
+     <p>
+      One very nifty thing would be implementing the Tagged Filesystem using
+LUFS or Hurds filesystem translators, so you could do stuff like
+(assuming the Tagged Filesystem is mounted at
+      <code>
+       ~/music
+      </code>
+      .)
+     </p>
+     <pre>
+      <code>
+       ls ~/music/blues/clapton
+      </code>
+     </pre>
+     <p>
+      very easily.  By the way, above would be the same as
+     </p>
+     <pre>
+      <code>
+       ls ~/music/clapton/blues
+      </code>
+     </pre>
+     <p>
+      of course!  One may want to invent a syntax to implement negation too,
+so you could do
+     </p>
+     <pre>
+      <code>
+       ls ~/music/-clapton/blues
+      </code>
+     </pre>
+     <p>
+      to show all music files tagged as Blues not by Eric Clapton.  Another
+nice thing would be to have computed tags, like Files created last
+week, Files changed after last backup and so on.
+     </p>
+     <p>
+      I think Tagged Filesystems could help the average user lots, and still
+be downward compatible enough to classic, hierarchical filesystems to stay
+accessible within the shell.  Of course, this requires OS and
+application developers to actually implement them, and making them
+so easy and natural to use that average people will actually use them.
+     </p>
+     <p>
+      <small>
+       NP: Eric Clapton &amp; B.B. KingWorried Life Blues
+      </small>
+     </p>
+    </div>
+   </div>
+   <address class="author vcard">
+    Copyright  20042013
+    <a class="email fn" href="mailto:chneukirchen@gmail.com">
+     Christian Neukirchen
+    </a>
+   </address>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,1951 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Copyright  2002 Paciolan, Inc. All rights reserved. -->
+<!-- EVError.html, 7.10.100 (PYOS) -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+ <!-- custom code (title) BELOW -->
+ <!-- Demo Request #105/106 (captcha/pleasewait lightbox) -->
+ <!-- 1= on, 0= off -->
+ <!-- turned off due to  IE issues -->
+ <!-- lbCaptcha = 1 -->
+ <!-- END Demo Request #105/106 (captcha/pleasewait lightbox) -->
+ <!-- custom code (BO version) BELOW -->
+ <head>
+  <script language="JavaScript">
+   &lt;!--
+
+
+
+function timerDisplay_(formNumber) {
+	var remaining = eval("document.timerForm"+formNumber+"_.seconds.value") ;
+	var min = Math.floor(remaining / 60) ;
+	var sec = Math.floor(remaining - (min * 60)) ;
+	var time = "" ;
+	
+	if(min &lt; 10) time = "0" ;
+	time += min + ":" ;
+	if(sec &lt; 10) time += "0" ;
+	time += sec ;
+
+	timerCountdown_(formNumber) ;
+
+	return time ;
+}
+
+function timerCountdown_(formNumber) {
+	if(Number(eval("document.timerForm"+formNumber+"_.seconds.value")) &gt; 1)
+		eval("document.timerForm"+formNumber+"_").seconds.value -= 1 ;
+	else
+	{
+		clearInterval(timerID) ;
+		timerSubmit_(formNumber) ;
+	}
+}
+
+function timerInit_(cartListItem, formNumber) {
+	eval("document.timerForm"+formNumber+"_.cartNum").value = cartListItem.cart.number ;
+	eval("document.timerForm"+formNumber+"_.seconds").value = cartListItem.cart.expire ;
+}
+
+function timerSubmit_(formNumber) {
+	eval("document.timerForm"+formNumber+"_").submit() ;
+}
+
+
+function Timer(cartListItem, formNumber) {
+	var formName = "timerForm" + formNumber + "_" ;
+	document.write(
+		'&lt;form name="', formName, '" action="/cgi-bin/ncommerce3/SEUpdateCart" method="post"&gt;',
+			' &lt;input type="hidden" name="returnUrl" value="/cgi-bin/ncommerce3/SEGetGroupList?linkID=metro&amp;shopperContext="&gt;',
+		' &lt;input type="hidden" name="cartNum" value=""&gt;',
+		' &lt;input type="hidden" name="linkID" value="metro"&gt;',
+		' &lt;input type="hidden" name="after" value="error"&gt;',
+		' &lt;input type="hidden" name="remove" value="expired"&gt;',
+		' &lt;input type="hidden" name="seconds" value=""&gt;',
+		' &lt;input type="hidden" name="delMode" value=""&gt;',
+		'&lt;/form&gt;'
+	) ;
+
+	this.display = timerDisplay_ ;
+	this.submit = timerSubmit_ ;
+	timerInit_(cartListItem, formNumber) ;
+}
+
+	//--&gt;
+  </script>
+  <script language="JavaScript">
+   &lt;!--
+	function makeCart(number, shrfnbr, invNum, orrfnbr, maxItems, cookie, expire, cusellmsg, id, status,payCode,shopperContext,isPK,fingerprint,fingerprintID,payerAuth, eOrder) {
+		this.number = number ;
+		this.shrfnbr = shrfnbr ;
+		this.invNum = invNum ;
+		this.orrfnbr = orrfnbr ;
+		this.maxItems = maxItems ;
+		this.cookie = cookie ;
+		this.expire = expire ;
+		this.cusellmsg = cusellmsg ;
+		this.id = id ;
+		this.status = status;
+		this.payCode = payCode;
+		this.shopperContext = shopperContext;
+		this.isPK = isPK;
+		this.fingerprint = fingerprint;
+		this.fingerprintID = fingerprintID;
+		this.payerAuth = payerAuth;
+		this.eOrder = eOrder;
+	}
+//--&gt;
+  </script>
+  <script language="JavaScript">
+   &lt;!--
+			function makeShopper(type) {
+				this.type = type ;
+			}
+				shopper = new makeShopper("G") ;
+		//--&gt;
+  </script>
+  <!-- Shopper Information for selection where SHRFNBR = 1880382 not available  -->
+  <script language="JavaScript">
+   &lt;!--
+			function makeRegShopperInfo(number, email, password, profile, account, pin, first, last, company, emailOptin, isHTML, mobileOptin, dnURL, ccType, ccNum, ccMonth, ccYear) {
+				this.number   = number;
+				this.email    = email;
+				this.password = password;
+				this.profile  = profile;
+				this.account  = account;
+				this.pin      = pin;
+				this.first    = first;
+				this.last     = last;
+				this.company  = company;
+				this.emailOptin  = emailOptin;
+				this.isHTML  = isHTML;
+				this.mobileOptin  = mobileOptin;
+				this.dnURL  = dnURL;
+				this.ccType  = ccType;
+				this.ccNum  = ccNum;
+				this.ccMonth  = ccMonth;
+				this.ccYear  = ccYear;
+			}
+				var shopperInfo = new makeRegShopperInfo("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+				
+			//--&gt;
+  </script>
+  <!-- Shopper retrieval error for session 2168e890f3d832b4 100 -->
+  <script language="javascript">
+   &lt;!--
+				function makeNCShopper() {
+					this.name   = "" ;
+					this.fname  = "" ;
+					this.lname  = "" ;
+					this.addr1  = "" ;
+					this.addr2  = "" ;
+					this.addr3  = "" ;
+					this.city   = "" ;
+					this.state  = "" ;
+					this.zip    = "" ;
+					this.email  = "" ;
+					this.phone  = "" ;
+					this.ephone = "" ;
+				}
+				NCShopper = new makeNCShopper();
+			//--&gt;
+  </script>
+  <script language="JavaScript">
+   &lt;!--
+			function makeRegAdmin(showLink, loginMode, updateMode) {
+				this.invNum = "1191";
+				this.showLink = showLink;
+				this.loginMode = loginMode;
+				this.autoAccountUpdate = updateMode;
+			}
+			regAdminInfo = new makeRegAdmin("0", "R", ("1"=="1"));
+			
+		//--&gt;
+  </script>
+  <!-- no carts in any inventory for shopper '1880382' 100 -->
+  <script language="JavaScript">
+   &lt;!--
+			cartList = new Array ;
+			cartList[0] = new Object ;
+			cartList[0].cart = new makeCart("", "1880382", "1191", "", "", "0", "", "", "metro", "","","","","","","","") ;
+			cartList[0].linkID = "metro" ;
+			cartList[0].description = "" ;
+			cartList[0].url = "" ;
+			cart = new Object ;
+			cart = cartList[0].cart ;
+		//--&gt;
+  </script>
+  <!-- no pending pk item in any inventory for shopper '1880382' 100 -->
+  <script language="JavaScript">
+   &lt;!--
+			pkItemOnBuild = new Array ;
+			pkItemOnBuild[0] = new Object;
+			pkItemOnBuild[0].pkNum = "";
+			pkItemOnBuild[0].pkUrl = "";
+		//--&gt;
+  </script>
+  <script language="JavaScript">
+   var propertyList = new Array;
+		
+			function hasProperty(property) {
+				return typeof(propertyList[property]) != "undefined";
+			}
+	
+			function getPropertyValue(property) {
+			    return hasProperty(property) ? propertyList[property] : "";
+			}
+			
+            propertyList["fd"] = "1";
+            propertyList["fd.description"] = "Online Fundraising";
+            propertyList["fd.dh"] = "0";
+            propertyList["fd.maxPledgeAmount"] = "";
+            propertyList["fd.minInitialPayment"] = "0.00";
+            propertyList["fd.minPledgeAmount"] = "";
+            propertyList["reg"] = "1";
+            propertyList["reg.autoAccountUpdate"] = "1";
+            propertyList["reg.description"] = "Online Registration";
+            propertyList["reg.emailOptInText"] = "";
+            propertyList["reg.fdBillAddr"] = "tb";
+            propertyList["reg.fdMailAddr"] = "tb";
+            propertyList["reg.fdPhoneDay"] = "td";
+            propertyList["reg.fdPhoneEvening"] = "te";
+            propertyList["reg.integratedPatron"] = "0";
+            propertyList["reg.mobileOptInText"] = "";
+            propertyList["reg.mode"] = "R";
+            propertyList["reg.timeZoneName"] = "CST";
+            propertyList["reg.timeZoneOffsetMin"] = "-360";
+            propertyList["reg.tsBillAddr"] = "tb";
+            propertyList["reg.tsPhoneDay"] = "td";
+            propertyList["reg.tsPhoneEvening"] = "te";
+            propertyList["sr"] = "1";
+            propertyList["sr.description"] = "SeasonRenewals";
+            propertyList["ss.activateAccountValidation"] = "NONE";
+            propertyList["ts"] = "1";
+            propertyList["ts.accesscontrol"] = "1";
+            propertyList["ts.accessibilityLink"] = "0";
+            propertyList["ts.ccTypeCount"] = "4";
+            propertyList["ts.ccTypes"] = "V,M,A,D";
+            propertyList["ts.CCSplitPayEnabled"] = "0";
+            propertyList["ts.description"] = "Online Ticketing";
+            propertyList["ts.gift"] = "1";
+            propertyList["ts.GetGCBalance"] = "0";
+            propertyList["ts.oh"] = "0";
+            propertyList["ts.pah"] = "1";
+            propertyList["ts.pah.allowEmailDelivery"] = "1";
+            propertyList["ts.pp"] = "1";
+            propertyList["ts.presale"] = "1";
+            propertyList["ts.promo"] = "1";
+            propertyList["ts.publicProfileCode"] = "GEN";
+            propertyList["ts.pyos"] = "1";
+            propertyList["ts.seatGroupMax"] = "";
+            propertyList["ts.tcaiFlag"] = "1";
+  </script>
+  <script language="JavaScript">
+   &lt;!--
+			var returnURL = window.location.host + window.location.pathname + window.location.hash + window.location.search;
+
+			if (window.location.pathname.indexOf("OrderWait.d2w") != -1)
+			{
+				returnURL = window.location.host + "/cgi-bin/ncommerce3/SEGetEventList" + window.location.hash + window.location.search;
+			}
+			else
+			{
+				returnURL = window.location.host + window.location.pathname + window.location.hash + window.location.search;
+			}
+			
+			var httpURL   = escape("http://" + returnURL);
+			var httpsURL  = escape("https://" + returnURL);
+
+			var common = new Object;
+			common.home = "/evenue/linkID=metro/se/index.html";
+			common.help = "http://robohelp.paciolan.com/robo/projects/evenue/evenue.htm";
+			common.main = "/cgi-bin/ncommerce3/EVExecMacro";
+			common.se = "/" + "cgi-bin/ncommerce3/SEGetGroupList";
+			common.dp = "/" + "cgi-bin/ncommerce3/DPLanding";
+			common.sr = "/" + "cgi-bin/ncommerce3/GetApps";
+			common.login = "/cgi-bin/ncommerce3/EVExecMacro";
+			common.logout = "/cgi-bin/ncommerce3/REGLogoff";
+			common.myAccount = "/cgi-bin/ncommerce3/EVExecMacro";
+			common.cart = "/" + "cgi-bin/ncommerce3/SECartRedisplay";
+			common.pageName = "EVError.html";
+			common.hasCart = cart.number != "" &amp;&amp; cart.expire &gt; 0 &amp;&amp; cart.status != "C" &amp;&amp; cart.isPK != "1";
+			common.returnURL = escape(window.location);
+			common.isStudent = ("0" == "1");
+						
+			common.presale = "/" + "cgi-bin/ncommerce3/PPUpdateSysConfig" + "?linkID=metro&amp;RSRC=&amp;RDAT=&amp;caller=PS&amp;failureURL=" + httpURL;
+			common.promo = "/cgi-bin/ncommerce3/EVExecMacro";
+			common.accessibility = "/cgi-bin/ncommerce3/EVExecMacro";
+
+			common.gc = "/cgi-bin/ncommerce3/SEGetGroupList";
+
+			common.search = "/cgi-bin/ncommerce3/EVExecMacro";
+
+				common.loggedIn = false;
+
+			function confirmLogOut()
+			{
+				if (!common.hasCart) return true;
+				return confirm( "You have reservations in your shopping cart." +
+						" If you logout, these reservations will be released. Do you really want to logout?");
+			}
+
+			function setNavigateReturnURL(url) {
+				pos = url.indexOf("://");
+				if(pos &gt;= 0)
+				{
+					// remove leading http(s)://
+					url = url.substr(pos+3);
+				}
+				if(url.indexOf("/") == 0)
+				{
+					httpURL   = escape(url);
+					httpsURL  = escape(url);
+				} else {
+					httpURL   = escape("http://" + url);
+					httpsURL  = escape("https://" + url);
+				}
+				common.returnURL = escape(url);
+			}
+
+			function splitURL(returnURL)
+			{	
+				if(returnURL.indexOf(escape(escape("&amp;shopperContext=ST"))) == -1)
+				{
+					var splittedURL = returnURL.split(escape("url="));
+					if(splittedURL.length &gt; 1)
+					{
+						var newURL ="";
+						for(var i=1;i&lt;splittedURL.length ;i++ ) newURL+=splittedURL[i];
+						return unescape(newURL);
+					}
+					else 
+						return returnURL;
+				}
+				else
+				{
+					return escape(common.login);
+				}
+			}			
+
+
+			function createNavigateHref(action) {
+				navHref = "";
+
+				if(action == "HOME")
+				{
+					navHref = common.home;
+				}
+				else if(action == "MAIN")
+				{
+					navHref = common.main + "?linkID=metro&amp;evm=main";
+				}
+				else if(action == "SE")
+				{
+					navHref = common.se + "?linkID=metro&amp;groupCode=&amp;RSRC=&amp;RDAT=&amp;url=" + httpURL;
+				}
+				else if(action == "DP")
+				{
+					//Donation Processing
+					navHref = common.dp + "?linkID=metro&amp;RSRC=&amp;RDAT=&amp;url=" + httpsURL;
+				}
+				else if(action == "SS")
+				{
+					//Student Sales 
+					navHref = common.se + "?linkID=metro&amp;groupCode=&amp;RSRC=&amp;RDAT=&amp;url=" + httpURL + "&amp;shopperContext=ST";
+				}				
+				else if(action == "SR")
+				{
+					if(regAdminInfo.loginMode != "D" &amp;&amp; "metro" != "")
+					{
+						navHref = common.sr + "?linkID=metro&amp;RSRC=&amp;RDAT=&amp;linkSource=SR&amp;caller=appList";
+					}
+				}
+				else if(action == "ACCOUNT")
+				{
+					if(regAdminInfo.loginMode != "D" &amp;&amp; common.loggedIn)
+					{
+						navHref = common.myAccount + "?linkID=metro&amp;evm=myac&amp;RSRC=&amp;RDAT=&amp;url=" + httpsURL;
+					}
+				}
+				else if(action == "CART")
+				{
+					if(common.hasCart)
+					{
+						navHref = common.cart + "?linkID=metro&amp;RSRC=&amp;RDAT=&amp;cartNum=" + cart.number;
+					}
+				}
+				else if(action == "LOGIN")
+				{ 
+					if(regAdminInfo.loginMode != "D" &amp;&amp; ! common.loggedIn)
+					{
+						URL_ = unescape(splitURL(httpsURL));
+						if(URL_.indexOf("?") == -1)
+						{
+							URL_ = "https://" + window.location.host + common.main;
+						}
+						navHref = common.login + "?linkID=metro&amp;evm=myac&amp;entry=" + common.pageName + "&amp;url=" + escape(URL_);
+						if(common.pageName == "CartDisplay.html" || common.pageName == "OrderConfirmation.html")
+						{
+							navHref += "&amp;RSRC=&amp;RDAT=&amp;cartNum=" + cart.number;
+						}
+					}
+					}
+				else if(action == "LOGOUT")
+				{ 
+					if(regAdminInfo.loginMode != "D" &amp;&amp; common.loggedIn)
+					{
+						navHref = common.logout + "?linkID=metro&amp;RSRC=&amp;RDAT=&amp;url=" + "http://" + window.location.host + escape("/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=regl");
+					}
+				}
+				else if(action == "PROMO")
+				{ 
+					navHref = common.promo + "?linkID=metro&amp;evm=prmo&amp;RSRC=&amp;RDAT=&amp;caller=PR";
+				}
+				else if(action == "PRESALE")
+				{
+					//Go to the page where the user inputs the promo code
+					navHref = common.presale;
+				}
+				else if(action == "ACCESSIBILITY")
+				{
+					//Go to the page where the user inputs the accessible seating request info
+					navHref = common.accessibility + "?linkID=metro&amp;evm=seac&amp;url=" + httpURL;
+				}				
+				else if(action == "GC")
+				{
+					if(common.isStudent)
+					{
+						navHref = common.gc + "?linkID=metro&amp;groupCode=&amp;RSRC=&amp;RDAT=&amp;caller=GC&amp;shopperContext=ST&amp;url=" + httpURL;
+					}
+					else
+					{
+						navHref = common.gc + "?linkID=metro&amp;groupCode=&amp;RSRC=&amp;RDAT=&amp;caller=GC&amp;url=" + httpURL;
+					}
+				}
+				else if(action == "SEARCH")
+				{
+					navHref = common.search + "?linkID=metro&amp;evm=setx&amp;RSRC=&amp;RDAT=" + ((common.isStudent) ? "&amp;shopperContext=ST" : "");
+				}
+				else if(action == "HELP")
+				{
+					navHref = common.help;
+				}
+
+				return navHref;
+			}
+		//--&gt;
+  </script>
+  <!-- no carts in any inventory for shopper '1880382' 100 -->
+  <script language="JavaScript">
+   &lt;!--
+			cartList = new Array ;
+			cartList[0] = new Object ;
+			cartList[0].cart = new makeCart("", "1880382", "1191", "", "", "0", "", "", "metro", "","","","","","","","") ;
+			cartList[0].linkID = "metro" ;
+			cartList[0].description = "" ;
+			cartList[0].url = "" ;
+			cart = new Object ;
+			cart = cartList[0].cart ;
+		//--&gt;
+  </script>
+  <script language="JavaScript">
+   &lt;!--
+		function makeErr() {
+			this.msg = "Unable to process the request" ;
+			this.param = "SQL" ;
+			this.url = "/evenue/linkID=metro/se/index.html" ;
+		}
+		error = new makeErr() ;
+	//--&gt;
+  </script>
+  <!-- everror.html -->
+  <title>
+   MetroTix | Online Ticket Office | Sorry
+  </title>
+  <script language="JavaScript">
+   &lt;!--
+	var navHead = "Sorry";
+
+// reload site code - part 1 of 2
+	function timedRefresh(timeoutPeriod) {
+		setTimeout("location.reload(true);",timeoutPeriod);
+	}
+	
+	// Demo Request #105/106 (captcha/pleasewait lightbox)
+	if(top.location!=document.location &amp;&amp; window.name=="simpleBoxFrame") {
+		location.replace("/evenue/linkID=metro/core/error.html?msg="+ escape(error.msg) +"&amp;url="+ escape(error.url));
+	}
+	// END Demo Request #105/106 (captcha/pleasewait lightbox)
+//--&gt;
+  </script>
+  <!-- Closing head tag and body tag are included in the banner file -->
+  <meta content="no-cache" http-equiv="cache-control"/>
+  <meta content="no-cache" http-equiv="pragma"/>
+  <meta content="-1" http-equiv="expires"/>
+  <script language="javascript">
+   /* ==================================================
+	Mobil Redirect
+-----------------------------------------------------
+	UPDATES:
+	1/25/2013
+		- Added updates for mobile version 2
+	3/11/2013
+		- Disabled mobile redirects for
+		ticket transfers.
+	7/30/2013
+		- Disabled redirects for donation
+		pages (case 352158 - 7.0 upgrade)
+	11/20/2013
+		- mobile redirects now go to their
+		counterparts by default (allows myaccount
+		deeplinking, etc) from case 363228.
+================================================== */
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i &lt; ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,0,-1);
+}
+
+var desktopLinkID = ("metro").replace(/^m-/, '');
+var mobileLinkID = "m-" + desktopLinkID;
+
+// mobile code case 363228 (for deeplinks etc.)
+// returns mobile link
+function getMobileLink(url) {
+	// do not convert certain conditions
+	if(
+		url.indexOf("linkID="+desktopLinkID)==-1 ||
+		url.indexOf("linkID="+mobileLinkID)&gt;-1 ||
+		url.indexOf("SEGetPackageInfo?")&gt;-1 ||
+		url.indexOf("fromMobile=1")&gt;-1
+	) {
+		return url;
+	}
+	
+	// update linkID
+	eval('url = url.replace(/linkID='+desktopLinkID+'/g, "linkID='+mobileLinkID+'")');
+	
+	// updated post url
+	if(url.indexOf("&amp;url=")&gt;-1) {
+		var postUrl = url.split("&amp;url=");
+		var postUrl2 = postUrl[1];
+		
+		postUrl2 = postUrl2.split("&amp;");
+		postUrl2[0] = escape(getMobileLink(unescape(postUrl2[0])));
+		
+		postUrl[1] = postUrl2.join("&amp;");
+		url = postUrl.join("&amp;url=");
+	}
+	
+	// convert ticketcode if displayeventinfo
+	if(url.indexOf("SEGetEventInfo?")&gt;-1 &amp;&amp; url.indexOf("ticketCode=")&gt;-1) {
+		var qs = url.split("ticketCode=");
+		qs[1] = qs[1].split("&amp;");
+		var t_eventCode = unescape(qs[1][0]).split(":");
+		if(t_eventCode[1].indexOf("!M")==-1) {
+			t_eventCode[1] += "!M";
+			qs[1][0] = t_eventCode.join(":");
+			qs[1] = qs[1].join("&amp;");
+			url = qs.join("ticketCode=");
+		}
+	}
+	
+	return url;
+}
+// end mb case 363228
+
+function gotoMobile() {
+	if(mobileURL!='') {
+		eraseCookie("desktopView");
+		location.href = mobileURL;
+	}
+}
+
+var mobileURL = '';
+
+// do not redirect (case 318251)
+if(
+	""=="1" ||
+	common.pageName=="DisplayPackageInfo.html" ||
+	location.href.indexOf("shopperContext=DP")&gt;-1 ||
+	common.pageName.match(/^D(P|H)/g)!=null ||
+	//common.pageName=="AcceptTicketTransfer.html" ||
+	(
+		common.pageName=="MyAccount.html" &amp;&amp;
+		(
+			location.href.indexOf("linkSource=SR")&gt;-1 ||
+			// template upgrade - 352158
+			//location.href.indexOf("shopperContext=ST")&gt;-1 ||
+			location.href.indexOf("entry=DPFundDetails.html")&gt;-1
+		)
+	)
+) {
+	createCookie('desktopView', true, 0.125); // case 318251 (expires after 3 hours)
+}
+// END do not redirect
+
+if("1" == "1")
+{
+	var desktopView = readCookie('desktopView');
+	
+	// mobileURL = '/cgi-bin/ncommerce3/EVExecMacro?linkID=m-metro&amp;evm=main';
+	mobileURL = getMobileLink(location.href);
+	
+	// case 318527 (redirect to main group if no items/missing group and from mobile)
+	if(
+		desktopView &amp;&amp;
+		common.pageName=="EVError.html" &amp;&amp;
+		"FOX04MAR15"!="" &amp;&amp;
+		error.msg=="There are no events or items on sale at this time"
+	) {
+		mobileURL = createNavigateHref("SE").replace(/linkID=metro/ig, "linkID=m-metro");
+	}
+	// END case 318527 (redirect to main group if no items/missing group and from mobile)
+	
+	if(common.pageName=="DisplayGroupList.html" &amp;&amp; "FOX04MAR15"!="") {
+		mobileURL = '/cgi-bin/ncommerce3/SEGetGroupList?groupCode=FOX04MAR15&amp;linkID=m-metro&amp;fromDesktop=1';
+		
+	} else if(
+		common.pageName=="DisplayEventList.html" &amp;&amp;
+		""=="0" &amp;&amp;
+		""=="" &amp;&amp;
+		""=="" &amp;&amp;
+		""!="1"
+	) {
+		if(""!="") {
+			mobileURL = '/cgi-bin/ncommerce3/SEGetEventList?prc=&amp;caller=PR&amp;linkID=m-metro&amp;fromDesktop=1';
+		} else {
+			mobileURL = '/cgi-bin/ncommerce3/SEGetEventList?groupCode=FOX04MAR15&amp;linkID=m-metro&amp;fromDesktop=1';
+		}
+		
+	} else if(common.pageName=="DisplayPromoList.html") {
+		mobileURL = '/cgi-bin/ncommerce3/EVExecMacro?linkID=m-metro&amp;evm=prmo&amp;caller=PR&amp;fromDesktop=1';
+		
+	} else if(
+		(
+			common.pageName=="DisplayEventInfo.html" ||
+			common.pageName=="DisplayItemInfo.html" ||
+			common.pageName=="DisplayDSTicketInfo.html"
+		) &amp;&amp;
+		typeof(eventInfo)!="undefined"
+	) {
+		var t_eventCode = eventInfo.eventCode.split(":");
+		t_eventCode[1] += "!M";
+		mobileURL = '/cgi-bin/ncommerce3/SEGetEventInfo?ticketCode='+t_eventCode.join(":")+'&amp;linkID=m-metro&amp;fromDesktop=1';
+		if(""!="") {
+			mobileURL += '&amp;caller=PR&amp;prc=&amp;ppc=';
+		}
+	
+	} else if(common.pageName=="Activate.html") {
+		mobileURL = location.href.replace(/metro/ig, "m-metro");
+	
+	} else if(common.pageName=="AcceptTicketTransfer.html") {
+		mobileURL = location.href.replace(/linkID=metro/ig, "linkID=m-metro");	
+//	 template upgrade - 352158		
+	} else if(common.pageName=="MyAccount.html" &amp;&amp; location.href.indexOf("shopperContext=ST")&gt;-1 ){
+		mobileURL = location.href.replace(/metro/ig, "m-metro");
+	}
+
+	if(desktopView==null &amp;&amp; mobileURL!='') {
+		(function(a,b){if(/android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|e\-|e\/|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(di|rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|xda(\-|2|g)|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))window.location=b})(navigator.userAgent||navigator.vendor||window.opera , mobileURL);
+	}
+}
+  </script>
+  <!-- 7.00.200 template enhancement - no robots for HIDDEN -->
+  <link href="/evenue/linkID=metro/stylesheets/bootstrap.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/evenue/linkID=metro/stylesheets/ev_bootstrap.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/evenue/linkID=metro/stylesheets/style.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/evenue/linkID=metro/stylesheets/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <link href="https://media.paciolan.com/evenue/Common/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+  <script language="JavaScript">
+   &lt;!--
+	var imageWWWPath = "/evenue/linkID=metro/images";
+	var seWWWPath = "/evenue/linkID=metro/se";
+	var coreWWWPath = "/evenue/linkID=metro/core";
+	var macroPath = "ev69";
+	var linkID = "metro";
+	var customerCode = "";
+	var phoneNumber = "";
+	var styleWWWPath = "/evenue/linkID=metro/stylesheets";
+	if(typeof(pageName)=="undefined") var pageName = (common.pageName!="" ? common.pageName : "EVError.html");
+	// case 330919
+	var ev_iprofile = (shopperInfo.profile != "GEN" ? shopperInfo.profile : "");
+
+	var timerDisplayed = 0;
+	
+	var todayDate = new Date();
+	var zerotimetext = "time TBA";  // variable used in function timeFormat  - 695 bug #4 fix	
+	// load jQuery library
+	if(typeof(jQuery) == 'undefined'){
+      document.write(unescape("%3Cscript src='/evenue/linkID=metro/core/jquery/jquery-1.7.2.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+//--&gt;
+  </script>
+  <script language="javascript" src="/evenue/linkID=metro/core/functions.js">
+  </script>
+  <script language="javascript" src="/evenue/linkID=metro/core/functions-color.js">
+  </script>
+  <script language="javascript" src="/evenue/linkID=metro/core/functions-forms.js">
+  </script>
+  <!--
+&lt;script language="javascript" src="/evenue/linkID=metro/core/functions-logos.js"&gt;&lt;/script&gt;
+-->
+  <script language="javascript" src="/evenue/linkID=metro/core/functions-logos-xml.js">
+  </script>
+  <script language="javascript" src="/evenue/linkID=metro/core/functions-staticmaps.js">
+  </script>
+  <script language="javascript" src="/evenue/linkID=metro/core/lb.js">
+  </script>
+  <!-- light box module -->
+  <script language="javascript" src="/evenue/linkID=metro/core/jquery/easyTooltip.js">
+  </script>
+  <!-- template case 342517 -->
+  <script language="javascript" src="/evenue/linkID=metro/core/jquery/jquery.cookie.js">
+  </script>
+  <!-- 7.10.100 upgrade fix -->
+  <script language="JavaScript">
+   &lt;!--
+	var jq = jQuery.noConflict();  // jquery setup
+	
+	setlogoList();
+	
+	window.onscroll = function(){ adjustBox(); };  // to center the light box function
+	
+	//  attache showBox as new window's alertbox
+	if(document.getElementById) {
+		window.alert = function(txt) {
+			showBox(txt, document.title.split("|")[0]);
+		}
+	}
+//--&gt;
+  </script>
+  <script>
+   &lt;!--
+/* DYNAMIC NAV START */
+
+/* INIT VARS */
+var timerID		= "";
+var GotAllLayers	= false;
+var imageLoaded = false;
+
+/* SOME BROWSER TESTS */
+NS4 = (document.layers) ? 1 : 0;
+IE4 = (document.all) ? 1 : 0;
+DOM = (document.getElementById) ? 1 : 0;
+ver4 = (NS4 || IE4) ? 1 : 0;
+var agt = navigator.userAgent.toLowerCase();
+var is_mac = (agt.indexOf("mac") != -1);
+
+/* HIDE/SHOW LAYER REF BY ID */
+function itemshow(layername,show){
+	if (GotAllLayers) {
+		if (show) {
+			if (NS4) {
+				document.layers[layername].visibility = "show";
+			} else if (DOM) {
+				document.getElementById(layername).style.visibility = "visible";
+			} else {
+				document.all[layername].style.visibility = "visible";
+			}
+		} else {
+			if (NS4) {
+				document.layers[layername].visibility = "hide";
+			} else if (DOM) {
+				document.getElementById(layername).style.visibility = "hidden";
+			} else {
+				document.all[layername].style.visibility = "hidden";
+			}
+		}
+	}
+}
+
+/* BUFFER IMAGE ROLLOVERS */
+function gen_img_arrays(){
+	for(y = 0; y &lt; menu_images.length; y++){
+
+			menu_image = menu_images[y];
+
+			eval(menu_image + "_image_off = new Image()");
+			eval(menu_image + "_image_on = new Image()");
+			eval(menu_image + "_image_off.src = '/evenue/linkID=metro/images/dmenu/" + menu_image + ".gif'");
+			eval(menu_image + "_image_on.src = '/evenue/linkID=metro/images/dmenu/" + menu_image + "2.gif'");
+	}
+
+	imageLoaded = true;
+}
+
+function moveLayers() {
+	if (GotAllLayers) {
+		if (NS4) {
+			document.layers['buyersguide'].left = 48;
+			document.layers['buyersguide'].top = 80;
+			document.layers['help'].left = 147;
+			document.layers['help'].top = 80;
+			document.layers['venues'].left = 186;
+			document.layers['venues'].top = 80;
+			document.layers['membership'].left = 244;
+			document.layers['membership'].top = 80;
+		} else if (DOM) {
+			document.getElementById('buyersguide').style.left = 48;
+			document.getElementById('buyersguide').style.top = 80;
+			document.getElementById('help').style.left = 147;
+			document.getElementById('help').style.top = 80;
+			document.getElementById('venues').style.left = 186;
+			document.getElementById('venues').style.top = 80;
+			document.getElementById('membership').style.left = 244;
+			document.getElementById('membership').style.top = 80;
+		} else {
+			document.all['buyersguide'].style.pixelLeft = 48;
+			document.all['buyersguide'].style.pixelTop = 80;
+			document.all['help'].style.pixelLeft = 147;
+			document.all['help'].style.pixelTop = 79;
+			document.all['venues'].style.pixelLeft = 186;
+			document.all['venues'].style.pixelTop = 80;
+			document.all['membership'].style.pixelLeft = 244;
+			document.all['membership'].style.pixelTop = 80;
+		}
+	}
+}
+
+function changeimage(name,show){
+		imagename = name;
+		if(show){
+      if (imageLoaded) {
+  			document.images[imagename + '_image'].src = eval(imagename + '_image_on.src');
+      }
+		}else{
+      if (imageLoaded) {
+			document.images[imagename + '_image'].src = eval(imagename + '_image_off.src');
+      }
+		}
+}
+
+/* HIDE A MENU */
+function hidemenufunc(name){
+	changeimage(name,false);
+	layername = name;
+	itemshow(layername,false);
+}
+
+/* HIDE ALL MENUS*/
+function hideall(){
+	for(y = 0; y &lt; menus.length; y++){
+		menu_name = menus[y];
+		hidemenufunc(menu_name);
+	}
+}
+
+/* KILL THE TIMER AND KEEP THE CURRENT MENU */
+function keepmenu(){
+	clearTimeout(timerID);
+}
+
+/* HIDE/SHOW MENU */
+function showmenu(name,show){
+	clearTimeout(timerID);
+	hideall();
+	if (imageLoaded) {
+		changeimage(name,true);
+		layername = name;
+		itemshow(layername,true);
+	}
+}
+
+/* TIMER SO MEUNS DON'T DISAPEAR */
+function hidemenu(menu) {
+	name = menu;
+	/* Wait to see if anything happens then hide the menu */
+	timerID = setTimeout('hidemenufunc([name])', 300);
+	eval(timerID);
+}
+
+menu_images = new Array(
+	/*Static Images*/
+	"home",
+	"buyersguide",
+	"help",
+	"venues",
+	"merchandise",
+	"membership",
+	"outlets",
+
+	/*buyersguide menu*/
+	"howtobuy",
+	"purchasepolicies",
+	"deliveryoptions",
+	"security",
+
+	/*help menu*/
+	"faqs",
+	"contactus",
+	"forgottenpassword",
+	
+	/*venues menu*/
+	"stlouisarea",
+	"other",
+
+	/*membership menu*/
+	"joinnow",
+	"mymetrotix",
+	"changepassword",
+	"unsubscribe");
+	
+menus = new Array("buyersguide","help","venues","membership")
+
+/* DYNAMIC NAV END */
+// --&gt;
+  </script>
+ </head>
+ <body onload="gen_img_arrays();">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+   <tr>
+    <td colspan="2" width="100%">
+     <img border="0" height="86" src="/evenue/linkID=metro/images/metrotix_logo2.gif" width="250"/>
+    </td>
+   </tr>
+   <tr>
+    <td colspan="2">
+     <!-- MENU START -->
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td colspan="8">
+        <img height="12" src="/evenue/linkID=metro/images/blank.gif" width="12"/>
+       </td>
+       <td align="right" rowspan="2" valign="middle">
+        <img height="1" hspace="209" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <a href="http://metrotix.com/" onmouseout="javascript:changeimage('home',false);" onmouseover="javascript:changeimage('home',true); hideall();" target="_blank">
+         <img border="0" height="21" name="home_image" src="/evenue/linkID=metro/images/dmenu/home.gif" width="48"/>
+        </a>
+       </td>
+       <td>
+        <a href="/evenue/linkID=metro/se/" onmouseout="javascript:hidemenu('buyersguide');" onmouseover="javascript:showmenu('buyersguide',true);">
+         <img border="0" height="21" name="buyersguide_image" src="/evenue/linkID=metro/images/dmenu/buyersguide.gif" width="99"/>
+        </a>
+       </td>
+       <td>
+        <a href="/evenue/linkID=metro/se/" onmouseout="javascript:hidemenu('help');" onmouseover="javascript:showmenu('help',true);">
+         <img border="0" height="21" name="help_image" src="/evenue/linkID=metro/images/dmenu/help.gif" width="39"/>
+        </a>
+       </td>
+       <td>
+        <a href="/evenue/linkID=metro/se/" onmouseout="javascript:hidemenu('venues');" onmouseover="javascript:showmenu('venues',true);">
+         <img border="0" height="21" name="venues_image" src="/evenue/linkID=metro/images/dmenu/venues.gif" width="58"/>
+        </a>
+       </td>
+       <!--&lt;td&gt;&lt;a href="http://metrotix.com/search.php?method=merch" target="_blank" onmouseover="javascript:changeimage('merchandise',true); hideall();" onmouseout="javascript:changeimage('merchandise',false);"&gt;&lt;img src="/evenue/linkID=metro/images/dmenu/merchandise.gif" border="0" name="merchandise_image" width="94" height="21"&gt;&lt;/a&gt;&lt;/td&gt;-->
+       <td>
+        <a href="/evenue/linkID=metro/se/" onmouseout="javascript:hidemenu('membership');" onmouseover="javascript:showmenu('membership',true);">
+         <img border="0" height="21" name="membership_image" src="/evenue/linkID=metro/images/dmenu/membership.gif" width="92"/>
+        </a>
+       </td>
+       <td>
+        <a href="http://metrotix.com/outlets.php" onmouseout="javascript:changeimage('outlets',false);" onmouseover="javascript:changeimage('outlets',true); hideall();" target="_blank">
+         <img border="0" height="21" name="outlets_image" src="/evenue/linkID=metro/images/dmenu/outlets.gif" width="58"/>
+        </a>
+       </td>
+       <td>
+        <img border="0" height="21" name="endswirl_image" src="/evenue/linkID=metro/images/dmenu/endswirl.gif" width="41"/>
+       </td>
+       <td valign="top">
+       </td>
+      </tr>
+     </table>
+     <div id="buyersguide" style="POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; TOP: 80px; LEFT: 48px;">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td bgcolor="#FD5402" colspan="9">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/howtobuy.php" onmouseout="javascript:document.images['howtobuy_image'].src = howtobuy_image_off.src; hidemenu('buyersguide');" onmouseover="javascript:document.images['howtobuy_image'].src = howtobuy_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="howtobuy_image" src="/evenue/linkID=metro/images/dmenu/howtobuy.gif" width="71"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/purchasepolicy.php" onmouseout="javascript:document.images['purchasepolicies_image'].src = purchasepolicies_image_off.src; hidemenu('buyersguide');" onmouseover="javascript:document.images['purchasepolicies_image'].src = purchasepolicies_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="purchasepolicies_image" src="/evenue/linkID=metro/images/dmenu/purchasepolicies.gif" width="105"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/deliveryoptions.php" onmouseout="javascript:document.images['deliveryoptions_image'].src = deliveryoptions_image_off.src; hidemenu('buyersguide');" onmouseover="javascript:document.images['deliveryoptions_image'].src = deliveryoptions_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="deliveryoptions_image" src="/evenue/linkID=metro/images/dmenu/deliveryoptions.gif" width="100"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/faqs/security.php" onmouseout="javascript:document.images['security_image'].src = security_image_off.src; hidemenu('buyersguide');" onmouseover="javascript:document.images['security_image'].src = security_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="security_image" src="/evenue/linkID=metro/images/dmenu/security.gif" width="53"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402" colspan="9">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div id="help" style="POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; TOP: 80px; LEFT: 148px;">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td bgcolor="#FD5402" colspan="7">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/faqs.php" onmouseout="javascript:document.images['faqs_image'].src = faqs_image_off.src; hidemenu('help');" onmouseover="javascript: document.images['faqs_image'].src = faqs_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="faqs_image" src="/evenue/linkID=metro/images/dmenu/faqs.gif" width="39"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/contactus.php" onmouseout="javascript:document.images['contactus_image'].src = contactus_image_off.src; hidemenu('help');" onmouseover="javascript:document.images['contactus_image'].src = contactus_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="contactus_image" src="/evenue/linkID=metro/images/dmenu/contactus.gif" width="68"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="/cgi-bin/ncommerce3/ExecMacro/evenue/ev69/core/Forgot.d2w/report?linkID=metro&amp;addrReq=&amp;phoneReq=&amp;RSRC=&amp;RDAT=" onmouseout="javascript:document.images['forgottenpassword_image'].src = forgottenpassword_image_off.src; hidemenu('help');" onmouseover="javascript:document.images['forgottenpassword_image'].src = forgottenpassword_image_on.src; keepmenu();">
+          <img border="0" height="16" name="forgottenpassword_image" src="/evenue/linkID=metro/images/dmenu/forgottenpassword.gif" width="121"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402" colspan="7">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div id="venues" style="POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; TOP: 80px; LEFT: 187px;">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td bgcolor="#FD5402" colspan="7">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/venues.php?area=stlouis" onmouseout="javascript:document.images['stlouisarea_image'].src = stlouisarea_image_off.src; hidemenu('venues');" onmouseover="javascript:document.images['stlouisarea_image'].src = stlouisarea_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="stlouisarea_image" src="/evenue/linkID=metro/images/dmenu/stlouisarea.gif" width="81"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <td>
+         <a href="http://metrotix.com/venues.php?area=other" onmouseout="javascript:document.images['other_image'].src = other_image_off.src; hidemenu('venues');" onmouseover="javascript:document.images['other_image'].src = other_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="other_image" src="/evenue/linkID=metro/images/dmenu/other.gif" width="39"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402" colspan="7">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div id="membership" style="POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; TOP: 80px; LEFT: 245px;">
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td bgcolor="#FD5402" colspan="5">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <!--&lt;td&gt;&lt;a href="http://paciolan.myprefs.com/?@mmtx&amp;p2p=Signup" target="_blank" onmouseout="javascript:document.images['joinnow_image'].src = joinnow_image_off.src; hidemenu('membership');" onmouseover="javascript:document.images['joinnow_image'].src = joinnow_image_on.src; keepmenu();"&gt;&lt;img src="/evenue/linkID=metro/images/dmenu/joinnow.gif" border="0" name="joinnow_image" width="59" height="16"&gt;&lt;/a&gt;&lt;/td&gt;-->
+        <td>
+         <a href="http://metrotix.com/r.php?GOTO=mymetrotix.php" onmouseout="javascript:document.images['joinnow_image'].src = joinnow_image_off.src; hidemenu('membership');" onmouseover="javascript:document.images['joinnow_image'].src = joinnow_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="joinnow_image" src="/evenue/linkID=metro/images/dmenu/joinnow.gif" width="59"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+        <!--
+			&lt;td&gt;&lt;a onmouseover="javascript:document.images['mymetrotix_image'].src = mymetrotix_image_on.src; keepmenu();" onmouseout="javascript:document.images['mymetrotix_image'].src = mymetrotix_image_off.src; hidemenu('membership');"&gt;&lt;img src="/evenue/linkID=metro/images/dmenu/mymetrotix.gif" border="0" name="mymetrotix_image" width="76" height="16"&gt;&lt;/a&gt;&lt;/td&gt;
+			&lt;td bgcolor="#FD5402"&gt;&lt;img src="/evenue/linkID=metro/images/blank.gif" width="1" height="16"&gt;&lt;/td&gt;
+			&lt;td&gt;&lt;a href="/cgi-bin/ncommerce3/ExecMacro/evenue/ev69/core/myaccount.d2w/report?linkID=metro&amp;entry=Register.html&amp;url=https%3A//ev6.evenue.net/cgi-bin/ncommerce3/SEGetGroupList%3FgroupCode%3DMTX%26linkID%3Dmetro" onmouseover="javascript:document.images['changepassword_image'].src = changepassword_image_on.src; keepmenu();" onmouseout="javascript:document.images['changepassword_image'].src = changepassword_image_off.src; hidemenu('membership');"&gt;&lt;img src="/evenue/linkID=metro/images/dmenu/changepassword.gif" border="0" name="changepassword_image" width="107" height="16"&gt;&lt;/a&gt;&lt;/td&gt;
+			&lt;td bgcolor="#FD5402"&gt;&lt;img src="/evenue/linkID=metro/images/blank.gif" width="1" height="16"&gt;&lt;/td&gt;
+			-->
+        <!--&lt;td&gt;&lt;a href="http://paciolan.myprefs.com/?@mmtx&amp;p2p=login" target="_blank" onmouseover="javascript:document.images['unsubscribe_image'].src = unsubscribe_image_on.src; keepmenu();" onmouseout="javascript:document.images['unsubscribe_image'].src = unsubscribe_image_off.src; hidemenu('membership');"&gt;&lt;img src="/evenue/linkID=metro/images/dmenu/unsubscribe.gif" border="0" name="unsubscribe_image" width="76" height="16"&gt;&lt;/a&gt;&lt;/td&gt;-->
+        <td>
+         <a href="http://metrotix.com/r.php?GOTO=mymetrotix.php" onmouseout="javascript:document.images['unsubscribe_image'].src = unsubscribe_image_off.src; hidemenu('membership');" onmouseover="javascript:document.images['unsubscribe_image'].src = unsubscribe_image_on.src; keepmenu();" target="_blank">
+          <img border="0" height="16" name="unsubscribe_image" src="/evenue/linkID=metro/images/dmenu/unsubscribe.gif" width="76"/>
+         </a>
+        </td>
+        <td bgcolor="#FD5402">
+         <img height="16" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+        </td>
+       </tr>
+       <tr>
+        <td bgcolor="#FD5402" colspan="5">
+         <img height="1" src="/evenue/linkID=metro/images/blank.gif"/>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <script>
+      &lt;!--
+			GotAllLayers = true;
+			moveLayers();
+		// --&gt;
+     </script>
+     <!-- MENU END -->
+    </td>
+   </tr>
+   <tr>
+    <td class="bgmed4">
+     <img height="6" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+     <br/>
+     <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+       <td bgcolor="#000066" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0" width="985">
+         <tr valign="top">
+          <td width="5">
+           <img height="1" src="/evenue/linkID=metro/images/blank.gif" width="5"/>
+          </td>
+          <td class="bgmed2" width="980">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+             <td bgcolor="#000066">
+              <img height="5" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+             </td>
+            </tr>
+           </table>
+           <!--
+				&lt;img src="/evenue/linkID=metro/images/drk_blue.gif" width="980" height="5" border="0"&gt;&lt;br&gt;
+				-->
+           <!-- start main body table -->
+           <table border="0" cellpadding="4" cellspacing="4" width="100%">
+            <tr valign="top">
+             <td height="500" id="menu" rowspan="2" width="225">
+              <br/>
+              <img height="3" src="/evenue/linkID=metro/images/blank.gif" width="185"/>
+              <br/>
+              <script language="JavaScript">
+               &lt;!--
+	function chartPop() {
+		window.open('/evenue/linkID=metro/core/seating_charts.html', 'Charts', 'scrollbars=yes,resizable=yes,width=640,height=480');
+	}
+	function SSpop() {
+		alert('Student tickets are currently unavailable.');
+	}
+	function SRpop() {
+		alert('There are no season renewals currently available.');
+	}
+
+	// custom code case 299173 - add promo
+	function validatePromoFormNav(pForm) {
+		var tmp_code = pForm.prc.value.replace(/\s/g, "");
+		var err = "";
+
+		//see if the user entered a code and if the code id between 3-25 chars
+		if(tmp_code == null || tmp_code == "")  {
+			err = "Please enter a Promotion Code";
+		} else if(tmp_code.length &lt; 3 || tmp_code.length &gt; 25) {
+			err = "Invalid Promotion Code";
+		}
+
+		if(err != "") {
+			alert(err);
+			return false;
+		}
+
+		//change the input to upper case.
+		pForm.prc.value = pForm.prc.value.toUpperCase();
+	}
+
+	/* ------------------------------
+		Ticket Items
+	------------------------------ */
+	document.write(
+		'&lt;ul&gt;',
+		'&lt;li&gt;&lt;a href="/evenue/linkID=metro/se/"&gt;Welcome&lt;/a&gt;&lt;/li&gt;',
+		'&lt;li&gt;&lt;a href="', createNavigateHref("SE"), '"&gt;Buy Tickets&lt;/a&gt;&lt;/li&gt;',
+	// calendar link
+	//	'&lt;li&gt;&lt;a href="', printCalendarLink("metro", '') ,'"&gt;Events Calendar&lt;/a&gt;&lt;/li&gt;',
+		''
+	);
+
+	/*
+	if(regAdminInfo.loginMode != "D" &amp;&amp; "metro" != "" &amp;&amp; showRenewalLinks) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("SR"), '"&gt;Season Renewals&lt;/a&gt;&lt;/li&gt;',
+		//	'&lt;li&gt;&lt;a href="javascript:SRpop();"&gt;Season Renewals&lt;/a&gt;&lt;/li&gt;',
+			''
+		);
+	}
+
+	if(regAdminInfo.loginMode != "D" &amp;&amp; "metro" != "" &amp;&amp; showStudentLinks) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("SS"), '"&gt;Student Tickets&lt;/a&gt;&lt;/li&gt;',
+		//	'&lt;li&gt;&lt;a href="javascript:SSpop();"&gt;Student Tickets&lt;/a&gt;&lt;/li&gt;',
+			''
+		);
+	}
+
+	if(hasProperty("ts.presale") &amp;&amp; getPropertyValue("ts.presale") == "1") {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("PRESALE"), '"&gt;Presales&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+	*/
+
+	if(hasProperty("ts.promo") &amp;&amp; getPropertyValue("ts.promo") == "1") {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("PROMO"), '"&gt;Promotions&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+
+	/*
+	if(getPropertyValue("fd") == "1" &amp;&amp; showDonationLinks) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("DP"), '"&gt;Donations&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+
+	if(hasProperty("ts.gift") &amp;&amp; getPropertyValue("ts.gift") == "1") {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("GC"), '"&gt;Gift Certificates&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+	*/
+	
+	// custom code case 299173 - add promo
+		if(getPropertyValue("ts.promo") == "1" &amp;&amp; ""=="") {
+			document.write(
+				'&lt;form action="/cgi-bin/ncommerce3/SEGetGroupList" method="post" name="promoForm" onsubmit="return validatePromoFormNav(this)"&gt;',
+				'&lt;p align="center" style="color:#fff; font-weight:bold;"&gt;If you have a promotion code, enter it here:&lt;br&gt;&lt;img src="/evenue/linkID=metro/images/blank.gif" width="1" height="5"&gt;&lt;br&gt;&lt;input type="text" name="prc" size="16" maxlength="25"&gt; &lt;input type="submit" value="Go" class="button"&gt;',
+				'&lt;input type="hidden" name="linkID" value="metro"&gt;',
+				'&lt;input type="hidden" name="caller" value="PR"&gt;',
+				'&lt;/p&gt;',
+				'&lt;/form&gt;'
+			);
+		}
+	// end cc case 167458 (add promo form to top of this page)
+
+	/* ------------------------------
+		Account Items
+	------------------------------ */
+	if(regAdminInfo.loginMode != "D" &amp;&amp; common.loggedIn) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("LOGOUT"), '" onClick="return confirmLogOut()"&gt;Sign Out&lt;/a&gt;&lt;/li&gt;'
+		);
+	} else if(!common.loggedIn &amp;&amp; (regAdminInfo.loginMode == "R" || regAdminInfo.loginMode == "O")) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("LOGIN"), '"&gt;Sign In&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+
+	if(common.loggedIn) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("ACCOUNT"), '"&gt;My Account&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+
+	if(common.hasCart) {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("CART"), '"&gt;Shopping Cart&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+	
+	/* ------------------------------
+		Misc Items
+	------------------------------ */
+	/*
+	document.write(
+	//	'&lt;li&gt;&lt;a href="', createNavigateHref("SEARCH") ,'"&gt;Search Tickets by Date&lt;/a&gt;&lt;/li&gt;',
+	//	'&lt;li&gt;&lt;a href="/cgi-bin/ncommerce3/ExecMacro/evenue/ev69/core/tmp.d2w/report?linkID=metro"&gt;Ticket Marketplace&lt;/a&gt;&lt;/li&gt;',
+		'&lt;li&gt;&lt;a href="javascript:chartPop();"&gt;Seating Charts&lt;/a&gt;&lt;/li&gt;',
+		'&lt;li&gt;&lt;a href="/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=cont"&gt;Contact Us&lt;/a&gt;&lt;/li&gt;'
+	);
+
+	if(hasProperty("ts.accessibilityLink") &amp;&amp; getPropertyValue("ts.accessibilityLink") == "1") {
+		document.write(
+			'&lt;li&gt;&lt;a href="', createNavigateHref("ACCESSIBILITY"), '"&gt;Accessible Seating&lt;/a&gt;&lt;/li&gt;'
+		);
+	}
+
+	document.write(
+		// brainstorm #15
+		'&lt;li&gt;&lt;a href="javascript:void(showBox(\'/evenue/linkID=metro/core/site-security.html\', \'Security Information\', 700, 500, 1))"&gt;Site Security&lt;/a&gt;&lt;/li&gt;',						
+	//	'&lt;li&gt;&lt;a href="javascript:popBox(\'', createNavigateHref("HELP"),'\', \'evenue\', 640, 480);"&gt;Help&lt;/a&gt;&lt;/li&gt;',
+		''
+	);
+	*/
+
+//--&gt;
+              </script>
+              <!-- custom code - sign in -->
+              <script language="JavaScript">
+               &lt;!--
+
+	var IPFlag = "0";
+	if(hasProperty("reg.integratedPatron")) {
+		IPFlag = getPropertyValue("reg.integratedPatron");
+	}
+
+	function emailValidateMyAccount(email) {
+
+		var str = email.value; // email string
+
+		var reg1 = /(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/; // not valid
+		var reg2 = /^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,4}|[0-9]{1,4})(\]?)$/; // valid
+
+		if(IPFlag == "0")
+		{
+			if( isNaN(parseInt(str)) == false )
+				return true;
+		}
+
+		if (!reg1.test(str) &amp;&amp; reg2.test(str)) { // if syntax is valid
+			return true;
+		}
+		window.status = "Please enter a valid Internet e-mail address";
+
+		email.focus();
+		email.select();
+		return false;
+	}
+
+	function formValidate(frm) {
+		if(emailValidateMyAccount(frm.email) == false &amp;&amp; accntValidate(frm.email) == false) {
+			alert("Please enter a valid Internet e-mail address or account number");
+			return false;
+		}
+		if(passwordValidate(frm.password) == false) {
+			if(IPFlag)
+				alert("Please enter a password between 6 and 15 characters in length");
+			else
+				alert("Please enter a password between 4 and 12 characters in length");
+			return false;
+		}
+		return true;
+	}
+
+	function goOn(action) {
+		if(action == "REGISTER")
+		{
+			location.href = "/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=regr&amp;account=&amp;pin=&amp;addrReq=&amp;phoneReq=&amp;RSRC=&amp;RDAT=&amp;url=" + escape("");
+		}
+		else if(action == "FORGOT")
+		{
+			location.href = "/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=regf&amp;addrReq=&amp;phoneReq=&amp;RSRC=&amp;RDAT=";
+		}
+		else if(action == "OPTIONAL")
+		{
+			location.href = "";
+		}
+		else if(action == "ACTIVATE")
+		{
+			location.href = "/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=rega&amp;returnURL=" + escape("") + "&amp;shopperContext=&amp;RSRC=&amp;RDAT=&amp;url=" + escape("");
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+//--&gt;
+              </script>
+              <script language="JavaScript">
+               &lt;!--   
+
+	//custom code, imported macro function
+	var caller = "";	
+	
+	function formInit() 
+	{
+		// edited hidden fields to fix re-direct issue	
+		var rUrl = document.location.href.replace("http:", "https:").split("#")[0];
+		var url = window.location.href.replace("http:", "https:").split("#")[0];		
+		document.write(
+			//OG: '&lt;input type="hidden" name="url" value=""&gt;',
+			'&lt;input type="hidden" name="url" value="', url,'"&gt;',
+			//OG: '&lt;input type="hidden" name="returnURL" value=""&gt;',
+			'&lt;input type="hidden" name="returnURL" value="',rUrl,'"&gt;',
+			'&lt;input type="hidden" name="linkID" value="metro"&gt;',
+			'&lt;input type="hidden" name="entry" value=""&gt;',
+			'&lt;input type="hidden" name="cartNum" value=""&gt;',
+			'&lt;input type="hidden" name="account" value=""&gt;',
+			'&lt;input type="hidden" name="pin" value=""&gt;',
+			'&lt;input type="hidden" name="relink" value=""&gt;',
+			'&lt;input type="hidden" name="skippedLogin" value="0"&gt;',
+			'&lt;input type="hidden" name="numAddr" value=""&gt;',
+			'&lt;input type="hidden" name="RSRC" value=""&gt;',
+			'&lt;input type="hidden" name="RDAT" value=""&gt;',
+			'&lt;input type="hidden" name="numPhones" value=""&gt;'
+		) ;
+	}
+
+	loginAction_ = "https://" + window.location.host + "/cgi-bin/ncommerce3/REGLogin";
+	document.write('&lt;form action="', loginAction_, '" method="post" name="loginForm" onSubmit="return formValidate(this)"&gt;');
+//--&gt;
+              </script>
+              <style>
+               .sidebarFeature {
+	background: #000066;
+	color: #fff;
+	margin: 10px;
+}
+
+.button_nav {
+	font-family: Arial, Geneva, sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+/*
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+*/	
+	color: #000;
+	background-color: #eee;
+}
+              </style>
+              <input name="addrReq" type="hidden" value=""/>
+              <input name="phoneReq" type="hidden" value=""/>
+              <input name="shopperContext" type="hidden" value=""/>
+              <input name="linkSource" type="hidden" value=""/>
+              <input name="relink" type="hidden" value=""/>
+              <script language="JavaScript">
+               &lt;!--
+	formInit();
+	
+	var ccURL = "";
+	
+	var isStudent = ccURL.match("shopperContext=ST");
+	var isRenewal = ccURL.match("caller=appList");
+//--&gt;
+              </script>
+              <!-- start -->
+              <!-- REGULAR LOGIN -->
+              <!-- sign in -->
+              <div class="content">
+               <div class="sidebarFeature">
+                <div align="center" id="customerSignIn">
+                 <br/>
+                 <label for="email">
+                  E-mail or Account #
+                 </label>
+                 <br/>
+                 <input class="form-text" maxlength="50" name="email" size="23" type="text"/>
+                 <br/>
+                 <br/>
+                 <label for="password">
+                  Password
+                 </label>
+                 <br/>
+                 <input class="form-text" maxlength="12" name="password" size="23" type="password"/>
+                 <br/>
+                 <br/>
+                 <input class="button_nav" name="submitForm" type="submit" value="Sign In"/>
+                 <br/>
+                 <br/>
+                 <!--
+				&lt;ul&gt;
+				&lt;li&gt;&lt;a href="javascript:goOn('FORGOT');" class="small"&gt;Forgot Password?&lt;/a&gt;&lt;/li&gt;
+				&lt;li&gt;&lt;a href="javascript:goOn('REGISTER');" class="small"&gt;New User?&lt;/a&gt;&lt;/li&gt;
+				&lt;/ul&gt;
+				-->
+                 <a class="small" href="javascript:goOn('FORGOT');" style="color: #fff;">
+                  Forgot Password?
+                 </a>
+                 <br/>
+                 <a class="small" href="javascript:goOn('REGISTER');" style="color: #fff;">
+                  New User?
+                 </a>
+                 <br/>
+                 <br/>
+                </div>
+               </div>
+              </div>
+              <!-- end sign in -->
+              <!-- end sign in -->
+              <!-- end navigate -->
+              <br/>
+              <img height="1" src="/evenue/linkID=metro/images/blank.gif" width="185"/>
+              <br/>
+             </td>
+             <!--
+						&lt;td width="2" background="/evenue/linkID=metro/images/000066.gif" style="padding: 0;"&gt;&lt;img src="/evenue/linkID=metro/images/blank.gif" width="1" height="600"&gt;&lt;/td&gt;
+						-->
+             <td rowspan="2" style="padding: 0;" width="2">
+              <img height="600" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+             </td>
+             <td width="963">
+              <!-- mini cart - top hover version -->
+              <script language="javascript">
+               &lt;!--
+	var timerID;
+	
+	var cartExists = false;
+	var packageExists = false;
+	var iconSrc = "/evenue/linkID=metro/images/icons/basket.png";
+	var iconSrcOver = "/evenue/linkID=metro/images/icons/basket-over.gif";
+	
+	function startTimer(cartIndex, setTimerID) {
+		var exp = "document.cartListForm.countdown" + cartIndex + ".value = " +
+							"cartList["+cartIndex+"].timer.display(" + cartIndex + ");";
+		if(setTimerID)
+			timerID = setInterval(exp, 1000);
+		else
+			setInterval(exp, 1000);
+	}
+
+	// custom code - show minicart
+	function showminiCart(){
+		var icart = document.getElementById("mCart");
+		if(icart){
+			icart.top = 0 + "px";	
+			icart.style.display = "block";				
+		}	
+		document.images.carticon.src=iconSrcOver;	
+		if(common.pageName != "CartDisplay.html") {		
+			//document.getElementById("cartIcon").style.borderWidth="1px";
+			//document.getElementById("cartIcon").style.borderStyle="solid";		
+			//document.getElementById("cartIcon").style.borderColor="#fcc603";				
+			//document.getElementById("cartIcon").style.backgroundImage = 'url(/evenue/linkID=metro/images/skin/minicart_bg.png)';							
+			document.getElementById("cartIcon").className = "minicart-over";										
+			document.getElementById("expStr").style.color="#fff";																		
+		}
+	}		
+	
+	function hideminiCart(){
+		var icart = document.getElementById("mCart");
+		if(icart){		
+			icart.top = -999 + "px";	
+			icart.style.display = "none";			
+		}	
+		document.images.carticon.src=iconSrc;		
+		//document.getElementById("cartIcon").style.borderWidth="0px";
+		document.getElementById("cartIcon").style.backgroundColor="transparent";						
+		document.getElementById("cartIcon").className = "minicart";																
+		document.getElementById("expStr").style.color="#000000";															
+	}
+	// end of cc - showminicart
+	
+
+	// Determine number of active carts and the current cart's index
+	var activeRes = 0;
+	var thisCartIndex = -1;
+	var inputTimer = 5;
+
+	for(var i=0; i &lt; cartList.length; i++) {
+		if(cartList[i].cart.expire &gt; 0) {
+			++activeRes;
+			if(cartList[i].cart == cart)
+				thisCartIndex = i;
+		}
+	}
+
+	// check the existence of cart and package
+	if(thisCartIndex &gt; -1) {
+		// For the cart in the current inventory
+		cartExists = !(cartList[thisCartIndex].pkNum=="" &amp;&amp; cartList[thisCartIndex].transferNum=="" &amp;&amp; cartList[thisCartIndex].appNum=="" &amp;&amp; cartList[thisCartIndex].appPayCode=="" &amp;&amp; cartList[thisCartIndex].ticketNum=="" &amp;&amp; cartList[thisCartIndex].miscNum=="" &amp;&amp; cartList[thisCartIndex].pledgeNum=="" &amp;&amp; cartList[thisCartIndex].pledgePayNum=="");
+		packageExists = (pkItemOnBuild[0]!=undefined &amp;&amp; pkItemOnBuild[0].pkNum!="");
+		if(common.pageName == "CartDisplay.html") {
+			iconSrc = iconSrcOver = "/evenue/linkID=metro/images/icons/shiny/shopping_cart_clock_48.png";
+		} else {
+			iconSrc = (packageExists &amp;&amp; !cartExists) ? "/evenue/linkID=metro/images/icons/package-icon.png"  : "/evenue/linkID=metro/images/icons/shiny/shopping_cart_clock_48.png"
+			iconSrcOver = (packageExists &amp;&amp; !cartExists) ? "/evenue/linkID=metro/images/icons/package-icon-over.png"  : "/evenue/linkID=metro/images/icons/shiny/shopping_cart_clock_48.png"		
+		}
+	}	
+
+
+	// custom code - custom layout for mini shopping cart 
+	if(activeRes &gt; 0 &amp;&amp; common.pageName != "OrderWait.html" &amp;&amp; common.pageName != "AppList.html" &amp;&amp; common.pageName != "OrderOk.html" ) {
+		// Create timer forms
+		timerDisplayed = 1;
+
+		for(var i=0; i &lt; cartList.length; i++) {
+			if(cartList[i].cart.expire &gt; 0)
+				cartList[i].timer = new Timer(cartList[i], i);
+		}
+
+
+		// icon	
+		document.write(
+			//'&lt;table border="0" cellpadding="0" cellspacing="0" width="100%"&gt;&lt;tr&gt;&lt;td align="right" valign="top"&gt;',
+			'&lt;div id="cartIcon" onmouseover="showminiCart();" onmouseout="hideminiCart();" align="left" class="minicart"&gt;',
+			'&lt;form action="" method="post" name="cartListForm"&gt;',			
+			//'&lt;a href="#" style="cursor: default;"&gt;',
+			'	&lt;table cellpadding="0" cellspacing="0" width="100%"&gt;&lt;tr&gt;&lt;td align="right" width="35%"&gt;',
+			'	&lt;img name="carticon" src="', iconSrc ,'" align="absmiddle"&gt;',
+			'	&lt;/td&gt;&lt;td align="left" width="66%"&gt;',
+			'	&lt;span id="expStr" class="small"&gt;expires in&lt;/span&gt; &lt;input type="text" name="countdown' + thisCartIndex + '" size="5" value="'+ cartList[thisCartIndex].timer.display(thisCartIndex)+ '" onfocus="blur();" class="timer"&gt;',
+			'	&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;',
+			'&lt;/form&gt;'			
+		);	
+		
+		if(common.pageName == "CartDisplay.html" &amp;&amp; !packageExists ) {
+			document.write(
+				'&lt;/div&gt;'		
+			);
+			// start timer for cartdisplay page with no mini carts			
+			setTimerFlag = false;
+			if(thisCartIndex &gt; -1) {
+				setTimerFlag = true;
+				if(setTimerFlag)			
+					startTimer(thisCartIndex, true);
+			}	
+			
+		} else {
+
+			document.write(
+				'&lt;div id="mCart" style="display: none; left: auto; top: -1000px;" align="center"&gt;',		
+				'&lt;table border="0" cellpadding="0" cellspacing="0" width="280" style="padding: 0;" &gt;',
+				'&lt;tr align="top"&gt;',
+				'	&lt;td align="center" style="padding:0; margin: 0;" id="timer"&gt;'
+			);
+	
+			setTimerFlag = false;
+			if(thisCartIndex &gt; -1) {				
+				
+				if(cartExists){
+					document.write(			
+					  '&lt;a href="', cartList[thisCartIndex].url, '" style="font-size: 10px;"&gt;View Shopping Cart'  // template request #101 - text change
+					);
+					 if(packageExists)
+					 	document.write('&lt;br&gt;');
+				}
+				if(packageExists){
+					document.write(		
+					  '&lt;a href="', pkItemOnBuild[0].pkUrl, '" style="font-size: 10px;"&gt;View Package List'
+					 ); 			
+				}
+			
+				setTimerFlag = true;
+				
+			
+				if(setTimerFlag)			
+					startTimer(thisCartIndex, true);
+			
+			
+				document.write(
+					'	&lt;/td&gt;',
+					'	&lt;/tr&gt;'
+				);	
+			
+				// add iframe and buttons only if there is cart items
+				if(cartExists) {		
+					document.write (				
+						'	&lt;tr&gt;',
+						'	&lt;td  valign="top" style="padding: 10px; border: 1px solid #9a9a9a; background-color: #fff; height: 320px; "&gt;',
+						'   &lt;div style="background: #fff; height: 100% overflow: auto;"&gt;'
+					);	
+				
+					if(common.hasCart) {
+						document.write(
+							'&lt;iframe name="minicart" src="/cgi-bin/ncommerce3/SECartRedisplay?linkID=metro&amp;cartNum='+ cart.number +'&amp;isCartTimer=1" width="100%" height="300" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="auto"&gt;&lt;/iframe&gt;'
+						);
+					}
+					document.write(
+						'   &lt;/div&gt;', // iframe div
+						'	&lt;/td&gt;',
+						'&lt;/tr&gt;'
+					);	
+			
+					// checkout button		
+					document.write (							
+						'&lt;tr&gt;',
+						'	&lt;td align="center" style="text-align: center; padding: 10px;"&gt;'
+					);		
+
+					/*
+					if(pageName!="OrderConfirmation.html") {				
+						document.write(			
+						  '&lt;a href="', cartList[thisCartIndex].url, '" class="timer"&gt;View Cart Details&lt;/a&gt;'
+						);
+					}
+					*/				
+				document.write (							
+					'	&lt;/td&gt;',
+					'&lt;/tr&gt;'
+				);		
+					
+			}
+				// end of add iframe	
+		}
+	
+	
+		document.write (							
+			'&lt;/table&gt;',
+			'&lt;/div&gt;',
+			'&lt;/div&gt;'			
+		);		
+		 // end of not cartdisplayPage			
+	}
+
+
+}
+//--&gt;
+              </script>
+              <!-- end showactivecartlist -->
+              <!-- end of top hover mini cart -->
+              <script language="javascript">
+               &lt;!--
+	if(
+		regAdminInfo.loginMode != "D" &amp;&amp; 
+		common.loggedIn &amp;&amp;
+		shopperInfo.first != "" &amp;&amp;
+		shopperInfo.last != ""
+	) {
+		document.write(
+			'&lt;div id="login"&gt;Welcome ', shopperInfo.first ,' ', shopperInfo.last ,'!&lt;/div&gt;'
+		);
+
+	}
+//--&gt;
+              </script>
+              <!-- end showactivecartlist -->
+              <!-- Template Request (case 297380 - tracking pixel) -->
+              <script language="javascript">
+               document.write('&lt;s','cript language="JavaScript" src="/evenue/linkID=metro/core/tracking_pixel.js?timestamp=',(new Date()),'"&gt;&lt;/s','cript&gt;');
+              </script>
+              <!-- END Template Request (case 297380 - tracking pixel) -->
+              <!-- ==================================================
+	END HEADER
+=================================================== -->
+              <script language="JavaScript">
+               &lt;!--
+//	printHead("sorry", navHead);
+//--&gt;
+              </script>
+              <div align="center">
+               <p>
+               </p>
+               <script language="JavaScript">
+                &lt;!--
+		var regex     = /.*has no applications available online.  Please call ticket office for further processing/;
+		var errortext = error.msg;
+		var result    = errortext.match(regex);
+		
+		if(result) {
+			document.write(
+				'&lt;p class="error"&gt;Sorry, you currently have no applications available online.&lt;/p&gt;',
+				'&lt;p&gt;If you have received your invoice in the mail, ',
+				'  &lt;a href="/cgi-bin/ncommerce3/EVExecMacro?linkID=metro&amp;evm=rega&amp;linkSource=SR','&amp;url=', escape(createNavigateHref("SR")), '"&gt;click here&lt;/a&gt; to link your account ',
+				'  and view your applications online. ',
+				'  You will need your Customer Number and PIN which can be found above your name on your invoice.&lt;/p&gt;'
+			);
+		} else {
+			// reload site code - part 2 of 2
+			if(error.msg == "The inventory is set OFFLINE. Please contact eVenue system administrator for further information"){
+				document.write(
+					'&lt;p class="error"&gt;Please wait while we update event information. This process only takes a few minutes.&lt;/p&gt;',
+					'&lt;img src="/evenue/linkID=metro/images/waitani.gif" onload="JavaScript:timedRefresh(30000);"&gt;'
+				);
+			} else {
+				document.write(
+					'&lt;p class="error"&gt;', error.msg, '&lt;/p&gt;',
+					'&lt;p&gt;If you want to try again, click &lt;a href="', error.url, '"&gt; here&lt;/a&gt;.&lt;/p&gt;'
+				);
+			}
+		}
+	//--&gt;
+               </script>
+              </div>
+              <!-- ==================================================
+	END MAIN CONTENT
+=================================================== -->
+             </td>
+            </tr>
+            <tr>
+             <td valign="bottom">
+              <div id="footer">
+               <div id="browserReq" style="display:none;">
+                <div align="center">
+                 <p align="left">
+                  <b>
+                   Browser Requirements
+                  </b>
+                  <br/>
+                  This site supports the current versions of the browsers listed below. Using older browsers, non-compatible browsers, or disabling browser features (such as Javascript, cookies and SSL), will reduce site functionality.
+                 </p>
+                 <p>
+                  To download a browser, click on one of the following icons.
+                  <br/>
+                  <br/>
+                  <a href="http://www.microsoft.com/windows/internet-explorer/" target="_blank">
+                   <img alt="Download Microsoft Internet Explorer" border="0" src="/evenue/linkID=metro/images/ie.png"/>
+                  </a>
+                  <a href="http://www.apple.com/safari/" target="_blank">
+                   <img alt="Download Safari" border="0" src="/evenue/linkID=metro/images/safari.png"/>
+                  </a>
+                  <a href="http://www.mozilla.com/en-US/firefox/" target="_blank">
+                   <img alt="Download Firefox" border="0" src="/evenue/linkID=metro/images/firefox.png"/>
+                  </a>
+                  <a href="https://www.google.com/chrome" target="_blank">
+                   <img alt="Download Chrome" border="0" src="/evenue/linkID=metro/images/chrome.png"/>
+                  </a>
+                 </p>
+                </div>
+               </div>
+               <img alt="Powered by Paciolan" border="0" height="25" src="/evenue/linkID=metro/images/paciolan-logo.gif" width="150"/>
+               <img height="25" src="/evenue/linkID=metro/images/metrotix_logo2.gif" width="100"/>
+               <br/>
+               <script type="text/javascript">
+                &lt;!--
+				if(typeof(secret)=="undefined") var secret = printCalendarLink("metro", '');
+				if (secret != "")
+					document.write('Copyright &lt;a href="', secret ,'" class="secret"&gt;&copy;&lt;/a&gt; 2001-');
+				else
+					document.write("Copyright &copy; 2001-");
+
+				document.write(todayDate.getFullYear());
+				document.write(", Paciolan, Inc.  All Rights Reserved.");
+			//--&gt;
+               </script>
+               <p class="buttonSet">
+                <script language="JavaScript">
+                 if(mobileURL!='') {
+						document.write('&lt;a href="', mobileURL ,'"&gt;View Mobile Site&lt;/a&gt;');
+					}
+                </script>
+                <a href="javascript:showBox(document.getElementById('browserReq').innerHTML, 'Browser Requirements', 600, 300);">
+                 Browser Requirements
+                </a>
+                <a href="javascript:void(0)" onclick="window.open('http://www.metrotix.com/faqs/privacy.php','mypopup', 'width=550,height=500,location=0,toolbar=0,scrollbars=1,screenx=200,screeny=200,left=200,top=200')">
+                 Privacy Policy
+                </a>
+                <br/>
+               </p>
+              </div>
+             </td>
+            </tr>
+           </table>
+           <img border="0" height="1" src="/evenue/linkID=metro/images/blank.gif" width="765"/>
+           <br/>
+          </td>
+         </tr>
+        </table>
+        <!-- end 780 table -->
+       </td>
+      </tr>
+     </table>
+     <!-- end 100% table -->
+     <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+       <td class="listhead">
+        <img border="0" height="5" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+       </td>
+      </tr>
+      <tr>
+       <td class="bottom">
+        <img border="0" height="5" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+       </td>
+      </tr>
+      <tr>
+       <td class="bottomlinks">
+        <a class="bottom" href="http://www.metrotix.com/faqs/about.php" target="_blank">
+         About MetroTix
+        </a>
+        |
+        <a class="bottom" href="http://www.metrotix.com/employment.php" target="_blank">
+         Employment
+        </a>
+        | Charge-By-Phone 314-534-1111  800-293-5949
+       </td>
+      </tr>
+      <tr>
+       <td class="bottom">
+        <img border="0" height="5" src="/evenue/linkID=metro/images/blank.gif" width="1"/>
+       </td>
+      </tr>
+     </table>
+     <!-- ------------------------------------------------------------
+	CUSTOM CODE - Google Analytics (uncomment this import to activate)
+	(Remember to update the account number in google_analytics.js)
+	(use evenueLinkTracker() function in google_analytics.js on links traveling to the original site)
+------------------------------------------------------------- -->
+     <script language="javascript" src="/evenue/linkID=metro/core/google_analytics.js">
+     </script>
+     <!-- ------------------------------------------------------------
+	END CUSTOM CODE - Google Analytics
+------------------------------------------------------------- -->
+     <!-- custom code - Facebook Tracking Code - 339220 -->
+     <script type="text/javascript">
+      var fb_param = {};
+fb_param.pixel_id = '6007947388482';
+fb_param.value = '0.00';
+(function(){
+var fpw = document.createElement('script');
+fpw.async = true;
+fpw.src = '//connect.facebook.net/en_US/fp.js';
+var ref = document.getElementsByTagName('script')[0];
+ref.parentNode.insertBefore(fpw, ref);
+})();
+     </script>
+     <!-- Request #119 (Social Labs/Facebook) -->
+     <script language="javascript" src="/evenue/linkID=metro/core/socialLabs.js">
+     </script>
+     <!-- END Request #119 (Social Labs/Facebook) -->
+    </td>
+   </tr>
+  </table>
+ </body>
+ <!-- ==================================================
+	END FOOTER
+=================================================== -->
+</html>

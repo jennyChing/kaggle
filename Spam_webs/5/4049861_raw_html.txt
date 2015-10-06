@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:addthis="http://www.addthis.com/help/api-spec" xmlns:fb="http://ogp.me/ns/fb#">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=1100" name="viewport" scheme=""/>
+  <meta content="Tcjl9wQk3soINMQie6D-9-K8lR7KS8s1GruZx0s2sgw" name="google-site-verification" scheme=""/>
+  <meta content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" name="SKYPE_TOOLBAR" scheme=""/>
+  <meta class="swiftype" content="blog" data-type="enum" name="type"/>
+  <title>
+   OutSystems Blog   Usability and The Great App: An Interview With Steve Krug
+  </title>
+  <link href="https://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://www.outsystems.com/blog/xmlrpc.php" rel="pingback"/>
+  <link charset="UTF-8" href="/CMS_BackOffice/ResourceLink.aspx?ResourceName=font-css.css&amp;v=2015-06-02 14:06:58" rel="stylesheet" type="text/css"/>
+  <link charset="UTF-8" href="/CMS_BackOffice/ResourceLink.aspx?ResourceName=bootstrapbase&amp;v=2015-06-02 14:06:58" rel="stylesheet" type="text/css"/>
+  <link charset="UTF-8" href="/CMS_BackOffice/ResourceLink.aspx?ResourceName=simplify-css.min.css&amp;v=2015-06-02 14:06:58" rel="stylesheet" type="text/css"/>
+  <link charset="UTF-8" href="/CMS_BackOffice/ResourceLink.aspx?ResourceName=simplify-header-css.min.css&amp;v=2015-06-02 14:06:58" rel="stylesheet" type="text/css"/>
+  <link charset="UTF-8" href="/CMS_BackOffice/ResourceLink.aspx?ResourceName=simplify-footer-css.min.css&amp;v=2015-06-02 14:06:58" rel="stylesheet" type="text/css"/>
+  <link href="http://www.outsystems.com/blog/wp-content/themes/outsystems-blog-theme/style.css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="//code.jquery.com/jquery-1.10.2.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /** dropdown menus **/
+var currentActive;
+
+function hideDropDown(_elem) {
+	$('.navigation-bar li.active').removeClass('active');
+	$('.navigation-bar li.company').addClass('active');
+	$('[data-dropdown-wrapper]').hide();
+}
+
+function toggleDropdowMenu(_elem) {
+	$('.navigation-bar li.active').removeClass('active');
+	$('[data-dropdown-wrapper]').hide();
+	$("[data-dropdown-wrapper='" + $(_elem).attr('data-name') + "']").toggle();
+
+	_elem.parent().addClass('active');
+	//currentActive.removeClass('active');
+	/*
+	if (_elem.parent().hasClass('active')) {
+		_elem.parent().removeClass('active');
+		currentActive.addClass('active');
+	} else {
+		_elem.parent().addClass('active');
+		currentActive.removeClass('active');
+	}
+	*/
+}
+$(document).ready(function() {
+	currentActive = $('.navigation-bar li.active');
+	$('[data-option=dropdown]').click(function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		clicked = $(this);
+
+		if ($("[data-dropdown-wrapper='" + $(clicked).attr('data-name') + "']").is(":visible")) {
+			hideDropDown(clicked);
+		} else {
+			toggleDropdowMenu(clicked);
+		}
+
+
+		$('[data-dropdown-wrapper]').click(function(event) {
+			event.stopPropagation();
+		});
+
+		$(document).on('click', function(e) {
+			hideDropDown(clicked);
+		});
+	});
+});
+  </script>
+  <script src="/blog/wp-content/themes/outsystems-blog-theme/js/masonry.pkgd.js" type="text/javascript">
+  </script>
+  <script src="/blog/wp-content/themes/outsystems-blog-theme/js/jquery.waitforimages.js" type="text/javascript">
+  </script>
+  <script src="//use.typekit.net/jlz7hji.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   try{Typekit.load();}catch(e){}
+  </script>
+  <!-- Google Tag Manager for WordPress by DuracellTomi - http://duracelltomi.com -->
+  <script type="text/javascript">
+   var gtm4wp_datalayer_name = "dataLayer";
+	var dataLayer = dataLayer || []
+  </script>
+  <!-- End Google Tag Manager for WordPress by DuracellTomi -->
+  <link href="http://feedpress.me/outsystems-blog" rel="alternate" title="OutSystems Blog  Feed" type="application/rss+xml"/>
+  <link href="http://feedpress.me/outsystems-blog" rel="alternate" title="OutSystems Blog  Comments Feed" type="application/rss+xml"/>
+  <link href="http://www.outsystems.com/blog/2013/05/usability-and-the-great-app-interview-with-steve-krug.html/feed" rel="alternate" title="OutSystems Blog  Usability and The Great App: An Interview With Steve Krug Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.outsystems.com\/blog\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://www.outsystems.com/blog/wp-content/plugins/swiftype-search/assets/autocomplete.css?ver=4.2.2" id="swiftype-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.outsystems.com/blog/wp-content/plugins/wp-lightbox-2/styles/lightbox.min.css?ver=1.3.4" id="wp-lightbox-2.min.css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.outsystems.com/blog/wp-content/plugins/jetpack/css/jetpack.css?ver=3.5.3" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <!-- This site uses the Google Analytics by Yoast plugin v5.4.2 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-164596-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+  </script>
+  <!-- / Google Analytics by Yoast -->
+  <script src="http://www.outsystems.com/blog/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://www.outsystems.com/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var swiftype_localize = {"all_results_text":"See all results"};
+var swiftypeParams = {"engineKey":"sXhsjhaFTKsmsntqLBaT"};
+/* ]]&gt; */
+  </script>
+  <script src="http://www.outsystems.com/blog/wp-content/plugins/swiftype-search/assets/install_swiftype.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.outsystems.com/blog/wp-content/plugins/duracelltomi-google-tag-manager/js/gtm4wp-form-move-tracker.js?ver=1.0" type="text/javascript">
+  </script>
+  <link href="http://www.outsystems.com/blog/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://www.outsystems.com/blog/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://www.outsystems.com/blog/2013/05/web-security-how-outsystems-protects-your-applications-and-data.html" rel="prev" title="Web Security: How OutSystems Protects Your Applications and Data"/>
+  <link href="http://www.outsystems.com/blog/2013/06/user-experience-the-new-it-imperative.html" rel="next" title="User Experience: The New IT Imperative?"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://www.outsystems.com/blog/2013/05/usability-and-the-great-app-interview-with-steve-krug.html" rel="canonical"/>
+  <link href="http://wp.me/p5IzYB-2T" rel="shortlink"/>
+  <script type="text/javascript">
+   var _kmq = _kmq || [];
+  var _kmk = _kmk || '6f097df4611690e30c38a45f336c5c3f07ed80b7';
+  function _kms(u){
+    setTimeout(function(){
+    var s = document.createElement('script'); var f = document.getElementsByTagName('script')[0]; s.type = 'text/javascript'; s.async = true;
+    s.src = u; f.parentNode.insertBefore(s, f);
+    }, 1);
+  }
+  _kms('//i.kissmetrics.com/i.js');_kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
+  _kmq.push(function() {
+    if(document.getElementsByTagName('body')[0].className.match('home')) {
+    	_kmq.push(['record', 'Viewed Blog Homepage']);
+    }
+  });
+
+_kmq.push(function() {
+		if(document.getElementsByTagName('body')[0].className.match('search-results')) {
+			try {
+				var query = KM.uprts(decodeURIComponent(window.location.href)).params.s;
+				_kmq.push(['record', 'Searched Site', {'WordPress Search Query': query}]);
+			} catch(e) {}
+		}
+	});
+  </script>
+  <script type="text/javascript">
+   document.write(unescape("%3Cscript src='//munchkin.marketo.net/munchkin.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   Munchkin.init("338-PNW-019");
+  </script>
+  <style type="text/css">
+   img#wpstats{display:none}
+  </style>
+  <style type="text/css">
+   .recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}
+  </style>
+  <!-- Google Tag Manager for WordPress by DuracellTomi -->
+  <script type="text/javascript">
+   dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["tech-zone"],"pageAttributes":["nextstep","steve-krug","usability","ux"],"pagePostAuthor":"Michel Ozzello"});
+  </script>
+  <link href="http://www.outsystems.com/blog/2015/06" rel="archives" title="June 2015"/>
+  <link href="http://www.outsystems.com/blog/2015/05" rel="archives" title="May 2015"/>
+  <link href="http://www.outsystems.com/blog/2015/04" rel="archives" title="April 2015"/>
+  <link href="http://www.outsystems.com/blog/2015/03" rel="archives" title="March 2015"/>
+  <link href="http://www.outsystems.com/blog/2015/02" rel="archives" title="February 2015"/>
+  <link href="http://www.outsystems.com/blog/2015/01" rel="archives" title="January 2015"/>
+  <link href="http://www.outsystems.com/blog/2014/12" rel="archives" title="December 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/11" rel="archives" title="November 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/10" rel="archives" title="October 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/09" rel="archives" title="September 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/08" rel="archives" title="August 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/06" rel="archives" title="June 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/04" rel="archives" title="April 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/03" rel="archives" title="March 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/02" rel="archives" title="February 2014"/>
+  <link href="http://www.outsystems.com/blog/2014/01" rel="archives" title="January 2014"/>
+  <link href="http://www.outsystems.com/blog/2013/12" rel="archives" title="December 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/11" rel="archives" title="November 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/10" rel="archives" title="October 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/09" rel="archives" title="September 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/08" rel="archives" title="August 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/07" rel="archives" title="July 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/06" rel="archives" title="June 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/05" rel="archives" title="May 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/04" rel="archives" title="April 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/03" rel="archives" title="March 2013"/>
+  <link href="http://www.outsystems.com/blog/2013/02" rel="archives" title="February 2013"/>
+  <link href="http://www.outsystems.com/blog/2012/10" rel="archives" title="October 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/08" rel="archives" title="August 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/07" rel="archives" title="July 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/06" rel="archives" title="June 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/05" rel="archives" title="May 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/03" rel="archives" title="March 2012"/>
+  <link href="http://www.outsystems.com/blog/2012/02" rel="archives" title="February 2012"/>
+  <link href="http://www.outsystems.com/blog/2011/12" rel="archives" title="December 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/11" rel="archives" title="November 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/09" rel="archives" title="September 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/08" rel="archives" title="August 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/07" rel="archives" title="July 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/06" rel="archives" title="June 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/05" rel="archives" title="May 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/04" rel="archives" title="April 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/03" rel="archives" title="March 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/02" rel="archives" title="February 2011"/>
+  <link href="http://www.outsystems.com/blog/2011/01" rel="archives" title="January 2011"/>
+  <link href="http://www.outsystems.com/blog/2010/12" rel="archives" title="December 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/11" rel="archives" title="November 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/10" rel="archives" title="October 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/09" rel="archives" title="September 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/08" rel="archives" title="August 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/07" rel="archives" title="July 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/06" rel="archives" title="June 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/05" rel="archives" title="May 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/04" rel="archives" title="April 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/03" rel="archives" title="March 2010"/>
+  <link href="http://www.outsystems.com/blog/2010/02" rel="archives" title="February 2010"/>
+  <link href="http://www.outsystems.com/blog/2009/12" rel="archives" title="December 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/11" rel="archives" title="November 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/10" rel="archives" title="October 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/09" rel="archives" title="September 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/08" rel="archives" title="August 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/07" rel="archives" title="July 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/06" rel="archives" title="June 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/05" rel="archives" title="May 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/04" rel="archives" title="April 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/03" rel="archives" title="March 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/02" rel="archives" title="February 2009"/>
+  <link href="http://www.outsystems.com/blog/2009/01" rel="archives" title="January 2009"/>
+  <link href="http://www.outsystems.com/blog/2008/12" rel="archives" title="December 2008"/>
+ </head>
+ <body>
+  <div data-swiftype-index="false" id="wrapper">
+   <div class="header-hero-wrapper home">
+    <div class="navigation-outter">
+     <div class="navigation-inner container">
+      <div class="row" id="wt11_wtheader">
+       <span data-locale="uk" data-swiftype-index="false" id="locale-aux" style="display:none">
+       </span>
+       <script src="//use.typekit.net/jlz7hji.js" type="text/javascript">
+       </script>
+       <script type="text/javascript">
+        try{Typekit.load();}catch(e){}
+       </script>
+       <a data-swiftype-index="false" href="#popup" id="wt11_wtheader_wt20_wt13_wtpopuplink" style="display:none;">
+        link
+       </a>
+       <!-- Google Tag Manager -->
+       <noscript>
+        <iframe height="0" src="//www.googletagmanager.com/ns.html?id=GTM-WF6BPG" style="display:none;visibility:hidden" width="0">
+        </iframe>
+       </noscript>
+       <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],  j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);  })(window,document,'script','dataLayer','GTM-WF6BPG');
+       </script>
+       <!-- End Google Tag Manager -->
+       <style>
+        .submenuhover{top: 80px;}.navigation-inner{position: inherit;}
+       </style>
+       <div data-swiftype-index="false" style="position: relative; z-index: 9999;height: 30px;text-align: right;direction:ltr;">
+        <style>
+         .header-hero-wrapper{padding-top: 0;}.navigation-inner{height: 80px;}.navigation-outter.navigation-wrapper{padding-top: 0px;}
+        </style>
+        <div class="secondary-menu">
+         <span class="header-contacts">
+          Call us at  404-719-5100
+         </span>
+         <a alt="Contact us" href="/blog/" id="wt11_wtheader_wt20_wt10" title="Contact us">
+          Blog
+         </a>
+         <a href="/company/contact-us/" id="wt11_wtheader_wt20_wt64">
+          Contacts
+         </a>
+        </div>
+        <div class="search_field">
+         <form action="" id="WebForm1" method="get" name="WebForm1">
+          <input class="search" maxlength="256" name="s" size="30" type="search"/>
+          <input class="button" name="" type="submit" value=" "/>
+         </form>
+        </div>
+        <a alt="Login" class="osbtn osbtn-gray header-login" href="https://www.outsystems.com/home/" id="wt11_wtheader_wt20_wt32" onclick="trackEvent('CS - Navigate To portal',null,null);setTimeout(function(){window.location.href='https://www.outsystems.com/home/login.aspx';},500);" title="Login">
+         Login
+        </a>
+       </div>
+       <div class="navigation-longtail" data-swiftype-index="false">
+        <div class="span1">
+        </div>
+        <div class="navigation-bar-section navigation-bar-tail-spacer">
+         <a href="/" id="wt11_wtheader_wt20_wt41">
+          <img alt="" class="navigation-bar-tail-logo" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=logo-outsystems_glow&amp;v=20150319175442"/>
+         </a>
+        </div>
+        <div class="navigation-items">
+         <ul class="navigation-bar">
+          <span id="wt11_wtheader_wt20_wt26_wtListSections">
+           <li class="platform">
+            <a data-name="platform" data-option="dropdown" href="/platform/" id="wt11_wtheader_wt20_wt26_wtListSections_ctl00_wt15">
+             <span class="">
+              How It Works
+             </span>
+            </a>
+           </li>
+           <li class="spacer">
+           </li>
+           <li class="solutions">
+            <a data-name="solutions" data-option="dropdown" href="/solutions/" id="wt11_wtheader_wt20_wt26_wtListSections_ctl02_wt15">
+             <span class="solutions">
+              Solutions
+             </span>
+            </a>
+           </li>
+           <li class="spacer">
+           </li>
+           <li class="customers">
+            <a data-name="customers" data-option="dropdown" href="/customers/" id="wt11_wtheader_wt20_wt26_wtListSections_ctl04_wt15">
+             <span class="customers">
+              Customers
+             </span>
+            </a>
+           </li>
+           <li class="spacer">
+           </li>
+           <li class="partners">
+            <a data-name="partners" data-option="dropdown" href="/partners/" id="wt11_wtheader_wt20_wt25_wtListSections_ctl06_wt15">
+             <span class="">
+              Partners
+             </span>
+            </a>
+           </li>
+           <li class="spacer">
+           </li>
+           <li class="company active">
+            <a data-name="company" data-option="dropdown" href="/company/" id="wt11_wtheader_wt20_wt26_wtListSections_ctl06_wt15">
+             <span class="company">
+              Company
+             </span>
+            </a>
+           </li>
+           <li class="spacer">
+           </li>
+           <li class="get-started">
+            <a class="osbtn osbtn-red" data-name="get-started" data-option="" href="/get-started/" id="wt11_wtheader_wt20_wt26_wtListSections_ctl08_wt15">
+             <span class="try-now">
+              Try now for free
+             </span>
+            </a>
+           </li>
+          </span>
+         </ul>
+         <div class="navigation-search-outter navigation-bar-section">
+         </div>
+        </div>
+        <span id="wt11_wtheader_wt20_wt26_wtListSubMenuHoveSections">
+         <div data-dropdown-wrapper="platform" data-swiftype-index="false">
+          <div class="magiccontainer">
+           <div class="submenuhover submenu-hover-sections">
+            <div class="container">
+             <div class="row">
+              <div class="span12 align-center submenuhoverbox" style="background-image:none;">
+               <div class="row">
+                <h2 style="margin-bottom: 10px;">
+                 Rapid Application Delivery Platform
+                </h2>
+                <h5 style="margin-bottom: 25px;">
+                 One codebase. All devices. No lock-in.
+                </h5>
+                <div class="span4" style="">
+                 <div style="position: absolute;margin-left: -15px;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent">
+                  <h6 class="submenuhoverbox-contentheading">
+                   WhyOutSystems?
+                  </h6>
+                  <ul class="list" style="list-style-type: none; font-size:16px">
+                   <li>
+                    <span class="osicon-tablet">
+                    </span>
+                    <a href="/platform/madp/">
+                     Develop once for all devices
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-cogs">
+                    </span>
+                    <a href="/platform/integrate-everything/">
+                     Easily integrate existing systems
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-dashboard">
+                    </span>
+                    <a href="/platform/iterate-rapidly/">
+                     Rapid delivery, effortless change
+                    </a>
+                   </li>
+                  </ul>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style="position: absolute; margin-left: -15px; height: 160px;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" ">
+                  <h6 class="submenuhoverbox-contentheading">
+                   OutSystems Platform
+                  </h6>
+                  <ul class="list" style="list-style-type: none; font-size:16px">
+                   <li>
+                    <a href="/platform/">
+                     Overview
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/apps/">
+                     Pre-builtApps
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/pricing-and-licensing/">
+                     Pricing
+                    </a>
+                   </li>
+                  </ul>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style="position: absolute;margin-left: -15px;height: 160px;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" ">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Platform Demo
+                  </h6>
+                  <a class="popup_link" href="/platform/build-applications-demo/" onclick="hideDropDown()">
+                   <img src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=top-nav-video-thumb&amp;v=20150213144119"/>
+                  </a>
+                  <br/>
+                  <br/>
+                  or
+                  <a href="/1/outsystems-platform-demo/" target="_blank">
+                   join us for a live demo
+                  </a>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div data-dropdown-wrapper="solutions" data-swiftype-index="false">
+          <style type="text/css">
+           body.landing-no-top {        }   @media screen and (max-width: 767px) {     .header-hero-wrapper {              }   }
+          </style>
+          <div class="magiccontainer">
+           <div class="submenuhover" id="submenu-solutions">
+            <div class="container">
+             <div class="row">
+              <div class="span12 align-center submenuhoverbox">
+               <div class="row">
+                <div class="span4">
+                 <div class="submenuhoverbox-firstcontent" style="margin-left:100px">
+                  <h1>
+                   Solutions
+                  </h1>
+                  <h5>
+                   Hundreds of companies
+                   <br/>
+                   in 22 industries use
+                   <br/>
+                   OutSystems Platform to
+                   <br/>
+                   deliver innovative
+                   <br/>
+                   business solutions.
+                  </h5>
+                 </div>
+                </div>
+                <div class="span4" style="">
+                 <div class="submenuhoverbox-line" style=" position: absolute; margin-left: -15px; ">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent">
+                  <h6 class="submenuhoverbox-contentheading">
+                   See what our customers have built in industries like:
+                  </h6>
+                  <ul class="list" style="list-style-type: none; font-size:16px">
+                   <li>
+                    <span class="osicon-home-banking" style="color: #808080;">
+                    </span>
+                    <a href="/solutions/banking/">
+                     Banking
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-insurance" style="color: #808080;">
+                    </span>
+                    <a href="/solutions/insurance/">
+                     Insurance
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-healthcare" style="color: #808080;">
+                    </span>
+                    <a href="/solutions/healthcare/">
+                     Healthcare
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-science" style="color: #808080;">
+                    </span>
+                    <a href="/solutions/pharmaceutical-and-biotech/">
+                     Pharma &amp; Biotech
+                    </a>
+                   </li>
+                   <li>
+                    <span class="osicon-transportation" style="color: #808080;">
+                    </span>
+                    <a href="/solutions/retail/">
+                     Retail &amp; Consumer Goods
+                    </a>
+                   </li>
+                   <li style="margin-top: 16px; padding-left: 28px;">
+                    <a href="/solutions/all-industries/" style="display: block;">
+                     All industries 
+                    </a>
+                   </li>
+                  </ul>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style=" position: absolute; margin-left: -15px; ">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" ">
+                  <h6 class="submenuhoverbox-contentheading">
+                   <span style="color: rgb(128, 128, 128); font-family: myriad-pro, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; line-height: 22px; background-color: rgb(255, 255, 255);">
+                    Kick-start your next app project with our sample apps
+                   </span>
+                   :
+                  </h6>
+                  <ul class="innovationlist" style="font-size:16px; color:#808080;">
+                   <li>
+                    <a href="/apps/field-services-app/">
+                     Field Services
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/apps/mobile-order-management-app/">
+                     Mobile Order Management
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/apps/executive-dashboard-app/">
+                     Executive Dashboard
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/apps/customer-portal-app/">
+                     Customer Portal
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/apps/accident-reporting-app/">
+                     Car Accident Reporting
+                    </a>
+                   </li>
+                   <li style="margin-top: 16px;  list-style-type: none; ">
+                    <a href="/apps/" style="display: block;">
+                     More apps 
+                    </a>
+                   </li>
+                  </ul>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div data-dropdown-wrapper="customers" data-swiftype-index="false">
+          <div class="magiccontainer">
+           <div class="submenuhover submenu-hover-sections" id="submenu-customers">
+            <div class="container">
+             <div class="row">
+              <div class="span12 align-center submenuhoverbox">
+               <div class="row">
+                <div class="span4" style="">
+                 <div class="submenuhoverbox-secondcontent">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Customers
+                  </h6>
+                  <div style="padding: 0 0 10px 0px;">
+                   <a href="/customers/">
+                    <img src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=mega-menu-customers&amp;v=20150326173243" style="margin-top: -16px; margin-bottom: -6px;"/>
+                   </a>
+                  </div>
+                  <div style="text-align: center; padding: 3px 0 0 0; font-size: 16px;">
+                   <a href="/customers/" style="display: block;">
+                    See all customers 
+                   </a>
+                  </div>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style="position: absolute; margin-left: -15px;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" margin-left: 25px;">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Case Studies
+                  </h6>
+                  <div class="customers-case-study-preview" style=" padding: 18px 11px;height: auto;">
+                   <a href="/case-studies/fico/origination-manager-application/" title="Read Case Study">
+                    <img alt="FICO" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=logo-card&amp;v=20150326173243" style="width: 81px; height: 23px;"/>
+                   </a>
+                   <p style="margin: 18px 11px; text-align: lef; font-size: 16px; line-height: 18px;">
+                    <a href="/case-studies/fico/origination-manager-application/" style="color: #333333;" title="Read Case Study">
+                     "We reduced our development hours by 75% and got to market 3x faster using OutSystems.
+                    </a>
+                   </p>
+                  </div>
+                  <p style=" font-size: 16px; margin-top: 11px; text-align: center;">
+                   <a href="/case-studies/all-case-studies/">
+                    See all case studies 
+                   </a>
+                  </p>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style=" position: absolute; margin-left: -15px; border-right-width: 0;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" margin-left: 25px;">
+                  <div class="customers-case-study-preview" style=" padding: 18px 11px;height: auto; margin-top: 41px;">
+                   <a href="/case-studies/livanta/medicare-appeals-management-app/" title="Read Case Study">
+                    <img src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=innovation-award-winner&amp;v=20150326173243" style=" display: block; height: 92px; position: absolute; top: -45px; right: 0;"/>
+                    <img alt="Livanta" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=livanta-logo&amp;v=20150326165822" style="height: 23px;margin-left: 10px;"/>
+                   </a>
+                   <p style=" margin: 18px 11px; text-align: lef; font-size: 16px; line-height: 18px;">
+                    <a href="/case-studies/livanta/medicare-appeals-management-app/" style="color: #333333;" title="Read Case Study">
+                     "The average lifetime of an appeal has been reduced from seven to three days."
+                    </a>
+                   </p>
+                  </div>
+                  <p style=" font-size: 16px; margin-top: 11px; text-align: center;">
+                   <a href="/customers/innovation-awards/">
+                    See innovation award winners 
+                   </a>
+                  </p>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div data-dropdown-wrapper="partners" data-swiftype-index="false">
+          <style type="text/css">
+           .ImplementationPartnersMegaMenu img {     width: 89px;   }   span.Partner-matrix {     margin: 0 0 3px 5px;     border: 1px solid #F4F4F4;     margin-left: 2px;     margin-bottom: 2px;   }   .PartnersMegaMenu img {     width: 125px;     padding-bottom: 6px;     margin-left: 50px;   }
+          </style>
+          <div class="magiccontainer">
+           <div class="submenuhover submenu-hover-sections" id="submenu-partners">
+            <div class="container">
+             <div class="row">
+              <div class="span12 align-center submenuhoverbox">
+               <div class="row">
+                <div class="span8" style="">
+                 <div class="row">
+                  <div class="span4" style="">
+                   <div class="submenuhoverbox-secondcontent ImplementationPartnersMegaMenu" style=" ">
+                    <h6 class="submenuhoverbox-contentheading">
+                     Implementation Partners
+                    </h6>
+                    <a href="/partners/" style="text-decoration: none; display: block;padding: 0px 0px 10px 35px;">
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="atos" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=atosmegamenu&amp;v=20150515123914"/>
+                     </span>
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="atc" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=atcmegamenu&amp;v=20150515123914"/>
+                     </span>
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="cgi" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=cgimegamenu&amp;v=20150515123914"/>
+                     </span>
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="optra" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=optramegamenu&amp;v=20150515123914" style=" "/>
+                     </span>
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="hp" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=hpmegamenu&amp;v=20150515123914"/>
+                     </span>
+                     <span class="Partner-matrix" style="display: inline-block;">
+                      <img alt="kpmg" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=kpmgmegamenu&amp;v=20150515123914"/>
+                     </span>
+                    </a>
+                    <div style="text-align: center; padding: 7px 0 0 0; font-size: 16px;">
+                     <a href="/partners/" style="display: block;">
+                      See all partners 
+                     </a>
+                    </div>
+                   </div>
+                  </div>
+                  <div class="span4" style="">
+                   <div class="submenuhoverbox-secondcontent">
+                    <h6 class="submenuhoverbox-contentheading">
+                     Why Become a Partner?
+                    </h6>
+                    <div class="customers-case-study-preview" style="padding: 7px 14px;  height: auto;">
+                     <img src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=isb_global_cores&amp;v=20150515123914" style="width: 130px; /* height: 23px; */"/>
+                     <p style="margin: 5px 11px; text-align: lef; font-size: 16px; line-height: 18px;">
+                      <a href="/case-studies/isb-global/sap-mobile-application/" style="color: #333333;" title="Read Case Study">
+                       "OutSystems Platform is a key component of our product development roadmap and its capabilities enable us to build and deliver functionalities to meet our customer's requirement and timelines"
+                      </a>
+                     </p>
+                    </div>
+                    <div style="text-align: center; padding: 15px 0 0 0; font-size: 16px;">
+                     <a href="/partners/become-a-partner/" style="display: block;">
+                      Become a Partner 
+                     </a>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style="position: absolute; margin-left: -15px;">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent PartnersMegaMenu" style=" margin-left: 25px;">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Technical Partners
+                  </h6>
+                  <div style="padding: 0 0 10px 0px;">
+                   <span style="display: block;">
+                    <a href="http://global.sap.com/community/ebook/2013_09_adpd/enEN/search.html#search=outsystems&amp;recordid=3832" target="_blank">
+                     <img alt="SAP" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=sap&amp;v=20150515123914"/>
+                    </a>
+                   </span>
+                   <span style="display: block;">
+                    <a href="https://solutions.oracle.com/scwar/scr/Partner/SCPP-OUTSYSTEMS.html" target="_blank">
+                     <img alt="oracle" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=oracle&amp;v=20150515123914"/>
+                    </a>
+                   </span>
+                   <span style="display: block;">
+                    <a href="http://pinpoint.microsoft.com/en-CY/partners/OutSystems-4295535901" target="_blank">
+                     <img alt="microsoft" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=microsoft-partner&amp;v=20150515123914"/>
+                    </a>
+                   </span>
+                   <span style="display: inline-block;">
+                    <a href="http://www.aws-partner-directory.com/PartnerDirectory/PartnerDetail?Name=OutSystems" target="_blank">
+                     <img alt="amazon" src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=amazon-web-services&amp;v=20150515123914"/>
+                    </a>
+                   </span>
+                   <a href="/partners/">
+                   </a>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div data-dropdown-wrapper="company" data-swiftype-index="false">
+          <div class="magiccontainer">
+           <div class="submenuhover submenu-hover-sections" id="submenu-about-us">
+            <div class="container">
+             <div class="row">
+              <div class="span12 align-center submenuhoverbox">
+               <div class="row">
+                <div class="span4">
+                 <div class="submenuhoverbox-secondcontent" style="margin-left:70px">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Company
+                  </h6>
+                  <ul class="list" style="list-style-type: none; font-size:16px">
+                   <li>
+                    <a href="/company/about/">
+                     About Us
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/company/contact-us/" target="_blank">
+                     Offices Worldwide
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/company/investors/" target="_blank">
+                     Management Team
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/company/investors/" target="_blank">
+                     Investors
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/company/news/" target="_blank">
+                     News
+                    </a>
+                   </li>
+                   <li>
+                    <a href="/company/careers/" target="_blank">
+                     Careers
+                    </a>
+                   </li>
+                  </ul>
+                 </div>
+                </div>
+                <div class="span4" style="">
+                 <div class="submenuhoverbox-line" style=" position: absolute; margin-left: -15px; ">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Culture
+                  </h6>
+                  <div style="padding-left: 30px;">
+                   <p>
+                    <img alt="Small Book of the Few Big Rules" src="http://outsystems.com/CMS_BackOffice/ResourceLink.aspx?ResourceName=Small-Book-of-the-Few-Big-Rules-small&amp;v=20150326165736" style="width: 184px; height: 136px;"/>
+                   </p>
+                   <p style="text-align:center; margin-top:-12px;">
+                    <a href="/the-small-book/" target="_blank">
+                     Download your copy of
+                     <br/>
+                     The Small Book of the Few Big Rules
+                    </a>
+                   </p>
+                  </div>
+                 </div>
+                </div>
+                <div class="span4">
+                 <div class="submenuhoverbox-line" style=" position: absolute; margin-left: -15px; ">
+                 </div>
+                 <div class="submenuhoverbox-secondcontent" style=" ">
+                  <h6 class="submenuhoverbox-contentheading">
+                   Blog
+                  </h6>
+                  <ul class="list" style="list-style-type: none;font-size: 16px;width: 237px;">
+                   <li>
+                    <a href="http://www.outsystems.com/blog/2015/03/visual-programming-is-unbelievable.html" target="_blank">
+                     Visual Programming Is Unbelievable Heres Why We Dont Believe In It
+                    </a>
+                    <p style="font-size: 14px;margin-top: 10px;">
+                     By Tiago Simes on March 25, 2015
+                    </p>
+                   </li>
+                  </ul>
+                  <div class="pt" id="footer-mid">
+                   <ul class="social-icons">
+                    <li>
+                     <a class="twitter" href="https://twitter.com/OutSystems" target="_blank">
+                      Twitter
+                     </a>
+                    </li>
+                    <li>
+                     <a class="facebook" href="https://www.facebook.com/OutSystems" target="_blank">
+                      Facebook
+                     </a>
+                    </li>
+                    <li>
+                     <a class="google" href="https://plus.google.com/+outsystems" target="_blank">
+                      G+
+                     </a>
+                    </li>
+                    <li>
+                     <a class="linkedin" href="http://www.linkedin.com/company/outsystems" target="_blank">
+                      linkedin
+                     </a>
+                    </li>
+                   </ul>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </span>
+        <div class="navigation-longtail-end">
+        </div>
+       </div>
+       <style type="text/css">
+        .sub-navigation-bar li a {     margin-left: 26px; }
+       </style>
+       <div class="second-level-menu-wrapper">
+        <div class="container">
+         <div class="row">
+          <div class="span3">
+           <span class="title">
+            <span>
+             Company
+            </span>
+           </span>
+          </div>
+          <div class="span9">
+           <ul class="sub-navigation-bar company-menu">
+            <li class="overview">
+             <a href="/company/about/">
+              <span>
+               Overview
+              </span>
+             </a>
+            </li>
+            <li class="events">
+             <a href="/company/events/">
+              <span>
+               Events
+              </span>
+             </a>
+            </li>
+            <li class="news">
+             <a href="/company/news/">
+              <span>
+               News
+              </span>
+             </a>
+            </li>
+            <li class="management-team">
+             <a href="/company/management-team/">
+              <span>
+               Management Team
+              </span>
+             </a>
+            </li>
+            <li class="careers">
+             <a href="/company/careers/">
+              <span>
+               Careers
+              </span>
+             </a>
+            </li>
+            <li class="analysts">
+             <a href="/company/analysts/">
+              <span>
+               Analysts
+              </span>
+             </a>
+            </li>
+            <li class="investors">
+             <a href="/company/investors/">
+              <span>
+               Investors
+              </span>
+             </a>
+            </li>
+            <li class="active">
+             <a href="/blog/">
+              <span>
+               Blog
+              </span>
+             </a>
+            </li>
+            <li class="contact-us">
+             <a href="/company/contact-us/">
+              <span>
+               Offices and Support
+              </span>
+             </a>
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+       <script>
+        osjs(function() {       if (osjs('.navigation-outter.navigation-wrapper')[0]){          osjs('.navigation-outter.navigation-wrapper').addClass('header-hero-wrapper page-company');       }else{          osjs('.header-hero-wrapper.page-without-hero').addClass('page-company');           osjs('.header-hero-wrapper.case-studies-category').addClass('page-company');       }  });
+       </script>
+       <!--[if IE 7]&gt;      &lt;style&gt;          .navigation-longtail-end{              display: none;          }          .navigation-items{              width: 630px;          }          .navigation-longtail{              width: 1100px;          }        &lt;/style&gt;  &lt;![endif]-->
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="container">
+   <div class="category">
+    <a href="http://www.outsystems.com/blog">
+     OutSystems Blog
+    </a>
+    
+    <a href="http://www.outsystems.com/blog/category/tech-zone">
+     Tech Zone
+    </a>
+   </div>
+   <div class="row">
+    <div class="leftbar span8">
+     <div class="fullpost">
+      <h2>
+       Usability and The Great App: An Interview With Steve Krug
+      </h2>
+      <p class="postmetadata byline">
+       By
+       <a href="http://www.outsystems.com/blog/author/mozzello" rel="author" title="Posts by Michel Ozzello">
+        Michel Ozzello
+       </a>
+       on May 17, 2013
+      </p>
+      <div class="postcontent">
+       <p>
+        This year our
+        <a href="http://www.outsystems.com/nextstep/" id="link_55a56bf2a91c7" target="_blank">
+         NextStep user conference
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a91c7","Article link clicked",{"Title":"NextStep user conference","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+        was all about creating great user experiences on enterprise web and mobileapplications, and we were pleased to host usability guru Steve Krug to the speaker line-up as keynote.
+       </p>
+       <p style="text-align: left;">
+        Over several days Steve spoke and led workshops for hundreds of participants.
+       </p>
+       <p>
+        <span id="more-179">
+        </span>
+        <img alt="UXforIT.jpg" class="alignright" height="166" src="https://www.outsystems.com/blog/wp-content/uploads/2013/05/UXforIT11.jpg" style="text-align: center;" width="167"/>
+       </p>
+       <p style="text-align: left;">
+        Steve is perhaps best known as the author of
+        <a href="http://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758/ref=sr_1_1?ie=UTF8&amp;qid=1366985423&amp;sr=8-1&amp;keywords=Don%27t+Make+Me+Think%3A+A+Common+Sense+Approach+to+Web+Usability." id="link_55a56bf2a92e7" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758/ref=sr_1_1?ie=UTF8&amp;qid=1366985423&amp;sr=8-1&amp;keywords=Don%27t+Make+Me+Think%3A+A+Common+Sense+Approach+to+Web+Usability.', 'Dont Make Me Think: A Common Sense Approach to Web Usability.']);" target="_blank">
+         Dont Make Me Think: A Common Sense Approach to Web Usability.
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a92e7","Article link clicked",{"Title":"Don&#8217;t Make Me Think: A Common Sense Approach to Web Usability.","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+        This book has more than 350,000 copies in print and is in its second edition. His latest book is the usability testing handbook,
+        <a href="http://www.amazon.com/Rocket-Surgery-Made-Easy-Do-It-Yourself/dp/0321657292/ref=pd_bxgy_b_img_y" id="link_55a56bf2a93ff" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.amazon.com/Rocket-Surgery-Made-Easy-Do-It-Yourself/dp/0321657292/ref=pd_bxgy_b_img_y', 'Rocket Surgery Made Easy: The Do-It-Yourself Guide to Finding and Fixing Usability Problems.']);" target="_blank">
+         Rocket Surgery Made Easy: The Do-It-Yourself Guide to Finding and Fixing Usability Problems.
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a93ff","Article link clicked",{"Title":"Rocket Surgery Made Easy: The Do-It-Yourself Guide to Finding and Fixing Usability Problems.","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+       </p>
+       <p>
+        Both books are based on the 20-plus years Steve has spent as a usability consultant for a wide variety of clients, including Apple, Bloomberg.com, Lexus.com, NPR, the International Monetary Fund, and others. His consulting firm,
+        <a href="http://www.sensible.com/" id="link_55a56bf2a950c" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sensible.com/', 'Advanced Common Sense']);" target="_blank">
+         Advanced Common Sense
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a950c","Article link clicked",{"Title":"Advanced Common Sense","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+        (just me and a few well-placed mirrors), is based in Chestnut Hill, MA. Steve spends most of his time teaching usability workshops, consulting, and watching old episodes of Law and Order.
+       </p>
+       <p>
+        During the conference we had an opportunity to sit down with Steve to discuss industry trends and such. The following are some highlights from that discussion:
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b style="line-height: 1.62;">
+          Michel Ozzello:
+         </b>
+        </span>
+        <strong>
+         <em>
+          <span style="line-height: 1.62;">
+           What are a couple of things every technology company can do to make usability more central to their development  and if they are not already doing that, why do you think that is the case?
+          </span>
+         </em>
+        </strong>
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b>
+          Steve Krug:
+         </b>
+        </span>
+        I think there are basically two routes to boosting the amount of commitment to usability. Either (a) get a powerful advocate somewhere very close to the top of the corporate ladder who decides that usability is going to be part of everyones job
+        <i>
+         and
+        </i>
+        allocates the time and budget to make it happen, or (b) start small and grow virally. The second case is the one that interests me the most, because its the one that almost anyone who believes in the value of usability can have a hand in. (You can always
+        <i>
+         try
+        </i>
+        to convince management to drink the user experience Kool-Aid, but I think its usually something they have to discover on their own.)
+       </p>
+       <p>
+        I have to admit that Im one of those guys who own a hammer so everything looks like a nail to me: I think that the best way to infect an organization with the UX bug is by getting as many people as possible to watch some live usability tests  even one or two.
+       </p>
+       <p>
+        A lot of the people I know who run usability tests for a living talk about it as a conversion experience: people watching their first usability tests often just suddenly get it that (a) regardless of what they thought before, all users are
+        <i>
+         not
+        </i>
+        like them, and (b) people have a much harder time figuring out how to use things than we like to think (i.e., they spend a lot of time just muddling through). So all of a sudden, it becomes clear that to produce something that people will enjoy using (and something that doesnt generate tons of frustration and support calls), we have to invest a lot more care, thought, and testing into the design of the things we build.
+       </p>
+       <p>
+        Why do I think most companies still dont pay enough attention to creating good user experience? I guess there have always been a lot of reasons. For instance, historically youve always been much more likely to get fired for shipping a product thats buggy or lacking crucial features than one that frustrates people. And UX research (e.g. usability testing) always had a reputation for being expensive and potentially slowing down development, although I think thats changing as people realize that lighter weight guerilla methods can be just as effective. Also, usability is a relatively new concept for a lot of people, so its never been an indispensable line-item in development budgets. Who knows? Maybe itll achieve that status in the next few yearsmostly thanks to the influence of Apple.
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b>
+          MOZ:
+         </b>
+        </span>
+        <em>
+         <strong>
+          How do you see the discipline of Usability trending in the next few years? What is going to matter?
+         </strong>
+        </em>
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b>
+          KRUG:
+         </b>
+        </span>
+        I thinkor at least I hopethat its going to become much less of a thing that only specialists do and more something that
+        <i>
+         everyone
+        </i>
+        does. For instance, I think that any degree program for developers or designers should include a course in user experience (I think most people could learn what they need to know in a semester). Not that there wont be plenty of work for specialists, just that theyll be doing more advanced work, coming up with new interaction ideas, and teaching everyone else.
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b style="line-height: 1.62;">
+          MOZ:
+         </b>
+        </span>
+        <em>
+         <strong>
+          <span style="line-height: 1.62;">
+           Tell us about
+          </span>
+          Rocket Surgery Made Easy
+          <span style="line-height: 1.62;">
+           . Is a handbook for usability testing important today? At this point in the evolution of the web, do you find that people are still getting usability wrong?
+          </span>
+         </strong>
+        </em>
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b>
+          KRUG:
+         </b>
+        </span>
+        Well, were back to me and my hammer again: I think that everyone whos building something that people interact with should be doing some form of usability testing, whether its bringing in a few people once a month or just doing frequent hallway tests where you grab somebody for a few minutes and ask them to try using whatever youre working on at the moment. I mainly wrote
+        <i>
+         Rocket Surgery
+        </i>
+        for people who want to do some usability testing even though its not their real job. So I spelled out a complete formula for how to do testing thats quick and efficient, but still almost always produces more valuable design insights than you can use.
+       </p>
+       <p>
+        And its not so much that people are getting usability
+        <i>
+         wrong
+        </i>
+        ; its more that its almost impossible to get all of usability
+        <i>
+         right,
+        </i>
+        at least on the first try. Its really hard, and with possible exception of the occasional genius designer (one of those unicorns people are always trying to recruit, like designers who code and developers who design), nobody can get it completely right without doing some usability testing.
+       </p>
+       <p style="text-align: center;">
+        <img alt="detail.png" class="mt-image-center aligncenter" height="217" src="https://www.outsystems.com/blog/wp-content/uploads/2013/05/detail2.png" style="text-align: center; display: block; margin-top: 0px; margin-bottom: 20px;" width="100%"/>
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b style="line-height: 1.62;">
+          MOZ:
+         </b>
+        </span>
+        <strong>
+         <em>
+          <span style="line-height: 1.62;">
+           What have been some of your takeaways from the OutSystems conference?
+          </span>
+         </em>
+        </strong>
+       </p>
+       <p>
+        <span style="color: #808080;">
+         <b>
+          KRUG:
+         </b>
+        </span>
+        To name just a few:
+       </p>
+       <ul>
+        <li>
+         People in Lisbon are really nice and smart. I already knew this from a previous visit, but it was fun to learn it all over again.
+        </li>
+        <li>
+         <span style="font-size: 13px; line-height: 19px;">
+          I never realized that almost all the developers coding enterprise applications have to do their own design work.
+         </span>
+        </li>
+        <li>
+         <span style="font-size: 13px; line-height: 19px;">
+          I didnt know there was a company out there that took my books as seriously as the folks at OutSystems. It was really gratifying to see what can happen when an organization makes usability a top priority.
+         </span>
+        </li>
+        <li>
+         <span style="font-size: 13px; line-height: 19px;">
+          I loved some of the usability features they cooked into Platform 8. My favorite is probably the way they found to automate optimal vertical spacing in designs. I started out as a typesetter originally, so vertical spacing (or leading) has always been an obsession for me, and I know just how much of a difference it can make for readers/users, and how hard it can be for even designers to get right. So I was really tickled to see that theyd come up with a feature that just does the right thing, without the person building the app having to think about it at all. Honestly, I was blown away by it.
+         </span>
+        </li>
+        <li>
+         <span style="line-height: 1.62;">
+          Also, some folks at OutSystems put together an excellent PDF called 
+         </span>
+         <a href="http://www.outsystems.com/ux-for-it/" id="link_55a56bf2a961d" style="line-height: 1.62;" target="_blank">
+          11 Usability Rules for IT Developers
+         </a>
+         <script>
+          _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a961d","Article link clicked",{"Title":"11 Usability Rules for IT Developers","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+         </script>
+         <span style="line-height: 1.62;">
+           that has some of the best basic usability advice Ive ever seen.
+         </span>
+        </li>
+       </ul>
+       <p>
+        <a href="http://www.outsystems.com/nextstep/2013/one-more-thing--usability/" id="link_55a56bf2a9726" target="_blank">
+         Visit our conference site
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a9726","Article link clicked",{"Title":"Visit our conference site","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+        to watch Steve deliver his presentation to attendees, and check out this real-time, hand-illustrated infographic from our event last week. Our
+        <a href="http://www.outsystems.com/ux-for-it/" id="link_55a56bf2a982c" target="_blank">
+         UX-for-IT tool kit
+        </a>
+        <script>
+         _kmq.push(["trackClickOnOutboundLink","link_55a56bf2a982c","Article link clicked",{"Title":"UX-for-IT tool kit","Page":"Usability and The Great App: An Interview With Steve Krug"}]);
+        </script>
+        is also available for all developers interested in learning more about usability and UX basics.
+       </p>
+       <p>
+        <img alt="compo.jpg" class="mt-image-center" height="480" src="https://www.outsystems.com/blog/wp-content/uploads/2013/05/compo2.jpg" style="text-align: center; display: block; margin: 0 auto 20px;" width="450"/>
+       </p>
+       <script>
+        _kmq.push(["record","Viewed post",{"ID":179,"Title":"Usability and The Great App: An Interview With Steve Krug","Categories":["Tech Zone"]}]);
+       </script>
+      </div>
+      <div class="tags">
+       <i>
+       </i>
+       <a href="http://www.outsystems.com/blog/tag/nextstep" rel="tag">
+        Nextstep
+       </a>
+       <a href="http://www.outsystems.com/blog/tag/steve-krug" rel="tag">
+        steve krug
+       </a>
+       <a href="http://www.outsystems.com/blog/tag/usability" rel="tag">
+        usability
+       </a>
+       <a href="http://www.outsystems.com/blog/tag/ux" rel="tag">
+        ux
+       </a>
+      </div>
+      <div class="author_info">
+       <div class="author_photo">
+        <style>
+         .author_photo { 
+									background-image	: url("http://www.outsystems.com/blog/wp-content/uploads/userphoto/51.thumbnail.png"); 
+								}
+        </style>
+       </div>
+       <div class="author_data">
+        <div class="author_about">
+         About the author
+        </div>
+        <div class="author_name">
+         <h4>
+          Michel Ozzello
+         </h4>
+        </div>
+        <div class="author_bio">
+         Although he's been working in Marketing for the past decade or so, Michel is still a geeky Software Engineer at heart. He tries to fit technology in every bit of marketing activity he does - from SEO to websites and digital advertising.
+        </div>
+        <p class="twitter clear" style="margin-top: 10px;">
+         <a class="twitter-follow-button" data-show-count="false" href="https://twitter.com/@mozzello">
+          Follow @@mozzello
+         </a>
+         <script>
+          !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+         </script>
+        </p>
+       </div>
+       <div style="clear:both">
+       </div>
+      </div>
+     </div>
+     <div class="comments-template">
+      <div id="comments">
+       <div class="comment-respond" id="respond">
+        <h3 class="comment-reply-title" id="reply-title">
+         Leave Your Comment
+         <small>
+          <a href="/blog/2013/05/usability-and-the-great-app-interview-with-steve-krug.html#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+           Cancel reply
+          </a>
+         </small>
+        </h3>
+        <form action="http://www.outsystems.com/blog/wp-comments-post.php" class="comment-form" id="commentform" method="post">
+         <div class="comment-form-author">
+          <div class="formlabel">
+           <label for="author">
+            Name
+           </label>
+          </div>
+          <div class="forminput">
+           <input id="author" name="author" size="30" type="text" value=""/>
+          </div>
+         </div>
+         <div class="comment-form-email">
+          <div class="formlabel">
+           <label for="email">
+            E-mail
+           </label>
+          </div>
+          <div class="forminput">
+           <input id="email" name="email" size="30" type="text" value=""/>
+          </div>
+         </div>
+         <div class="comment-form-url">
+          <div class="formlabel">
+           <label for="url">
+            URL
+           </label>
+          </div>
+          <div class="forminput">
+           <input id="url" name="url" size="30" type="text" value=""/>
+          </div>
+         </div>
+         <div class="comment-form-comment">
+          <div class="formlabel">
+           <label for="comment">
+            Comment
+           </label>
+          </div>
+          <div class="forminput">
+           <textarea aria-required="true" cols="45" id="comment" name="comment" rows="8">
+           </textarea>
+          </div>
+         </div>
+         <p class="form-submit">
+          <input class="submit" id="submit" name="submit" type="submit" value="Submit"/>
+          <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="179"/>
+          <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+         </p>
+         <p style="display: none;">
+          <input id="akismet_comment_nonce" name="akismet_comment_nonce" type="hidden" value="dffb72b5ba"/>
+         </p>
+         <p class="antispam-group antispam-group-q" style="clear: both;">
+          <label>
+           Current ye@r
+           <span class="required">
+            *
+           </span>
+          </label>
+          <input class="antispam-control antispam-control-a" name="antspm-a" type="hidden" value="2015"/>
+          <input class="antispam-control antispam-control-q" name="antspm-q" type="text" value="3.5"/>
+         </p>
+         <p class="antispam-group antispam-group-e" style="display: none;">
+          <label>
+           Leave this field empty
+          </label>
+          <input class="antispam-control antispam-control-e" name="antspm-e-email-url-website" type="text" value=""/>
+         </p>
+         <script type="text/javascript">
+          _kmq.push(function() {
+  		var commented = function() {
+	  			_kmq.push(['identify', document.getElementById('email').value]);
+  				_kmq.push(['record', 'Commented', {
+					name: document.getElementById( 'author' ).value,
+					email: document.getElementById( 'email' ).value,
+					comment: document.getElementById( 'comment' ).value
+				}]);
+  			},
+			el = document.getElementById('submit');
+
+		if(el.addEventListener) {
+			el.addEventListener('mousedown', commented, false);
+		} else if(el.attachEvent)  {
+			el.attachEvent('onmousedown', commented);
+		}
+  });
+         </script>
+         <p style="display: none;">
+          <input id="ak_js" name="ak_js" type="hidden" value="203"/>
+         </p>
+        </form>
+       </div>
+       <!-- #respond -->
+      </div>
+     </div>
+    </div>
+    <div class="sidebar span4" data-swiftype-index="false">
+     <div class="social_share">
+      <!-- AddThis Button BEGIN -->
+      <div class="addthis_sharing_toolbox" style="display:inline-block;">
+      </div>
+      <div class="at-share-tbx-element addthis_32x32_style addthis-smartlayers addthis-animated at4-show" id="atstbx" style="display:inline !important;">
+       <a class="addthis_counter addthis_bubble_style" style="margin: 0px;margin-left: -3px;">
+       </a>
+      </div>
+      <!-- AddThis Button END -->
+      <script type="text/javascript">
+       var titleNew = document.title + "- via @@mozzello";
+				addthis.update('share', 'title', titleNew);
+      </script>
+     </div>
+     <div class="rss_subscription">
+      <div class="subscription_area">
+       <script src="//app-sj03.marketo.com/js/forms2/js/forms2.js">
+       </script>
+       <form id="mktoForm_1119">
+       </form>
+       <script>
+        MktoForms2.loadForm("//app-sj03.marketo.com", "338-PNW-019", 1119);
+       </script>
+      </div>
+      <div class="feeds">
+       <a href="http://feedpress.me/outsystems-blog">
+        <i class="rss">
+        </i>
+        Subscribe RSS
+       </a>
+      </div>
+     </div>
+     <div class="more_posts">
+      <h4>
+       Explore other categories:
+      </h4>
+      <div class="categories">
+       <!--&lt;div class="toggle "&gt;&lt;a href="http://www.outsystems.com/blog"&gt;All Posts&lt;/a&gt;&lt;/div&gt;-->
+       <div class="toggle active">
+        <a href="http://www.outsystems.com/blog/category/tech-zone">
+         <i class="tech-zone">
+         </i>
+         Tech Zone
+        </a>
+       </div>
+       <div class="toggle notopborder">
+        <a href="http://www.outsystems.com/blog/category/platform-in-action">
+         <i class="platform-in-action">
+         </i>
+         Platform in Action
+        </a>
+       </div>
+       <div class="toggle notopborder">
+        <a href="http://www.outsystems.com/blog/category/perspectives">
+         <i class="perspectives">
+         </i>
+         Perspectives
+        </a>
+       </div>
+      </div>
+     </div>
+     <div class="more_posts_category">
+      <h4>
+       More posts in this category:
+      </h4>
+      <div class="post first" onclick="location.href='http://www.outsystems.com/blog/2015/06/outsystems-online-training-2-0-more-options-more-expertise.html'">
+       <div class="header">
+        <img alt="bcard-onlinetraining" class="attachment-post-thumbnail wp-post-image" height="138" src="http://www.outsystems.com/blog/wp-content/uploads/2015/06/bcard-onlinetraining-306x138.jpg" width="306"/>
+        <div class="category byline tech-zone">
+         <i>
+         </i>
+         Tech Zone
+        </div>
+       </div>
+       <div class="entry">
+        <h3>
+         <a class="postlink" href="http://www.outsystems.com/blog/2015/06/outsystems-online-training-2-0-more-options-more-expertise.html">
+          OutSystems Online Training 2.0  More Options, More Expertise!
+         </a>
+        </h3>
+        <div class="postcontent">
+         <p>
+          In the two years since we launched our free online training page, weve been paying attention to feedback from our developers and community members. So weve been working behind the scenes to enhance the online training experience and make it even easier to learn OutSystems Platform.
+         </p>
+         <p>
+          Heres whats new
+          <a class="more-link" href="http://www.outsystems.com/blog/2015/06/outsystems-online-training-2-0-more-options-more-expertise.html#more-3373" id="link_55a56bf2ad410">
+           (more)
+          </a>
+          <script>
+           _kmq.push(["trackClickOnOutboundLink","link_55a56bf2ad410","Article link clicked",{"Title":"(more&hellip;)","Page":"OutSystems Online Training 2.0 &#8211; More Options, More Expertise!"}]);
+          </script>
+         </p>
+        </div>
+        <p class="postmetadata byline">
+         By
+         <a href="http://www.outsystems.com/blog/author/joaofernandes" rel="author" title="Posts by Joao Fernandes">
+          Joao Fernandes
+         </a>
+         on June 9, 2015
+        </p>
+       </div>
+      </div>
+      <div class="post first" onclick="location.href='http://www.outsystems.com/blog/2015/02/how-i-built-a-texting-app-and-connected-to-a-government-database-in-24-hours.html'">
+       <div class="header">
+        <img alt="govathon-card" class="attachment-post-thumbnail wp-post-image" height="138" src="http://www.outsystems.com/blog/wp-content/uploads/2015/02/govathon-card-306x138.png" width="306"/>
+        <div class="category byline tech-zone">
+         <i>
+         </i>
+         Tech Zone
+        </div>
+       </div>
+       <div class="entry">
+        <h3>
+         <a class="postlink" href="http://www.outsystems.com/blog/2015/02/how-i-built-a-texting-app-and-connected-to-a-government-database-in-24-hours.html">
+          How I Built a Texting App and Connected to a Government Database  in 24 Hours
+         </a>
+        </h3>
+        <div class="postcontent">
+         <p>
+          I like hackathons. And one of the main reasons I like them is the limited time period the organizers enforce. I take particular satisfaction in delivering production quality and relatively large apps in less than 24 hours. I can do this because a large portion of the work is done with the help of a RAD tool  OutSystems Platform.
+          <a class="more-link" href="http://www.outsystems.com/blog/2015/02/how-i-built-a-texting-app-and-connected-to-a-government-database-in-24-hours.html#more-2300" id="link_55a56bf2ae61e">
+           (more)
+          </a>
+          <script>
+           _kmq.push(["trackClickOnOutboundLink","link_55a56bf2ae61e","Article link clicked",{"Title":"(more&hellip;)","Page":"How I Built a Texting App and Connected to a Government Database &#8211; in 24 Hours"}]);
+          </script>
+         </p>
+        </div>
+        <p class="postmetadata byline">
+         By
+         <a href="http://www.outsystems.com/blog/author/pedroq" rel="author" title="Posts by Pedro Queirs">
+          Pedro Queirs
+         </a>
+         on February 23, 2015
+        </p>
+       </div>
+      </div>
+      <div class="post first" onclick="location.href='http://www.outsystems.com/blog/2015/02/how-to-chose-the-best-mobile-architecture-infograph.html'">
+       <div class="header">
+        <img alt="new-hybrid-web-native-card2" class="attachment-post-thumbnail wp-post-image" height="138" src="http://www.outsystems.com/blog/wp-content/uploads/2015/02/new-hybrid-web-native-card2-306x138.png" width="306"/>
+        <div class="category byline tech-zone">
+         <i>
+         </i>
+         Tech Zone
+        </div>
+       </div>
+       <div class="entry">
+        <h3>
+         <a class="postlink" href="http://www.outsystems.com/blog/2015/02/how-to-chose-the-best-mobile-architecture-infograph.html">
+          Native vs Web vs Hybrid: Which Mobile Architecture is Right for Your App?
+         </a>
+        </h3>
+        <div class="postcontent">
+         <p>
+          Picking the right mobile architecture for your apps can amount to a million dollar decision. And there isnt a one-size-fits-all architecture to solve all mobile problems.
+         </p>
+         <p>
+          Based on our years of experience helping our enterprise customers deliver mobile applications, our team of mobile app experts have compiled a guide to help you select the right mobile architecture. The guide includes a decision tree and a set of simple instructions that help explain the benefits and tradeoffs of each type of mobile approach.
+          <a class="more-link" href="http://www.outsystems.com/blog/2015/02/how-to-chose-the-best-mobile-architecture-infograph.html#more-2396" id="link_55a56bf2af7a8">
+           (more)
+          </a>
+          <script>
+           _kmq.push(["trackClickOnOutboundLink","link_55a56bf2af7a8","Article link clicked",{"Title":"(more&hellip;)","Page":"Native vs Web vs Hybrid: Which Mobile Architecture is Right for Your App?"}]);
+          </script>
+         </p>
+        </div>
+        <p class="postmetadata byline">
+         By
+         <a href="http://www.outsystems.com/blog/author/rodrigo" rel="author" title="Posts by Rodrigo Coutinho">
+          Rodrigo Coutinho
+         </a>
+         on February 18, 2015
+        </p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="top70" data-swiftype-index="false">
+   <div class="top50">
+    <div id="footer-wrapper">
+     <div id="footer-mid-wrapper">
+      <div class="container">
+       <div class="row" id="footer-mid">
+        <ul class="footer-nav span2">
+         <li class="title">
+          <span>
+           Company
+          </span>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/company/">
+           About Us
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/company/careers/">
+           Careers
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/academy/" target="_blank">
+           Training
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/partners/">
+           Partners
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/company/news/">
+           News
+          </a>
+         </li>
+        </ul>
+        <ul class="footer-nav span2">
+         <li class="title">
+          <span>
+           More
+          </span>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/it-resources/">
+           Resources
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/blog/" target="_blank">
+           Blog
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/community/" target="_blank">
+           Community
+          </a>
+         </li>
+         <li>
+          <a href="http://www.outsystems.com/network/" target="_blank">
+           Agile Network
+          </a>
+         </li>
+         <li>
+          <ul class="social-icons">
+           <li>
+            <a class="twitter" href="http://twitter.com/OutSystems" target="_blank">
+             Twitter
+            </a>
+           </li>
+           <li>
+            <a class="facebook" href="http://www.facebook.com/OutSystems" target="_blank">
+             Facebook
+            </a>
+           </li>
+           <li>
+            <a class="google" href="http://plus.google.com/+outsystems" target="_blank">
+             G+
+            </a>
+           </li>
+           <li>
+            <a class="linkedin" href="http://www.linkedin.com/company/outsystems" target="_blank">
+             linkedin
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+        <ul class="footer-nav span4" id="footer-events-list">
+         <li class="title">
+          <span>
+           Upcoming Events
+          </span>
+         </li>
+         <li class="events-more">
+          <a href="http://www.outsystems.com/company/events/" id="wt15">
+           more events 
+          </a>
+         </li>
+        </ul>
+        <ul class="footer-nav span4">
+         <li id="footer-contactus-table">
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+     <div id="footer-bottom-wrapper">
+      <div class="container">
+       <div class="row" id="footer-bottom">
+        <div class="legal span12">
+         <p>
+          Built with
+          <a class="footer-op-link" href="http://www.outsystems.com/platform/?ref=f">
+           OutSystems
+           <sup>
+            
+           </sup>
+           Platform
+          </a>
+          - OutSystems  All rights reserved.
+         </p>
+         <ul>
+          <li>
+           <a href="http://www.outsystems.com/legal/terms-of-use/" title="Terms &amp; Conditions">
+            Terms &amp; Conditions
+           </a>
+          </li>
+          <li>
+           <a href="http://www.outsystems.com/legal/terms-of-use/privacy-statement/#7">
+            About Cookies
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <script type="text/javascript">
+     $( document ).ready(function() {
+
+
+		$.getJSON( "https://www.outsystems.com/footer.aspx", function( data ) {
+			if(data.locale)
+				$('#footer-mid').addClass(data.locale);
+			if(data.events)
+				$("#footer-events-list li:first-child").after($(data.events));
+			if(data.contactus)
+				$('#footer-contactus-table').append($(data.contactus));
+		});
+	});
+    </script>
+   </div>
+  </div>
+  <script src="/CMS_BackOffice/ResourceLink.aspx?ResourceName=os-olark.min.js&amp;v=20150219174199" type="text/javascript">
+  </script>
+  <!-- begin olark code -->
+  <script data-cfasync="false" type="text/javascript">
+   /*&lt;![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
+f[z]=function(){
+(a.s=a.s||[]).push(arguments)};var a=f[z]._={
+},q=c.methods.length;while(q--){(function(n){f[z][n]=function(){
+f[z]("call",n,arguments)}})(c.methods[q])}a.l=c.loader;a.i=nt;a.p={
+0:+new Date};a.P=function(u){
+a.p[u]=new Date-a.p[0]};function s(){
+a.P(r);f[z](r)}f.addEventListener?f.addEventListener(r,s,false):f.attachEvent("on"+r,s);var ld=function(){function p(hd){
+hd="head";return["&lt;",hd,"&gt;&lt;/",hd,"&gt;&lt;",i,' onl' + 'oad="var d=',g,";d.getElementsByTagName('head')[0].",j,"(d.",h,"('script')).",k,"='",l,"//",a.l,"'",'"',"&gt;&lt;/",i,"&gt;"].join("")}var i="body",m=d[i];if(!m){
+return setTimeout(ld,100)}a.P(1);var j="appendChild",h="createElement",k="src",n=d[h]("div"),v=n[j](d[h](z)),b=d[h]("iframe"),g="document",e="domain",o;n.style.display="none";m.insertBefore(n,m.firstChild).id=z;b.frameBorder="0";b.id=z+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){
+b.src="javascript:false"}b.allowTransparency="true";v[j](b);try{
+b.contentWindow[g].open()}catch(w){
+c[e]=d[e];o="javascript:var d="+g+".open();d.domain='"+d.domain+"';";b[k]=o+"void(0);"}try{
+var t=b.contentWindow[g];t.write(p());t.close()}catch(x){
+b[k]=o+'d.write("'+p().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)};ld()};nt()})({
+loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
+/* custom configuration goes here (www.olark.com/documentation) */
+
+olark.identify('1050-308-10-5415');
+
+/*]]&gt;*/
+  </script>
+  <noscript>
+   <noscript>
+    <a href="https://www.olark.com/site/1050-308-10-5415/contact" target="_blank" title="Contact us">
+     Questions? Feedback?
+    </a>
+    powered by
+    <a href="http://www.olark.com?welcome" title="Olark live chat software">
+     Olark live chat software
+    </a>
+   </noscript>
+   <!-- end olark code -->
+   <!-- End Olark Code &lt;http://www.olark.com/&gt; -->
+   <noscript>
+    <iframe height="0" src="//www.googletagmanager.com/ns.html?id=GTM-WF6BPG" style="display:none;visibility:hidden" width="0">
+    </iframe>
+   </noscript>
+   <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WF6BPG');
+   </script>
+   <!-- End Google Tag Manager -->
+   <script type="text/javascript">
+    var addthis_config = {"ui_atversion":300};
+   </script>
+   <!-- AddThis Settings Begin -->
+   <script type="text/javascript">
+    var addthis_product = "wpp-5.0.5";
+                    var wp_product_version = "wpp-5.0.5";
+                    var wp_blog_version = "4.2.2";
+                    if (typeof(addthis_config) == "undefined") {
+                        var addthis_config = {"ui_atversion":300};
+                    }
+                    if (typeof(addthis_share) == "undefined") {
+                        
+                    }
+   </script>
+   <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4feb3b104c6a1370 " type="text/javascript">
+   </script>
+   <script src="http://www.outsystems.com/blog/wp-content/plugins/akismet/_inc/form.js?ver=3.1.2" type="text/javascript">
+   </script>
+   <link href="http://www.outsystems.com/blog/wp-content/plugins/addthis/css/output.css?ver=4.2.2" id="addthis_output-css" media="all" rel="stylesheet" type="text/css"/>
+   <script src="http://www.outsystems.com/blog/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+   </script>
+   <script src="http://www.outsystems.com/blog/wp-content/plugins/anti-spam/js/anti-spam-3.5.js" type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    /* &lt;![CDATA[ */
+var JQLBSettings = {"fitToScreen":"1","resizeSpeed":"400","displayDownloadLink":"0","navbarOnTop":"0","loopImages":"","resizeCenter":"","marginSize":"0","linkTarget":"_self","help":"","prevLinkTitle":"previous image","nextLinkTitle":"next image","prevLinkText":"\u00ab Previous","nextLinkText":"Next \u00bb","closeTitle":"close image gallery","image":"Image ","of":" of ","download":"Download","jqlb_overlay_opacity":"80","jqlb_overlay_color":"#000000","jqlb_overlay_close":"1","jqlb_border_width":"10","jqlb_border_color":"#ffffff","jqlb_border_radius":"0","jqlb_image_info_background_transparency":"100","jqlb_image_info_bg_color":"#ffffff","jqlb_image_info_text_color":"#000000","jqlb_image_info_text_fontsize":"10","jqlb_show_text_for_image":"1","jqlb_next_image_title":"next image","jqlb_previous_image_title":"previous image","jqlb_next_button_image":"http:\/\/www.outsystems.com\/blog\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/next.gif","jqlb_previous_button_image":"http:\/\/www.outsystems.com\/blog\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/prev.gif","jqlb_maximum_width":"","jqlb_maximum_height":"","jqlb_show_close_button":"1","jqlb_close_image_title":"close image gallery","jqlb_close_image_max_heght":"22","jqlb_image_for_close_lightbox":"http:\/\/www.outsystems.com\/blog\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/closelabel.gif","jqlb_keyboard_navigation":"1","jqlb_popup_size_fix":"0"};
+/* ]]&gt; */
+   </script>
+   <script src="http://www.outsystems.com/blog/wp-content/plugins/wp-lightbox-2/wp-lightbox-2.min.js?ver=1.3.4.1" type="text/javascript">
+   </script>
+   <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201529" type="text/javascript">
+   </script>
+   <script async="" defer="" src="http://stats.wp.com/e-201529.js" type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.5.3',blog:'84506409',post:'179',tz:'1',srv:'www.outsystems.com'} ]);
+	_stq.push([ 'clickTrackerInit', '84506409', '179' ]);
+   </script>
+   <!--wp_footer-->
+  </noscript>
+ </body>
+</html>

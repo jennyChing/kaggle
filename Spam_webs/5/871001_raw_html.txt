@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   ESXi (ESX 3i) Enable SSH
+  </title>
+  <style type="text/css">
+   &lt;!--
+.style1 {font-family: Arial}
+.style2 {
+	color: #FF0000;
+	font-weight: bold;
+}
+--&gt;
+  </style>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/yahoo.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/dom.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/event.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/connection.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/animation.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="/TE_CommentSystem/javaScript/TE_CommentSystem.js" type="text/javascript">
+  </script>
+  <link href="/TE_CommentSystem/style/TE_CommentSystem.css" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+   &lt;!--
+.style37 {font-size: 10px}
+--&gt;
+  </style>
+ </head>
+ <body>
+  <p class="style1">
+   [
+   <a href="/index.html">
+    Home
+   </a>
+   ]   [
+   <a href="http://www.vm-help.com/forum/">
+    Forum
+   </a>
+   ]
+  </p>
+  <p class="style1">
+   ESXi 3.5 does ship with the ability to run SSH, but this is disabled by default (and is not supported). If you just need to access the console of ESXi, then you only need to perform steps 1 - 3.
+  </p>
+  <p class="style1">
+   1) At the console of the ESXi host, press ALT-F1 to access the console window.
+   <br/>
+   2) Enter
+   <strong>
+    unsupported
+   </strong>
+   in the console and then press Enter. You will not see the text you type in.
+   <br/>
+   3) If you typed in unsupported correctly, you will see the Tech Support Mode warning and a password prompt. Enter the password for the root login.
+   <br/>
+   4) You should then see the prompt of ~ #. Edit the file inetd.conf (enter the command
+   <strong>
+    vi /etc/inetd.conf
+   </strong>
+   ).
+   <br/>
+   5) Find the line that begins with #ssh and remove the #. Then save the file. If you're new to using vi, then move the cursor down to #ssh line and then press the
+   <strong>
+    Insert
+   </strong>
+   key. Move the cursor over one space and then hit backspace to delete the #. Then press
+   <strong>
+    ESC
+   </strong>
+   and type in
+   <strong>
+    :wq
+   </strong>
+   to save the file and exit vi.  If you make a mistake, you can press the
+   <strong>
+    ESC
+   </strong>
+   key and then type it :q! to quit vi without saving the file.
+   <br/>
+   6) Once you've closed the vi editor, run the command
+   <strong>
+    /sbin/services.sh restart
+   </strong>
+   to restart the management services. You'll now be able to connect to the ESXi host with a SSH client.
+  </p>
+  <p class="style1">
+   <span class="style2">
+    Tip
+   </span>
+   - with some applications like WinSCP, the default encryption cipher used is AES. If you change that to Blowfish you will likely see significantly faster transfers.
+  </p>
+  <p class="style1">
+   <span class="style2">
+    Update for ESXi 3.5 Update 2
+   </span>
+   - With Update 2 the service.sh command no longer restarts the inetd process which enables SSH access. You can either restart your host or run
+   <strong>
+    ps | grep inetd
+   </strong>
+   to determine the process ID for the inetd process. The output of the command will be something like 1299 1299 busybox inetd, and the process ID is 1299. Then run
+   <strong>
+    kill -HUP &lt;process_id&gt;
+   </strong>
+   (kill  -HUP 1299 in this example) and you'll then be able to access the host via SSH.
+  </p>
+  <p class="style1">
+   You can also download an
+   <a href="/esx/esx3i/customize_oem_tgz.php">
+    oem.tgz
+   </a>
+   file which will enable SSH (and FTP). Copy the file to a datastore with the VI client and then to bootbank with the command cp /vmfs/volumes/&lt;datastore&gt;/oem.tgz /bootbank/oem.tgz and then reboot.
+  </p>
+  <div class="comment_container" id="commentContainer">
+  </div>
+  <div class="comment_form_container">
+   <div class="comment_form_title">
+    ADD YOUR COMMENT - IF YOU HAVE A QUESTION PLEASE USE THE
+    <a href="http://www.vm-help.com/forum/">
+     FORUM
+    </a>
+   </div>
+   <form id="form1" method="post" name="form1">
+    <div class="comment_error">
+    </div>
+    <p>
+     <br/>
+     <input class="input_fields" id="commentAuthor" name="commentAuthor" type="text"/>
+     Name (required)
+     <br/>
+     <br/>
+     <input class="input_fields" id="authorSite" name="authorSite" type="text"/>
+     Web site (optional)
+     <br/>
+     <br/>
+     <input class="input_fields" id="authorEmail" name="authorEmail" type="text"/>
+     Email address (required - will not be displayed
+    </p>
+    <p>
+     Comment (required)
+     <br/>
+     <textarea class="textarea_fields" id="commentBody" name="commentBody" rows="5">
+     </textarea>
+    </p>
+    <p>
+     <img id="commentCaptcha" src="/TE_CommentSystem/TE_CommentSystem.php?.png"/>
+     Please enter code
+     <input class="input_fields" id="secureCode" name="secureCode" type="text"/>
+    </p>
+    <p>
+     <input id="publishComment" name="publishComment" onclick="TECommentSystem.post(this.form)" type="submit" value="Publish the Comment"/>
+    </p>
+   </form>
+  </div>
+  <p class="style1">
+   <span class="style37">
+    Copyright  2011 - Dave Mishchenko
+   </span>
+  </p>
+ </body>
+</html>

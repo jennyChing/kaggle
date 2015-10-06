@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="fr-FR" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
+  <meta content="http://www.geekhard.fr/wp-content/uploads/2013/12/intel-broadwell-150x150.jpg" property="og:image"/>
+  <title>
+   Le fonctionnement dun processeur  GeekHard.fr
+  </title>
+  <!--[if lt IE 9]&gt;
+&lt;link rel="stylesheet" type="text/css" href="http://www.geekhard.fr/wp-content/themes/hottopix/css/iecss.css" /&gt;
+&lt;![endif]-->
+  <link href="http://www.geekhard.fr/wp-content/uploads/2014/05/fav-2.png" rel="shortcut icon"/>
+  <link href="http://www.geekhard.fr/feed/" rel="alternate" title="RSS 2.0" type="application/rss+xml"/>
+  <link href="http://www.geekhard.fr/feed/rss/" rel="alternate" title="RSS .92" type="text/xml"/>
+  <link href="http://www.geekhard.fr/feed/atom/" rel="alternate" title="Atom 0.3" type="application/atom+xml"/>
+  <link href="http://www.geekhard.fr/xmlrpc.php" rel="pingback"/>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40105276-1', 'geekhard.fr');
+  ga('send', 'pageview');
+  </script>
+  <link href="http://www.geekhard.fr/feed/" rel="alternate" title="GeekHard.fr  Flux" type="application/rss+xml"/>
+  <link href="http://www.geekhard.fr/comments/feed/" rel="alternate" title="GeekHard.fr  Flux des commentaires" type="application/rss+xml"/>
+  <link href="http://www.geekhard.fr/2013/12/14/le-fonctionnement-dun-processeur/feed/" rel="alternate" title="GeekHard.fr  Le fonctionnement dun processeur Flux des commentaires" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.geekhard.fr\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://www.geekhard.fr/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.2.1" id="contact-form-7-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.geekhard.fr/wp-content/plugins/theia-post-slider/css/buttons-orange.css?ver=1.3.9" id="theiaPostSlider-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.geekhard.fr/wp-content/themes/hottopix/style.css?ver=4.2.2" id="mvp-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.geekhard.fr/wp-content/themes/hottopix/css/reset.css?ver=4.2.2" id="reset-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.geekhard.fr/wp-content/themes/hottopix/css/media-queries.css?ver=4.2.2" id="media-queries-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans%3A400%2C600%2C700%7COpen+Sans+Condensed%3A300%2C700%7COswald%3A300%2C400%2C700%7CAlegreya%3A400&amp;subset=latin%2Clatin-ext%2Ccyrillic%2Ccyrillic-ext%2Cgreek-ext%2Cgreek%2Cvietnamese&amp;ver=4.2.2" id="googlefonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.geekhard.fr/wp-content/plugins/codecanyon-115225-popular-posts-bar-widget/style.css?ver=4.2.2" id="ppb-stylesheet-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://www.geekhard.fr/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/theia-post-slider/js/balupton-history.js/jquery.history.js?ver=1.7.1" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/theia-post-slider/js/async.min.js?ver=25.11.2012" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/theia-post-slider/js/tps-transition-slide.js?ver=1.3.9" type="text/javascript">
+  </script>
+  <link href="http://www.geekhard.fr/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://www.geekhard.fr/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://www.geekhard.fr/2013/12/10/conseil-sur-le-html-css/" rel="prev" title="Conseil sur le HTML-CSS"/>
+  <link href="http://www.geekhard.fr/2014/01/01/le-top-5-des-jeux-video-de-2013/" rel="next" title="Le top 5 des jeux vido de 2013"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://www.geekhard.fr/2013/12/14/le-fonctionnement-dun-processeur/" rel="canonical"/>
+  <link href="http://www.geekhard.fr/?p=509" rel="shortlink"/>
+  <style type="text/css">
+   @import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:100,200,300,400,500,600,700,800,900|Oswald:100,200,300,400,500,600,700,800,900|Oswald:100,200,300,400,500,600,700,800,900&amp;subset=latin,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek,vietnamese);
+
+ul.main-nav li a,
+ul.main-nav li ul li a {
+	font-family: 'Open Sans Condensed', sans-serif;
+	}
+
+.main-text h1,
+.sub-text h2 {
+	font-family: 'Oswald', sans-serif;
+	}
+
+.home-widget .cat-dark-text h2,
+.home-widget .category-light h2 a,
+.sidebar-small-widget .category-light h2 a,
+ul.home-carousel li h2,
+h1.headline,
+h1.headline-page,
+.prev-post a,
+.next-post a,
+.related-text a,
+#post-404 h1,
+h3.cat-header,
+.archive-text h2 a,
+.archive-text-noimg h2 a,
+ul.widget-buzz li h2 a,
+.sidebar-widget .cat-dark-text h2,
+.sidebar-widget .category-light h2 a,
+.footer-widget .category-light h2 a {
+	font-family: 'Oswald', sans-serif;
+	}
+
+#logo-wrapper,
+#logo-small {
+	height: 100px;
+	}
+
+ul.main-nav li:hover,
+ul.main-nav li a:hover,
+ul.main-nav li.current-menu-item,
+ul.main-nav li.current-post-parent {
+	background: #ff0033 url(http://www.geekhard.fr/wp-content/themes/hottopix/images/menu-fade.png) repeat-x bottom;
+	}
+
+span.comment-count,
+h3.post-header,
+h3.comment-header,
+h3.home-widget-header,
+h3.small-widget-header,
+h3.sidebar-widget-header,
+span.post-tags-header,
+.post-tags a:hover,
+ul.tabber-widget li.active,
+ul.tabber-widget li:hover,
+.tag-cloud a:hover {
+	background: #ff0033;
+	}
+
+span.home-widget-header,
+span.small-widget-header,
+span.sidebar-widget-header,
+ul.tabber-widget,
+#comments,
+#related-posts {
+	border-top: 3px solid #ff0033;
+	}
+
+ol.commentlist {
+	border-bottom: 3px solid #ff0033;
+	}
+
+.prev-post,
+.next-post {
+	color: #ff0033;
+	}
+
+#nav-wrapper {
+	background: #211f1f url(http://www.geekhard.fr/wp-content/themes/hottopix/images/menu-fade.png) repeat-x bottom;
+	}
+
+ul.main-nav li ul li {
+	background: #211f1f;
+	}
+
+#nav-mobi select {
+	background: #211f1f url(http://www.geekhard.fr/wp-content/themes/hottopix/images/triangle-dark.png) no-repeat right;
+	}
+
+a, a:visited {
+	color: #0a090a;
+	}
+
+#wallpaper {
+	background: url() no-repeat 50% 0;
+	}
+  </style>
+  <style id="custom-background-css" type="text/css">
+   body.custom-background { background-image: url('http://www.geekhard.fr/wp-content/uploads/2013/08/gplaypattern.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+  </style>
+  <style type="text/css">
+  </style>
+ </head>
+ <body class="single single-post postid-509 single-format-standard custom-background">
+  <div id="site">
+   <div id="wrapper">
+    <div id="header-wrapper">
+     <div id="top-header-wrapper">
+      <div id="top-nav">
+       <div class="menu">
+        <ul>
+         <li class="page_item page-item-118">
+          <a href="http://www.geekhard.fr/nous-contacter/">
+           Contact
+          </a>
+         </li>
+         <li class="page_item page-item-91">
+          <a href="http://www.geekhard.fr/davinaz/">
+           Davinaz
+          </a>
+         </li>
+         <li class="page_item page-item-88">
+          <a href="http://www.geekhard.fr/loicia-itrema/">
+           Locia Itrma
+          </a>
+         </li>
+         <li class="page_item page-item-32">
+          <a href="http://www.geekhard.fr/nucl3arsnake/">
+           nucl3arsnake
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <!--top-nav-->
+      <div id="content-social">
+       <ul>
+        <li>
+         <a alt="Twitter" class="twitter-but" href="http://www.twitter.com/geekhardfr" target="_blank">
+         </a>
+        </li>
+        <li>
+         <a alt="RSS Feed" class="rss-but" href="http://www.geekhard.fr/feed/rss/">
+         </a>
+        </li>
+       </ul>
+      </div>
+      <!--content-social-->
+     </div>
+     <!--top-header-wrapper-->
+     <div id="logo-wrapper" itemscope="" itemtype="http://schema.org/Organization">
+      <a href="http://www.geekhard.fr" itemprop="url">
+       <img alt="GeekHard.fr" itemprop="logo" src="http://www.geekhard.fr/wp-content/uploads/2014/05/banniere.png"/>
+      </a>
+     </div>
+     <!--logo-wrapper-->
+    </div>
+    <!--header-wrapper-->
+    <div id="nav-wrapper">
+     <div id="nav-mobi">
+      <div class="menu-menu-top-container">
+       <select>
+        <option value="#">
+         Menu
+        </option>
+        <option id="menu-item-53" value="http://www.geekhard.fr/category/apple/">
+         Apple
+        </option>
+        <option id="menu-item-54" value="http://www.geekhard.fr/category/gnu-linux/">
+         GNU/Linux
+        </option>
+        <option id="menu-item-57" value="http://www.geekhard.fr/category/microsoft/">
+         Microsoft
+        </option>
+        <option id="menu-item-56" value="http://www.geekhard.fr/category/jeux/">
+         Jeux
+        </option>
+        <option id="menu-item-64" value="http://www.geekhard.fr/category/hightech/">
+         High-Tech
+        </option>
+        <option id="menu-item-66" value="http://www.geekhard.fr/category/gadgets/">
+         -Gadgets
+        </option>
+        <option id="menu-item-61" value="http://www.geekhard.fr/category/tablettes/">
+         -Tablettes
+        </option>
+        <option id="menu-item-62" value="http://www.geekhard.fr/category/telephonie/">
+         -Tlphonie
+        </option>
+        <option id="menu-item-67" value="http://www.geekhard.fr/category/litterature/">
+         Books
+        </option>
+        <option id="menu-item-65" value="http://www.geekhard.fr/category/tutoriels/">
+         Tutoriels
+        </option>
+        <option id="menu-item-58" value="http://www.geekhard.fr/category/web/">
+         Web
+        </option>
+        <option id="menu-item-59" value="http://www.geekhard.fr/category/socialmedia/">
+         -Social media
+        </option>
+        <option id="menu-item-55" value="http://www.geekhard.fr/category/interviews/">
+         Interviews
+        </option>
+        <option id="menu-item-168" value="http://www.geekhard.fr/category/apropos/">
+          propos de
+        </option>
+        <option id="menu-item-175" value="http://www.geekhard.fr/loicia-itrema/">
+         -Locia Itrma
+        </option>
+        <option id="menu-item-176" value="http://www.geekhard.fr/nucl3arsnake/">
+         -nucl3arsnake
+        </option>
+        <option id="menu-item-174" value="http://www.geekhard.fr/davinaz/">
+         -Davinaz
+        </option>
+        <option id="menu-item-120" value="http://www.geekhard.fr/nous-contacter/">
+         -Contact
+        </option>
+       </select>
+      </div>
+     </div>
+     <!--nav-mobi-->
+     <ul class="main-nav">
+      <div class="menu-menu-top-container">
+       <ul class="menu" id="menu-menu-top-1">
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-53">
+         <a href="http://www.geekhard.fr/category/apple/">
+          Apple
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-54">
+         <a href="http://www.geekhard.fr/category/gnu-linux/">
+          GNU/Linux
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-57">
+         <a href="http://www.geekhard.fr/category/microsoft/">
+          Microsoft
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-56">
+         <a href="http://www.geekhard.fr/category/jeux/">
+          Jeux
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-64">
+         <a href="http://www.geekhard.fr/category/hightech/">
+          High-Tech
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-66">
+           <a href="http://www.geekhard.fr/category/gadgets/">
+            Gadgets
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-61">
+           <a href="http://www.geekhard.fr/category/tablettes/">
+            Tablettes
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-62">
+           <a href="http://www.geekhard.fr/category/telephonie/">
+            Tlphonie
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-67">
+         <a href="http://www.geekhard.fr/category/litterature/">
+          Books
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-65">
+         <a href="http://www.geekhard.fr/category/tutoriels/">
+          Tutoriels
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-58">
+         <a href="http://www.geekhard.fr/category/web/">
+          Web
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-59">
+           <a href="http://www.geekhard.fr/category/socialmedia/">
+            Social media
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-55">
+         <a href="http://www.geekhard.fr/category/interviews/">
+          Interviews
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-168">
+         <a href="http://www.geekhard.fr/category/apropos/">
+           propos de
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-175">
+           <a href="http://www.geekhard.fr/loicia-itrema/">
+            Locia Itrma
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-176">
+           <a href="http://www.geekhard.fr/nucl3arsnake/">
+            nucl3arsnake
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-174">
+           <a href="http://www.geekhard.fr/davinaz/">
+            Davinaz
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-120">
+           <a href="http://www.geekhard.fr/nous-contacter/">
+            Contact
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+     </ul>
+     <!--main-nav-->
+     <div id="main-search">
+      <form action="http://www.geekhard.fr/" id="searchform" method="get">
+       <input id="s" name="s" onblur='if (this.value == "") { this.value = "Rechercher"; }' onfocus='if (this.value == "Rechercher") { this.value = ""; }' type="text" value="Rechercher"/>
+       <input id="search-button" type="hidden"/>
+      </form>
+     </div>
+     <!--main-search-->
+    </div>
+    <!--nav-wrapper-->
+    <div id="main">
+     <div id="content-wrapper">
+      <div class="breadcrumb">
+       <div id="crumbs">
+        <a href="http://www.geekhard.fr">
+         Home
+        </a>
+        /
+        <a href="http://www.geekhard.fr/category/hightech/">
+         High-Tech
+        </a>
+        /
+        <span class="current">
+         Le fonctionnement dun processeur
+        </span>
+       </div>
+      </div>
+      <!--breadcrumb-->
+      <div id="title-main">
+       <h1 class="headline">
+        Le fonctionnement dun processeur
+       </h1>
+       <span class="post-byline">
+        Par
+        <a href="http://www.geekhard.fr/author/nucl3arsnake/" rel="author" title="Articles par nucl3arsnake">
+         nucl3arsnake
+        </a>
+        le 14 dcembre 2013
+       </span>
+      </div>
+      <!--title-main-->
+      <div id="home-main">
+       <div class="post-509 post type-post status-publish format-standard has-post-thumbnail hentry category-hightech category-tutoriels tag-amd tag-cpu tag-hyperthread tag-intel tag-misenavant tag-multicoeur tag-processeur" id="post-area">
+        <div id="social-box">
+         <ul class="post-social">
+          <li class="fb-line">
+           <div class="fb-like" data-layout="button_count" data-send="false" data-show-faces="false" data-width="90">
+           </div>
+          </li>
+          <li>
+           <a class="twitter-share-button" data-count="horizontal" data-lang="en" href="http://twitter.com/share">
+            Tweet
+           </a>
+          </li>
+          <li>
+           <g:plusone annotation="bubble" size="medium" width="90">
+           </g:plusone>
+          </li>
+          <li>
+           <a class="pin-it-button" count-layout="horizontal" href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.geekhard.fr%2F2013%2F12%2F14%2Fle-fonctionnement-dun-processeur%2F&amp;media=http://www.geekhard.fr/wp-content/uploads/2013/12/intel-broadwell.jpg&amp;description=Le fonctionnement dun processeur">
+            Pin It
+           </a>
+          </li>
+         </ul>
+        </div>
+        <!--social-box-->
+        <div id="content-area">
+         <div class="post-image">
+          <img alt="intel-broadwell" class="attachment-post-thumb wp-post-image" height="400" src="http://www.geekhard.fr/wp-content/uploads/2013/12/intel-broadwell-620x400.jpg" width="620"/>
+         </div>
+         <!--post-image-->
+         <p>
+          Le processeur, aussi appel CPU (Central Processing Unit) est une pice maitresse de votre ordinateur.
+          <br/>
+          Dans le monde des ordinateurs (du moins grand public), on peut dire quil existe deux marques: Intel et AMD.
+         </p>
+         <ul>
+          <li>
+            part le nom, quelle est la diffrence entre lun et lautre?
+          </li>
+         </ul>
+         <p>
+          Historiquement, Intel est le premier  avoir cr un processeur darchitecturex86 (on va simplifier en disant 32 bits) et est aussi une socit plus ancienne que AMD (de peu, 1 an). Maintenant la guerre AMD-Intel ne me semble plus avoir lieu dtre, mais il faut savoir que la PS4 et la Xbox One seront quipes en AMD (ce qui devrait les aider financirement, et a tombe  pic).
+          <br/>
+          (petit edit: SteamOS lui ne semble pas encore supporter les cartes graphiques AMD)
+         </p>
+         <ul>
+          <li>
+           Comment que a marche?
+          </li>
+         </ul>
+         <p>
+          Le microprocesseur utilise un timer. En gros un quartz qui fait GO! toutes les X secondes de faon rgulire.
+         </p>
+         <p>
+          Une fois ce GO reu, le processeur effectue lopration demande.
+         </p>
+         <ul>
+          <li>
+           Et comment sait-on quelle est lopration demande?
+          </li>
+         </ul>
+         <p>
+          Nous, utilisateurs, ne pouvons pas. Ceci dit lintrt serait plutt faible.
+         </p>
+         <p>
+          Pour donner un exemple (en simplifi), un processeur2.3Ghz effectuera 2.3 MILLIARDS de calculs en une seconde. Alors  moins de lire trs vite, on aura du mal.
+         </p>
+         <ul>
+          <li>
+           Alors qui dcide quelle est linformation qui doit tre traite?
+          </li>
+         </ul>
+         <p>
+          Le systme dexploitation et les dveloppeurs.
+         </p>
+         <p>
+          Il faut savoir que cette manire de dcider quelle opration doit tre effectue (et  quel moment) a beaucoup volu.
+         </p>
+         <p>
+          Au dbut on avait un plan simple, premier arriv, premier servi.
+          <br/>
+          Comprendre Linformation A traite en premier, la B en deuxime, etc.
+         </p>
+         <p>
+          Le souci, cest que si A est trs long  calculer (noubliez pas quon parle de vielle mthode, on navait pas des processeurs sur-dimensionns), alors tout le systme se retrouve ralenti.
+         </p>
+         <p>
+          <em>
+           Exemple
+          </em>
+          : On demande, dans lordre, de calculer Pi et dafficher lheure.
+         </p>
+         <p>
+          Vous voyez le souci? Pi tant long  calculer (trs long) lordinateur naffichera jamais lheure.
+         </p>
+         <ul>
+          <li>
+           Pour pallier  a, les dveloppeurs ont cherch une solution annexe, finalement ils se sont tourn vers un systme de priorisations.
+          </li>
+         </ul>
+         <p>
+          Comprendre A est trs important, B peu important, C moyennement important etc.
+         </p>
+         <p>
+          Le souci cest que si le systme reoit beaucoup dinstructions signales importantes, les autres tches ne seront pas calcules.
+         </p>
+         <p>
+          <em>
+           Exemple
+          </em>
+          : A = Calculer Pi B= Afficher lheure C= Afficher calcul russi, le rsultat est:
+         </p>
+         <p>
+          Vous voyez le souci? Si pendant le calcul de A, une tche D arrive avec limportance haute, alors lordinateur naffichera pas calcul russi (dommage, on ne saura pas le rsultat) et lheure ne sera toujours pas affiche.
+         </p>
+         <ul>
+          <li>
+           Bon, on tourne en rond l! Un mix des deux a vous irait? Voyons le rsultat
+          </li>
+         </ul>
+         <p>
+          On va envoyer les fichiers et augmenter leurs importances  intervalle rgulier
+         </p>
+         <p>
+          Pas mal, mais rajoutons un temps limite. Si une instruction nest pas finie en un temps limite, on stoppe et on garde son rsultat.
+         </p>
+         <p>
+          <em>
+           Exemple
+          </em>
+          :  = Calculer Pi (trs important) B= Afficher lheure (moyennement important) ce = Afficher calcul russi, le rsultat est: (peu important)
+         </p>
+         <p>
+          On va calculer pi pendant x ms (son temps limite), puis B et C vont augmenter en importance pendant ce temps.
+         </p>
+         <p>
+          Si B et C gagne en importance et dpasse limportance de A on stoppe tout et on finit la boucle afficher heure, et le rsultat de A au moment de la fin du calcul).
+         </p>
+         <ul>
+          <li>
+           Et cest tout?
+          </li>
+         </ul>
+         <p>
+          Presque, on na pas parl des technologies mises en place pour amliorer la vitesse de traitement.
+         </p>
+         <p>
+          Il faut savoir qua une poque on augmentait uniquement la vitesse du processeur, ce qui occasionnait quelques soucis (chauffe et usure du processeur). La loi de Moore (du nom de son inventeur, qui est aussi un des fondateurs dIntel) a vous parle?
+         </p>
+         <p>
+          On peut la rsumer comme ceci Tous les 2 ans on double le nombre de transistors (la petite pice qui sert au calcul, le processeur est en fait une arme de transistors), arriv un moment va falloir ruser.
+         </p>
+         <p>
+          Et il navait pas tellement tort le gars.
+         </p>
+         <p>
+          On a donc invent diffrentes technologies.
+         </p>
+         <p>
+          
+          <strong>
+           HyperThreading
+          </strong>
+          :
+         </p>
+         <p>
+          On fait croire aux applications quil ny a pas un processeur, mais plusieurs. Ainsi lapplication envoie plus dinformations au processeur.
+         </p>
+         <p>
+          
+          <strong>
+           Multicur:
+          </strong>
+         </p>
+         <p>
+          De ce ct il y a eu de lvolution. Quand jtais tout gamin, je me rappelle avoir eu un PC bicore (comprendre 2 processeurs), mais qui ne fonctionnait pas de la mme manire quactuellement. En fait, il fallait que le processeur1 arrive  saturation pour que la 2nd fasse effet. Un peu con, non?
+         </p>
+         <p>
+          Cest surement aussi ce quon pensait Intel et AMD et maintenant les processeurs travaillent de concert.
+         </p>
+         <p>
+          Pour comparer, cest comme si avant votre patron attendait que vous soyez noy sous le travail pour commencer  embaucher quelquun. Maintenant il sait que tous les ans  la mme priode il y a un rush, alors il prvoit en amont pour qu cette priode vous soyez 2.
+         </p>
+         <p>
+          
+          <strong>
+           Mmoire cache:
+          </strong>
+         </p>
+         <p>
+          La mmoire cache dun processeur est une zone o il stocke les informations en cours de traitement ou qui seront ncessaires sous peu.
+         </p>
+         <p>
+          Par exemple si le rsultat dune opration sera rutilis, il le stocke dans la mmoire cache. Et si jamais il travaille, il met les calculs  faire en cache pour ne pas avoir  redemander :
+          <br/>
+          hey mec, cest quoi dj que tu voulais que je calcule ?
+         </p>
+         <ul>
+          <li>
+           <strong>
+            Conclusion:
+           </strong>
+          </li>
+         </ul>
+         <p>
+          a semble simple, mais il faut grer les priorits trs finement, imaginer que la requte F se retrouve avec une priorit plus importante que D, alors que F ncessite la rponse de D serait ballot!
+         </p>
+         <p>
+         </p>
+         <p>
+          Voil, cest grosso modo comme a quun processeur fonctionne. Je vous ai pass le coup du registre, du pont nord/pont sud, tec.. Qui primo, ne sont pas super passionnantes, deuzio ..vous ncessite un peu plus de temps pour les comprendre.
+         </p>
+        </div>
+        <!--content-area-->
+        <div id="author-info">
+         <img alt="" class="avatar avatar-60 photo" height="60" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=60&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=120&amp;d=retro&amp;r=g 2x" width="60"/>
+         <div id="author-text">
+         </div>
+         <!--author-text-->
+        </div>
+        <!--author-info-->
+        <div class="post-tags">
+         <span class="post-tags-header">
+          En lien avec cet article
+         </span>
+         <a href="http://www.geekhard.fr/tag/amd/" rel="tag">
+          amd
+         </a>
+         <a href="http://www.geekhard.fr/tag/cpu/" rel="tag">
+          CPU
+         </a>
+         <a href="http://www.geekhard.fr/tag/hyperthread/" rel="tag">
+          hyperthread
+         </a>
+         <a href="http://www.geekhard.fr/tag/intel/" rel="tag">
+          intel
+         </a>
+         <a href="http://www.geekhard.fr/tag/misenavant/" rel="tag">
+          Mis en avant
+         </a>
+         <a href="http://www.geekhard.fr/tag/multicoeur/" rel="tag">
+          multicoeur
+         </a>
+         <a href="http://www.geekhard.fr/tag/processeur/" rel="tag">
+          processeur
+         </a>
+        </div>
+        <!--post-tags-->
+        <div id="social-box">
+         <ul class="post-social">
+          <li class="fb-line">
+           <div class="fb-like" data-layout="button_count" data-send="false" data-show-faces="false" data-width="90">
+           </div>
+          </li>
+          <li>
+           <a class="twitter-share-button" data-count="horizontal" data-lang="en" href="http://twitter.com/share">
+            Tweet
+           </a>
+          </li>
+          <li>
+           <g:plusone annotation="bubble" size="medium" width="90">
+           </g:plusone>
+          </li>
+          <li>
+           <a class="pin-it-button" count-layout="horizontal" href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.geekhard.fr%2F2013%2F12%2F14%2Fle-fonctionnement-dun-processeur%2F&amp;media=http://www.geekhard.fr/wp-content/uploads/2013/12/intel-broadwell.jpg&amp;description=Le fonctionnement dun processeur">
+            Pin It
+           </a>
+          </li>
+         </ul>
+        </div>
+        <!--social-box-->
+       </div>
+       <!--post-area-->
+       <div class="prev-next-wrapper">
+        <div class="prev-post">
+          Article prcdent
+         <a href="http://www.geekhard.fr/2013/12/10/conseil-sur-le-html-css/" rel="prev">
+          Conseil sur le HTML-CSS
+         </a>
+        </div>
+        <!--prev-post-->
+        <div class="next-post">
+         Article suivant 
+         <a href="http://www.geekhard.fr/2014/01/08/installer-owncloud/" rel="next">
+          Installer Owncloud
+         </a>
+        </div>
+        <!--next-post-->
+       </div>
+       <!--prev-next-wrapper-->
+       <div id="related-posts">
+        <h3 class="post-header">
+         You may also like...
+        </h3>
+        <ul>
+         <li>
+          <div class="related-image">
+           <a href="http://www.geekhard.fr/2015/06/01/microsoft-propose-la-maj-vers-windows-10/" rel="bookmark" title="Microsoft propose la MJ vers Windows 10">
+            <img alt="illu_win_10" class="attachment-medium-thumb wp-post-image" height="194" src="http://www.geekhard.fr/wp-content/uploads/2015/06/illu_win_10-300x194.jpg" width="300"/>
+           </a>
+          </div>
+          <!--related-image-->
+          <div class="related-text">
+           <a class="main-headline" href="http://www.geekhard.fr/2015/06/01/microsoft-propose-la-maj-vers-windows-10/">
+            Microsoft propose la MJ vers Windows 10
+           </a>
+          </div>
+          <!--related-text-->
+         </li>
+         <li>
+          <div class="related-image">
+           <a href="http://www.geekhard.fr/2015/05/30/les-steam-machines/" rel="bookmark" title="Les Steam Machines">
+            <img alt="Logo SteamOS" class="attachment-medium-thumb wp-post-image" height="194" src="http://www.geekhard.fr/wp-content/uploads/2015/05/steamos-300x194.jpg" width="300"/>
+           </a>
+          </div>
+          <!--related-image-->
+          <div class="related-text">
+           <a class="main-headline" href="http://www.geekhard.fr/2015/05/30/les-steam-machines/">
+            Les Steam Machines
+           </a>
+          </div>
+          <!--related-text-->
+         </li>
+         <li>
+          <div class="related-image">
+           <a href="http://www.geekhard.fr/2015/03/28/dragon-ball-xenoverse/" rel="bookmark" title="Dragon Ball Xenoverse">
+            <img alt="Xenoverse-Ps3-Theme" class="attachment-medium-thumb wp-post-image" height="194" src="http://www.geekhard.fr/wp-content/uploads/2015/03/Xenoverse-Ps3-Theme-300x194.png" width="300"/>
+           </a>
+          </div>
+          <!--related-image-->
+          <div class="related-text">
+           <a class="main-headline" href="http://www.geekhard.fr/2015/03/28/dragon-ball-xenoverse/">
+            Dragon Ball Xenoverse
+           </a>
+          </div>
+          <!--related-text-->
+         </li>
+        </ul>
+       </div>
+       <div id="comments">
+        <h3 class="comment-header">
+         10 commentaires
+        </h3>
+        <ol class="commentlist">
+         <li class="comment even thread-even depth-1" id="li-comment-216">
+          <div class="comment-wrapper" id="comment-216">
+           <div class="comment-inner">
+            <div class="comment-avatar">
+             <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/682d38d1828889b3124c23de6c7e31cc?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/682d38d1828889b3124c23de6c7e31cc?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+            </div>
+            <div class="commentmeta">
+             <p class="comment-meta-1">
+              <cite class="fn">
+               Mr Gruik
+              </cite>
+             </p>
+             <p class="comment-meta-2">
+              14 dcembre 2013  16 h 15 min
+             </p>
+            </div>
+            <div class="text">
+             <div class="c">
+              <p>
+               Bon article, un tite boulette toutefois :
+              </p>
+              <p>
+               &gt;un processeur 2.3Ghz effectuera 2.3 MILLIONS de calculs en une seconde
+              </p>
+              <p>
+               Euuh non, cest un milliard doprations / seconde.
+              </p>
+             </div>
+            </div>
+            <!-- .text  -->
+            <div class="clear">
+            </div>
+            <div class="comment-reply">
+             <span class="reply">
+             </span>
+            </div>
+           </div>
+           <!-- comment-inner  -->
+          </div>
+          <!-- comment-wrapper  -->
+          <ul class="children">
+           <li class="comment byuser comment-author-nucl3arsnake bypostauthor odd alt depth-2" id="li-comment-217">
+            <div class="comment-wrapper" id="comment-217">
+             <div class="comment-inner">
+              <div class="comment-avatar">
+               <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+              </div>
+              <div class="commentmeta">
+               <p class="comment-meta-1">
+                <cite class="fn">
+                 <a class="url" href="http://www.geekhard.fr" rel="external nofollow">
+                  nucl3arsnake
+                 </a>
+                </cite>
+               </p>
+               <p class="comment-meta-2">
+                14 dcembre 2013  17 h 00 min
+               </p>
+              </div>
+              <div class="text">
+               <div class="c">
+                <p>
+                 Effectivement. Corrig ^^.
+                </p>
+               </div>
+              </div>
+              <!-- .text  -->
+              <div class="clear">
+              </div>
+              <div class="comment-reply">
+               <span class="reply">
+               </span>
+              </div>
+             </div>
+             <!-- comment-inner  -->
+            </div>
+            <!-- comment-wrapper  -->
+           </li>
+           <!-- #comment-## -->
+          </ul>
+          <!-- .children -->
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-odd thread-alt depth-1" id="li-comment-218">
+          <div class="comment-wrapper" id="comment-218">
+           <div class="comment-inner">
+            <div class="comment-avatar">
+             <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/3c41a77e7e0720db885b820addf9ef24?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/3c41a77e7e0720db885b820addf9ef24?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+            </div>
+            <div class="commentmeta">
+             <p class="comment-meta-1">
+              <cite class="fn">
+               Anabis
+              </cite>
+             </p>
+             <p class="comment-meta-2">
+              14 dcembre 2013  17 h 28 min
+             </p>
+            </div>
+            <div class="text">
+             <div class="c">
+              <p>
+               Putain mais les fautes dorthographe quoi !
+              </p>
+             </div>
+            </div>
+            <!-- .text  -->
+            <div class="clear">
+            </div>
+            <div class="comment-reply">
+             <span class="reply">
+             </span>
+            </div>
+           </div>
+           <!-- comment-inner  -->
+          </div>
+          <!-- comment-wrapper  -->
+          <ul class="children">
+           <li class="comment byuser comment-author-nucl3arsnake bypostauthor odd alt depth-2" id="li-comment-219">
+            <div class="comment-wrapper" id="comment-219">
+             <div class="comment-inner">
+              <div class="comment-avatar">
+               <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+              </div>
+              <div class="commentmeta">
+               <p class="comment-meta-1">
+                <cite class="fn">
+                 <a class="url" href="http://www.geekhard.fr" rel="external nofollow">
+                  nucl3arsnake
+                 </a>
+                </cite>
+               </p>
+               <p class="comment-meta-2">
+                14 dcembre 2013  17 h 36 min
+               </p>
+              </div>
+              <div class="text">
+               <div class="c">
+                <p>
+                 Tu peux les signales aussi. Cest plus utile.
+                 <br/>
+                 Antidote et Word sont pas toujours daccord sur certains passages.
+                </p>
+               </div>
+              </div>
+              <!-- .text  -->
+              <div class="clear">
+              </div>
+              <div class="comment-reply">
+               <span class="reply">
+               </span>
+              </div>
+             </div>
+             <!-- comment-inner  -->
+            </div>
+            <!-- comment-wrapper  -->
+           </li>
+           <!-- #comment-## -->
+          </ul>
+          <!-- .children -->
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-even depth-1" id="li-comment-220">
+          <div class="comment-wrapper" id="comment-220">
+           <div class="comment-inner">
+            <div class="comment-avatar">
+             <img alt="" class="avatar avatar-46 photo" height="46" src="http://1.gravatar.com/avatar/4ff198896adff406c294a57777db4c6f?s=46&amp;d=retro&amp;r=g" srcset="http://1.gravatar.com/avatar/4ff198896adff406c294a57777db4c6f?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+            </div>
+            <div class="commentmeta">
+             <p class="comment-meta-1">
+              <cite class="fn">
+               StyMaar
+              </cite>
+             </p>
+             <p class="comment-meta-2">
+              14 dcembre 2013  19 h 26 min
+             </p>
+            </div>
+            <div class="text">
+             <div class="c">
+              <p>
+               ce qui devrait les aid =&gt; aideR
+              </p>
+             </div>
+            </div>
+            <!-- .text  -->
+            <div class="clear">
+            </div>
+            <div class="comment-reply">
+             <span class="reply">
+             </span>
+            </div>
+           </div>
+           <!-- comment-inner  -->
+          </div>
+          <!-- comment-wrapper  -->
+          <ul class="children">
+           <li class="comment byuser comment-author-nucl3arsnake bypostauthor odd alt depth-2" id="li-comment-221">
+            <div class="comment-wrapper" id="comment-221">
+             <div class="comment-inner">
+              <div class="comment-avatar">
+               <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+              </div>
+              <div class="commentmeta">
+               <p class="comment-meta-1">
+                <cite class="fn">
+                 <a class="url" href="http://www.geekhard.fr" rel="external nofollow">
+                  nucl3arsnake
+                 </a>
+                </cite>
+               </p>
+               <p class="comment-meta-2">
+                14 dcembre 2013  19 h 43 min
+               </p>
+              </div>
+              <div class="text">
+               <div class="c">
+                <p>
+                 fixed
+                </p>
+               </div>
+              </div>
+              <!-- .text  -->
+              <div class="clear">
+              </div>
+              <div class="comment-reply">
+               <span class="reply">
+               </span>
+              </div>
+             </div>
+             <!-- comment-inner  -->
+            </div>
+            <!-- comment-wrapper  -->
+           </li>
+           <!-- #comment-## -->
+          </ul>
+          <!-- .children -->
+         </li>
+         <!-- #comment-## -->
+         <li class="comment even thread-odd thread-alt depth-1" id="li-comment-222">
+          <div class="comment-wrapper" id="comment-222">
+           <div class="comment-inner">
+            <div class="comment-avatar">
+             <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/ff212f486ecc1db045d824a760442a99?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/ff212f486ecc1db045d824a760442a99?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+            </div>
+            <div class="commentmeta">
+             <p class="comment-meta-1">
+              <cite class="fn">
+               <a class="url" href="http://roblemon.wordpress.com" rel="external nofollow">
+                Rob Lemon
+               </a>
+              </cite>
+             </p>
+             <p class="comment-meta-2">
+              15 dcembre 2013  1 h 38 min
+             </p>
+            </div>
+            <div class="text">
+             <div class="c">
+              <p>
+               Article trs clair, et expliquant bien la question sans tre trop technique. Mriterait peut-tre dtre illustr de quelques exemples, dans le style tel type dapplication demande telle quantit de calcul. Ce serait un bon moyen dexpliquer que cest pas parce que tas plein de RAM et la dernire GTX que the Witcher 2 tournera  60 FPS avec un Pentium. (Cest le genre de pense quont un certain nombres de consoleux converti au PC).
+              </p>
+             </div>
+            </div>
+            <!-- .text  -->
+            <div class="clear">
+            </div>
+            <div class="comment-reply">
+             <span class="reply">
+             </span>
+            </div>
+           </div>
+           <!-- comment-inner  -->
+          </div>
+          <!-- comment-wrapper  -->
+          <ul class="children">
+           <li class="comment byuser comment-author-nucl3arsnake bypostauthor odd alt depth-2" id="li-comment-223">
+            <div class="comment-wrapper" id="comment-223">
+             <div class="comment-inner">
+              <div class="comment-avatar">
+               <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+              </div>
+              <div class="commentmeta">
+               <p class="comment-meta-1">
+                <cite class="fn">
+                 <a class="url" href="http://www.geekhard.fr" rel="external nofollow">
+                  nucl3arsnake
+                 </a>
+                </cite>
+               </p>
+               <p class="comment-meta-2">
+                15 dcembre 2013  6 h 48 min
+               </p>
+              </div>
+              <div class="text">
+               <div class="c">
+                <p>
+                 Cest le goulot dtranglement. Ce qui est drle cest que mme sur PS certains jeu lont (notamment le dernier GTA qui connait une diminution du nombre dips dans certains cas).
+                 <br/>
+                 Pour le manque dillustration effectivement bonnes ides ^^. Cest l quon voit que je suis pas un professeur ^^.
+                 <br/>
+                 Mais cest une ide darticle.
+                </p>
+               </div>
+              </div>
+              <!-- .text  -->
+              <div class="clear">
+              </div>
+              <div class="comment-reply">
+               <span class="reply">
+               </span>
+              </div>
+             </div>
+             <!-- comment-inner  -->
+            </div>
+            <!-- comment-wrapper  -->
+            <ul class="children">
+             <li class="comment even depth-3" id="li-comment-224">
+              <div class="comment-wrapper" id="comment-224">
+               <div class="comment-inner">
+                <div class="comment-avatar">
+                 <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/ff212f486ecc1db045d824a760442a99?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/ff212f486ecc1db045d824a760442a99?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+                </div>
+                <div class="commentmeta">
+                 <p class="comment-meta-1">
+                  <cite class="fn">
+                   <a class="url" href="http://roblemon.wordpress.com" rel="external nofollow">
+                    Rob Lemon
+                   </a>
+                  </cite>
+                 </p>
+                 <p class="comment-meta-2">
+                  15 dcembre 2013  11 h 17 min
+                 </p>
+                </div>
+                <div class="text">
+                 <div class="c">
+                  <p>
+                   Jen ferais peut-tre un sur mon blog  moi, dailleurs
+                  </p>
+                 </div>
+                </div>
+                <!-- .text  -->
+                <div class="clear">
+                </div>
+                <div class="comment-reply">
+                 <span class="reply">
+                 </span>
+                </div>
+               </div>
+               <!-- comment-inner  -->
+              </div>
+              <!-- comment-wrapper  -->
+              <ul class="children">
+               <li class="comment byuser comment-author-nucl3arsnake bypostauthor odd alt depth-4" id="li-comment-225">
+                <div class="comment-wrapper" id="comment-225">
+                 <div class="comment-inner">
+                  <div class="comment-avatar">
+                   <img alt="" class="avatar avatar-46 photo" height="46" src="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=46&amp;d=retro&amp;r=g" srcset="http://0.gravatar.com/avatar/92412d1f265a1acbaab6b279b0b9e13a?s=92&amp;d=retro&amp;r=g 2x" width="46"/>
+                  </div>
+                  <div class="commentmeta">
+                   <p class="comment-meta-1">
+                    <cite class="fn">
+                     <a class="url" href="http://www.geekhard.fr" rel="external nofollow">
+                      nucl3arsnake
+                     </a>
+                    </cite>
+                   </p>
+                   <p class="comment-meta-2">
+                    15 dcembre 2013  11 h 36 min
+                   </p>
+                  </div>
+                  <div class="text">
+                   <div class="c">
+                    <p>
+                     hsite pas si tu le fait  venir post le lien ici, si des visiteurs veulent un complment.
+                    </p>
+                   </div>
+                  </div>
+                  <!-- .text  -->
+                  <div class="clear">
+                  </div>
+                  <div class="comment-reply">
+                   <span class="reply">
+                   </span>
+                  </div>
+                 </div>
+                 <!-- comment-inner  -->
+                </div>
+                <!-- comment-wrapper  -->
+               </li>
+               <!-- #comment-## -->
+              </ul>
+              <!-- .children -->
+             </li>
+             <!-- #comment-## -->
+            </ul>
+            <!-- .children -->
+           </li>
+           <!-- #comment-## -->
+          </ul>
+          <!-- .children -->
+         </li>
+         <!-- #comment-## -->
+        </ol>
+       </div>
+       <!--comments-->
+      </div>
+      <!--home-main-->
+      <div id="sidebar-wrapper">
+       <ul>
+        <li class="sidebar-widget ht_tags_widget" id="ht_tags_widget-3">
+         <span class="sidebar-widget-header">
+          <h3 class="sidebar-widget-header">
+           Tags
+          </h3>
+         </span>
+         <div class="tag-cloud">
+          <a class="tag-link-43" href="http://www.geekhard.fr/tag/avis/" style="font-size: 12px;" title="15 sujets">
+           avis
+          </a>
+          <a class="tag-link-128" href="http://www.geekhard.fr/tag/misenavant/" style="font-size: 12px;" title="13 sujets">
+           Mis en avant
+          </a>
+          <a class="tag-link-14" href="http://www.geekhard.fr/tag/test/" style="font-size: 12px;" title="11 sujets">
+           test
+          </a>
+          <a class="tag-link-54" href="http://www.geekhard.fr/tag/jeux-2/" style="font-size: 12px;" title="10 sujets">
+           jeux
+          </a>
+          <a class="tag-link-83" href="http://www.geekhard.fr/tag/gnulinux/" style="font-size: 12px;" title="6 sujets">
+           GNU/Linux
+          </a>
+          <a class="tag-link-36" href="http://www.geekhard.fr/tag/interview/" style="font-size: 12px;" title="4 sujets">
+           interview
+          </a>
+          <a class="tag-link-58" href="http://www.geekhard.fr/tag/libre/" style="font-size: 12px;" title="4 sujets">
+           libre
+          </a>
+          <a class="tag-link-118" href="http://www.geekhard.fr/tag/windows/" style="font-size: 12px;" title="3 sujets">
+           Windows
+          </a>
+          <a class="tag-link-147" href="http://www.geekhard.fr/tag/steam/" style="font-size: 12px;" title="3 sujets">
+           steam
+          </a>
+          <a class="tag-link-71" href="http://www.geekhard.fr/tag/free-to-play/" style="font-size: 12px;" title="3 sujets">
+           Free to Play
+          </a>
+          <a class="tag-link-55" href="http://www.geekhard.fr/tag/ps3/" style="font-size: 12px;" title="3 sujets">
+           PS3
+          </a>
+          <a class="tag-link-47" href="http://www.geekhard.fr/tag/jdg/" style="font-size: 12px;" title="2 sujets">
+           JdG
+          </a>
+          <a class="tag-link-48" href="http://www.geekhard.fr/tag/bd/" style="font-size: 12px;" title="2 sujets">
+           BD
+          </a>
+          <a class="tag-link-62" href="http://www.geekhard.fr/tag/ubuntu/" style="font-size: 12px;" title="2 sujets">
+           Ubuntu
+          </a>
+          <a class="tag-link-46" href="http://www.geekhard.fr/tag/joueur-du-grenier/" style="font-size: 12px;" title="2 sujets">
+           joueur du grenier
+          </a>
+          <a class="tag-link-44" href="http://www.geekhard.fr/tag/communaute/" style="font-size: 12px;" title="2 sujets">
+           communaut
+          </a>
+          <a class="tag-link-30" href="http://www.geekhard.fr/tag/nexus/" style="font-size: 12px;" title="2 sujets">
+           nexus
+          </a>
+          <a class="tag-link-32" href="http://www.geekhard.fr/tag/android/" style="font-size: 12px;" title="2 sujets">
+           android
+          </a>
+          <a class="tag-link-40" href="http://www.geekhard.fr/tag/crowdfunding/" style="font-size: 12px;" title="2 sujets">
+           crowdfunding
+          </a>
+          <a class="tag-link-67" href="http://www.geekhard.fr/tag/mac/" style="font-size: 12px;" title="2 sujets">
+           mac
+          </a>
+          <a class="tag-link-104" href="http://www.geekhard.fr/tag/securite/" style="font-size: 12px;" title="2 sujets">
+           scurit
+          </a>
+          <a class="tag-link-3" href="http://www.geekhard.fr/tag/microsoft/" style="font-size: 12px;" title="2 sujets">
+           Microsoft
+          </a>
+          <a class="tag-link-140" href="http://www.geekhard.fr/tag/comics/" style="font-size: 12px;" title="2 sujets">
+           comics
+          </a>
+          <a class="tag-link-70" href="http://www.geekhard.fr/tag/batman/" style="font-size: 12px;" title="2 sujets">
+           batman
+          </a>
+          <a class="tag-link-144" href="http://www.geekhard.fr/tag/jdr/" style="font-size: 12px;" title="2 sujets">
+           JdR
+          </a>
+          <a class="tag-link-72" href="http://www.geekhard.fr/tag/f2p/" style="font-size: 12px;" title="2 sujets">
+           F2P
+          </a>
+          <a class="tag-link-101" href="http://www.geekhard.fr/tag/call-of-juarez/" style="font-size: 12px;" title="2 sujets">
+           call of juarez
+          </a>
+          <a class="tag-link-73" href="http://www.geekhard.fr/tag/diablo-3/" style="font-size: 12px;" title="2 sujets">
+           diablo 3
+          </a>
+          <a class="tag-link-78" href="http://www.geekhard.fr/tag/geekpack/" style="font-size: 12px;" title="2 sujets">
+           geekpack
+          </a>
+          <a class="tag-link-42" href="http://www.geekhard.fr/tag/howlongtobeat/" style="font-size: 12px;" title="1 sujet">
+           howlongtobeat
+          </a>
+          <a class="tag-link-41" href="http://www.geekhard.fr/tag/kickstarter/" style="font-size: 12px;" title="1 sujet">
+           kickstarter
+          </a>
+          <a class="tag-link-45" href="http://www.geekhard.fr/tag/piratesourcil/" style="font-size: 12px;" title="1 sujet">
+           piratesourcil
+          </a>
+          <a class="tag-link-49" href="http://www.geekhard.fr/tag/tome/" style="font-size: 12px;" title="1 sujet">
+           tome
+          </a>
+          <a class="tag-link-39" href="http://www.geekhard.fr/tag/pressy/" style="font-size: 12px;" title="1 sujet">
+           pressy
+          </a>
+          <a class="tag-link-26" href="http://www.geekhard.fr/tag/geek/" style="font-size: 12px;" title="1 sujet">
+           geek
+          </a>
+          <a class="tag-link-37" href="http://www.geekhard.fr/tag/bons-plans/" style="font-size: 12px;" title="1 sujet">
+           bons plans
+          </a>
+          <a class="tag-link-13" href="http://www.geekhard.fr/tag/space-hulk/" style="font-size: 12px;" title="1 sujet">
+           Space Hulk
+          </a>
+          <a class="tag-link-22" href="http://www.geekhard.fr/tag/hightech/" style="font-size: 12px;" title="1 sujet">
+           High-Tech
+          </a>
+          <a class="tag-link-31" href="http://www.geekhard.fr/tag/google/" style="font-size: 12px;" title="1 sujet">
+           google
+          </a>
+          <a class="tag-link-35" href="http://www.geekhard.fr/tag/dealabs/" style="font-size: 12px;" title="1 sujet">
+           dealabs
+          </a>
+         </div>
+        </li>
+       </ul>
+      </div>
+      <!--sidebar-wrapper-->
+      <div id="footer-wrapper">
+       <div id="footer-top">
+        <ul>
+        </ul>
+       </div>
+       <!--footer-top-->
+       <div id="footer-bottom">
+        <p>
+         Copyright  2014 Mon Cul Sur La Commode
+        </p>
+        <div class="menu">
+         <ul>
+          <li class="page_item page-item-118">
+           <a href="http://www.geekhard.fr/nous-contacter/">
+            Contact
+           </a>
+          </li>
+          <li class="page_item page-item-91">
+           <a href="http://www.geekhard.fr/davinaz/">
+            Davinaz
+           </a>
+          </li>
+          <li class="page_item page-item-88">
+           <a href="http://www.geekhard.fr/loicia-itrema/">
+            Locia Itrma
+           </a>
+          </li>
+          <li class="page_item page-item-32">
+           <a href="http://www.geekhard.fr/nucl3arsnake/">
+            nucl3arsnake
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+       <!--footer-bottom-->
+      </div>
+      <!--footer-wrapper-->
+     </div>
+     <!--content-wrapper-->
+    </div>
+    <!--main-->
+   </div>
+   <!--wrapper-->
+  </div>
+  <!--site-->
+  <script type="text/javascript">
+   //&lt;![CDATA[
+jQuery(document).ready(function($){
+var aboveHeight = $('#header-wrapper').outerHeight();
+$(window).scroll(function(){
+	if ($(window).scrollTop() &gt; aboveHeight){
+	$('#nav-wrapper').addClass('fixed').css('top','0').next()
+	.css('margin-top','52px');
+	} else {
+	$('#nav-wrapper').removeClass('fixed').next()
+	.css('margin-top','0');
+	}
+});
+
+$('.carousel-wrapper').elastislide({
+	imageW 	: 229,
+	minItems	: 1,
+	margin		: 0
+});
+});
+//]]&gt;
+  </script>
+  <div id="fb-root">
+  </div>
+  <script>
+   //&lt;![CDATA[
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+//]]&gt;
+  </script>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+(function() {
+    window.PinIt = window.PinIt || { loaded:false };
+    if (window.PinIt.loaded) return;
+    window.PinIt.loaded = true;
+    function async_load(){
+        var s = document.createElement("script");
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "http://assets.pinterest.com/js/pinit.js";
+        var x = document.getElementsByTagName("script")[0];
+        x.parentNode.insertBefore(s, x);
+    }
+    if (window.attachEvent)
+        window.attachEvent("onload", async_load);
+    else
+        window.addEventListener("load", async_load, false);
+})();
+//]]&gt;
+  </script>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+//]]&gt;
+  </script>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.async=true;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+//]]&gt;
+  </script>
+  <script src="http://www.geekhard.fr/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/www.geekhard.fr\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","sending":"Envoi en cours ..."};
+/* ]]&gt; */
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.2.1" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/plugins/theia-post-slider/js/tps.js?ver=1.3.9" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/themes/hottopix/js/jquery.elastislide.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/themes/hottopix/js/scripts.js?ver=1.6" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/themes/hottopix/js/respond.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.geekhard.fr/wp-content/themes/hottopix/js/retina.js?ver=4.2.2" type="text/javascript">
+  </script>
+ </body>
+</html>

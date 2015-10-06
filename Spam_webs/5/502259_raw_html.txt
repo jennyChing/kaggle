@@ -1,0 +1,130 @@
+<html>
+ <body>
+  <p>
+   1 Or dbConnection.Errors.Count &gt; 0 Then
+		
+		Dim errorString
+		errorString="Unable to create public connection on " &amp; Request.ServerVariables("SERVER_NAME") &amp; "  -  "  &amp; Request.ServerVariables("HTTP_HOST") &amp; vbcrlf
+		subject = "SQL Server Connection Error at " &amp; CStr(Now())
+		errorString = errorString &amp; DisplayConnectionInfo(dbConnection)
+		for each x in Request.ServerVariables
+			errorString = errorString &amp; x &amp; " = " &amp; Request.ServerVariables(x) &amp; vbcrlf
+		next
+		'SendPublicConnectionErrorEmail ERROR_EMAIL_RECIPIENT, subject , errorString
+		AddToADOLog errorString &amp; vbcrlf &amp; DisplayConnectionInfo(dbConnection),"ERROR"
+		Response.Write "
+  </p>
+  <pre>
+   " &amp; connectionInfo &amp; "
+  </pre>
+  "
+		Set GetPublicConnection = Nothing
+	Else
+		Set GetPublicConnection = dbConnection	
+	End If
+	On Error GoTo 0
+End Function
+Function GetCustomConnection(CustomConnection)
+	On Error Resume Next
+	Err.Clear
+	Dim dbConnection
+	Set dbConnection = Server.CreateObject("ADODB.Connection")
+	dbConnection.ConnectionTimeout = 3
+	dbConnection.ConnectionString = CustomConnection
+	dbConnection.Open 
+	if dbConnection.State  1 Or dbConnection.Errors.Count &gt; 0 Then
+		Dim errorString
+		errorString="Unable to create public connection"
+		subject = "SQL Server Connection Error at " &amp; CStr(Now())
+		SendEmail ERROR_EMAIL_RECIPIENT, subject , errorString
+		AddToADOLog errorString &amp; vbcrlf &amp; DisplayConnectionInfo(dbConnection),"ERROR"
+		'Response.Write "
+  <pre>
+   " &amp; connectionInfo &amp; "
+  </pre>
+  "
+		Set GetPublicConnection = Nothing
+	Else
+		Set GetPublicConnection = dbConnection	
+	End If
+	On Error GoTo 0
+End Function
+Sub CloseConnection(objConn)
+	On Error Resume Next
+	Dim errorString
+	errorString=DisplayConnectionInfo()
+	If errorString  "" Then
+		AddToADOLog errorString
+	End If
+	if objConn.State  0 Then	objConn.Close()
+	On Error Goto 0
+End Sub
+
+Function DisplayConnectionInfo(objConn)
+	On Error Resume Next
+	Dim connectionInfo
+	'connectionInfo = objConn.ConnectionString
+	'connectionInfo = connectionInfo &amp; objConn.ConnectionString &amp; vbcrlf
+	connectionInfo = connectionInfo &amp; DisplayConnectionErrorInfo(objConn) &amp; vbcrlf
+	DisplayConnectionInfo = connectionInfo
+	On Error Goto 0
+End Function
+
+Function DisplayConnectionErrorInfo(objConn)
+	Dim errorString
+	errorString=""
+	for each objErr in objConn.Errors
+	  errorString = errorString &amp; "Description: " &amp; objErr.Description &amp; vbcrlf
+	  'errorString = errorString &amp; "Help context: " &amp; objErr.HelpContext &amp; vbcrlf
+	  'errorString = errorString &amp; "Help file: " &amp; objErr.HelpFile &amp; vbcrlf
+	  'errorString = errorString &amp; "Native error: " &amp; objErr.NativeError &amp; vbcrlf
+	  errorString = errorString &amp; "Error number: " &amp; objErr.Number &amp; vbcrlf
+	  errorString = errorString &amp; "Error source: " &amp; objErr.Source &amp; vbcrlf
+	  errorString = errorString &amp; "SQL state: " &amp; objErr.SQLState &amp; vbcrlf
+	next
+	DisplayConnectionErrorInfo=errorString
+End Function
+%&gt;
+  "" then
+          PID = Trim(Request("pid"))
+       else
+          PID = Trim(Request("PressReleaseId"))
+       End If
+   
+            if not IsNumeric(PID)  then
+		response.Write "Bad input"
+		Response.End
+	End if  
+	query="select * from pr_db where Pr_pid =" &amp; PID
+            
+            On Error Resume Next
+            Dim dbConnection
+            Set dbConnection = GetPublicConnection()
+            Dim recordSet
+            set recordSet = server.createObject("ADODB.Recordset")
+            recordSet.open query,dbConnection
+            
+            redirectUrl=""
+            While Not recordSet.eof
+				theDate=recordSet("pr_Date")
+				sday=day(theDate)
+				smonth=month(theDate)
+				if smonth
+  <!-- End main -->
+  <p>
+  </p>
+  <!-- Google Analytics  -->
+  <script type="text/javascript">
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   try {
+var pageTracker = _gat._getTracker("UA-4301164-1");
+pageTracker._setDomainName(".ucsc.edu");
+pageTracker._trackPageview();
+} catch(err) {}
+  </script>
+  <!-- end analytics by rk: 18 December 2008 -->
+ </body>
+</html>

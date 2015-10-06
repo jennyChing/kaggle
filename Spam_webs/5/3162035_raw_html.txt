@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Simple CSS3 rounded corners with support for IE  BestInClass.com Blog
+  </title>
+  <script src="/javascripts/all.js" type="text/javascript">
+  </script>
+  <link href="/css/bestinclass.css" rel="Stylesheet" type="text/css"/>
+  <link href="/blog/style.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/images/favicon.png" rel="icon" type="image/png"/>
+  <link href="http://www.bestinclass.com/blog/2008/css3-border-radius-rounded-corners-ie/" rel="canonical"/>
+ </head>
+ <body>
+  <div id="container">
+   <div id="header">
+    <div class="rhead">
+     <ul class="sess">
+      <li>
+      </li>
+     </ul>
+     <div id="search">
+      <form action="/search" id="cse-search-box">
+       <div>
+        <input name="cx" type="hidden" value="001196849584783258296:678yjwvhhb8"/>
+        <input name="cof" type="hidden" value="FORID:11"/>
+        <span>
+         Search:
+        </span>
+        <input class="sbox" name="q" size="25" type="text"/>
+        <a class="greenbut" href="javascript:search()">
+         Go
+        </a>
+       </div>
+      </form>
+     </div>
+    </div>
+    <div id="logo">
+     <a href="/digital-cameras">
+      <img alt="best digital camera" height="60" src="/images/bluelogo.png" width="284"/>
+     </a>
+    </div>
+   </div>
+   <div id="content">
+    <div class="rounded_maincol rounded index maincol">
+     <div class="tl">
+     </div>
+     <div class="tr">
+     </div>
+     <div class="post single" id="post_14">
+      <div class="rounded_colhead rounded post_title">
+       <div class="tl">
+       </div>
+       <div class="tr">
+       </div>
+       <h1>
+        Simple CSS3 rounded corners with support for IE
+       </h1>
+       <div class="bl">
+       </div>
+       <div class="br">
+       </div>
+      </div>
+      <p class="postmeta">
+       by
+       <a href="http://www.bestinclass.com" rel="external" title="Visit Bill Lipas website">
+        Bill Lipa
+       </a>
+       on Monday, September 15th, 2008
+      </p>
+      <div class="post_content">
+       <p>
+        Rounded corners are a common element of web designs.  Unfortunately, they have been frustratingly difficult to express in clean CSS / HTML.  The long term solution is CSS3s border-radius property, which is nicely supported in the current versions of Safari and Firefox.  Sadly but unsurprisingly, this property is not supported in IE, even the upcoming IE8.
+       </p>
+       <p>
+        The new design for our website was full of rounded corners.  As an avid Firefox user, I simply could not bear the idea of sending millions of little corner images when border-radius did the trick so well.  Yet, IE7 is the dominant browser, so we couldnt leave those users out in the cold.
+       </p>
+       <p>
+        I started looking for a technique that would meet these requirements:
+       </p>
+       <ul>
+        <li>
+         CSS3 border-radius aware browsers are sent clean, fast CSS with no corner images
+        </li>
+        <li>
+         IE7+ gets a fallback using corner images
+        </li>
+        <li>
+         The same HTML is used for all browsers  only the CSS is different
+        </li>
+        <li>
+         Cosmetics in IE6 dont matter  its OK to have square corners in this old browser
+        </li>
+        <li>
+         No Javascript
+        </li>
+       </ul>
+       <p>
+        Fortunately, I did find a flexible way to achieve this without too many problems.  If you look at the
+        <a href="http://www.bestinclass.com">
+         BestInClass.com home page
+        </a>
+        in Firefox, all of the corners and rounded buttons are implemented with pure CSS3.
+       </p>
+       <p>
+        <span id="more-14">
+        </span>
+       </p>
+       <p>
+        The main drawbacks and restrictions are:
+       </p>
+       <ul>
+        <li>
+         It adds some non-semantic empty divs to the markup.
+        </li>
+        <li>
+         It requires a way to deliver different CSS to IE.
+        </li>
+        <li>
+         It cannot support rounded elements with a border that sit on top of unpredictable backgrounds.
+        </li>
+       </ul>
+       <h4>
+        Show Me, Dont Tell Me
+       </h4>
+       <p>
+        For those that want to skip over the why and get straight to the how, heres a fairly minimal example in a single file.
+       </p>
+       <p>
+        <a href="/blog/samples/css3-rounded-corners-ie/example.html">
+         CSS3 Rounded Corners With IE Fallback Example
+        </a>
+       </p>
+       <h4>
+        The Code for Decent Browsers
+       </h4>
+       <p>
+        The first thing to do is pick a unique style id for the rounded corners.  This id will be used to find the right corner images for IE, so it needs to be unique considering the rounded blocks background color, border style, and background the block is sitting on top of.
+       </p>
+       <p>
+        First, the HTML.  Wherever we want to have a rounded block, use the following elements:
+       </p>
+       <pre class="code">
+        &lt;div class="rounded_STYLE rounded"&gt;
+  &lt;div class="tl"&gt;&lt;/div&gt;&lt;div class="tr"&gt;&lt;/div&gt;
+  ... contents of the block go here ...
+  &lt;div class="bl"&gt;&lt;/div&gt;&lt;div class="br"&gt;&lt;/div&gt;
+&lt;/div&gt;
+       </pre>
+       <p>
+        STYLE should be the unique style ID you chose.  The empty tl and tr divs are the top left and right corners, while the bl and br are the bottom right.  Those divs are not used at all in a CSS3-aware browser, but they are needed for IEs image corners.
+       </p>
+       <p>
+        For a CSS3 aware browser like Safari and Firefox 3, this element can be styled very simply:
+       </p>
+       <pre class="code">
+        .rounded_STYLE
+{
+    background-color: COLOR;          /* if needed */
+    border: 1px solid BORDER_COLOR;   /* if needed */
+    -webkit-border-radius: RADIUS;    /* for Safari */
+    -moz-border-radius: RADIUS;       /* for Firefox */
+}
+       </pre>
+       <p>
+        RADIUS would be something like 4px.  And thats it, youre done in Firefox and Safari.
+       </p>
+       <h4>
+        The Code for IE
+       </h4>
+       <p>
+        Life would be good if we could stop there, but unfortunately the depressingly incomplete and non-standard IE remains the favorite of a majority of users  At least usage of IE6 has dwindled to the point where we no longer have to worry about pixel perfection there.  And that opens the door for a decent solution in IE7 and above.
+       </p>
+       <p>
+        Did I mention that the HTML is the same?  Yes I did.  But we do need different CSS.  Somehow, you need to hide the CSS for .rounded_STYLE above from IE, and feed it the following instead.  On BestInClass.com we use dynamically generated CSS to do this, but you could use IE conditional comments as well.
+       </p>
+       <pre class="code">
+        .rounded_STYLE
+{
+  background-color: COLOR;            /* if needed */
+  border: 1px solid BORDER_COLOR;     /* if needed */
+  position: relative;
+}
+
+.rounded_STYLE &gt; .tl, .rounded_STYLE &gt; .tr, .rounded_STYLE &gt; .bl, .rounded_STYLE &gt; .br
+{
+  width: RADIUS;
+  height: RADIUS;
+  position: absolute;
+}
+
+.rounded_STYLE &gt; .tl
+{
+  background: url(/images/ui/rounded/STYLE-tl.png) top left no-repeat;
+  top: OFFSET;
+  left: OFFSET;
+}
+
+.rounded_STYLE &gt; .tr
+{
+  background: url(/images/ui/rounded/STYLE-tr.png) top right no-repeat;
+  top: OFFSET;
+  right: OFFSET;
+}
+
+.rounded_STYLE &gt; .bl
+{
+  background: url(/images/ui/rounded/STYLE-bl.png) bottom left no-repeat;
+  bottom: OFFSET;
+  left: OFFSET;
+}
+
+.rounded_STYLE &gt; .br
+{
+  background: url(/images/ui/rounded/STYLE-br.png) bottom right no-repeat;
+  bottom: OFFSET;
+  right: OFFSET;
+}
+       </pre>
+       <p>
+        Here RADIUS is again something like 4px and STYLE is the unique corner style id you chose.  OFFSET should be set to -1px if you have a 1 pixel border for the element, or 0 if there is no border.
+       </p>
+       <p>
+        The CSS references four different corner images.  In this example, they are located on the path /images/ui/rounded.
+       </p>
+       <h4>
+        Making the Corner Images
+       </h4>
+       <p>
+        You could generate these images using PhotoShop or another image editor.  At least on a Mac, there is a much easier way for the non-PhotoShop savvy using the Preview application.
+       </p>
+       <ol>
+        <li>
+         Display your page in Firefox and take a screenshot of one of the corners.
+        </li>
+        <li>
+         Open the screenshot in Preview.  Zoom in so that you can see the pixels clearly.
+        </li>
+        <li>
+         Select a square that is no bigger than RADIUS on a side and which is aligned with the straight borders of the element.
+        </li>
+        <li>
+         Copy and New from Clipboard.
+        </li>
+        <li>
+         Save this corner in your /images/ui/rounded directory using the name STYLE-CORNER.png where CORNER is tl, tr, bl, or br depending on whatever corner you chose.
+        </li>
+        <li>
+         Use Flip Horizontal and Flip Vertical to generate the other three corners and repeat.
+        </li>
+       </ol>
+       <p>
+        Congratulations, you should now have attractive anti-aliased rounded corners in all modern browsers, with Firefox and Safari users able to enjoy faster browsing without millions of teeny corner images clogging up the internets.  Plus, you have the satisfaction of being future-compliant with CSS3 as it becomes increasingly available.
+       </p>
+       <p>
+        <strong>
+         Update 3/10/2009:
+        </strong>
+        Note that if you make your corner images for IE some other way than the suggested screenshot method above, that the background should not be transparent.  Otherwise the square border that IE places down will not be erased properly.  Also, all of the images should be the same square size.
+       </p>
+      </div>
+      <div class="comments">
+       <!-- You can start editing here. -->
+       <h3 id="comments">
+        43 Responses to Simple CSS3 rounded corners with support for IE
+       </h3>
+       <ol class="commentlist">
+        <li class="comment odd" id="comment-8">
+         <div class="info">
+          <cite>
+           HD
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 21, 2008 at 2:54 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Created a site for a friend and hate the square corners, so have been looking for an easy rounded corner fix, but am not that familiar with this coding. Where in the index page does your html code go and where in the style sheet does the CSS3 coding go? Thanks
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-9">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 21, 2008 at 9:21 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           @HD  Ive added an example that should make it more clear.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-10">
+         <div class="info">
+          <cite>
+           links for 2008-09-21 | pollas.dk [permanent meta]  Blog Archive
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 21, 2008 at 11:00 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] BestInClass.com Blog  Simple rounded corners with CSS3 box-radius and fallback for IE The long term solution is CSS3s box-radius property, which is nicely supported in the current versions of Safari and Firefox. Sadly but unsurprisingly, this property is not supported in IE, even the upcoming IE8. (tags: tutorial corners webdev css css3) [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-11">
+         <div class="info">
+          <cite>
+           HD
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 22, 2008 at 9:00 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Thanks so much for your help! This fix is really great and works perfectly in Foxfire!! In IE7 though, while the top corners are now rounded, the bottom corners are still square. Scrolling down you can see that the rounded corners are way below the frame, at the very bottom of the page. Is there anything that can be done to fix that?
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-12">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 22, 2008 at 9:14 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           @HD  looking at your site, you have two declarations of the rounded_colhead div.  The second one is beneath the footer and contains the bl and br divs.  Thats why the bottom corners are going down there in IE.  What you want to do is get rid of the second rounded_colhead div and move the bl and br divs to the end of the first rounded_colhead div (like in the example).
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-13">
+         <div class="info">
+          <cite>
+           HD
+          </cite>
+          on
+          <span class="commentmetadata">
+           Sep 22, 2008 at 10:40 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Initially, I had the code in the same place as the example, but I just ended up with a separate rectangle, with rounded corners, above my frame. I had to play around with it to get the corners to go where they were supposed to, and discovered that moving the bl and br code to the bottom was the only way it worked for me in Foxfire.
+          </p>
+          <p>
+           I could see a problem in IE7 with the actual corners that I had made, so I just created new ones. Foxfire is still fine and, in IE7, now the rounded corners that were floating at the bottom have disappeared, while the corners at the top are now stepped. Not sure why that happened but if it stays that way, I can live with it. (For some reason, it looks different on my computer than it does online, even though I have all of the same files here the corners are still just squared in IE7.)
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-20">
+         <div class="info">
+          <cite>
+           OZZIE
+          </cite>
+          on
+          <span class="commentmetadata">
+           Oct 2, 2008 at 2:34 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           HD the browser is called FireFox ___not___ foxfire lol.. so please stop saying it :)
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-37">
+         <div class="info">
+          <cite>
+           freelancer
+          </cite>
+          on
+          <span class="commentmetadata">
+           Oct 24, 2008 at 2:40 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           IMO using rounded corner image is better than using css (moz-border, etc). That is because rounded corners are rendered ugly: no anti-aliasing, at least in FF, corners does not look the same (in my case left corner is more rounded than right, even though i gave the same rounding value). Images are much more flexible, reliable, and cross-browser compatible.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-40">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Oct 29, 2008 at 4:16 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           The rounded corners are rendered nicely in the prevalent versions of Firefox and Safari.  Firefox 2 had rather ugly jagged round corners, but thats a pretty small percentage of users now.  You can use the same image fallback technique to handle Firefox 2 users if youre still concerned about them.
+          </p>
+          <p>
+           I havent seen a problem with different looking corners  what browser is that on?
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-43">
+         <div class="info">
+          <cite>
+           The new features of CSS3 | Goowik DesigN
+          </cite>
+          on
+          <span class="commentmetadata">
+           Nov 26, 2008 at 4:17 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] If by any chance you do want to start using the rounded function feature, but would like to have the same effect on other browsers that doesnt support it, go here. [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-60">
+         <div class="info">
+          <cite>
+           vicky pandey
+          </cite>
+          on
+          <span class="commentmetadata">
+           Feb 24, 2009 at 11:45 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           dose it work in IE 6.0 and 8 beta, coz it is not working in that browser
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-74">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 2, 2009 at 3:10 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           This technique does not work in IE6.  It could probably be made to work with some effort, but our policy for IE6 is not to sweat the cosmetic details.  IE6s user base is declining, and its a painful browser to support.
+          </p>
+          <p>
+           Ill have to look at it in IE8.  It should be easy to make it work if theres something the matter there.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-75">
+         <div class="info">
+          <cite>
+           Csar Camelo
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 2, 2009 at 3:36 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Hi Bill !! Very nice article.
+          </p>
+          <p>
+           I could see a problem when my menu drops down over my rounded corner box, works fine for Firefox, Safari and Chrome but the lists drops behind my rc-box in IE7. Any Idea?
+          </p>
+          <p>
+           Thanks in advance !!
+          </p>
+          <p>
+           If I can fixit I`ll let you know.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-76">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 2, 2009 at 4:27 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Hi Csar, I will take a look if you send me a link to your website.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-82">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 3, 2009 at 3:40 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           @vicky  I did check the technique out in IE8 RC1, and it appears to work fine.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-102">
+         <div class="info">
+          <cite>
+           Defonic
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 11, 2009 at 9:54 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Nice tutorial thanks.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-124">
+         <div class="info">
+          <cite>
+           Sneha S
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 19, 2009 at 7:08 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Bill,
+           <br/>
+           You have simple &amp; nice solution using the CSS3 attribute-values for rounded corners.
+           <br/>
+           What I meant is for browsers not supporting CSS3, can use absolute positioning, z-index &amp; 4 corner PNGs to achieve rounded corners in all except IE6. Sorry I dont have link to my work yet. It is in progress. Thanks.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-125">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 19, 2009 at 10:10 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           @Sneha  you are correct. In fact, thats the technique I describe in this very article!
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-167">
+         <div class="info">
+          <cite>
+           The Rollsteady Network  Blog Archive  links for 2009-03-31
+          </cite>
+          on
+          <span class="commentmetadata">
+           Mar 31, 2009 at 5:30 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] Simple CSS3 rounded corners with support for IE  BestInClass.com Blog (tags: webdesign css corners rounded) [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-192">
+         <div class="info">
+          <cite>
+           Daily Links | AndySowards.com :: Professional Web Design, Development, Programming, Hacks, Downloads, Math and being a Web 2.0 Hipster?
+          </cite>
+          on
+          <span class="commentmetadata">
+           Apr 9, 2009 at 6:03 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] Simple CSS3 rounded corners with support for IE  BestInClass.com Blog Great rounded corner trick (tags: css css3 webdesign corners rounded roundedcorners corner webdev) [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-193">
+         <div class="info">
+          <cite>
+           Mina
+          </cite>
+          on
+          <span class="commentmetadata">
+           Apr 16, 2009 at 5:16 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Thanks for the simple code. It works. After I saw the example page : CSS3 Rounded Corners With IE Fallback Example.
+           <br/>
+           Example is easier to understand.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-194">
+         <div class="info">
+          <cite>
+           Angoli arrotondati sul proprio sito con CSS in 5 minuti | Flavios blog
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 8, 2009 at 11:36 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] Lultimo metodo  il pi avanzato, perch sfrutta le potenzialit del nuovo CSS3, messe a disposizione dai browser pi recenti come Firefox, Safari, ed Internet Explorer 8 (finalmente). Epossibile consultarlo a questo indirizzo. [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-196">
+         <div class="info">
+          <cite>
+           Bill Graham
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 17, 2009 at 11:23 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Your css produces rounded corners very nicely in Chrome and Firefox. I have still to get your IE example working. I suspect it might have something to do with z-order.
+          </p>
+          <p>
+           What is strange is that if I attempt to place some text directly within the rounded rectangle WITHOUT a  markup, the text fails to be displayed. Once I use the   tags, the text displays fine. If I place the text within a , same problem. But, if I place the text within a tables  tag, the text shows fine.
+          </p>
+          <p>
+           This problem persists with all browsers using the CSS script you provided.
+          </p>
+          <p>
+           What are the issues that might be causing this ? Could the same issue be affecting the rendering of round corners in IE 8 using your script ?
+          </p>
+          <p>
+           Many thanks
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-197">
+         <div class="info">
+          <cite>
+           Bill Graham
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 17, 2009 at 11:27 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           My tag names didnt display in the previous message. The text displays fine if I use a paragraph tag. The text fails to display if I use a div tag within the box. BUT, the text displays fine if I first place a table in the box and put the text within the table.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-198">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 19, 2009 at 9:40 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Bill, I am wondering if some other CSS on your page is interfering with the markup.  I dont think there should be much difference between a p and a div tag unless you have some other CSS that is affecting it.  You can experiment to find out what is causing the problem by starting with the minimum sample page linked in this article and then adding components from your page one at a time until you find what is triggering the issue.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-199">
+         <div class="info">
+          <cite>
+           CSS3 Exciting Functions and Features: 30+ Useful Tutorials | Noupe
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 21, 2009 at 2:31 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           [...] Simple CSS3 rounded Corners with Support for IE [...]
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-200">
+         <div class="info">
+          <cite>
+           Felipe
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 21, 2009 at 8:16 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           While this solution promises simplicity it is not based on standards, while bashing IE7 for not being a decent browser!!! It does not work, for example, in the very good Opera browser too. Perhaps it wont work on Chrome (didnt mind downloading it yet). When a rounded-corner CSS standard comes up then everything will be fine Until then solutions are mostly non-standard-compliant (like this) or too bloated, like many others What a miserable state of affairs!
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-204">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 23, 2009 at 10:44 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Felipe, I think this is as close as we can get to the CSS3 standard at the moment in the major browsers (I dont consider Opera a major browser currently  its consistently around 1% of traffic).  While our solution uses the vendor specific prefixes for the CSS properties, they are close in spirit and behavior to the real CSS3 properties.  It will be very easy to convert to the real standard properties when browsers support them.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-206">
+         <div class="info">
+          <cite>
+           Dave
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 4, 2009 at 4:11 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Cor spent days looking at rounded corner methods, most bollocks, complex, and managed myself, but with loads of added code and css.
+          </p>
+          <p>
+           Yours is brill, so wish had seen it first.
+          </p>
+          <p>
+           Thank you, why doesnt ie just change its css support.
+          </p>
+          <p>
+           Bill Gates youre an idiot
+          </p>
+          <p>
+           Dave
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-209">
+         <div class="info">
+          <cite>
+           Dave H
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 10, 2009 at 8:40 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           How about borders?
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-212">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 18, 2009 at 3:58 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Dave H, borders work fine with this technique.  The only caveat is that the background has to be predictable, so you can make the little corner images for IE with the right backgrounds.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-213">
+         <div class="info">
+          <cite>
+           Anna
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 19, 2009 at 7:09 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Awesome technique. The only thing that I didnt like was that it doesnt work in IE6.  No worries I just used conditional statement and used the border-radius.htc hack for anything less than IE7.
+          </p>
+          <p>
+           Thanks again!  Made my work day much shorter!
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-214">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 19, 2009 at 9:24 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Yeah, it would be nice if it supported rounded corners in IE6, but at least it degrades gracefully.  Square corners arent so bad if its only IE6 users.  Ive more or less given up on cosmetic appeal for IE6 and just worry about basic functionality.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-215">
+         <div class="info">
+          <cite>
+           margotta
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 25, 2009 at 3:36 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           great tutorial
+           <br/>
+           but it doesnt work in ie8 :S
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-216">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 26, 2009 at 11:07 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           It should definitely work in IE8.  What problem are you seeing?  Do you have a link to the site?
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-217">
+         <div class="info">
+          <cite>
+           Mona Everett
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 26, 2009 at 6:13 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           This is a great tutorial, and, if I am ever forced into it, I will try this.  However, I really feel that if Microsoft cannot bother to implement rounded corners in IE, I cannot bother to go around the block to support them in IE either.  IE users are not used to rounded corners in web pages so I just dont give them rounded corners.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-219">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jun 29, 2009 at 4:30 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Mona, I feel somewhat the same way, but in some cases rounded corners add so much to the look that its hard to abandon all IE users.  Ideally, IE9 would implement the rounded corner CSS properties.  I cant believe its 2009 and were still slinging little corner images around the Internet for the most popular browser!
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-220">
+         <div class="info">
+          <cite>
+           dokania
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jul 3, 2009 at 4:51 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Great support
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-221">
+         <div class="info">
+          <cite>
+           Vancouver WD
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jul 7, 2009 at 9:07 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Great post,
+           <br/>
+           Glad to see a decent alternative to chopping away in photoshop
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-225">
+         <div class="info">
+          <cite>
+           Tatsh
+          </cite>
+          on
+          <span class="commentmetadata">
+           Jul 29, 2009 at 9:43 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Only thing was I had trouble using filter:alpha(opacity=OPACITY) on a site I was making, instead just decided to leave the issue alone and hide (display:none) the top and bottom of a navigation link set, looks much better in Firefox/Safari/etc, but still functional in IE.
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-228">
+         <div class="info">
+          <cite>
+           David | WebModia
+          </cite>
+          on
+          <span class="commentmetadata">
+           Aug 6, 2009 at 4:02 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           I am tired of seeing people promote bad practices. The author has good intentions, Im sure. IE is the problem and the author is just offering an alternative workaround. But I feel compelled to repeat and draw attention to the main drawback of this solution (whereas the author only glossed over the fact), lest those newer to CSS or unfamiliar with standards-based design are misled. This solution uses a presentational hack  i.e. those empty divs are there solely to feed the corner images to IE7. This is no different than littering your markup with spacer gifs.
+          </p>
+          <p>
+           Delivering background images for rounded corners via CSS using SEMANTIC markup that is already available is still the BEST option if you want cross-browser support that includes IE7  this technique is well documented, and cleaner and more maintainable than any markup presentational hack. Either use that approach, or be bold and use the CSS3 border-radius to have your rounded corners for all modern browsers and let IE8 and below degrade gracefully with square corners. Or even use one of the well-documented JavaScript methods to dynmically generate the needed markup (falls under the general idea of progressive enhancement). The point is you have better options. Presentational hacks are never really the answer.
+          </p>
+         </div>
+        </li>
+        <li class="comment " id="comment-229">
+         <div class="info">
+          <cite>
+           Bill Lipa
+          </cite>
+          on
+          <span class="commentmetadata">
+           Aug 6, 2009 at 10:19 pm:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           The empty divs do offend my semantically pure sensibilities (I mentioned them as the first drawback, which is hardly glossing over the fact.)
+          </p>
+          <p>
+           As with everything on the messy web, there are tradeoffs.  I personally feel that its worse to send background corners to new browsers, slowing them down, than some empty divs which semantically mean nothing.  And there are still too many IE users to be comfortable ignoring them completely.  But hey, you and others may differ.
+          </p>
+          <p>
+           As for the Javascript methods which involve hundreds of auto-generated divs of varying lengths and colors, essentially using divs to draw rounded corner pixels on the screen, now that fits my definition of a horrendous hack!
+          </p>
+         </div>
+        </li>
+        <li class="comment odd" id="comment-4179">
+         <div class="info">
+          <cite>
+           Luke
+          </cite>
+          on
+          <span class="commentmetadata">
+           May 15, 2010 at 10:18 am:
+          </span>
+         </div>
+         <div class="commenttext">
+          <p>
+           Thank you for making this so simple. IE is obviously a pile of crap though = ).
+          </p>
+         </div>
+        </li>
+       </ol>
+       <h3 id="respond">
+        Comments are closed.
+       </h3>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <div class="bl">
+     </div>
+     <div class="br">
+     </div>
+    </div>
+    <div class="rounded_sidebox rounded sidebar">
+     <div class="tl">
+     </div>
+     <div class="tr">
+     </div>
+     <ul>
+      <li class="widget widget_text" id="text-224447531">
+       <h2 class="widgettitle">
+        About Us
+       </h2>
+       <div class="textwidget">
+        <p>
+         BestInClass.com is a product recommendation service based on unbiased expert opinions. We want to provide the fastest and easiest way to get a good answer to the question, What product is right for me?
+        </p>
+       </div>
+      </li>
+     </ul>
+     <div class="bl">
+     </div>
+     <div class="br">
+     </div>
+    </div>
+   </div>
+   <ul id="footer">
+    <li>
+      2009-2011 BestInClass.com, Inc.
+    </li>
+   </ul>
+  </div>
+  <div id="modal_anchor">
+   <div id="modal_dialog">
+   </div>
+   <div id="modal_overlay">
+   </div>
+  </div>
+  <!-- Metrics -->
+  <script src="http://www.google-analytics.com/ga.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var pt = _gat._getTracker("UA-1658914-2");
+    pt._initData();
+    pt._trackPageview();
+  </script>
+  <script type="text/javascript">
+   _qoptions={
+  qacct:"p-b6dLwJmKWGqrQ"
+  };
+  </script>
+  <script src="http://edge.quantserve.com/quant.js" type="text/javascript">
+  </script>
+  <!-- End Metrics -->
+ </body>
+</html>

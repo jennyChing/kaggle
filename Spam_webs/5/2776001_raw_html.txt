@@ -1,0 +1,1595 @@
+<html>
+ <head>
+  <link href="http://www.embeddedrelated.com/new2/favicon.ico" rel="shortcut icon"/>
+  <link href="http://www.embeddedrelated.com/showthread/comp.arch.embedded/11016-1.php" rel="canonical"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   comp.arch.embedded | preventing SPI noise on ADC
+  </title>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:400,300italic,700,400italic,500,500italic,700italic,900" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,700,300,600,800,400" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet" type="text/css"/>
+  <!--&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"&gt;-->
+  <link href="/new2/css/style.php5" rel="StyleSheet" type="text/css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+  </script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js">
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/js/jquery.placeholder.min.js">
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/highslide/highslide/highslide-full.js" type="text/javascript">
+  </script>
+  <script charset="utf-8" src="http://www.embeddedrelated.com/new2/highslide/highslide/highslide.config.js" type="text/javascript">
+  </script>
+  <link href="http://www.embeddedrelated.com/new2/highslide/highslide/highslide.css" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 7]&gt;
+&lt;link rel="stylesheet" type="text/css" href="http://www.embeddedrelated.com/new2/highslide/highslide/highslide-ie6.css" /&gt;
+&lt;![endif]-->
+  <script type="text/javascript">
+   hs.addEventListener(window, "load", function() {
+				setTimeout(function() {
+				        try {
+				   hs.htmlExpand(null, {objectType: 'iframe', width: '640',
+				      src: 'http://www.embeddedrelated.com/new2/highslide/ad.php?waid=104'
+				   }); } catch (e) {}
+				    }, 3500);
+				});
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/js/autosize.js" type="text/javascript">
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/js/jquery.hashchange.min.js" type="text/javascript">
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/js/jquery.easytabs.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   $(document).ready( function() {
+      $('#tab-container').easytabs({animate: false});
+    });
+
+    function scrollBottom() {
+        var posts = document.getElementById("posts");
+        var blockquotes = posts.getElementsByTagName("blockquote");
+        for(var i=0; i&lt;blockquotes.length; i++)
+        {
+            var thisblockquote = blockquotes[i];
+            thisblockquote.scrollTop = thisblockquote.scrollHeight;
+        }
+    }
+    window.onload = scrollBottom;
+  </script>
+  <link href="http://www.embeddedrelated.com/new2/css/modal_login.css" rel="StyleSheet" type="text/css"/>
+  <script src="http://www.embeddedrelated.com/new2/js/jquery.leanModal.min.js" type="text/javascript">
+  </script>
+  <script>
+   if (window.history.pushState) {
+window.history.replaceState({"threadid": 11016, "group": "comp.arch.embedded", "page": 1, "sort": "of"}, null, "/showthread/comp.arch.embedded/11016-1.php");
+                }
+
+    // Revert to a previously saved state when back button is pushed
+    window.addEventListener('popstate', function(event) {
+      console.log('popstate fired!');
+      console.log(event.state.page);
+      //var obj = event.state;
+      if (event.state)
+      {
+        var obj = event.state;
+        myCall(obj.threadid, obj.group, obj.page, obj.sort, '#tabs1-chronological', 'no');
+      }
+      //updateContent(event.state);
+    });
+
+    function myCall(threadid, group, page, sort, tabshash, pushstate) {
+
+        var tabshash2 = tabshash.substring(1, tabshash.length);     //remove # char because doesn't get passed properly to script
+
+        var request = $.ajax({
+            url: "/new2/showthread_ajax.php",
+            type: "GET",
+            data: "threadid=" + threadid + "&amp;group=" + group + "&amp;page=" + page + "&amp;sort=" + sort + "&amp;tabshash=" + tabshash2,
+            dataType: "html"
+        });
+
+        if (window.history.pushState &amp;&amp; pushstate != 'no') {
+                        window.history.pushState({"threadid": threadid, "group": group, "page": page, "sort": sort, "tabshash": tabshash}, null, '/showthread/'+group+'/'+threadid+'-'+page+'.php'+tabshash);
+        }
+
+        request.done(function(msg) {
+            $(tabshash).fadeOut('slow', function() {
+            $(tabshash).html(msg);
+            $(tabshash).fadeIn('slow');
+});
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            scrollBottom();
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+            alert( "Request failed: " + textStatus );
+        });
+    }
+  </script>
+  <script src="http://www.embeddedrelated.com/new2/js/spin.min.js" type="text/javascript">
+  </script>
+  <script>
+   function Reply(postid, group, elem) {
+
+        var request = $.ajax({
+            url: "/new2/ajax_reply.php",
+            type: "GET",
+            data: "postid=" + postid + "&amp;group=" + group,
+            dataType: "html"
+        });
+
+        request.done(function(msg) {
+
+//            $(elem).parent().html(msg);
+            var parent = $(elem).parent();
+//            var textbox = $(parent).find("textarea");
+            height = $(parent).height();
+
+            $(parent).fadeOut('slow', function() {
+            $(parent).html(msg);
+            $(parent).find("textarea").height(height);
+            $(parent).fadeIn('slow', function() {
+//              $(parent).find("textarea").focus();
+              autosize($(parent).find("textarea"));
+              moveCursorToEnd($(parent).find("textarea"));
+              $(parent).find("textarea").scrollTop($(parent).find("textarea")[0].scrollHeight);
+/*              $(parent).find("textarea").animate({
+                scrollTop: $(parent).find("textarea")[0].scrollHeight
+              }, function(){
+              });*/
+//                $(parent).find("textarea").scrollTop($(parent).find("textarea")[0].scrollHeight, function() {alert('TEST');});
+//                moveCursorToEnd($(parent).find("textarea"));
+//                var data = $(parent).find("textarea").val();
+//                $(parent).find("textarea").focus().val('').val(data);
+//                autosize($(parent).find("textarea"));
+//                $(parent).find("textarea").scrollTop($(parent).find("textarea")[0].scrollHeight);
+            });
+});
+
+/*            height = $("#styled").height();
+            alert (height);*/
+
+
+/*            val = $('#styled').val();
+            alert (val);
+            $('#styled')
+                .focus()
+                .val("")
+                .val(val);*/
+
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+            alert( "Request failed: " + textStatus );
+        });
+    }
+
+    function moveCursorToEnd(input) {
+    var originalValue = input.val();
+    input.val('');
+    input.blur().focus().val(originalValue);
+}
+  </script>
+  <script>
+   $(function() {
+    var formMessages = $('.form-messages');
+
+        $(document).delegate('.replyform', 'submit', function(e) {
+        // Stop the browser from submitting the form.
+        e.preventDefault();
+//        alert('reply clicked');
+        var form = $(this);
+        // Serialize the form data.
+        var formData = $(form).serialize();
+        // Submit the form using AJAX.
+        //alert($('#subject').val());
+//        alert(formData);
+        $.ajax({
+            type: 'POST',
+            url: $(form).attr('action'),
+            data: formData
+        })
+
+        .done(function(response) {
+        var parent = $(form).parent();
+
+        $(parent).fadeOut('slow', function() {
+            $(parent).html(response);
+            $(parent).fadeIn('slow');
+            });
+
+
+//            alert(response);
+
+
+//            var postbox = document.getElementsByClassName("post");
+//            var spinner = new Spinner().spin(postbox);
+
+        })
+        .fail(function(data) {
+            // Make sure that the formMessages div has the 'error' class.
+            //$(formMessages).removeClass('success');
+            //$(formMessages).addClass('error');
+
+            // Set the message text.
+            if (data.responseText !== '') {
+//                $(formMessages).html(data.responseText);
+                $('#'+parent+' .form-messages').html(data.responseText);
+            } else {
+                $('#'+parent+' .form-messages').text('Oops! An error occured and your message could not be sent.');
+            }
+        });
+
+    });
+
+});
+  </script>
+ </head>
+ <body>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1774944-2', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <div class="container" id="menutabs">
+   <a alt="EmbeddedRelated.com" href="http://www.embeddedrelated.com">
+    <img alt="" border="0" class="bigtab" src="http://www.embeddedrelated.com/new2/images/EmbeddedRelated_bigtab.png"/>
+   </a>
+   <a alt="FPGARelated.com" href="http://www.fpgarelated.com">
+    <img alt="" border="0" class="smalltab" src="http://www.embeddedrelated.com/new2/images/FPGARelated_smalltab.png"/>
+   </a>
+   <a alt="DSPRelated.com" href="http://www.dsprelated.com">
+    <img alt="" border="0" class="smalltab" src="http://www.embeddedrelated.com/new2/images/DSPRelated_smalltab.png"/>
+   </a>
+   <a alt="Electronics-Related.com" href="http://www.electronics-related.com">
+    <img alt="" border="0" class="smalltab" src="http://www.embeddedrelated.com/new2/images/Electronics-Related_smalltab.png"/>
+   </a>
+   <!--&lt;img src="http://www.embeddedrelated.com/new2/images/forengineers.png" alt="" style="margin-left: 40px;"&gt;-->
+  </div>
+  <div id="horizontalmenu">
+   <div class="container">
+    <ul>
+     <li>
+      <a href="/index.php">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="/blogs.php">
+       Blogs
+      </a>
+     </li>
+     <li>
+      <a href="/groups.php">
+       Forums
+      </a>
+     </li>
+     <li>
+      <a href="/tutorials.php">
+       Tutorials
+      </a>
+     </li>
+     <li>
+      <a href="/books.php">
+       Books
+      </a>
+     </li>
+     <li>
+      <a href="/documents.php">
+       Free PDFs
+      </a>
+     </li>
+     <li>
+      <a href="/code.php">
+       Code Snippets
+      </a>
+     </li>
+    </ul>
+    <div class="socialbox floatright">
+     <a href="https://www.facebook.com/embeddedrelated">
+      <i class="fa fa-facebook fa-2x" style="line-height: 30px;">
+      </i>
+     </a>
+    </div>
+    <div class="socialbox floatright">
+     <a href="https://twitter.com/embeddedrelated">
+      <i class="fa fa-twitter fa-2x" style="line-height: 30px;">
+      </i>
+     </a>
+    </div>
+    <div class="socialbox floatright">
+     <a href="https://plus.google.com/+Embeddedrelated/posts">
+      <i class="fa fa-google-plus fa-2x" style="line-height: 30px;">
+      </i>
+     </a>
+    </div>
+   </div>
+  </div>
+  <div class="container">
+   <div id="mainleft">
+    <!--&lt;img src="/new2/images/728x90.JPG" style="margin-bottom: 10px;"&gt;-->
+    <div class="breadcrumbs bigbold">
+     <a href="/">
+      <i class="fa fa-home">
+      </i>
+     </a>
+     <i class="fa fa-angle-right fa-lg">
+     </i>
+     <a href="/groups.php">
+      Forums
+     </a>
+     <i class="fa fa-angle-right fa-lg">
+     </i>
+     <a href="/groups/comp.arch.embedded/1.php">
+      comp.arch.embedded
+     </a>
+     <i class="fa fa-angle-right fa-lg">
+     </i>
+    </div>
+    <div id="posts">
+     <h1 class="biggerfont">
+      preventing SPI noise on ADC
+     </h1>
+     <div class="threadinfo" style="float:left;">
+      Started by
+      <span class="author">
+       Glenn
+      </span>
+      <span class="bullet">
+       
+      </span>
+      July 11, 2004
+     </div>
+     <div class="tab-container" id="tab-container">
+      <ul class="etabs" style="text-align:right;">
+       <li class="tab">
+        <a href="#tabs1-chronological">
+         Chronological
+        </a>
+       </li>
+       <li class="tab">
+        <a href="#tabs1-achronological">
+         Newest First
+        </a>
+       </li>
+       <!--&lt;a href="/new2/showthread_ajax.php?sort=nf&amp;group=&lt;?php echo $group;?&gt;&amp;threadid=&lt;?php echo $threadid;?&gt;&amp;page=&lt;?php echo $page;?&gt;&amp;tabshash=tabs1-achronological" data-target="#tabs1-achronological"&gt;Newest Posts First&lt;/a&gt;&lt;/li&gt;-->
+      </ul>
+      <div class="panel-container-topborder">
+       <div id="tabs1-chronological">
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           How can I best prevent noise on the SPI lines communicating 
+between my ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V 
+microcontroller (AVR ATmega32)?
+
+I've tried to keep the digital lines as far away from the 
+analog lines as possible, and have a 2-layer design with 
+seperate analog / digital ground planes.
+
+Should I buffer all the SPI lines?  if so, which buffer 
+chips would be suitable?
+Do I use series resistors?
+
+I've seen some opto-isolated designs, but we'll be running 
+off of the same power supply for the AD and the 
+microcontroller and they will only be a couple of 
+centimetres apart.
+
+
+Thanks.
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          habib bouaziz-viallet
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Glenn wrote:
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating between my 
+&gt; ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V microcontroller (AVR 
+&gt; ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the analog lines 
+&gt; as possible, and have a 2-layer design with seperate analog / digital 
+&gt; ground planes.
+           </blockquote>
+           AFAIK I had similar problems and i fixed it with
+TL431 Voltage ref on ADS Vref pin.
+Assume that power lines are noiseless, Vcc logic and Vcc analog should 
+be physicaly separate with two PCB tracks connected to CP power (100uF 
+Tantalium)
+
+Vlogic  -----------------------------------|
+Vanal   ---/\/\/\-------|                -----
+         |    10       -----              ----- C2 Power
+        ---            ----- C1 Power       |
+        --- 100nF        |                  |
+         |               | AGND             |
+       --------------------               ----- DGND
+
+With LARGE tracks on AGND, DGND and Vlogic. a simple 1order RC filter on 
+Vanal may improve noise immunity of analog path.
+
+Mux COM input as close as possible to AGND
+
+Finally i placed a high stability 2.5V ref on input and the average of 
+100,000 samples shows a very good distribution.
+           <blockquote>
+            &gt; Should I buffer all the SPI lines?  if so, which buffer chips would be 
+&gt; suitable?
+&gt; Do I use series resistors?
+&gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running off of the 
+&gt; same power supply for the AD and the microcontroller and they will only 
+&gt; be a couple of centimetres apart.
+&gt; 
+&gt; 
+&gt; Thanks.
+&gt;
+           </blockquote>
+           Good Luck, Habib.
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Mark Borgerson
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           In article &lt;eX6Ic.178$RD4.4750@news20.bellglobal.com&gt;, 
+monkeytech@sympatico.ca says...
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating 
+&gt; between my ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V 
+&gt; microcontroller (AVR ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the 
+&gt; analog lines as possible, and have a 2-layer design with 
+&gt; seperate analog / digital ground planes.
+&gt; 
+&gt; Should I buffer all the SPI lines?  if so, which buffer 
+&gt; chips would be suitable?
+           </blockquote>
+           Probably not necessary.
+           <blockquote>
+            &gt; Do I use series resistors?
+           </blockquote>
+           Probably not necessary.
+           <blockquote>
+            &gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running 
+&gt; off of the same power supply for the AD and the 
+&gt; microcontroller and they will only be a couple of 
+&gt; centimetres apart.
+&gt;
+           </blockquote>
+           If you look at the data sheet,  most SPI ADC converters will show
+a sampling method that has the SPI lines quiescent during the
+actual conversion and then active again after the conversion to
+transfer the data.   There is quite often a faster method which
+clocks out the data as the conversion takes place and may actually
+use the SPI clock as the conversion clock.  This may result in
+more conversion noise.
+
+The best way to get good noise results is to keep the SPI lines
+stable during the conversion as much as possible, and use an
+internal clock as the conversion clock.  This may reduce your
+maximum conversion rate, but life is full of such tradeoffs.
+
+The ADS8344 data sheet discusses these tradeoffs on Page 14.
+           <blockquote>
+            &gt; 
+&gt; Thanks.
+&gt; 
+&gt;
+           </blockquote>
+           Mark Borgerson
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Joerg
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Hi Glenn,
+
+You got some good advice here. Just one more comment: Splitting digital 
+and analog ground may often not be such a good idea. In theory a split 
+might work but at several MHz into the noise spectrum which your SPI and 
+other clock transitions will certainly create, such a separation 
+vanishes quickly. Then it becomes an uncontrolled matter where these 
+grounds really meet and by how much.
+
+I never use split grounds unless there is an isolation requirement for 
+safety reasons, such as in medical gear.
+
+Regards, Joerg
+           <a href="http://www.analogconsultants.com" rel="nofollow" target="_blank">
+            http://www.analogconsultants.com
+           </a>
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Rene Tschaggelar
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 12, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Glenn wrote:
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating between my 
+&gt; ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V microcontroller (AVR 
+&gt; ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the analog lines 
+&gt; as possible, and have a 2-layer design with seperate analog / digital 
+&gt; ground planes.
+&gt; 
+&gt; Should I buffer all the SPI lines?  if so, which buffer chips would be 
+&gt; suitable?
+&gt; Do I use series resistors?
+&gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running off of the 
+&gt; same power supply for the AD and the microcontroller and they will only 
+&gt; be a couple of centimetres apart.
+           </blockquote>
+           To start with, when the SPI is running to read out the values, then ADC
+already has a conversion finished. So the SPI signals to the ADC to
+rerad it out are of no convern. However, the signals on the SPI lines
+that are not caused by your intent to read out the ADC are of concern.
+
+I went as fas as trying the magnetic isolators from Analog devices,
+ADum1400 and such, but they are somewhat overkill.
+
+Yes, series resistors on the SPI lines dampen the reflections.
+
+Rene
+-- 
+Ing.Buero R.Tschaggelar -
+           <a href="http://www.ibrtses.com" rel="nofollow" target="_blank">
+            http://www.ibrtses.com
+           </a>
+           &amp; commercial newsgroups -
+           <a href="http://www.talkto.net" rel="nofollow" target="_blank">
+            http://www.talkto.net
+           </a>
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Gerard Zagema / StackTools
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 18, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           And no SPI lines under the ADC device will also help.
+
+Gerard
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+       </div>
+       <div id="tabs1-achronological">
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Gerard Zagema / StackTools
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 18, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           And no SPI lines under the ADC device will also help.
+
+Gerard
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Rene Tschaggelar
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 12, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Glenn wrote:
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating between my 
+&gt; ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V microcontroller (AVR 
+&gt; ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the analog lines 
+&gt; as possible, and have a 2-layer design with seperate analog / digital 
+&gt; ground planes.
+&gt; 
+&gt; Should I buffer all the SPI lines?  if so, which buffer chips would be 
+&gt; suitable?
+&gt; Do I use series resistors?
+&gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running off of the 
+&gt; same power supply for the AD and the microcontroller and they will only 
+&gt; be a couple of centimetres apart.
+           </blockquote>
+           To start with, when the SPI is running to read out the values, then ADC
+already has a conversion finished. So the SPI signals to the ADC to
+rerad it out are of no convern. However, the signals on the SPI lines
+that are not caused by your intent to read out the ADC are of concern.
+
+I went as fas as trying the magnetic isolators from Analog devices,
+ADum1400 and such, but they are somewhat overkill.
+
+Yes, series resistors on the SPI lines dampen the reflections.
+
+Rene
+-- 
+Ing.Buero R.Tschaggelar -
+           <a href="http://www.ibrtses.com" rel="nofollow" target="_blank">
+            http://www.ibrtses.com
+           </a>
+           &amp; commercial newsgroups -
+           <a href="http://www.talkto.net" rel="nofollow" target="_blank">
+            http://www.talkto.net
+           </a>
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Joerg
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Hi Glenn,
+
+You got some good advice here. Just one more comment: Splitting digital 
+and analog ground may often not be such a good idea. In theory a split 
+might work but at several MHz into the noise spectrum which your SPI and 
+other clock transitions will certainly create, such a separation 
+vanishes quickly. Then it becomes an uncontrolled matter where these 
+grounds really meet and by how much.
+
+I never use split grounds unless there is an isolation requirement for 
+safety reasons, such as in medical gear.
+
+Regards, Joerg
+           <a href="http://www.analogconsultants.com" rel="nofollow" target="_blank">
+            http://www.analogconsultants.com
+           </a>
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Mark Borgerson
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           In article &lt;eX6Ic.178$RD4.4750@news20.bellglobal.com&gt;, 
+monkeytech@sympatico.ca says...
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating 
+&gt; between my ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V 
+&gt; microcontroller (AVR ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the 
+&gt; analog lines as possible, and have a 2-layer design with 
+&gt; seperate analog / digital ground planes.
+&gt; 
+&gt; Should I buffer all the SPI lines?  if so, which buffer 
+&gt; chips would be suitable?
+           </blockquote>
+           Probably not necessary.
+           <blockquote>
+            &gt; Do I use series resistors?
+           </blockquote>
+           Probably not necessary.
+           <blockquote>
+            &gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running 
+&gt; off of the same power supply for the AD and the 
+&gt; microcontroller and they will only be a couple of 
+&gt; centimetres apart.
+&gt;
+           </blockquote>
+           If you look at the data sheet,  most SPI ADC converters will show
+a sampling method that has the SPI lines quiescent during the
+actual conversion and then active again after the conversion to
+transfer the data.   There is quite often a faster method which
+clocks out the data as the conversion takes place and may actually
+use the SPI clock as the conversion clock.  This may result in
+more conversion noise.
+
+The best way to get good noise results is to keep the SPI lines
+stable during the conversion as much as possible, and use an
+internal clock as the conversion clock.  This may reduce your
+maximum conversion rate, but life is full of such tradeoffs.
+
+The ADS8344 data sheet discusses these tradeoffs on Page 14.
+           <blockquote>
+            &gt; 
+&gt; Thanks.
+&gt; 
+&gt;
+           </blockquote>
+           Mark Borgerson
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          habib bouaziz-viallet
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           Glenn wrote:
+           <blockquote>
+            &gt; How can I best prevent noise on the SPI lines communicating between my 
+&gt; ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V microcontroller (AVR 
+&gt; ATmega32)?
+&gt; 
+&gt; I've tried to keep the digital lines as far away from the analog lines 
+&gt; as possible, and have a 2-layer design with seperate analog / digital 
+&gt; ground planes.
+           </blockquote>
+           AFAIK I had similar problems and i fixed it with
+TL431 Voltage ref on ADS Vref pin.
+Assume that power lines are noiseless, Vcc logic and Vcc analog should 
+be physicaly separate with two PCB tracks connected to CP power (100uF 
+Tantalium)
+
+Vlogic  -----------------------------------|
+Vanal   ---/\/\/\-------|                -----
+         |    10       -----              ----- C2 Power
+        ---            ----- C1 Power       |
+        --- 100nF        |                  |
+         |               | AGND             |
+       --------------------               ----- DGND
+
+With LARGE tracks on AGND, DGND and Vlogic. a simple 1order RC filter on 
+Vanal may improve noise immunity of analog path.
+
+Mux COM input as close as possible to AGND
+
+Finally i placed a high stability 2.5V ref on input and the average of 
+100,000 samples shows a very good distribution.
+           <blockquote>
+            &gt; Should I buffer all the SPI lines?  if so, which buffer chips would be 
+&gt; suitable?
+&gt; Do I use series resistors?
+&gt; 
+&gt; I've seen some opto-isolated designs, but we'll be running off of the 
+&gt; same power supply for the AD and the microcontroller and they will only 
+&gt; be a couple of centimetres apart.
+&gt; 
+&gt; 
+&gt; Thanks.
+&gt;
+           </blockquote>
+           Good Luck, Habib.
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+        <div class="postinfo">
+         Posted by
+         <span class="author">
+          Glenn
+         </span>
+         <span class="bullet">
+          
+         </span>
+         July 11, 2004
+        </div>
+        <div class="post">
+         <span style="-ms-word-break: break-all; word-break: break-all; word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;">
+          <pre>
+           How can I best prevent noise on the SPI lines communicating 
+between my ADC (Burr-Brown 16-bit 8-ch ADS8344) and a 5V 
+microcontroller (AVR ATmega32)?
+
+I've tried to keep the digital lines as far away from the 
+analog lines as possible, and have a 2-layer design with 
+seperate analog / digital ground planes.
+
+Should I buffer all the SPI lines?  if so, which buffer 
+chips would be suitable?
+Do I use series resistors?
+
+I've seen some opto-isolated designs, but we'll be running 
+off of the same power supply for the AD and the 
+microcontroller and they will only be a couple of 
+centimetres apart.
+
+
+Thanks.
+          </pre>
+         </span>
+         <a class="modal_trigger" href="#modal">
+          <button class="pure-button button-more-small" style="float: right; margin: 10px 40px 10px 0;">
+           Reply
+           <i class="fa fa-reply">
+           </i>
+          </button>
+         </a>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear: both;">
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!--&lt;img src="/new2/images/728x90.JPG" style="margin-bottom: 10px;"&gt;-->
+   </div>
+   <div id="sidebar">
+    <div id="loginbox">
+     <h2>
+      Sign in
+     </h2>
+     <div class="sidebar_box">
+      <form action="/showthread/comp.arch.embedded/11016-1.php" class="pure-form" method="post" name="login">
+       <fieldset>
+        <input class="pure-input-login" name="usernameposted" placeholder="Username" required="" type="text"/>
+        <input class="pure-input-login" name="passwordposted" placeholder="Password" required="" type="password"/>
+        <button class="pure-button pure-button-green" type="submit">
+         Sign in
+        </button>
+        <label for="remember" style="display: block;">
+         <input checked="" id="remember" name="remember" style="padding: 10px;" type="checkbox" value="checked"/>
+         Remember me
+        </label>
+       </fieldset>
+       <span class="condensed">
+        <a class="green smallbold" href="/forgot.php">
+         Forgot username or password?
+        </a>
+        |
+        <a class="green smallbold" href="/register.php">
+         Create account
+        </a>
+       </span>
+      </form>
+     </div>
+    </div>
+    <script language="JavaScript1.1" src="http://ad.doubleclick.net/ddm/adj/N5744.160338.8235592114521/B8439950.119427911;sz=336x280;ord=1436904980?">
+    </script>
+    <noscript>
+     <a href="http://ad.doubleclick.net/ddm/jump/N5744.160338.8235592114521/B8439950.119427911;sz=336x280;ord=1436904980?">
+      <img alt="Advertisement" border="0" height="280" src="http://ad.doubleclick.net/ddm/ad/N5744.160338.8235592114521/B8439950.119427911;sz=336x280;ord=1436904980?" width="336"/>
+     </a>
+    </noscript>
+    <h2>
+     Search forums
+    </h2>
+    <div class="sidebar_box">
+     <form action="/groups.php" class="pure-form" method="get" name="searchform">
+      <fieldset>
+       <input class="pure-input-subscribe" name="searchfor" type="text"/>
+       <button class="pure-button pure-button-green" type="submit">
+        Search
+       </button>
+      </fieldset>
+     </form>
+    </div>
+    <h2>
+     Free PDF Downloads
+    </h2>
+    <div class="sidebar_box">
+     <div class="imageleft" style="position: relative; width: 70px; float: left; margin: 0 10px 10px 0;">
+      <a href="/showabstract/158.php">
+       <img align="left" class="imageleft document" src="/new2/Documents_Covers/158.70.jpg" style="position: relative;" width="70"/>
+      </a>
+     </div>
+     <span class="smallbold">
+      <a href="/showabstract/158.php">
+       <i class="fa fa-cloud-download">
+       </i>
+       Interrupt handling in an ARM processor
+      </a>
+     </span>
+     <div style="clear:both">
+     </div>
+     <div class="imageleft" style="position: relative; width: 70px; float: left; margin: 0 10px 10px 0;">
+      <a href="/showabstract/178.php">
+       <img align="left" class="imageleft document" src="/new2/Documents_Covers/178.70.jpg" style="position: relative;" width="70"/>
+      </a>
+     </div>
+     <span class="smallbold">
+      <a href="/showabstract/178.php">
+       <i class="fa fa-cloud-download">
+       </i>
+       Introduction to Embedded Systems - A Cyber-Physical Systems Approach
+      </a>
+     </span>
+     <div style="clear:both">
+     </div>
+     <div class="imageleft" style="position: relative; width: 70px; float: left; margin: 0 10px 10px 0;">
+      <a href="/showabstract/208.php">
+       <img align="left" class="imageleft document" src="/new2/Documents_Covers/208.70.jpg" style="position: relative;" width="70"/>
+      </a>
+     </div>
+     <span class="smallbold">
+      <a href="/showabstract/208.php">
+       <i class="fa fa-cloud-download">
+       </i>
+       Microcontroller Programming and Interfacing
+      </a>
+     </span>
+     <div style="clear:both">
+     </div>
+     <a href="/documents.php">
+      <button class="pure-button button-more-small" style="float: right; margin: 10px 0px 10px 0;">
+       All FREE PDF Downloads
+       <i class="fa fa-arrow-circle-o-down fa-lg">
+       </i>
+      </button>
+     </a>
+     <div style="clear:both">
+     </div>
+    </div>
+    <h2>
+     Hall of Fame
+    </h2>
+    <div class="sidebar_box">
+     <div class="halloffame">
+      <a href="http://www.embeddedrelated.com/showarticle/453.php">
+       <img align="left" class="imageleft document" height="92" src="http://www.embeddedrelated.com/new2/images/blogs/453.png" width="100"/>
+       <p>
+        Introduction to
+        <span class="highlight">
+         Microcontrollers
+        </span>
+       </p>
+      </a>
+      <br/>
+      <span class="author">
+       Mike Silva
+      </span>
+     </div>
+     <div style="clear:both;">
+     </div>
+     <div class="halloffame">
+      <a href="http://www.embeddedrelated.com/showarticle/629.php">
+       <img align="left" class="imageleft document" height="78" src="http://www.embeddedrelated.com/new2/images/blogs/629.png" width="100"/>
+       <p>
+        Important
+        <span class="highlight">
+         Programming
+        </span>
+        Concepts (Even on Embedded Systems)
+       </p>
+      </a>
+      <br/>
+      <span class="author">
+       Jason Sachs
+      </span>
+     </div>
+     <div style="clear:both;">
+     </div>
+     <div class="halloffame">
+      <a href="http://www.embeddedrelated.com/showarticle/195.php">
+       <img align="left" class="imageleft document" height="88" src="http://www.embeddedrelated.com/new2/images/blogs/357.png" width="100"/>
+       <p>
+        How
+        <span class="highlight">
+         FPGAs
+        </span>
+        Work and Why You'll Buy One
+       </p>
+      </a>
+      <br/>
+      <span class="author">
+       Yossi Krenin
+      </span>
+     </div>
+     <div style="clear:both;">
+     </div>
+     <div class="halloffame">
+      <a href="http://www.embeddedrelated.com/showarticle/179.php">
+       <img align="left" class="imageleft document" height="121" src="http://www.embeddedrelated.com/new2/images/blogs/179.png" width="100"/>
+       <p>
+        <span class="highlight">
+         MSP430
+        </span>
+        Launchpad Tutorial
+       </p>
+      </a>
+      <br/>
+      <span class="author">
+       Enrico Garante
+      </span>
+     </div>
+     <div style="clear:both;">
+     </div>
+     <div class="halloffame">
+      <a href="http://www.embeddedrelated.com/showarticle/498.php">
+       <img align="left" class="imageleft document" height="97" src="http://www.embeddedrelated.com/new2/images/blogs/498.png" width="100"/>
+       <p>
+        <span class="highlight">
+         Arduino
+        </span>
+        Robotics
+       </p>
+      </a>
+      <br/>
+      <span class="author">
+       Lonnie Honeycutt
+      </span>
+     </div>
+     <div style="clear:both;">
+     </div>
+    </div>
+    <h2>
+     Discussion Groups
+    </h2>
+    <div class="sidebar_box iconnav">
+     <ul>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/68hc12/1.php">
+        68HC12
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/AT91SAM/1.php">
+        AT91SAM ARM
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/avrclub/1.php">
+        AVRclub
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/basicx/1.php">
+        BasicX
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/fpga-cpu/1.php">
+        FPGA-CPU
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/lpc2000/1.php">
+        LPC2000
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/LPC900_users/1.php">
+        LPC900
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/hc11/1.php">
+        M68HC11
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/msp430/1.php">
+        MSP430
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/piclist/1.php">
+        Piclist
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/rabbit-semi/1.php">
+        Rabbit-Semi
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/tiarm/1.php">
+        TI ARM Processors MCUs
+       </a>
+      </li>
+      <li>
+       <a href="http://www.embeddedrelated.com/groups/c28x/1.php">
+        TI C2000
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div style="clear: both;">
+   </div>
+   <div id="footer">
+    <div class="container">
+     <div class="footerbox">
+      <h2 class="smallfont">
+       Quick Links
+      </h2>
+      <ul>
+       <li>
+        <a href="/index.php">
+         Home
+        </a>
+       </li>
+       <li>
+        <a href="/blogs.php">
+         Blogs
+        </a>
+       </li>
+       <li>
+        <a href="/groups.php">
+         Forums
+        </a>
+       </li>
+       <li>
+        <a href="/tutorials.php">
+         Tutorials
+        </a>
+       </li>
+       <li>
+        <a href="/books.php">
+         Books
+        </a>
+       </li>
+       <li>
+        <a href="/documents.php">
+         Free PDFs
+        </a>
+       </li>
+       <li>
+        <a href="/code.php">
+         Code Snippets
+        </a>
+       </li>
+       <li>
+        <a href="/books.php">
+         Books
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="footerbox">
+      <h2>
+       About EmbeddedRelated.com
+      </h2>
+      <ul>
+       <li>
+        <a href="/showarticle/770/advertising-on-the-related-sites">
+         Advertise
+        </a>
+       </li>
+       <li>
+        <a href="/contact.php">
+         Contact
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="footerbox">
+      <h2>
+       Social Networks
+      </h2>
+      <div class="socialbox floatleft">
+       <a href="https://www.facebook.com/embeddedrelated">
+        <i class="fa fa-facebook fa-2x darkblue" style="line-height: 30px;">
+        </i>
+       </a>
+      </div>
+      <div class="socialbox floatleft">
+       <a href="https://twitter.com/embeddedrelated">
+        <i class="fa fa-twitter fa-2x darkblue" style="line-height: 30px;">
+        </i>
+       </a>
+      </div>
+      <div class="socialbox floatleft">
+       <a href="https://plus.google.com/+Embeddedrelated/posts">
+        <i class="fa fa-google-plus fa-2x darkblue" style="line-height: 30px;">
+        </i>
+       </a>
+      </div>
+     </div>
+     <div class="footerbox">
+      <a href="http://www.embeddedrelated.com">
+       <img src="http://www.embeddedrelated.com/new2/images/EmbeddedRelated_logo.svg" style="margin: 0; padding: 0; vertical-align: top;" width="260px"/>
+      </a>
+      <a href="http://www.dsprelated.com">
+       <img src="http://www.embeddedrelated.com/new2/images/DSPRelated_logo.svg" style="margin: 0; padding: 0;  vertical-align: top;" width="260px"/>
+      </a>
+      <a href="http://www.electronics-related.com">
+       <img src="http://www.embeddedrelated.com/new2/images/Electronics-Related_logo.svg" style="margin: 0; padding: 0; vertical-align: top;" width="260px"/>
+      </a>
+      <a href="http://www.fpgarelated.com">
+       <img src="http://www.embeddedrelated.com/new2/images/FPGARelated_logo.svg" style="margin: 0; padding: 0; vertical-align: top;" width="260px"/>
+      </a>
+     </div>
+    </div>
+   </div>
+   <script type="text/javascript">
+    $(".modal_trigger").leanModal({top : 200, overlay : 0.6, closeButton: ".modal_close" });
+  $(function () {
+      // Calling Login Form
+      $("#login_form").click(function () {
+          $(".social_login").hide();
+          $(".user_login").show();
+          return false;
+      });
+
+      // Calling Register Form
+      $(".register_form").click(function () {
+          $(".user_login").hide();
+          $(".social_login").hide();
+          $(".user_register").show();
+          $(".header_title").text('Register');
+          return false;
+      });
+
+      // Going back to Social Forms
+      $(".back_btn").click(function () {
+          $(".user_login").show();
+          $(".user_register").hide();
+          $(".header_title").text('Login');
+          return false;
+      });
+
+  })
+   </script>
+   <script type="text/javascript">
+    $(function() {
+
+	// Get the form.
+//	var form = $('#registerform');
+//	var form = $('.ajaxform2');
+
+	// Get the messages div.
+	var formMessages = $('.form-messages');
+
+
+	// Set up an event listener for the form.
+//	$(form).submit(function(e) {
+        $(document).delegate('#registerform', 'submit', function(e) {
+		// Stop the browser from submitting the form.
+		e.preventDefault();
+
+       //alert($(this).parent().attr('id'));
+        var parent = $(this).parent().attr('id');
+//        alert (parent);
+
+        var form = $(this);
+
+		// Serialize the form data.
+		var formData = $(form).serialize();
+
+		// Submit the form using AJAX.
+		$.ajax({
+			type: 'POST',
+			url: $(form).attr('action'),
+			data: formData
+		})
+
+		.done(function(response) {
+			// Make sure that the formMessages div has the 'success' class.
+			//$(formMessages).removeClass('error');
+			//$(formMessages).addClass('success');
+
+			// Set the message text.
+			//$(formMessages).text(response);
+            //$('#'+parent+' .form-messages').html(response);
+
+            //$(registerform).html(response);
+            //$('#'+parent).html(response);
+            $('.user_register').hide();
+            $('.user_register').html(response);
+
+            $('#loginbox').load("/new2/ajax_updateloginbox.php");
+
+            $('.user_register').append('&lt;input type="button" value="Close" class="btn btn_green" onClick="window.location.reload()"&gt;');
+            $('.modal_close').hide();
+//            location.reload();
+//            alert('test');
+            $('.user_register').fadeIn(1600);
+
+		})
+		.fail(function(data) {
+			// Make sure that the formMessages div has the 'error' class.
+			//$(formMessages).removeClass('success');
+			//$(formMessages).addClass('error');
+
+			// Set the message text.
+			if (data.responseText !== '') {
+//				$(formMessages).html(data.responseText);
+                $('.form-messages').html(data.responseText);
+			} else {
+				$('.form-messages').text('Oops! An error occured and your message could not be sent.');
+			}
+		});
+
+	});
+
+});
+   </script>
+   <div class="popupContainer" id="modal" style="display:none;">
+    <header class="popupHeader">
+     <span class="header_title">
+      Login
+     </span>
+     <span class="modal_close">
+      <i class="fa fa-times">
+      </i>
+     </span>
+    </header>
+    <section class="popupBody">
+     <div class="user_login">
+      <p style="margin-top: 0px; padding-top: 0px;">
+      </p>
+      <form action="/showthread/comp.arch.embedded/11016-1.php#tabs1-chronological" method="post" name="login">
+       <label>
+        Email / Username
+       </label>
+       <input name="usernameposted" type="text"/>
+       <br/>
+       <label>
+        Password
+       </label>
+       <input name="passwordposted" type="password"/>
+       <br/>
+       <div class="action_btns">
+        <div class="one_half first">
+         <button class="btn btn_green" type="submit">
+          Login
+         </button>
+        </div>
+       </div>
+      </form>
+      <div class="forgot_password">
+       <a class="register_form" href="#" name="register_form">
+        Create free account
+       </a>
+       |
+       <a href="/new2/forgot.php">
+        Forgot password?
+       </a>
+      </div>
+     </div>
+     <div class="user_register">
+      <div class="form-messages" style="display: inline-block; vertical-align: top; margin-bottom: 10px; color: red;">
+      </div>
+      <form action="/new2/ajax_process_registration.php" id="registerform" method="post">
+       <label>
+        Email Address
+       </label>
+       <input name="email" type="email"/>
+       <br/>
+       <label>
+        Username
+       </label>
+       <input maxlength="16" name="username" type="text"/>
+       <br/>
+       <label>
+        Password
+       </label>
+       <input name="passwd" type="password"/>
+       <br/>
+       <label>
+        Confirm Password
+       </label>
+       <input name="passwd2" type="password"/>
+       <br/>
+       <!--              &lt;div class="checkbox"&gt;
+                  &lt;input id="send_updates" type="checkbox" name="newsletter" checked&gt; &lt;label for=
+                  "send_updates"&gt;Send me occasional email updates&lt;/label&gt;
+              &lt;/div&gt;-->
+       <div class="action_btns">
+        <div class="one_half">
+         <a class="btn back_btn" href="#">
+          Back
+         </a>
+        </div>
+        <div class="one_half last">
+         <button class="btn btn_green" type="submit">
+          Register
+         </button>
+        </div>
+       </div>
+      </form>
+     </div>
+    </section>
+   </div>
+  </div>
+ </body>
+</html>

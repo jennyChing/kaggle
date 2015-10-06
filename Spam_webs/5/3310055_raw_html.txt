@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   SSH Tricks - Servers for Hackers
+  </title>
+  <!--Facebook Metadata /-->
+  <meta content="https://serversforhackers.com/img/sfh_social.png" property="og:image"/>
+  <meta content="What programmers need to know about servers." property="og:description"/>
+  <meta content="SSH Tricks" property="og:title"/>
+  <!--Google+ Metadata /-->
+  <meta content="SSH Tricks" itemprop="name"/>
+  <meta content="What programmers need to know about servers." itemprop="description"/>
+  <meta content="https://serversforhackers.com/img/sfh_social.png" itemprop="image"/>
+  <!-- Twitter Metadata /-->
+  <meta content="summary" name="twitter:card"/>
+  <meta content="@srvrsforhackers" name="twitter:site"/>
+  <meta content="SSH Tricks" name="twitter:title"/>
+  <meta content="What programmers need to know about servers." name="twitter:description"/>
+  <meta content="https://serversforhackers.com/img/sfh_social.png" name="twitter:image"/>
+  <meta content="serversforhackers.com" name="twitter:domain"/>
+  <link href="/favicon.png" rel="icon"/>
+  <link href="/css/styles.css?v=db62d1239a272fd4471fe83381edc9d0" rel="stylesheet"/>
+  <script src="//vjs.zencdn.net/4.12/video.js">
+  </script>
+ </head>
+ <body>
+  <div class="navbar navbar-default navbar-static-top" id="nav" role="navigation">
+   <div class="container">
+    <div class="navbar-header">
+     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+      <span class="sr-only">
+       Toggle navigation
+      </span>
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+     </button>
+     <a class="navbar-brand" href="/">
+      <img height="60" src="/img/icon_square.png" width="65"/>
+     </a>
+    </div>
+    <div class="navbar-collapse collapse">
+     <ul class="nav navbar-nav">
+      <li>
+       <a href="https://serversforhackers.com/series">
+        Videos
+       </a>
+      </li>
+      <li>
+       <a href="http://forums.serversforhackers.com">
+        Forums
+       </a>
+      </li>
+      <li>
+       <a href="https://serversforhackers.com/editions">
+        Editions
+       </a>
+      </li>
+      <li>
+       <a href="https://serversforhackers.com/articles">
+        Articles
+       </a>
+      </li>
+     </ul>
+     <ul class="nav navbar-nav navbar-right">
+      <li>
+       <a href="https://serversforhackers.com/login?returnto=%2Fssh-tricks">
+        Login
+       </a>
+      </li>
+      <li id="sign_up_btn">
+       <a href="https://serversforhackers.com/plans">
+        Sign Up
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+  </div>
+  <!-- end nav bar -->
+  <div class="container">
+   <div class="row large-title">
+    <div class="col-md-12">
+     <h1>
+      SSH Tricks
+     </h1>
+     <p class="publish-date">
+      Jul 01, 2014
+     </p>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12 content" data-urlslug="ssh-tricks" id="content">
+     <div class="meta lined">
+      <span class="tags">
+       <a href="/tag/ssh">
+        ssh
+       </a>
+       <a href="/tag/ansible">
+        ansible
+       </a>
+      </span>
+     </div>
+     <article class="book">
+      <blockquote>
+       <p>
+        If you're interested in more of this type of content, check out the
+        <a href="https://book.serversforhackers.com/">
+         Servers for Hackers eBook
+        </a>
+        !
+       </p>
+      </blockquote>
+     </article>
+     <article class="body">
+      <p>
+       We use SSH to log into our servers, but it actually has a lot of neat tricks it can help us with as well! We'll cover some of them here.
+      </p>
+      <p>
+       <a name="logging-in">
+       </a>
+      </p>
+      <h2>
+       Logging in
+      </h2>
+      <p>
+       Of course, we use SSH to login:
+      </p>
+      <pre>
+       <code>
+        $ ssh user@hostname
+       </code>
+      </pre>
+      <p>
+       And, if needed, we can specify a different port:
+      </p>
+      <pre>
+       <code>
+        $ ssh -p 2222 user@hostname
+       </code>
+      </pre>
+      <p>
+       Sometimes, if we have a lot of SSH keys in our
+       <code>
+        ~/.ssh
+       </code>
+       directory, we'll often find that SSHing into servers with the intent of using a password results in a "too many authentication attempts" error. If we need to log into a server with a password, we can attempt to force password-based login. This will stop SSH from attempting to use your SSH keys first:
+      </p>
+      <pre>
+       <code>
+        $ ssh -o "PubkeyAuthentication no" username@hostname
+       </code>
+      </pre>
+      <p>
+       If you use AWS, and in other cases, you might get a PEM file to use as an identity. In this case, you might need to specify a specific identity file to use when logging in. We can do this with the
+       <code>
+        -i
+       </code>
+       flag:
+      </p>
+      <pre>
+       <code>
+        $ ssh -i /path/to/identity.pem username@hostname
+       </code>
+      </pre>
+      <blockquote>
+       <p>
+        You may need to set your permissions on the pem file so only the owner can read/write/execute it:
+        <code>
+         chmod 0600 identity.pem
+        </code>
+        or
+        <code>
+         chmod u+rw identity.pem &amp;&amp; chmod go-rwx identity.pem
+        </code>
+       </p>
+      </blockquote>
+      <h3>
+       SSH Config
+      </h3>
+      <p>
+       Here's something really powerful.
+      </p>
+      <p>
+       If you want to setup aliases for servers you access often, you can create an
+       <code>
+        ~/.ssh/config
+       </code>
+       file and specify each server you log into, along with the authentication method to use:
+      </p>
+      <pre>
+       <code>
+        $ vim ~/.ssh/config
+
+Host somealias
+    HostName example.com
+    Port 2222
+    User someuser
+    IdentityFile  ~/.ssh/id_example
+    IdentitiesOnly yes
+
+Host anotheralias
+    HostName 192.168.33.10
+    User anotheruser
+    PubkeyAuthentication no
+
+How aws
+    HostName some.address.ec2.aws.com
+    User awsuser
+    IdentityFile  ~/.ssh/aws_identity.pem
+    IdentitiesOnly yes
+       </code>
+      </pre>
+      <p>
+       So, there's a few example entries you might find in the
+       <code>
+        ~/.ssh/config
+       </code>
+       file (you can have as many entries as you'd like).
+      </p>
+      <p>
+       Using a defined host ("alias") is as easy as this:
+      </p>
+      <pre>
+       <code>
+        $ ssh somealias
+       </code>
+      </pre>
+      <p>
+       Let's cover the options used above:
+      </p>
+      <ul>
+       <li>
+        <strong>
+         HostName
+        </strong>
+        - The server host (domain or ipaddress)
+       </li>
+       <li>
+        <strong>
+         Port
+        </strong>
+        - The port to use when connecting
+       </li>
+       <li>
+        <strong>
+         User
+        </strong>
+        - The username to log in with
+       </li>
+       <li>
+        <strong>
+         IdentityFile
+        </strong>
+        - The SSH key identity to use to log in with, if using SSH key access
+       </li>
+       <li>
+        <strong>
+         IdentitiesOnly
+        </strong>
+        - "Yes" to specify only attempting to log in via SSH key
+       </li>
+       <li>
+        <strong>
+         PubkeyAuthentication
+        </strong>
+        - "No" to specify you wish to bypass attempting SSH key authentication
+       </li>
+      </ul>
+      <p>
+       <a name="ssh-tunneling">
+       </a>
+      </p>
+      <h2>
+       SSH Tunneling
+      </h2>
+      <p>
+       SSH can be used for tunneling, which is essentially port forwarding. There's a few ways we can do this - Local (Outbound), Remote (Inboud), and some others (Dynamic and Agent Forwarding).
+      </p>
+      <h3>
+       Local Port Forwarding
+      </h3>
+      <p>
+       Local port forwarding is what you use when you need to tunnel through a server's firewall or other limitation.
+      </p>
+      <p>
+       A common example is attempting to connect to a remote database which is either behind a firewall or is only listening to local connection. For example, MySQL only listens to localhost connections by default. You can't remotely connect to it without editing the
+       <code>
+        my.cnf
+       </code>
+       file and have it listen on all networks. There's also a firewall preventing you connecting to MySQL's port 3306 anyway.
+      </p>
+      <blockquote>
+       <p>
+        Remote means any computer that isn't yours, which includes virtual machines (guests) inside of your host computer
+       </p>
+      </blockquote>
+      <p>
+       Assuming we have SSH access to the remote server, we can get around this by creating a tunnel into the server. What might that look like?
+      </p>
+      <pre>
+       <code>
+        ssh -L 3306:localhost:3306 username@hostname
+       </code>
+      </pre>
+      <p>
+       Let's go over this:
+      </p>
+      <ul>
+       <li>
+        <code>
+         -L
+        </code>
+        - Setup local port forwarding
+       </li>
+       <li>
+        <code>
+         3306
+        </code>
+        - The local port to forward
+       </li>
+       <li>
+        <code>
+         localhost:3306
+        </code>
+        - Within the remote server, what address and port to forward traffic to. Since the MySQL server is on the remote server, we're tunneling to the remote server's "localhost" on port 3306, which MySQL is listening to.
+       </li>
+       <li>
+        <code>
+         username@localhost
+        </code>
+        - The SSH username and host to connect to
+       </li>
+      </ul>
+      <p>
+       I can then use my local client to connect to the remote server as if it's a local one:
+      </p>
+      <p>
+       <img alt="" src="https://s3.amazonaws.com/serversforhackers/tunnela.png"/>
+      </p>
+      <p>
+       Now, I used the same port locally and remotely, but I could have specified a different local port to use:
+      </p>
+      <pre>
+       <code>
+        ssh -L 3307:localhost:3306 username@hostname
+       </code>
+      </pre>
+      <p>
+       Then my local mysql client would have to connect to port
+       <code>
+        3307
+       </code>
+       , which would still tunnel to the remote server's local
+       <code>
+        3306
+       </code>
+       :
+      </p>
+      <p>
+       <img alt="" src="https://s3.amazonaws.com/serversforhackers/tunnelb.png"/>
+      </p>
+      <!-- should talk about "localhost" and "127.0.0.1" being lo, "*" being used to all interfaces, and specific IP addresses for eth* interface binding -->
+      <h3>
+       Remote Port Forwarding
+      </h3>
+      <p>
+       Remote Port Forwarding is good if you need to share your local computer with others who are outside of your network.
+      </p>
+      <p>
+       To do this, we need a remote server all parties can reach. Something like a AWS or Digital Ocean server will do.
+      </p>
+      <p>
+       First, let's pretend our local computer has a web server running on port
+       <code>
+        8001
+       </code>
+       :
+      </p>
+      <pre>
+       <code>
+        # On our local machine:
+$ curl localhost:8001
+Hi!
+       </code>
+      </pre>
+      <p>
+       We want our friends to see our website, which simply says "Hi!". Let's use a remote server to forward requests to our local computer:
+      </p>
+      <pre>
+       <code>
+        # Still on our local machine:
+ssh -R 9000:localhost:8001 username@hostname
+       </code>
+      </pre>
+      <p>
+       Let's go over this command:
+      </p>
+      <ul>
+       <li>
+        <code>
+         -R
+        </code>
+        - Using remote port forwarding
+       </li>
+       <li>
+        <code>
+         9000
+        </code>
+        - The remote server's port to use (not our local server this time!)
+       </li>
+       <li>
+        <code>
+         localhost:8001
+        </code>
+        - The local address to forward to. Since our webserver is on localhost port
+        <code>
+         8001
+        </code>
+        , that's what we specify here. (Yep, the order of those arguments changed for -R over -L!)
+       </li>
+       <li>
+        <code>
+         username@hostname
+        </code>
+        - SSH access to the remote server
+       </li>
+      </ul>
+      <p>
+       If our remote server's IP address was
+       <code>
+        123.123.123.123
+       </code>
+       , then our friends can access our website at
+       <code>
+        123.123.123.123:9000
+       </code>
+       , which will forward to our local site at
+       <code>
+        localhost:8001
+       </code>
+       !
+      </p>
+      <p>
+       <strong>
+        Note:
+       </strong>
+       To accomplish this, your remote server's firewall must not block port
+       <code>
+        9000
+       </code>
+       . You may also need to edit
+       <code>
+        /etc/ssh/sshd_config
+       </code>
+       and set the
+       <code>
+        GatewayPorts
+       </code>
+       directive to
+       <code>
+        yes
+       </code>
+       . (Don't forget to restart SSH after any changes to
+       <code>
+        sshd_config
+       </code>
+       ).
+      </p>
+      <p>
+       <a name="one-off-cmnds">
+       </a>
+      </p>
+      <h2>
+       One-Off Commands
+      </h2>
+      <p>
+       You can run commands remotely using SSH as well - in fact, this might be the easiest "trick" for using SSH.
+      </p>
+      <p>
+       When you run a command using SSH, you're running the command on the remote server. However, any resulting output will be displayed in your terminal.
+      </p>
+      <p>
+       Let's just run some simple commands on a remote server. The following will run
+       <code>
+        pwd
+       </code>
+       command. We'll see that it returns the default folder that we would be in after logging in. The we'll run the
+       <code>
+        ls
+       </code>
+       command to see the directory's output:
+      </p>
+      <pre>
+       <code>
+        # Run `pwd` command
+$ ssh -p 2222 username@hostname pwd
+/home/username
+
+# Run `ls -la` command
+$ ssh -p 2222 username@hostname ls -la
+drwxr-xr-x 8 username username   4096 Jun 30 17:49 .
+drwxr-xr-x 4 root     root       4096 Apr 28  2013 ..
+-rw------- 1 username username  18589 Jun 30 17:49 .bash_history
+-rw-r--r-- 1 username username    220 Apr 28  2013 .bash_logout
+-rw-r--r-- 1 username username   3486 Apr 28  2013 .bashrc
+-rw-r--r-- 1 username username    675 Apr 28  2013 .profile
+drwxrwxr-x 2 username username   4096 Mar 15 14:21 .ssh
+       </code>
+      </pre>
+      <h3>
+       Ansible
+      </h3>
+      <p>
+       This is actually the basis of how some server provisioning tools work. In fact, Ansible is very similar - it will run commands over SSH on groups of servers (in series and in parallel).
+      </p>
+      <p>
+       Let's see how that works on Ubuntu really quickly.
+      </p>
+      <p>
+       First install Ansible on a server that will be doing provisioning (not the one being provisioned):
+      </p>
+      <pre>
+       <code>
+        sudo apt-add-repository -y ppa:rquillo/ansible
+sudo apt-get update
+sudo apt-get install -y ansible
+       </code>
+      </pre>
+      <p>
+       Then, configure one or more servers in the
+       <code>
+        /etc/ansible/hosts
+       </code>
+       directory:
+      </p>
+      <pre>
+       <code>
+        [web]
+192.168.22.10
+192.168.22.11
+192.168.22.12
+       </code>
+      </pre>
+      <p>
+       Save that file and then let's run a command on all three servers!
+      </p>
+      <pre>
+       <code>
+        $ ansible -k all -m ping -u vagrant
+       </code>
+      </pre>
+      <p>
+       This will run "ping" on each server. You'll get some JSON output saying if they were successful or not.
+      </p>
+      <p>
+       The flags of that command:
+      </p>
+      <ul>
+       <li>
+        <code>
+         -k
+        </code>
+        - Ask for password
+       </li>
+       <li>
+        <code>
+         all
+        </code>
+        - All servers configured in
+        <code>
+         /etc/ansible/hosts
+        </code>
+       </li>
+       <li>
+        <code>
+         -m ping
+        </code>
+        - Use the ping module
+       </li>
+       <li>
+        <code>
+         -u vagrant
+        </code>
+        - Login with user "vagrant", which will work if the hosts defined are other vagrant servers. Change the username as needed.
+       </li>
+      </ul>
+      <p>
+       You can actually run any command using the "shell" module:
+      </p>
+      <pre>
+       <code>
+        $ ansible -k all -m shell -u vagrant -a "apt-get install nginx"
+       </code>
+      </pre>
+      <p>
+       Here, the
+       <code>
+        -a "apt-get install nginx
+       </code>
+       will run the given command using the "shell" module.
+      </p>
+      <p>
+       Here's more information on
+       <a href="http://docs.ansible.com/intro_adhoc.html">
+        running ad-hoc commands with Ansible
+       </a>
+       !
+      </p>
+      <h2>
+       More Resources:
+      </h2>
+      <ul>
+       <li>
+        <a href="http://blog.tjll.net/ssh-kung-fu">
+         http://blog.tjll.net/ssh-kung-fu
+        </a>
+       </li>
+       <li>
+        <a href="http://www.symkat.com/ssh-tips-and-tricks-you-need">
+         http://www.symkat.com/ssh-tips-and-tricks-you-need
+        </a>
+       </li>
+       <li>
+        <a href="http://www.symkat.com/ssh-tips-and-tricks-you-need">
+         http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.urfix.com/25-ssh-commands-tricks/">
+         http://blog.urfix.com/25-ssh-commands-tricks/
+        </a>
+       </li>
+      </ul>
+     </article>
+    </div>
+   </div>
+  </div>
+  <div class="container has-newsletter" id="newsletter-long">
+   <div class="row">
+    <div class="col-md-push-1 col-md-10">
+     <hr/>
+     <h1>
+      Want more?
+     </h1>
+     <p>
+      If articles like this interest you, sign up for the
+      <strong>
+       newsletter
+      </strong>
+      !
+      <br/>
+      Join nearly 10000 others on the mailing list!
+     </p>
+     <form action="https://serversforhackers.us3.list-manage.com/subscribe/post?u=a8135265ae1b33559181e2f60&amp;id=5b5ccc2ff7" method="post">
+      <ul>
+       <li>
+        <input class="txt" name="EMAIL" placeholder="Email Address" type="email" value=""/>
+       </li>
+       <li>
+        <button class="button subcr" type="submit">
+         Subscribe
+        </button>
+       </li>
+      </ul>
+      <div style="position: absolute; left: -5000px;">
+       <input name="b_a8135265ae1b33559181e2f60_5b5ccc2ff7" type="text" value=""/>
+      </div>
+     </form>
+     <hr/>
+    </div>
+   </div>
+  </div>
+  <div class="container" id="the-comments">
+   <div class="row">
+    <div class="col-md-12">
+     <section class="comments">
+      <div id="disqus_thread">
+      </div>
+      <script type="text/javascript">
+       var disqus_shortname = 'serversforhackers';
+
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+      </script>
+     </section>
+    </div>
+   </div>
+  </div>
+  <section class="dark" id="footer">
+   <div class="container">
+    <div class="row">
+     <div class="col-md-6">
+      <h3>
+       Servers for Hackers
+      </h3>
+      <ul>
+       <li>
+        <a href="https://serversforhackers.com/series">
+         Videos
+        </a>
+       </li>
+       <li>
+        <a href="http://forums.serversforhackers.com">
+         Forums
+        </a>
+       </li>
+       <li>
+        <a href="https://serversforhackers.com/editions">
+         Editions
+        </a>
+       </li>
+       <li>
+        <a href="https://serversforhackers.com/articles">
+         Articles
+        </a>
+       </li>
+       <li>
+        <a href="https://serversforhackers.com/feed">
+         RSS
+        </a>
+       </li>
+       <li>
+        <a href="https://book.serversforhackers.com">
+         eBook
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="col-md-6" id="newsletter">
+      <h3>
+       The Newsletter
+      </h3>
+      <p>
+       Get Actually Useful server info bimonthly!
+      </p>
+      <form action="https://serversforhackers.us3.list-manage.com/subscribe/post?u=a8135265ae1b33559181e2f60&amp;id=5b5ccc2ff7" method="post">
+       <ul>
+        <li>
+         <input class="txt" name="EMAIL" placeholder="Email Address" type="email" value=""/>
+        </li>
+        <li>
+         <button class="btn subcr" type="submit">
+          Subscribe
+         </button>
+        </li>
+       </ul>
+       <div style="position: absolute; left: -5000px;">
+        <input name="b_a8135265ae1b33559181e2f60_5b5ccc2ff7" type="text" value=""/>
+       </div>
+      </form>
+     </div>
+    </div>
+    <div class="row" id="footer-meta">
+     <div class="col-md-12">
+      <p>
+        2015 - Fideloper LLC -
+       <a href="https://twitter.com/srvrsforhackers">
+        @srvrsforhackers
+       </a>
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+  </script>
+  <script src="/js/scripts.js?v=db62d1239a272fd4471fe83381edc9d0">
+  </script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js">
+  </script>
+  <script type="application/javascript">
+   $(function()
+    {
+        // Code Hinting
+        hljs.initHighlightingOnLoad();
+
+        // Video resizing
+        _V_("vjs-video-current").ready(function(){
+
+            var myPlayer = this;
+
+            // GA Integration
+            myPlayer.ga();
+
+            // Resizing
+            var aspectRatio = 641/1140;
+
+            function resizeVideoJS(){
+                // Get the parent element's actual width
+                var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
+                // Set width to fill parent element, Set height
+                myPlayer.width(width).height( width * aspectRatio );
+            }
+
+            resizeVideoJS(); // Initialize the function
+            $(window).smartresize(function(){
+                resizeVideoJS();
+            });
+
+            // Track (initial) Play
+            myPlayer.one('play', function(e)
+            {
+                var urlSlug = $('#content').data('urlslug');
+                var postUrl =  '/metrics/content_watched_anon'; 
+                $.ajax({
+                    type: "POST",
+                    url: postUrl,
+                    data: {url: urlSlug, _token:'hnHY7cYYTPbFK8b9Ryhgi8vEmhGcWrPPMgLpLkQl'},
+                    dataType: 'text'
+                });
+            });
+        });
+    });
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-20914866-3', 'serversforhackers.com');
+        ga('send', 'pageview');
+  </script>
+ </body>
+</html>

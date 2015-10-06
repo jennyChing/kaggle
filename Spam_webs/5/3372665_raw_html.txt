@@ -1,0 +1,3349 @@
+<!DOCTYPE html>
+<!--[if IE 7]&gt;
+&lt;html class="ie ie7" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if IE 8]&gt;
+&lt;html class="ie ie8" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if !(IE 7) &amp; !(IE 8)]&gt;&lt;!-->
+<html lang="en-US">
+ <!--&lt;![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <title>
+   How to write a KWin effect | Martin's Blog
+  </title>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://blog.martin-graesslin.com/blog/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+	&lt;script src="http://blog.martin-graesslin.com/blog/wp-content/themes/twentyfourteen/js/html5.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <link href="http://blog.martin-graesslin.com/blog/feed/" rel="alternate" title="Martin's Blog  Feed" type="application/rss+xml"/>
+  <link href="http://blog.martin-graesslin.com/blog/comments/feed/" rel="alternate" title="Martin's Blog  Comments Feed" type="application/rss+xml"/>
+  <link href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/feed/" rel="alternate" title="Martin's Blog  How to write a KWin effect Comments Feed" type="application/rss+xml"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/jetpack/modules/theme-tools/compat/twentyfourteen.css?ver=3.4.3" id="twentyfourteen-jetpack-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C900%2C300italic%2C400italic%2C700italic&amp;subset=latin%2Clatin-ext" id="twentyfourteen-lato-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/jetpack/_inc/genericons/genericons/genericons.css?ver=3.1" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/themes/twentyfourteen/style.css?ver=4.0" id="twentyfourteen-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentyfourteen-ie-css'  href='http://blog.martin-graesslin.com/blog/wp-content/themes/twentyfourteen/css/ie.css?ver=20131205' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/jetpack/css/jetpack.css?ver=3.4.3" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0" id="core3.0-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css?ver=3.0" id="core-Default3.0-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0" id="theme-Default3.0-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://blog.martin-graesslin.com/blog/wp-includes/js/jquery/jquery.js?ver=1.11.1" type="text/javascript">
+  </script>
+  <script src="http://blog.martin-graesslin.com/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <link href="http://blog.martin-graesslin.com/blog/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://blog.martin-graesslin.com/blog/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://blog.martin-graesslin.com/blog/2009/06/eine-neue-kwin-fensterdekoration-theme-engine/" rel="prev" title="Eine neue KWin Fensterdekoration Theme Engine"/>
+  <link href="http://blog.martin-graesslin.com/blog/2009/07/gran-canaria-desktop-summit-personliche-zusammenfassung/" rel="next" title="Gran Canaria Desktop Summit  persnliche Zusammenfassung"/>
+  <meta content="WordPress 4.0" name="generator"/>
+  <link href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/" rel="canonical"/>
+  <link href="http://wp.me/p2F5bG-4a" rel="shortlink"/>
+  <!-- Jetpack Open Graph Tags -->
+  <meta content="article" property="og:type"/>
+  <meta content="How to write a KWin effect" property="og:title"/>
+  <meta content="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/" property="og:url"/>
+  <meta content="This blog post has been in my drafts folder for weeks and I just thought it's time to publish it - ready for Akademy :-) And if somebody is really interested we could have a BOF session at Akademy...." property="og:description"/>
+  <meta content="2009-07-02T09:06:04+00:00" property="article:published_time"/>
+  <meta content="2009-07-02T09:06:04+00:00" property="article:modified_time"/>
+  <meta content="http://blog.martin-graesslin.com/blog/author/admin/" property="article:author"/>
+  <meta content="Martin's Blog" property="og:site_name"/>
+  <meta content="http://lh3.ggpht.com/_wUaMak2PJU4/SipB22-BZmI/AAAAAAAAACk/rrHtMqhMmq0/s400/resize.png" property="og:image"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="@jetpack" name="twitter:site"/>
+  <meta content="http://lh3.ggpht.com/_wUaMak2PJU4/SipB22-BZmI/AAAAAAAAACk/rrHtMqhMmq0/s400/resize.png?w=240" name="twitter:image"/>
+  <meta content="summary" name="twitter:card"/>
+ </head>
+ <body class="single single-post postid-258 single-format-standard masthead-fixed full-width singular">
+  <div class="hfeed site" id="page">
+   <header class="site-header" id="masthead" role="banner">
+    <div class="header-main">
+     <h1 class="site-title">
+      <a href="http://blog.martin-graesslin.com/blog/" rel="home">
+       Martin's Blog
+      </a>
+     </h1>
+     <div class="search-toggle">
+      <a aria-controls="search-container" aria-expanded="false" class="screen-reader-text" href="#search-container">
+       Search
+      </a>
+     </div>
+     <nav class="site-navigation primary-navigation" id="primary-navigation" role="navigation">
+      <button class="menu-toggle">
+       Primary Menu
+      </button>
+      <a class="screen-reader-text skip-link" href="#content">
+       Skip to content
+      </a>
+      <div class="nav-menu">
+       <ul>
+        <li class="page_item page-item-2">
+         <a href="http://blog.martin-graesslin.com/blog/about/">
+          About
+         </a>
+        </li>
+        <li class="page_item page-item-765">
+         <a href="http://blog.martin-graesslin.com/blog/bugfixing-service/">
+          Bugfixing Service
+         </a>
+        </li>
+        <li class="page_item page-item-43">
+         <a href="http://blog.martin-graesslin.com/blog/datenschutzerklarung/">
+          Datenschutzerklrung
+         </a>
+        </li>
+        <li class="page_item page-item-44">
+         <a href="http://blog.martin-graesslin.com/blog/impressum/">
+          Impressum
+         </a>
+        </li>
+        <li class="page_item page-item-390">
+         <a href="http://blog.martin-graesslin.com/blog/veroffentlichungen/">
+          Verffentlichungen
+         </a>
+        </li>
+       </ul>
+      </div>
+     </nav>
+    </div>
+    <div class="search-box-wrapper hide" id="search-container">
+     <div class="search-box">
+      <form action="http://blog.martin-graesslin.com/blog/" class="search-form" method="get" role="search">
+       <label>
+        <span class="screen-reader-text">
+         Search for:
+        </span>
+        <input class="search-field" name="s" placeholder="Search " title="Search for:" type="search" value=""/>
+       </label>
+       <input class="search-submit" type="submit" value="Search"/>
+      </form>
+     </div>
+    </div>
+   </header>
+   <!-- #masthead -->
+   <div class="site-main" id="main">
+    <div class="content-area" id="primary">
+     <div class="site-content" id="content" role="main">
+      <article class="post-258 post type-post status-publish format-standard hentry category-allgemein category-kde category-planetkde" id="post-258">
+       <header class="entry-header">
+        <div class="entry-meta">
+         <span class="cat-links">
+          <a href="http://blog.martin-graesslin.com/blog/kategorien/allgemein/" rel="category tag">
+           Allgemein
+          </a>
+          ,
+          <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/" rel="category tag">
+           KDE
+          </a>
+          ,
+          <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/planetkde/" rel="category tag">
+           planetkde
+          </a>
+         </span>
+        </div>
+        <h1 class="entry-title">
+         How to write a KWin effect
+        </h1>
+        <div class="entry-meta">
+         <span class="entry-date">
+          <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/" rel="bookmark">
+           <time class="entry-date" datetime="2009-07-02T11:06:04+00:00">
+            2. July 2009
+           </time>
+          </a>
+         </span>
+         <span class="byline">
+          <span class="author vcard">
+           <a class="url fn n" href="http://blog.martin-graesslin.com/blog/author/admin/" rel="author">
+            Martin Grlin
+           </a>
+          </span>
+         </span>
+         <span class="comments-link">
+          <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/#comments" title="Comment on How to write a KWin effect">
+           9 Comments
+          </a>
+         </span>
+        </div>
+        <!-- .entry-meta -->
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         This blog post has been in my drafts folder for weeks and I just thought its time to publish it  ready for Akademy
+         <img alt=":-)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_smile.gif"/>
+         And if somebody is really interested we could have a BOF session at Akademy. I think Plasma devs want us to write a slide effect to replace their custom popup animation. That would be a perfect example to get your hands dirty.
+        </p>
+        <p>
+         I wrote a new Kwin effect and thought this is the ideal effect for writing a small howto. It is an effect which helps resizing windows by colouring the changed geometry. I was told that resizing is not optimal in KWin, that is if the window content is shown while resizing it is slow and if the window content is not shown it is ugly. This effect should fill the gap. Unfortunately the current code will only work with the slow show window content while resizing (the API has to be changed). Nevertheless I decided to show the code in this tutorial.
+        </p>
+        <table style="width:auto;">
+         <tr>
+          <td>
+           <a href="http://picasaweb.google.de/lh/photo/3tALNzSWEqAKfhhvn9uwmA?feat=embedwebsite">
+            <img src="http://lh3.ggpht.com/_wUaMak2PJU4/SipB22-BZmI/AAAAAAAAACk/rrHtMqhMmq0/s400/resize.png"/>
+           </a>
+          </td>
+         </tr>
+         <tr>
+          <td style="font-family:arial,sans-serif; font-size:11px; text-align:right">
+           Von
+           <a href="http://picasaweb.google.de/mgraesslin/KWin?feat=embedwebsite">
+            KWin
+           </a>
+          </td>
+         </tr>
+        </table>
+        <p>
+         The effect has been committed to
+         <a href="http://websvn.kde.org/trunk/KDE/kdebase/workspace/kwin/effects/resize/">
+          trunk
+         </a>
+         . So you can have a look at it and if youre running trunk you can even try it. The effect which we will write has the name
+         <em>
+          Resize
+         </em>
+         . It will support both backends: XRender and OpenGL. Each effect has an own directory in
+         <strong>
+          kwin/effects
+         </strong>
+         so we create a new directory
+         <strong>
+          resize
+         </strong>
+         . There we create the following files:
+        </p>
+        <ul>
+         <li>
+          CMakeLists.txt
+         </li>
+         <li>
+          resize.h
+         </li>
+         <li>
+          resize.cpp
+         </li>
+         <li>
+          resize.desktop
+         </li>
+        </ul>
+        <p>
+         We have to include this directory into the build, so we edit the
+         <strong>
+          <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/effects/CMakeLists.txt">
+           CMakeLists.txt
+          </a>
+         </strong>
+         in the
+         <strong>
+          effects
+         </strong>
+         directory. We just add the following line to the section marked as
+         <em>
+          Common effects
+         </em>
+         :
+        </p>
+        <p>
+         <code>
+          <strong>
+           include( resize/CMakeLists.txt )
+          </strong>
+         </code>
+        </p>
+        <p>
+         If it were an OpenGL only effect we would place this line in the section marked as
+         <em>
+          OpenGL-specific effects
+         </em>
+         .
+        </p>
+        <p>
+         So at this point we are finished with the preparation. So lets start looking at the files. First the
+         <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/effects/resize/resize.desktop">
+          desktop file
+         </a>
+         :
+        </p>
+        <pre>
+         <tt>
+          [Desktop Entry]
+Name=Resize Window
+Icon=preferences-system-windows-effect-resize
+Comment=Effect to outline geometry while resizing a window
+
+Type=Service
+X-KDE-ServiceTypes=KWin/Effect
+X-KDE-PluginInfo-Author=Martin Grlin
+X-KDE-PluginInfo-Email=kde@martin-graesslin.com
+X-KDE-PluginInfo-Name=kwin4_effect_resize
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-Category=Window Management
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=false
+X-KDE-Library=kwin4_effect_builtins
+X-KDE-Ordering=60
+         </tt>
+        </pre>
+        <p>
+         Most of it is self explaining and just needed for the All effects tab in the compositing kcm. The most important value is the X-KDE-PluginInfo-Name. This is the name used to load the effect and has to start with kwin4_effect_ followed by your custom effect name. This last part will be needed in the source code.
+        </p>
+        <p>
+         Each effect is a subclass of class
+         <strong>
+          
+          <a href="http://api.kde.org/4.x-api/kdebase-workspace-apidocs/kwin/lib/html/classKWin_1_1Effect.html">
+           Effect
+          </a>
+          
+         </strong>
+         defined in kwineffects.h and implements some of the virtual methods provided by Effect. There are methods for almost everything the window manager does. So by implementing those methods you can react on change of desktop or on opened/closed windows. In this effect we are interested in resize events so we have to implement method
+         <strong>
+          windowUserMovedResized( EffectWindow *w, bool first, bool last )
+         </strong>
+         . This method is called whenever a user moves or resizes the given window. The two boolean values indicate if it is the first, last or an intermediate resize event.
+        </p>
+        <p>
+         But there are more methods we have to implement. The effect should paint the changed geometry while resizing. So we have to implement the methods required for custom painting. KWins painting pass consists of three stages:
+        </p>
+        <ol>
+         <li>
+          pre paint
+         </li>
+         <li>
+          paint
+         </li>
+         <li>
+          post paint
+         </li>
+        </ol>
+        <p>
+         These stages are executed once for the complete screen and once for every window. All effects are chained and each effect calls the stage for the next effect. How this works we will see when looking at the implementation. You can find a good documentation in the comments of
+         <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/scene.cpp">
+          scene.cpp
+         </a>
+        </p>
+        <p>
+         Now its time to have a look at the
+         <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/effects/resize/resize.h">
+          header file
+         </a>
+         :
+        </p>
+        <pre>
+         <tt>
+          <b>
+           <font color="#000080">
+            #ifndef
+           </font>
+          </b>
+          KWIN_RESIZE_H
+          <b>
+           <font color="#000080">
+            #define
+           </font>
+          </b>
+          KWIN_RESIZE_H
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           &lt;kwineffects.h&gt;
+          </font>
+          <b>
+           <font color="#0000FF">
+            namespace
+           </font>
+          </b>
+          KWin
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#0000FF">
+            class
+           </font>
+          </b>
+          <font color="#008080">
+           ResizeEffect
+          </font>
+          <font color="#990000">
+           :
+          </font>
+          <b>
+           <font color="#0000FF">
+            public
+           </font>
+          </b>
+          Effect
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#0000FF">
+            public
+           </font>
+          </b>
+          <font color="#990000">
+           :
+          </font>
+          <b>
+           <font color="#000000">
+            ResizeEffect
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <font color="#990000">
+           ~
+          </font>
+          <b>
+           <font color="#000000">
+            ResizeEffect
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <b>
+           <font color="#0000FF">
+            virtual
+           </font>
+          </b>
+          <font color="#009900">
+           void
+          </font>
+          <b>
+           <font color="#000000">
+            prePaintScreen
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          ScreenPrePaintData
+          <font color="#990000">
+           &amp;
+          </font>
+          data
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          time
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#0000FF">
+            virtual
+           </font>
+          </b>
+          <font color="#009900">
+           void
+          </font>
+          <b>
+           <font color="#000000">
+            paintWindow
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          EffectWindow
+          <font color="#990000">
+           *
+          </font>
+          w
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          mask
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#008080">
+           QRegion
+          </font>
+          region
+          <font color="#990000">
+           ,
+          </font>
+          WindowPaintData
+          <font color="#990000">
+           &amp;
+          </font>
+          data
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#0000FF">
+            virtual
+           </font>
+          </b>
+          <font color="#009900">
+           void
+          </font>
+          <b>
+           <font color="#000000">
+            windowUserMovedResized
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <font color="#008080">
+           EffectWindow
+          </font>
+          <font color="#990000">
+           *
+          </font>
+          w
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           bool
+          </font>
+          first
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           bool
+          </font>
+          last
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#0000FF">
+            private
+           </font>
+          </b>
+          <font color="#990000">
+           :
+          </font>
+          <font color="#009900">
+           bool
+          </font>
+          m_active
+          <font color="#990000">
+           ;
+          </font>
+          EffectWindow
+          <font color="#990000">
+           *
+          </font>
+          m_resizeWindow
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#008080">
+           QRegion
+          </font>
+          m_originalWindowRect
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#000080">
+            #endif
+           </font>
+          </b>
+         </tt>
+        </pre>
+        <p>
+         We see that there are three member variables. The boolean is used to indicate if there is a window being resized, that is if we have to do some painting. The
+         <strong>
+          EffectWindow
+         </strong>
+         is a pointer on the window being resized and the
+         <strong>
+          QRegion
+         </strong>
+         stores the windowss geometry before the start of resizing.
+        </p>
+        <p>
+         So now we can have a look at the
+         <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/effects/resize/resize.cpp">
+          implementation
+         </a>
+         . I will split the code in small parts and explain the code. So first lets look at the includes:
+        </p>
+        <pre>
+         <tt>
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           "resize.h"
+          </font>
+          <b>
+           <font color="#000080">
+            #ifdef
+           </font>
+          </b>
+          KWIN_HAVE_OPENGL_COMPOSITING
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           &lt;GL/gl.h&gt;
+          </font>
+          <b>
+           <font color="#000080">
+            #endif
+           </font>
+          </b>
+          <b>
+           <font color="#000080">
+            #ifdef
+           </font>
+          </b>
+          KWIN_HAVE_XRENDER_COMPOSITING
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           &lt;X11/Xlib.h&gt;
+          </font>
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           &lt;X11/extensions/Xrender.h&gt;
+          </font>
+          <b>
+           <font color="#000080">
+            #endif
+           </font>
+          </b>
+          <b>
+           <font color="#000080">
+            #include
+           </font>
+          </b>
+          <font color="#FF0000">
+           &lt;KColorScheme&gt;
+          </font>
+         </tt>
+        </pre>
+        <p>
+         As our effect should support both XRender and OpenGL we have to include the headers for both. As it is possible that the effect is compiled on a system which does not support one of both we use ifdef. We can be sure that at least one of both is available or the effects wouldnt be compiled at all. If you write an OpenGL only effect you do not have to bother about such things. Also if you only use KWins high level API you dont need to include those headers. But we want to paint on the screen using OpenGL or XRender directly.
+        </p>
+        <p>
+         So lets have a look at the next part:
+        </p>
+        <pre>
+         <tt>
+          <b>
+           <font color="#0000FF">
+            namespace
+           </font>
+          </b>
+          KWin
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#000000">
+            KWIN_EFFECT
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          resize
+          <font color="#990000">
+           ,
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           )
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           ::
+          </font>
+          <b>
+           <font color="#000000">
+            ResizeEffect
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           :
+          </font>
+          <b>
+           <font color="#000000">
+            m_active
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <b>
+           <font color="#0000FF">
+            false
+           </font>
+          </b>
+          <font color="#990000">
+           )
+          </font>
+          <font color="#990000">
+           ,
+          </font>
+          <b>
+           <font color="#000000">
+            m_resizeWindow
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <font color="#993399">
+           0
+          </font>
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#000000">
+            reconfigure
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          ReconfigureAll
+          <font color="#990000">
+           );
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           ::~
+          </font>
+          <b>
+           <font color="#000000">
+            ResizeEffect
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+         </tt>
+        </pre>
+        <p>
+         Here we see the use of a macro. This has to be included or your effect will not load (it took me ten minutes to notice I forgot to add this line). The first value is the second part of
+         <strong>
+          X-KDE-PluginInfo-Name
+         </strong>
+          I told you we will need it again. The second value is the class name. Following is constructor and deconstructor.
+        </p>
+        <p>
+         So lets look at the pre paint screen stage:
+        </p>
+        <pre>
+         <tt>
+          <font color="#009900">
+           void
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           ::
+          </font>
+          <b>
+           <font color="#000000">
+            prePaintScreen
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          ScreenPrePaintData
+          <font color="#990000">
+           &amp;
+          </font>
+          data
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          time
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          m_active
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          data
+          <font color="#990000">
+           .
+          </font>
+          mask
+          <font color="#990000">
+           |=
+          </font>
+          PAINT_SCREEN_WITH_TRANSFORMED_WINDOWS
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            prePaintScreen
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          data
+          <font color="#990000">
+           ,
+          </font>
+          time
+          <font color="#990000">
+           );
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+         </tt>
+        </pre>
+        <p>
+         Here we extend the mask to say that we paint the screen with transformed windows when the effect is active. Thats not completely true  we dont transform a window. But this flag indicates that the complete screen will be repainted, so we eliminate the risk of artefacts. We could also track the parts which have to be repainted manually but this would probably be more work for the CPU than the complete repaint for the GPU. At this point we see the chaining for the first time. The
+         <strong>
+          effects-&gt;prePaintScreen( data, time );
+         </strong>
+         will call the next effect in the chain.
+         <strong>
+          effects
+         </strong>
+         is a pointer on the
+         <a href="http://api.kde.org/4.x-api/kdebase-workspace-apidocs/kwin/lib/html/classKWin_1_1EffectsHandler.html">
+          EffectsHandler
+         </a>
+         and a very useful helper.
+        </p>
+        <p>
+         So now we start looking at the heart of the effect:
+        </p>
+        <pre>
+         <tt>
+          <font color="#009900">
+           void
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           ::
+          </font>
+          <b>
+           <font color="#000000">
+            paintWindow
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          EffectWindow
+          <font color="#990000">
+           *
+          </font>
+          w
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          mask
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#008080">
+           QRegion
+          </font>
+          region
+          <font color="#990000">
+           ,
+          </font>
+          WindowPaintData
+          <font color="#990000">
+           &amp;
+          </font>
+          data
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            paintWindow
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          w
+          <font color="#990000">
+           ,
+          </font>
+          mask
+          <font color="#990000">
+           ,
+          </font>
+          region
+          <font color="#990000">
+           ,
+          </font>
+          data
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          m_active
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          w
+          <font color="#990000">
+           ==
+          </font>
+          m_resizeWindow
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <font color="#008080">
+           QRegion
+          </font>
+          intersection
+          <font color="#990000">
+           =
+          </font>
+          m_originalWindowRect
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            intersected
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            geometry
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <font color="#008080">
+           QRegion
+          </font>
+          paintRegion
+          <font color="#990000">
+           =
+          </font>
+          m_originalWindowRect
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            united
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            geometry
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           ).
+          </font>
+          <b>
+           <font color="#000000">
+            subtracted
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          intersection
+          <font color="#990000">
+           );
+          </font>
+          <font color="#009900">
+           float
+          </font>
+          alpha
+          <font color="#990000">
+           =
+          </font>
+          <font color="#993399">
+           0
+          </font>
+          <font color="#990000">
+           .
+          </font>
+          8f
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#008080">
+           QColor
+          </font>
+          color
+          <font color="#990000">
+           =
+          </font>
+          <b>
+           <font color="#000000">
+            KColorScheme
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          QPalette
+          <font color="#990000">
+           ::
+          </font>
+          Normal
+          <font color="#990000">
+           ,
+          </font>
+          KColorScheme
+          <font color="#990000">
+           ::
+          </font>
+          Selection
+          <font color="#990000">
+           ).
+          </font>
+          <b>
+           <font color="#000000">
+            background
+           </font>
+          </b>
+          <font color="#990000">
+           ().
+          </font>
+          <b>
+           <font color="#000000">
+            color
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+         </tt>
+        </pre>
+        <p>
+         We first continue the paint window effect chain  this will paint the window on the screen. Now we check if we are in resizing mode (
+         <strong>
+          m_active
+         </strong>
+         ) and if the currently painted window is the window which is repainted. In that case we calculate the region which has to be painted. We just subtract the intersection of current geometry with saved geometry from the union of those two. The next two lines are for the color definition. We use the background color of a selection with 80 % opacity.
+        </p>
+        <p>
+         Now we have to do a little bit OpenGL. In most effects where you just transform windows you dont have to write OpenGL at all. There is a nice high level API which allows you to translate, scale and rotate windows or the complete screen. Also transforming single quads can be completely done without knowing anything about OpenGL.
+        </p>
+        <pre>
+         <tt>
+          <b>
+           <font color="#000080">
+            #ifdef
+           </font>
+          </b>
+          KWIN_HAVE_OPENGL_COMPOSITING
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            compositingType
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           ==
+          </font>
+          OpenGLCompositing
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#000000">
+            glPushAttrib
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          GL_CURRENT_BIT
+          <font color="#990000">
+           |
+          </font>
+          GL_ENABLE_BIT
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glEnable
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          GL_BLEND
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glBlendFunc
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          GL_SRC_ALPHA
+          <font color="#990000">
+           ,
+          </font>
+          GL_ONE_MINUS_SRC_ALPHA
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glColor4f
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            red
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           .
+          </font>
+          0f
+          <font color="#990000">
+           ,
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            green
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           .
+          </font>
+          0f
+          <font color="#990000">
+           ,
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            blue
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           .
+          </font>
+          0f
+          <font color="#990000">
+           ,
+          </font>
+          alpha
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glBegin
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          GL_QUADS
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            foreach
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <b>
+           <font color="#0000FF">
+            const
+           </font>
+          </b>
+          <font color="#008080">
+           QRect
+          </font>
+          <font color="#990000">
+           &amp;
+          </font>
+          r
+          <font color="#990000">
+           ,
+          </font>
+          paintRegion
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            rects
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#000000">
+            glVertex2i
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            x
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            y
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glVertex2i
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            x
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           +
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            width
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            y
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glVertex2i
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            x
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           +
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            width
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            y
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           +
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            height
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            glVertex2i
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            x
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            y
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           +
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            height
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#000000">
+            glEnd
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <b>
+           <font color="#000000">
+            glPopAttrib
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#000080">
+            #endif
+           </font>
+          </b>
+         </tt>
+        </pre>
+        <p>
+         We check if KWin uses OpenGL as a backend. We enable blending in the OpenGL state machine (needed to have translucent colors) and set the color for our rects. OpenGL clamps colors in the range [0,1] thats why we cant use the values from QColor directly. Last but not least we just paint one quads for each rect of our regin.
+        </p>
+        <p>
+         Now just the XRender part is missing. This part is taken from show paint effect  I dont know anything about XRender
+         <img alt=";-)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_wink.gif"/>
+        </p>
+        <pre>
+         <tt>
+          <b>
+           <font color="#000080">
+            #ifdef
+           </font>
+          </b>
+          KWIN_HAVE_XRENDER_COMPOSITING
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            compositingType
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           ==
+          </font>
+          XRenderCompositing
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <font color="#008080">
+           XRenderColor
+          </font>
+          col
+          <font color="#990000">
+           ;
+          </font>
+          col
+          <font color="#990000">
+           .
+          </font>
+          alpha
+          <font color="#990000">
+           =
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          <font color="#990000">
+           (
+          </font>
+          alpha
+          <font color="#990000">
+           *
+          </font>
+          <font color="#993399">
+           0xffff
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          col
+          <font color="#990000">
+           .
+          </font>
+          red
+          <font color="#990000">
+           =
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          <font color="#990000">
+           (
+          </font>
+          alpha
+          <font color="#990000">
+           *
+          </font>
+          <font color="#993399">
+           0xffff
+          </font>
+          <font color="#990000">
+           *
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            red
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          col
+          <font color="#990000">
+           .
+          </font>
+          green
+          <font color="#990000">
+           =
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          <font color="#990000">
+           (
+          </font>
+          alpha
+          <font color="#990000">
+           *
+          </font>
+          <font color="#993399">
+           0xffff
+          </font>
+          <font color="#990000">
+           *
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            green
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          col
+          <font color="#990000">
+           .
+          </font>
+          blue
+          <font color="#990000">
+           =
+          </font>
+          <font color="#009900">
+           int
+          </font>
+          <font color="#990000">
+           (
+          </font>
+          alpha
+          <font color="#990000">
+           *
+          </font>
+          <font color="#993399">
+           0xffff
+          </font>
+          <font color="#990000">
+           *
+          </font>
+          color
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            blue
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           /
+          </font>
+          <font color="#993399">
+           255
+          </font>
+          <font color="#990000">
+           );
+          </font>
+          <b>
+           <font color="#000000">
+            foreach
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <b>
+           <font color="#0000FF">
+            const
+           </font>
+          </b>
+          <font color="#008080">
+           QRect
+          </font>
+          <font color="#990000">
+           &amp;
+          </font>
+          r
+          <font color="#990000">
+           ,
+          </font>
+          paintRegion
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            rects
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           )
+          </font>
+          <b>
+           <font color="#000000">
+            XRenderFillRectangle
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          <b>
+           <font color="#000000">
+            display
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          PictOpOver
+          <font color="#990000">
+           ,
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            xrenderBufferPicture
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          <font color="#990000">
+           &amp;
+          </font>
+          col
+          <font color="#990000">
+           ,
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            x
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            y
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            width
+           </font>
+          </b>
+          <font color="#990000">
+           (),
+          </font>
+          r
+          <font color="#990000">
+           .
+          </font>
+          <b>
+           <font color="#000000">
+            height
+           </font>
+          </b>
+          <font color="#990000">
+           ());
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#000080">
+            #endif
+           </font>
+          </b>
+          <font color="#FF0000">
+           }
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+         </tt>
+        </pre>
+        <p>
+         This does the same as the OpenGL part just with XRender.
+        </p>
+        <p>
+         Last but not least we have to track the window resizing:
+        </p>
+        <pre>
+         <tt>
+          <font color="#009900">
+           void
+          </font>
+          ResizeEffect
+          <font color="#990000">
+           ::
+          </font>
+          <b>
+           <font color="#000000">
+            windowUserMovedResized
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          EffectWindow
+          <font color="#990000">
+           *
+          </font>
+          w
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           bool
+          </font>
+          first
+          <font color="#990000">
+           ,
+          </font>
+          <font color="#009900">
+           bool
+          </font>
+          last
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          first
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          last
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          <i>
+           <font color="#9A1900">
+            // not interested in maximized
+           </font>
+          </i>
+          <b>
+           <font color="#0000FF">
+            return
+           </font>
+          </b>
+          <font color="#990000">
+           ;
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          first
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            isUserResize
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          <font color="#990000">
+           !
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            isUserMove
+           </font>
+          </b>
+          <font color="#990000">
+           ()
+          </font>
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          m_active
+          <font color="#990000">
+           =
+          </font>
+          <b>
+           <font color="#0000FF">
+            true
+           </font>
+          </b>
+          <font color="#990000">
+           ;
+          </font>
+          m_resizeWindow
+          <font color="#990000">
+           =
+          </font>
+          w
+          <font color="#990000">
+           ;
+          </font>
+          m_originalWindowRect
+          <font color="#990000">
+           =
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            geometry
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          w
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            addRepaintFull
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <b>
+           <font color="#0000FF">
+            if
+           </font>
+          </b>
+          <font color="#990000">
+           (
+          </font>
+          m_active
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          w
+          <font color="#990000">
+           ==
+          </font>
+          m_resizeWindow
+          <font color="#990000">
+           &amp;&amp;
+          </font>
+          last
+          <font color="#990000">
+           )
+          </font>
+          <font color="#FF0000">
+           {
+          </font>
+          m_active
+          <font color="#990000">
+           =
+          </font>
+          <b>
+           <font color="#0000FF">
+            false
+           </font>
+          </b>
+          <font color="#990000">
+           ;
+          </font>
+          m_resizeWindow
+          <font color="#990000">
+           =
+          </font>
+          NULL
+          <font color="#990000">
+           ;
+          </font>
+          effects
+          <font color="#990000">
+           -&gt;
+          </font>
+          <b>
+           <font color="#000000">
+            addRepaintFull
+           </font>
+          </b>
+          <font color="#990000">
+           ();
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <font color="#FF0000">
+           }
+          </font>
+          <i>
+           <font color="#9A1900">
+            // namespace
+           </font>
+          </i>
+         </tt>
+        </pre>
+        <p>
+         So and thats all. When a resize event is started we activate the effect and trigger a repaint of the window (probably not needed, but doesnt hurt). And when the resizing is finished we deactivate the effect and trigger another repaint of the complete screen just to make sure that there are no artefacts left.
+        </p>
+        <p>
+         The
+         <a href="http://websvn.kde.org/*checkout*/trunk/KDE/kdebase/workspace/kwin/effects/resize/CMakeLists.txt">
+          CMakeLists.txt
+         </a>
+         could just be taken from any other effect and be adjusted. So heres the example:
+        </p>
+        <pre>
+         <tt>
+          #######################################
+# Effect
+
+# Source files
+set( kwin4_effect_builtins_sources ${kwin4_effect_builtins_sources}
+    resize/resize.cpp
+    )
+
+# .desktop files
+install( FILES
+    resize/resize.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+
+#######################################
+# Config
+         </tt>
+        </pre>
+        <p>
+         Now you can compile and try your new effect.
+        </p>
+       </div>
+       <!-- .entry-content -->
+      </article>
+      <!-- #post-## -->
+      <nav class="navigation post-navigation" role="navigation">
+       <h1 class="screen-reader-text">
+        Post navigation
+       </h1>
+       <div class="nav-links">
+        <a href="http://blog.martin-graesslin.com/blog/2009/06/eine-neue-kwin-fensterdekoration-theme-engine/" rel="prev">
+         <span class="meta-nav">
+          Previous Post
+         </span>
+         Eine neue KWin Fensterdekoration Theme Engine
+        </a>
+        <a href="http://blog.martin-graesslin.com/blog/2009/07/gran-canaria-desktop-summit-personliche-zusammenfassung/" rel="next">
+         <span class="meta-nav">
+          Next Post
+         </span>
+         Gran Canaria Desktop Summit  persnliche Zusammenfassung
+        </a>
+       </div>
+       <!-- .nav-links -->
+      </nav>
+      <!-- .navigation -->
+      <div class="comments-area" id="comments">
+       <h2 class="comments-title">
+        9 thoughts on How to write a KWin effect
+       </h2>
+       <ol class="comment-list">
+        <li class="comment even thread-even depth-1" id="comment-3912">
+         <article class="comment-body" id="div-comment-3912">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://0.gravatar.com/avatar/a35f12cee4e6a42472a7a57d3106982b?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             Tuukka
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3912">
+             <time datetime="2009-07-02T12:53:01+00:00">
+              2. July 2009 at 12:53 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Im very happy to hear you are making improvements to the resize effect! I actually submitted a wishlist bug a while ago about the very feature you describe  (#182456). I hope the necessary API change will be made that the contents dont have to be shown
+           </p>
+           <p>
+            Oh, and thanks for the howto!
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-3919">
+         <article class="comment-body" id="div-comment-3919">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://0.gravatar.com/avatar/881a6cf50eba36b3b5cee1482e808959?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             Mr Mister
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3919">
+             <time datetime="2009-07-02T15:54:10+00:00">
+              2. July 2009 at 3:54 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Maybe next a guide to how to write a proper configuration window/settings for the effect just created? Odd that KDE vs GNOME is always seen that GNOME is for small children and idiots whereas KDE stands for the tweak-everything-geeks but I cant even adjust 10 % of the stuff in KWin that is there in Compiz.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-admin bypostauthor even thread-even depth-1" id="comment-3920">
+         <article class="comment-body" id="div-comment-3920">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://0.gravatar.com/avatar/e76424052fd111de1eb2d1f91bddb64f?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             Martin
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3920">
+             <time datetime="2009-07-02T16:01:32+00:00">
+              2. July 2009 at 4:01 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            @Mr Mister: please note that Compiz is not a GNOME application but an independent project. Personally I think Compiz offers too many configurations and even kwin offers too many (e.g. cube  thats my fault). Where it makes sense we need configuration and where it does not make sense we dont need and Im hardly aware of anything that needs more configuration.
+           </p>
+           <p>
+            Btw: if you want a config option just report a wish on
+            <a href="http://bugs.kde.org" rel="nofollow">
+             http://bugs.kde.org
+            </a>
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-3930">
+         <article class="comment-body" id="div-comment-3930">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://0.gravatar.com/avatar/051ec7a5601a216c3d1b0997a98af30b?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             Aaron Seigo
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3930">
+             <time datetime="2009-07-02T21:29:19+00:00">
+              2. July 2009 at 9:29 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            this should totally be copy and pasted onto techbase in the tutorials section!
+            <img alt=":)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_smile.gif"/>
+           </p>
+           <p>
+            as for compiz, i agree that theyve gone completely overboard with their configuration. great fun for tweaking, but impossible to use in real environments with regular joes.
+           </p>
+           <p>
+            contrast: kwins ability to easily select effects for things like window switching is elegant and actually passes the my non-geek friends are able to use it test
+            <img alt=":)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_smile.gif"/>
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="comment-3963">
+         <article class="comment-body" id="div-comment-3963">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://1.gravatar.com/avatar/5ac662f80e794501af040ff15486dc90?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             jospoortvliet
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3963">
+             <time datetime="2009-07-03T18:19:50+00:00">
+              3. July 2009 at 6:19 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            I put a link on techbase, but this should indeed get on techbase itself
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-3989">
+         <article class="comment-body" id="div-comment-3989">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://1.gravatar.com/avatar/5cc115c50ceb34b7de56c5058531c07b?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             andrew
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3989">
+             <time datetime="2009-07-04T14:45:29+00:00">
+              4. July 2009 at 2:45 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            picky question you use the code
+            <br/>
+            <code>
+             glColor4f( color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f, alpha );
+            </code>
+           </p>
+           <p>
+            which exposes and hard codes colour precision for no clear reason (something I dislike) and involves implicit floatint conversion which has known performance issues on some platforms (see for example
+            <a href="http://www.mega-nerd.com/FPcast/" rel="nofollow">
+             http://www.mega-nerd.com/FPcast/
+            </a>
+            ) so I was just wondering:
+            <br/>
+            1. Why not use glColor4b or
+            <br/>
+            2. why not use redF(), greenF() etc. probably with  glColour4d (as qreal is double for most platforms)
+           </p>
+           <p>
+            Later code also involves a lot of integer to float conversion also. Sorry  Im not trying to be rude or a smart-arse.  I guess Im just suggesting that minimising the number of implicit casts going on would be good practice.  Especially in example code that people are going to model their own code on.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-admin bypostauthor even thread-even depth-1" id="comment-3993">
+         <article class="comment-body" id="div-comment-3993">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://0.gravatar.com/avatar/e76424052fd111de1eb2d1f91bddb64f?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             Martin
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-3993">
+             <time datetime="2009-07-04T17:02:48+00:00">
+              4. July 2009 at 5:02 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            @andrew: yes using redF() would be better  Ill change that. But I want to point out two points: first QColor stores the color value as an int and OpenGL uses floats. Sending an int to the graphics engine just will cause the same calculations and sending double  well that doesnt improve anything. And given that qreal is mostly double kind of my logic is even better
+            <img alt=";-)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_wink.gif"/>
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-4024">
+         <article class="comment-body" id="div-comment-4024">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-34 photo" height="34" src="http://1.gravatar.com/avatar/5cc115c50ceb34b7de56c5058531c07b?s=34&amp;d=identicon&amp;r=G" width="34"/>
+            <b class="fn">
+             andrew
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.martin-graesslin.com/blog/2009/07/how-to-write-a-kwin-effect/comment-page-1/#comment-4024">
+             <time datetime="2009-07-05T13:16:37+00:00">
+              5. July 2009 at 1:16 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Valid point about sending bytes to GL.  Floats are less ambiguous and so always better to use if the library doesnt just convert strainght back
+            <img alt=":-)" class="wp-smiley" src="http://blog.martin-graesslin.com/blog/wp-includes/images/smilies/icon_smile.gif"/>
+           </p>
+           <p>
+            Can I be so rude as to suggest code like the following for the XRender case:
+           </p>
+           <p>
+            <code>
+             <br/>
+             const float alpha = 0.8f; // from top
+             <br/>
+             ...
+             <br/>
+             const int  xr_alpha = 257 * alpha; // Note: 257*0xff = 0xffff
+             <br/>
+             col.red = unsigned short(xr_alpha * color.red());  // XRenderColor uses 16 bit color
+             <br/>
+             ...
+             <br/>
+            </code>
+           </p>
+           <p>
+            May be overly pedantic but its how I think  sorry :-/
+            <br/>
+            Anyway, thanks very much for posting a tutorial on this stuff.  Very much appreciated.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="pingback even thread-even depth-1" id="comment-4324">
+         <div class="comment-body">
+          Pingback:
+          <a class="url" href="http://identi.ca/notice/6394665" rel="external nofollow">
+           Hans Chen (mogger) 's status on Monday, 13-Jul-09 09:50:21 UTC - Identi.ca
+          </a>
+         </div>
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!-- .comment-list -->
+       <p class="no-comments">
+        Comments are closed.
+       </p>
+      </div>
+      <!-- #comments -->
+     </div>
+     <!-- #content -->
+    </div>
+    <!-- #primary -->
+    <div id="secondary">
+     <h2 class="site-description">
+      From the land of wobbly windows
+     </h2>
+     <div class="primary-sidebar widget-area" id="primary-sidebar" role="complementary">
+      <aside class="widget widget_pages" id="pages-2">
+       <h1 class="widget-title">
+        Pages
+       </h1>
+       <ul>
+        <li class="page_item page-item-2">
+         <a href="http://blog.martin-graesslin.com/blog/about/">
+          About
+         </a>
+        </li>
+        <li class="page_item page-item-765">
+         <a href="http://blog.martin-graesslin.com/blog/bugfixing-service/">
+          Bugfixing Service
+         </a>
+        </li>
+        <li class="page_item page-item-43">
+         <a href="http://blog.martin-graesslin.com/blog/datenschutzerklarung/">
+          Datenschutzerklrung
+         </a>
+        </li>
+        <li class="page_item page-item-44">
+         <a href="http://blog.martin-graesslin.com/blog/impressum/">
+          Impressum
+         </a>
+        </li>
+        <li class="page_item page-item-390">
+         <a href="http://blog.martin-graesslin.com/blog/veroffentlichungen/">
+          Verffentlichungen
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_text" id="text-2">
+       <h1 class="widget-title">
+        Support KDE
+       </h1>
+       <div class="textwidget">
+        <a href="http://jointhegame.kde.org/">
+         <img alt="Join the Game" src="wp-content/uploads/2011/12/jtg.png" title="Join the Game"/>
+        </a>
+       </div>
+      </aside>
+      <aside class="widget widget_categories" id="categories-1">
+       <h1 class="widget-title">
+        Categories
+       </h1>
+       <ul>
+        <li class="cat-item cat-item-1">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/allgemein/">
+          Allgemein
+         </a>
+        </li>
+        <li class="cat-item cat-item-3">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/it/">
+          Bits und Bytes
+         </a>
+        </li>
+        <li class="cat-item cat-item-35">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/help-kwin/">
+          Help KWin
+         </a>
+        </li>
+        <li class="cat-item cat-item-5">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/">
+          KDE
+         </a>
+        </li>
+        <li class="cat-item cat-item-7">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/planetkde/">
+          planetkde
+         </a>
+        </li>
+        <li class="cat-item cat-item-4">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/Politik/">
+          Politik
+         </a>
+        </li>
+        <li class="cat-item cat-item-32">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/kde/this-week-in-kwin/">
+          This Week in KWin
+         </a>
+        </li>
+        <li class="cat-item cat-item-6">
+         <a href="http://blog.martin-graesslin.com/blog/kategorien/ubuntuusers/">
+          ubuntuusers
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_archive" id="archives-2">
+       <h1 class="widget-title">
+        Archives
+       </h1>
+       <ul>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2015/06/">
+          June 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2015/04/">
+          April 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2015/03/">
+          March 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2015/02/">
+          February 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2015/01/">
+          January 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/12/">
+          December 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/11/">
+          November 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/10/">
+          October 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/08/">
+          August 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/07/">
+          July 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/06/">
+          June 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/05/">
+          May 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/04/">
+          April 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/03/">
+          March 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/02/">
+          February 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2014/01/">
+          January 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/12/">
+          December 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/11/">
+          November 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/10/">
+          October 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/09/">
+          September 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/08/">
+          August 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/07/">
+          July 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/06/">
+          June 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/05/">
+          May 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/04/">
+          April 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/03/">
+          March 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/02/">
+          February 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2013/01/">
+          January 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/12/">
+          December 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/11/">
+          November 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/10/">
+          October 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/09/">
+          September 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/08/">
+          August 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/07/">
+          July 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/06/">
+          June 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/05/">
+          May 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/04/">
+          April 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/03/">
+          March 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/02/">
+          February 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2012/01/">
+          January 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/12/">
+          December 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/11/">
+          November 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/10/">
+          October 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/09/">
+          September 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/08/">
+          August 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/07/">
+          July 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/06/">
+          June 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/05/">
+          May 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/04/">
+          April 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/03/">
+          March 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/02/">
+          February 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2011/01/">
+          January 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/12/">
+          December 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/11/">
+          November 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/10/">
+          October 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/09/">
+          September 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/08/">
+          August 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/07/">
+          July 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/06/">
+          June 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/05/">
+          May 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/04/">
+          April 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/03/">
+          March 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/02/">
+          February 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2010/01/">
+          January 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/12/">
+          December 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/11/">
+          November 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/10/">
+          October 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/09/">
+          September 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/08/">
+          August 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/07/">
+          July 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/06/">
+          June 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/05/">
+          May 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/04/">
+          April 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/02/">
+          February 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2009/01/">
+          January 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/12/">
+          December 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/11/">
+          November 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/10/">
+          October 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/09/">
+          September 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/08/">
+          August 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/07/">
+          July 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/06/">
+          June 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/05/">
+          May 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/04/">
+          April 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/03/">
+          March 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/02/">
+          February 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2008/01/">
+          January 2008
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/12/">
+          December 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/11/">
+          November 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/10/">
+          October 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/09/">
+          September 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/08/">
+          August 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/07/">
+          July 2007
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/2007/06/">
+          June 2007
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_meta" id="meta-2">
+       <h1 class="widget-title">
+        Meta
+       </h1>
+       <ul>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/wp-login.php">
+          Log in
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/feed/">
+          Entries
+          <abbr title="Really Simple Syndication">
+           RSS
+          </abbr>
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.martin-graesslin.com/blog/comments/feed/">
+          Comments
+          <abbr title="Really Simple Syndication">
+           RSS
+          </abbr>
+         </a>
+        </li>
+        <li>
+         <a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">
+          WordPress.org
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_cc" id="content-license">
+       <div style="text-align: center">
+        <div class="wp_license">
+         <a href="http://creativecommons.org/licenses/by-sa/3.0/de/" rel="license">
+          <img alt="Creative Commons Attribution-ShareAlike 3.0 Deutschland" src="http://i.creativecommons.org/l/by-sa/3.0/de/88x31.png"/>
+         </a>
+         <br/>
+         This work by
+         <a href="http://blog.martin-graesslin.com/blog" property="cc:attributionName" rel="cc:attributionURL" xmlns:cc="http://creativecommons.org/ns#">
+          Martin Grlin
+         </a>
+         is licensed under a
+         <a href="http://creativecommons.org/licenses/by-sa/3.0/de/" rel="license">
+          Creative Commons Attribution-ShareAlike 3.0 Deutschland
+         </a>
+         .
+        </div>
+       </div>
+      </aside>
+     </div>
+     <!-- #primary-sidebar -->
+    </div>
+    <!-- #secondary -->
+   </div>
+   <!-- #main -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div class="site-info">
+     <a href="http://wordpress.org/">
+      Proudly powered by WordPress
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <div class="license_block">
+   <div class="wp_license">
+    <a href="http://creativecommons.org/licenses/by-sa/3.0/de/" rel="license">
+     <img alt="Creative Commons Attribution-ShareAlike 3.0 Deutschland" src="http://i.creativecommons.org/l/by-sa/3.0/de/88x31.png"/>
+    </a>
+    <br/>
+    This work by
+    <a href="http://blog.martin-graesslin.com/blog" property="cc:attributionName" rel="cc:attributionURL" xmlns:cc="http://creativecommons.org/ns#">
+     Martin Grlin
+    </a>
+    is licensed under a
+    <a href="http://creativecommons.org/licenses/by-sa/3.0/de/" rel="license">
+     Creative Commons Attribution-ShareAlike 3.0 Deutschland
+    </a>
+    .
+   </div>
+  </div>
+  <div style="display:none">
+   <div class="grofile-hash-map-a35f12cee4e6a42472a7a57d3106982b">
+   </div>
+   <div class="grofile-hash-map-881a6cf50eba36b3b5cee1482e808959">
+   </div>
+   <div class="grofile-hash-map-e76424052fd111de1eb2d1f91bddb64f">
+   </div>
+   <div class="grofile-hash-map-051ec7a5601a216c3d1b0997a98af30b">
+   </div>
+   <div class="grofile-hash-map-5ac662f80e794501af040ff15486dc90">
+   </div>
+   <div class="grofile-hash-map-5cc115c50ceb34b7de56c5058531c07b">
+   </div>
+  </div>
+  <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201529" type="text/javascript">
+  </script>
+  <script src="http://s.gravatar.com/js/gprofiles.js?ver=2015Julaa" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.martin-graesslin.com/blog/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.0" type="text/javascript">
+  </script>
+  <script src="http://blog.martin-graesslin.com/blog/wp-content/themes/twentyfourteen/js/functions.js?ver=20150315" type="text/javascript">
+  </script>
+  <script async="" defer="" src="http://stats.wp.com/e-201529.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.4.3',blog:'39344064',post:'258',tz:'1'} ]);
+	_stq.push([ 'clickTrackerInit', '39344064', '258' ]);
+  </script>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+(function() {
+var _analytics_scr = document.createElement('script');
+_analytics_scr.type = 'text/javascript'; _analytics_scr.async = true; _analytics_scr.src = '/_Incapsula_Resource?SWJIYLWA=2977d8d74f63d7f8fedbea018b7a1d05&amp;ns=3';
+var _analytics_elem = document.getElementsByTagName('script')[0]; _analytics_elem.parentNode.insertBefore(_analytics_scr, _analytics_elem);
+})();
+// ]]&gt;
+  </script>
+ </body>
+</html>

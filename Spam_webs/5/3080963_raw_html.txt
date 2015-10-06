@@ -1,0 +1,1823 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Five more PHP design patterns
+  </title>
+  <link href="http://purl.org/DC/elements/1.0/" rel="schema.DC"/>
+  <link href="//www.ibm.com/favicon.ico" rel="SHORTCUT ICON"/>
+  <meta content=" CopyrightIBM Corporation2008" name="DC.Rights"/>
+  <meta content="design patterns, php5, PHP, iterator, state decorator, delegate, open   source, Nathan Good, tttosca" name="Keywords"/>
+  <meta content="2008-03-25" name="DC.Date" scheme="iso8601"/>
+  <meta content="v17 delivery:developerWorks" name="Source"/>
+  <meta content="Public" name="Security"/>
+  <meta content="PHP V5's object-oriented features give you the ability to implement design patterns to improve your code's design. When you improve your code's design in this way, it becomes more readable, more maintainable, and more robust to absorb changes." name="Abstract"/>
+  <meta content="PHP V5's object-oriented features give you the ability to implement design patterns to improve your code's design. When you improve your code's design in this way, it becomes more readable, more maintainable, and more robust to absorb changes." name="Description"/>
+  <meta content="2008-03-25" name="IBM.Effective" scheme="W3CDTF"/>
+  <meta content="developerWorks Content/Raleigh/IBM" name="Owner"/>
+  <meta content="en" name="DC.Language" scheme="rfc1766"/>
+  <meta content="SP001" name="IBM.SpecialPurpose"/>
+  <meta content="ZZ" name="IBM.Country"/>
+  <meta content="index,follow" name="Robots"/>
+  <meta content="CT316" name="DC.Type" scheme="IBM_ContentClassTaxonomy"/>
+  <meta content="TT400" name="DC.Subject" scheme="IBM_SubjectTaxonomy"/>
+  <meta content="7" name="dW.ContentArea"/>
+  <meta content="214,54" name="dW.Topic"/>
+  <meta content="SOFDCOSRZZ" name="IBM.WTMCategory" scheme="IBM_WTMCategory"/>
+  <!-- SITE MON : START (DO NOT DELETE) -->
+  <!-- developerWorks monitoring token -->
+  <!-- SITE MON : END (DO NOT DELETE) -->
+  <link href="http://www.ibm.com/developerworks/library/os-php-designpatterns/index.html" rel="canonical"/>
+  <!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+  <link href="//1.www.s81c.com/common/v17/css/www.css" rel="stylesheet" title="www" type="text/css"/>
+  <!--  Masthead/footer  -->
+  <link href="//dw1.s81c.com/developerworks/css/dw-mf/v17/dw-mfN2015-01.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-article-6.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-common-features.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-bluemix-regbar.css" media="screen,projection" rel="stylesheet" title="www" type="text/css"/>
+  <script src="//1.www.s81c.com/common/js/dojo/www.js" type="text/javascript">
+   //
+  </script>
+  <script src="//dw1.s81c.com/developerworks/js/v17/dw-www-v2.js" type="text/javascript">
+   //
+  </script>
+  <script type="text/javascript">
+   dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_rb_cta="Built on open technology for seamless integrations.";dojo.attr(dojo.byId("dw-regbar-vp"),"innerHTML",dw_rb_cta);var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var lnkID="article-rbar-bmix-home-regbar";dojo.attr(dojo.query(".dw-regbar-btn")[0],"id",lnkID);var lnkHref=dojo.attr(dojo.byId(lnkID),"href")+"?lang="+dw_lang+"&amp;ca="+dw_source+"-_-bluemix-_-"+dw_content+"-_-regbar-article";dojo.attr(dojo.byId(lnkID),"href",lnkHref);dojo.attr(dojo.byId(lnkID),"onclick","trkOBL('"+lnkHref+"','"+lnkID+"'); return false;");var dwRegbarShow=dojo.animateProperty({node:"dw-regbar",duration:1000,delay:1000,properties:{opacity:{start:0,end:1},top:0}});var ibmTopShow=dojo.animateProperty({node:"ibm-top",duration:1000,delay:1000,properties:{marginTop:{start:0,end:42}}});dwRegbarShow.play();ibmTopShow.play()})
+  </script>
+  <script type="text/javascript">
+   //  ibmweb.config.set({ sbs: { enabled: false }});
+  </script>
+  <!-- Continuous Feedback Survey (jpp 04/06/15 -->
+  <script type="text/javascript">
+   ibmweb.config.set({
+    opinionlab: {
+    intercept: {
+    percent: 15,
+    start: "April 5 2015",
+    stop: "May 15 2015",
+    invitation: {
+    title: "Tell developerWorks what you think",
+    content: "We want your feedback to help us improve developerWorks. Please take a few minutes to complete our brief survey.",
+    yes_label: "Yes",
+    no_label: "No Thanks"
+    },
+    survey: {
+    type: "sg",
+    id: "s3/2048432/Tell-developerWorks-what-you-think",
+    width: 720,
+    height: 600
+    }
+    }
+    }
+    });
+  </script>
+  <script type="text/javascript">
+   document.write('&lt;link href="//dw1.s81c.com/developerworks/css/v17/dw-article-social-a.css" rel="stylesheet" title="www" type="text/css"/&gt;');dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_register="Sign up for a free Bluemix trial";var dw_connect="Connect with Bluemix developers";var dw_vp="Develop and deploy your next&lt;br/&gt;app on the IBM Bluemix&lt;br/&gt;cloud platform.";var dw_cta="Start your free trial";var dw_tile_alt="Develop and deploy your next app on the IBM Bluemix cloud platform. Start building for free.";var dw_videopr="It's never been easier&lt;br/&gt;to build and deploy your apps in the cloud.&lt;br/&gt;";var dw_videopr_cta="Start your free trial";var dw_campaign="bluemix";var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var bluDevComURL="https://developer.ibm.com/bluemix/";var bluLink="https://www.bluemix.net/";var lnkID;var lnkIDd;var lnkIDt;var bLinkEnd;var bLinkTemp;var idTrkr=[];var idCnt;var artTop=dojo.query("div.ibm-col-1-1")[0];var artChildren=dojo.query(artTop).children();var edgy=false;if(dojo.hasClass(artChildren[0],"ibm-inset"))edgy=true;if((artChildren[0].nodeName=="H2")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-inset")))edgy=true;if(dojo.hasClass(artChildren[0],"codesection"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"codesection")))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(artChildren[1].width&gt;=701))edgy=true;if(artChildren[1].width&gt;=701)edgy=true;if(dojo.hasClass(artChildren[0],"ibm-data-table"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-data-table")))edgy=true;if(!(edgy)){var sBarAB='&lt;div class="dw-article-sidebar dw-bluemix" id="dwc-exp-a"&gt;'+'&lt;img src="//dw1.s81c.com/developerworks/i/bluemix-graphic.png" height="64" width="64" alt=""/&gt;'+'&lt;p&gt;'+dw_vp+'&lt;/p&gt;'+'&lt;p class="ibm-button-link-alternate dw-button-green"&gt;'+'&lt;a id="tutc-sbar-bmix-home-btn-ABa" href="'+bluLink+'" class="dw-button-large"&gt;'+dw_cta+'&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;';dojo.place(sBarAB,artTop,"first")}dojo.forEach(dojo.query("#ibm-content-main a"),function(item,index){var dw_medium="article";var bLink=dojo.attr(item,"href");var linkClass=dojo.attr(item,"class");if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-sbar-")&gt;-1))dw_medium="sidebar";if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-vpromo-")&gt;-1))dw_medium="video-promotion";if(bLink&amp;&amp;(bLink.indexOf("//bluemix.net")&gt;-1))bLink=bLink.replace("//bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//ace.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//ace.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//console.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//console.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;((bLink.indexOf("//www.bluemix.net")&gt;-1)||(bLink.indexOf("//www.ng.bluemix.net")&gt;-1)||(bLink.indexOf("//hub.jazz.net")&gt;-1))){bLinkEnd="";bLink=bLink.split("?");if((bLink[1])&amp;&amp;(bLink[1].indexOf("repository=")!=-1)){var deployBtn=true;bLink[0]=bLink[0]+"?"+bLink[1];bLink[1]=null}if((bLink[1])&amp;&amp;(bLink[1].indexOf("/")!=-1))bLinkEnd=bLink[1].substring(bLink[1].indexOf("/"));if(dojo.attr(item,"id")==null){bLinkTemp=bLink[0]+bLinkEnd;if(bLinkTemp.indexOf("bluemix")!=-1){lnkIDd="bmix";if(bLinkTemp.indexOf("/#/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/#/store")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/catalog")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/docs")!=-1){lnkIDd=lnkIDd+"-docs"}else{lnkIDd=lnkIDd+"-home"}}else{if((bLinkTemp.indexOf("//hub.jazz.net/git")&gt;-1)||(bLinkTemp.indexOf("//hub.jazz.net/project")&gt;-1)){lnkIDd=deployBtn?"devops-deploy":"devops-code"}else{lnkIDd=bLinkTemp.substring(bLinkTemp.indexOf("hub.jazz.net/")+13);lnkIDd=lnkIDd==""?"devops-home":"devops-"+lnkIDd.split("/")[0]}}if(dojo.attr(dojo.query(item).parent()[0],"class").indexOf("ibm-button")!=-1){lnkIDt="btn"}else{lnkIDt="txt"}}bLink=bLink[0];if(bLink.indexOf("//hub.jazz.net")&gt;-1){if(!(deployBtn)&amp;&amp;((bLink.indexOf("//hub.jazz.net/git")&gt;-1)||(bLink.indexOf("//hub.jazz.net/project")&gt;-1))){bLink="https://login.jazz.net/psso/proxy/jazzregister?utm_source="+dw_source+"&amp;utm_medium="+dw_medium+"&amp;utm_content="+dw_content+"&amp;utm_campaign="+dw_campaign+"&amp;redirect_uri="+bLink}else{if(deployBtn){bLink=bLink+"&amp;cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}else{bLink=bLink+"?utm_source="+dw_source+"&amp;utm_campaign="+dw_campaign+"&amp;utm_content="+dw_content+"&amp;utm_medium="+dw_medium}}}else{if(bLink.indexOf("/#/")==-1){if(bLink.substring(bLink.length-7)=="/docs/#"){bLink=bLink.replace("/docs/#","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else if(bLink.substring(bLink.length-5)=="/docs"){bLink=bLink.replace("/docs","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else{bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}}else{bLink=bLink.substring(0,bLink.indexOf("#"))+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium+bLink.substring(bLink.indexOf("#")-1)}}if(bLinkEnd)bLink=bLink+bLinkEnd;if(linkClass.indexOf("bluemix-home")==-1){if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("/catalog")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net/")!=-1)){bLink=bLink.replace("//www.bluemix.net/","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net?")!=-1)){bLink=bLink.replace("//www.bluemix.net","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("solutions")!=-1)){bLinkTemp=bLink.substring(0,bLink.indexOf("?"));bLink=bLink.substring(bLink.indexOf("/#/")+3,bLink.length);bLink=bLinkTemp+bLink;bLinkTemp=bLink.substring(0,bLink.indexOf("solution="));bLink=bLink.substring(bLink.indexOf("/solution=")+10,bLink.length);bLink=bLinkTemp+bLink;bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("store")!=-1)){if(bLink.indexOf("&amp;cloudOEPaneId=store")!=-1){bLinkTemp=bLink.split("&amp;cloudOEPaneId=store");bLink=bLinkTemp[0]}bLinkTemp=bLink.substring(bLink.indexOf("serviceOfferingGuid=")+20,bLink.length);bLink=bLink.substring(0,bLink.indexOf(".net/")+5)+"catalog/"+bLinkTemp+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if(dojo.attr(item,"id")==null){lnkID="tutc-main-"+lnkIDd+"-"+lnkIDt;idCnt=0;dojo.forEach(idTrkr,function(item,index){if(item.indexOf(lnkID)!=-1){idCnt++}});if(idCnt&gt;0){lnkID=lnkID+"-"+idCnt}dojo.attr(item,"id",lnkID);idTrkr.push(lnkID)}else{lnkID=dojo.attr(item,"id")}dojo.attr(item,"href",bLink);dojo.attr(item,"onclick","trkOBL('"+bLink+"','"+lnkID+"'); return false;");}});var istndom=setInterval(function(){if(!!dojo.byId('ibm-social-tools')){var ibmsi=["print","email","facebook","twitter","linkedin","googleplus"];dojo.forEach(ibmsi,function(item,index){var siHref=escape(dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"href"));var siID="ibmShare-A-"+item;siHref=siHref.replace(/%250A/g,"");siHref=siHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+siHref+"','"+siID+"');")});clearInterval(istndom)}},1000);var dwistndom=setInterval(function(){if(!!dojo.byId('dw-ibm-social-tools')){var dwibmsi=["facebook","twitter","linkedin","googleplus"];dojo.forEach(dwibmsi,function(item,index){var dwsiHref=escape(dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href"));var dwsiID="dwShare-A-"+item;dwsiHref=dwsiHref.replace(/%250A/g,"");dwsiHref=dwsiHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+dwsiHref+"','"+dwsiID+"');");dojo.removeAttr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"target");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href","javascript:void(0)")});clearInterval(dwistndom)}},1000);});
+  </script>
+  <!-- LEADSPACE_STYLES -->
+ </head>
+ <body id="ibm-com">
+  <div aria-labelledby="dw-regbar-vp" class="dw-home-band" id="dw-regbar" role="complementary">
+   <div class="ibm-columns">
+    <div class="ibm-col-6-6">
+     <span id="dw-regbar-bluemix">
+      IBM
+      <strong>
+       Bluemix
+      </strong>
+     </span>
+     <span id="dw-regbar-vp">
+      Develop in the cloud at the click of a button!
+     </span>
+     <p class="ibm-button-link-alternate dw-button-green">
+      <a class="dw-button-large dw-regbar-btn" href="https://developer.ibm.com/sso/bmregistration">
+       Start your free trial
+      </a>
+     </p>
+    </div>
+   </div>
+  </div>
+  <div class="ibm-landing-page" id="ibm-top">
+   <!-- MASTHEAD_BEGIN -->
+   <div id="ibm-masthead">
+    <!-- TOP ROW -->
+    <div id="dw-masthead-top-row">
+     <ul aria-label="Masthead navigation" id="ibm-mast-options-dw" role="toolbar">
+      <li id="dw-mast-top-4" role="presentation">
+       <a href="http://www.ibm.com/developerworks/" tabindex="0">
+        <img alt="dW" aria-label="dW" height="22" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-badge.png" width="43"/>
+       </a>
+      </li>
+      <li id="dw-mast-top-0" role="presentation">
+       <div id="dw-mast-signin">
+        <a class="dw-mf-noscript" href="#" id="dw-mf-signin-link" tabindex="2" title="Sign in requires JavaScript">
+         Sign in
+        </a>
+        <span class="dw-mf-signin-spacer">
+         |
+        </span>
+        <a class="dw-mf-noscript" href="#" id="dw-mf-reg-link" tabindex="3" title="Register requires JavaScript">
+         Register
+        </a>
+       </div>
+       <div class="dw-mf-hide" id="dw-mast-auth-link">
+        <a class="authenticated ibm-active" href="#" role="button" tabindex="2">
+        </a>
+        <ul class="dw-mf-hide" id="dw-mast-auth-menu">
+         <li aria-hidden="true" class="dw-mast-auth-menu-title">
+          developerWorks Community
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/profiles/html/myProfileView.do?lang=en" tabindex="3">
+           My profile
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/groups/service/html/mycommunities?lang=en" tabindex="4">
+           My communities
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/news/?lang=en" tabindex="5">
+           Settings
+          </a>
+         </li>
+         <li class="dw-mast-auth-menu-divider">
+          <hr/>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="#" id="dw-mast-signout-link" tabindex="6">
+           Sign out
+          </a>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li id="dw-mast-top-1">
+       <div>
+       </div>
+      </li>
+      <li id="dw-mast-top-3" role="presentation">
+       <a href="http://www.ibm.com" tabindex="1">
+        IBM
+       </a>
+      </li>
+     </ul>
+    </div>
+    <!-- BOTTOM ROW -->
+    <div aria-label="Site map" id="ibm-universal-nav-dw">
+     <ul id="ibm-unav-links-dw">
+      <li id="ibm-unav-home-dwlogo">
+       <a href="http://www.ibm.com/developerworks/">
+        <img alt="developerWorks" height="28" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-wordmark.png" width="225"/>
+       </a>
+      </li>
+     </ul>
+     <ul aria-label="Site map" id="ibm-menu-links-dw" role="toolbar">
+      <li id="dw-mast-nav-0" role="presentation">
+       <a href="http://www.ibm.com/developerworks/topics/" tabindex="0">
+        Technical topics
+       </a>
+      </li>
+      <li id="dw-mast-nav-1" role="presentation">
+       <a href="http://www.ibm.com/developerworks/downloads/" tabindex="0">
+        Evaluation software
+       </a>
+      </li>
+      <li id="dw-mast-nav-2" role="presentation">
+       <a href="http://www.ibm.com/developerworks/community/index.html" tabindex="0">
+        Community
+       </a>
+      </li>
+      <li id="dw-mast-nav-3" role="presentation">
+       <a href="http://www.ibm.com/developerworks/events/" tabindex="0">
+        Events
+       </a>
+      </li>
+     </ul>
+     <form action="//www.ibm.com/search/csass/search/" aria-label="IBM developerWorks Search" id="ibm-search-form" method="get" name="form1" role="search">
+      <p>
+       <label for="q">
+        <span class="ibm-access">
+         Search developerWorks
+        </span>
+       </label>
+       <input id="q" maxlength="100" name="q" type="text" value="Search developerWorks"/>
+       <input name="sn" type="hidden" value="dw"/>
+       <input name="lang" type="hidden" value="en"/>
+       <input name="cc" type="hidden" value="US"/>
+       <input name="en" type="hidden" value="utf"/>
+       <input name="hpp" type="hidden" value="20"/>
+       <input name="dws" type="hidden" value="dw"/>
+       <input class="ibm-btn-search" id="ibm-search" type="submit" value="Submit"/>
+      </p>
+     </form>
+    </div>
+   </div>
+   <div class="ibm-access" id="fdiv">
+   </div>
+   <!-- MASTHEAD_END -->
+   <!-- LAYOUT -->
+   <!-- LEADSPACE_BEGIN -->
+   <div id="ibm-leadspace-head">
+    <!-- LEADSPACE_BODY_BEGIN -->
+    <div id="ibm-leadspace-body">
+     <!-- Navigation_Trail_BEGIN -->
+     <ul id="ibm-navigation-trail">
+      <li>
+       <a href="http://www.ibm.com/developerworks/">
+        developerWorks
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/topics/">
+        Technical topics
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/opensource/">
+        Open source
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/opensource/library/">
+        Technical library
+       </a>
+      </li>
+     </ul>
+     <!-- END_Navigation_Trail -->
+     <!-- Title_Subtitle -->
+     <h1>
+      Five more PHP design patterns
+     </h1>
+     <p>
+      <em>
+       <span>
+        Two years ago, we introduced five design patterns -- here are five more that accelerate PHP application development
+       </span>
+      </em>
+     </p>
+    </div>
+    <!-- LEADSPACE_BODY_END -->
+    <!-- SUMMARY_BEGIN -->
+    <div class="dw-summary-columns" id="dw-summary-area">
+     <div class="ibm-col-6-4">
+      <p>
+       PHP V5's object-oriented features give you the ability to implement design
+  patterns to improve your code's  design. When you improve your code's design in this
+  way, it becomes more  readable, more maintainable, and more robust to absorb changes.
+      </p>
+      <p class="ibm-no-print ibm-ind-link">
+       <span id="nCmts">
+       </span>
+      </p>
+      <div id="dw-social-tools-container">
+       <span class="dw-social-lead-in">
+        Share:
+       </span>
+      </div>
+     </div>
+     <div class="ibm-col-6-2 dw-toc-margin">
+      <p class="dw-summary-author">
+       <a class="ibm-popup-link" href="#authorN10028" onclick="ibmweb.overlay.show('authorN10028',this);return false;">
+        Nathan A. Good
+       </a>
+       , Senior Information Engineer, Freelance Developer
+      </p>
+      <div class="ibm-common-overlay" id="authorN10028">
+       <div class="ibm-head">
+        <p>
+         <a class="ibm-common-overlay-close" href="#close">
+          Close [x]
+         </a>
+        </p>
+       </div>
+       <div class="ibm-body">
+        <div class="ibm-main">
+         <div class="ibm-title">
+          <!--this is where the h2 usually goes-->
+         </div>
+         <div class="ibm-container ibm-alternate">
+          <div class="ibm-container-body">
+           <p>
+            <!--.-->
+            Nathan Good lives in the Twin Cities area of Minnesota. Professionally, he does
+  software development, software architecture,  and systems administration. When he's not writing software, he enjoys building PCs  and servers, reading about and working with new technologies, and trying to get his friends  to make the move to open source software. He's written and co-written many books and  articles, including
+            <em>
+             Professional Red Hat Enterprise Linux 3, Regular Expression Recipes: A Problem-Solution Approach,
+            </em>
+            and
+            <em>
+             Foundations of PEAR: Rapid PHP Development.
+            </em>
+           </p>
+           <br/>
+           <br/>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="ibm-footer">
+        <!-- -->
+       </div>
+      </div>
+      <p class="dw-summary-date">
+       25 March 2008
+      </p>
+      <div aria-hidden="true" class="ibm-container" id="dw-toc">
+       <div class="ibm-container-body">
+        <ul class="ibm-twisty">
+         <li>
+          <a class="ibm-twisty-trigger" href="#toggle">
+           <img alt="-" src="//www.ibm.com/i/c.gif"/>
+          </a>
+          <span class="ibm-twisty-head">
+           Table of contents
+          </span>
+          <div class="ibm-twisty-body">
+           <ul class="ibm-link-list" style="font-size:0.8em">
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1007B">
+              The adapter pattern
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N100CE">
+              The iterator pattern
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10101">
+              The decorator pattern
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10129">
+              The delegate pattern
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10157">
+              The state pattern
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10186">
+              Summary
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#download">
+              Download
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#resources">
+              Resources
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#icomments">
+              Comments
+             </a>
+            </li>
+           </ul>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- SUMMARY_END -->
+   </div>
+   <!-- LEADSPACE_END -->
+   <div id="ibm-pcon">
+    <!-- BEGIN_IBM-CONTENT -->
+    <div id="ibm-content">
+     <!-- BEGIN_IBM-CONTENT-BODY -->
+     <div id="ibm-content-body">
+      <!-- BEGIN_IBM-CONTENT-MAIN -->
+      <div id="ibm-content-main">
+       <!-- 1_1_COLUMN_BEGIN -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <p>
+          The book
+          <em>
+           Design Patterns
+          </em>
+          introduced me to the notion there could be such
+    things. At the time, I was  still learning object orientation (OO), so there were many
+    concepts in the book  I found difficult to grasp. However, as I became
+    more comfortable with  OO concepts  particularly the use of interfaces and
+    inheritance   I began to see the real value in design patterns. As an
+    application developer,  you can have a lifelong career without ever knowing what any
+    of the patterns are called  or how or when they're used. However, I've found that a
+    good working knowledge of these  patterns, as well as those introduced in the
+    developerWorks article "Five common PHP design patterns" (see
+          <a href="#resources">
+           Resources
+          </a>
+          ),  allows you to do two things:
+         </p>
+         <dl>
+          <dt>
+           <strong>
+            Enable high-bandwidth conversations
+           </strong>
+          </dt>
+          <dd>
+           If you know about design patterns, you'll be able to build solid OO applications
+  faster. But when your  entire development team knows the various patterns, you can
+  suddenly have very high-bandwidth  conversations. You no longer need to talk about all
+  the classes you would use here  or there. Instead, you can talk in terms of patterns to
+  each other. "Well, I'm referencing  a singleton here, then using an iterator to go
+  through a collection of my objects,  and ... " is much, much faster than going through
+  the classes, methods,  and interfaces that make up these patterns. This efficiency in
+  communication alone can  be worth taking time to go through a couple of sessions
+  together, as a team, to  study patterns.
+          </dd>
+         </dl>
+         <dl>
+          <dt>
+           <strong>
+            Reduce painful lessons
+           </strong>
+          </dt>
+          <dd>
+           Each design pattern describes a proven way to solve a common problem. Therefore, you
+  don't need to worry about  whether your design is the right one, so long as you've
+  chosen the pattern that provides the advantages  you need.
+          </dd>
+         </dl>
+         <h3 id="N1005D">
+          Pitfalls
+         </h3>
+         <p>
+          There is a saying that goes something like this: "When you're holding a hammer,
+  everything looks like a nail." When you  find a pattern you think is great, you may try
+  to use it anywhere and everywhere,  even in places you shouldn't. Remember that you must
+  consider the usage goals  of the patterns you're learning and try not to force patterns
+  into parts of your application just for  the sake of using them.
+         </p>
+         <p>
+          This article covers five patterns you can use to improve your PHP code. Each pattern
+  covers a specific scenario. The  PHP code for these patterns is available in the
+          <a href="#download">
+           Download
+          </a>
+          section.
+         </p>
+         <h3 id="N1006A">
+          Requirements
+         </h3>
+         <p>
+          To get the most out of this article and use the examples, install the following  on your computer:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           PHP V5 or later (this article was written with PHP V5.2.4)
+          </li>
+          <li>
+           An extraction program, such as WinZIP (to extract the downloadable
+code archive)
+          </li>
+         </ul>
+         <p>
+          <strong>
+           Note:
+          </strong>
+          Although you don't absolutely need to have an editor other than a plain
+  text editor, I find that it really helps  to have syntax highlighting and syntax
+  error-correcting. The examples in this  article were written using the Eclipse PHP Development Tools (PDT).
+         </p>
+         <h2 id="N1007B">
+          The adapter pattern
+         </h2>
+         <p>
+          Use the adapter pattern when you need to convert an object of one type to an object
+  of another type. Typically, developers handle  this process through a bunch of
+  assignment code, as shown in Listing  1. The adapter pattern is a nice way to clean this
+  type of code up and  reuse all your assignment code in other places. Also, it hides the
+  assignment code, which can  simplify things quite a bit if you're also doing some formatting along the way.
+         </p>
+         <h5 id="list1">
+          Listing 1. Using code to assign values between objects
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           class AddressDisplay
+{
+    private $addressType;
+    private $addressText;
+
+    public function setAddressType($addressType)
+    {
+        $this-&gt;addressType = $addressType;
+    }
+
+    public function getAddressType()
+    {
+        return $this-&gt;addressType;
+    }
+
+    public function setAddressText($addressText)
+    {
+        $this-&gt;addressText = $addressText;
+    }
+
+    public function getAddressText()
+    {
+        return $this-&gt;addressText;
+    }
+}
+
+class EmailAddress
+{
+    private $emailAddress;
+    
+    public function getEmailAddress()
+    {
+        return $this-&gt;emailAddress;
+    }
+    
+    public function setEmailAddress($address)
+    {
+        $this-&gt;emailAddress = $address;
+    }
+}
+
+$emailAddress = new EmailAddress();
+/* Populate the EmailAddress object */
+$address = new AddressDisplay();
+           <strong>
+            /* Here's the assignment code, where I'm assigning values 
+  from one object to another... */
+           </strong>
+           $address-&gt;setAddressType("email");
+$address-&gt;setAddressText($emailAddress-&gt;getEmailAddress());
+          </pre>
+         </div>
+         <p>
+          This example uses an
+          <code>
+           AddressDisplay
+          </code>
+          object to display an
+  address to a user. The
+          <code>
+           AddressDisplay
+          </code>
+          object has two parts:
+  the type of address and a  formatted address string.
+         </p>
+         <p>
+          After implementing the pattern (see Listing 2), the PHP script no longer needs to worry
+  about exactly how the
+          <code>
+           EmailAddress
+          </code>
+          object is turned into the
+          <code>
+           AddressDisplay
+          </code>
+          object.  That's a good thing, especially if
+  the
+          <code>
+           AddressDisplay
+          </code>
+          object changes or the rules that govern
+  how an
+          <code>
+           EmailAddress
+          </code>
+          object  is turned into an
+          <code>
+           AddressDisplay
+          </code>
+          object change.  Remember, one of the main benefits of
+  designing your code in a modular  fashion is to take advantage of having to change as
+  little code as possible if  something in the business domain changes or you need to add
+  a new feature to  the software. Think about this even when you're doing mundane tasks,
+  such as assigning values from  properties of one object to another.
+         </p>
+         <h5 id="list2">
+          Listing 2. Using the adapter pattern
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           class EmailAddressDisplayAdapter extends AddressDisplay
+{
+    public function __construct($emailAddr)
+    {
+        $this-&gt;setAddressType("email");
+        $this-&gt;setAddressText($emailAddr-&gt;getEmailAddress());
+    }
+}	
+
+$email = new EmailAddress();
+$email-&gt;setEmailAddress("user@example.com");
+
+$address = new EmailAddressDisplayAdapter($email);
+
+echo($address-&gt;getAddressType() . "\n") ;
+echo($address-&gt;getAddressText());
+          </pre>
+         </div>
+         <p>
+          Figure 1 shows a class diagram of the adapter pattern.
+         </p>
+         <h5 id="fig1">
+          Figure 1. Class diagram of the adapter pattern
+         </h5>
+         <img alt="Class diagram of the adapter pattern" src="adapter.gif" width="414"/>
+         <h3 id="N100B8">
+          Alternate method
+         </h3>
+         <p>
+          An alternate method of writing an adapter  and one that some prefer 
+  is to implement an interface  to adapt behavior, rather than extending an object. This
+  is a very clean way of creating  an adapter and doesn't have the drawbacks of extending
+  the object. One of  the disadvantages of using the interface is that you need to add the
+  implementation into the adapter class, as  shown in Figure 2.
+         </p>
+         <h5 id="fig2">
+          Figure 2. The adapter pattern (using an interface)
+         </h5>
+         <img alt="The adapter pattern (using an interface)" src="adapter-alt.gif" width="414"/>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N100CE">
+          The iterator pattern
+         </h2>
+         <p>
+          The iterator pattern provides a way to encapsulate looping through a collection or
+  array of objects. It is  particularly handy if you want to loop through different types of objects in the collection.
+         </p>
+         <p>
+          Look back at the e-mail and physical address example in Listing 1. Before adding an
+  iterator pattern, if you're  looping through the person's addresses, you might loop
+  through the physical addresses and display  them, then loop through the person's e-mail
+  addresses and display them, then  loop through the person's IM addresses and display those. That's some messy looping!
+         </p>
+         <p>
+          Instead, by implementing an iterator, all you have to do is call
+          <code>
+           while($itr-&gt;hasNext())
+          </code>
+          and deal with the  next item
+          <code>
+           $itr-&gt;next()
+          </code>
+          returns. An example of  one of the iterators is shown in
+  Listing 3. An iterator is powerful because  you can add new types of items through which
+  to iterate, and you don't have to  change the code that loops through the items. In the
+          <code>
+           Person
+          </code>
+          example, for instance, you  could add an array of IM addresses; simply by
+  updating the iterator, you don't have  to change any code that loops through the addresses for display.
+         </p>
+         <h5 id="list3">
+          Listing 3. Using the iterator pattern to loop through objects
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           class PersonAddressIterator implements AddressIterator
+{
+    private $emailAddresses;
+    private $physicalAddresses;
+    private $position;
+    
+    public function __construct($emailAddresses)
+    {
+        $this-&gt;emailAddresses = $emailAddresses;
+        $this-&gt;position = 0;
+    }
+    
+    public function hasNext()
+    {
+        if ($this-&gt;position &gt;= count($this-&gt;emailAddresses) || 
+            $this-&gt;emailAddresses[$this-&gt;position] == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public function next()
+    {
+        $item = $this-&gt;emailAddresses[$this-&gt;position];
+        $this-&gt;position = $this-&gt;position + 1;
+        return $item;
+    }
+    
+}
+          </pre>
+         </div>
+         <p>
+          If the
+          <code>
+           Person
+          </code>
+          object is modified to return an implementation
+  of the
+          <code>
+           AddressIterator
+          </code>
+          interface, the application code that
+  uses the iterator doesn't need  to be modified if the implementation is extended to loop
+  through additional objects. You can use  a compound iterator that wraps the iterators
+  that loop through each type of  address like the one listed in Listing 3. An example of
+  this is available (see
+          <a href="#download">
+           Download
+          </a>
+          ).
+         </p>
+         <p>
+          Figure 3 shows a class diagram of the iterator pattern.
+         </p>
+         <h5 id="fig3">
+          Figure 3. Class diagram of the iterator pattern
+         </h5>
+         <img alt="Class diagram of the iterator pattern" src="iterator.gif" width="160"/>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10101">
+          The decorator pattern
+         </h2>
+         <p>
+          Consider the code sample in Listing 4. The purpose of this code is to add a bunch of
+  features onto a car for a Build  Your Own Car site. Each car model has more features and
+  an associated cost. With only  two models, it would be fairly trivial to add these
+  features with
+          <code>
+           if  then
+          </code>
+          statements. However, if a new model
+  came along, you'd have  to go back through the code and make sure the statements worked for the new model.
+         </p>
+         <h5 id="list4">
+          Listing 4. Using the decorator pattern to add features
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           require('classes.php');
+
+$auto = new Automobile();
+
+$model = new BaseAutomobileModel();
+
+$model = new SportAutomobileModel($model);
+
+$model = new TouringAutomobileModel($model);
+
+$auto-&gt;setModel($model);
+
+$auto-&gt;printDescription();
+          </pre>
+         </div>
+         <p>
+          Enter the decorator pattern, which allows you to add this functionality onto the
+          <code>
+           AutomobileModel
+          </code>
+          in a  nice, clean class. Each class remains concerned
+  only about its price and options  and how they're added to the base model.
+         </p>
+         <p>
+          Figure 4 shows a class diagram for the decorator pattern.
+         </p>
+         <h5 id="fig4">
+          Figure 4. Class diagram of the decorator pattern
+         </h5>
+         <img alt="Class diagram of the decorator pattern" src="decorator.gif" width="390"/>
+         <p>
+          An advantage of the decorator pattern is that you can easily tack on more than one
+  decorator to the base at  a time.
+         </p>
+         <p>
+          If you've done much work with stream objects, you have used a decorator. Most stream
+  constructs, such as an output  stream, are decorators that take a base input stream,
+  then decorate it by adding additional  functionality  like one that inputs
+  streams from files, one that  inputs streams from buffers, etc.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10129">
+          The delegate pattern
+         </h2>
+         <p>
+          The delegate pattern provides a way of delegating behavior based on different criteria.
+  Consider the code in  Listing 5. This code contains several conditions. Based on the
+  condition, the code selects the  appropriate type of object to handle the request.
+         </p>
+         <h5 id="list5">
+          Listing 5. Using conditional statements to route shipping requests
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           pkg = new Package("Heavy Package");
+$pkg-&gt;setWeight(100);
+
+if ($pkg-&gt;getWeight() &gt; 99)
+{
+	echo( "Shipping " . $pkg-&gt;getDescription() . " by rail.");
+} else {
+	echo("Shipping " . $pkg-&gt;getDescription() . " by truck");
+}
+          </pre>
+         </div>
+         <p>
+          With a delegate pattern, an object internalizes this routing process by setting an
+  internal reference to the appropriate object  when a method is called, like
+          <code>
+           useRail()
+          </code>
+          in  Listing 6. This is especially handy if the criteria
+  change for handling various packages or if a new  type of shipping becomes available.
+         </p>
+         <h5 id="list6">
+          Listing 6. Using the delegate pattern to route shipping requests
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           require_once('classes.php');
+
+$pkg = new Package("Heavy Package");
+$pkg-&gt;setWeight(100);
+
+$shipper = new ShippingDelegate();
+
+if ($pkg-&gt;getWeight() &gt; 99)
+{
+	$shipper-&gt;useRail();
+}
+
+$shipper-&gt;deliver($pkg);
+          </pre>
+         </div>
+         <p>
+          The delegate provides the advantage that behavior can change dynamically by calling the
+          <code>
+           useRail()
+          </code>
+          or
+          <code>
+           useTruck()
+          </code>
+          method to
+  switch which class handles the work.
+         </p>
+         <p>
+          Figure 5 shows a class diagram of the delegate pattern.
+         </p>
+         <h5 id="fig5">
+          Figure 5. Class diagram of the delegate pattern
+         </h5>
+         <img alt="Class diagram of the delegate pattern" src="delegate.gif" width="382"/>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10157">
+          The state pattern
+         </h2>
+         <p>
+          The state pattern is a similar to the command pattern, but the intent is quite
+  different. Consider the code below.
+         </p>
+         <h5 id="list7">
+          Listing 7. Using code to build a robot
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           class Robot 
+{
+
+	private $state;
+
+	public function powerUp()
+	{
+		if (strcmp($state, "poweredUp") == 0)
+		{
+			echo("Already powered up...\n");
+			/* Implementation... */
+		} else if ( strcmp($state, "powereddown") == 0) {
+			echo("Powering up now...\n");
+			/* Implementation... */
+		}
+	}
+
+	public function powerDown()
+	{
+		if (strcmp($state, "poweredUp") == 0)
+		{
+			echo("Powering down now...\n");
+			/* Implementation... */
+		} else if ( strcmp($state, "powereddown") == 0) {
+			echo("Already powered down...\n");
+			/* Implementation... */
+		}
+	}
+
+	/* etc... */
+
+}
+          </pre>
+         </div>
+         <p>
+          In this listing, the PHP code represents the operating system for a powerful robot that
+  turns into a car. The  robot can power up, power down, turn into a robot when it's a
+  vehicle, and turn into a vehicle when  it's a robot. The code is OK now, but you  see
+  that it can  become  complex if any of the rules change or if another state comes into the picture.
+         </p>
+         <p>
+          Now look at Listing 8, which has the same logic for handling the robot's states, but
+  this time puts the logic into the  state pattern. The code in Listing 8 does the same
+  thing as the original code,  but the logic for handling states has been put into one
+  object for each state. To illustrate the  advantages of using the design pattern,
+  imagine that after a while, these  robots have discovered that they shouldn't power down
+  while being in robot mode.  In fact, if they power down, they must change to vehicle
+  mode first. If they're already  in vehicle mode, the robot just powers down. With the
+  state pattern, the changes are pretty trivial.
+         </p>
+         <h5 id="list8">
+          Listing 8. Using the state pattern to handle the robot's state
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           $robot = new Robot();
+echo("\n");
+$robot-&gt;powerUp();
+echo("\n");
+$robot-&gt;turnIntoRobot();
+echo("\n");
+$robot-&gt;turnIntoRobot(); /* This one will just give me a message */
+echo("\n");
+$robot-&gt;turnIntoVehicle();
+echo("\n");
+          </pre>
+         </div>
+         <h5 id="list9">
+          Listing 9. Small changes to one of the state objects
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           class NormalRobotState implements RobotState
+{
+    private $robot;
+
+    public function __construct($robot)
+    {
+        $this-&gt;robot = $robot;
+    }
+
+    public function powerUp()
+    {
+        /* implementation... */
+    }
+    public function powerDown()  
+    {
+           <strong>
+            /* First, turn into a vehicle */
+        $this-&gt;robot-&gt;setState(new VehicleRobotState($this-&gt;robot));
+        $this-&gt;robot-&gt;powerDown();
+           </strong>
+           }
+    
+    public function turnIntoVehicle()  
+    {
+        /* implementation... */
+    }
+    
+    public function turnIntoRobot() 
+    {
+        /* implementation... */
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Something that doesn't appear obvious when looking at Figure 6 is that each object in
+  the state pattern  has a reference to the context object (the robot), so each object can
+  advance the state onto the appropriate  one.
+         </p>
+         <h5 id="fig6">
+          Figure 6. Class diagram of the state pattern
+         </h5>
+         <img alt="Class diagram of the state pattern" src="state.gif" width="476"/>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10186">
+          Summary
+         </h2>
+         <p>
+          Using design patterns in your PHP code is one way to make your code more readable and
+  maintainable. By using established patterns, you benefit from common design constructs
+  that allow other developers on a team  to understand your code's purpose. It also allows
+  you to benefit from the  work done by other designers, so you don't have to learn the hard lessons of design ideas that don't work out.
+         </p>
+         <!--CMA ID: 295932-->
+         <!--Site ID: 1-->
+         <!--XSLT stylesheet used to transform this file:
+        dw-document-html-7.0.xsl-->
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="download">
+          Download
+         </h2>
+         <table border="0" cellpadding="0" cellspacing="0" class="ibm-data-table dw-download-table">
+          <thead>
+           <tr>
+            <th scope="col">
+             Description
+            </th>
+            <th scope="col">
+             Name
+            </th>
+            <th scope="col">
+             Size
+            </th>
+           </tr>
+          </thead>
+          <tbody>
+           <tr>
+            <th class="ibm-table-row" scope="row">
+             Sample code
+            </th>
+            <td nowrap="nowrap">
+             <a href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=295932&amp;filename=os-php-designpatterns_morepatterns.zip&amp;method=http&amp;locale=">
+              os-php-designpatterns_morepatterns.zip
+             </a>
+            </td>
+            <td nowrap="nowrap">
+             4KB
+            </td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+       <!-- 1_1_COLUMN_END -->
+       <!-- SPLIT_COLUMNS_BEGIN -->
+       <div class="ibm-columns">
+        <!-- 6_4_COLUMN_BEGIN -->
+        <div class="ibm-col-6-4">
+         <h2 class="ibm-rule" id="resources">
+          Resources
+         </h2>
+         <h3 class="dw-resources-category-heading">
+          Learn
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           Read Jack Herrington's article on design patterns: 
+    "
+           <a href="http://www.ibm.com/developerworks/library/os-php-designptrns/" onmouseover="linkQueryAppend(this)">
+            Five common
+PHP design patterns
+           </a>
+           ."
+          </li>
+          <li>
+           Read the easy-to-follow book on design patterns,
+           <a href="http://safari5.bvdep.com/0596007124">
+            <em>
+             Head First Design Patterns
+            </em>
+           </a>
+           ,  by Eric Freeman (O'Reilly, 2004).
+          </li>
+          <li>
+           Read the original "Gang of Four" book,
+           <a href="http://www.amazon.com/gp/product/0201633612">
+            <em>
+             Design Patterns: Elements of 
+Reusable Object-Oriented Software
+            </em>
+           </a>
+           (Addison-Wesley Professional Computing Series, 1994).
+          </li>
+          <li>
+           Read the Wikipedia entry on
+           <a href="http://en.wikipedia.org/wiki/Design_pattern_(computer_science)">
+            design patterns
+           </a>
+           ,
+  which contains links to  more patterns and resources.
+          </li>
+          <li>
+           <a href="http://www.php.net">
+            PHP.net
+           </a>
+           is the central resource for PHP developers.
+          </li>
+          <li>
+           Check out the "
+           <a href="http://www.ibm.com/developerworks/library/os-php-read" onmouseover="linkQueryAppend(this)">
+            Recommended PHP reading list
+           </a>
+           ."
+          </li>
+          <li>
+           Browse all the
+           <a href="http://www.ibm.com/developerworks/views/opensource/libraryview.jsp?search_by=php">
+            PHP content
+           </a>
+           on developerWorks.
+          </li>
+          <li>
+           Expand your PHP skills by checking out IBM developerWorks'
+           <a href="http://www.ibm.com/developerworks/opensource/top-projects/php.html" onmouseover="linkQueryAppend(this)">
+            PHP project resources
+           </a>
+           .
+          </li>
+          <li>
+           To listen to interesting interviews and discussions for software developers, check out
+           <a href="http://www.ibm.com/developerworks/podcast/" onmouseover="linkQueryAppend(this)">
+            developerWorks  podcasts
+           </a>
+           .
+          </li>
+          <li>
+           Using a database with PHP? Check out the
+           <a href="http://www-306.ibm.com/software/data/info/zendcore/">
+            Zend Core for
+  IBM
+           </a>
+           , a seamless, out-of-the-box, easy-to-install PHP development and production environment that supports IBM DB2 V9.
+          </li>
+          <li>
+           Stay current with developerWorks'
+           <a href="http://www.ibm.com/developerworks/offers/techbriefings/" onmouseover="linkQueryAppend(this)">
+            Technical events and webcasts
+           </a>
+           .
+          </li>
+          <li>
+           Check out upcoming conferences, trade shows, webcasts, and other
+           <a href="http://www.ibm.com/developerworks/views/opensource/events.jsp" onmouseover="linkQueryAppend(this)">
+            Events
+           </a>
+           around the world that are of interest to IBM open source developers.
+          </li>
+          <li>
+           Visit the developerWorks
+           <a href="http://www.ibm.com/developerworks/opensource" onmouseover="linkQueryAppend(this)">
+            Open source zone
+           </a>
+           for extensive how-to information, tools, and project updates to help you develop with open source technologies and use them with IBM's products.
+          </li>
+          <li>
+           Watch and learn about IBM and open source technologies and product functions with the no-cost
+           <a href="http://www.ibm.com/developerworks/offers/lp/demos/" onmouseover="linkQueryAppend(this)">
+            developerWorks On demand demos
+           </a>
+           .
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Get products and technologies
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           Innovate your next open source development project with
+           <a href="http://www.ibm.com/developerworks/downloads/" onmouseover="linkQueryAppend(this)">
+            IBM trial software
+           </a>
+           , available for download or on DVD.
+          </li>
+          <li>
+           Download
+           <a href="http://www.ibm.com/developerworks/downloads/" onmouseover="linkQueryAppend(this)">
+            IBM product evaluation versions
+           </a>
+           , and get your hands on application development tools and middleware products from DB2, Lotus, Rational, Tivoli, and WebSphere.
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Discuss
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           Participate in
+           <a href="http://www.ibm.com/developerworks/blogs" onmouseover="linkQueryAppend(this)">
+            developerWorks blogs
+           </a>
+           and get involved in the developerWorks community.
+          </li>
+          <li>
+           Participate in the developerWorks
+           <a href="http://www.ibm.com/developerworks/forums/dw_forum.jsp?forum=992&amp;cat=51" onmouseover="linkQueryAppend(this)">
+            PHP Forum: Developing PHP applications with IBM Information Management products (DB2, IDS)
+           </a>
+           .
+          </li>
+         </ul>
+         <!-- INLINE_COMMENTS_BEGIN -->
+         <h2 class="ibm-alternate-rule ibm-no-print" id="icomments">
+          Comments
+         </h2>
+         <div class="ibm-no-print" id="dw-icomments-container">
+          <div id="threadShow">
+          </div>
+         </div>
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="signin_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              developerWorks: Sign in
+             </h2>
+             <div class="no-display" id="ibm-overlay-error-signin">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="sFormId" method="post" name="sForm" onsubmit="return false;">
+               <p>
+                <label for="ibmid">
+                 IBM ID:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="ibmid" name="ibm-id" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;d='+encodeURIComponent(location.protocol + '//' + location.hostname + location.pathname + '#icomments'); return false;">
+                  Need an IBM ID?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="/developerworks/dwwi/jsp/WSHelp.jsp?lang=en_US">
+                  Forgot your IBM ID?
+                 </a>
+                </span>
+               </p>
+               <p>
+                <label for="password">
+                 Password:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="password" name="password" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="password" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(dwsi.siInst.getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Den_US%26d%3D'+encodeURIComponent(location.href);})();">
+                  Forgot your password?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">
+                  Change your password
+                 </a>
+                </span>
+               </p>
+               <p class="dw-perm-box">
+                <span>
+                 <input id="perm" name="perm_name" type="checkbox"/>
+                 <label for="perm">
+                  Keep me signed in.
+                 </label>
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('signin_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <p>
+               The first time you sign into developerWorks, a profile is created for you.
+               <strong>
+                Information in your profile (your name, country/region, and company name) is displayed to the public and will accompany any content you post, unless you opt to hide your company name
+               </strong>
+               .  You may update your IBM account at any time.
+              </p>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- Display name OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="displayname_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              Choose your display name
+             </h2>
+             <br/>
+             <br/>
+             <div class="no-display" id="ibm-overlay-error-dname">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               The first time you sign in to developerWorks, a profile is created for you, so you need to choose a display name.  Your display name accompanies the content you post on developerWorks.
+              </p>
+              <p>
+               <strong>
+                Please choose a display name between 3-31 characters
+               </strong>
+               . Your display name must be unique in the developerWorks community and should not be your email address for privacy reasons.
+              </p>
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="dFormId" method="post" name="dForm" onsubmit="return false;">
+               <p>
+                <label for="displayname">
+                 Display name:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input id="displayname" name="displayname" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                </span>
+                <span class="ibm-form-note">
+                 (Must be between 3  31 characters.)
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('displayname_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- INLINE_COMMENTS_END -->
+        </div>
+        <!-- 6_4_COLUMN_END -->
+        <!-- 6_2_COLUMN_BEGIN -->
+        <div class="ibm-col-6-2">
+         <!-- Next_Steps -->
+         <!-- Dig_Deeper -->
+         <!-- DIG_DEEPER_START -->
+         <h2 class="ibm-rule">
+          Dig deeper into Open source on developerWorks
+         </h2>
+         <ul class="ibm-link-list">
+          <li class="ibm-first">
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/opensource/">
+            Overview
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/opensource/newto/">
+            New to Open source
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/opensource/find/projects/">
+            Projects
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/opensource/library/">
+            Technical library (tutorials and more)
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="https://www.ibm.com/developerworks/community/forums/html/category?id=33333333-0000-0000-0000-000000000051">
+            Forums
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/opensource/find/events/">
+            Events
+           </a>
+          </li>
+         </ul>
+         <!-- DIG_DEEPER_END -->
+         <!-- Promotion_Module -->
+         <!-- PROMOTION_MODULE_START -->
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <ul class="ibm-portrait-module-list">
+          <li>
+           <img alt="" height="60" src="//dw1.s81c.com/developerworks/i/sm-f-bluemixdev60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://developer.ibm.com/bluemix/">
+             Bluemix Developers Community
+            </a>
+           </h3>
+           <p>
+            Get samples, articles, product docs, and community resources to help build, deploy, and manage your cloud apps.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-dwnewsletters60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://ibmdeveloperworks.mkt6741.com/dWdWWeeklyNewsletterSubscriptionPage/">
+             developerWorks Weekly Newsletter
+            </a>
+           </h3>
+           <p>
+            Keep up with the best and latest technical info to help you tackle your development challenges.
+           </p>
+          </li>
+          <!-- &lt;li&gt;&lt;img height="60" width="60" src="//www.ibm.com/developerworks/i/sm-f-dwlabs60.png" alt=""/&gt;
+&lt;h3&gt;&lt;a class="ibm-feature-link" href="http://www.ibm.com/developerworks/labs/?ca=dti-tiles-labs"&gt;developerWorks Labs&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Experiment with new directions in software development.&lt;/p&gt;&lt;/li&gt; -->
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-jazzhub2.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://hub.jazz.net/?utm_source=developerWorks&amp;utm_medium=ad&amp;utm_campaign=dW+tiny+ad">
+             DevOps Services
+            </a>
+           </h3>
+           <p>
+            Software development in the cloud.  Register today to create a project.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-evaluationsoftware60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://www.ibm.com/developerworks/downloads/?ca=dti-tiles-evaluate">
+             IBM evaluation software
+            </a>
+           </h3>
+           <p>
+            Evaluate IBM software and solutions, and transform challenges into opportunities.
+           </p>
+          </li>
+         </ul>
+         <!-- PROMOTION_MODULE_END -->
+        </div>
+        <!-- 6_2_COLUMN_END -->
+       </div>
+       <!-- SPLIT_COLUMNS_END -->
+       <!-- BOTTOM_BACK_TO_TOP -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+        </div>
+       </div>
+       <!-- Rating_Meta_BEGIN -->
+       <!--Rating_Meta_BEGIN-->
+       <div class="metavalue">
+        static.content.url=http://www.ibm.com/developerworks/js/artrating/
+       </div>
+       <div class="metavalue">
+        SITE_ID=1
+       </div>
+       <div class="metavalue">
+        Zone=Open source
+       </div>
+       <div class="metavalue">
+        ArticleID=295932
+       </div>
+       <div class="metavalue">
+        ArticleTitle=Five more PHP design patterns
+       </div>
+       <div class="metavalue">
+        publish-date=03252008
+       </div>
+       <script language="javascript" type="text/javascript">
+        document.write('&lt;div class="metavalue"&gt;url='+location.href.replace(/&lt;/g,  '%3C')+'&lt;/div&gt;');
+       </script>
+       <!--Rating_Meta_END-->
+       <!-- Rating_Meta_END -->
+      </div>
+      <!-- END_IBM_CONTENT_MAIN -->
+     </div>
+     <!-- END_IBM_CONTENT_BODY -->
+    </div>
+    <!-- END_IBM_CONTENT -->
+   </div>
+   <!-- END_IBM_PCON -->
+   <!-- FOOTER_BEGIN -->
+   <div id="ibm-footer">
+    <!-- IBM footer container; disabled -->
+   </div>
+   <div aria-label="developerWorks Footer" id="ibm-footer-module-dwwrapper" role="contentinfo">
+    <div id="ibm-footer-module-dw">
+     <div class="dw-footer-columns">
+      <div class="dw-footer-col-6-1">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/" tabindex="0">
+          About
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/feedback" tabindex="0">
+          Help
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/contacts.html" tabindex="0">
+          Contact us
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/ideas" tabindex="0">
+          Submit content
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-2">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/feeds/" tabindex="0">
+          Feeds
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/newsletter/" tabindex="0">
+          Newsletters
+         </a>
+        </li>
+        <li>
+         <a class="ibm-twitter-link" href="http://twitter.com/developerWorks" tabindex="0" target="_blank">
+          Follow
+         </a>
+        </li>
+        <li>
+         <a class="ibm-facebook-link" href="http://www.facebook.com/developerworks" tabindex="0" target="_blank">
+          Like
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-3">
+       <ul>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/report/" tabindex="0">
+          Report abuse
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/use/" tabindex="0">
+          Terms of use
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/thirdparty/" tabindex="0">
+          Third party notice
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/privacy/" tabindex="0">
+          IBM privacy
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/accessibility/" tabindex="0">
+          IBM accessibility
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-4">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/ibm/university/academic/pub/page/academic_initiative" tabindex="0">
+          Faculty
+         </a>
+        </li>
+        <li>
+         <a href="http://asmarterplanet.com/studentsfor/" tabindex="0">
+          Students
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/isv/" tabindex="0">
+          Business Partners
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-5">
+       <ul>
+        <li class="dw-footer-lang-head">
+         Select a language:
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/" tabindex="0">
+          English
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/cn/" lang="zh" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/jp/" lang="ja" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ru/" lang="ru" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/br/" lang="pt" tabindex="0">
+          Portugus (Brasil)
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ssa/" lang="es" tabindex="0">
+          Espaol
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/vn/" lang="vi" tabindex="0">
+          Vit
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-6">
+       <img alt="IBM" height="46" src="//dw1.s81c.com/developerworks/i/mf/dwn-ibm-logo-v17.png" width="223"/>
+       <img alt="" class="dw-preload" height="1" src="//1.www.s81c.com/i/v17/icons/ibm_sprite_social_blue_ON.png" width="1"/>
+       <img alt="" class="dw-preload" height="1" src="//dw1.s81c.com/developerworks/i/mf/arrow-down-active.gif" width="1"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- FOOTER_END -->
+   <!-- END_IBM-TOP -->
+  </div>
+  <!-- SCRIPTS_INCLUDE_BEGIN -->
+  <script src="/developerworks/js/v17/dw-comments.js" type="text/javascript">
+   //
+  </script>
+  <script language="JavaScript" type="text/javascript">
+   dojo.ready(function(){
+		rBHash = typeof rBHash == "undefined" ? {} : rBHash;
+		rBHash['viperLang'] = 'en';
+		rBHash['urlLang'] = 'en';
+		rBHash['dwwi2Lang'] = 'en_US';
+		rBHash['appCode'] = 'dwmav';
+		rBHash['signoutUrl'] = (location.host.toLowerCase() === "www.ibm.com" || location.host.toLowerCase() === "developer.ibm.com") ? 'http://www.ibm.com/developerworks/' : ''; 
+		dwsi.siInst = new dwweb.dynnav.dwsi();
+		dwsi.siInst.initSI();		
+
+		// construct the comment widget
+		dwc &amp;&amp; new dwc.comments('threadShow','95%',5,'nCmts','icomments');
+		});
+  </script>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-41146412-3','auto');ga('require','linkid','linkid.js');var dcdate="2008-03-25";ga('set','dimension1',dcdate);var dw_canonical="http://www.ibm.com/developerworks/library/os-php-designpatterns/index.html";dw_canonical=dw_canonical.substring(dw_canonical.indexOf(".ibm.com")+8);ga('send','pageview',{'page':dw_canonical,'dimension1':dcdate});var trkOBL=function(url,id){id=id.split("-");if(id[0].indexOf("Share")&gt;-1){var cat="Share from toolbar";if(id[0]=="dwShare")cat="Share from summary";var act="Color toolbar";if(id[1]=="B")act="Gray toolbar";var label=id[2];var ab=0;ga('send','event',cat,act,label,ab,{'page':dw_canonical});if(id[0]=="dwShare"){url=unescape(url);if(label='twitter'&amp;&amp;url.indexOf("%2F%2Fwww.ibm.com%2Fdeveloperworks%2F")&gt;-1){var ohref=url.substring(url.indexOf("=http")+1,url.indexOf(".html")+5);ohref=unescape(ohref);var bitly=new ibmweb.bitly({url:ohref,onSuccess:function(){url=url.replace(/http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2F(.*)%20-%20/,this.shorturl+'%20-%20');window.open(url)}});bitly.shorten()}else{window.open(url)}}}else{var cat="Rich tutorial";if(id[0]=="tutc")cat="Classic tutorial";if(id[0]=="lpzone")cat="Zone landing";if(id[0]=="lptrial")cat="Trial landing";if(id[0]=="lpgen")cat="Generic landing";var act="Bluemix";if(id[2]=="devops")act="Devops";act=act+' '+id[3];if(id[4]){var label=id[4];if(label=="btn")label="button";if(label=="txt")label="text link";if(label=="bnr")label="banner";if(label=="tl")label="tile";if(label=="regbar")label="registration bar";if(label=="spop")label="scroll pop";if(label=="vp")label="video promotion"}var ab=0;if(id[5]){if(id[5]=="ABa")ab=1;if(id[5]=="ABb")ab=2;if(id[5]=="ABc")ab=3;if(id[5]=="ABd")ab=4;if(id[5]=="ABe")ab=5;if(id[5]=="ABf")ab=6;if(id[5]=="ABg")ab=7;if(id[5]=="ABh")ab=8}ga('send','event',cat,act,label,ab,{'page':dw_canonical,'hitCallback':function(){document.location=url}})}}
+  </script>
+  <script src="/developerworks/js/v17/dw-event-tagging.js" type="text/javascript">
+   //
+  </script>
+  <!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+  <script language="JavaScript">
+   var NTPT_PGEXTRA="ibmSkillLevel=3&amp;ibmCmaId=295932&amp;ibmContentAreas=opensource";
+  </script>
+  <!--END -->
+  <!-- SCRIPTS_INCLUDE_END -->
+  <div id="ibm-metrics">
+   <script src="//dw1.s81c.com/common/stats/stats.js" type="text/javascript">
+    //
+   </script>
+  </div>
+ </body>
+</html>

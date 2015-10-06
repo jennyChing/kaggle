@@ -1,0 +1,2876 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="IE=8" http-equiv="X-UA-Compatible"/>
+  <title>
+   Play Online. Risk your troops in a free strategy game
+  </title>
+  <script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   WebFont.load({
+                ascender: {
+                   key: 'ee4369f8-c84c-40e6-b9c2-96353ec28a64',
+                    families: ['Rockwell:bold']
+                }
+            });
+  </script>
+  <link href="/Content/Site.css?v=18" rel="stylesheet" type="text/css"/>
+  <link href="/content/customJquery/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript">
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript">
+  </script>
+  <script src="/scripts/prospect.js?v=18" type="text/javascript">
+  </script>
+  <!-- These meta tages are for facebook and other sites that use opengraph-->
+  <meta content="Victors United" property="og:title"/>
+  <meta content="http://victorsunited.com" property="og:url"/>
+  <meta content="http://victorsunited.com/images/Victors_Logo.png" property="og:image"/>
+  <meta content="Victors United" property="og:site_name"/>
+  <meta content="game" property="og:type"/>
+  <meta content="Free online world conquest game" property="og:description"/>
+  <meta content="Risk online your troops. Play Victors United, the free online strategic conquest game. Challenge your friends without a download." id="description" name="description"/>
+  <meta content="play free, online game, strategy, global conquest, social, board game, turn based, challenge, victorsunited, victors" id="keywords" name="keywords"/>
+  <script type="text/javascript">
+   var currentUserId = '';
+    //used for OAuth stuff because window.opener was null
+    window.name = "VictorsUnited";
+
+    function showInvitation(invitationUrl, gameId) {
+        $.getJSON("/game/invite", { gameId: gameId });
+
+        $("#invitationUrl").val(invitationUrl);
+        $("#invitationForm").dialog({ draggable: false, modal: true, resizable: false, width: 480 });
+        setupJqueryDialog();
+        $("#invitationUrl").focus();
+        $("#invitationUrl").select();
+    }
+
+    function closeInvitation() {
+        $("#invitationForm").dialog("close");
+    }
+
+    function isiPad() {
+        var temp = navigator.userAgent;
+        return (navigator.userAgent.indexOf('iPad') != -1);
+    }
+
+    function initFBButtons() {
+        $("#FBLike").empty();
+        $("#FBLike").append("&lt;fb:like href='http://facebook.com/victorsunited' style='vertical-align:middle; padding-right:2px; padding-left:5px; margin-right: -8px;' id='FBLink2' send='false' layout='button_count' width='10' show_faces='false' font='arial'&gt;&lt;/fb:like&gt;");
+        FB.XFBML.parse();
+    }
+  </script>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-22619284-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+&lt;/script&gt;
+&lt;script type="text/javascript" src="http://connect.facebook.net/en_US/all.js#xfbml=1"&gt;
+  </script>
+ </head>
+ <body>
+  <div id="fb-root">
+  </div>
+  <script type="text/javascript">
+   window.fbAsyncInit = function () {
+        FB.init({
+            appId: '171162039593410',  //debug app id 175015812536166 upcoming app id 206690069353232 live site app id 171162039593410
+            status: true, // check login status
+            cookie: true, // enable cookies to allow the server to access the session
+            xfbml: false  // parse XFBML
+        });
+
+        FB.Event.subscribe('edge.create', function (response) {
+            $.post("/VisitEvent/RecordwithName", { eventname: 'Facebook', message: 'Homepage facebook like button clicked' },
+                function (response) {
+                }, "json");
+        });
+
+        initFBButtons();
+    };
+    (function () {
+        var e = document.createElement('script');
+        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.async = true;
+        document.getElementById('fb-root').appendChild(e);        
+    } ());
+  </script>
+  <div id="pageFloat" style="background-color:#1B1B1B; width:auto;">
+   <div class="pageHP" style="width:1200px; margin-left:auto; margin-right:auto; background-color:#202020">
+    <div class="siteLogo" style="position:absolute;">
+     <a href="/">
+      <h1>
+       VICTORS UNITED
+       <sup style="font-size:0.5em">
+        
+       </sup>
+       <i>
+        <span style="font-size:11px; color:gray; font-family:Georgia; font-weight:bold">
+         &amp;nbsp BETA
+        </span>
+       </i>
+      </h1>
+     </a>
+    </div>
+    <div class="siteNav" id="siteNav" style="background-color:transparent;">
+     <table class="siteNavTable">
+      <tr>
+       <td>
+        <a href="/Game/MyGames">
+         Games
+        </a>
+       </td>
+       <td>
+        <a href="/Store/Upgrade?from=homepage">
+         Upgrade
+        </a>
+       </td>
+       <td>
+        <a href="/LeaderBoard">
+         Leaderboard
+        </a>
+       </td>
+       <td>
+        <a href="/Community">
+         Community
+        </a>
+       </td>
+       <td>
+        <a href="/Help">
+         Help
+        </a>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="userInfo" id="userBox" style="background-color:transparent;">
+     <div id="userInfo" style="display:none; margin-top:3px;">
+      <div>
+       <table class="invisible" style="width:auto; margin-left:auto; margin-right:10px;">
+        <tr valign="bottom">
+         <td>
+          <a href="/MyAccount/">
+           <img class="tinyAvatar" id="profilePicture" style="display:none" title="Change profile picture"/>
+          </a>
+         </td>
+         <td style="min-width:55px;">
+          <a href="/MyAccount/" rel="nofollow">
+           <span class="profileName" id="profileName">
+           </span>
+          </a>
+         </td>
+         <td>
+          <span style="position:relative">
+           <span class="notificationBox" id="activeGameCount" onclick="document.location.href='/Game/MyGames';" style="display:none">
+           </span>
+          </span>
+         </td>
+         <td style="padding-bottom:3px; min-width:55px;">
+          <a href="/Login/Logout" rel="nofollow">
+           Sign out
+          </a>
+         </td>
+        </tr>
+       </table>
+       <br/>
+      </div>
+     </div>
+     <div id="loginLink" style="margin-top:15px; margin-right:10px; ">
+      <a href="#" onclick="welcomeLogin();" rel="nofollow" style="padding-right:10px; font-size:14px;">
+       Login
+      </a>
+      <a href="#" onclick="welcomeRegister();" rel="nofollow" style="font-size:14px;">
+       Register
+      </a>
+     </div>
+     <div id="authDialog" style="display:none;">
+      <div id="loginForm" style="display:none;">
+       <table class="loginDialog" style="margin-left:auto; margin-right:auto;" width="95%">
+        <tr>
+         <td>
+          <h4>
+           Login with a Victors United Account
+          </h4>
+          <br/>
+         </td>
+         <td>
+         </td>
+         <td>
+          <h4>
+           Login with your Existing Account
+          </h4>
+          <br/>
+         </td>
+        </tr>
+        <tr>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td style="width:40%;">
+          <span class="infotextgray">
+           Username or Email Address
+          </span>
+          <br/>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <input class="inputTextBox" id="loginBox" name="userNameOrEmailAddress" onkeydown="if (event.keyCode == 13) {$('#realPassword').focus();}" style="line-height:25px;" type="text" value=""/>
+         </td>
+         <td>
+         </td>
+         <td class="connections" id="fbButton2" onclick="OAuthLogin('facebook');">
+          <img src="/images/g_facebook_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Login with Facebook
+         </td>
+        </tr>
+        <tr>
+         <td style="width:40%;">
+          <span class="infotextgray">
+           Password
+          </span>
+          <br/>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <input class="inputTextBox" id="realPassword" name="password" onkeydown="if (event.keyCode == 13) {$('#loginButton').click();}" style="line-height:25px;" type="password"/>
+          <br/>
+          <a class="infotextgray" href="/Password/Recover/" onclick="cancel();">
+           Forgot password?
+          </a>
+          <br/>
+          <span class="errorMessage" id="loginMessage" style="font-weight:bold">
+          </span>
+         </td>
+         <td style="width:20%; text-align:center;">
+          <h4>
+           - Or -
+          </h4>
+         </td>
+         <td class="connections" id="googButton2" onclick="OAuthLogin('google');">
+          <img src="/images/g_google_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Login with Google
+         </td>
+        </tr>
+        <tr>
+         <td style="width:40%; height:13px;">
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td style="vertical-align:middle;">
+          <a class="body" href="" onclick="swapRegister(); return false;" style="color:#EA6A29;">
+           Don't have an account? Create one!
+          </a>
+         </td>
+         <td>
+         </td>
+         <td class="connections" id="twitButton2" onclick="OAuthLogin('twitter');">
+          <img src="/images/g_twitter_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Login with Twitter
+         </td>
+        </tr>
+        <tr>
+         <td style="vertical-align:top;">
+          <input class="hotButton" id="loginButton" onclick="login();" style="width:142px; font:bold 11px Georgia;" type="button" value="Login"/>
+          <input class="coldButton" onclick="cancel();" style="width:142px; font:bold 11px Georgia;" type="button" value="Cancel"/>
+          <br/>
+         </td>
+         <td>
+         </td>
+         <td>
+          <br/>
+          <span class="infotextgray">
+           You're in Control: We always notify
+           <b>
+            before
+           </b>
+           communication on your behalf.
+           <a href="/help/connections/" target="_blank">
+            Learn more
+           </a>
+          </span>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <br/>
+          <span class="infotextgray">
+           By signing up you are agreeing to our
+           <a href="/help/legal/" target="_blank">
+            Terms &amp; Conditions
+           </a>
+          </span>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+       </table>
+       <br/>
+       <br/>
+      </div>
+      <div id="registerForm">
+       <table class="loginDialog" style="margin-left:auto; margin-right:auto; width: 730px;">
+        <tr style="height:50px">
+         <td style="vertical-align:top; width: 300px;">
+          <h4>
+           Sign up using your account with...
+          </h4>
+         </td>
+         <td style="width: 120px;">
+         </td>
+         <td style="vertical-align:top; width: 300px;">
+          <h4>
+           ...or complete the fields below.
+          </h4>
+         </td>
+        </tr>
+        <tr>
+         <td>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td class="connections" id="fbButton" onclick="OAuthLogin('facebook');">
+          <img src="/images/g_facebook_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Sign up with Facebook
+         </td>
+         <td>
+         </td>
+         <td style="vertical-align:top;">
+          <span class="infotextgray">
+           Email Address
+          </span>
+          <br/>
+          <input class="inputTextBox" id="emailAddress" name="emailAddress" onkeydown="if (event.keyCode == 13) {$('#userName').focus();}" style="line-height:25px; width: 300px;" type="text" value=""/>
+          <span class="errorMessage" id="regEmailMessage">
+          </span>
+         </td>
+        </tr>
+        <tr height="15">
+         <td>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td class="connections" id="googButton" onclick="OAuthLogin('google');">
+          <img src="/images/g_google_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Sign up with Google
+         </td>
+         <td style="text-align:center;">
+          <h4>
+           - Or -
+          </h4>
+         </td>
+         <td style="vertical-align:top;">
+          <span class="infotextgray">
+           Username
+          </span>
+          <br/>
+          <input class="inputTextBox" id="userName" maxlength="16" name="userName" onkeydown="if (event.keyCode == 13) {$('#realRegPassword').focus();}" style="line-height:25px; width: 300px;" type="text" value=""/>
+          <span class="errorMessage" id="regUserNameMessage">
+          </span>
+         </td>
+        </tr>
+        <tr height="15">
+         <td>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td class="connections" id="twitButton" onclick="OAuthLogin('twitter');">
+          <img src="/images/g_twitter_login.png" style="vertical-align:middle; padding-right:10px;"/>
+          Sign up with Twitter
+         </td>
+         <td>
+         </td>
+         <td style="vertical-align:top;">
+          <span class="infotextgray">
+           Password
+          </span>
+          <br/>
+          <input class="inputTextBox" id="realRegPassword" name="realRegPassword" onkeydown="if (event.keyCode == 13) {$('#regButton').click();}" style="line-height:25px; width: 300px;" type="password"/>
+          <span class="errorMessage" id="regPasswordMessage">
+          </span>
+         </td>
+        </tr>
+        <tr height="10">
+         <td>
+         </td>
+         <td>
+         </td>
+         <td>
+         </td>
+        </tr>
+        <tr>
+         <td style="vertical-align:top;">
+         </td>
+         <td>
+         </td>
+         <td>
+          <input class="hotButton" id="regButton" onclick="register();" style="width:307px; font:bold 11px Georgia;" type="button" value="Register"/>
+         </td>
+        </tr>
+        <tr>
+         <td colspan="3" style="text-align:center">
+          <br/>
+          <br/>
+          <a class="body" href="" onclick="swapLogin(); return false;" style="color:#EA6A29; font-weight: bold;">
+           Already have an account? Log in!
+          </a>
+          <br/>
+          <br/>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <span class="infotextgray">
+           By signing up you are agreeing to our
+           <a href="/help/legal/" target="_blank">
+            Terms &amp; Conditions
+           </a>
+          </span>
+         </td>
+         <td>
+         </td>
+         <td>
+          <span class="infotextgray">
+           You're in Control: We always notify
+           <b>
+            before
+           </b>
+           communication on your behalf.
+           <a href="/help/connections/" target="_blank">
+            Learn more
+           </a>
+          </span>
+         </td>
+        </tr>
+       </table>
+       <br/>
+      </div>
+     </div>
+     <div style="clear:both;">
+     </div>
+     <script type="text/javascript">
+      //website optimizer code
+    var _gaq = _gaq || [];
+    _gaq.push(['gwo._setAccount', 'UA-22619284-2']);
+
+    function doGoal() {
+       try {
+           _gaq.push(['gwo._trackPageview', '/0390041334/goal']);
+            }
+            catch(err){}
+    } 
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+//end website optimizer code
+
+    $(document).ready(function () {
+        updateCurrentTurnCount(true);
+    });
+
+    function setupJqueryDialog() {
+        $(".ui-dialog-titlebar").removeClass("ui-widget-header");
+    }
+    function showLoginDialog() {
+        swapLogin();
+        $("#authDialog").dialog({ draggable: false, modal: true, resizable: false, width: 800 });
+        setupJqueryDialog();
+    }
+
+    function showRegisterDialog() {
+        swapRegister();
+        $("#authDialog").dialog({ draggable: false, modal: true, resizable: false, width: 800 });
+        setupJqueryDialog();
+    }
+
+    function swapRegister() {
+        $("#loginForm").hide();
+        $("#registerForm").show();
+    }
+
+    function swapLogin() {
+        $("#loginForm").show();
+        $("#registerForm").hide();
+    }
+
+
+    function cancel() {
+        $("#authDialog").dialog("close");
+    }
+
+    function showUserInfo() {
+        $("#userInfo").show();
+        $("#loginForm").hide();
+        $("#loginLink").hide();
+        $("#profileName").text(ClientUserName);
+        $("#profilePicture").show();
+        $("#profilePicture").attr("src", "/avatar/tiny/" + currentUserId);
+    }
+
+
+    function bounceToWelcome() {
+        document.location.href = "/welcome";
+    }
+
+    function welcomeLogin() {
+        authCallback = bounceToWelcome;
+        showLoginDialog();
+    }
+
+    function welcomeRegister() {
+        authCallback = bounceToWelcome;
+        showRegisterDialog();
+    }
+    
+
+    function clearLabel(textBox, label) {
+        var existing = textBox.value;
+        if (existing == label) {
+            textBox.value = "";
+        }
+    }
+
+    function setLabel(textBox, label) {
+        if (!textBox.value) {
+            textBox.value = label;
+        }
+    }
+
+    function OAuthLogin(provider) {
+        $("#authDialog").dialog("close");
+        if (provider == 'facebook') {
+            win2 = window.open("/OAuth/begin/"+provider, "Window2", "width=1024,height=600,scrollbars=yes");
+        } else {
+            win2 = window.open("/OAuth/begin/" + provider, "Window2", "width=800,height=600,scrollbars=yes");
+        }
+       
+    }
+
+    function login() {
+        var userNameOrEmailAddress = $("#loginBox").val();
+        var password = $("#realPassword").val();
+
+        $.post("/login/clientLogin",
+            { userNameOrEmailAddress: userNameOrEmailAddress,
+                password: password
+            },
+            function (response) {
+                if (response.Success) {
+                    ci();
+                    currentUserId = response.UserId;
+                    ClientUserId = response.ClientUserId;
+                    ClientUserName = response.UserName;
+                    $("#authDialog").dialog("close");
+                    showUserInfo();
+                    if (authCallback) {
+                        authCallback();
+                    }
+                    //general-purpose always-do-this-after-login method
+                    updateCurrentTurnCount(true);
+                    if (postLoginRefresh) {
+                        postLoginRefresh();
+                    }
+                }
+                else {
+                    if (response.ErrorMessage == "Multiple Accounts") {
+                        location.href = "/store/Upgrade?multipleaccounts=true";
+                    } else {
+                        $("#loginMessage").empty();
+                        $("#loginMessage").append("login failed. please try again");
+                        $("#authDialog").effect("shake", { times: 1 }, 200);
+                    }
+                }
+            }, "json");
+        }
+
+        function ci() {
+            var vi = "";
+            try
+            {
+                vi = screen.width + "_" + screen.height + "_" + screen.colorDepth;
+            }
+            catch (ex) { }
+
+            var tz = "";
+            try {
+                tz = new Date().getTimezoneOffset();
+            }
+            catch (ex) { }
+
+            var pnz = "";
+            try {
+                pnz = gpnz();
+            }
+            catch (ex) { }
+
+            var fv = "";
+            try {
+                fv = GetSwfVer();
+            }
+            catch (ex) { }
+
+            try {
+                $.post("/ci/snd", { vi: vi, tz: tz, pnz: pnz, fv: fv }, function (result) {
+                }, "json");
+            } catch (ex) { }
+        }
+
+        function gpnz() {
+            var pv = "";
+            if (navigator.plugins) {
+                np = navigator.plugins;
+                for (var i = 0; i &lt; np.length; i++) {
+                    pv += np[i].name + "\n";
+                }
+            }
+            pv = pv.replace(/&lt;/gi, "");
+            pv = pv.replace(/&gt;/gi, "");
+            return pv;
+        }
+
+        function updateCurrentTurnCount(chain) {
+            if (currentUserId) {
+                $.getJSON("/game/CurrentTurnCount", { currentUserId: currentUserId }, function (count) {
+                    var title = document.title;
+                    if (count &gt; 0) {
+                        $("#activeGameCount").text(count);
+                        title = title.replace(/\([0-9]+\)/, "("+count+")");
+                        title = title.replace(" - ", " (" + count + ") ");
+                        title = title.replace(". ", " (" + count + ") ");                    
+                        if (count &gt; 999) {
+                            $("#activeGameCount").text("999");
+                            title = title.replace(/\([0-9]+\)/, "(999)");
+                            title = title.replace(" - ", " (999) ");
+                        }
+                        $("#activeGameCount").show();
+                        document.title = title;
+                    }
+                    else {
+                        $("#activeGameCount").text("");
+                        $("#activeGameCount").hide();
+                    }
+                });
+                var refreshInterval = 2 * 60 * 1000; //every 2 minutes
+                if (chain) {
+                    setTimeout('updateCurrentTurnCount(true)', refreshInterval)
+                }
+            }
+        }
+
+
+        function register() {
+            $("#regButton").attr("disabled", "disabled");
+            $("#regButton").attr("class", "disabledButton");
+
+            var userName = $("#userName").val();
+            var password = $("#realRegPassword").val();
+            var emailAddress = $("#emailAddress").val();
+
+            $("#regEmailMessage").empty();
+            $("#regUserNameMessage").empty();
+            $("#regPasswordMessage").empty();
+
+            $.post("/register/clientRegister",
+            { userName: userName, emailAddress: emailAddress, password: password },
+            function (result) {
+                if (result.Success) {
+                    //record event in website optimizer
+                    doGoal();
+                    ci();
+                    currentUserId = result.UserId;
+                    ClientUserId = result.ClientUserId;
+                    ClientUserName = result.UserName;
+                    $("#authDialog").dialog("close");
+                    showUserInfo();
+                    if (authCallback) {
+                        authCallback();
+                    }
+                }
+                else {
+                    $("#regEmailMessage").empty();
+                    $("#regUserNameMessage").empty();
+                    $("#regPasswordMessage").empty();
+
+                    if (result.UserNameMessage) {
+                        $("#regUserNameMessage").append("&lt;BR&gt;" + result.UserNameMessage);
+                    }
+
+                    if (result.PasswordMessage) {
+                        $("#regPasswordMessage").append("&lt;BR&gt;" + result.PasswordMessage);
+                    }
+
+                    if (result.EmailAddressMessage) {
+                        $("#regEmailMessage").append("&lt;BR&gt;" + result.EmailAddressMessage);
+                    }
+                    $("#authDialog").effect("shake", { times: 1 }, 200);
+
+                    $("#regButton").attr("disabled", "");
+                    $("#regButton").attr("class", "hotButton");
+
+                }
+            }, "json");
+        }
+     </script>
+     <script type="text/javascript">
+      var isPremiumMember = '';
+        var ClientUserId = '';
+        var ClientUserName = '';
+        var authCallback;
+
+        $("#userInfo").hide();
+        $("#loginForm").show();
+     </script>
+    </div>
+    <span id="FBLike" style="float:right;">
+    </span>
+    <div class="mainHP" id="main">
+     <script src="/Scripts/GameQuery.js?v=18" type="text/javascript">
+     </script>
+     <!-- Google Website Optimizer Control Script -->
+     <script>
+      function utmx_section() { } function utmx() { }
+    (function () {
+        var k = '0390041334', d = document, l = d.location, c = d.cookie; function f(n) {
+            if (c) {
+                var i = c.indexOf(n + '='); if (i &gt; -1) {
+                    var j = c.indexOf(';', i); return escape(c.substring(i + n.
+length + 1, j &lt; 0 ? c.length : j))
+                } 
+            } 
+        } var x = f('__utmx'), xx = f('__utmxx'), h = l.hash;
+        d.write('&lt;sc' + 'ript src="' +
+'http' + (l.protocol == 'https:' ? 's://ssl' : '://www') + '.google-analytics.com'
++ '/siteopt.js?v=1&amp;utmxkey=' + k + '&amp;utmx=' + (x ? x : '') + '&amp;utmxx=' + (xx ? xx : '') + '&amp;utmxtime='
++ new Date().valueOf() + (h ? '&amp;utmxhash=' + escape(h.substr(1)) : '') +
+'" type="text/javascript" charset="utf-8"&gt;&lt;/sc' + 'ript&gt;')
+    })();
+     </script>
+     <!-- End of Google Website Optimizer Control Script -->
+     <!-- Google Website Optimizer Tracking Script -->
+     <script type="text/javascript">
+      var _gaq = _gaq || [];
+    _gaq.push(['gwo._setAccount', 'UA-22619284-2']);
+    _gaq.push(['gwo._trackPageview', '/0390041334/test']);
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+     </script>
+     <!-- End of Google Website Optimizer Tracking Script -->
+     <script type="text/javascript">
+      $("#gameNav").hide();
+    $("#siteNav").css("background", "transparent");
+    $("#userBox").css("background", "transparent");
+    $("#siteNav").css("padding-top", "16px");
+    $("#siteNav").css("padding-left", "350px");
+    $("#siteNav").css("width", "574px");
+    $("#siteNav").css("font-size", "14px");
+
+
+    var currentUserId = '';
+    var currentMediumAvatar = '/avatar/medium/';
+    var hasPremiumMaps = '';
+     </script>
+     <div id="page" style="max-width:1200px; min-width:1175px; margin-left:auto; margin-right:auto;">
+      <div id="topHolder">
+       <div id="quotation" style="position:relative; width:200px; text-align:right; top: 41px; left: 137px;">
+        <span class="mediumTextHP">
+         Kick some ass - two
+         <br/>
+         minutes at a time
+         <br/>
+         <i style="font-size:11px;">
+          -Shane, Co-Founder, 2010
+         </i>
+        </span>
+       </div>
+       <div style="position:relative; width:350px; top: 0px; left: 415px;">
+        <h1>
+         CHALLENGE ANYONE.
+        </h1>
+        <h1>
+         PLAY ANYWHERE.
+        </h1>
+        <h1>
+         BE VICTORIOUS.
+        </h1>
+       </div>
+       <div style="position:relative; width:300px; top: 35px; left: 415px;">
+        <script>
+         utmx_section("PlayNowLink")
+        </script>
+        <a href="/Game/MyGames?from=playfree">
+         <img alt="Play Risk Free" src="/images/HP_PlayFree.png" style="border:0px;" title="Play for Free"/>
+        </a>
+        <div id="playFree" onclick="playFree()">
+         PLAY NOW
+         <i>
+          for
+         </i>
+         FREE
+        </div>
+       </div>
+       <div id="HP_leaderBoard" style="position:relative; width:auto; top: -205px; float:right;">
+        <div id="leadergrid" style="width:auto">
+         <table>
+          <tr>
+           <td>
+           </td>
+           <td colspan="2" style="text-align:left; font-size:14px; color:#FFFFFF; font-weight:bold; min-width:142px;">
+            Victors United Top 5
+           </td>
+           <td colspan="4" style="text-align:right;">
+            <b>
+             <a href="/Leaderboard/" style="font-size:12px; color:#EA6A29;">
+              View more
+             </a>
+            </b>
+           </td>
+          </tr>
+          <tr style="height:30px;">
+           <td>
+           </td>
+           <td>
+           </td>
+           <td class="graySmallTextHP" style="padding-left:10px; text-align:left;">
+            Username
+           </td>
+           <td class="graySmallTextHP" style="text-align:left;">
+            Country
+           </td>
+           <td class="graySmallTextHP">
+            Score
+           </td>
+          </tr>
+          <tr style="background-color:#2A2A2A;">
+           <td style="width:32px; color:White; font:18px Georgia; font-style:italic;">
+            <b>
+             1
+            </b>
+           </td>
+           <td style="width:auto;">
+            <a href="/u/La%20Ostia">
+             <img class="tinyAvatar" src="/media/8a739538-623d-4404-9996-43d8aded5b3a.jpg" style="border: solid 1px #323232;"/>
+            </a>
+           </td>
+           <td style="width:100px; max-width:100px; font-size:14px; padding-left:10px; color:#FFFFFF; text-align:left;">
+            <a href="/u/La%20Ostia">
+             La Ostia
+            </a>
+           </td>
+           <td style="text-align:left;">
+            X
+           </td>
+           <td>
+            3829
+           </td>
+          </tr>
+          <tr style="background-color:#1B1B1B;">
+           <td style="width:32px; color:White; font:18px Georgia; font-style:italic;">
+            <b>
+             2
+            </b>
+           </td>
+           <td style="width:auto;">
+            <a href="/u/d1puffpuff">
+             <img class="tinyAvatar" src="/media/8fa07f4d-cfdc-4e99-88f0-725ee1ec6429.jpg" style="border: solid 1px #323232;"/>
+            </a>
+           </td>
+           <td style="width:100px; max-width:100px; font-size:14px; padding-left:10px; color:#FFFFFF; text-align:left;">
+            <a href="/u/d1puffpuff">
+             d1puffpuff
+            </a>
+           </td>
+           <td style="text-align:left;">
+            United States
+           </td>
+           <td>
+            3730
+           </td>
+          </tr>
+          <tr style="background-color:#2A2A2A;">
+           <td style="width:32px; color:White; font:18px Georgia; font-style:italic;">
+            <b>
+             3
+            </b>
+           </td>
+           <td style="width:auto;">
+            <a href="/u/jinji">
+             <img class="tinyAvatar" src="/media/95360dd8-30e0-4209-9387-046ef8ea49c2.jpg" style="border: solid 1px #323232;"/>
+            </a>
+           </td>
+           <td style="width:100px; max-width:100px; font-size:14px; padding-left:10px; color:#FFFFFF; text-align:left;">
+            <a href="/u/jinji">
+             jinji
+            </a>
+           </td>
+           <td style="text-align:left;">
+            vietnam
+           </td>
+           <td>
+            3693
+           </td>
+          </tr>
+          <tr style="background-color:#1B1B1B;">
+           <td style="width:32px; color:White; font:18px Georgia; font-style:italic;">
+            <b>
+             4
+            </b>
+           </td>
+           <td style="width:auto;">
+            <a href="/u/NewDetroitStyle">
+             <img class="tinyAvatar" src="/media/23999375-1660-4c36-bd05-7fb3984a103d.jpg" style="border: solid 1px #323232;"/>
+            </a>
+           </td>
+           <td style="width:100px; max-width:100px; font-size:14px; padding-left:10px; color:#FFFFFF; text-align:left;">
+            <a href="/u/NewDetroitStyle">
+             NewDetroitStyle
+            </a>
+           </td>
+           <td style="text-align:left;">
+            United States
+           </td>
+           <td>
+            3587
+           </td>
+          </tr>
+          <tr style="background-color:#2A2A2A;">
+           <td style="width:32px; color:White; font:18px Georgia; font-style:italic;">
+            <b>
+             5
+            </b>
+           </td>
+           <td style="width:auto;">
+            <a href="/u/Kareena">
+             <img class="tinyAvatar" src="/media/8a5f3e33-e125-483b-9413-8d796f8cf171.jpg" style="border: solid 1px #323232;"/>
+            </a>
+           </td>
+           <td style="width:100px; max-width:100px; font-size:14px; padding-left:10px; color:#FFFFFF; text-align:left;">
+            <a href="/u/Kareena">
+             Kareena
+            </a>
+           </td>
+           <td style="text-align:left;">
+            Austria
+           </td>
+           <td>
+            3581
+           </td>
+          </tr>
+         </table>
+        </div>
+       </div>
+      </div>
+      <div id="bottomHolderHP" style="min-height:1100px; position:relative;height:auto;">
+       <div class="grayTextHP" style="position:absolute; width:325px; top: 50px; float:left;">
+        <h1 style="font-size:23px;">
+         OUR STORY
+        </h1>
+        <div style="margin-top:15px;">
+         Started by three guys with a passion for strategy
+         <a href="/play_risk_board_game">
+          board games
+         </a>
+         , Victors United is fast becoming the destination for online, turn based, multiplayer
+         <a href="/strategy_game_online">
+          strategy gaming
+         </a>
+         .
+         <br/>
+         <br/>
+         Players from around the world can come together to battle it out and
+         <a href="/play_risk_online">
+          risk
+         </a>
+         their armies against their foes.
+         <br/>
+         <br/>
+         Its
+         <a href="/free_risk_online">
+          free to play
+         </a>
+         , and you can play as fast or as casual as youd like.
+        </div>
+       </div>
+       <div style="clear:both;">
+       </div>
+       <a href="http://www.facebook.com/pages/Victors-United/149713508416199" style="text-decoration:none;" target="_blank">
+        <div class="socialWidgetHP" id="facebook" style="top: 330px;">
+         <div id="floater2" style="float:left; height:50%; margin-top:15px;">
+          <img src="/images/HP_Facebook.png" style="border:0px; margin-right:33px; vertical-align:middle;"/>
+          <span class="socialTextHP">
+           BECOME A FAN
+           <i>
+            on Facebook
+           </i>
+          </span>
+         </div>
+        </div>
+       </a>
+       <div style="clear:both;">
+       </div>
+       <a href="/blog" style="text-decoration:none;" target="_blank">
+        <div class="socialWidgetHP" id="blog" style="top: 415px;">
+         <div id="Div2" style="float:left; height:50%; margin-top:15px;">
+          <img src="/images/HP_Blog.png" style="border:0px; margin-right:33px; vertical-align:middle;"/>
+          <span class="socialTextHP">
+           SEE WHAT'S NEW
+           <i>
+            at our blog
+           </i>
+          </span>
+         </div>
+        </div>
+       </a>
+       <div style="clear:both;">
+       </div>
+       <div class="socialWidgetHP" id="twitter" style="top: 500px;">
+        <div id="floater" style="float:left; height:50%; margin-top:15px;">
+         <a href="http://twitter.com/victorsunited" style="text-decoration:none;" target="_blank">
+          <img align="middle" src="/images/HP_Twitter.png" style="border:0px; margin-right:25px;vertical-align:middle;"/>
+          <span class="socialTextHP">
+           FOLLOW US
+           <i>
+            on Twitter
+           </i>
+          </span>
+         </a>
+        </div>
+       </div>
+       <div style="clear:both;">
+       </div>
+       <div id="twitterStream" style="float:left; display:none; position:absolute; width:325px; top:667px; margin-left:40px;">
+        <script src="http://widgets.twimg.com/j/2/widget.js">
+        </script>
+        <script>
+         new TWTR.Widget({
+                version: 2,
+                type: 'profile',
+                rpp: 5,
+                interval: 6000,
+                width: 325,
+                height: 300,
+                theme: {
+                    shell: {
+                        background: '#444444',
+                        color: '#ffffff'
+                    },
+                    tweets: {
+                        background: '#1B1B1B',
+                        color: '#ffffff',
+                        links: '#ea6a29'
+                    }
+                },
+                features: {
+                    scrollbar: false,
+                    loop: false,
+                    live: false,
+                    hashtags: true,
+                    timestamp: true,
+                    avatars: false,
+                    behavior: 'all'
+                }
+            }).render().setUser('victorsunited').start();
+        </script>
+       </div>
+       <div style="clear:both;">
+       </div>
+       <div id="gamesHolderHP">
+        <div class="newsFeedSection">
+         <span class="gameLabel">
+          Recent Activity
+         </span>
+         <br/>
+         <br/>
+         <a href="/u/ford">
+          <img class="mediumAvatar" src="/media/71f6137f-1f55-4007-86c8-07867eaf2f8b.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="ford"/>
+         </a>
+         <a href="/u/ford" style="color:#CCC;">
+          <b>
+           ford
+          </b>
+         </a>
+         joined
+         <a href="/game/play/3ec27031-74c0-42dc-bfae-981114f43fc1" style="color:#CCC;">
+          Game
+          <b>
+           5NOHY
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          49 seconds ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/ford">
+          <img class="mediumAvatar" src="/media/71f6137f-1f55-4007-86c8-07867eaf2f8b.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="ford"/>
+         </a>
+         <a href="/u/ford" style="color:#CCC;">
+          <b>
+           ford
+          </b>
+         </a>
+         won
+         <a href="/game/play/6baf6cdd-1ab8-4892-a164-8e1d87738de5" style="color:#CCC;">
+          Game
+          <b>
+           5NOHN
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          4 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/gary ragman">
+          <img class="mediumAvatar" src="/media/391fa5eb-c35d-4e9b-baf5-8d45cc4fec41.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="gary ragman"/>
+         </a>
+         <a href="/u/gary ragman" style="color:#CCC;">
+          <b>
+           gary ragman
+          </b>
+         </a>
+         won
+         <a href="/game/play/7c1fc5c6-ece4-4316-abca-6eb01a2f1e62" style="color:#CCC;">
+          Game
+          <b>
+           5NOHV
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          5 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/urgsbane">
+          <img class="mediumAvatar" src="/media/b7b58c90-cca4-492d-a721-85cce8eb6534.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="urgsbane"/>
+         </a>
+         <a href="/u/urgsbane" style="color:#CCC;">
+          <b>
+           urgsbane
+          </b>
+         </a>
+         won
+         <a href="/game/play/7aeeeeb6-a3fe-49e0-a28b-5e2f02f36e33" style="color:#CCC;">
+          Game
+          <b>
+           5NOHH
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          5 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/gary ragman">
+          <img class="mediumAvatar" src="/media/391fa5eb-c35d-4e9b-baf5-8d45cc4fec41.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="gary ragman"/>
+         </a>
+         <a href="/u/gary ragman" style="color:#CCC;">
+          <b>
+           gary ragman
+          </b>
+         </a>
+         created
+         <a href="/game/play/7c1fc5c6-ece4-4316-abca-6eb01a2f1e62" style="color:#CCC;">
+          Game
+          <b>
+           5NOHV
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          15 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/BlitzKriegster">
+          <img class="mediumAvatar" src="/media/122d071c-3c7b-4d29-8d02-961df2204fd4.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="BlitzKriegster"/>
+         </a>
+         <a href="/u/BlitzKriegster" style="color:#CCC;">
+          <b>
+           BlitzKriegster
+          </b>
+         </a>
+         created
+         <a href="/game/play/15f01dc2-c41a-40a7-95bb-db42553bc99a" style="color:#CCC;">
+          Game
+          <b>
+           5NOHR
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          28 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/ford">
+          <img class="mediumAvatar" src="/media/71f6137f-1f55-4007-86c8-07867eaf2f8b.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="ford"/>
+         </a>
+         <a href="/u/ford" style="color:#CCC;">
+          <b>
+           ford
+          </b>
+         </a>
+         joined
+         <a href="/game/play/6baf6cdd-1ab8-4892-a164-8e1d87738de5" style="color:#CCC;">
+          Game
+          <b>
+           5NOHN
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          30 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/kgarbison">
+          <img class="mediumAvatar" src="/media/121eb67a-12ac-4987-a8c2-cf76899de921.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="kgarbison"/>
+         </a>
+         <a href="/u/kgarbison" style="color:#CCC;">
+          <b>
+           kgarbison
+          </b>
+         </a>
+         won
+         <a href="/game/play/12fba60a-2242-45cc-8472-ebd0707d5aa4" style="color:#CCC;">
+          Game
+          <b>
+           5NOHM
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          31 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/kgarbison">
+          <img class="mediumAvatar" src="/media/121eb67a-12ac-4987-a8c2-cf76899de921.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="kgarbison"/>
+         </a>
+         <a href="/u/kgarbison" style="color:#CCC;">
+          <b>
+           kgarbison
+          </b>
+         </a>
+         created
+         <a href="/game/play/12fba60a-2242-45cc-8472-ebd0707d5aa4" style="color:#CCC;">
+          Game
+          <b>
+           5NOHM
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          35 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/Vaslov">
+          <img class="mediumAvatar" src="/media/e6eb1d74-3b37-4898-8bb3-5b0f832963b4.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="Vaslov"/>
+         </a>
+         <a href="/u/Vaslov" style="color:#CCC;">
+          <b>
+           Vaslov
+          </b>
+         </a>
+         created
+         <a href="/game/play/9cd05df6-c444-4067-a563-0300b9c04222" style="color:#CCC;">
+          Game
+          <b>
+           5NOHJ
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          36 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/urgsbane">
+          <img class="mediumAvatar" src="/media/b7b58c90-cca4-492d-a721-85cce8eb6534.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="urgsbane"/>
+         </a>
+         <a href="/u/urgsbane" style="color:#CCC;">
+          <b>
+           urgsbane
+          </b>
+         </a>
+         created
+         <a href="/game/play/7aeeeeb6-a3fe-49e0-a28b-5e2f02f36e33" style="color:#CCC;">
+          Game
+          <b>
+           5NOHH
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          36 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/Marshall1">
+          <img class="mediumAvatar" src="/media/99e89122-a674-4caa-8e25-21a2693f1547.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="Marshall1"/>
+         </a>
+         <a href="/u/Marshall1" style="color:#CCC;">
+          <b>
+           Marshall1
+          </b>
+         </a>
+         won
+         <a href="/game/play/0d2ed8de-5dcf-46ad-bfa6-9f58933690b8" style="color:#CCC;">
+          Game
+          <b>
+           5NOGR
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          38 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/ravatem">
+          <img class="mediumAvatar" src="/media/85bac06b-4c4e-4f99-b2d7-2620f89c19bb.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="ravatem"/>
+         </a>
+         <a href="/u/ravatem" style="color:#CCC;">
+          <b>
+           ravatem
+          </b>
+         </a>
+         won
+         <a href="/game/play/4a243f97-881c-453f-b46e-06bb2e4c536b" style="color:#CCC;">
+          Game
+          <b>
+           5NOGZ
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          40 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/kgarbison">
+          <img class="mediumAvatar" src="/media/121eb67a-12ac-4987-a8c2-cf76899de921.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="kgarbison"/>
+         </a>
+         <a href="/u/kgarbison" style="color:#CCC;">
+          <b>
+           kgarbison
+          </b>
+         </a>
+         won
+         <a href="/game/play/e5a162c8-b86f-405f-8978-f56b8610b61b" style="color:#CCC;">
+          Game
+          <b>
+           5NOH3
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          42 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+         <a href="/u/Marshall1">
+          <img class="mediumAvatar" src="/media/99e89122-a674-4caa-8e25-21a2693f1547.jpg" style="float:left;margin-right:5px;margin-bottom:2px;" title="Marshall1"/>
+         </a>
+         <a href="/u/Marshall1" style="color:#CCC;">
+          <b>
+           Marshall1
+          </b>
+         </a>
+         won
+         <a href="/game/play/9fc4c495-6332-4acd-8342-ba93673e1335" style="color:#CCC;">
+          Game
+          <b>
+           5NOGT
+          </b>
+         </a>
+         <br/>
+         <span style="color:#666666">
+          47 minutes ago
+         </span>
+         <br clear="all"/>
+         <br/>
+        </div>
+        <div id="topActiveGame">
+        </div>
+        <script type="text/javascript">
+         function startPlayNow() {
+        if (!currentUserId) {
+            authCallback = startPlayNow;
+            showLoginDialog();
+            return;
+        }
+        document.location.href = "/playnow";
+    }
+
+    $(document).ready(function () {
+        if (currentMediumAvatar) {
+            $("#playNowUserAvatar").attr("src", currentMediumAvatar);
+        }
+        else {
+            $("#playNowUserAvatar").attr("src", "/images/1x1transparent.gif");
+        }
+        $("#playNowUserAvatar").show();
+    });
+        </script>
+        <table class="searchResult" id="playNowBox">
+         <tr valign="bottom">
+          <td colspan="2" style="padding-left:10px;padding-top:10px;padding-right:10px;">
+           <span class="gameLabel" onclick="startPlayNow();" style="cursor:pointer;">
+            Singleplayer Game
+           </span>
+           <div style="float:right">
+           </div>
+          </td>
+         </tr>
+         <tr>
+          <td style="padding-left:10px;">
+           Rules:
+           <strong>
+            Classic
+           </strong>
+          </td>
+          <td align="right" style="padding-right:10px;">
+           <span class="playerNumber">
+            3
+           </span>
+           players
+          </td>
+         </tr>
+         <tr valign="top">
+          <td style="padding-left:10px;">
+           <img class="boardThumbnail" id="playNow" onclick="startPlayNow();" src="/boardImages/board_4_a221af2f-76a9-4cd5-a5e5-c093b785533f.png" style="cursor:pointer;"/>
+           <br/>
+           <a class="gameInfoLink" href="javaScript: loadBoardInfo('79786a0c-191f-441c-b448-0a4fa223af8b');" id="playNowPreviewLink" style="text-decoration:none;color:#999999;">
+            Preview
+           </a>
+           <br/>
+           <input class="hotButton resultButton" onclick="startPlayNow();" type="button" value="start playing now"/>
+          </td>
+          <td style="padding-right:0px;">
+           <table class="playerGrid">
+            <tr>
+             <td>
+              <img class="mediumAvatar" id="playNowUserAvatar" style="display:none"/>
+             </td>
+             <td>
+              <img alt="Robot Player" class="mediumAvatar" src="/images/RobotMediumAvatar.jpg"/>
+             </td>
+             <td>
+              <img alt="Robot Player" class="mediumAvatar" src="/images/RobotMediumAvatar.jpg"/>
+             </td>
+            </tr>
+            <tr>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+            </tr>
+            <tr>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+             <td>
+              <img class="emptySquare" height="42" src="/images/1x1transparent.gif" width="42"/>
+             </td>
+            </tr>
+           </table>
+          </td>
+         </tr>
+        </table>
+        <script type="text/javascript">
+         function joinBrawl() {
+        $("#joinButton").hide();
+        $("#joinButton").attr("disabled", "disabled");
+        if (!currentUserId) {
+            authCallback = joinBrawl;
+            showLoginDialog();
+            return;
+        }
+
+        if (currentBrawl.Users.length &gt;= 6) {
+            alert("Game is Full");
+            refreshBrawl();
+            return;
+        }
+        $.post("/brawl/join", {}, function (response) {
+            if (response == "Using unlimited games" &amp;&amp; showWarningDialog) {
+                showWarningDialog('Using unlimited games', '');
+            } else {
+                isInBrawl = true;
+            }
+            refreshBrawl();
+        }, "json");
+    }
+
+    function leaveBrawl() {
+        $("#leaveButton").attr("disabled", "disabled");
+        $.post("/brawl/leave", {}, function (response) {
+            refreshBrawl();
+        }, "json");
+    }
+
+
+    var lastBrawlId = '';
+    var isInBrawl = false;
+    var currentBrawl;
+
+    var clockValue = '';
+    $(document).ready(function () {
+        refreshBrawl();
+
+        //start the clock decrementing, do it just this once, so we don't have them stack up.
+        decrementClock();
+    });
+
+    function refreshBrawl() {
+        updateBrawl();
+    }
+
+    function updateBrawl() {
+        $.getJSON("/brawl/current", {}, function (response) {
+            currentBrawl = response;
+            if (isInBrawl) {
+                if (currentBrawl.BrawlId != lastBrawlId) {
+                    document.location.href = '/game/brawl/' + lastBrawlId;
+                    //prepareGame();
+                }
+            }
+            lastBrawlId = currentBrawl.BrawlId;
+            updateBrawlDisplay();
+        });
+    }
+
+    function updateBrawlDisplay() {
+        if (!currentBrawl) {
+            return;
+        }
+
+        clockValue = currentBrawl.RemainingSeconds;
+
+        $("#boardName").text(currentBrawl.Board.Name);
+        $("#previewLink").attr("href", "javaScript: loadBoardInfo('" + currentBrawl.Board.BoardId + "');");
+        $.each(currentBrawl.Board.Images, function (i, image) {
+            if (image.Size == 4) {
+                $("#boardImage").attr("src", image.Url);
+                $("#boardImage").attr("title", currentBrawl.Board.Name);
+            }
+        });
+
+
+        $("#brawlPlayers").empty();
+        var playerList = "";
+        isInBrawl = false;
+        playerList += "&lt;table class='playerGrid'&gt;&lt;tr&gt;";
+
+        $.each(currentBrawl.Users, function (i, user) {
+            if (i == 3) {
+                playerList += "&lt;/tr&gt;&lt;tr&gt;";
+            }
+            playerList += "&lt;td&gt;&lt;a href='" + user.Url + "'&gt;";
+            playerList += "&lt;img class='mediumAvatar' src='/avatar/medium/" + user.UserId + "' title='" + user.UserName + "' align='middle' /&gt;";
+            playerList += "&lt;/a&gt;&lt;/td&gt;";
+
+            if (currentUserId) {
+                if (currentUserId == user.UserId) {
+                    isInBrawl = true;
+                }
+            }
+        });
+
+
+        var remainder = 6 - currentBrawl.Users.length;
+        var columnNumber = currentBrawl.Users.length;
+
+        if (remainder &gt; 0) {
+            for (var i = 0; i &lt; remainder; i++) {
+                if (columnNumber == 3) {
+                    playerList += "&lt;/tr&gt;&lt;tr&gt;";
+                }
+                playerList += "&lt;td&gt;&lt;a href='javascript:joinBrawl();'&gt;&lt;img class='plusImage' src='/images/1x1transparent.gif' height='42' width='42' title='open'&gt;&lt;/a&gt;&lt;/td&gt;";
+                columnNumber++;
+            }
+        }
+
+        playerList += "&lt;/tr&gt;";
+        playerList += "&lt;tr&gt;";
+        for (var i = 0; i &lt; 3; i++) 
+        {
+            playerList += "&lt;td&gt;&lt;img class='emptySquare' src='/images/1x1transparent.gif' height='42' width='42'&gt;&lt;/td&gt;";
+        }
+        playerList += "&lt;tr&gt;";
+        playerList += "&lt;/table&gt;";
+        $("#brawlPlayers").append(playerList);
+
+        if (isInBrawl) {
+            $("#joinButton").hide();
+            $("#leaveButton").show();
+        }
+        else {
+            $("#joinButton").show();
+            $("#leaveButton").hide();
+        }
+        $("#joinButton").attr("disabled", "");
+        $("#leaveButton").attr("disabled", "");
+        //update the brawl info at a particular interval via setTimeout
+        setTimeout("updateBrawl();", 30 * 1000);
+    }
+
+    function decrementClock() {
+        if (!currentBrawl) {
+            setTimeout("decrementClock();", 1000);
+            return;
+        }
+
+        clockValue = clockValue - 1;
+        if (clockValue &lt;= 0) {
+            $("#pageHeader").hide();
+            $("#startDisplay").show();
+            setTimeout("refreshBrawl();", 500);
+            setTimeout("decrementClock();", 1000);
+            return;
+        }
+        $("#startDisplay").hide();
+        $("#pageHeader").show();
+        
+
+        var display = "";
+
+        if (clockValue &lt; 200) {
+            $("#brawlBox").attr("style", "");//if we were to change bgcolor, or something, we could do it here.
+        }
+        else {
+            $("#brawlBox").attr("style", "");
+        }
+
+        var remaining = clockValue;
+
+        var secondsPerHour = 60 * 60;
+        if (remaining &gt;= secondsPerHour) {
+            var hours = Math.floor(remaining / secondsPerHour);
+            var displayHours = '' + hours;
+            if (displayHours.length == 1) {
+                displayHours = "0" + displayHours;
+            }
+            display += displayHours + "&lt;b&gt;:&lt;/b&gt;";
+            remaining = remaining - (hours * secondsPerHour);
+        }
+
+        var secondsPerMinute = 60;
+        if (remaining &gt;= secondsPerMinute) {
+            var minutes = Math.floor(remaining / secondsPerMinute);
+            var displayMinutes = '' + minutes;
+            if (displayMinutes.length == 1) {
+                displayMinutes = "0" + displayMinutes;
+            }
+            display += displayMinutes + "&lt;b&gt;:&lt;/b&gt;";
+            remaining = remaining - (minutes * secondsPerMinute);
+        }
+        else {
+            display += "00&lt;b&gt;:&lt;/b&gt;";
+        }
+
+        var displaySeconds = '' + remaining;
+        if (displaySeconds.length == 1) {
+            displaySeconds = "0" + displaySeconds;
+        }
+        display += displaySeconds;
+        $("#timer").html(display);
+
+        //tail recursion is fun!
+        setTimeout("decrementClock();", 1000);
+    }
+
+    function prepareGame() {
+        $("#divLightningPrep").show();
+        checkForGame();
+    }
+
+    var tries = 0;
+    var maxTries = 3;
+    function checkForGame() {
+        $.getJSON("/brawl/CheckForLightningGame", {}, function (response) {
+            if (response == "No Game Id") {
+                tries++;
+                if (tries &gt;= maxTries) {
+                    document.location.href = '/lightningGame/empty/';
+                } else {
+                    setTimeout("checkForGame();", 1000);
+                }
+            } else {
+                document.location.href = '/game/play/' + response.GameId;
+            }
+        });
+    }
+        </script>
+        <div style="position: relative;">
+         <div id="divLightningPrep" style="background-color: white; position: absolute; top: 50px; left: 400px; width: 300px; height: 100px; padding-top: 12px; padding-left: 15px; border: 5px solid black; display: none;">
+          Your lightning match is being set up.
+          <div style="margin-left: 120px; margin-top: 20px;">
+           <img src="/images/roller.gif"/>
+          </div>
+         </div>
+        </div>
+        <table class="searchResult" id="brawlBox">
+         <tr valign="bottom">
+          <td colspan="2" style="padding-left:10px;padding-top:10px;padding-right:10px;">
+           <span id="pageHeader">
+            <span class="gameLabel">
+             Next Lightning Game starts in
+             <strong>
+              <span id="timer">
+              </span>
+             </strong>
+            </span>
+           </span>
+           <span id="startDisplay" style="display:none">
+            <span class="gameLabel">
+             Lightning Game Starting
+            </span>
+           </span>
+           <div style="float:right">
+            <img alt="Lightning game. 5 minutes to start and finish your turn" src="/images/icon_lightning_white.png" style="margin-left:4px;" title="Lightning game. 5 minutes to start and finish your turn"/>
+           </div>
+          </td>
+         </tr>
+         <tr>
+          <td style="padding-left:10px;">
+           Turn length:
+           <strong>
+            5 minutes
+           </strong>
+          </td>
+          <td align="right" style="padding-right:10px;">
+           <span class="playerNumber">
+            2 to 6
+           </span>
+           players
+          </td>
+         </tr>
+         <tr valign="top">
+          <td style="padding-left:10px;">
+           <img class="boardThumbnail" id="boardImage"/>
+           <br/>
+           <a class="gameInfoLink" href="" id="previewLink" style="text-decoration:none;color:#999999;">
+            Preview
+           </a>
+           <br/>
+           <input alt="Play Online Conquest Game" class="coolButton resultButton" id="joinButton" onclick="joinBrawl();" style="display:none;" type="button" value="join this game"/>
+           <input class="coldButton resultButton" id="leaveButton" onclick="leaveBrawl();" style="display:none;" type="button" value="leave game"/>
+          </td>
+          <td style="padding-right:0px;">
+           <div id="brawlPlayers">
+           </div>
+          </td>
+         </tr>
+        </table>
+        <div id="joinGameResultsHP">
+        </div>
+        <div style="clear:both;">
+        </div>
+       </div>
+      </div>
+     </div>
+     <script type="text/javascript">
+      $(document).ready(function () {
+                 loadActiveGame();
+             });
+
+             var activeGameCount = 0;
+             function postLoginRefresh() {
+                 $("#topActiveGame").hide();
+                 $("#joinGameResultsHP").hide();
+                 loadActiveGame();
+                 loadJoinableGames();
+             }
+
+             function loadActiveGame() {
+                 if(!currentUserId)
+                 {
+                    loadJoinableGames();
+                    return;
+                }
+                 var gameQuery = new Object();
+                 gameQuery.start = 0;
+                 gameQuery.currentUserId = currentUserId;
+                 gameQuery.gameStatus = "Active";
+                 gameQuery.count = 2;
+                 getGames(gameQuery, handleActiveResult);
+             }
+
+             function loadJoinableGames() {
+                 var gameQuery = new Object();
+                 gameQuery.start = 0;
+                 if (!isPremiumMember) {
+                     //no lightning or team games for non-premium players
+                     gameQuery.isPremiumOnly = 0;
+                     gameQuery.teamCount = 0;
+                     gameQuery.turnStartMinutes = -5;
+                 }
+                 gameQuery.count = 3;
+                 if (activeGameCount == 1) {
+                     gameQuery.count = 2;
+                 }
+                 gameQuery.isPublic = 1;
+                 gameQuery.isPremiumOnly = 0;
+                 gameQuery.gameStatus = "Pending";
+                 getGames(gameQuery, handleJoinResult);
+                 $("#twitterStream").show();
+             }
+
+             function handleActiveResult(activeQueryResult) {
+                 if (activeQueryResult.TotalGames &gt; 0) {
+                     var outputArea = $("#topActiveGame");
+                     displayResults(activeQueryResult, outputArea);
+                     activeGameCount = 1;
+                     $("#topActiveGame").show();
+                 }
+                 else
+                 {
+                    $("#topActiveGame").hide();
+                 }
+                loadJoinableGames();
+             }
+
+             function handleJoinResult(queryResult) {
+                 if (queryResult.TotalGames == 0) {
+                     $("#joinGameResultsHP").hide();
+                     return;
+                 }
+                 $("#joinGameResultsHP").show();
+                 var outputArea = $("#joinGameResultsHP");
+                 displayResults(queryResult, outputArea);
+             }
+        &lt;/script&gt;
+
+        &lt;script type="text/javascript"&gt;
+            function playFree() {
+                if (!currentUserId) {
+                    authCallback = bounceToWelcome;
+                    document.location.href = "/Game/MyGames?from=playfree";
+                }
+                else {
+                    bounceToWelcome();
+                }
+            }
+     </script>
+     <script type="text/javascript">
+      function closeInfoDialog() {
+        $("#boardInfoDialog").dialog("close");
+    }
+
+    function loadBoardInfo(boardId) {
+        $.getJSON("/board/detail/" + boardId, {},
+        function (boardDetails) {
+            var thumbnailUrl = "";
+            $.each(boardDetails.Images, function (i, boardImage) {
+                if (boardImage.Size == 1) {
+                    $("#boardInfoImage").attr("src", boardImage.Url);
+                }
+                if (boardImage.Size == 4) {
+                    thumbnailUrl = boardImage.Url;
+                }
+            });
+
+            var info = "";
+            info += "&lt;big&gt;" + boardDetails.Name + "&lt;/big&gt;&lt;br&gt;";
+
+            if (thumbnailUrl) {
+                info += "&lt;img src='" + thumbnailUrl + "'/&gt;&lt;br&gt;";
+            }
+            info += "&lt;br&gt;&lt;br&gt;";
+
+
+            var zoneTable = "&lt;table&gt;&lt;tr&gt;&lt;th&gt;zone&lt;/th&gt;&lt;th&gt;bonus&lt;/th&gt;&lt;/tr&gt;";
+
+            $.each(boardDetails.Continents, function (i, zone) {
+                zoneTable += "&lt;tr&gt;&lt;td&gt;" + zone.Name + "&lt;/td&gt;";
+                zoneTable += "&lt;td align='center'&gt;" + zone.OccupationBonus + "&lt;/td&gt;&lt;/tr&gt;";
+            });
+
+            if (boardDetails.Continents.length &gt; 0) {
+                info += zoneTable;
+            }
+
+            $("#boardInfoDetails").empty();
+            $("#boardInfoDetails").append(info);
+
+            $("#boardInfoDialog").dialog({ draggable: true, modal: true, resizable: false, width: 1250, height: 700, show: 'fade', hide: 'fade', title: "" });
+            setupJqueryDialog();
+        });
+    }
+     </script>
+     <div id="boardInfoDialog" style="display:none;background-color:#101010;padding:0px;">
+      <div style="position:relative">
+       <img id="boardInfoImage" onclick="closeInfoDialog();" src="" style="z-index:8;"/>
+       <div class="callout">
+        <div class="calloutInset">
+         <div style="margin-left:auto;margin-right:auto;width:180px;">
+          <div id="boardInfoDetails">
+          </div>
+          <input class="coolButton" onclick="closeInfoDialog();" type="button" value="close"/>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="footer" style="height:auto; max-height:300px;">
+     <table class="invisible" width="100%">
+      <tr>
+       <td colspan="3">
+        <hr/>
+       </td>
+      </tr>
+      <tr>
+       <td align="left" valign="top">
+        <div style="float: left;">
+         Copyright  2015. Victors United. All Rights Reserved.
+         <a href="/contact">
+          Contact
+         </a>
+         |
+         <a href="/help/legal">
+          Terms and Conditions
+         </a>
+         |
+         <a href="/help/privacy">
+          Privacy Policy
+         </a>
+         |
+         <a href="/help/faq">
+          FAQ
+         </a>
+        </div>
+        <br/>
+        <br/>
+       </td>
+       <td width="20%">
+       </td>
+       <td align="right">
+       </td>
+      </tr>
+      <tr>
+      </tr>
+     </table>
+     <!-- Google Code for Remarketing tag -->
+     <script type="text/javascript">
+      /* &lt;![CDATA[ */
+                    var google_conversion_id = 974924339;
+                    var google_conversion_label = "LYPACMXM7QQQs9Tw0AM";
+                    var google_custom_params = window.google_tag_params;
+                    var google_remarketing_only = true;
+                    /* ]]&gt; */
+     </script>
+     <script src="//www.googleadservices.com/pagead/conversion.js" type="text/javascript">
+     </script>
+     <noscript>
+      <div style="display:inline;">
+       <img alt="" height="1" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/974924339/?value=0&amp;label=LYPACMXM7QQQs9Tw0AM&amp;guid=ON&amp;script=0" style="border-style:none;" width="1"/>
+      </div>
+     </noscript>
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   function closeGameInfo() {
+        $("#gameInfo").dialog("close");
+    }
+
+    function getPlayerTable(isVerbose) {
+        var table = "&lt;div id='playerHeaderRow' style='position:relative;'&gt;&lt;table class='playerTable'&gt;&lt;tr&gt;&lt;td align='left' colspan='3' id='ribbonTD' style='height:35px; border-top-width:0px;'&gt;";
+        table += "&lt;div style='position:relative' &gt;&lt;img style='margin-top:3px; ' src='/images/g_player_ribbon_long.png'&gt;"
+        table += "&lt;div id='playerHeader' style='position:absolute; z-index:10; padding-left:10px; top:8px; font-weight:bold; color:white;'&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;";
+        if (isVerbose) {
+            if (currentGame.TeamCount) {
+                table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_team.png' alt='team' title='team'/&gt;&lt;br&gt;team&lt;/td&gt;";
+            }
+            table += "&lt;td style='border-top-width:0px; padding:3px; font-size:10px; text-align:center;'&gt;&lt;img src='/images/g_icon_r.png' alt='regions occupied' title='regions occupied'/&gt;&lt;br&gt;regions&lt;/td&gt;";
+            table += "&lt;td style='border-top-width:0px; padding:3px;font-size:10px;text-align:center;'&gt;&lt;img src='/images/g_icon_t.png' alt='troops' title='troops'/&gt;&lt;br&gt;troops&lt;/td&gt;";
+            table += "&lt;td style='border-top-width:0px; padding:3px;font-size:10px;text-align:center;'&gt;&lt;img src='/images/g_icon_td.png' alt='troops due' title='troops due'/&gt;&lt;br&gt;troops due&lt;/td&gt;";
+            if (currentGame.CardOption != "3") {
+                table += "&lt;td style='border-top-width:0px; padding:3px;font-size:10px;text-align:center;'&gt;&lt;img src='/images/g_icon_c.png' alt='cards' title='cards'/&gt;&lt;br&gt;cards&lt;/td&gt;&lt;/tr&gt;";
+            }
+        }
+        else {
+            if (currentGame.TeamCount) {
+                table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_team.png' alt='team' title='team'/&gt;&lt;/td&gt;";
+            }
+            table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_r.png' alt='regions occupied' title='regions occupied'/&gt;&lt;/td&gt;";
+            table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_t.png' alt='troops' title='troops'/&gt;&lt;/td&gt;";
+            table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_td.png' alt='troops due' title='troops due'/&gt;&lt;/td&gt;";
+            if (currentGame.CardOption != "3") {
+                table += "&lt;td style='border-top-width:0px; text-align:center;width:26px;'&gt;&lt;img src='/images/g_icon_c.png' alt='cards' title='cards'/&gt;&lt;/td&gt;";
+            }
+        }
+        if (isVerbose) {
+            table += "&lt;/tr&gt;&lt;tr&gt;";
+        } else {
+            var paddingwidth = "width:27px;";
+            if (currentGame.Players.length &lt; 6) { paddingwidth = "width:10px;"; }
+            table += "&lt;td style='border-top-style:none;"+paddingwidth+"'&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;";
+            table += "&lt;div id='playerHolder' class='playerList'&gt;&lt;div id='Players' style='' &gt;&lt;table class='playerTable'&gt;&lt;tr&gt;";
+        }
+        var startIndex = 0;
+        if (currentGame.CurrentUserId) {
+            for (index = 0; index &lt; currentGame.Players.length; index++) {
+                if (currentGame.CurrentUserId == currentGame.Players[index].UserId) {
+                    startIndex = index;
+                    break;
+                }
+            }
+        }
+
+        var sortIndex = 0;
+        var sortedPlayers = new Array();
+        var inactivePlayersIndex = 0;
+        var inactivePlayers = new Array();        
+        for (index = startIndex; index &lt; currentGame.Players.length; index++) {
+            if (!currentGame.Players[index].IsActive) {
+                inactivePlayers[inactivePlayersIndex] = currentGame.Players[index];
+                inactivePlayersIndex++;
+            } else {            
+                sortedPlayers[sortIndex] = currentGame.Players[index];
+                sortIndex++;
+            }
+        }
+        if (startIndex &gt; 0) {
+            for (index = 0; index &lt; startIndex; index++) {
+                if (!currentGame.Players[index].IsActive) {
+                    inactivePlayers[inactivePlayersIndex] = currentGame.Players[index];
+                    inactivePlayersIndex++;
+                } else {
+                    sortedPlayers[sortIndex] = currentGame.Players[index];
+                    sortIndex++;
+                }
+            }
+        }
+        // Add inactive players to bottom of the list
+        if (inactivePlayersIndex &gt; 0) { 
+            for (index = 0; index &lt; inactivePlayersIndex; index++) {
+                sortedPlayers[sortIndex] = inactivePlayers[index];
+                sortIndex++;
+            }
+        }
+
+        $.each(sortedPlayers, function (i, player) {
+            var styleSpan = "&lt;span style='";
+            styleSpan += "'&gt;";
+
+            if (player.PlayerNumber) {
+            }
+            table += "&lt;tr&gt;";
+            var background = "#FFFFFF";
+            if (i % 2 != 0) {
+                background = "#e3e0e0";
+            }
+            table += "&lt;td style='width:8px; border-top-width:0px;'&gt;&lt;/td&gt;&lt;td style='width:28px; background-color:" + background + "'&gt;";
+
+
+            if (player.TinyAvatar) {
+                if (player.ProfileUrl) {
+                    table += "&lt;a href='" + player.ProfileUrl + "'&gt;";
+                }
+
+
+                if (!player.IsActive) {
+                    table += "&lt;img style='background-image:url(" + player.TinyAvatar + ")' src='/images/eliminated_tiny.png' class='tinyAvatar' alt='" + player.UserName + "'/&gt;";
+                }
+                else {
+                    if (player.IsChallenge) {
+                        playerImage = "&lt;img style='background-image:url(" + player.TinyAvatar + ")' src='/images/challenge_overlay_tiny.png' class='tinyAvatar' alt='" + player.UserName + "'/&gt;";
+                    }
+                    else {
+                        var playerImage = "&lt;img src='" + player.TinyAvatar + "' class='tinyAvatar' alt='" + player.UserName + "' onmouseover=userMouseOver('" + player.UserId + "'); onmouseout=userMouseOut();/&gt;";
+                        if (player.UserId == currentGame.CurrentUserId) {
+                            playerImage = "&lt;img style='background-image:url(" + player.TinyAvatar + ")' src='/images/your_turn_small.png' class='tinyAvatar' alt='" + player.UserName + "'/&gt;";
+                            if (currentGame.TurnStarted) {
+                                playerImage = "&lt;img style='background-image:url(" + player.TinyAvatar + ")' src='/images/active_turn_small.png' class='tinyAvatar' alt='" + player.UserName + "'/&gt;";
+                            }
+                        }
+                    }
+                    table += playerImage;
+                }
+
+                if (player.ProfileUrl) {
+                    table += "&lt;/a&gt;";
+                }
+            }
+            table += "&lt;/td&gt;";
+
+            table += "&lt;td style='background-color:" + background + "'&gt;";
+
+            if (player.ProfileUrl) {
+                table += "&lt;a href='" + player.ProfileUrl + "' style='text-decoration:none;'&gt;";
+            }
+            table += styleSpan
+            table += "&lt;div class='userBox userColor" + player.PlayerColorId + "' onmouseover=userMouseOver('" + player.UserId + "'); onmouseout=userMouseOut();&gt;";
+            table += player.UserName;
+            table += "&lt;/div&gt;";
+            table += "&lt;/span&gt;";
+
+            if (player.Regions == null) {
+                player.Regions = "?";
+            }
+
+            if (player.Troops == null) {
+                player.Troops = "?";
+            }
+
+            if (player.TroopsDue == null) {
+                player.TroopsDue = "?";
+            }
+
+            if (player.ProfileUrl) {
+                table += "&lt;/a&gt;";
+            }
+            table += "&lt;/td&gt;";
+
+            if (currentGame.TeamCount) {
+                table += "&lt;td align='center' style='width:26px; background-color:" + background + "'&gt;" + styleSpan + getTeamName(player.TeamNumber) + "&lt;/span&gt;&lt;/td&gt;";
+            }
+
+            table += "&lt;td align='center' style='width:26px; background-color:" + background + "'&gt;" + styleSpan + player.Regions + "&lt;/span&gt;&lt;/td&gt;";
+            table += "&lt;td align='center' style='width:26px;background-color:" + background + "'&gt;" + styleSpan + player.Troops + "&lt;/span&gt;&lt;/td&gt;";
+            table += "&lt;td align='center' style='width:26px;background-color:" + background + "'&gt;" + styleSpan + player.TroopsDue + "&lt;/span&gt;&lt;/td&gt;";
+            if (currentGame.CardOption != "3") {
+                table += "&lt;td align='center' style='width:28px;background-color:" + background + "'&gt;" + styleSpan + player.CardCount + "&lt;/span&gt;&lt;/td&gt;";
+            }
+            table += "&lt;td style='border-top-width:0px; width:8px;'&gt;&lt;/td&gt;&lt;/tr&gt;";
+        });
+
+        table += "&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;";
+        return table;
+    }
+
+    var currentGame;
+
+
+    function getGameRules() {
+        var helpText = new Array();
+        var cardText
+        var gameRules = ""
+
+
+        if (currentGame.TurnStartMinutes == 1440 &amp;&amp; currentGame.TurnFinishMinutes == 60) {
+            helpText.push("speed_normal");
+            gameRules += "&lt;span class='grayText'&gt;Speed:&lt;/span&gt; &lt;b&gt;normal&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.TurnStartMinutes == 30 &amp;&amp; currentGame.TurnFinishMinutes == 5) {
+            helpText.push("speed_short");
+            gameRules += "&lt;span class='grayText'&gt;Speed:&lt;/span&gt; &lt;b&gt;short&lt;/b&gt; &lt;br&gt;";
+        }
+
+        if (currentGame.TurnStartMinutes == 5 &amp;&amp; currentGame.TurnFinishMinutes == -1) {
+            helpText.push("speed_lightning");
+            gameRules += "&lt;span class='grayText'&gt;Speed:&lt;/span&gt; &lt;b&gt;lightning&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (!currentGame.TurnStartMinutes &amp;&amp; !currentGame.TurnFinishMinutes) {
+            helpText.push("speed_casual");
+            gameRules += "&lt;span class='grayText'&gt;Speed:&lt;/span&gt; &lt;b&gt;casual&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.CardOption == 1) {
+            helpText.push("cards_classic");
+            gameRules += "&lt;span class='grayText'&gt;Cards:&lt;/span&gt; &lt;b&gt;classic escalating&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.CardOption == 4) {
+            helpText.push("cards_slow");
+            gameRules += "&lt;span class='grayText'&gt;Cards:&lt;/span&gt; &lt;b&gt;slow escalating&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.CardOption == 2) {
+            helpText.push("cards_flat");
+            gameRules += "&lt;span class='grayText'&gt;Cards:&lt;/span&gt; &lt;b&gt;flat rate&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.CardOption == 3) {
+            helpText.push("cards_none");
+            gameRules += "&lt;span class='grayText'&gt;Cards:&lt;/span&gt; &lt;b&gt;none&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.TeamCount) {
+            var playersPerTeam = currentGame.PlayerCount / currentGame.TeamCount;
+            gameRules += "&lt;span class='grayText'&gt;Teams:&lt;/span&gt; &lt;b&gt;" + currentGame.TeamCount + " teams of " + playersPerTeam + "&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.InitialDeploymentType == 1) {
+            gameRules += "&lt;span class='grayText'&gt;Initial Deploy:&lt;/span&gt; &lt;b&gt;Manual&lt;/b&gt;&lt;br/&gt;";
+        }
+
+        if (currentUserId &amp;&amp; currentGame) {
+            if (getPlayer) {
+                var currentPlayer = getPlayer(currentUserId);
+                if (currentPlayer) {
+                    if (currentPlayer.TeamNumber) {
+                        gameRules += "&lt;span class='grayText'&gt;Team:&lt;/span&gt; &lt;b&gt;" + getTeamName(currentPlayer.TeamNumber) + "&lt;/b&gt;&lt;br&gt;";            
+                    }
+                }
+            }
+        }
+
+        if (currentGame.ReinforcementDepth == 0) {
+            helpText.push("reinforce_none");
+            gameRules += "&lt;span class='grayText'&gt;Reinforcements:&lt;/span&gt; &lt;b&gt;none&lt;/b&gt;&lt;br&gt;";
+        }
+        else {
+            if (currentGame.ReinforcementDepth == null) {
+                helpText.push("reinforce_chained");
+                if (currentGame.ReinforcementCount == null) {
+                    gameRules += "&lt;span class='grayText'&gt;Reinforcements: &lt;/span&gt; &lt;b&gt;unlimited&lt;/b&gt;&lt;br&gt;";
+                }
+                else {
+                    gameRules += "&lt;span class='grayText'&gt;Reinforcements: &lt;/span&gt; &lt;b&gt;chained&lt;/b&gt;&lt;br&gt;";
+                }
+            }
+            if (currentGame.ReinforcementDepth == 1) {
+                helpText.push("reinforce_adjacent");
+                gameRules += "&lt;span class='grayText'&gt;Reinforcements: &lt;/span&gt;  &lt;b&gt;adjacent&lt;/b&gt;&lt;br&gt;";
+            }
+        }
+
+        if (currentGame.EnemyTroopVisibility == null &amp;&amp; currentGame.EnemyOccupationVisibility == null) {
+            gameRules += "";
+        }
+
+        if (currentGame.EnemyOccupationVisibility == 1 || currentGame.EnemyTroopVisibility == 1) {
+            helpText.push("fog_war");
+            gameRules += "&lt;span class='grayText'&gt;Fog of War:&lt;/span&gt; &lt;b&gt;yes&lt;/b&gt;&lt;br&gt;";
+        }
+
+        /**
+        if (currentGame.EnemyOccupationVisibility == 0) {
+            helpText.push("fog_noocc");
+            gameRules += "&lt;span class='grayText'&gt;Fog of war:&lt;/span&gt; &lt;b&gt;no occupations&lt;/b&gt;&lt;br&gt;";
+        }
+
+
+        if (currentGame.EnemyTroopVisibility == 1) {
+            helpText.push("fog_adjacenttroops");
+            gameRules += "&lt;span class='grayText'&gt;Fog of war:&lt;/span&gt; &lt;b&gt;adjacent troops&lt;/b&gt;&lt;br&gt;";
+        }
+
+        if (currentGame.EnemyTroopVisibility == 0) {
+            helpText.push("fog_notroops");
+            gameRules += "&lt;span class='grayText'&gt;Fog of war:&lt;/span&gt; &lt;b&gt;no troops&lt;/b&gt;&lt;br&gt;";
+        }
+        **/
+        gameRules = "&lt;div id ='gameRules' class='playControlsHeader'&gt;Game Rules" + placeHelp('game_rules', helpText) + "&lt;/div&gt;" + gameRules;
+        return gameRules;
+    }
+
+    function showGameInfo(gameId)
+    {
+        $("#gameInfo").dialog({ draggable: false, modal: true, resizable: false, width: 425 });
+        $("#players").empty();
+        setupJqueryDialog();
+        $.getJSON("/game/detail/" + gameId, {},
+
+       function (game) {
+           currentGame = game;
+           $("#boardInfo").empty();
+           $("#boardInfo").append("&lt;B&gt;" + currentGame.BoardName + "&lt;/B&gt;&lt;br&gt;");
+           if (currentGame.BoardThumbnail) {
+               $("#boardInfo").append("&lt;img src='" + currentGame.BoardThumbnail + "'&gt;");
+           }
+
+           if (currentGame.Status == 0) {
+               $("#gameInfoStatusLabel").text("Status: pending");
+           }
+
+           if (currentGame.Status == 1) {
+               $("#gameInfoStatusLabel").text("Status: active");
+           }
+
+           if (currentGame.Status == 2) {
+               $("#gameInfoStatusLabel").text("Status: finished");
+           }
+
+           if (currentGame.Status == 3) {
+               $("#gameInfoStatusLabel").text("Status: waiting on challenge");
+           }
+
+
+           if (currentGame.CurrentRound) {
+               $("#gameInfoRoundNumber").text("Round: " + currentGame.CurrentRound);
+           }
+
+
+           $("#gameRules").empty();
+           $("#gameRules").append(getGameRules());
+
+
+           var playerTable = getPlayerTable(true);
+           $("#players").append(playerTable);
+           displayClock();
+           applyUserColorStyles();
+       });
+   }
+
+   var initialClockValue = "";
+   function displayClock() {
+       if (!currentGame) {
+           return;
+       }
+
+       if (currentGame.SecondsToFinishTurn) {
+            initialClockValue = currentGame.SecondsToFinishTurn;
+           updateClock(currentGame.SecondsToFinishTurn, currentGame.SecondsToFinishTurn, "Time left to finish turn");
+       }
+       else {
+           if (currentGame.SecondsToStartTurn) {
+               initialClockValue = currentGame.SecondsToStartTurn;
+                var title = "Time left to start turn";
+                if (currentGame.Status == 0 || currentGame.Status == 3) {
+                    title = "Time left to accept challenge";
+                }
+               updateClock(currentGame.SecondsToStartTurn, currentGame.SecondsToStartTurn, title);
+           }
+       }
+
+       if (!currentGame.SecondsToStartTurn &amp;&amp; !currentGame.SecondsToFinishTurn) {
+           $("#playerHeader").append("Players");
+       }
+    }
+
+    function updateClock(initialSeconds, seconds, title) {
+        if (initialSeconds != initialClockValue) {
+            return;
+        }
+        var display = formatRemainingSeconds(seconds);
+        if (display =="0") {
+            setTimeout("updateCurrentGame()", 1000 * 12);
+            updateCurrentGame();
+        }
+       $("#playerHeader").empty();
+       if (display) {
+           $("#playerHeader").append(display);
+           $("#playerHeader").attr("title", title);
+           seconds = seconds - 1;
+           setTimeout("updateClock(" + initialSeconds + "," + seconds + ",'" + title + "')", 1 * 1000);
+       } 
+   }
+
+    function formatRemainingSeconds(remainingSeconds) {
+        if(!remainingSeconds)
+        {
+            return;
+        }
+
+        if (remainingSeconds &lt; 0) {
+            return;
+        }
+
+        if (remainingSeconds == 0) {
+            return "0";
+        }
+
+        var returnValue = "";
+        var days = Math.floor(remainingSeconds / (24 * 60 * 60 ));
+        if (days &gt;= 1) {
+            returnValue += days + "&lt;b&gt;:&lt;/b&gt;";
+            remainingSeconds = remainingSeconds - (days * 24 * 60 * 60);
+        }
+
+        var hours = Math.floor(remainingSeconds / (60*60));
+        if (hours &gt;= 1) {
+            var displayHours = '' + hours;
+            if (hours.length == 1) {
+                displayHours = "0" + displayHours;
+            }
+            returnValue += displayHours + "&lt;b&gt;:&lt;/b&gt;";
+        }
+        remainingSeconds = remainingSeconds - (hours * 60 * 60);
+
+        var minutes = Math.floor(remainingSeconds / (60));
+        if(minutes &gt;= 1)
+        {
+            var displayMinutes = '' + minutes;
+            if(displayMinutes.length==1) {
+                displayMinutes = "0" + displayMinutes;
+            }
+            returnValue += displayMinutes + "&lt;b&gt;:&lt;/b&gt;";
+        }
+
+        remainingSeconds = remainingSeconds - (minutes * 60);
+
+        var displaySeconds = '' + remainingSeconds;
+        if (displaySeconds.length == 1) {
+            displaySeconds = "0" + displaySeconds;
+        }
+
+        returnValue += displaySeconds;
+        return returnValue;
+    }
+
+    function regionMouseover(regionId) {
+            if (!regionId) {
+            return;
+        }
+
+        if (!currentGame) {
+            return;
+        }
+
+        if (!currentGame.GameState) {
+            return;
+        }
+        //ensure it is clear - for iPad
+        userMouseOut();
+        var userId = getOccupationUserId(regionId);
+        if (!userId) {
+            // In the case of unoccupied regions
+            userId = '';
+        }
+
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+
+        if (!fxCanvas.getContext) {
+            return;
+        }
+
+        highlightRegion(regionId, userId);
+    }
+
+    function highlightZoneRegion(regionId) {
+        if (!regionId) {
+            return;
+        }
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+
+        if (!fxCanvas.getContext) {
+            return;
+        }
+
+        var fxContext = fxCanvas.getContext("2d");
+
+
+        var geometry = getRegionGeometry(regionId);
+        if (!geometry) {
+            return;
+        }
+
+        if (!geometry.Perimeter) {
+            return;
+        }
+
+        var firstPoint = true;
+        fxContext.beginPath();
+        $.each(geometry.Perimeter, function (i, perimeterPoint) {
+            if (firstPoint) {
+                fxContext.moveTo(perimeterPoint.X, perimeterPoint.Y);
+            }
+            firstPoint = false;
+            fxContext.lineTo(perimeterPoint.X, perimeterPoint.Y);
+        });
+
+        fxContext.closePath();
+        var fillColor = hex2rgb("#FFFFFF", 0.7);
+        fxContext.fillStyle = fillColor;
+        fxContext.fill();
+
+        var borderColor = hex2rgb("#FFFFFF", 0.95);
+        fxContext.strokeStyle = borderColor;
+        fxContext.lineWidth = 6;
+        fxContext.stroke();
+
+        var borderColor2 = hex2rgb("#F57B30", 0.9);
+        fxContext.strokeStyle = borderColor2;
+        fxContext.lineWidth = 1;
+        fxContext.stroke();
+    }
+
+    function clearFxCanvas() {
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+        var temp = fxCanvas.width;
+        fxCanvas.width = 0;
+        fxCanvas.width = temp;
+    }
+
+    function userMouseOut() {
+        clearFxCanvas();
+    }
+
+
+    function highlightRegion(regionId, userId) {
+        if (!regionId) {
+            return;
+        }
+        if (!userId) {
+            return;
+        }
+
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+
+        if (!fxCanvas.getContext) {
+            return;
+        }
+
+        var fxContext = fxCanvas.getContext("2d");
+
+
+        var geometry = getRegionGeometry(regionId);
+        if (!geometry) {
+            return;
+        }
+
+        if (!geometry.Perimeter) {
+            return;
+        }
+        var player = getPlayer(userId);
+        if (!player) {
+            return;
+        }
+        
+        var firstPoint = true;
+        fxContext.beginPath();
+        $.each(geometry.Perimeter, function (i, perimeterPoint) {
+            if (firstPoint) {
+                fxContext.moveTo(perimeterPoint.X, perimeterPoint.Y);
+            }
+            firstPoint = false;
+            fxContext.lineTo(perimeterPoint.X, perimeterPoint.Y);
+        });
+
+        fxContext.closePath();
+        var fillColor = hex2rgb("#FFFFFF", 0.25);
+        fxContext.fillStyle = fillColor;
+        fxContext.fill();
+
+        var colorSet = getColorSet(player.PlayerColorId);
+        var borderColor = hex2rgb(colorSet.end, 0.4);
+        fxContext.strokeStyle = borderColor;
+        fxContext.lineWidth = 6;
+        fxContext.stroke();
+
+        var borderColor2 = hex2rgb(colorSet.start, 0.9);
+        fxContext.strokeStyle = borderColor2;
+        fxContext.lineWidth = 2;
+        fxContext.stroke();
+    }
+
+    function userMouseOver(userId) {
+        if (!userId) {
+            return;
+        }
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+
+        if (!fxCanvas.getContext) {
+            return;
+        }
+
+        var fxCanvas = document.getElementById("fxCanvas");
+        var fxContext = fxCanvas.getContext("2d");
+
+        fxCanvas.width = fxCanvas.width;
+        var occupations = currentGame.GameState.Occupations;
+        $.each(occupations, function (i, occupation) {
+            if (occupation.UserId == userId) {
+                    var regionId = occupation.RegionId;
+                    highlightRegion(regionId, userId);
+            }
+        });
+        }
+
+        function zoneMouseOver(zoneRegionId) {
+            userMouseOut();
+            if (currentBoard) {
+                if (currentBoard.Groups) {
+                    $.each(currentBoard.Groups, function (i, regionGroup) {
+                        if (regionGroup.ParentRegionId == zoneRegionId) {
+                            highlightZoneRegion(regionGroup.ChildRegionId);
+                        }
+                    });
+                }
+            }
+    }
+
+    function displayLoadingCanvas() {
+        var fxCanvas = document.getElementById("fxCanvas");
+        if (!fxCanvas) {
+            return;
+        }
+
+        if (!fxCanvas.getContext) {
+            return;
+        }
+        var fxContext = fxCanvas.getContext("2d");
+        
+        fxContext.fillStyle = hex2rgb("#000000", 0.6);
+        fxContext.fillRect(0, 0, fxCanvas.width, fxCanvas.height);
+    }
+
+    function getPlayer(userId) {
+        var currentPlayer;
+        $.each(currentGame.Players, function (i, player) {
+            if (player.UserId == userId) {
+                currentPlayer = player;
+                return;
+            }
+        });
+
+        if (!currentPlayer &amp;&amp; userId == currentGame.FogUserId) {
+            currentPlayer = new Object();
+            currentPlayer.PlayerColorId = 0;
+        }
+        //had some errors where a starting userID was not in the game and log was blank
+        if (currentPlayer == undefined) {
+            currentPlayer = new Object();
+            currentPlayer.PlayerColorId = 0;
+        }
+        return currentPlayer;
+    }
+  </script>
+  <div id="gameInfo" style="display:none; margin-right:auto; margin-left:auto; ">
+   <h2>
+    Game Details
+   </h2>
+   <table width="400px">
+    <tr>
+     <td>
+      <div id="gameInfoStatusLabel">
+      </div>
+      <div id="gameInfoRoundNumber">
+      </div>
+      <div id="gameRules">
+      </div>
+     </td>
+     <td>
+      <div id="boardInfo">
+      </div>
+     </td>
+    </tr>
+    <tr valign="top">
+     <td colspan="2">
+      <div id="players">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <div align="center">
+    <input class="coldButton" onclick="closeGameInfo();" type="button" value="close"/>
+   </div>
+  </div>
+  <div id="teamSelector" style="display:none">
+   <div id="teamSelectorList">
+   </div>
+   <div align="center">
+    <span id="randomTeamButton">
+    </span>
+    <input class="coldButton" onclick='$("#teamSelector").dialog("close");' type="button" value="cancel"/>
+   </div>
+  </div>
+  <script type="text/javascript">
+   function showWarningDialog(title, beta) {
+        window.scroll(0, 0);
+        $('#warningText').empty();
+
+        if (title == "Using unlimited games") {
+            $("#unableToTitle").text("You're Trying to Join a 4th Game");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("You are currently active or pending in 3 games, which is the limit for a free membership.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("You are currently active or pending in 3 games, which is the limit for a free membership.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+        if (title == "Using team games") {
+            $("#unableToTitle").text("You're Trying to Join a Team Game");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("Team games are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("Team games are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+        if (title == "Using lightning games") {
+            $("#unableToTitle").text("You're Trying to Join a Lightning Game");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("Lightning games are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("Lightning games are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+        if (title == "Custom rules not enabled") {
+            $("#unableToTitle").text("You're Trying to Create a Game with Custom Rules");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("Custom rules are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("Custom rules are for Premium Members Only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt; Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+
+        if (title == "Premium members only") {
+            $("#unableToTitle").text("You're Trying to Create a Game for Premium Members");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("You need to yourself be a premium member to restrict games to premium members only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("You need to yourself be a premium member to restrict games to premium members only.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt; Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+        if (title == "Premium custom rules selected") {
+            $("#unableToTitle").text("You're Trying to Create a Game using custom rules only available for Premium Members");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("You need to be a premium member to create a game with custom rules.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("You need to be a premium member to create a game with custom rules.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt; Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+
+        if (title == "Premium map selected") {
+            $("#unableToTitle").text("You're Trying to Play on a Premium Map");
+            $("#unableToSubTitle").text("You need to upgrade to Premium to do that!");
+            if (beta) {
+                $('#warningText').append("&lt;b&gt;Thank you for being a beta user of our game!&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;");
+                $('#warningText').append("The selected map is only for premium members.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt;  Please visit our Upgrade Page to now to get full premium access for Free!");
+            } else {
+                $('#warningText').append("The selected map is only for premium members.");
+                $('#warningText').append("&lt;br/&gt;&lt;br /&gt; Please visit our Upgrade Page to now to get full premium access!");
+            }
+        }
+
+
+
+        $("#warningForm").show();
+        $("#warningDialog").dialog({ draggable: false, modal: true, resizable: false, width: 720, closeOnEscape: true });
+        setupJqueryDialog();
+        $.post("/VisitEvent/RecordwithName", { eventname: 'Upgrade Warning', message: title },
+                function (response) {
+                }, "json");
+    }
+
+    function hideWarningDialog() {
+        $("#warningDialog").dialog("close");
+    }
+  </script>
+  <div class="upgradeDialog" id="warningDialog" style="padding-left:30px; padding-right:30px; padding-bottom:0px; padding-top:0px;">
+   <div id="warningForm" style="display:none">
+    <div class="upperTitleArea">
+     <img src="/images/Victors_icon_128.png" style="float:left;"/>
+     <div style="float:left;">
+      <br/>
+      <h3 id="unableToTitle">
+      </h3>
+      <h4 id="unableToSubTitle">
+      </h4>
+     </div>
+     <div style="clear:both;">
+     </div>
+    </div>
+    <div style="margin-left:20px;">
+     <div id="warningText">
+     </div>
+    </div>
+    <div class="lowerButtonArea">
+     <input class="coolButton upgradeButton" onclick="document.location.href='/store/upgrade?from=warningdialog';" type="button" value="Visit Upgrade Page"/>
+     &amp;nbsp&amp;nbsp&amp;nbsp&amp;nbsp
+     <input class="coldButton" onclick="hideWarningDialog();" type="button" value="close"/>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

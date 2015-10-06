@@ -1,0 +1,1372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- InstanceBegin template="/Templates/Main_Template.dwt" codeOutsideHTMLIsLocked="false" -->
+ <head>
+  <meta content="embedded systems,real time,real-time,embedded, firmware, training courses, classes, expert witness" name="keywords"/>
+  <meta content="Most watchdogs are designed poorly. Here's code and circuits that get it right." name="description"/>
+  <meta content="Copyright by The Ganssle Group. All rights reserved." name="copyright"/>
+  <meta content="NO-CACHE" http-equiv="CACHE-CONTROL"/>
+  <!-- Patch to make button menus work properly under IE -->
+  <meta content="IE=EmulateIE7" http-equiv="X-UA-Compatible"/>
+  <!-- InstanceBeginEditable name="doctitle" -->
+  <title>
+   Designing Watchdog Timers for Embedded Systems
+  </title>
+  <!-- InstanceEndEditable -->
+  <!-- Define the main logo background image for the top of the page -->
+  <style type="text/css">
+   table.head_background {
+background: url("http://www.ganssle.com/images/tgg-title.gif") no-repeat;
+}
+  </style>
+  <!-- The following style makes a table for the "suggestions" Dreamweaver Snippet -->
+  <style type="text/css">
+   table.suggestion {
+  border-width: 5px;
+  border-spacing: 2px;
+  border-style: solid;
+  border-color: blue;
+  border-collapse: collapse;
+  background-color: white;
+}
+  </style>
+  <style type="text/css">
+   &lt;!--
+
+.panel_header {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #FFFFFF;
+  font-size: 10pt;
+  text-align: center;
+  font-weight: bold;
+}
+.footer {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #FFFFFF;
+  font-size: 8pt;
+  text-align: left;
+  font-weight: bold;
+  line-height: 130%;
+}
+.panel_body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #20505D;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 125%;
+}
+--&gt;
+  </style>
+  <!-- InstanceBeginEditable name="head" -->
+  <!-- InstanceEndEditable -->
+  <script src="http://www.ganssle.com/Scripts/AC_RunActiveContent.js" type="text/javascript">
+  </script>
+  <script src="http://www.ganssle.com/SpryAssets/SpryMenuBar.js" type="text/javascript">
+  </script>
+  <style type="text/css">
+   &lt;!--
+.panel {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11.5px;
+  color: #FFFFFF;
+  line-height: 13px;
+}
+.panel a:link {color: #00CCFF;text-decoration: none;}
+.panel a:visited {color: #00CCFF;text-decoration: none;}
+.panel a:hover {color: #00CCFF;text-decoration: none;}
+.panel a:hover {color: #00CCFF;text-decoration: none;}
+
+body {
+  background-color: #FFFFFF;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  line-height: 18px;
+  color: #000000;
+}
+
+a:link {color: #20505D; text-decoration: underline;}
+a:visited {color: #20505D;text-decoration: none;}
+a:hover {color: #20505D;text-decoration: underline;}
+a:active {color: #20505D;text-decoration: underline;}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height=10;
+padding: 0; 
+margin: 20px 0 0; 
+  color: #0070D0;
+}
+
+h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  color: #0070C0;
+}
+
+th {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 14px;
+  color: #000000;
+  text-align: center;
+}
+
+--&gt;
+  </style>
+  <link href="http://www.ganssle.com/SpryAssets/SpryMenuBarHorizontal.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.ganssle.com/SpryAssets/SpryMenuBarVertical.css" rel="stylesheet" type="text/css"/>
+  <!-- InstanceParam name="content" type="text" value="Most watchdogs are designed poorly. Here's code and circuits that get it right." -->
+  <style type="text/css">
+   &lt;!--
+.style4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-style: italic;
+	font-size: small;
+    color: #0070C0;
+}
+.style7 {font-style: italic}
+.style9 {
+	color: red;
+	font-weight: bold;
+}
+.style10 {
+	color: #FF0000;
+	font-style: italic;
+	font-weight: bold;
+}
+
+--&gt;
+  </style>
+ </head>
+ <body class="twoColHybLtHdr">
+  <table bgcolor="#f1f1f1" border="0" cellpadding="0" cellspacing="0" width="1010">
+   <tr>
+    <td width="500">
+     <a href="http://www.ganssle.com">
+      <img alt="The Ganssle Group logo" border="0" height="100" src="http://www.ganssle.com/images/tgg-title.gif" width="399"/>
+     </a>
+    </td>
+    <td>
+     <i>
+      <font color="#0070D0" face="verdana" size="2">
+       <b>
+        <script language="JavaScript" type="text/javascript">
+         &lt;!--
+      var r_text= new Array ();
+      r_text[0]= "The capacitance of low ESR capacitors varies with the applied DC bias... sometimes by a LOT!";
+      r_text[1]= "Most projects spend 50% of the schedule in debugging... so I guess the other 50% should be called bugging.&lt;br&gt;- Jack Ganssle";
+      r_text[2]= "Multitasking between 3 projects adds about 40% to the schedule due to context switch time.";
+      r_text[3]= "Error rates in big C functions are about two to six times higher than for smaller functions.";
+      r_text[4]= "Productivity can decrease by as much as 25% when workers put in 60+ hour weeks for a prolonged time.";
+      r_text[5]= "Turnover is nearly 3 times higher among workers who work extended hours.";
+      r_text[6]= "Absenteeism among companies with extended hours is more than twice the national average.";
+      r_text[7]= "Sometimes you have to stop bailing and plug the leak.";
+      r_text[8]= "Theoretically, software is the only component that can be perfect, and this should always be our starting point.&lt;br&gt;- Jesse Poore";
+      r_text[9]= "For every 25% increase in the problem complexity, there is a 100% increase in the complexity of the software solution.&lt;br&gt;- Robert Glass";
+      r_text[10]= "If the code and the comments disagree, both are probably wrong.";
+      r_text[11]= "Good judgment comes from experience, and experience comes from bad judgment.&lt;br&gt;- Fred Brooks";
+      r_text[12]= "If you can't write it down in English, you can't code it.";
+      r_text[13]= "1/3 of all software faults take more than 5000 execution-years to fail. So relying on testing only is bound to fail.";
+      r_text[14]= "For every 7 faults corrected, one of at least equal severity injected.";
+      r_text[15]= "Redundant code, even when harmless, highly correlates with bugs.";
+      r_text[16]= "90% CPU loading doubles the schedule, 95% triples it.";
+      r_text[17]= "Only 55% of our time is actually spent on a project.";
+      r_text[18]= "Embedded lines of code are growing 26% annually but developers increasing by only 8%.";
+      r_text[19]= "Best in class companies have about 2 bugs per hundred LOC, and remove 99% of those before delivery.";
+      r_text[20]= "Good programmers use their brains, but good guidelines save us having to think out every case.&lt;br&gt;- Francis Glassborow";
+      r_text[21]= "Programming can be fun, so can cryptography; however they should not be combined.&lt;br&gt;- Kreitzberg and Shneiderman";
+      r_text[22]= "I have always found that plans are useless, but planning is indispensable.&lt;br&gt;- Dwight Eisenhower";
+      r_text[23]= "Your problem is another's solution; Your solution will be his problem.";
+      r_text[24]= "To go faster, slow down. Everybody who knows about orbital mechanics understands that.&lt;br&gt;- Scott Cherf";
+      r_text[25]= "Keynes said, it is better to be vaguely right than precisely wrong.";
+      r_text[26]= "One test is worth a thousand opinions.";
+      r_text[27]= "35-40% of bugs are from missing logic, and 40% from a unique combination of logic paths. They will not be caught by 100% testing.";
+      r_text[28]= "Everything - even a small change - takes a week";
+      r_text[29]= "Abraham Lincoln reportedly said that, given eight hours to chop down a tree, he'd spend six sharpening his axe.";
+      r_text[30]= "How does a large software project get to be one year late? One day at a time! - Fred Brooks";
+      r_text[31]= "74% of embedded developers report that they remove at least 30% of the features in a scramble to ship.";
+      r_text[32]= "The combination of design reviews and code inspections remove 60-90% of the bugs.";
+      r_text[33]= "The biggest cause of schedule slippages: Bugs.";
+      r_text[34]= "The true peace of God begins at any point 1,000 miles from the nearest land.&lt;br&gt; - Joseph Conrad";
+      r_text[35]= "The schedule grows much faster than the code.";
+      r_text[36]= "Most watchdog timers are poorly engineered.";
+      r_text[37]= "Many compilers miscompile code that uses the volatile keyword.";
+      r_text[38]= "Code qualified to DO-178B level A is about 65% more expensive than that done to level E.";
+      r_text[39]= "It is easier to write a new code than to understand an old one.&lt;br&gt;- John von Neumann, 1952.";
+      r_text[40]= "Best in class embedded code ships with about one bug per KLOC. Imagine what that means to a 1 million LOC code base.";
+      r_text[41]= "One test is worth a thousand opinions.";
+      r_text[42]= "Average embedded code ships with about ten bugs per KLOC. Imagine what that means to a 1 million LOC code base.";
+      r_text[43]= "A study of a code base of 30 million lines of code found that 13% of the code accounts for 90% of the problems.";
+      r_text[44]= "Inspections find different kinds of errors than testing does.";
+      r_text[45]= "The combination of design and code inspections removes 60-90% of all defects.";
+      r_text[46]= "Aetna Insurance found 82% of errors using inspections and decreased resources by 25%.";
+      r_text[47]= "AT&amp;T found inspections net a 14% increase in productivity and 90% decrease in defects.";
+      r_text[48]= "Passwords - Use them like a toothbrush. Change them often and don't share them with friends.&lt;br&gt; -Clifford Stoll";
+      r_text[49]= "In God we trust. All others must bring data.&lt;br&gt;- W. Edwards Deming";
+      r_text[50]= "The only thing that should be reused from some projects is the hard disk space.&lt;br&gt;- Charles Manning";
+      r_text[51]= "Be conservative in what you do, be liberal in what you accept from others.&lt;br&gt;- RFC 793";
+      r_text[52]= "Computer system analysis is like child-rearing; you can do grievous damage, but you cannot ensure success.&lt;br&gt; - Tom DeMarco";
+      r_text[53]= "Inside every large program there is a small one trying to get out.&lt;br&gt; - Tony Hoare";
+      r_text[54]= "Don't worry if it doesn't work right. If everything did, you'd be out of a job.&lt;br&gt; - Mosher's Law of Software Engineering";
+      r_text[55]= "100% test coverage is insufficient. 35% of the faults are missing logic paths.&lt;br&gt;- Robert Glass";
+      r_text[56]= "A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.&lt;br&gt; - Antoine de Saint-Exupery";
+      r_text[57]= "Good design adds value faster than it adds cost.&lt;br&gt; - Thomas C. Gale";
+      r_text[58]= "Walking on water and developing software from a specification are easy if both are frozen.&lt;br&gt; - Edward V. Berard";
+      r_text[59]= "The object-oriented version of Spaghetti code is, of course, Lasagna code (too many layers).&lt;br&gt; - Roberto Waltman";
+      r_text[60]= "Losing just one hour of sleep per night for a week will cause a level of cognitive degradation equivalent to a .10 blood alcohol level.";
+      r_text[61]= "Our developers never release code. Rather, it tends to escape, pillaging the countryside all around.&lt;br&gt;- The Enlightenment Project";
+      r_text[62]= "Always code as if the guy who ends of up maintaining your code will be a violent psychopath who knows where you live.&lt;br&gt; - Damian Conway";
+      r_text[63]= "Documentation is a love letter that you write to your future self.&lt;br&gt; - Damian Conway";
+      r_text[64]= "C is quirky, flawed, and an enormous success.&lt;br&gt; - Dennis Ritchie";
+      r_text[65]= "Computer science education cannot make anybody an expert programmer any more than studying brushes and pigment can make somebody an expert painter.&lt;br&gt; - Eric S. Raymond";
+      r_text[66]= "Science is about what is; engineering is about what can be.&lt;br&gt; - Neil Armstrong";
+      r_text[67]= "Data is like garbage. You had better know what you are going to do with it before you collect it.&lt;br&gt; - Mark Twain";
+      r_text[68]= "A programming language is low level when its programs require attention to the irrelevant.&lt;br&gt; - Alan J. Perlis";
+      r_text[69]= "I love deadlines. I like the swooshing sounds they make as they fly by.&lt;br&gt; - Douglas Adams";
+      r_text[70]= "Engineering is done with numbers. Analysis without numbers is only an opinion.&lt;br&gt; - David Aikin";
+      r_text[71]= "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.&lt;br&gt; - Christopher Thompson";
+      r_text[72]= "Learning to program has no more to do with designing interactive software than learning to touch type has to do with writing poetry.&lt;br&gt; - Ted Nelson";
+      r_text[73]= "The sooner you start to code, the longer the program will take.&lt;br&gt;- Roy Carls";
+      r_text[74]= "The number of defects found in production use will be inversely proportional to the percent of defects removed prior to integration, system, and acceptance testing.&lt;br&gt;- Girish Seshagiri";
+	  r_text[75]= "Furious activity is no substitute for understanding.&lt;br&gt;- H. H. Williams";
+	  r_text[76]="When test is the principal defect removal method during development, corrective maintenance will account for the majority of the maintenance spend.&lt;br&gt;- Girish Seshagiri";
+	  r_text[77]= "We always overestimate the change that will occur in the next two years and underestimate the change that will occur in the next 10. Don't let yourself be lulled into inaction.&lt;br&gt;- Bill Gates";
+	  r_text[78]= "We're too busy chopping wood to sharpen the axe!&lt;br&gt;";
+	  r_text[79]= "Without requirements or design, programming is the art of adding bugs to an empty text file.&lt;br&gt;- Louis Srygle";
+	  r_text[80]= "Science may be the theater, but engineering is the action on the stage.&lt;br&gt;- Henry Petroski";
+	  r_text[81]= "The competent programmer is fully aware of the strictly limited size of his own skull; therefore he approaches the programming task in full humility.&lt;br&gt;- Edsger Dijkstra";
+	  r_text[82]= "It is not necessary to change. Survival is not mandatory.&lt;br&gt; - W. Edwards Deming";
+	  r_text[83]= "In any electrical circuit, appliances and wiring will burn out to protect fuses.&lt;br&gt; - Robert Byrnes";
+  
+      var i = Math.floor((r_text.length)*Math.random());
+      document.write(r_text[i]);
+      //--&gt;
+        </script>
+       </b>
+      </font>
+     </i>
+    </td>
+    <td width="10">
+    </td>
+   </tr>
+  </table>
+  <table border="0" cellpadding="0" cellspacing="0" width="1010">
+   <tr>
+    <td>
+     <ul class="MenuBarHorizontal" id="MenuBar3">
+      <li>
+       <a href="http://www.ganssle.com">
+        Home
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar4">
+        <li>
+         <a href="http://www.ganssle.com">
+          Home
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/bio.htm">
+          About Jack
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/onsite.htm">
+        Seminars
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar2">
+        <li>
+         <a href="http://www.ganssle.com/classes.htm">
+          Public Classes
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/onsite.htm">
+          On-Site Classes
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/tem-subunsub.html">
+        Newsletter
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar5">
+        <li>
+         <a href="http://www.ganssle.com/tem-subunsub.html">
+          Subscribe
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/tem-back.htm">
+          Back Issues
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/video/video-list.html">
+        Videos
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar11">
+        <li>
+         <a href="http://www.ganssle.com/video/episode15-review-of-logic-pro.html">
+          Most Recent - Logic Pro review
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/video/video-list.html">
+          Complete List of Videos
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/tools.htm">
+        Tool &amp; Book Reviews
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar6">
+        <li>
+         <a href="http://www.ganssle.com/tools.htm">
+          Tool Reviews
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/book.htm">
+          Jack's Books
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/bkreviews.htm">
+          Reviews of Embedded Books
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/spcl_reports.htm">
+        Special Reports
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar8">
+        <li>
+         <a href="http://www.ganssle.com/reports/ultra-low-power-design.html">
+          Designing ultra-low power systems
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/probingpointers.html">
+          Surprising Scope Probe Issues
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/salsurv2014.html">
+          2014 Salary Survey
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/debouncing.htm">
+          Debouncing Contacts
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/watchdogs.htm">
+          Watchdog Timers
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/tm40.html">
+          Microprocessor History
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/consulting.htm">
+          Being a Consultant
+         </a>
+        </li>
+        <li>
+         <a class="MenuBarItemSubmenu" href="http://www.ganssle.com/misc/wom.html">
+          Write Only Memory
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles/abossguidepi.htm">
+          Process Improvement for the Boss
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/commenting.htm">
+          Commenting
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/testingram.htm">
+          Testing RAM
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/startinges.htm">
+          Getting into Embedded Work
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/inspections.htm">
+          Code Inspections
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/dbc.htm">
+          How to Automatically Find Bugs
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/extremeinstrumenting.htm">
+          eXtreme Instrumenting
+         </a>
+        </li>
+        <li>
+         <a class="MenuBarItemSubmenu" href="http://www.ganssle.com/approx.htm">
+          Floating Point Approximations
+         </a>
+         <ul class="MenuBarVertical" id="MenuBar10">
+          <li>
+           <a href="http://www.ganssle.com/approx.htm">
+            Trig
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ganssle.com/approx-2.htm">
+            Other Functions
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/sellurself.htm">
+          Better Resumes
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/articles-subj.htm">
+        Articles
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar7">
+        <li>
+         <a href="http://www.ganssle.com/articles.htm">
+          All Articles
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm">
+          Analog Filtering, etc
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Communications">
+          Communications
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Debugging">
+          Debugging
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Fun">
+          Fun
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Hardware">
+          Hardware
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Historical">
+          Historical
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Managing">
+          Managing
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Math">
+          Math
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Memory">
+          Memory
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Philosophical">
+          Philosophical and Career
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#realtime">
+          Real Time
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Processes">
+          Software
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/articles-subj.htm#Tools">
+          Tools
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/jack/">
+          Sailing!
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/randomrants.htm">
+        Rants
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/jokes.htm">
+        Humor
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/search/search.html">
+        Search
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/contact.htm">
+        About Us
+       </a>
+       <ul class="MenuBarVertical" id="MenuBar12">
+        <li>
+         <a href="http://www.ganssle.com/contact.htm">
+          Contact and Privacy Info
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/advertise.html">
+          Advertising
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ganssle.com/bio.htm">
+          Jack's Bio
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="http://www.ganssle.com/advertise.html">
+        Advertise
+       </a>
+      </li>
+     </ul>
+    </td>
+   </tr>
+   <tr>
+    <!-- Space down a little -->
+    <td bgcolor="#FFFFFF">
+     <p>
+     </p>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <!-- Main table "A" for content. Has margins, room for the main content, and the ad/info column to the right. -->
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td width="10">
+       </td>
+       <td bgcolor="#FFFFFF" valign="top" width="690">
+        <!-- This is the pop-up that asks (once) the reader to subscribe to the Muse -->
+        <script language="JavaScript">
+         &lt;!--
+function GetCookie(name) {
+  var arg=name+"=";
+  var alen=arg.length;
+  var clen=document.cookie.length;
+  var i=0;
+  while (i&lt;clen) {
+    var j=i+alen;
+    if (document.cookie.substring(i,j)==arg)
+      return "here";
+    i=document.cookie.indexOf(" ",i)+1;
+    if (i==0) break;
+  }
+  return null;
+}
+var visit=GetCookie("TEMUSE");
+if (visit==null){
+    newwin=window.open('http://www.ganssle.com/popwin.html','temwindow','width=800,height=450');
+   document.cookie="TEMUSE=here; expires=Thu 01-01-2034 00:00:00 GMT;";
+}
+// --&gt;
+        </script>
+        <!-- InstanceBeginEditable name="EditRegion3" -->
+        <p>
+        </p>
+        <!-- #BeginLibraryItem "/Library/TEM Signup.lbi" -->
+        <br/>
+        <!-- AddThis Button BEGIN -->
+        <a class="addthis_button" href="http://addthis.com/bookmark.php?v=250&amp;username=jackganssle">
+         <img alt="Bookmark and Share" height="16" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" style="border:0" width="125"/>
+        </a>
+        <script src="http://s7.addthis.com/js/250/addthis_widget.js#username=jackganssle" type="text/javascript">
+        </script>
+        <!-- AddThis Button END -->
+        <table border="0" width="100%">
+         <tr>
+          <td width="11%">
+           <a href="http://www.ganssle.com/tem-subunsub.html">
+            <img alt="The logo for The Embedded Muse" height="75" src="http://www.ganssle.com/images/temlogo.jpg" width="115"/>
+           </a>
+          </td>
+          <td width="89%">
+           <i>
+            For novel ideas about building embedded systems (both hardware and firmware), join the 25,000+ engineers who subscribe to
+            <a href="http://www.ganssle.com/tem-subunsub.html">
+             The Embedded Muse
+            </a>
+            , a free biweekly newsletter. The Muse has no hype, no vendor PR.  It takes just a few seconds (just enter your email, which is shared with absolutely no one) to
+            <a href="http://www.ganssle.com/tem-subunsub.html">
+             subscribe.
+            </a>
+           </i>
+          </td>
+         </tr>
+        </table>
+        <!-- #EndLibraryItem -->
+        <h1>
+         Great Watchdog Timers For Embedded Systems
+        </h1>
+        <h2>
+         By Jack Ganssle
+         <br/>
+         <em>
+          Version 1.3, updated September, 2011
+         </em>
+         <br/>
+        </h2>
+        <p>
+         Launched in January of 1994, the Clementine spacecraft spent two very successful months mapping the moon before leaving lunar orbit to head towards near-Earth asteroid Geographos.
+        </p>
+        <p>
+         A dual-processor Honeywell 1750 system handled telemetry and various spacecraft functions. Though the 1750 could control Clementine's thrusters, it did so only in emergency situations; all routine thruster operations were under ground control.
+        </p>
+        <p>
+         On May 7, 1994, the 1750 experienced a floating point exception. This wasn't unusual; some 3000 prior exceptions had been detected and handled properly. But immediately after the May 7 event downlinked data started varying wildly and nonsensically. Then the data froze. Controllers spent 20 minutes trying to bring the system back to life by sending software resets to the 1750; all were ignored. A hardware reset command finally brought Clementine back on-line.
+        </p>
+        <p>
+         Alive, yes, even communicating with the ground, but with virtually no fuel left.
+        </p>
+        <p>
+         The evidence suggests that the 1750 locked up, probably due to a software crash. While hung the processor turned on one or more thrusters, dumping fuel and setting the spacecraft spinning at 80 RPM. In other words, it appears the code ran wild, firing thrusters it should never have enabled; they kept firing till the tanks ran nearly dry and the hardware reset closed the valves.
+        </p>
+        <p>
+         The mission to Geographos had to be abandoned.
+        </p>
+        <p>
+         Designers had worried about this sort of problem and implemented a software thruster timeout. That, of course, failed when the firmware hung.
+        </p>
+        <p>
+         The 1750's built-in watchdog timer hardware was not used, over the objections of the lead software designer. With no automatic "reset" button, success of the mission rested in the abilities of the controllers on Earth to detect problems quickly and send a hardware reset. For the lack of a few lines of watchdog code the mission was lost.
+        </p>
+        <p>
+         Though such a fuel dump had never occurred on Clementine before, roughly 16 times before the May 7 event hardware resets from the ground had been required to bring the spacecraft's firmware back to life. One might also wonder why some 3000 previous floating point exceptions were part of the mission's normal firmware profile.
+        </p>
+        <p>
+         Not surprisingly, the software team wished they had indeed used the watchdog timer, and had not implemented the thruster timeout in firmware. They also noted, though, that a normal, simple, watchdog may not have been robust enough to catch the failure mode.
+        </p>
+        <p>
+         Contrast this with Pathfinder, a mission whose software also famously hung, but which was saved by a reliable watchdog. The software team found and fixed the bug, uploading new code to a target system 40 million miles away, enabling an amazing roving scientific mission on Mars.
+        </p>
+        <p>
+         Watchdog timers (WDTs) are our failsafe, our last line of defense, an option taken only when all else fails - right? These missions (Clementine had been reset
+         <em>
+          16 times
+         </em>
+         prior to the failure) and so many others suggest to me that WDTs are not emergency outs, but integral parts of our systems. The WDT is as important as
+         <font face="Courier New, Courier, monospace">
+          main()
+         </font>
+         or the runtime library, it's an asset that is likely to be used, and maybe used a lot.
+        </p>
+        <p>
+         Outer space is a hostile environment, of course, with high intensity radiation fields, thermal extremes and vibrations we'd never see on Earth. Do we have these worries when designing Earth-bound systems?
+        </p>
+        <p>
+         Maybe so. Intel revealed that the McKinley processor's ultra fine design rules and huge transistor budget means cosmic rays may flip on-chip bits. The Itanium 2 processor, also sporting an astronomical transistor budget and small geometry, includes an on-board system management unit to handle transient hardware failures. The hardware ain't what it used to be - even if our software were perfect.
+        </p>
+        <p>
+         But too much (all?) firmware is not perfect. Consider this unfortunately true story from Ed VanderPloeg:
+        </p>
+        <blockquote>
+         <p>
+          "The world has reached a new embedded software milestone:  I had to reboot my hood fan.  That's right, the range exhaust fan in the kitchen.  It's a simple model from a popular North American company.  It has six buttons on the front:  3 for low, medium, and high fan speeds and 3 more for low, medium, and high light levels.  Press a button once and the hood fan does what the button says.  Press the same button again and the fan or lights turn off.  That's it.  Nothing fancy.  And it needed rebooting via the breaker panel."
+         </p>
+         <p>
+          "Apparently the thing has a micro to control the light levels and fan speeds, and it also has a temperature sensor to automatically switch the fan to high speed if the temperature exceeds some fixed threshold.  Well, one day we were cooking dinner as usual, steaming a pot of potatoes, and suddenly the fan kicks into high speed and the lights start flashing.  "Hmm, flaky sensor or buggy sensor software", I think to myself."
+         </p>
+         <p>
+          "The food happened to be done so I turned off the stove and tried to turn off the fan, but I suppose it wanted things to cool off first.  Fine.  So after ten minutes or so the fan and lights turned off on their own.  I then went to turn on the lights, but instead they flashed continuously, with the flash rate depending on the brightness level I selected."
+         </p>
+         <p>
+          "So just for fun I tried turning on the fan, but any of the three fan speed buttons produced only high speed.  "What 'smart' feature is this?", I wondered to myself.  Maybe it needed to rest a while.  So I turned off the fan &amp; lights and went back to finish my dinner.  For the rest of the evening the fan &amp; lights would turn on and off at random intervals and random levels, so I gave up on the idea that it would self-correct.  So with a heavy heart I went over to the breaker panel, flipped the hood fan breaker to &amp; fro, and the hood fan was once again well-behaved."
+         </p>
+         <p>
+          "For the next few days, my wife said that I was moping around as if someone had died.  I would tell everyone I met, even complete strangers, about what happened:  "Hey, know what?  I had to reboot my hood fan the other night!". The responses were varied, ranging from "Freak!" to "Sounds like what happened to my toaster...".  Fellow programmers would either chuckle or stare in common disbelief."
+         </p>
+         <p>
+          "What's the embedded world coming to?  Will programmers and companies everywhere realize the cost of their mistakes and clean up their act?  Or will the entire world become accustomed to occasionally rebooting everything they own?  Would the expensive embedded devices then come with a "reset" button, advertised as a feature?  Or will programmer jokes become as common and ruthless as lawyer jokes?  I wish I knew the answer.  I can only hope for the best, but I fear the worst."
+         </p>
+        </blockquote>
+        <p>
+         One developer admitted to me that his consumer products company could care less about the correctness of firmware.  Reboot - who cares? Customers are used to this, trained by decades of desktop computer disappointments. Hit the reset switch, cycle power, remove the batteries for 15 minutes, even pre-teens know the tricks of coping with legions of embedded devices.
+        </p>
+        <table class="suggestion">
+         <tr>
+          <td>
+           <i>
+            Suggestion: Subscribe to my free
+            <a href="http://www.ganssle.com/tem-subunsub.html">
+             newsletter
+            </a>
+            which often covers watchdogs and similar subjects.
+           </i>
+          </td>
+         </tr>
+        </table>
+        <p>
+         Crummy firmware is the norm, but in my opinion is totally unacceptable. Shipping a defective product in any other field is like opening the door to torts. So far the embedded world has been mostly immune from predatory lawyers, but that Brigadoon-like isolation is unlikely to continue. Besides, it's simply unethical to produce junk.
+        </p>
+        <p>
+         But it's hard, even impossible, to produce perfect firmware. We must strive to make the code correct, but also design our systems to cleanly handle failures. In other words, a healthy dose of paranoia leads to better systems.
+        </p>
+        <p>
+         A Watchdog Timer is an important line of defense in making reliable products. Decent embedded systems design means that, if your system needs a WDT, it better be of exceptionally high quality.
+        </p>
+        <p>
+         Well-designed watchdog timers fire off a lot, daily and quietly saving systems and lives without the esteem offered to other, human, heroes. Perhaps the developers producing such reliable WDTs deserve a parade. Poorly-designed WDTs fire off a lot, too, sometimes saving things, sometimes making them worse. A simple-minded watchdog implemented in a non-safety critical system won't threaten health or lives, but can result in systems that hang and do strange things that tick off our customers. No business can tolerate unhappy customers, so unless your code is perfect (whose is?) it's best in all but the most cost-sensitive apps to build a really great WDT.
+        </p>
+        <p>
+         An effective WDT is far more than a timer that drives reset. Such simplicity might have saved Clementine, but would it fire when the code tumbles into a really weird mode like that experienced by Ed's hood fan?
+        </p>
+        <p>
+        </p>
+        <h1>
+         Internal WDTs
+        </h1>
+        <p>
+         Internal watchdogs are those that are built into the processor chip. Virtually all highly integrated embedded processors include a wealth of peripherals, often with some sort of watchdog. Most are brain-dead watchdog timers suitable for only the lowest-end applications.
+        </p>
+        <p>
+         Let's look at a few.
+        </p>
+        <p>
+         Some of TI's  Stellaris series of ARM  controllers, like the LM4F110B2QR (how's that for a part number!) have a lock  out register. Program the right code into register WDTLOCK and the code cannot  change any WDT control register. That's a great feature! Alas, it's easy enough  to unlock the WDT registers. A pessimist will note that a program running  insanely could simply disable the watchdog.
+        </p>
+        <p>
+         Toshiba's TMP96141AF is part of their TLCS-900 family of quite nice microprocessors, which offers a wide range of extremely versatile on-board peripherals. All have pretty much the same watchdog circuit. As the data sheet says, "The TMP96141AF is containing watchdog timer of Runaway detecting."
+        </p>
+        <p>
+         Ahem. And I thought the days of Jinglish were over. Anyway, the part generates a non-maskable interrupt when the watchdog times out, which is either a very, very bad idea or a wonderfully clever one. It's clever only if the system produces an NMI, waits a while, and only then asserts reset, which the Toshiba part unhappily cannot do. Reset and NMI are synchronous.
+        </p>
+        <p>
+         A nice feature is that it takes two different I/O operations to disable the watchdog timer, so there are slim chances of a runaway program turning off this protective feature.
+        </p>
+        <p>
+         Motorola's widely-used 68332 variant of their CPU32 family (like most of these 68k embedded parts) also includes a watchdog. It's a simple-minded thing meant for low-reliability applications only.  Unlike a lot of WDTs, user code must write two different values (0x55 and 0xaa) to the WDT control register to insure the device does not time out. This is a very good thing - it limits the chances of rogue software accidentally issuing the command needed to appease the watchdog. I'm not thrilled with the fact that any amount of time may elapse between the two writes (up to the timeout period). Two back-to-back writes would further reduce the chances of random watchdog tickles, though once would have to insure no interrupt could preempt the paired writes. And the 0x55/0xaa twosome is often used in RAM tests; since the 68k I/O registers are memory mapped, a runaway RAM test could keep the device from resetting.
+        </p>
+        <p>
+         The 68332's WDT drives reset, not some exception handling interrupt or NMI. This makes a lot of sense, since any software failure that causes the stack pointer to go odd will crash the code, and a further exception-handling interrupt of any sort would drive the part into a "double bus fault". The hardware is such that it takes a reset to exit this condition.
+        </p>
+        <p>
+         Motorola's popular Coldfire parts are similar. The MCF5204, for instance, will let the code write to the WDT control registers only once. Cool! Crashing code, which might do all sorts of silly things, cannot reprogram the protective mechanism. However, it's possible to change the reset interrupt vector at any time, pretty much invalidating the clever write-once design.
+        </p>
+        <p>
+         Like the CPU32 parts a 0x55/0xaa sequence keeps the WDT from timing out, and back-to-back writes aren't required. The Coldfire datasheet touts this as an advantage since it can handle interrupts between the two tickle instructions, but I'd prefer less of a window. The Coldfire has a fault-on-fault condition much like the CPU32's double bus fault, so reset is also the only option when watchdog timer fires - which is a good thing.
+        </p>
+        <p>
+         There's no external indication that the WDT timed out, perhaps to save pins. That means your hardware/software must be designed so at a warm boot the code can issue a from-the-ground-up reset to every peripheral to clear weird modes that may accompany a WDT timeout.
+        </p>
+        <p>
+         Philip's XA processors require two sequential writes of 0xa5 and 0x5a to the WDT. But like the Coldfire there's no external indication of a timeout, and it appears the watchdog reset isn't even a complete CPU restart - the docs suggest it's just a reload of the program counter. Yikes - what if the processor's internal states were in disarray from code running amok or a hardware glitch?
+         <br/>
+        </p>
+        <p align="center">
+         <img alt="What's wrong with most watchdog timers" height="326" src="http://www.ganssle.com/images/watchdogs1.jpg" width="573"/>
+         <br/>
+        </p>
+        <h1>
+         External Watchdog Timers
+        </h1>
+        <p>
+         Many of the supervisory chips we buy to manage a processor's reset line include built-in WDTs.
+        </p>
+        <p>
+         TI's UCC3946 is one of many nice power supervisor parts that does an excellent job of driving reset only when Vcc is legal. In a nice small 8 pin SMT package it eats practically no PCB real estate.  It's not connected to the CPU's clock, so the WDT will output a reset to the hardware safe-ing mechanisms even if there's a crystal failure. But it's too darn simple: to avoid a timeout just wiggle the input bit once in a while. Crashed code could do this in any of a million ways.
+        </p>
+        <p>
+         TI isn't the only purveyor of simplistic WDTs. Maxim's MAX823 and many other versions are similar. The catalogs of a dozen other vendors list equally dull and ineffective watchdogs.
+        </p>
+        <p>
+         But both TI and Maxim do offer more sophisticated devices. Consider TI's TPS3813 and Maxim's MAX6323. Both are "Window Watchdogs". Unlike the internal versions described above that avoid timeouts using two different data writes (like a 0x55 and then 0xaa), these require tickling within certain time bands. Toggle the WDT input too slowly, too fast, or not at all, and a timeout will occur. That greatly reduces the chances that a program run amok will create the precise timing needed to satisfy the watchdog. Since a crashed program will likely speed up or bog down if it does anything at all, errant strobing of the tickle bit will almost certainly be outside the time band required.
+         <br/>
+         <br/>
+        </p>
+        <p align="center">
+         <img alt="TI's TPS3813 watchdog" height="321" src="http://www.ganssle.com/images/watchdogs2.jpg" width="514"/>
+        </p>
+        <p align="center">
+         <img alt="Diagram of Maxim's MAX6323 watchdog" height="367" src="http://www.ganssle.com/images/watchdogs3.jpg" width="544"/>
+         <br/>
+         <br/>
+        </p>
+        <h1>
+         Characteristics of Great Watchdog Timers
+        </h1>
+        <p>
+         What's the rationale behind an awesome watchdog timer? The perfect WDT should detect all erratic and insane software modes. It must not make any assumptions about the condition of the software
+         <em>
+          or
+         </em>
+         the hardware; in the real world anything that can go wrong will. It must bring the system back to normal operation no matter what went wrong, whether from a software defect, RAM glitch, or bit flip from cosmic rays.
+        </p>
+        <p>
+         It's impossible to recover from a hardware failure that keeps the computer from running properly, but at the least the WDT must put the system into a safe state. Finally, it should leave breadcrumbs behind, generating debug information for the developers. After all, a watchdog timeout is the yin and yang of an embedded system. It saves the system, keeping customers happy, yet demonstrates an inherent design flaw that should be addressed. Without debug info, troubleshooting these infrequent and erratic events is close to impossible.
+        </p>
+        <p>
+         What does this mean in practice?
+        </p>
+        <p>
+         An effective watchdog is independent from the main system. Though all WDTs are a blend of interacting hardware and software, something external to the processor must always be poised, like the sword of Damocles, ready to intervene as soon as a crash occurs. Pure software implementations are simply not reliable.
+        </p>
+        <p>
+         There's only one kind of intervention that's effective: an immediate reset to the processor and all connected peripherals. Many embedded systems have a watchdog that initiates a non-maskable interrupt. Designers figure that firing off NMI rather than reset preserves some of the system's context. It's easy to seed debugging assets in the NMI handler (like a stack capture) to aid in resolving the crash's root cause. That's a great idea, except that it does not work.
+        </p>
+        <p>
+         All we really know when the WDT fires is that something truly awful happened. Software bug? Perhaps. Hardware glitch? Also possible. Can you insure that the error wasn't something that totally scrambled the processor's internal logic states? I worked with one system where a motor in another room induced so much EMF that our instrument sometimes went bonkers. We tracked this down to a sub-nanosecond glitch on one CPU input, a glitch so short that the processor went into an undocumented weird mode. Only a reset brought it back to life.
+        </p>
+        <p>
+         Some CPUs, notably the 68k and ColdFire, will throw an exception if a software crash causes the stack pointer to go odd. That's not bad . . . except that any watchdog circuit that then drives the CPU's non-maskable interrupt will unavoidably invoke code that pushes the system's context, creating a second stack fault. The CPU halts, staying halted till a reset, and only a reset, comes along.
+        </p>
+        <p>
+         Drive reset; it's the only reliable way to bring a confused microprocessor back to lucidity. Some clever designers, though, build circuits that drive NMI first, and then after a short delay pound on reset. If the NMI works then its exception handler can log debug information and then halt. It may also signal other connected devices that this unit is going offline for a while. The pending reset guarantees an utterly clean restart of the code. Don't be tempted to use the NMI handler to safe dangerous hardware; that task always, in every system, belongs to a circuit external to the possibly confused CPU.
+        </p>
+        <p>
+         Don't forget to reset the whole computer system; a simple CPU restart may not be enough. Are the peripherals absolutely, positively, in a sane mode? Maybe not. Runaway code may have issued all sorts of I/O instructions that placed complex devices in insane modes. Give every peripheral a
+         <em>
+          hardware
+         </em>
+         reset; software resets may get lost in all of the I/O chatter.
+        </p>
+        <p>
+         Consider what the system must do to be totally safe after a failure. Maybe a pacemaker needs to reboot in a heartbeat (so to speak) . . . or maybe backup hardware should issue a few ticks if reboots are slow.
+        </p>
+        <p>
+         One thickness gauge that beams high energy gamma rays through 4 inches of hot steel failed in a spectacular way. Defective hardware crashed the code. The watchdog properly closed the protective lead shutter, blocking off the 5 curie cesium source. I was present, and watched incredulously as the engineering VP put his head in path of the beam; the crashed code, still executing something, tricked the watchdog into opening the shutter, beaming high intensity radiation through the veep's forehead. I wonder to this day what eventually became of the man.
+        </p>
+        <p>
+         A really effective watchdog cannot use the CPU's clock, which may fail. A bad solder joint on the crystal, poor design that doesn't work well over temperature extremes, or numerous other problems can shut down the oscillator. This suggests that no WDT internal to the CPU is really safe. Most share the processor's clock.
+        </p>
+        <p>
+         Under no circumstances should the software be able to reprogram the WDT or any of its necessary components (like reset vectors, I/O pins used by the watchdog, etc). Assume runaway code runs under the guidance of a malevolent deity.
+        </p>
+        <p>
+         Build a watchdog that monitors the
+         <em>
+          entire system's
+         </em>
+         operation. Don't assume that things are fine just because some loop or ISR runs often enough to tickle the watchdog timer. A software-only watchdog should look at a variety of parameters to insure the product is healthy, kicking the dog only if everything is OK. What is a software crash, after all? Occasionally the system executes a HALT and stops, but more often the code vectors off to a random location, continuing to run instructions. Maybe only one task crashed. Perhaps only one is still alive - no doubt that which kicks the dog.
+        </p>
+        <p>
+         Think about what can go wrong in your system. Take corrective action when that's possible, but initiate a reset when it's not. For instance, can your system recover from exceptions like floating point overflows or divides by zero? If not, these conditions may well signal the early stages of a crash. Either handle these competently or initiate a WDT timeout. For the cost of a handful of lines of code you may keep a 60 Minutes camera crew from appearing at your door.
+        </p>
+        <p>
+         It's a good idea to flash an LED or otherwise indicate that the WDT kicked. A lot of devices automatically recover from timeouts; they quickly come back to life with the customer totally unaware a crash occurred. Unless you have a debug LED how do you know if your precious creation is working properly, or occasionally invisibly resetting? One outfit complained that over time, and with several thousand units in the field, their product's response time to user inputs degraded noticeably. A bit of research showed that their system's watchdog properly drove the CPU's reset signal, and the code then recognized a warm boot, going directly to the application with no indication to the users that the time-out had occurred. We tracked the problem down to a floating input on the CPU, that caused the software to crash - up to several thousand times per second. The processor was spending most of its time resetting, leading to apparently slow user response. An LED would have shown the problem during debug, long before customers started yelling.
+        </p>
+        <p>
+         Everyone knows we should include a jumper to disable the WDT during debugging. But few folks think this through. The jumper should be
+         <em>
+          <u>
+           inserted
+          </u>
+         </em>
+         <u>
+          to enable debugging
+         </u>
+         , and removed for normal operation. Otherwise if manufacturing forgets to install the jumper, or if it falls out during shipment, the WDT won't function. And there's no production test to check the watchdog's operation.
+        </p>
+        <p>
+         Design the logic so the jumper disconnects the watchdog timer from the reset line (possibly though an inverter so an inserted jumper sets debug mode). Then the watchdog continues to function even while debugging the system. It won't reset the processor but will flash the LED. The light will blink a lot when breakpointing and singlestepping, but should never come on during full-speed testing.
+         <br/>
+        </p>
+        <p align="center">
+         <img alt="characteristics of a great watchdog timer" height="230" src="http://www.ganssle.com/images/watchdogs4.jpg" width="563"/>
+        </p>
+        <h1>
+         <br/>
+         Using an Internal Watchdog Timer
+        </h1>
+        <p>
+         Most embedded processors that include high integration peripherals have some sort of built-in WDT. Avoid these except in the most cost-sensitive or benign systems. Internal units offer minimal protection from rogue code. Runaway software may reprogram the WDT controller, many internal watchdogs will not generate a proper reset, and any failure of the processor will make it impossible to put the hardware into a safe state. A great WDT must be independent of the CPU it's trying to protect.
+        </p>
+        <p>
+         However, in systems that really must use the internal versions, there's plenty we can do to make them more reliable. The conventional model of kicking a simple timer at erratic intervals is too easily spoofed by runaway code.
+        </p>
+        <p>
+         A pair of design rules leads to decent WDTs: kick the dog only after your code has done
+         <em>
+          several unrelated
+         </em>
+         good things, and make sure that erratic execution streams that wander into your watchdog routine won't issue incorrect tickles.
+        </p>
+        <p>
+         This is a great place to use a simple state machine. Suppose we define a global variable named
+         <font face="Courier New, Courier, monospace">
+          "state"
+         </font>
+         . At the beginning of the main loop set
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         to 0x5555.  Call watchdog routine A, which adds an offset - say 0x1111 - to
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         and then insures the variable is now 0x6666. Return if the compare matches; otherwise halt or take other action that will cause the WDT to fire.
+        </p>
+        <p>
+         Later, maybe at the end of the main loop, add another offset to
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         , say 0x2222. Call watchdog routine B, which makes sure
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         is now 0x8888. Set
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         to zero. Kick the dog if the compare worked. Return. Halt otherwise.
+        </p>
+        <p>
+         Suppose the code crashes and for inscrutable reasons probably having to do with Murphy's Law and the perversity of nature vectors into
+         <font face="Courier New, Courier, monospace">
+          wdt_b()
+         </font>
+         just before the
+         <font face="Courier New, Courier, monospace">
+          kick_dog
+         </font>
+         command. The protection mechanism of the state machine won't help.
+        </p>
+        <p>
+         Perhaps it's safe to assume that the code will again crash when
+         <font face="Courier New, Courier, monospace">
+          wdt_b()
+         </font>
+         returns, so the system will miss the next watchdog tickle. But. . . . perhaps not - who knows what evil lurks in the mind of runaway software?
+        </p>
+        <p>
+         Is this fear paranoid? You bet. But the WDT might be the last line of defense between deflecting the Earth-bound asteroid and utter disaster, or at least in rebooting the pacemaker before grandpa collapses. Assuming that crashed code will operate in any benign mode is nave.
+        </p>
+        <p>
+         So
+         <font face="Courier New, Courier, monospace">
+          wdt_b()
+         </font>
+         double-checks variable "state" to insure the system halts (so the watchdog can issue a reset) even if rogue code wandered into
+         <font face="Courier New, Courier, monospace">
+          wdt_b()
+         </font>
+         just before issuing the
+         <font face="Courier New, Courier, monospace">
+          kick_dog.
+         </font>
+        </p>
+        <p>
+         This is a trivial bit of code, but now runaway code that stumbles into any of the tickling routines cannot errantly kick the dog. Further, no tickles will occur unless the entire main loop executes in the proper sequence. If the code just calls routine B repeatedly, no tickles will occur because it sets
+         <font face="Courier New, Courier, monospace">
+          state
+         </font>
+         to zero before exiting.
+        </p>
+        <p>
+         Add additional intermediate states as your fear of litigation dictates.
+        </p>
+        <p>
+         Normally I detest global variables, but this is a perfect application. Cruddy code that mucks with the variable, errant tasks doing strange things, or any error that steps on the global will make the WDT timeout.
+        </p>
+        <p>
+         Do put these actions in the program's main loop, not inside an ISR. It's fun to watch a multitasking product crash - the entire system might be hung, but one task still responds to interrupts. If your watchdog tickler stays alive as the world collapses around the rest of the code, then the watchdog serves no useful purpose.
+        </p>
+        <p>
+         If the WDT doesn't generate an external reset pulse (some processors handle the restart internally) make sure the code issues a hardware reset to all peripherals immediately after start-up. That may mean working with the EEs so an output bit resets every resettable peripheral.
+        </p>
+        <p>
+         If you must take action to safe dangerous hardware, well, since there's no way to guarantee the code will come back to life, stay away from internal watchdogs. Broken hardware will obviously cause this . . . but so can lousy code. A digital camera was recalled recently when users found that turning the device off when in a certain mode meant it could never be turned on again. The code wrote faulty info to flash memory that created a permanent crash.
+        </p>
+        <h1 align="center">
+         <img alt="Code for a watchdog timer" height="302" src="http://www.ganssle.com/images/watchdogs5.jpg" width="585"/>
+        </h1>
+        <h1>
+         <br/>
+         An External Watchdog Timer
+        </h1>
+        <p>
+         The best watchdog is one that doesn't rely on the processor or its software. It's external to the CPU, shares no resources, and is utterly simple, thus devoid of latent defects.
+        </p>
+        <p>
+         Use a PIC, a Z8, or other similar dirt-cheap processor as a system health monitor. These parts have an independent clock, on-board memory, and the built-in timers we need to build a truly great WDT. Being external, you can connect an output to hardware interlocks that put dangerous machinery into safe states.
+        </p>
+        <p>
+         But when selecting a watchdog CPU check the part's specs carefully. Tying the tickle to the watchdog CPU's interrupt input, for instance, may not work reliably. A slow part - like most PICs - may not respond to a tickle of short duration. Consider TI's MSP430 family or processors. They're a very inexpensive (half a buck or so) series of 16 bit processors that use virtually no power and no PCB real estate.
+        </p>
+        <p align="center">
+         <img alt="MSP430" height="383" src="http://www.ganssle.com/images/watchdogs6.jpg" width="586"/>
+         <br/>
+        </p>
+        <p>
+         Tickle it using the same sort of state-machine described above. Like the windowed watchdogs (TI's TPS3813 and Maxim's MAX6323), define min
+         <em>
+          and
+         </em>
+         max tickle intervals, to further limit the chances that a runaway program deludes the WDT into avoiding a reset.
+        </p>
+        <p>
+         Perhaps it seems extreme to add an entire computer just for the sake of a decent watchdog. We'd be fools to add extra hardware to a highly cost-constrained product. Most of us, though, build lower volume higher margin systems. A fifty cent part that prevents the loss of an expensive mission, or that even saves the cost of one customer support call, might make a lot of sense.
+        </p>
+        <p>
+         In a multiprocessor system it's easy to turn all of the processors into watchdogs. Have them exchange "I'm OK" messages periodically. The receiver resets the transmitter if it stops speaking. This approach checks a lot of hardware and software, and requires little circuitry.
+        </p>
+        <p align="center">
+         <img alt="Circuit for a free watchdog timer" height="386" src="http://www.ganssle.com/images/watchdogs7.jpg" width="539"/>
+         <br/>
+         <br/>
+        </p>
+        <h1>
+         Watchdog Timers for Multitasking
+        </h1>
+        <p>
+         Tasking turns a linear bit of software into a multidimensional mix of tasks competing for processor time. Each runs more or less independently of the others. . . which means each can crash on its own, without bringing the entire system to its knees.
+        </p>
+        <p>
+         You can learn a lot about a system's design just be observing its operation. Consider a simple instrument with a display and various buttons. Press a button and hold it down; if the display continues to update, odds are the system multitasks.
+        </p>
+        <p>
+         Yet in the same system a software crash might go undetected by conventional watchdog strategies. If the display or keyboard tasks die, the main line code or a WDT task may continue to run.
+        </p>
+        <p>
+         Any system that uses an ISR or a special task to tickle the watchdog but that does not examine the health of all other tasks is not robust. Success lies in weaving the watchdog into the fabric of all of the system's tasks - which is happily much easier than it sounds.
+        </p>
+        <p>
+         First, build a watchdog task. It's the only part of the software allowed to tickle the WDT. If your system has an MMU mask off all I/O accesses to the WDT except those from this task, so rogue code traps on an errant attempt to output to the watchdog.
+        </p>
+        <p>
+         Next, create a data structure that has one entry per task, with each entry being just an integer.
+        </p>
+        <p>
+         When a task starts it increments its entry in the structure. Tasks that only start once and stay active forever can increment the appropriate value each time through their main loops.
+        </p>
+        <p>
+         Increment the data
+         <em>
+          atomically
+         </em>
+         - in a way that cannot be interrupted with the data half-changed.  ++TASKi (if TASK is an integer array) on an 8 bit CPU might not be atomic, though it's almost certainly OK on a 16 or 32 bitter. The safest way to both encapsulate and insure atomic access to the data structure is to hide it behind another task. Use a semaphore to eliminate concurrent shared accesses. Send increment messages to the task, using the RTOS's messaging resources.
+        </p>
+        <p>
+         As the program runs the number of counts for each task advances. Infrequently but at regular intervals the watchdog task runs. Perhaps once a second, or maybe once a msec - it's all a function of your paranoia and the implications of a failure.
+        </p>
+        <p>
+         The watchdog task scans the structure, checking that the count stored for each task is reasonable. One that runs often should have a high count; another which executes infrequently will produce a smaller value. Part of the trick is determining what's reasonable for each task; stick with me - we'll look at that shortly.
+        </p>
+        <p>
+         If the counts are unreasonable, halt and let the watchdog timeout.  If everything is OK, set all of the counts to zero and exit.
+        </p>
+        <p>
+         Why is this robust? Obviously, the watchdog monitors every task in the system. But it's also impossible for code that's running amok to stumble into the watchdog timer task and errantly tickle the dog; by zeroing the array we guarantee it's in a "bad" state.
+        </p>
+        <p>
+         I skipped over a critical step - how do we decide what's a reasonable count for each task? It might be possible to determine this analytically. If the WDT task runs once a second, and one of the monitored tasks starts every 50 msec, then surely a count of around 20 is reasonable.
+        </p>
+        <p>
+         Other activities are much harder to ascertain. What about a task that responds to asynchronous inputs from other computers, say data packets that come at irregular intervals? Even in cases of periodic events, if these drive a low-priority task they maybe suspended for rather long intervals by higher-priority problems.
+        </p>
+        <p>
+         The solution is to broaden the data structure that maintains count information. Add min and max fields to each entry. Each task must run at least min, but no more than max times.
+        </p>
+        <p>
+         Now redesign the watchdog task to run in one of two modes. The first is the one already described, and is used during normal system operation.
+        </p>
+        <p>
+         The second mode is a debug environment enabled by a compile-time switch that collects min and max data. Each time the WDT task runs it looks at the incremented counts and sets new min and max values as needed. It tickles the watchdog each time it executes.
+        </p>
+        <p>
+         Run the product's full test suite with this mode enabled. Maybe the system needs to operate for a day or a week to get a decent profile of the min/max values. When you're satisfied that the tests are representative of the system's real operation, manually examine the collected data and adjust the parameters as seems necessary to give adequate margins to the data.
+        </p>
+        <p>
+         What a pain! But by taking this step you'll get a great watchdog - and a deep look into your system's timing. I've observed that few developers have much sense how their creations perform in the time domain. "It seems to work" tells us little. Looking at the data acquired by this profiling, though might tell a lot. Is it a surprise that task A runs 400 times a second? That might explain a previously-unknown performance bottleneck.
+        </p>
+        <p>
+         In a real time system we must
+         <a href="http://www.ganssle.com/extremeinstrumenting.htm">
+          manage and measure time
+         </a>
+         ; it's every bit as important as procedural issues, yet is oft ignored till a nagging problem turns into an unacceptable symptom. This watchdog scheme forces you to think in the time domain, and by its nature profiles - admittedly with coarse granularity - the time-operation of your system.
+        </p>
+        <p>
+         There's yet one more kink, though. Some tasks run so infrequently or erratically that any sort of automated profiling will fail. A watchdog that runs once a second will miss tasks that start only hourly. It's not unreasonable to exclude these from watchdog monitoring. Or, we can add a bit of complexity to the code to initiate a watchdog timeout if, say, the slow tasks don't start even after a number of hours elapse.
+        </p>
+        <h1>
+         Some Decent WDTs on MCUs
+        </h1>
+        <p>
+         MCU watchdogs are getting better. For instance Freescale's 32 bit Coldfire+ line, like the MCF51Qx. Instead of "watchdog" Freescale prefers the awkward phrase "Computer Acting Properly" (COP). But it does offer a very intriguing feature. In general, one pets the watchdog, uh, COP, by writing 0x55 and then 0xaa to the control register. But in one mode that sequence must be sent in the last 25% of the COP timeout period. A premature write results in a reset. Odds of a errant program getting the timing Goldilocks-correct (not too often, nor too infrequently) are tiny.
+        </p>
+        <p>
+         The part also generates a reset is any attempt is made to execute an illegal instruction. That's somewhat different from most CPUs, which issue an illegal op code interrupt. I rather like Freescale's approach, since interrupt handlers are not guaranteed to work if the code crashes. A blown stack, corrupt PC (on some CPUs if the PC is odd a fault is taken), or a vector base register changes. This also suggests that it's a good idea to fill unused flash at link time with an illegal op code, and on power-up fill all of RAM with a similar instruction, so that errant code waltzing through memory is likely to generate a reset.
+        </p>
+        <p>
+         Another nice touch is that the reset pin is open drain and is asserted when any of these errors occur. Tie it to the peripheral reset inputs. Even if wandering code issues output instructions their potentially scrambled little brains will be straightened out.
+        </p>
+        <p>
+         ST Microelectronics has a line of Cortex-M3 devices. The M3 has become extremely popular for lower-end embedded devices, and ST's STM32F is representative of these parts (though the WDT is an ST add-on, and does not necessarily mirror other vendors' implementations). The STM32F has two different protection mechanisms. An "Independent Watchdog" is a pretty vanilla design that has little going for it other than ease of use. But their Window Watchdog offers more robust protection. When a countdown timer expires, a reset is generated, which can be impeded by reloading the timer. Nothing special there. But if the reload happens too quickly, the system will also reset. In this case "too quickly" is determined by a value one programs into a control register.
+        </p>
+        <p>
+         Another cool feature: it can generate an interrupt just before resetting. Write a bit of code to snag the interrupt and you can take some action to, for instance, put the system in a safe state or to snapshot data for debugging purposes. ST suggests using the ISR to reload the watchdog -- that is, kick the dog so a reset does not occur. Don't take their advice. If the program crashes the interrupt handlers may very well continue to function normally. And using an ISR to reload the WDT invalidates the entire reason for a window watchdog.
+        </p>
+        <p>
+         The WDT cannot be disabled once enabled -- good thinking, folks! But oddly, the other configuration registers can be changed at will, which can make the watchdog behave incorrectly.
+         <br/>
+        </p>
+        <h1>
+         Summary and Other Thoughts
+        </h1>
+        <p>
+         For some thoughts on the possible future of watchdogs, see
+         <a href="http://www.ganssle.com/articles/watchdogsredux.htm">
+          this
+         </a>
+         .
+        </p>
+        <p>
+         I remain troubled by the fan failure described earlier. It's easy to dismiss this as a glitch, an unexplained failure caused by a hardware or software bug, cosmic rays, or meddling by aliens. But others have written about identical situations with their vent fans, all apparently made by the same vendor.
+        </p>
+        <p>
+         When we blow off a failure, calling it a "glitch" as if that name explains something, we're basically professing our ignorance. There are no glitches in our macroscopically deterministic world. Things happen for a reason.
+        </p>
+        <p>
+         The fan failures didn't make the evening news and hurt no one. So why worry?
+        </p>
+        <p>
+         Surely the customers were irritated, and the possible future sales of that company at least somewhat diminished. The company escalated the general rudeness level of the world, and thus the sum total incipient anger level, by treating their customers with contempt. Maybe a couple more Valiums were popped, a few spouses yelled at, some kids cowered till dad calmed down. In the grand scheme of things perhaps these are insignificant blips. Yet we must remember the purpose of embedded control is to help people, to improve lives, not to help therapists garner new patients.
+        </p>
+        <p>
+         What concerns me is that if we cannot even build reliable fan controllers, what hope is there for more mission-critical applications?
+        </p>
+        <p>
+         I don't know what went wrong with those fan controllers, and I have no idea if a watchdog timer - well designed or not - is part of the system. I do know, though, that the failures are unacceptable and avoidable. But maybe not avoidable by the use of a conventional watchdog. A WDT tells us the code is running. A windowing WDT tells us it's running with pretty much the right timing. No watchdog, though, flags software executing with corrupt data structures, unless the data is so bad it grossly affects the execution stream.
+        </p>
+        <p>
+         Why would a data structure become corrupt? Bugs, surely. Strange conditions the designers never anticipated will also create problems, like the never-ending flood of buffer overflow conditions that plague the net, or unexpected user inputs ("we never thought the user would press all 4 buttons at the same time!").
+        </p>
+        <p>
+         Is another layer of self-defense, beyond watchdogs, wise? Safety critical apps, where the cost of a failure is frighteningly high, should definitely include integrity checks on the data. Low threat equipment - like this oven fan - can and should have at least a minimal amount of code for trapping possible failure conditions.
+        </p>
+        <p>
+         Some might argue it makes no sense to "waste" time writing defensive code for a dumb fan application. Yet the simpler the system, the easier and quicker it is to plug in a bit of code to look for program and data errors.
+        </p>
+        <p>
+         Very simple systems tend to translate inputs to outputs. Their primary data structures are the I/O ports. Often several unrelated output bits get multiplexed to a single port. To change one bit means either reading the port's current status, or maintaining a copy of the port in RAM. Both approaches are problematic.
+        </p>
+        <p>
+         Computers are deterministic, so it's reasonable to expect that, in the absence of bugs, they'll produce correct results all the time. So it's apparently safe to read a port's current status, AND off the unwanted bits, OR in new ones, and output the result. This is a state machine; the outputs evolve over time to deal with changing inputs. But the process works only if the state machine never incorrectly flips a bit. Unfortunately, output ports are connected to the hostile environment of the real world. It's entirely possible that a bit of energy from starting the fan's highly inductive motor will alter the port's setting. I've seen this happen many times.
+        </p>
+        <p>
+         So maybe it's more reliable to maintain a memory image of the port. The downside is that a program bug might corrupt the image. Most of the time these are stored as global variables, so any bit of sloppy code can accidentally trash the location. Encapsulation solves that problem, but not the one of a wandering pointer walking over the data, or of a latent reentrancy issue corrupting things. You might argue that writing correct code means we shouldn't worry about a location changing, but we added a WDT to, in part, deal with bugs. Similar concerns about our data are warranted.
+        </p>
+        <p>
+         In a simple system look for a design that resets data structures from time to time. In the case of the oven fan, whenever the user selects a fan speed reset all I/O ports and data structures. It's that simple.
+        </p>
+        <p>
+         In a more complicated system the best approach is the oldest trick in software engineering: check the parameters passed to functions for reasonableness. In the embedded world we chose not to do this for three reasons: speed, memory costs, and laziness. Of these, the third reason is the real culprit most of the time.
+        </p>
+        <p align="center">
+         <img alt="watchdogs" height="347" src="http://www.ganssle.com/images/watchdogs8.jpg" width="581"/>
+        </p>
+        <p>
+         <br/>
+        </p>
+        <p>
+        </p>
+        <p>
+        </p>
+        <!-- InstanceEndEditable -->
+       </td>
+       <td bgcolor="#F1F1F1" width="10">
+       </td>
+       <td bgcolor="#0070C0" width="1">
+       </td>
+       <td bgcolor="#F1F1F1" valign="top" width="300">
+        <!-- Table "B" that contains the right hand column including margins and ads. -->
+        <table bgcolor="#F1F1F1" border="0" cellpadding="0" cellspacing="0">
+         <tr>
+          <td width="10">
+          </td>
+          <td>
+           <!-- Table "C" that contains the ads. -->
+           <table bgcolor="#F1F1F1" border="0" cellpadding="5" cellspacing="0">
+            <tr>
+             <td bgcolor="#0070C0" class="panel_header">
+              New and Noteworthy
+             </td>
+            </tr>
+            <tr>
+             <td class="panel_body">
+              <p class="style7">
+               Do you need to
+               <span class="style9">
+                reduce bugs
+               </span>
+               in your firmware?
+               <span class="style9">
+                Shorten schedules
+               </span>
+               ?
+               <em>
+                My one-day
+                <a class="style9" href="http://www.ganssle.com/onsite.htm">
+                 Better Firmware Faster
+                </a>
+                seminar will teach your team how to operate at a world-class level, producing code with far fewer bugs in less time. It's fast-paced, fun, and covers the unique issues faced by embedded developers.
+                <a href="http://www.ganssle.com/onsite.htm">
+                 Here's
+                </a>
+                information about how this class, taught at your facility, will
+                <strong>
+                 measurably
+                </strong>
+                improve your team's effectiveness.
+               </em>
+              </p>
+              <p>
+               <em>
+                <b>
+                 <font color="red">
+                  New Video!
+                 </font>
+                </b>
+                <a href="http://www.ganssle.com/video/episode15-review-of-logic-pro.html">
+                 Review
+                </a>
+                of Saleae's Logic Pro logic analyzer.
+               </em>
+              </p>
+              <p>
+               <span class="style10">
+                Win a free oscilloscope!
+               </span>
+               <em>
+                Drawing August 3. More info
+                <a href="http://www.ganssle.com/contest.html">
+                 here
+                </a>
+                .
+               </em>
+              </p>
+             </td>
+            </tr>
+            <!-- Iterate here for each ad -->
+            <tr>
+             <td bgcolor="#F1F1F1">
+              <hr color="blue"/>
+              <a href="http://www.saelig.com">
+               <img src="http://www.saelig.com/images/saeligganssle250.gif"/>
+              </a>
+             </td>
+            </tr>
+            <!-- End of ad iteration -->
+            <!-- Iterate here for each ad -->
+            <tr>
+             <td bgcolor="#F1F1F1">
+              <p class="panel_body">
+               Advertise here! More
+               <a href="http://www.ganssle.com/advertise.html">
+                info
+               </a>
+               .
+              </p>
+             </td>
+            </tr>
+            <!-- End of ad iteration -->
+            <!-- Iterate here for each ad -->
+            <tr>
+             <td bgcolor="#F1F1F1">
+             </td>
+            </tr>
+            <!-- End of ad iteration -->
+            <!-- Iterate here for each ad -->
+            <tr>
+             <td bgcolor="#F1F1F1">
+             </td>
+            </tr>
+            <!-- End of ad iteration -->
+           </table>
+           <!-- end table "C" -->
+          </td>
+          <td width="10">
+          </td>
+         </tr>
+        </table>
+        <!-- End table "B" -->
+       </td>
+      </tr>
+     </table>
+     <!-- End table "A" -->
+    </td>
+   </tr>
+   <tr>
+    <td align="left" bgcolor="#F1F1F1" height="60">
+     <h2>
+      The Ganssle Group  -
+      <a href="mailto:info@ganssle.com">
+       info@ganssle.com
+      </a>
+      - Copyright The Ganssle Group - Contact info
+      <a href="http://www.ganssle.com/contact.htm">
+       here
+      </a>
+     </h2>
+     <h2 class="style4">
+      Interested in advertising with us? More information
+      <a href="http://www.ganssle.com/advertise.html">
+       here
+      </a>
+      .
+     </h2>
+    </td>
+   </tr>
+  </table>
+  <script type="text/javascript">
+   var MenuBar3 = new Spry.Widget.MenuBar("MenuBar3", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
+  </script>
+ </body>
+ <!-- InstanceEnd -->
+</html>

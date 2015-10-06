@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html itemscope="" itemtype="http://schema.org/CollectionPage" lang="en" version="HTML+RDFa 1.1">
+ <head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Newest webcams in United States
+  </title>
+  <meta content="31 webcams in United States, showing the newest cams we found at the top. Animated snapshots" name="description"/>
+  <meta content="opentopia, webcam, webcams, webcamera, cameras, security cams" name="keywords"/>
+  <meta content="195525890471892" property="fb:page_id"/>
+  <link href="/css/blueprint/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+  <link href="/css/blueprint/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 8]&gt;&lt;link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection" /&gt;&lt;![endif]-->
+  <link href="/css/newstyle.css" rel="stylesheet" type="text/css"/>
+  <link href="/css/basic.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/themes/custom-theme/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css"/>
+  <script src="/js/jquery.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/ui.selectmenu.js">
+  </script>
+  <script src="/js/jquery.simplemodal.js">
+  </script>
+  <script src="/js/jquery.loginmodal.js">
+  </script>
+  <script src="/js/jquery.forgetmodal.js">
+  </script>
+  <script src="/js/jquery.forgetsuccessmodal.js">
+  </script>
+  <script src="/js/json2.js">
+  </script>
+  <script src="/js/jquery.cookie.js">
+  </script>
+  <script src="/js/websocket_rails/websocket_rails.js">
+  </script>
+  <script src="/js/websocket_rails/event.js">
+  </script>
+  <script src="/js/websocket_rails/http_connection.js">
+  </script>
+  <script src="/js/websocket_rails/websocket_connection.js">
+  </script>
+  <script src="/js/websocket_rails/channel.js">
+  </script>
+  <script src="/js/application.js?time=1436909230">
+  </script>
+  <script src="/js/tiny_mce/tiny_mce.js">
+  </script>
+  <script src="http://maps.google.com/maps/api/js?sensor=false">
+  </script>
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <meta content="http://www.opentopia.com/hiddencam.php" property="og:url"/>
+  <meta content="Opentopia" property="og:site_name"/>
+  <meta content="126979244020610" property="fb:app_id"/>
+  <meta content="Opentopia" itemprop="name"/>
+  <meta content="Thousands of live webcams from around the world, found through clever search techniques" itemprop="description"/>
+  <meta content="http://www.opentopia.com/images/opentopia_logo_bg.jpg" itemprop="image"/>
+  <meta content="http://www.opentopia.com/" itemprop="url"/>
+  <link href="http://www.opentopia.com/hiddencam.php?showmode=animated&amp;country=United+States%7CIllinois&amp;seewhat=newest&amp;p=2" rel="next"/>
+  <link href="http://www.opentopia.com/hiddencam.php?showmode=animated&amp;country=United+States%7CIllinois&amp;seewhat=newest" rel="canonical"/>
+  <script src="/js/livehidden.js">
+  </script>
+  <script>
+   $(document).ready(function() {
+	/* $('select#sel_seewhat').selectmenu({width:200});
+	$('select#sel_country').selectmenu({width:240, maxHeight: 300, style:'popup'});
+	//$('select#tag2').selectmenu({width:200}); 
+	$("#searchbutton").button(); */
+});
+var countries = new Array();
+var tags = new Array();
+var gottags = false;
+var cur_country_name = 'United States';
+var cur_state_name = 'Illinois';
+var cur_tag = '';
+function countrychange() {
+	if (!gottags) {
+		return;
+	}	
+	var country = $('#sel_country').val();
+	var xarr = country.split(',')
+	if (xarr.length&gt;1) {
+		var country_name = xarr[0];
+		var state_name = $.trim(country.substring(country_name.length+1));
+	} else {
+		var country_name = country;
+		var state_name = '';
+	}
+	cur_country_name = country_name;
+	cur_state_name = state_name;
+	if (country_name == '') {
+		return;
+	}
+	//$('#tag2').html('');
+	if (typeof(countries['name'][country_name]) == 'undefined') {
+		return;
+	}
+	var country_code = countries['name'][country_name];
+	if (countries['code'][country_code]['tags'].length == 0) {
+		return;
+	}
+	var html = '&lt;option&gt;&lt;/option&gt;';
+	var len = countries['code'][country_code]['tags'].length;
+	var seltag = '';
+	if (state_name!='') {
+		var admin1uniq = state_name_to_code[state_name];
+		for (var tag_name in countries['code'][country_code]['states'][admin1uniq]['tags']) {
+			var tag_count = countries['code'][country_code]['states'][admin1uniq]['tags'][tag_name];
+			if (tag_name == cur_tag) {
+				seltag = cur_tag;
+			}
+		   html += '&lt;option value="' + tag_name + '"&gt;' + tag_name + ' ('+ tag_count + ')&lt;/option&gt;';
+		}
+	} else {
+		for (var tag_name in countries['code'][country_code]['tags']) {
+			var tag_count = countries['code'][country_code]['tags'][tag_name];
+			if (tag_name == cur_tag) {
+				seltag = cur_tag;
+			}
+		   html += '&lt;option value="' + tag_name + '"&gt;' + tag_name + ' ('+ tag_count + ')&lt;/option&gt;';
+		}
+	}
+	$('#tag2').append(html);
+	if (seltag!='') {
+		$('#tag2').val(seltag);
+	}
+}
+function tagchange() {
+	cur_tag = $('#tag2').val();
+}
+var state_name_to_code = {'Alabama':'US.AL','Alaska':'US.AK','Arizona':'US.AZ','Arkansas':'US.AR','California':'US.CA','Colorado':'US.CO','Connecticut':'US.CT','Delaware':'US.DE','Florida':'US.FL','Georgia':'US.GA','Hawaii':'US.HI','Idaho':'US.ID','Illinois':'US.IL','Indiana':'US.IN','Iowa':'US.IA','Kansas':'US.KS','Kentucky':'US.KY','Louisiana':'US.LA','Maine':'US.ME','Maryland':'US.MD','Massachusetts':'US.MA','Michigan':'US.MI','Minnesota':'US.MN','Mississippi':'US.MS','Missouri':'US.MO','Montana':'US.MT','Nebraska':'US.NE','Nevada':'US.NV','New Hampshire':'US.NH','New Jersey':'US.NJ','New Mexico':'US.NM','New York':'US.NY','North Carolina':'US.NC','North Dakota':'US.ND','Ohio':'US.OH','Oklahoma':'US.OK','Oregon':'US.OR','Pennsylvania':'US.PA','Rhode Island':'US.RI','South Carolina':'US.SC','South Dakota':'US.SD','Tennessee':'US.TN','Texas':'US.TX','Utah':'US.UT','Vermont':'US.VT','Virginia':'US.VA','Washington':'US.WA','Washington, D.C.':'US.DC','West Virginia':'US.WV','Wisconsin':'US.WI','Wyoming':'US.WY'};
+//$.getJSON('?xmode=get_country_tags', function(data){
+//	countries = data['countries'];
+//	tags = data['tags'];
+//	gottags = true;
+//});
+  </script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="span-25 last">
+    <div id="header">
+     <div id="logo">
+      <div class="logininfo">
+      </div>
+      <a href="/">
+       <img alt="Opentopia logo" height="162" src="/images/opentopia_logo.png" width="334"/>
+      </a>
+     </div>
+     <div id="headerright">
+      <div id="headertop">
+       <span id="welcome">
+        Welcome, guest
+       </span>
+       <div class="fb-login-button" data-max-rows="1" data-show-faces="false" data-width="200" style="display:inline">
+       </div>
+       <!--&lt;div class="fb-login-button" style="display:inline"&gt;&lt;a href="https://www.facebook.com/dialog/oauth?client_id=102047243191178&amp;redirect_uri=http%3A%2F%2Fwww.opentopia.com%2Fhiddencam.php%3Fseewhat%3Dnewest%26country%3DUnited%2520States%7CIllinois%26showmode%3Danimated%26p%3D1&amp;state=1e47e7210198653246feb82687bae9a0"&gt;FBLogin&lt;/a&gt;&lt;/div&gt;-->
+       or
+       <a href="/login.php">
+        Sign In
+       </a>
+       /
+       <a href="/join.php">
+        Join OpenTopia
+       </a>
+      </div>
+      <div id="menu">
+       <ul>
+        <li style="width:10px">
+        </li>
+        <li>
+         <a class="menu" href="/search.php">
+          Search
+         </a>
+        </li>
+        <li>
+         <a class="menu" href="/map.php">
+          Map
+         </a>
+        </li>
+        <li>
+         <a class="menu atv" href="/hiddencam.php">
+          All Cams
+         </a>
+        </li>
+        <li>
+         <a class="menu" href="/index.php" rel="home">
+          Home
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div id="topbox_search">
+     <div id="whitesearch">
+      <form action="/hiddencam.php" id="ch_form" method="get" name="ch_form">
+       <input id="showmode" name="showmode" type="hidden" value="animated"/>
+       <div>
+        <button class="otstyle" id="searchbutton" onclick="return document.getElementById('ch_form').submit();" type="button">
+         View 
+        </button>
+       </div>
+       <div>
+        <select class="otstyle" id="sel_country" name="country" onchange="countrychange()">
+         <option value="*">
+          * Anywhere
+         </option>
+         <option value="Albania">
+          Albania (1)
+         </option>
+         <option value="Anguilla">
+          Anguilla (1)
+         </option>
+         <option value="Antarctica">
+          Antarctica (1)
+         </option>
+         <option value="Argentina">
+          Argentina (2)
+         </option>
+         <option value="Australia">
+          Australia (9)
+         </option>
+         <option value="Austria">
+          Austria (109)
+         </option>
+         <option value="Bahamas">
+          Bahamas (2)
+         </option>
+         <option value="Belgium">
+          Belgium (7)
+         </option>
+         <option value="Bulgaria">
+          Bulgaria (4)
+         </option>
+         <option value="Canada">
+          Canada (64)
+         </option>
+         <option value="Chile">
+          Chile (5)
+         </option>
+         <option value="Costa Rica">
+          Costa Rica (1)
+         </option>
+         <option value="Croatia">
+          Croatia (8)
+         </option>
+         <option value="Czech Republic">
+          Czech Republic (33)
+         </option>
+         <option value="Denmark">
+          Denmark (6)
+         </option>
+         <option value="Ecuador">
+          Ecuador (1)
+         </option>
+         <option value="Estonia">
+          Estonia (27)
+         </option>
+         <option value="Finland">
+          Finland (50)
+         </option>
+         <option value="France">
+          France (61)
+         </option>
+         <option value="French Polynesia">
+          French Polynesia (1)
+         </option>
+         <option value="Germany">
+          Germany (187)
+         </option>
+         <option value="Greece">
+          Greece (6)
+         </option>
+         <option value="Guam">
+          Guam (1)
+         </option>
+         <option value="Hong Kong">
+          Hong Kong (1)
+         </option>
+         <option value="Hungary">
+          Hungary (23)
+         </option>
+         <option value="Iceland">
+          Iceland (17)
+         </option>
+         <option value="India">
+          India (1)
+         </option>
+         <option value="Ireland">
+          Ireland (3)
+         </option>
+         <option value="Italy">
+          Italy (60)
+         </option>
+         <option value="Japan">
+          Japan (366)
+         </option>
+         <option value="Jersey">
+          Jersey (2)
+         </option>
+         <option value="Latvia">
+          Latvia (4)
+         </option>
+         <option value="Liechtenstein">
+          Liechtenstein (1)
+         </option>
+         <option value="Luxembourg">
+          Luxembourg (2)
+         </option>
+         <option value="Macao">
+          Macao (3)
+         </option>
+         <option value="Mexico">
+          Mexico (5)
+         </option>
+         <option value="Nepal">
+          Nepal (1)
+         </option>
+         <option value="Netherlands">
+          Netherlands (38)
+         </option>
+         <option value="New Zealand">
+          New Zealand (1)
+         </option>
+         <option value="Nicaragua">
+          Nicaragua (1)
+         </option>
+         <option value="Norway">
+          Norway (70)
+         </option>
+         <option value="Poland">
+          Poland (26)
+         </option>
+         <option value="Portugal">
+          Portugal (2)
+         </option>
+         <option value="Reunion">
+          Reunion (1)
+         </option>
+         <option value="Romania">
+          Romania (9)
+         </option>
+         <option value="Russia">
+          Russia (23)
+         </option>
+         <option value="Saint Barthlemy">
+          Saint Barthlemy (2)
+         </option>
+         <option value="Saint Lucia">
+          Saint Lucia (1)
+         </option>
+         <option value="Saint Pierre and Miquelon">
+          Saint Pierre and Miquelon (1)
+         </option>
+         <option value="Serbia">
+          Serbia (3)
+         </option>
+         <option value="Singapore">
+          Singapore (1)
+         </option>
+         <option value="Slovakia">
+          Slovakia (2)
+         </option>
+         <option value="Slovenia">
+          Slovenia (5)
+         </option>
+         <option value="South Korea">
+          South Korea (4)
+         </option>
+         <option value="Spain">
+          Spain (76)
+         </option>
+         <option value="Svalbard and Jan Mayen">
+          Svalbard and Jan Mayen (1)
+         </option>
+         <option value="Sweden">
+          Sweden (93)
+         </option>
+         <option value="Switzerland">
+          Switzerland (106)
+         </option>
+         <option value="Taiwan">
+          Taiwan (17)
+         </option>
+         <option value="Turkey">
+          Turkey (1)
+         </option>
+         <option value="U.S. Virgin Islands">
+          U.S. Virgin Islands (1)
+         </option>
+         <option value="Ukraine">
+          Ukraine (4)
+         </option>
+         <option value="United Arab Emirates">
+          United Arab Emirates (1)
+         </option>
+         <option value="United Kingdom">
+          United Kingdom (72)
+         </option>
+         <option value="United States">
+          United States (752)
+         </option>
+         <option value="United States|United States (general)">
+          -United States (general) (1)
+         </option>
+         <option value="United States|Alaska">
+          -Alaska (8)
+         </option>
+         <option value="United States|Alabama">
+          -Alabama (6)
+         </option>
+         <option value="United States|Arkansas">
+          -Arkansas (6)
+         </option>
+         <option value="United States|Arizona">
+          -Arizona (35)
+         </option>
+         <option value="United States|California">
+          -California (62)
+         </option>
+         <option value="United States|Colorado">
+          -Colorado (17)
+         </option>
+         <option value="United States|Connecticut">
+          -Connecticut (7)
+         </option>
+         <option value="United States|Washington, D.C.">
+          -Washington, D.C. (4)
+         </option>
+         <option value="United States|Delaware">
+          -Delaware (2)
+         </option>
+         <option value="United States|Florida">
+          -Florida (34)
+         </option>
+         <option value="United States|Georgia">
+          -Georgia (7)
+         </option>
+         <option value="United States|Hawaii">
+          -Hawaii (12)
+         </option>
+         <option value="United States|Iowa">
+          -Iowa (10)
+         </option>
+         <option value="United States|Idaho">
+          -Idaho (1)
+         </option>
+         <option selected="selected" value="United States|Illinois">
+          -Illinois (31)
+         </option>
+         <option value="United States|Indiana">
+          -Indiana (26)
+         </option>
+         <option value="United States|Kansas">
+          -Kansas (4)
+         </option>
+         <option value="United States|Kentucky">
+          -Kentucky (8)
+         </option>
+         <option value="United States|Louisiana">
+          -Louisiana (6)
+         </option>
+         <option value="United States|Massachusetts">
+          -Massachusetts (21)
+         </option>
+         <option value="United States|Maryland">
+          -Maryland (12)
+         </option>
+         <option value="United States|Maine">
+          -Maine (16)
+         </option>
+         <option value="United States|Michigan">
+          -Michigan (37)
+         </option>
+         <option value="United States|Minnesota">
+          -Minnesota (13)
+         </option>
+         <option value="United States|Missouri">
+          -Missouri (2)
+         </option>
+         <option value="United States|Montana">
+          -Montana (6)
+         </option>
+         <option value="United States|North Carolina">
+          -North Carolina (12)
+         </option>
+         <option value="United States|North Dakota">
+          -North Dakota (8)
+         </option>
+         <option value="United States|Nebraska">
+          -Nebraska (4)
+         </option>
+         <option value="United States|New Hampshire">
+          -New Hampshire (3)
+         </option>
+         <option value="United States|New Jersey">
+          -New Jersey (13)
+         </option>
+         <option value="United States|New Mexico">
+          -New Mexico (2)
+         </option>
+         <option value="United States|Nevada">
+          -Nevada (11)
+         </option>
+         <option value="United States|New York">
+          -New York (83)
+         </option>
+         <option value="United States|Ohio">
+          -Ohio (22)
+         </option>
+         <option value="United States|Oklahoma">
+          -Oklahoma (6)
+         </option>
+         <option value="United States|Oregon">
+          -Oregon (12)
+         </option>
+         <option value="United States|Pennsylvania">
+          -Pennsylvania (26)
+         </option>
+         <option value="United States|Rhode Island">
+          -Rhode Island (4)
+         </option>
+         <option value="United States|South Carolina">
+          -South Carolina (12)
+         </option>
+         <option value="United States|South Dakota">
+          -South Dakota (2)
+         </option>
+         <option value="United States|Tennessee">
+          -Tennessee (22)
+         </option>
+         <option value="United States|Texas">
+          -Texas (20)
+         </option>
+         <option value="United States|Utah">
+          -Utah (14)
+         </option>
+         <option value="United States|Virginia">
+          -Virginia (28)
+         </option>
+         <option value="United States|Vermont">
+          -Vermont (3)
+         </option>
+         <option value="United States|Washington">
+          -Washington (33)
+         </option>
+         <option value="United States|Wisconsin">
+          -Wisconsin (13)
+         </option>
+         <option value="United States|West Virginia">
+          -West Virginia (1)
+         </option>
+         <option value="United States|Wyoming">
+          -Wyoming (3)
+         </option>
+        </select>
+       </div>
+       <div class="text">
+        from
+       </div>
+       <div>
+        <select class="otstyle" id="sel_seewhat" name="seewhat">
+         <option selected="selected" value="newest">
+          Newest
+         </option>
+         <option value="random">
+          Random Selection
+         </option>
+         <option value="oftenviewed">
+          Most Often Viewed
+         </option>
+         <option value="highlyrated">
+          Most Highly Rated
+         </option>
+        </select>
+       </div>
+      </form>
+     </div>
+     <!--whitesearch-->
+    </div>
+    <!--topbox_front-->
+   </div>
+   <!--span-25 last-->
+   <div class="span-25 last">
+    <div class="boxleft span-19">
+     <div class="angletop">
+     </div>
+     <div class="boxcontent">
+      <h3 class="navigation">
+       <a href="/hiddencam.php">
+        All Cameras
+       </a>
+       &gt;&gt;
+       <a href="/hiddencam.php?country=United States">
+        United States
+       </a>
+       <img src="/images/flags_iso/32/us.png" style="position:relative;top:9px;"/>
+       &gt;&gt;
+       <a href="/hiddencam.php?country=United States|Illinois">
+        Illinois
+       </a>
+      </h3>
+      <div style="margin: 5px 0px 20px 18px;padding:10px;background-color:#eee;font-size:12px;">
+       In San Francisco the Longest stretch of road is Geary Boulevard
+      </div>
+      <ul class="camgrid camgrid3">
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/16369" target="_self">
+          <img class="" id="cp_43911747" src="http://images.opentopia.com/cams/16369/43911747.jpg"/>
+          <img class="" id="cp_43909307" src="http://images.opentopia.com/cams/16369/43909307.jpg"/>
+          <img class="" id="cp_43906468" src="http://images.opentopia.com/cams/16369/43906468.jpg"/>
+          <img class="" id="cp_43904023" src="http://images.opentopia.com/cams/16369/43904023.jpg"/>
+          <img class="" id="cp_43901326" src="http://images.opentopia.com/cams/16369/43901326.jpg"/>
+          <img class="active" id="cp_43898888" src="http://images.opentopia.com/cams/16369/43898888.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/16297" target="_self">
+          <img class="" id="cp_43911774" src="http://images.opentopia.com/cams/16297/43911774.jpg"/>
+          <img class="" id="cp_43909336" src="http://images.opentopia.com/cams/16297/43909336.jpg"/>
+          <img class="" id="cp_43906496" src="http://images.opentopia.com/cams/16297/43906496.jpg"/>
+          <img class="" id="cp_43904055" src="http://images.opentopia.com/cams/16297/43904055.jpg"/>
+          <img class="" id="cp_43901354" src="http://images.opentopia.com/cams/16297/43901354.jpg"/>
+          <img class="active" id="cp_43898915" src="http://images.opentopia.com/cams/16297/43898915.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Community Development Of...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Wheeling
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/14931" target="_self">
+          <img class="" id="cp_43909020" src="http://images.opentopia.com/cams/14931/43909020.jpg"/>
+          <img class="" id="cp_43906216" src="http://images.opentopia.com/cams/14931/43906216.jpg"/>
+          <img class="" id="cp_43903776" src="http://images.opentopia.com/cams/14931/43903776.jpg"/>
+          <img class="" id="cp_43777367" src="http://images.opentopia.com/cams/14931/43777367.jpg"/>
+          <img class="" id="cp_43703783" src="http://images.opentopia.com/cams/14931/43703783.jpg"/>
+          <img class="active" id="cp_43701571" src="http://images.opentopia.com/cams/14931/43701571.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Driveway
+         </div>
+         <div class="location">
+          <span>
+           United State
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Villa Park
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <ul class="camgrid camgrid3">
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/14516" target="_self">
+          <img class="" id="cp_43912335" src="http://images.opentopia.com/cams/14516/43912335.jpg"/>
+          <img class="" id="cp_43909894" src="http://images.opentopia.com/cams/14516/43909894.jpg"/>
+          <img class="" id="cp_43907072" src="http://images.opentopia.com/cams/14516/43907072.jpg"/>
+          <img class="" id="cp_43904624" src="http://images.opentopia.com/cams/14516/43904624.jpg"/>
+          <img class="" id="cp_43901898" src="http://images.opentopia.com/cams/14516/43901898.jpg"/>
+          <img class="active" id="cp_43899469" src="http://images.opentopia.com/cams/14516/43899469.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12795" target="_self">
+          <img class="" id="cp_43912453" src="http://images.opentopia.com/cams/12795/43912453.jpg"/>
+          <img class="" id="cp_43910012" src="http://images.opentopia.com/cams/12795/43910012.jpg"/>
+          <img class="" id="cp_43907190" src="http://images.opentopia.com/cams/12795/43907190.jpg"/>
+          <img class="" id="cp_43904743" src="http://images.opentopia.com/cams/12795/43904743.jpg"/>
+          <img class="" id="cp_43902012" src="http://images.opentopia.com/cams/12795/43902012.jpg"/>
+          <img class="active" id="cp_43899582" src="http://images.opentopia.com/cams/12795/43899582.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          University of Chicago
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Chicago
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12609" target="_self">
+          <img class="" id="cp_43912499" src="http://images.opentopia.com/cams/12609/43912499.jpg"/>
+          <img class="" id="cp_43910058" src="http://images.opentopia.com/cams/12609/43910058.jpg"/>
+          <img class="" id="cp_43907236" src="http://images.opentopia.com/cams/12609/43907236.jpg"/>
+          <img class="" id="cp_43904788" src="http://images.opentopia.com/cams/12609/43904788.jpg"/>
+          <img class="" id="cp_43902056" src="http://images.opentopia.com/cams/12609/43902056.jpg"/>
+          <img class="active" id="cp_43899627" src="http://images.opentopia.com/cams/12609/43899627.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Schaumburg Swan Cam from...
+         </div>
+         <div class="location">
+          <span>
+           United State
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Schaumburg
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <ul class="camgrid camgrid3">
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12590" target="_self">
+          <img class="" id="cp_43912505" src="http://images.opentopia.com/cams/12590/43912505.jpg"/>
+          <img class="" id="cp_43910063" src="http://images.opentopia.com/cams/12590/43910063.jpg"/>
+          <img class="" id="cp_43907242" src="http://images.opentopia.com/cams/12590/43907242.jpg"/>
+          <img class="" id="cp_43904793" src="http://images.opentopia.com/cams/12590/43904793.jpg"/>
+          <img class="" id="cp_43902061" src="http://images.opentopia.com/cams/12590/43902061.jpg"/>
+          <img class="active" id="cp_43899633" src="http://images.opentopia.com/cams/12590/43899633.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Ferro Pavilion at George...
+         </div>
+         <div class="location">
+          <span>
+           United State
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Williams B
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12527" target="_self">
+          <img class="" id="cp_43912519" src="http://images.opentopia.com/cams/12527/43912519.jpg"/>
+          <img class="" id="cp_43910074" src="http://images.opentopia.com/cams/12527/43910074.jpg"/>
+          <img class="" id="cp_43907253" src="http://images.opentopia.com/cams/12527/43907253.jpg"/>
+          <img class="" id="cp_43904804" src="http://images.opentopia.com/cams/12527/43904804.jpg"/>
+          <img class="" id="cp_43902072" src="http://images.opentopia.com/cams/12527/43902072.jpg"/>
+          <img class="active" id="cp_43899644" src="http://images.opentopia.com/cams/12527/43899644.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          George Williams College ...
+         </div>
+         <div class="location">
+          <span>
+           United State
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Williams B
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12447" target="_self">
+          <img class="" id="cp_43912529" src="http://images.opentopia.com/cams/12447/43912529.jpg"/>
+          <img class="" id="cp_43910084" src="http://images.opentopia.com/cams/12447/43910084.jpg"/>
+          <img class="" id="cp_43907263" src="http://images.opentopia.com/cams/12447/43907263.jpg"/>
+          <img class="" id="cp_43904814" src="http://images.opentopia.com/cams/12447/43904814.jpg"/>
+          <img class="" id="cp_43902082" src="http://images.opentopia.com/cams/12447/43902082.jpg"/>
+          <img class="active" id="cp_43899653" src="http://images.opentopia.com/cams/12447/43899653.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <ul class="camgrid camgrid3">
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12423" target="_self">
+          <img class="" id="cp_43912533" src="http://images.opentopia.com/cams/12423/43912533.jpg"/>
+          <img class="" id="cp_43910091" src="http://images.opentopia.com/cams/12423/43910091.jpg"/>
+          <img class="" id="cp_43907267" src="http://images.opentopia.com/cams/12423/43907267.jpg"/>
+          <img class="" id="cp_43904818" src="http://images.opentopia.com/cams/12423/43904818.jpg"/>
+          <img class="" id="cp_43902086" src="http://images.opentopia.com/cams/12423/43902086.jpg"/>
+          <img class="active" id="cp_43899658" src="http://images.opentopia.com/cams/12423/43899658.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12422" target="_self">
+          <img class="" id="cp_43912534" src="http://images.opentopia.com/cams/12422/43912534.jpg"/>
+          <img class="" id="cp_43910092" src="http://images.opentopia.com/cams/12422/43910092.jpg"/>
+          <img class="" id="cp_43907268" src="http://images.opentopia.com/cams/12422/43907268.jpg"/>
+          <img class="" id="cp_43904819" src="http://images.opentopia.com/cams/12422/43904819.jpg"/>
+          <img class="" id="cp_43902087" src="http://images.opentopia.com/cams/12422/43902087.jpg"/>
+          <img class="active" id="cp_43899659" src="http://images.opentopia.com/cams/12422/43899659.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12421" target="_self">
+          <img class="" id="cp_43912535" src="http://images.opentopia.com/cams/12421/43912535.jpg"/>
+          <img class="" id="cp_43910093" src="http://images.opentopia.com/cams/12421/43910093.jpg"/>
+          <img class="" id="cp_43907269" src="http://images.opentopia.com/cams/12421/43907269.jpg"/>
+          <img class="" id="cp_43904820" src="http://images.opentopia.com/cams/12421/43904820.jpg"/>
+          <img class="" id="cp_43902088" src="http://images.opentopia.com/cams/12421/43902088.jpg"/>
+          <img class="active" id="cp_43899660" src="http://images.opentopia.com/cams/12421/43899660.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <ul class="camgrid camgrid3">
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12420" target="_self">
+          <img class="" id="cp_43912536" src="http://images.opentopia.com/cams/12420/43912536.jpg"/>
+          <img class="" id="cp_43910094" src="http://images.opentopia.com/cams/12420/43910094.jpg"/>
+          <img class="" id="cp_43907270" src="http://images.opentopia.com/cams/12420/43907270.jpg"/>
+          <img class="" id="cp_43904821" src="http://images.opentopia.com/cams/12420/43904821.jpg"/>
+          <img class="" id="cp_43902089" src="http://images.opentopia.com/cams/12420/43902089.jpg"/>
+          <img class="active" id="cp_43899661" src="http://images.opentopia.com/cams/12420/43899661.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12419" target="_self">
+          <img class="" id="cp_43912537" src="http://images.opentopia.com/cams/12419/43912537.jpg"/>
+          <img class="" id="cp_43910095" src="http://images.opentopia.com/cams/12419/43910095.jpg"/>
+          <img class="" id="cp_43907271" src="http://images.opentopia.com/cams/12419/43907271.jpg"/>
+          <img class="" id="cp_43904822" src="http://images.opentopia.com/cams/12419/43904822.jpg"/>
+          <img class="" id="cp_43902090" src="http://images.opentopia.com/cams/12419/43902090.jpg"/>
+          <img class="active" id="cp_43899662" src="http://images.opentopia.com/cams/12419/43899662.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <div class="flipbook">
+         <a href="/webcam/12418" target="_self">
+          <img class="" id="cp_43912538" src="http://images.opentopia.com/cams/12418/43912538.jpg"/>
+          <img class="" id="cp_43910096" src="http://images.opentopia.com/cams/12418/43910096.jpg"/>
+          <img class="" id="cp_43907272" src="http://images.opentopia.com/cams/12418/43907272.jpg"/>
+          <img class="" id="cp_43904823" src="http://images.opentopia.com/cams/12418/43904823.jpg"/>
+          <img class="" id="cp_43902091" src="http://images.opentopia.com/cams/12418/43902091.jpg"/>
+          <img class="active" id="cp_43899663" src="http://images.opentopia.com/cams/12418/43899663.jpg"/>
+         </a>
+        </div>
+        <div class="infos">
+         <div class="viewcamsname">
+          Argonne National Laborat...
+         </div>
+         <div class="location">
+          <span>
+           United States
+          </span>
+          |
+          <span>
+           Illinois
+          </span>
+          |
+          <span>
+           Lemont
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <div class="page">
+       <span>
+        1
+       </span>
+       <a href="http://www.opentopia.com/hiddencam.php?showmode=animated&amp;country=United+States%7CIllinois&amp;seewhat=newest&amp;p=2">
+        2
+       </a>
+       <a href="http://www.opentopia.com/hiddencam.php?showmode=animated&amp;country=United+States%7CIllinois&amp;seewhat=newest&amp;p=3">
+        3
+       </a>
+       <a href="http://www.opentopia.com/hiddencam.php?showmode=animated&amp;country=United+States%7CIllinois&amp;seewhat=newest&amp;p=2">
+        <img height="20" src="/images/pagenext.gif" width="20"/>
+       </a>
+      </div>
+      <ul class="camgrid camgridx">
+       <li>
+        <a href="/showxcams.php?pic=1%2F4&amp;ai=12&amp;agi=8&amp;ui=1" rel="nofollow" target="_self">
+         <img alt="camgirl" height="171" src="/images/mfc/1/4.jpg" width="230"/>
+        </a>
+       </li>
+       <li>
+        <a href="/showxcams.php?pic=1%2F21&amp;ai=12&amp;agi=8&amp;ui=1" rel="nofollow" target="_self">
+         <img alt="camgirl" height="171" src="/images/mfc/1/21.jpg" width="230"/>
+        </a>
+       </li>
+       <li>
+        <a href="/showxcams.php?pic=1%2F8&amp;ai=12&amp;agi=8&amp;ui=1" rel="nofollow" target="_self">
+         <img alt="camgirl" height="171" src="/images/mfc/1/8.jpg" width="230"/>
+        </a>
+       </li>
+      </ul>
+      <div style="text-align:center">
+       Display Mode:
+       <select class="otstyle" id="showmodeselect" name="showmode">
+        <option value="standard">
+         Last snapshot
+        </option>
+        <option selected="selected" value="animated">
+         Animation of last snapshots
+        </option>
+       </select>
+       <button class="otstyle" id="changeshowmode" onclick="$('#showmode').val($('#showmodeselect').val());$('#ch_form').submit();" type="button">
+        Change
+       </button>
+      </div>
+     </div>
+     <div style="clear:both">
+     </div>
+     <div class="viewline">
+     </div>
+     <div class="anglebottom">
+     </div>
+    </div>
+    <div class="span-6 last">
+     <div class="boxright span-6 last" id="recentbox">
+      <div class="angletop">
+      </div>
+      <div class="boxcontent" id="recentboxcontent">
+       <h1 class="bigtitle">
+        Recently Viewed
+       </h1>
+       <div class="camlist camlist_small_light" id="listrecent">
+        <div class="cell_small">
+         <div class="listcam">
+          <a href="/webcam/12176" target="_self">
+           <img alt="Circulation Desk at the UMC Library" height="48" src="http://images.opentopia.com/cams/12176/tiny.jpg" width="62"/>
+          </a>
+         </div>
+         <div class="listcaminfo">
+          <div class="name">
+           Circulation Desk at...
+          </div>
+          <div class="location">
+           United States
+          </div>
+         </div>
+        </div>
+        <div class="line">
+        </div>
+        <div class="cell_small">
+         <div class="listcam">
+          <a href="/webcam/15968" target="_self">
+           <img alt="View of Lake Saint-Jean " height="48" src="http://images.opentopia.com/cams/15968/tiny.jpg" width="62"/>
+          </a>
+         </div>
+         <div class="listcaminfo">
+          <div class="name">
+           View of Lake Saint-...
+          </div>
+          <div class="location">
+           Canada
+          </div>
+         </div>
+        </div>
+        <div class="line">
+        </div>
+        <div class="cell_small">
+         <div class="listcam">
+          <a href="/webcam/4541" target="_self">
+           <img alt="Detroit-Windsor Tunnel - Exit into Detroit" height="48" src="http://images.opentopia.com/cams/4541/tiny.jpg" width="62"/>
+          </a>
+         </div>
+         <div class="listcaminfo">
+          <div class="name">
+           Detroit-Windsor Tun...
+          </div>
+          <div class="location">
+           United States
+          </div>
+         </div>
+        </div>
+        <div class="line">
+        </div>
+        <div class="cell_small">
+         <div class="listcam">
+          <a href="/webcam/2754" target="_self">
+           <img alt="Purdue" height="48" src="http://images.opentopia.com/cams/2754/tiny.jpg" width="62"/>
+          </a>
+         </div>
+         <div class="listcaminfo">
+          <div class="name">
+           Purdue
+          </div>
+          <div class="location">
+           United States
+          </div>
+         </div>
+        </div>
+        <div class="line">
+        </div>
+        <div class="cell_small">
+         <div class="listcam">
+          <a href="/webcam/10942" target="_self">
+           <img alt="Purdue University - Computer Science Lab, LWSN B131 Student Activity Center" height="48" src="http://images.opentopia.com/cams/10942/tiny.jpg" width="62"/>
+          </a>
+         </div>
+         <div class="listcaminfo">
+          <div class="name">
+           Purdue University -...
+          </div>
+          <div class="location">
+           United States
+          </div>
+         </div>
+        </div>
+        <div class="line">
+        </div>
+       </div>
+       <!--listrecent-->
+       <script>
+        var recentshown = [12176,15968,4541,2754,10942];
+       </script>
+      </div>
+      <div style="clear:both">
+      </div>
+      <div class="anglebottom">
+      </div>
+     </div>
+     <div class="boxright span-6 last" style="overflow:hidden">
+      <div class="angletop">
+      </div>
+      <div class="boxcontent" style="margin: -23px 0 -15px -17px;">
+       <fb:like-box header="false" height="254" href="http://www.facebook.com/pages/Opentopia/195525890471892" show_faces="true" stream="false" width="238">
+       </fb:like-box>
+      </div>
+      <div style="clear:both">
+      </div>
+      <div class="anglebottom">
+      </div>
+     </div>
+     <div class="boxright span-6 last" style="overflow:hidden">
+      <div class="angletop">
+      </div>
+      <div class="boxcontent" style="margin: -5px 0 -10px 0">
+       <g:plusone annotation="inline">
+       </g:plusone>
+      </div>
+      <div style="clear:both">
+      </div>
+      <div class="anglebottom">
+      </div>
+     </div>
+     <div class="boxright span-6 last">
+      <div class="angletop">
+      </div>
+      <div class="boxcontent">
+       <p>
+        <b>
+         Explanation
+        </b>
+       </p>
+       <p>
+        These are web cameras with IP addresses, which send a continuous stream of pictures in the Motion JPEG format. These feeds are checked every three hours or so. The first frame of the video is grabbed and resized as a thumbnail. The general location is at first guessed based on the IP number, but can be edited by whoever has better information.
+       </p>
+       <p>
+        <b>
+         Copyright
+        </b>
+       </p>
+       <p>
+        These videos are most likely copyrighted by whoever owns the cameras. The snapshots you see here appear as fair use according to copyright law. However, if a picture from your webcam appears here and you object to that, let us know and it will be removed.
+       </p>
+       <p>
+        <b>
+         Links
+        </b>
+       </p>
+       <p>
+        These are some sites that have mentioned this page:
+       </p>
+       <ul>
+        <li>
+         <a href="http://edition.cnn.com/2010/TECH/web/09/09/our.favorite.webcams/index.html" target="_blank">
+          CNN
+         </a>
+        </li>
+        <li>
+         <a href="http://www.youtube.com/watch?v=k1YjsPPU6bY" target="_blank">
+          Rocketboom
+         </a>
+        </li>
+        <li>
+         <a href="http://it.slashdot.org/it/05/01/09/1411242.shtml" target="_blank">
+          Slashdot
+         </a>
+        </li>
+        <li>
+         <a href="http://www.boingboing.net/2005/01/10/still_more_random_go.html" target="_blank">
+          BoingBoing
+         </a>
+        </li>
+        <li>
+         <a href="http://waxy.org/links/" target="_blank">
+          Waxy
+         </a>
+        </li>
+        <li>
+         <a href="http://del.icio.us/popular/" target="_blank">
+          del.icio.us
+         </a>
+        </li>
+        <li>
+         <a href="http://www.daypop.com/top/" target="_blank">
+          DayPop
+         </a>
+        </li>
+        <li>
+         <a href="http://www.metafilter.com/mefi/38357" target="_blank">
+          Metafilter
+         </a>
+        </li>
+        <li>
+         <a href="http://www.williamgibsonbooks.com/blog/2005_01_01_archive.asp" target="_blank">
+          William Gibson
+         </a>
+        </li>
+        <li>
+         <a href="http://derstandard.at/" target="_blank">
+          Der Standard
+         </a>
+        </li>
+        <li>
+         <a href="http://i-am-bored.com/bored_link.cfm" target="_blank">
+          I am Bored
+         </a>
+        </li>
+       </ul>
+       <p>
+        And more than 3000 others...
+       </p>
+      </div>
+      <div style="clear:both">
+      </div>
+      <div class="anglebottom">
+      </div>
+     </div>
+    </div>
+    <!--span-25 last-->
+    <div class="span-25 last boxfull hottest">
+     <div class="angletop">
+     </div>
+     <div class="boxcontent">
+      <div class="title">
+       <input id="switchval" name="switchval" type="hidden" value="close"/>
+       <h2 class="bigtitlein">
+        <img class="openclose" height="24" onclick="return open_close();" src="/images/close.gif" width="24"/>
+        Trending Webcams
+       </h2>
+      </div>
+      <ul class="camgrid camgrid4" id="hottest" style="display:none">
+       <li>
+        <a href="/webcam/15505">
+         <img alt="Chip-Chan's Apartment Webcam" border="0" height="171" src="http://images.opentopia.com/cams/15505/medium.jpg" width="230"/>
+        </a>
+        <div class="infos">
+         <div class="viewcamsname">
+          Chip-Chan's Apartment We...
+         </div>
+         <div class="viewcamsaddress">
+          <span>
+           South Kore
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Seoul
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Seoul
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <a href="/webcam/6937">
+         <img alt="Oviso Bar " border="0" height="171" src="http://images.opentopia.com/cams/6937/medium.jpg" width="230"/>
+        </a>
+        <div class="infos">
+         <div class="viewcamsname">
+          Oviso Bar
+         </div>
+         <div class="viewcamsaddress">
+          <span>
+           Spain
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Catalonia
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Barcelona
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <a href="/webcam/10339">
+         <img alt="View over Lake Hornavan" border="0" height="171" src="http://images.opentopia.com/cams/10339/medium.jpg" width="230"/>
+        </a>
+        <div class="infos">
+         <div class="viewcamsname">
+          View over Lake Hornavan
+         </div>
+         <div class="viewcamsaddress">
+          <span>
+           Sweden
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Norrbotten
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Arjeplog
+          </span>
+         </div>
+        </div>
+       </li>
+       <li>
+        <a href="/webcam/8683">
+         <img alt="Sakurajima" border="0" height="171" src="http://images.opentopia.com/cams/8683/medium.jpg" width="230"/>
+        </a>
+        <div class="infos">
+         <div class="viewcamsname">
+          Sakurajima
+         </div>
+         <div class="viewcamsaddress">
+          <span>
+           Japan
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Kagoshima
+          </span>
+          <label class="line">
+           |
+          </label>
+          <span>
+           Tarumizu
+          </span>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </div>
+     <div style="clear:both">
+     </div>
+     <div class="anglebottom">
+     </div>
+    </div>
+    <!--span-25-->
+    <div class="boxbottom span-25 last">
+     <div class="bottomlist">
+      <h3>
+       Webcams
+      </h3>
+      <a href="/hiddencam.php">
+       All Cams
+      </a>
+      <a href="/map.php">
+       Maps
+      </a>
+     </div>
+     <div class="bottomlist">
+      <h3>
+       Member
+      </h3>
+      <a class="register" href="/join.php">
+       Create an Account
+      </a>
+      <a href="/profile.php">
+       Edit Profile
+      </a>
+     </div>
+     <div class="bottomlist">
+      <h3>
+       Buzz
+      </h3>
+      <a href="/news/">
+       Blog
+      </a>
+      <a href="http://www.twitter.com/opentopia" target="_blank">
+       Twitter feed
+      </a>
+     </div>
+     <div class="bottomlist">
+      <h3>
+       About
+      </h3>
+      <a href="/about.php">
+       About/Contact
+      </a>
+      <a href="/privacy.php">
+       Privacy
+      </a>
+     </div>
+     <div id="footer">
+      Opentopia  2004-2011 All Rights Reserved. Some Content copyrighted and licensed by its respective owners.
+     </div>
+    </div>
+   </div>
+   <!--container-->
+   <div id="fb-root">
+   </div>
+   <script>
+    // Load the FB SDK Asynchronously. http://developers.facebook.com/docs/facebook-login/getting-started-web/
+(function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+}(document));
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '102047243191178',
+	  channelUrl : 'http://www.opentopia.com/channel.php', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true,
+    oauth      : true,
+  });
+  
+  FB.Event.subscribe('auth.login', function(response) {
+    window.location.reload();
+  });
+  FB.Event.subscribe('auth.logout', function(response) {
+    Cookie.clear("mid");
+    Cookie.clear("xid");
+    Cookie.clear("uid");	
+    window.location.href = '?logout=1';
+  });
+
+};
+   </script>
+   <script type="text/javascript">
+    (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+   </script>
+   <!-- Start eXTReMe Non Public Tracker Code V3/4 -->
+   <script type="text/javascript">
+    &lt;!--
+EXref="";top.document.referrer?EXref=top.document.referrer:EXref=document.referrer;
+//--&gt;
+   </script>
+   <script type="text/javascript">
+    &lt;!--
+EXs=screen;EXw=EXs.width;navigator.appName!="Netscape"?
+EXb=EXs.colorDepth:EXb=EXs.pixelDepth;
+navigator.javaEnabled()==1?EXjv="y":EXjv="n";
+EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
+location.protocol=="https:"?EXprot="https":EXprot="http";
+EXref?EXref=EXref:EXref=EXd.referrer;EXsrc="src";
+EXd.write("&lt;img "+EXsrc+"="+EXprot+"://nht-2.extreme-dm.com",
+"/n3.g?login=opentopi&amp;pid=hiddenca&amp;auto=y&amp;",
+"jv="+EXjv+"&amp;j=y&amp;srw="+EXw+"&amp;srb="+EXb+"&amp;",
+"l="+escape(EXref)+" height=1 width=1&gt;");//--&gt;
+   </script>
+   <noscript>
+    <div id="naeXTReMe">
+     <img alt="" height="1" src="http://nht-2.extreme-dm.com/n3.g?login=opentopi&amp;pid=hiddenca&amp;j=n&amp;jv=n&amp;auto=y" width="1"/>
+    </div>
+   </noscript>
+   <!-- End eXTReMe Non Public Tracker Code -->
+  </div>
+ </body>
+</html>

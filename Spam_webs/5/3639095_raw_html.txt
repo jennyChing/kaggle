@@ -1,0 +1,4115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html dir="ltr" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <meta content="en" http-equiv="Content-Language"/>
+  <meta content="Tips for a Debian GNU/Linux System Administrator." name="description"/>
+  <meta content="Debian System Administration News, Debian Sysadmin, Linux Administration, Linux Sysadmin, Sysadmin" name="keywords"/>
+  <meta content="(c) 2004-2014 Debian Administration" name="copyright"/>
+  <meta content="Debian Administration" name="author"/>
+  <meta content="index,follow" name="robots"/>
+  <meta content="document" name="resource-type"/>
+  <meta content="Personal" name="classification"/>
+  <meta content="en" name="language"/>
+  <link href="/favicon.ico" rel="icon"/>
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <link href="/" rel="top" title="home"/>
+  <link href="/css/view.css" media="screen" rel="stylesheet" title="Site Layout" type="text/css"/>
+  <link href="/about/search" rel="search" title="Search"/>
+  <link href="/articles.rdf" rel="alternate" title="Debian Administration RSS" type="application/rdf+xml"/>
+  <link href="/atom.xml" rel="alternate" title="Atom" type="application/atom+xml"/>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+  <link href="http://www.debian-administration.org/article/590/OpenSSH_SFTP_chroot_with_ChrootDirectory" rel="canonincal"/>
+  <title>
+   OpenSSH SFTP chroot() with ChrootDirectory
+  </title>
+  <!--[if lte IE 6]&gt;
+   &lt;style type='text/css'&gt;
+    * html #main, * html #container {height:1%}
+   &lt;/style&gt;
+  &lt;![endif]-->
+  <!--[if !lt IE 6]&gt;&lt;!-->
+  <link href="/css/jquery.socialshareprivacy.min.css" rel="stylesheet" type="text/css"/>
+  <!-- jQuery: remotely, then locally -->
+  <link href="/css/jquery.autocomplete.css" rel="stylesheet" type="text/css"/>
+  <script src="/js/jquery-1.9.0.min.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.autocomplete.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.autogrow.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = '//api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]&gt; */
+  </script>
+  <script src="/js/jquery.sidebarToggler.102.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   &lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+$(function() {
+  $("#rightcol").toggleSidebar({animation: "queuedEffects",
+				initState:"shown",
+				event:"click",
+				triggerShow: "Menu"});
+});
+//--&gt;&lt;!]]&gt;
+  </script>
+  <!--&lt;![endif]-->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-37997217-1']);
+          _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                          })();
+  </script>
+ </head>
+ <body>
+  <div id="header">
+   <h1>
+    <a href="/">
+     Debian Administration
+    </a>
+   </h1>
+   <ul>
+    <li>
+     <a href="/about/Debian%20Administration">
+      About
+     </a>
+    </li>
+    <li>
+     <a href="/archive/">
+      Archive
+     </a>
+    </li>
+    <li>
+     <a href="/about/Contribute">
+      Contribute
+     </a>
+    </li>
+    <li>
+     <a href="/about/FAQ">
+      FAQ
+     </a>
+    </li>
+    <li>
+     <a href="/about/Search">
+      Search
+     </a>
+    </li>
+    <li>
+     <a href="/tag/">
+      Tags
+     </a>
+    </li>
+   </ul>
+  </div>
+  <div id="wrapper">
+   <div id="content">
+    <div id="container">
+     <div id="inner">
+      <div id="main">
+       <script src="/js/jquery.socialshareprivacy.min.js" type="text/javascript">
+       </script>
+       <script type="text/javascript">
+        &lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+$.fn.socialSharePrivacy.settings.path_prefix = '/';
+
+$(function() {
+     $('.share').socialSharePrivacy();
+});
+  //--&gt;&lt;!]]&gt;
+       </script>
+       <div class="article">
+        <!-- headline + section name -->
+        <h2 class="title">
+         OpenSSH SFTP chroot() with ChrootDirectory
+        </h2>
+        <div class="tagline">
+         <p>
+          Posted by
+          <a href="/users/niol">
+           niol
+          </a>
+          on Tue  1 Apr 2008  at 10:49
+         </p>
+        </div>
+        <!-- tag start -->
+        <script>
+         function addTag(url)
+{
+    $("#current_tags").load( url,
+                             function() {
+                                 $("#new_tag").val( "" )
+                                 $("#add_tag").hide()
+                             })
+
+}
+
+ $(document).ready(function(){
+    $("#new_tag").autocomplete("/ajax/complete");
+    $('a#toggle').click(function() {
+       $('#add_tag').toggle(400);
+     })
+
+} )
+        </script>
+        <div class="tags">
+         <span id="current_tags">
+          Tags:
+          <a href="/tag/ftp" rel="tag" title="Find more content with this tag">
+           ftp
+          </a>
+          ,
+          <a href="/tag/openssh" rel="tag" title="Find more content with this tag">
+           openssh
+          </a>
+          ,
+          <a href="/tag/sftp" rel="tag" title="Find more content with this tag">
+           sftp
+          </a>
+         </span>
+        </div>
+        <!-- tag end -->
+        <p>
+         The upcoming version of OpenSSH (
+         <tt>
+          4.8p1
+         </tt>
+         for the GNU/Linux port) features a new configuration option :
+         <tt>
+          ChrootDirectory
+         </tt>
+         . This has been made possible by a new SFTP subsystem statically linked to
+         <tt>
+          sshd
+         </tt>
+         .
+        </p>
+        <p>
+         This makes it easy to replace a basic FTP service without the hassle of configuring encryption and/or bothering with FTP passive and active modes when operating through a NAT router. This is also simpler than packages such as
+         <a href="http://packages.debian.org/rssh" rel="nofollow">
+          <tt>
+           rssh
+          </tt>
+         </a>
+         ,
+         <a href="http://packages.debian.org/scponly" rel="nofollow">
+          <tt>
+           scponly
+          </tt>
+         </a>
+         or
+         <a href="http://chrootssh.sourceforge.net/index.php" rel="nofollow">
+          other patches
+         </a>
+         because it does not require setting up and maintaining (i.e. security updates) a chroot environment.
+        </p>
+        <p>
+         To enable it, you obviously need the new version
+         <tt>
+          4.8p1
+         </tt>
+         . I personaly use the
+         <tt>
+          cvs
+         </tt>
+         version and the
+         <tt>
+          debian/
+         </tt>
+         directory of the sid package to build a well integrated Debian package
+         <tt>
+          4.8p1~cvs-1
+         </tt>
+         .
+        </p>
+        <p>
+         In
+         <tt>
+          /etc/ssh/sshd_config
+         </tt>
+         :
+        </p>
+        <p>
+         You need to configure OpenSSH to use its internal SFTP subsystem.
+        </p>
+        <pre>
+         Subsystem sftp internal-sftp
+        </pre>
+        <p>
+         Then, I configured
+         <tt>
+          chroot()
+         </tt>
+         ing in a match rule.
+        </p>
+        <pre>
+         Match group sftponly
+         ChrootDirectory /home/%u
+         X11Forwarding no
+         AllowTcpForwarding no
+         ForceCommand internal-sftp
+        </pre>
+        <p>
+         The directory in which to
+         <tt>
+          chroot()
+         </tt>
+         must be owned by root. After the call to
+         <tt>
+          chroot()
+         </tt>
+         ,
+         <tt>
+          sshd
+         </tt>
+         changes directory to the home directory relative to the new root directory. That is why I use
+         <tt>
+          /
+         </tt>
+         as home directory.
+        </p>
+        <pre>
+         # chown root.root /home/user
+# usermod -d / user
+# adduser user sftponly
+        </pre>
+        <p>
+         This seems to work as expected :
+        </p>
+        <pre>
+         $ sftp user@host
+Connecting to host...
+user@host's password:
+sftp&gt; ls
+build               cowbuildinall       incoming            johnbuilderclean
+sftp&gt; pwd
+Remote working directory: /
+sftp&gt; cd ..
+sftp&gt; ls
+build               cowbuildinall       incoming            johnbuilderclean
+        </pre>
+        <p>
+         The only thing I miss is file transfers logging, but I did not investigate this at all. More on this whenever I find some time to do so.
+        </p>
+        <p>
+         References :
+        </p>
+        <ul>
+         <li>
+          <a href="http://linuxfr.org/2008/02/22/23744.html" rel="nofollow">
+           Another step towards increasing SFTP popularity (fr)
+          </a>
+         </li>
+         <li>
+          <a href="http://undeadly.org/cgi?action=article&amp;sid=20080220110039" rel="nofollow">
+           Chroot in OpenSSH
+          </a>
+         </li>
+        </ul>
+        <div style="text-align: right;">
+        </div>
+        <div class="navigation">
+         <div class="row">
+          <span class="left">
+           <a href="/comment/onarticle/590">
+            Add Comment
+           </a>
+           <a href="/comment/feed/onarticle/590">
+            <img alt="XML logo" height="14" src="/images/xml.gif" title="Subscribe to comments on this article." width="36"/>
+           </a>
+          </span>
+          <span class="right">
+          </span>
+          <div class="spacer">
+          </div>
+         </div>
+         <p>
+         </p>
+         <div class="row">
+          <span class="left">
+           <a href="/article/589/Checking_password_strength_for_squirrelmail">
+            &lt;&lt;&lt; Checking password strength for squirrelmail
+           </a>
+          </span>
+          <span class="right">
+           <a href="/article/591/Using_the_dynamic_DNS_editor_nsupdate">
+            Using the dynamic DNS editor: nsupdate &gt;&gt;&gt;
+           </a>
+          </span>
+          <div class="spacer">
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+       </p>
+       <div class="share">
+       </div>
+       <p>
+       </p>
+       <p>
+       </p>
+       <div class="advert">
+        <center>
+         <script type="text/javascript">
+          &lt;!--
+	google_ad_client = "pub-1910202134166551";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	google_ad_format = "728x90_as";
+	google_ad_type = "text_image";
+	google_ad_channel ="4454478967";
+	//--&gt;
+         </script>
+         <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+         </script>
+        </center>
+        <p style="text-align: right;">
+         <a href="/about/FAQ%20:%20Site%20Adverts">
+          Why are these adverts here?
+         </a>
+        </p>
+       </div>
+       <hr/>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_1">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_1">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (97.89.xx.xx) on Tue  1 Apr 2008  at 14:49
+         <br/>
+        </div>
+        <div class="body">
+         This sounds awesome and thank you for posting it.
+         <br/>
+         <br/>
+         But I've learned not to trust anything posted on this day...
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/1">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_2">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_2">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (38.104.xx.xx) on Tue  1 Apr 2008  at 14:53
+          <br/>
+         </div>
+         <div class="body">
+          From the FAQ:
+          <br/>
+          Note that OpenSSH 4.8 was an OpenBSD-only release shipped with the
+          <br/>
+          OpenBSD 4.3 CD.
+          <br/>
+          <br/>
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_1">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/2">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_3">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_3">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (200.160.xx.xx) on Tue  1 Apr 2008  at 16:40
+         <br/>
+        </div>
+        <div class="body">
+         Nice work!
+         <br/>
+         OpenSSH 4.9 is OUT!
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/3">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_4">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_4">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (217.154.xx.xx) on Wed  2 Apr 2008  at 21:25
+         <br/>
+        </div>
+        <div class="body">
+         I considered using this (as I put together the alternative approach at
+         <a href="http://www.minstrel.org.uk/papers/sftp/" rel="nofollow">
+         </a>
+         <a href="http://www.minstrel.org.uk/papers/sftp/" rel="nofollow">
+          http://www.minstrel.org.uk/papers/sftp/
+         </a>
+         ), but from reading 'man sshd_config', it appeared to me that 'ChrootDirectory' was *not* a valid parameter in a Match block.
+         <br/>
+         <br/>
+         Have I misread the manual? It struck me that ChrootDirectory subsequently applied to all users (including myself), which wouldn't work for me at all...
+         <br/>
+         <br/>
+         I can be contacted through the Web site above.
+         <br/>
+         <br/>
+         --
+         <br/>
+         Minstrel
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/4">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_10">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_10">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (91.45.xx.xx) on Sun  6 Apr 2008  at 14:06
+          <br/>
+         </div>
+         <div class="body">
+          ChrootDirectory is a valid directive in a Match block. The man page sshd_config(5) however, doesn't list it correctly. But since we can use the force^Wsource ;), it is not a big problem to verify this. see servconf.c (of OpenSSH 5.0) line 275-372:
+          <pre>
+           #define SSHCFG_GLOBAL   0x01    /* allowed in main section of sshd_config */
+#define SSHCFG_MATCH    0x02    /* allowed inside a Match section */
+#define SSHCFG_ALL      (SSHCFG_GLOBAL|SSHCFG_MATCH)
+
+/* Textual representation of the tokens. */
+static struct {
+        const char *name;
+        ServerOpCodes opcode;
+        u_int flags;
+} keywords[] = {
+
+        // [...]
+        { "chrootdirectory", sChrootDirectory, SSHCFG_ALL },
+        // [...]
+};
+          </pre>
+          HTH
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_4">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/10">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_5">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_5">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (203.163.xx.xx) on Thu  3 Apr 2008  at 01:18
+         <br/>
+        </div>
+        <div class="body">
+         Does the chroot apply for SSH shell access, or only sftp?
+         <br/>
+         <br/>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/5">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_11">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_11">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (91.45.xx.xx) on Sun  6 Apr 2008  at 14:09
+          <br/>
+         </div>
+         <div class="body">
+          It applies to all shell access via SSH. But if you do not use internal-sftp, you'll still need to have all libraries and binaries the user shall be able to use inside his/her home directory.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_5">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/11">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_12">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_12">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (213.211.xx.xx) on Tue  8 Apr 2008  at 07:28
+           <br/>
+          </div>
+          <div class="body">
+           You can use Jailkit from
+           <a href="http://olivier.sessink.nl/jailkit/" rel="nofollow">
+           </a>
+           <a href="http://olivier.sessink.nl/jailkit/" rel="nofollow">
+            http://olivier.sessink.nl/jailkit/
+           </a>
+           to manage all the libraries and binaries.
+           <br/>
+           <br/>
+           With Jailkit you can also do a similar setup as above with cvs, rsync and scp.
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_11">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/12">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_6">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_6">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (82.229.xx.xx) on Thu  3 Apr 2008  at 15:24
+         <br/>
+        </div>
+        <div class="body">
+         Any ssh backport for etch planned ?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/6">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_7">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_7">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (80.69.xx.xx) on Fri  4 Apr 2008  at 08:43
+          <br/>
+         </div>
+         <div class="body">
+          I did one on my own as mentioned above - no problem with it so far.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_6">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/7">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_8">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_8">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (82.101.xx.xx) on Fri  4 Apr 2008  at 14:14
+           <br/>
+          </div>
+          <div class="body">
+           Have you put it on a repository?
+           <br/>
+           and have you seen OpenSSH 5.0/5.0p1 released Apr 3, 2008?
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_7">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/8">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_9">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_9">
+          Chown
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/sytoka">
+          sytoka
+         </a>
+         (80.170.xx.xx) on Sun  6 Apr 2008  at 07:45
+         <br/>
+        </div>
+        <div class="body">
+         <p>
+          Just change
+         </p>
+         <pre>
+          <code>
+           # chown root.root /home/user
+          </code>
+         </pre>
+         <p>
+          by
+         </p>
+         <pre>
+          <code>
+           # chown root:root /home/user
+          </code>
+         </pre>
+         <p>
+          It's now possible to have a dot in a username !
+         </p>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/9">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_13">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_13">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (70.145.xx.xx) on Wed  9 Apr 2008  at 20:33
+         <br/>
+        </div>
+        <div class="body">
+         Great!
+         <br/>
+         <br/>
+         Can't wait to try it.
+         <br/>
+         <br/>
+         Brian Pence
+         <br/>
+         Celestial Software
+         <br/>
+         <a href="http://www.celestialsoftware.net" rel="nofollow">
+         </a>
+         <a href="http://www.celestialsoftware.net/" rel="nofollow">
+         </a>
+         <a href="http://www.celestialsoftware.net/" rel="nofollow">
+          http://www.celestialsoftware.net
+         </a>
+         <br/>
+         AbsoluteTelnet (for
+         <a href="http://www.celestialsoftware.net" rel="nofollow">
+          telnet
+         </a>
+         and
+         <a href="http://www.celestialsoftware.net" rel="nofollow">
+          ssh
+         </a>
+         )
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/13">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_14">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_14">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (217.18.xx.xx) on Tue 15 Apr 2008  at 09:50
+          <br/>
+         </div>
+         <div class="body">
+          I can't locate internal-sftp command. When i try locate or find he not locate anywhere internal-sftp. How i can download this?
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_13">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/14">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_15">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_15">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (74.233.xx.xx) on Sat 17 May 2008  at 19:10
+           <br/>
+          </div>
+          <div class="body">
+           internal-sftp is not an external system command. It's an internal to OpenSSH specification that is used only in the sshd configuration file.
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_14">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/15">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_16">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_16">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (88.17.xx.xx) on Fri 24 Oct 2008  at 12:02
+           <br/>
+          </div>
+          <div class="body">
+           Use locate command
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_14">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/16">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_17">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_17">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (81.139.xx.xx) on Wed  5 Nov 2008  at 10:40
+         <br/>
+        </div>
+        <div class="body">
+         Nice post!
+         <br/>
+         <br/>
+         I don't like the sound of setting a users home directory set to "/" though. I can't think of any repercussions, but since their home directory is technically set incorrectly, I wouldn't like to say there would be none. Can anyone else think of any problems this might cause?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/17">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_18">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_18">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/kink">
+           kink
+          </a>
+          (85.147.xx.xx) on Fri  9 Jan 2009  at 16:45
+          <br/>
+         </div>
+         <div class="body">
+          It is not necessary to set / as the home directory: if the user's homedir does not exist under the chroot-ed path, it will just be ignored and the user will be put into the root of the chroot.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_17">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/18">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_21">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_21">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (89.212.xx.xx) on Tue 13 Jan 2009  at 21:55
+           <br/>
+          </div>
+          <div class="body">
+           So if the user creates ~/home/&lt;username&gt;, he's fu*ked then? ;)
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_18">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/21">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_19">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_19">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (85.27.xx.xx) on Tue 13 Jan 2009  at 19:03
+         <br/>
+        </div>
+        <div class="body">
+         Hi
+         <br/>
+         <br/>
+         It seems to be working but I still have a question ...
+         <br/>
+         <br/>
+         It says in the manpage of sshd_config that the path given to ChrootDirectory and all of its components must be root owned directories that are not writable by any other user or group.
+         <br/>
+         <br/>
+         So when the user logs in, he doesn't have write permissions right ?
+         <br/>
+         Therefore he can't upload anything ...
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/19">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_20">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_20">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/niol">
+           niol
+          </a>
+          (143.196.xx.xx) on Tue 13 Jan 2009  at 19:06
+          <br/>
+          [
+          <a href="/users/niol/weblog">
+           View Weblogs
+          </a>
+          ]
+         </div>
+         <div class="body">
+          Create one or more subdirectories with appropriate permissions and you will be good to go.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_19">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/20">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_22">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_22">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/andrewm659">
+          andrewm659
+         </a>
+         (97.91.xx.xx) on Mon 16 Mar 2009  at 01:04
+         <br/>
+        </div>
+        <div class="body">
+         I'm currently using the latest Debian Stable - Lenny, I have OpenSSH 5.X, I want to setup chroot environments, for most of the users on that system. I'm a little confused as how to set that up, do I need to add a group, I'm guessing that would be the proper way to do it. I'm looking for a updated tutorial on this as well.
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/22">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_23">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_23">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (85.158.xx.xx) on Fri 24 Apr 2009  at 12:16
+         <br/>
+        </div>
+        <div class="body">
+         Following these instructions I have a working chrooted sftp user.
+         <br/>
+         They can't upload files. How do I fix this please?
+         <br/>
+         Also is it possible to modify adduser.conf to create the home directory with the appropriate ownership/properties for this? (I have modified it to set the GID as sftponly too)
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/23">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_24">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_24">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/stew">
+          stew
+         </a>
+         (24.193.xx.xx) on Thu 28 May 2009  at 04:03
+         <br/>
+        </div>
+        <div class="body">
+         "ChrootDirectory /home/%u" should probably be replaced with "ChrootDirectory %h" which works for home directories not in /home
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/24">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_53">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_53">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (187.66.xx.xx) on Thu 18 Aug 2011  at 22:16
+          <br/>
+         </div>
+         <div class="body">
+          For the ChrootDirectory I used the following:
+          <br/>
+          /home/%u/Public
+          <br/>
+          It is not the home directory so no hidden files there, plus it is semantically better.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_24">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/53">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_25">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_25">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (189.88.xx.xx) on Fri 19 Jun 2009  at 04:08
+         <br/>
+        </div>
+        <div class="body">
+         I can't get this working on Ubuntu 8.10 inside 64 VMWare.
+         <br/>
+         <br/>
+         Here is what happens:
+         <br/>
+         <br/>
+         <br/>
+         user@server:/var$ sftp 192.45.2.137
+         <br/>
+         Connecting to 192.45.2.137...
+         <br/>
+         user@192.45.2.137's password:
+         <br/>
+         Couldn't read packet: Connection reset by peer
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+         /var/log/auth.log:
+         <br/>
+         <br/>
+         Jun 18 20:45:57 server sshd[23658]: debug1: Bind to port 22 on ::.
+         <br/>
+         Jun 18 20:45:57 server sshd[23658]: Server listening on :: port 22.
+         <br/>
+         Jun 18 20:45:57 server sshd[23658]: debug1: Bind to port 22 on 0.0.0.0.
+         <br/>
+         Jun 18 20:45:57 server sshd[23658]: Server listening on 0.0.0.0 port 22.
+         <br/>
+         Jun 18 20:46:03 server sshd[23658]: debug1: Forked child 23664.
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: rexec start in 5 out 5 newsock 5 pipe 7 sock 8
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: inetd sockets after dupping: 3, 3
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: Connection from 192.45.2.137 port 42626
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: Client protocol version 2.0; client software version OpenSSH_5.1p1 Debian-3ubuntu1
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: match: OpenSSH_5.1p1 Debian-3ubuntu1 pat OpenSSH*
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: Enabling compatibility mode for protocol 2.0
+         <br/>
+         Jun 18 20:46:03 server sshd[23664]: debug1: Local version string SSH-2.0-OpenSSH_5.1p1 Debian-3ubuntu1
+         <br/>
+         Jun 18 20:46:05 server sshd[23664]: debug1: user user matched group list sftp at line 80
+         <br/>
+         Jun 18 20:46:05 server sshd[23664]: debug1: PAM: initializing for "user"
+         <br/>
+         Jun 18 20:46:05 server sshd[23664]: debug1: PAM: setting PAM_RHOST to "192.45.2.137"
+         <br/>
+         Jun 18 20:46:05 server sshd[23664]: debug1: PAM: setting PAM_TTY to "ssh"
+         <br/>
+         Jun 18 20:46:05 server sshd[23664]: Failed none for user from 192.45.2.137 port 42626 ssh2
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: PAM: password authentication accepted for user
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: do_pam_account: called
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: Accepted password for user from 192.45.2.137 port 42626 ssh2
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: monitor_child_preauth: user has been authenticated by privileged process
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: PAM: establishing credentials
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: pam_unix(sshd:session): session opened for user user by (uid=0)
+         <br/>
+         Jun 18 20:46:06 server sshd[23671]: debug1: SELinux support disabled
+         <br/>
+         Jun 18 20:46:06 server sshd[23671]: debug1: PAM: establishing credentials
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: User child is on pid 23671
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: PAM: cleanup
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: PAM: deleting credentials
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: debug1: PAM: closing session
+         <br/>
+         Jun 18 20:46:06 server sshd[23664]: pam_unix(sshd:session): session closed for user user
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+         /etc/passwd:
+         <br/>
+         <br/>
+         user:x:1003:1003:User,,,:/:/usr/sbin/nologin
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+         /etc/group:
+         <br/>
+         <br/>
+         sftp:x:1004:user
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+         /etc/ssh/sshd_config:
+         <br/>
+         <br/>
+         # Logging
+         <br/>
+         SyslogFacility AUTH
+         <br/>
+         LogLevel DEBUG
+         <br/>
+         Subsystem sftp internal-sftp
+         <br/>
+         Match group sftp
+         <br/>
+         ForceCommand internal-sftp
+         <br/>
+         ChrootDirectory /var/sshbox
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+         user@server:/var$ ls -l
+         <br/>
+         drwxr-x--- 2 root root 4096 2009-06-18 20:05 sshbox
+         <br/>
+         <br/>
+         What I am doing wrong?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/25">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_55">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_55">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (80.153.xx.xx) on Fri 21 Oct 2011  at 08:30
+          <br/>
+         </div>
+         <div class="body">
+          Add a closing 'Match' clause at the end of the matching:
+          <br/>
+          <br/>
+          Match group sftponly
+          <br/>
+          ChrootDirectory /home/%u
+          <br/>
+          X11Forwarding no
+          <br/>
+          AllowTcpForwarding no
+          <br/>
+          ForceCommand internal-sftp
+          <br/>
+          Match
+          <br/>
+          ^^^^^
+          <br/>
+          Add this here.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_25">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/55">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_26">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_26">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (91.120.xx.xx) on Wed 15 Jul 2009  at 18:48
+         <br/>
+        </div>
+        <div class="body">
+         why need root owned directory?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/26">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_27">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_27">
+          How about logs?
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (213.201.xx.xx) on Tue 11 Aug 2009  at 12:16
+         <br/>
+        </div>
+        <div class="body">
+         So, if i change my FTP to a SFTP server... where can I track the user's actions??
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/27">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_62">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_62">
+           Re: How about logs?
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (63.116.xx.xx) on Thu  8 Nov 2012  at 15:18
+          <br/>
+         </div>
+         <div class="body">
+          You can get normal SFTP logging by having your log daemon create a /dev/log file in the chrooted tree. Reference data is at wikibooks.org, OpenSSH, Logging, Logging_Chrooted_SFTP. Newer Unices with rsyslog can be updated by dropping a file in /etc/rsyslog.d instead of the "-u -a" syntax used in the wikibooks article.
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_27">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/62">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_28">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_28">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (78.33.xx.xx) on Tue 11 Aug 2009  at 13:59
+         <br/>
+        </div>
+        <div class="body">
+         Forgive me for maybe being silly...
+         <br/>
+         <br/>
+         If you chown the users directory to root.root how can the user have write access to their home directory?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/28">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_29">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_29">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (70.247.xx.xx) on Fri 21 Aug 2009  at 00:06
+          <br/>
+         </div>
+         <div class="body">
+          They don't. You have to create a sub folder in the user's home directory that they have write access to.
+          <br/>
+          <br/>
+          I'm not sure on the reason for this, but I guess it's so they can't somehow change their .profile to allow themselves access to other directories. (maybe?)
+          <br/>
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_28">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/29">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_30">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_30">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (203.81.xx.xx) on Tue 15 Sep 2009  at 07:36
+           <br/>
+          </div>
+          <div class="body">
+           well.....chroot is working for sftp...but when i try to login to the....it just fails me....i have used the match block for sftp users as
+           <br/>
+           <br/>
+           <i>
+            # override default of no subsystems
+            <br/>
+            Subsystem sftp internal-sftp
+            <br/>
+            <br/>
+            Match Group sftpusers
+            <br/>
+            ChrootDirectory /chroot
+            <br/>
+            AllowTCPForwarding no
+            <br/>
+            X11Forwarding no
+            <br/>
+            ForceCommand internal-sftp
+           </i>
+           <br/>
+           <br/>
+           where /chroot is my custom directory owned by root.root and it is working fine for sftp users
+           <br/>
+           <br/>
+           and for non sftp users(i.e "ForceCommand not used")
+           <br/>
+           <br/>
+           <i>
+            Match Group nonsftp
+            <br/>
+            ChrootDirectory /chroot
+            <br/>
+            AllowTCPForwarding no
+            <br/>
+            X11Forwarding no
+           </i>
+           <br/>
+           <br/>
+           when i look at /var/log/messages....it says
+           <br/>
+           <br/>
+           <i>
+            sshserver sshd [2499] : Accepted password for test from 10.0.0.54 port 2683 ssh2
+           </i>
+           <br/>
+           <br/>
+           which says that authentication is ok....and when i ommit "ChrootDirectory" parameter.....than everything is ok...any suggestions??
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_29">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/30">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <div class="indent">
+          <!-- Comment entry -->
+          <div class="comment">
+           <div class="link">
+            <a href="/articles/590#comment_31">
+             #
+            </a>
+           </div>
+           <div class="title">
+            <a name="comment_31">
+             correction
+            </a>
+           </div>
+           <div class="tagline">
+            Posted by
+            <a href="/users/Anonymous">
+             Anonymous
+            </a>
+            (203.81.xx.xx) on Tue 15 Sep 2009  at 07:38
+            <br/>
+           </div>
+           <div class="body">
+            in the first line sentence is "when i try to login to the shell"
+           </div>
+           <p class="foot">
+            [
+            <a href="#comment_30">
+             Parent
+            </a>
+            |
+            <a href="/comment/onarticle/590/31">
+             Reply to this comment
+            </a>
+            ]
+           </p>
+          </div>
+          <!-- Terminate the indentation of the comments. -->
+         </div>
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_32">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_32">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/eriberto">
+          eriberto
+         </a>
+         (200.252.xx.xx) on Tue 15 Sep 2009  at 13:15
+         <br/>
+        </div>
+        <div class="body">
+         Hi! I need to prevent a file deletion by jail user. The file is .htaccess. How to make it?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/32">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_34">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_34">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (94.75.xx.xx) on Thu 24 Sep 2009  at 18:45
+          <br/>
+         </div>
+         <div class="body">
+          If you use ext3 fs, you may try set this file as immutible:
+          <br/>
+          sudo chattr +i .htaccess
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_32">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/34">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_33">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_33">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (81.167.xx.xx) on Thu 17 Sep 2009  at 08:44
+         <br/>
+        </div>
+        <div class="body">
+         I cant get this to work. Used 2 days on this now.
+         <br/>
+         sftp/ssh works. But chrooting dont.
+         <br/>
+         <br/>
+         If I remove the user from the sftpolny group it works. So Im guessing it has something with group/sftp to do, but I cant figure it out.
+         <br/>
+         <br/>
+         Anyone got any pointers to this?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/33">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_35">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_35">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (77.168.xx.xx) on Wed 30 Sep 2009  at 20:04
+          <br/>
+         </div>
+         <div class="body">
+          if you can't get it to work, check the version of your sshd on your server:
+          <br/>
+          sshd -v
+          <br/>
+          <br/>
+          and keep reading the logs:
+          <br/>
+          tail -f /var/log/auth.log &amp;
+          <br/>
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_33">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/35">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_36">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_36">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (81.167.xx.xx) on Sat 24 Oct 2009  at 12:37
+           <br/>
+          </div>
+          <div class="body">
+           Thanks! :)
+           <br/>
+           <br/>
+           "read/write" for "group" and "other" on /home/ftpuser
+           <br/>
+           Removed it to only "read". Works.
+           <br/>
+           <br/>
+           But no access. Shell is missing.
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_35">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/36">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_37">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_37">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/eriberto">
+          eriberto
+         </a>
+         (200.252.xx.xx) on Thu  7 Jan 2010  at 18:44
+         <br/>
+        </div>
+        <div class="body">
+         I use "PasswordAuthentication no" in sshd_config to force autentication by public key. However, I need to make users login in jail using password. I solved my problem putting "PasswordAuthentication yes" in my match block. See below:
+         <br/>
+         <br/>
+         Match group sftponly
+         <br/>
+         ChrootDirectory /home/%u
+         <br/>
+         X11Forwarding no
+         <br/>
+         AllowTcpForwarding no
+         <br/>
+         ForceCommand internal-sftp
+         <br/>
+         PasswordAuthentication yes
+         <br/>
+         <br/>
+         Hope this help.
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/37">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_38">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_38">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/kEND">
+          kEND
+         </a>
+         (64.128.xx.xx) on Fri 12 Feb 2010  at 23:33
+         <br/>
+        </div>
+        <div class="body">
+         Is there a way to configure the above and allow scp access for these chrooted sftp users?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/38">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_39">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_39">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (59.163.xx.xx) on Sun  6 Jun 2010  at 07:45
+         <br/>
+        </div>
+        <div class="body">
+         How to hide .ssh folder or disable ls -a option in chroot sftp login
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/39">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_40">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_40">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (78.90.xx.xx) on Sat 14 Aug 2010  at 21:04
+         <br/>
+        </div>
+        <div class="body">
+         GREAT
+         <br/>
+         <br/>
+         <code>
+          #usermod-d/user
+         </code>
+         <br/>
+         <br/>
+         And when i testing add some user, And when i delete him which
+         <br/>
+         <br/>
+         <code>
+          userdel-rfuser
+         </code>
+         <br/>
+         <br/>
+         .......................
+         <br/>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/40">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_41">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_41">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (62.242.xx.xx) on Tue 24 Aug 2010  at 12:42
+          <br/>
+         </div>
+         <div class="body">
+          Hi.
+          <br/>
+          I have tried this on Ubuntu 10.04 server.
+          <br/>
+          But when it is configured, I get an "network error - connection refused", when I try to connect using ssh or sftp, and this is for all users, chroot'ed or not??
+          <br/>
+          Has anyone tried this on Ubuntu 10.04 ?
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_40">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/41">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_42">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_42">
+          Permissions requirements
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (87.111.xx.xx) on Sun  3 Oct 2010  at 10:15
+         <br/>
+        </div>
+        <div class="body">
+         Note that the owner of the destination directory must be "root", and group/other users cannot have write permissions. The same with all the directory path:
+         <br/>
+         <code>
+          <br/>
+          chownroot/path/to/destination
+          <br/>
+          chownroot/path/to
+          <br/>
+          chownroot/path
+          <br/>
+          <br/>
+          chmodg-w,o-w/path/to/destination
+          <br/>
+          chmodg-w,o-w/path/to
+          <br/>
+          chmodg-w,o-w/path
+          <br/>
+         </code>
+         <br/>
+         <br/>
+         Alternatively, you can use a symbolic link to replace the real path:
+         <br/>
+         <code>
+          <br/>
+          chownroot/path/to/destination
+          <br/>
+          ln-s/path/to/destination/destination
+          <br/>
+          chownroot/destination
+          <br/>
+          <br/>
+          chmodg-w,o-w/path/to/destination
+          <br/>
+          chmodg-w,o-w/destination
+          <br/>
+         </code>
+         <br/>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/42">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_43">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_43">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (178.0.xx.xx) on Tue  5 Oct 2010  at 11:16
+         <br/>
+        </div>
+        <div class="body">
+         Hi,
+         <br/>
+         to get public-key authentication up and running for sftpusers use the users sftphome in /etc/passwd (e.g. /var/www/sftpuser_1) and let sshd chroot to %h! Password authentication will still work.
+         <br/>
+         Cheers,
+         <br/>
+         Olaf
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/43">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_44">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_44">
+          Caged directories and automatic client-mount
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/narcisgarcia">
+          narcisgarcia
+         </a>
+         (87.111.xx.xx) on Sun 10 Oct 2010  at 14:03
+         <br/>
+        </div>
+        <div class="body">
+         A new guide to configure better the client and the server:
+         <br/>
+         <a href="http://wiki.lapipaplena.org/index.php/How_to_mount_SFTP_accesses" rel="nofollow">
+         </a>
+         <a href="http://wiki.lapipaplena.org/index.php/How_to_mount_SFTP_accesses" rel="nofollow">
+          http://wiki.lapipaplena.org/index.php/How_to_mount_SFTP_accesses
+         </a>
+         <br/>
+         <br/>
+         (with special care with owners and permissions questions)
+         <br/>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/44">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_45">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_45">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/shlstrm">
+          shlstrm
+         </a>
+         (92.225.xx.xx) on Sat 12 Feb 2011  at 16:46
+         <br/>
+        </div>
+        <div class="body">
+         Couldn't this just be done with
+         <br/>
+         sudo usermod -s /bin/false someuser
+         <br/>
+         ?
+         <br/>
+         <br/>
+         Regards, Hkan
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/45">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_46">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_46">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/shlstrm">
+           shlstrm
+          </a>
+          (92.225.xx.xx) on Sat 12 Feb 2011  at 16:49
+          <br/>
+         </div>
+         <div class="body">
+          Ouch, sorry, that was meant to be a comment to this article:
+          <a href="http://www.debian-administration.org/articles/94" rel="nofollow">
+          </a>
+          <a href="http://www.debian-administration.org/articles/94" rel="nofollow">
+           http://www.debian-administration.org/articles/94
+          </a>
+          . However, I would still recommend including that step so that the user isn't able to log in and get shell access (for a bit more security).
+          <br/>
+          /Hkan
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_45">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/46">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_47">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_47">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (93.199.xx.xx) on Wed 22 Jun 2011  at 15:40
+         <br/>
+        </div>
+        <div class="body">
+         First of all: Thanks for the article.
+         <br/>
+         However, I think there is a error in the Match syntax. I tried it, and it didn't work; until I found out, that it is crucial to close the open Match clause. So using the example from the article the right entry in sshd.conf should be:
+         <br/>
+         <br/>
+         Match group sftponly
+         <br/>
+         ChrootDirectory /home/%u
+         <br/>
+         X11Forwarding no
+         <br/>
+         AllowTcpForwarding no
+         <br/>
+         ForceCommand internal-sftp
+         <br/>
+         Match
+         <br/>
+         <br/>
+         Otherwise SFTP-server won't allow any connections!
+         <br/>
+         Hope this helps!
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/47">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_48">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_48">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (132.64.xx.xx) on Mon 18 Jul 2011  at 13:46
+          <br/>
+         </div>
+         <div class="body">
+          I think your comment is what saved my non-working setup. Thanks!
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_47">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/48">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_49">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_49">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (174.30.xx.xx) on Fri 29 Jul 2011  at 21:10
+          <br/>
+         </div>
+         <div class="body">
+          Even using this, I can't get sftp to work when ChrootDirectory is specified. With or without the closing "Match" clause, if "Chrootdirectory" is not in Match, then sftp works just fine. However, if I put it in, in any location, with any value, sftp automatically disconnects after authentication success, whether I close Match or not. Can you help?
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_47">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/49">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <div class="indent">
+         <!-- Comment entry -->
+         <div class="comment">
+          <div class="link">
+           <a href="/articles/590#comment_50">
+            #
+           </a>
+          </div>
+          <div class="title">
+           <a name="comment_50">
+            Re: OpenSSH SFTP chroot() with ChrootDirectory
+           </a>
+          </div>
+          <div class="tagline">
+           Posted by
+           <a href="/users/Anonymous">
+            Anonymous
+           </a>
+           (148.87.xx.xx) on Sat 30 Jul 2011  at 05:26
+           <br/>
+          </div>
+          <div class="body">
+           Apart from Jail, we also want the user only to upload. and should NOT be able to download the file back. The reason is, the file he uploads is a source code. and we dont want him to login from another system and downloads it. Is there a way we can do that in SFTP ?
+          </div>
+          <p class="foot">
+           [
+           <a href="#comment_49">
+            Parent
+           </a>
+           |
+           <a href="/comment/onarticle/590/50">
+            Reply to this comment
+           </a>
+           ]
+          </p>
+         </div>
+         <!-- Terminate the indentation of the comments. -->
+        </div>
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_54">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_54">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (84.81.xx.xx) on Mon 17 Oct 2011  at 14:04
+          <br/>
+         </div>
+         <div class="body">
+          Oh my! Thx a lot, this comment saved me after quite some headache... So simple, yet I couldn't figure it out until reading your remark.
+          <br/>
+          Debian rules!
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_47">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/54">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_51">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_51">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (78.23.xx.xx) on Thu 11 Aug 2011  at 19:46
+         <br/>
+        </div>
+        <div class="body">
+         I'm not sure if I got this right:
+         <br/>
+         <br/>
+         for ChrootDirectory %h to work, the home directory of the user MUST be owned by root
+         <br/>
+         for .ssh/authorized_keys to work the home directory of the user MUST be owned by the user
+         <br/>
+         <br/>
+         So how do I "jail" a user in his own directory? (using sftp only)
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/51">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_52">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_52">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/niol">
+           niol
+          </a>
+          (88.174.xx.xx) on Fri 12 Aug 2011  at 07:02
+          <br/>
+          [
+          <a href="/users/niol/weblog">
+           View Weblogs
+          </a>
+          ]
+         </div>
+         <div class="body">
+          It's
+          <tt>
+           ~/.ssh
+          </tt>
+          that must be owned by the user for
+          <tt>
+           ~/.ssh/authorized_keys
+          </tt>
+          to work, not
+          <tt>
+           ~
+          </tt>
+          .
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_51">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/52">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_56">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_56">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (213.70.xx.xx) on Thu 27 Oct 2011  at 10:27
+         <br/>
+        </div>
+        <div class="body">
+         I would like my users to have the same home directory than their chroot directory (e.g. chroot user1 to
+         <i>
+          /home/user1
+         </i>
+         and home directory is
+         <i>
+          /home/user1
+         </i>
+         , too).
+         <br/>
+         <br/>
+         Are there any security considerations against doing the following?
+         <br/>
+         <br/>
+         <code>
+          chownroot:root/home/user1
+          <br/>
+          chmod750/home/user1
+          <br/>
+          setfacl-muser:user1:rwx/home/user1
+          <br/>
+          setfacl-mmask::rwx/home/user1
+         </code>
+         <br/>
+         <br/>
+         This would fulfil the requirements to successfully
+         <i>
+          chroot()
+         </i>
+         and let users have appropriate permissions to
+         <b>
+          their
+         </b>
+         home directories.
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/56">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <div class="indent">
+        <!-- Comment entry -->
+        <div class="comment">
+         <div class="link">
+          <a href="/articles/590#comment_61">
+           #
+          </a>
+         </div>
+         <div class="title">
+          <a name="comment_61">
+           Re: OpenSSH SFTP chroot() with ChrootDirectory
+          </a>
+         </div>
+         <div class="tagline">
+          Posted by
+          <a href="/users/Anonymous">
+           Anonymous
+          </a>
+          (84.186.xx.xx) on Wed 12 Sep 2012  at 21:51
+          <br/>
+         </div>
+         <div class="body">
+          Did this really work? I git the problem that setfacl -m u:user1:rwx /home/user1 resets the unix permissions on 0770 and setting those back to 0750 forces ACLs to r-x for user1 by telling be getfacl user1:rwx #effective r-x
+         </div>
+         <p class="foot">
+          [
+          <a href="#comment_56">
+           Parent
+          </a>
+          |
+          <a href="/comment/onarticle/590/61">
+           Reply to this comment
+          </a>
+          ]
+         </p>
+        </div>
+        <!-- Terminate the indentation of the comments. -->
+       </div>
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_57">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_57">
+          sshd dies
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (199.198.xx.xx) on Fri 16 Dec 2011  at 16:06
+         <br/>
+        </div>
+        <div class="body">
+         using the suggested addition to sshd_config makes sshd die.
+         <br/>
+         I noticed there is already a subsystem sftp defined, so maybe that is the problem, but what is the solution? I have:
+         <br/>
+         <br/>
+         Subsystem sftp /usr/lib/openssh/sftp-server
+         <br/>
+         <br/>
+         Subsystem sftp internal-sftp
+         <br/>
+         Match group guests
+         <br/>
+         ChrootDirectory /home/%u
+         <br/>
+         X11Forwarding no
+         <br/>
+         AllowTcpForwarding no
+         <br/>
+         ForceCommand internal-sftp
+         <br/>
+         Match
+         <br/>
+         <br/>
+         thanks everybody
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/57">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_58">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_58">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Andimotz80">
+          Andimotz80
+         </a>
+         (193.41.xx.xx) on Thu 22 Dec 2011  at 12:05
+         <br/>
+        </div>
+        <div class="body">
+         I have configured like this, but I want to copy directly in the home directory. Is this possible?
+         <br/>
+         BR
+         <br/>
+         <br/>
+         Andreas
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/58">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_59">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_59">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/eddzzz">
+          eddzzz
+         </a>
+         (80.113.xx.xx) on Thu  9 Feb 2012  at 10:37
+         <br/>
+        </div>
+        <div class="body">
+         I only partly have a problem connecting. When I use Filezilla it works perfect. But when I use sftp on Ubuntu it fails with the error:
+         <br/>
+         <br/>
+         Request for subsystem 'sftp' failed on channel 0
+         <br/>
+         Couldn't read packet: Connection reset by peer
+         <br/>
+         <br/>
+         What is going wrong and how can I fix this?
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/59">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_60">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_60">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (1.187.xx.xx) on Sat 25 Aug 2012  at 10:24
+         <br/>
+        </div>
+        <div class="body">
+         this is really helping ..............
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/60">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+       <!-- Comment entry -->
+       <div class="comment">
+        <div class="link">
+         <a href="/articles/590#comment_63">
+          #
+         </a>
+        </div>
+        <div class="title">
+         <a name="comment_63">
+          Re: OpenSSH SFTP chroot() with ChrootDirectory
+         </a>
+        </div>
+        <div class="tagline">
+         Posted by
+         <a href="/users/Anonymous">
+          Anonymous
+         </a>
+         (87.113.xx.xx) on Wed 26 Mar 2014  at 15:25
+         <br/>
+        </div>
+        <div class="body">
+         <blockquote>
+          <p>
+           After the call to chroot(), sshd changes directory to the home directory relative to the new root directory. That is why I use / as home directory.
+          </p>
+         </blockquote>
+         <p>
+          If you don't change the home directory to / it seems to work anyway (ie leave as default /home/user).
+         </p>
+         <p>
+          It also allows public key authentication to work (~/.ssh/authorized_keys)
+         </p>
+        </div>
+        <p class="foot">
+         [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  |
+         <a href="/comment/onarticle/590/63">
+          Reply to this comment
+         </a>
+         ]
+        </p>
+       </div>
+       <!-- Terminate the indentation of the comments. -->
+       <p>
+       </p>
+       <!-- Closing tag for if_error -->
+      </div>
+     </div>
+    </div>
+    <div class="side" id="rightcol">
+     <div class="slide">
+      <h4>
+       Sign In
+      </h4>
+      <form action="/login" id="user-login" method="post">
+       <input name="mode" type="hidden" value="login"/>
+       <input name="target" type="hidden" value="/article/590/OpenSSH_SFTP_chroot_with_ChrootDirectory"/>
+       <p>
+        <b>
+         Username
+        </b>
+        :
+        <br/>
+        <input id="name" maxlength="25" name="lname" size="14" type="text"/>
+       </p>
+       <p>
+        <b>
+         Password
+        </b>
+        :
+        <br/>
+        <input id="pass" maxlength="25" name="lpass" size="15" type="password"/>
+       </p>
+       <p>
+        <input name="submit" type="submit" value="Login"/>
+       </p>
+       <p>
+        [
+        <a href="/create/user/">
+         Register
+        </a>
+        |
+        <a href="/login">
+         Advanced
+        </a>
+        ]
+       </p>
+      </form>
+      <p>
+      </p>
+      <div id="flattr">
+       <h3>
+        Flattr
+       </h3>
+       <div style="text-align:center;">
+        <a class="FlattrButton" href="http://debian-administration.org" style="display:none;">
+        </a>
+       </div>
+      </div>
+      <p>
+      </p>
+      <div id="poll">
+       <h3>
+        Current Poll
+       </h3>
+       <form action="/polls/165" method="post">
+        <p>
+         <input name="poll_id" type="hidden" value="165"/>
+         <b>
+          Should this site stay open?
+         </b>
+        </p>
+        <p>
+         <label>
+          <input name="pollanswer" type="radio" value="1"/>
+          No, it has passed its peak.
+         </label>
+         <br/>
+         <label>
+          <input name="pollanswer" type="radio" value="2"/>
+          Yes, even rare updates are useful.
+         </label>
+         <br/>
+         <label>
+          <input name="pollanswer" type="radio" value="3"/>
+          Other ..
+         </label>
+         <br/>
+         <input name="mode" type="hidden" value="poll_vote"/>
+         <input name="id" type="hidden" value="165"/>
+         <input type="submit" value="Vote"/>
+         <br/>
+         <span class="votescast">
+          (
+          <a href="/polls/165">
+           478 votes ~ 8 comments
+          </a>
+          )
+         </span>
+        </p>
+       </form>
+      </div>
+      <p>
+      </p>
+      <div id="blogs">
+       <h3>
+        Recent Weblogs
+       </h3>
+       <div class="weblogs">
+        <div class="body">
+         <div class="title">
+          <a href="/users/Alexmore/weblog/1">
+           CRM more7
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/Alexmore">
+           Alexmore
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/dkg/weblog/115">
+           Challenge: one reproducible package a week
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/dkg">
+           dkg
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/mcortese/weblog/21">
+           GNOME Wayland
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/mcortese">
+           mcortese
+          </a>
+         </div>
+         <div class="comments">
+          <a href="/users/mcortese/weblog/21#comments">
+           1 comment
+          </a>
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/fugit/weblog/10">
+           Building a certain Version of Debian
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/fugit">
+           fugit
+          </a>
+         </div>
+         <div class="comments">
+          <a href="/users/fugit/weblog/10#comments">
+           2 comments
+          </a>
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/ajt/weblog/212">
+           DKIM
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/ajt">
+           ajt
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/rkreider/weblog/5">
+           It's been 7 Years
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/rkreider">
+           rkreider
+          </a>
+         </div>
+         <div class="comments">
+          <a href="/users/rkreider/weblog/5#comments">
+           1 comment
+          </a>
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/Steve/weblog/241">
+           Site code is public once again.
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/Steve">
+           Steve
+          </a>
+         </div>
+         <div class="comments">
+          <a href="/users/Steve/weblog/241#comments">
+           1 comment
+          </a>
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/lee/weblog/50">
+           Using Amazon SES with Exim (Submission)
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/lee">
+           lee
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/simonw/weblog/490">
+           Web Application Vulnerability scanners
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/simonw">
+           simonw
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+        <div class="body">
+         <div class="title">
+          <a href="/users/blackm/weblog/17">
+           I have a Debian server again
+          </a>
+         </div>
+         <div class="tagline">
+          by
+          <a href="/users/blackm">
+           blackm
+          </a>
+         </div>
+         <div class="comments">
+         </div>
+        </div>
+       </div>
+       <p>
+        <a href="http://planet.debian-administration.org" style="float:right;" title="Planet Debian Administration">
+         Archived weblogs
+        </a>
+       </p>
+       <p>
+       </p>
+      </div>
+      <p>
+      </p>
+      <div class="advert">
+       <h3>
+        Sponsored Links
+       </h3>
+       <p>
+       </p>
+       <div align="center">
+        <script type="text/javascript">
+         &lt;!--
+google_ad_client = "pub-1910202134166551";
+//200x90, created 08/12/07
+google_ad_slot = "2315151555";
+google_ad_width = 200;
+google_ad_height = 90;
+//--&gt;
+        </script>
+        <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+        </script>
+       </div>
+       <p>
+        <a href="/about/FAQ%20:%20Site%20Adverts">
+         Why are these adverts here?
+        </a>
+       </p>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- end #content -->
+  </div>
+  <!-- end #wrapper -->
+  <div id="footer">
+   <p>
+    Articles and comments are the property of their respective posters.
+   </p>
+   <p>
+    Trademarks are the property of their respective owners.
+    <br/>
+    Debian is
+    <a href="http://tarr.uspto.gov/servlet/tarr?regser=serial&amp;entry=75386376&amp;action=Request+Status">
+     a registered trademark
+    </a>
+    of
+    <a href="http://www.spi-inc.org">
+     Software in the Public Interest, Inc
+    </a>
+    .
+   </p>
+   <p>
+    This site is copyright  2004-2014
+    <a href="http://www.steve.org.uk/">
+     Steve Kemp
+    </a>
+    .
+    <br/>
+    Site hosting provided by
+    <a href="http://www.bytemark.co.uk/">
+     Bytemark Hosting
+    </a>
+    on the
+    <a href="http://bigv.io/">
+     BigV
+    </a>
+    platform.
+   </p>
+   <p>
+    <a href="/about/Syndication">
+     Article Feeds in Atom, RSS, &amp; RDF formats
+    </a>
+   </p>
+  </div>
+ </body>
+</html>

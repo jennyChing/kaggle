@@ -1,0 +1,881 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <title>
+   RAF - RAF Homepage
+  </title>
+  <meta content="RAF News, Royal Air Force News, News, RAF, Royal Air Force, Latest News, Typhoon, F3, Tornado, C130, F35, Joint Strike Fighter, A400, Sentinel, ISTAR, SDSR,  Search and Rescue, SAR," name="Keywords"/>
+  <meta content="Royal Air Force (RAF)" name="Description"/>
+  <meta content="RAF Details here" name="DC.creator"/>
+  <meta content="2015-04-10" name="DC.Date.created" scheme="ISO8601"/>
+  <meta content="RAF subject here" name="eGMS.subject.category" scheme="GCL"/>
+  <meta content="RAF - RAF Homepage" name="DC.title"/>
+  <meta content="Double-A" name="eGMS.accessibility" scheme="WCAG"/>
+  <link href="http://www.rafcareers.com/labels.xml" rel="meta" title="ICRA labels" type="application/rdf+xml"/>
+  <meta content='(pics-1.1 "http://www.icra.org/pics/vocabularyv03/" l gen true for "http://rafcareers.com" r (n 0 s 0 v 0 l 0 oa 0 ob 0 oc 0 od 0 oe 0 of 0 og 0 oh 0 c 1) gen true for "http://www.rafcareers.com" r (n 0 s 0 v 0 l 0 oa 0 ob 0 oc 0 od 0 oe 0 of 0 og 0 oh 0 c 1))' http-equiv="pics-Label"/>
+  <link href="http://www.raf.mod.uk/favicon.ico" rel="Shortcut Icon" type="image/ico"/>
+  <link href="http://www.raf.mod.uk/css/screen.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://www.raf.mod.uk/css/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <link href="http://www.raf.mod.uk/css/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 7.]&gt;&lt;link rel="stylesheet" type="text/css" media="screen" href="http://www.raf.mod.uk/css/iefixes.css" /&gt;&lt;![endif]-->
+  <!-- Styles needed by the tabs and carousel -->
+  <style>
+   #myTabs { position: relative; top: 0px; left: 0px; height: 235px; padding: 0px; margin: 0px;  background: url("http://www.raf.mod.uk/images/slider_bg.png") no-repeat; }
+			 			
+			#myTabs .ui-tabs-nav { position: absolute !important; height: 28px; left: 0; top: 280px; right:0; margin: 0px; padding: 0px; background: url("http://www.raf.mod.uk/images/tabscontrols_bg.png") no-repeat; } 
+			#myTabs .ui-tabs-nav li { border: none; background: url("http://www.raf.mod.uk/images/tabsdivider.gif") no-repeat; text-align: center; font-weight: bold; height: 20px; width: 152px;}
+			
+			i-tabs-selected { margin: 0px !important; }
+			.ui-tabs-panel { padding: 0px !important; }
+			
+			.ui-widget-content { border: none; }
+			.ui-widget-header { border: none; }
+			
+			
+			
+			#myTabs .ui-state-default { width: 152px; }
+			#myTabs .ui-state-default a { font-size: 11px; font-style: normal; font-weight: bold; color: #fff;  width: 152px; }
+			#myTabs .ui-state-active { background: url("http://www.raf.mod.uk/images/tabscontrols_bg_on.png") no-repeat !important; width: 152px; height: 20px; }
+			#myTabs #last { margin-right: 0 !important; width: 152px; }		
+			.tab_content { position: absolute; top: 0px; left: 0px; }
+			.nsContent {  }
+  </style>
+  <script src="http://www.raf.mod.uk/js/jquery-1.4.2.min.js" type="text/javascript">
+  </script>
+  <script src="http://www.raf.mod.uk/js/jquery-ui-1.8.1.custom.min.js" type="text/javascript">
+  </script>
+  <!-- Code for tabs and carousel -->
+  <script type="text/javascript">
+   //
+			// Define the carousel animation parameters.
+			//
+			//		carousel_period			- how long each tab remains on the screen for
+			//		carousel_restart_period	- how long before the carousel starts up again after being stopped by the user
+			//
+			var k_carousel_period = 8 ;
+			var k_carousel_restart_period = 20 ;
+			
+			var tabs_ignore_clicks = false ;
+			var next_carousel_time = 0 ; 
+				
+			//
+			// Use document ready to initialise the tabs rather than placing code at end
+			// of document. Placing code at the end of the document doesn't work too well
+			// as .removeClass() doesn't work in this case.
+			//
+			$(document).ready( function() { initialise_tabs() ; } ) ;
+			
+			//
+			// Initialise the tabs and carousel.
+			//
+			function initialise_tabs()
+			{
+				//
+				// Create the tab control and set event handlers.
+				//
+				// The tab select method ignores clicks if it's in a dissolve.
+				//
+				$( function()
+				{
+				
+					var tab_opts =	{
+										select : function( ev, pr )
+										{
+											var element ;
+											
+											if ( ! tabs_ignore_clicks )
+											{
+												//
+												// Make sure the tab contents are visibe.
+												//
+												element = $( "#myTabs .tab_content" ).eq( pr.index ) ;
+												
+												element.toggle( true ) ;
+												element.get( 0 ).style.opacity = "" ;
+												element.get( 0 ).style.filter = "" ;
+											}
+											
+											return ! tabs_ignore_clicks ;
+										}
+									} ;
+					
+					$( "#myTabs" ).tabs( tab_opts ) ;
+	
+				} ) ;
+				
+				//
+				// Set the event handlers and enable carousel mode.
+				//
+				// $( "#myTabs" ).bind( "mousedown", carousel_handle_click ) ;
+	
+				next_carousel_time = ( new Date() ).getTime() + k_carousel_period*1000 ;			
+				setInterval( carousel_refresh, 1000 ) ;
+				
+				//
+				// Remove round corners from all elements.
+				//
+				$( "#myTabs, #myTabs &gt; *,  #myTabs ul li" ).removeClass( "ui-corner-all ui-corner-top" ) ;
+				
+				//
+				// Clicks on the tabs etc temporarily slows down the carousel rotate period.
+				//
+				$( '#myTabs, #myTabs ul li a' ).bind( 'click', function()
+				{
+					//
+					// Set the time for the carousel to start up again.
+					//
+					next_carousel_time = ( new Date() ).getTime() + k_carousel_restart_period*1000 ;
+				} ) ;
+			}
+	
+			//
+			// Handle a carousel time event.
+			//
+			// Resets the rotate period to that of the carousel.
+			//				
+			function carousel_refresh()
+			{
+				var index, next_index, items, item, next_item, item_html ;
+				var length ;
+				var selector ;
+				
+				if ( ( new Date() ).getTime() &gt; next_carousel_time )
+				{
+					//
+					// While a dissolve is happening ignore clicks on the tabs.
+					//
+					tabs_ignore_clicks = true ;
+					
+					index = $( "#myTabs" ).tabs( "option", "selected" ) ;
+					length = $( "#myTabs" ).tabs( "length" ) ;
+					
+					next_index = index &lt; length - 1 ? index + 1 : 0 ;
+					
+					$( "#myTabs .tab_content" ).eq( index ).fadeOut( 1000 ) ;
+					$( "#myTabs .tab_content" ).eq( next_index ).fadeIn( 1000, function() {} ) ;
+					$( "#myTabs .tab_content" ).eq( next_index ).removeClass( 'ui-tabs-hide' ) ;
+					
+					//
+					// Select the next tab a little bit after the fade should have finished and
+					// allow clicks on the tabs again.
+					//
+					setTimeout( function() {  tabs_ignore_clicks = false ; $( "#myTabs" ).tabs( "option", "selected", next_index ) ;}, 1050 ) ;
+					
+					//
+					// Set the time to rotate to the next tab.
+					//
+					next_carousel_time = ( new Date() ).getTime() + k_carousel_period*1000 ;			
+				} ;
+			}
+  </script>
+  <meta content="100006631422538" property="fb:admins"/>
+  <script src="http://www.raf.mod.uk/js/functions.js" type="text/javascript">
+  </script>
+  <script src="http://www.raf.mod.uk/js/fontsizer.jquery.js" type="text/javascript">
+  </script>
+  <script src="http://www.raf.mod.uk/js/cookies.js" type="text/javascript">
+  </script>
+ </head>
+ <body>
+  <div id="bodyBackground">
+   <a id="pageTop" name="pageTop">
+   </a>
+   <ul class="hide">
+    <li>
+     <a href="#mainNav">
+      Skip to main navigation
+     </a>
+    </li>
+    <li>
+     <a href="#pageContent">
+      Skip to page content
+     </a>
+    </li>
+    <li>
+     <a href="#siteSearch">
+      Skip to search
+     </a>
+    </li>
+   </ul>
+   <div id="header">
+    <div class="hLeft">
+     <h1>
+      <a href="http://www.raf.mod.uk/">
+       <img alt="Royal Air Force" src="http://www.raf.mod.uk/images/logoRAF.gif"/>
+      </a>
+     </h1>
+    </div>
+    <div class="hRight">
+     <ul class="topNav">
+      <li>
+       <a href="http://www.raf.mod.uk/careers">
+        RAF CAREERS
+       </a>
+      </li>
+      <li>
+       <a href="http://www.raf.mod.uk/rafreserves">
+        RAF RESERVES
+       </a>
+      </li>
+      <li class="fnews">
+       <a href="http://www.raf.mod.uk/links">
+        LINKS
+       </a>
+      </li>
+      <li>
+       <a href="https://www.flickr.com/photos/royalairforce" target="_blank">
+        GALLERY
+       </a>
+      </li>
+      <li>
+       <a href="http://www.raf.mod.uk/downloads">
+        DOWNLOADS
+       </a>
+      </li>
+      <li>
+       <a href="http://www.raf.mod.uk/contact-us.cfm">
+        CONTACT US
+       </a>
+      </li>
+      <li>
+       <a href="http://www.raf.mod.uk/links/faqs.cfm">
+        FAQs
+       </a>
+      </li>
+      <li>
+       <a href="http://www.raf.mod.uk/privacy.cfm#cookies">
+        Cookies
+       </a>
+      </li>
+     </ul>
+     <ul class="tagline">
+      AGILE ADAPTABLE CAPABLE
+     </ul>
+    </div>
+   </div>
+   <!-- end header -->
+   <div id="nav">
+    <div class="gutter">
+     <a id="mainNav" name="mainNav">
+     </a>
+     <ul id="navigation">
+      <li class="home">
+       <a accesskey="1" class="here" href="http://www.raf.mod.uk/">
+        <span>
+         Home
+        </span>
+       </a>
+      </li>
+      <li class="role">
+       <a href="http://www.raf.mod.uk/role/">
+        Role
+       </a>
+      </li>
+      <li class="organisation">
+       <a href="http://www.raf.mod.uk/organisation/">
+        Organisation
+       </a>
+      </li>
+      <li class="currentoperations">
+       <a href="http://www.raf.mod.uk/currentoperations/">
+        Current Operations
+       </a>
+      </li>
+      <li class="equipment">
+       <a href="http://www.raf.mod.uk/equipment/">
+        Equipment
+       </a>
+      </li>
+      <li class="history">
+       <a href="http://www.raf.mod.uk/history/">
+        History
+       </a>
+      </li>
+      <li class="news">
+       <a href="http://www.raf.mod.uk/news/">
+        News
+       </a>
+      </li>
+     </ul>
+     <a id="siteSearch" name="siteSearch">
+     </a>
+     <form action="http://www.raf.mod.uk/search/index.cfm" method="post" name="frmSearch">
+      <label for="searchtext">
+       Search
+      </label>
+      <input accesskey="4" id="searchtext" name="searchtext" onblur="resetField('frmSearch','searchtext',' Search this site');" onfocus="clearField('frmSearch','searchtext',' Search this site');" size="25" type="text" value=" Search this site"/>
+      <input id="btnSearchSubmit" name="btnSearchSubmit" type="submit" value="Go"/>
+     </form>
+    </div>
+    <!-- end gutter -->
+   </div>
+   <!-- end nav -->
+   <!-- end breadCrumb -->
+   <a id="pageContent" name="pageContent">
+   </a>
+   <div id="content">
+    <div class="gutter">
+     <div id="leftMainContent">
+      <div id="newsslider">
+       <div id="myTabs">
+        <ul class="nsControls">
+         <li class="firsttab">
+          <a href="#firsttab">
+           RAF Marks Battle of Britain 75th Anniversary
+          </a>
+         </li>
+         <li>
+          <a href="#secondtab">
+           A400M Atlas Aircraft
+          </a>
+         </li>
+         <li>
+          <a href="#thirdtab">
+           Tunisia Repatriation concludes
+          </a>
+         </li>
+        </ul>
+        <div class="tab_content" id="firsttab">
+         <div class="nsContent">
+          <ul>
+           <li>
+            <img alt="20150710-BoB75-Flypast-MT" height="271" src="http://www.raf.mod.uk/rafcms/mediafiles/B237A315_5056_A318_A83F7C6414D99A00.jpg" width="452px"/>
+            <h3>
+             RAF Marks Battle of Britain 75th Anniversary
+            </h3>
+            <p>
+             75 years after the start of the Battle of Britain, the RAF marked the anniversary today [Friday, 10 July] with an enhanced Change of the Guard and a flypast in front of The Queen and six Battle of Britain veterans at Buckingham Palace.
+            </p>
+            <p>
+             <a class="arrowRed" href="http://www.raf.mod.uk/news/archive/raf-marks-battle-of-britain-75th-anniversary-10072015">
+              Battle of Britain Anniversary
+             </a>
+            </p>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="tab_content" id="secondtab">
+         <div class="nsContent">
+          <ul>
+           <li>
+            <img alt="The third A400M Aircraft delivered to the RAF arrived on a glorious sunlit evening into Brize Norton." height="271" src="http://www.raf.mod.uk/rafcms/mediafiles/0AFAB504_5056_A318_A8D0EF05D10F6FDE.jpg" width="452px"/>
+            <h3>
+             A400M Atlas Aircraft
+            </h3>
+            <p>
+             The Ministry of Defence is pleased to announce it has taken delivery of its third A400M Atlas aircraft which has flown back to the UK.
+            </p>
+            <p>
+             <a class="arrowRed" href="http://www.raf.mod.uk/news/archive/a400m-atlas-aircraft-07072015">
+              A400M Atlas Aircraft
+             </a>
+            </p>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="tab_content" id="thirdtab">
+         <div class="nsContent">
+          <ul>
+           <li>
+            <img alt="Repatriation to the UK , of British civilians killed in the Sousse attack in Tunisia. The repatriations were carried out by members of the Queens Colour Squadron, Royal Air Force Regiment onboard a C-17 Globemaster aircraft from 99 Squadron, based at RAF Brize Norton." height="271" src="http://www.raf.mod.uk/rafcms/mediafiles/17737D60_5056_A318_A84AFBD970478A5E.jpg" width="452px"/>
+            <h3>
+             Tunisia Repatriation concludes
+            </h3>
+            <p>
+             All British civilians killed in the attack on a beach in Tunisia have arrived back in the UK.
+            </p>
+            <p>
+             <a class="arrowRed" href="http://www.raf.mod.uk/news/archive/tunisia-repatriation-concludes-04072015">
+              Tunisia Repatriation
+             </a>
+            </p>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="block">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/news/archive.cfm" target="_blank">
+         Latest News Updates
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/news/archive.cfm" target="_blank">
+        <img alt="Operational Update" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/C43644DD_5056_A318_A8688ED3E6FD9C90.jpg" width="148"/>
+       </a>
+       <p>
+        Latest updates including Operational News
+       </p>
+      </div>
+      <div class="block right">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/organisation/expeditionary-air-group.cfm">
+         Expeditionary Air Force
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/organisation/expeditionary-air-group.cfm">
+        <img alt="Expeditionary Air Wings" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/7CF1F637_1143_EC82_2E3885AC8A4300CF.jpg" width="148"/>
+       </a>
+       <p>
+        Find out more about the RAF's global operations
+       </p>
+      </div>
+      <div class="block">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/recruitment/" target="_blank">
+         RAF Recruitment
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/recruitment/" target="_blank">
+        <img alt="RAF Careers " border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/C463074E_5056_A318_A8DFB4D729746A8F.jpg" width="148"/>
+       </a>
+       <p>
+        Our full-time regulars work side by side with spare-time reserves.
+       </p>
+      </div>
+      <div class="block right">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/ftrs-ptvr-adc-verr/" target="_blank">
+         FTRS Vacancies
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/ftrs-ptvr-adc-verr/" target="_blank">
+        <img alt="Recruitment Logo" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/C1AB4789_5056_A318_A8F4E08163947CD6.jpg" width="148"/>
+       </a>
+       <p>
+        View Full-Time Reserve Service (FTRS) vacancies available.
+       </p>
+      </div>
+      <div class="block">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/history/ww1.cfm">
+         World War 1
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/history/ww1.cfm">
+        <img alt="No 2 Sqn RFC in WW1" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/43962220_5056_A318_A83FDE61C3E9D84F.jpg" width="148"/>
+       </a>
+       <p>
+        The Worlds first independent Air Force was born in battle
+       </p>
+      </div>
+      <div class="block right">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/hawkt2roledemo/" target="_blank">
+         Hawk T2 Role Demo
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/hawkt2roledemo/" target="_blank">
+        <img alt="Hawk T2" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/ECC611C8_5056_A318_A89D5CB10C795B97.jpg" width="148"/>
+       </a>
+       <p>
+        Hawk T2 Role Demo Team Launches
+       </p>
+      </div>
+      <div class="block">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/rafsportsboard/" target="_blank">
+         RAF Sports Board
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/rafsportsboard/" target="_blank">
+        <img alt="RAF Sports" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/C423ED97_5056_A318_A8029C9C87BDF7CA.jpg" width="148"/>
+       </a>
+       <p>
+        All the sports in the RAF
+       </p>
+      </div>
+      <div class="block right">
+       <h3 class="title">
+        <a href="http://www.raf.mod.uk/events/rafondisplay.cfm">
+         RAF on Display
+        </a>
+       </h3>
+       <a href="http://www.raf.mod.uk/events/rafondisplay.cfm">
+        <img alt="RAF on Display" border="0" height="85" src="http://www.raf.mod.uk/rafcms/mediafiles/C42CB608_5056_A318_A86163E155E94240.jpg" width="148"/>
+       </a>
+       <p>
+        Find out more about our display teams
+       </p>
+      </div>
+     </div>
+     <div id="rightCol">
+      <div class="feature imagetext">
+       <div style="background: url(http://www.raf.mod.uk/rafcms/mediafiles/8B818F18_5056_A318_A8584F4A9C2718E8.jpg) no-repeat; height:49px; width: 221px; ">
+        <span>
+         Cookies and Privacy
+        </span>
+       </div>
+       <ul>
+        <li>
+         <a class="arrowRed" href="http://www.raf.mod.uk/privacy.cfm#cookies" target="_blank">
+          Cookies and your privacy
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="feature">
+       <a href="https://airspace.raf.mod.uk/" target="_blank">
+        <img alt="airspace" border="0" src="http://www.raf.mod.uk/rafcms/mediafiles/63661725_5056_A318_A8409E15A9DAA08E.jpg" width="221"/>
+       </a>
+      </div>
+      <div class="feature">
+       <a href="http://www.raf.mod.uk/news/royalairforcesocialmedia.cfm">
+        <img alt="social_media" border="0" src="http://www.raf.mod.uk/rafcms/mediafiles/636DDBA6_5056_A318_A86E1AF17FB7E41D.jpg" width="221"/>
+       </a>
+      </div>
+      <div class="feature">
+       <a href="http://www.raf.mod.uk/community">
+        <img alt="Community Support-RHC" border="0" src="http://www.raf.mod.uk/rafcms/mediafiles/4C46EF23_5056_A318_A86C723A2183E50F.jpg" width="221"/>
+       </a>
+      </div>
+      <div class="feature imagetext">
+       <div style="background: url(http://www.raf.mod.uk/rafcms/mediafiles/63D549D3_5056_A318_A8B268B4CCC84E25.jpg) no-repeat; height:49px; width: 221px; ">
+        <span>
+         RAF Presentation Team
+        </span>
+       </div>
+       <ul>
+        <li>
+         <a class="arrowRed" href="http://www.raf.mod.uk/presentationteam" target="_blank">
+          Find out more...
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="feature imagetext">
+       <h3>
+        Air Power
+       </h3>
+       <ul>
+        <li>
+         <a class="arrowRed" href="http://www.raf.mod.uk/role/airpower.cfm">
+          Air Power Speeches
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.cosfordairshow.co.uk/" target="_blank">
+          RAF Cosford Air Show
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.waddingtonairshow.co.uk/" target="_blank">
+          RAF Waddington Air Show
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="feature imagetext">
+       <h3>
+        RAF Community
+       </h3>
+       <ul>
+        <li>
+         <a class="arrowRed" href="http://raf.mod.uk/community/" target="_blank">
+          RAF Community Support
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.raf-ff.org.uk/" target="_blank">
+          RAF Families Federation
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.raf.mod.uk/aircadets" target="_blank">
+          Air Cadet Organisation
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.rafbf.org" target="_blank">
+          RAF Benevolent Fund
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.rafa.org.uk/" target="_blank">
+          RAF Association
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="feature imagetext">
+       <h3>
+        Useful Links
+       </h3>
+       <ul>
+        <li>
+         <a class="arrowRed" href="http://www.airtattoo.com/RAF-Charitable-Trust" target="_blank">
+          RAF Charitable Trust
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.defencegateway.mod.uk" target="_blank">
+          Defence Gateway
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.rafclub.org.uk/" target="_blank">
+          RAF Club
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.rafmuseum.org.uk/" target="_blank">
+          RAF Museum
+         </a>
+        </li>
+        <li>
+         <a class="arrowRed" href="http://www.raf.mod.uk/news/forcespensionsociety.cfm" target="_blank">
+          Forces Pension Society
+         </a>
+        </li>
+       </ul>
+      </div>
+      <script language="JavaScript">
+       function fbselect()
+	{
+		// If an FB is selected
+		if (document.addEditFeatureBox.featureBoxStyle.selectedIndex == 1)
+		{
+			document.getElementById("linkfield").className = "showField";
+			document.getElementById("linklabelfield").className = "showField";
+		}
+		else if (document.addEditFeatureBox.featureBoxStyle.selectedIndex == 2)
+		{			
+			document.getElementById("linkfield").className = "showField";
+			document.getElementById("linklabelfield").className = "showField";
+		}
+		else if (document.addEditFeatureBox.featureBoxStyle.selectedIndex == 3)
+		{			
+			document.getElementById("linkfield").className = "showField";
+			document.getElementById("linklabelfield").className = "showField";
+		}
+		else
+		{
+			document.getElementById("linkfield").className = "hideField";
+			document.getElementById("linklabelfield").className = "hideField";
+		}
+	}
+      </script>
+     </div>
+    </div>
+   </div>
+   <div id="tools">
+    <ul>
+     <script type="text/javascript">
+      function getRadioCheckedValue(radio_name)
+					{
+					   var oRadio = document.rateform.elements['stars'];
+					 
+					   for(var i = 0; i &lt; oRadio.length; i++)
+					   {
+					      if(oRadio[i].checked)
+					      {
+					         return oRadio[i].value;
+					      }
+					   }
+					 
+					   return "";
+					}
+     </script>
+     <li class="rate">
+      <p>
+       Rate this page:
+      </p>
+      <form action="http://www.raf.mod.uk/ratepage/index.cfm" id="rateform" method="post" name="rateform">
+       <input name="urlStr" type="hidden" value="http://www.raf.mod.uk/index.cfm"/>
+       <input name="pagename" type="hidden" value="RAF Homepage"/>
+       <input id="rate1" name="stars" type="radio" value="1"/>
+       <label for="rate1">
+        <img alt="1 star" src="http://www.raf.mod.uk/images/1star.gif"/>
+       </label>
+       <input id="rate2" name="stars" type="radio" value="2"/>
+       <label for="rate2">
+        <img alt="2 star" src="http://www.raf.mod.uk/images/2star.gif"/>
+       </label>
+       <input id="rate3" name="stars" type="radio" value="3"/>
+       <label for="rate3">
+        <img alt="3 star" src="http://www.raf.mod.uk/images/3star.gif"/>
+       </label>
+       <input id="rate4" name="stars" type="radio" value="4"/>
+       <label for="rate4">
+        <img alt="4 star" src="http://www.raf.mod.uk/images/4star.gif"/>
+       </label>
+       <input name="pageID" type="hidden" value="AE34DB9E-1143-EC82-2E8C23246D598E80"/>
+       <input id="btnRatePage" name="rate" type="submit" value="Go"/>
+      </form>
+     </li>
+    </ul>
+    <dl class="fontResizer">
+     <dt>
+      Text size:
+     </dt>
+     <dd>
+      <a class="first smallFont" href="#">
+       medium
+      </a>
+      |
+     </dd>
+     <dd>
+      <a class="medFont" href="#">
+       larger
+      </a>
+      |
+     </dd>
+     <dd>
+      <a class="largeFont" href="#">
+       largest
+      </a>
+     </dd>
+    </dl>
+   </div>
+   <!-- end tools -->
+   <div id="preFooter">
+    <div class="quickLinks">
+     <h4 class="title">
+      Quick links
+     </h4>
+     <div class="listings">
+      <ul>
+       <li>
+        <a href="http://www.raf.mod.uk/organisation/stations.cfm">
+         RAF Station Locations
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/events/displayteams.cfm">
+         Display Teams
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/reds">
+         Red Arrows
+        </a>
+       </li>
+      </ul>
+      <ul>
+       <li>
+        <a href="http://www.raf.mod.uk/news/rollofhonour.cfm">
+         Roll of Honour
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/history/raftimelinehomepage.cfm">
+         RAF Timeline
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/history/AircraftoftheRoyalAirForce.cfm">
+         RAF Aircraft
+        </a>
+       </li>
+      </ul>
+      <ul>
+       <li>
+        <a href="http://www.raf.mod.uk/aircadets">
+         Air Training Corps
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/careers/applicationzone/">
+         RAF Careers
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/rafreserves">
+         RAF Reserves
+        </a>
+       </li>
+      </ul>
+      <ul>
+       <li>
+        <a href="http://www.raf.mod.uk/community">
+         RAF Community
+        </a>
+       </li>
+       <li>
+        <a href="http://www.veterans-uk.info/about_us/about_us.html" target="_blank">
+         Veterans
+        </a>
+       </li>
+       <li>
+        <a href="http://www.raf.mod.uk/organisation/senior-commanders.cfm">
+         Senior Commanders
+        </a>
+       </li>
+      </ul>
+     </div>
+     <!-- end lists -->
+    </div>
+    <!-- end quickLinks -->
+   </div>
+   <!-- end preFooter -->
+   <div id="footer">
+    <ul>
+     <li>
+      <a accesskey="8" href="http://www.raf.mod.uk/termsconditions.cfm">
+       Terms &amp; conditions
+      </a>
+      |
+     </li>
+     <li>
+      <a accesskey="8" href="http://www.raf.mod.uk/privacy.cfm">
+       Privacy
+      </a>
+      |
+     </li>
+     <li>
+      <a accesskey="3" href="http://www.raf.mod.uk/sitemap.cfm">
+       Site map
+      </a>
+      |
+     </li>
+     <li>
+      <a accesskey="6" href="http://www.raf.mod.uk/accessibility.cfm">
+       Accessibility
+      </a>
+      |
+     </li>
+     <li class="sabrelink">
+      <a href='https://www.gov.uk/make-a-freedom-of-information-request/the-freedom-of-information-act"' target="_blank">
+       Freedom of information
+      </a>
+      |
+     </li>
+     <li>
+      <a accesskey="3" href="http://www.raf.mod.uk/glossary.cfm">
+       Glossary
+      </a>
+     </li>
+    </ul>
+    <p class="copyright">
+     <a href="http://www.mod.uk/defenceinternet/copyright/" target="_blank">
+       UK Crown copyright 2015
+     </a>
+    </p>
+   </div>
+   <!-- end footer -->
+   <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-15489333-3', 'auto');
+	  
+			ga('send', 'pageview');
+   </script>
+   <script type="text/javascript">
+    (function() {
+       var mf = document.createElement("script"); mf.type = "text/javascript"; mf.async = true;
+       mf.src = "//cdn.mouseflow.com/projects/e8359ccc-cfee-41e1-b0c8-69a129be703b.js";
+       document.getElementsByTagName("head")[0].appendChild(mf);
+   })();
+   </script>
+   <div class="clear">
+   </div>
+  </div>
+  <!-- end bodyBackground -->
+ </body>
+</html>

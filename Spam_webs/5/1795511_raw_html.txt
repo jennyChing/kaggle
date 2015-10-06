@@ -1,0 +1,1709 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <script type="text/javascript">
+   (function() { var b=window,f="chrome",g="tick",k="jstiming";(function(){function d(a){this.t={};this.tick=function(a,d,c){var e=void 0!=c?c:(new Date).getTime();this.t[a]=[e,d];if(void 0==c)try{b.console.timeStamp("CSI/"+a)}catch(h){}};this[g]("start",null,a)}var a;b.performance&amp;&amp;(a=b.performance.timing);var n=a?new d(a.responseStart):new d;b.jstiming={Timer:d,load:n};if(a){var c=a.navigationStart,h=a.responseStart;0&lt;c&amp;&amp;h&gt;=c&amp;&amp;(b[k].srt=h-c)}if(a){var e=b[k].load;0&lt;c&amp;&amp;h&gt;=c&amp;&amp;(e[g]("_wtsrt",void 0,c),e[g]("wtsrt_","_wtsrt",h),e[g]("tbsd_","wtsrt_"))}try{a=null,
+b[f]&amp;&amp;b[f].csi&amp;&amp;(a=Math.floor(b[f].csi().pageT),e&amp;&amp;0&lt;c&amp;&amp;(e[g]("_tbnd",void 0,b[f].csi().startE),e[g]("tbnd_","_tbnd",c))),null==a&amp;&amp;b.gtbExternal&amp;&amp;(a=b.gtbExternal.pageT()),null==a&amp;&amp;b.external&amp;&amp;(a=b.external.pageT,e&amp;&amp;0&lt;c&amp;&amp;(e[g]("_tbnd",void 0,b.external.startE),e[g]("tbnd_","_tbnd",c))),a&amp;&amp;(b[k].pt=a)}catch(p){}})();b.tickAboveFold=function(d){var a=0;if(d.offsetParent){do a+=d.offsetTop;while(d=d.offsetParent)}d=a;750&gt;=d&amp;&amp;b[k].load[g]("aft")};var l=!1;function m(){l||(l=!0,b[k].load[g]("firstScrollTime"))}b.addEventListener?b.addEventListener("scroll",m,!1):b.attachEvent("onscroll",m);
+ })();
+  </script>
+  <meta content="blogger" name="generator"/>
+  <link href="http://blog.llvm.org/favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html" rel="canonical"/>
+  <link href="http://blog.llvm.org/feeds/posts/default" rel="alternate" title="LLVM Project Blog - Atom" type="application/atom+xml"/>
+  <link href="http://blog.llvm.org/feeds/posts/default?alt=rss" rel="alternate" title="LLVM Project Blog - RSS" type="application/rss+xml"/>
+  <link href="https://www.blogger.com/feeds/6088150582281556517/posts/default" rel="service.post" title="LLVM Project Blog - Atom" type="application/atom+xml"/>
+  <!--[if IE]&gt; &lt;script&gt; (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i &lt; html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); &lt;/script&gt; &lt;![endif]-->
+  <title>
+   LLVM Project Blog: LLDB is Coming to Windows
+  </title>
+  <link href="https://www.blogger.com/static/v1/widgets/772717094-widget_css_bundle.css" rel="stylesheet" type="text/css"/>
+  <link href="https://www.blogger.com/dyn-css/authorization.css?targetBlogID=6088150582281556517&amp;zx=cd203961-1b8a-4deb-ab22-48ee8ff99edc" rel="stylesheet" type="text/css"/>
+  <style id="page-skin-1" type="text/css">
+   &lt;!--
+/*
+* Tekka
+* style modified from glish: http://www.glish.com/css/
+*
+* Updated by Blogger Team
+*/
+/* Variable definitions
+&lt;Variable name="mainBgColor" description="Page Background Color"
+type="color" default="#f5f5f5"&gt;
+&lt;Variable name="mainTextColor"  description="Text Color"
+type="color" default="#000000"&gt;
+&lt;Variable name="dateHeaderColor" description="Date Header Color"
+type="color" default="#808080"&gt;
+&lt;Variable name="mainLinkColor" description="Link Color"
+type="color" default="#0000ff"&gt;
+&lt;Variable name="mainVisitedLinkColor" description="Visited Link Color"
+type="color" default="#800080"&gt;
+&lt;Variable name="sidebarBgColor" description="Sidebar Background Color"
+type="color" default="#ffffff"&gt;
+&lt;Variable name="sidebarTextColor" description="Sidebar Text Color"
+type="color" default="#000000"&gt;
+&lt;Variable name="sidebarTitleColor" description="Sidebar Title Color"
+type="color" default="#000000"&gt;
+&lt;Variable name="sidebarLinkColor" description="Sidebar Link Color"
+type="color" default="#0000ff"&gt;
+&lt;Variable name="sidebarVisitedLinkColor" description="Sidebar Visited Link Color"
+type="color" default="#800080"&gt;
+&lt;Variable name="bodyFont" description="Text Font"
+type="font" default="normal normal 100% 'Trebuchet MS', verdana, sans-serif"&gt;
+&lt;Variable name="startSide" description="Start side in blog language"
+type="automatic" default="left"&gt;
+&lt;Variable name="endSide" description="End side in blog language"
+type="automatic" default="right"&gt;
+*/
+body {
+margin-top:0px;
+margin-right:0px;
+margin-bottom:0px;
+margin-left:0px;
+font-size: small;
+background-color: #f5f5f5;
+color: #000000;
+}
+#content-wrapper {
+margin-top: 0px;
+margin-right: 0px;
+margin-bottom: 0;
+margin-left: 5px;
+}
+h1 {
+font-size:400%;
+padding-left:15px;
+text-transform:uppercase;
+}
+h1 a, h1 a:link, h1 a:visited {
+text-decoration:none;
+color: #000000;
+}
+.description {
+text-align: center;
+padding-top:10px;
+}
+h2.date-header {
+border-bottom:none;
+font-size: 130%;
+text-align:left;
+margin-top:20px;
+margin-bottom:14px;
+padding:1px;
+padding-left:17px;
+color: #808080;
+font-weight: normal;
+font-family: Trebuchet MS, Verdana, Sans-serif;
+}
+.post h3 {
+font-size: 150%;
+font-weight:bold;
+}
+.post h3 a,
+.post h3 a:visited {
+color: #000000;
+}
+.post {
+padding-left:20px;
+margin-bottom:20px;
+text-indent:10px;
+padding-right:20px;
+line-height:22px;
+}
+.post-footer {
+margin-bottom:15px;
+margin-left:0px;
+font-size: 87%;
+}
+#comments {
+margin-left: 20px;
+}
+.feed-links {
+clear: both;
+line-height: 2.5em;
+margin-left: 20px;
+}
+#blog-pager-newer-link {
+float: left;
+margin-left: 20px;
+}
+#blog-pager-older-link {
+float: right;
+}
+#blog-pager {
+text-align: center;
+}
+#main {
+float:left;
+padding-bottom:20px;
+padding:0px;
+width:67%;
+font: normal normal 100% 'Trebuchet MS', verdana, sans-serif;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+}
+.sidebar h2 {
+font-weight:bold;
+font-size: 150%;
+color: #000000;
+}
+a {
+text-decoration:none
+}
+a:hover {
+border-bottom:dashed 1px red;
+}
+a img {
+border: 0;
+}
+a {
+color: #0000ff;
+}
+a:hover,
+a:visited {
+color: #800080;
+}
+#sidebar a {
+color: #0000ff;
+}
+#sidebar a:hover,
+#sidebar a:visited {
+color: #800080;
+}
+#sidebar {
+text-transform:none;
+background-color: #ffffff;
+color: #000000;
+padding-left: 20px;
+width: 30%;
+float: right;
+font: normal normal 100% 'Trebuchet MS', verdana, sans-serif;
+border-left:2px dashed #000000;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+}
+.sidebar .widget {
+padding-top: 4px;
+padding-right: 8px;
+padding-bottom: 0;
+padding-left: 0;
+}
+.profile-textblock {
+clear: both;
+margin-left: 0;
+}
+.profile-img {
+float: left;
+margin-top: 0;
+margin-right: 5px;
+margin-bottom: 5px;
+margin-left: 0;
+}
+.clear {
+clear: both;
+}
+.comment-footer {
+padding-bottom: 1em;
+}
+#navbar { display: none; }
+
+--&gt;
+  </style>
+  <script type="text/javascript">
+   var a="indexOf",b="&amp;m=1",e="(^|&amp;)m=",f="?",g="?m=1";function h(){var c=window.location.href,d=c.split(f);switch(d.length){case 1:return c+g;case 2:return 0&lt;=d[1].search(e)?null:c+b;default:return null}}var k=navigator.userAgent;if(-1!=k[a]("Mobile")&amp;&amp;-1!=k[a]("WebKit")&amp;&amp;-1==k[a]("iPad")||-1!=k[a]("Opera Mini")||-1!=k[a]("IEMobile")){var l=h();l&amp;&amp;window.location.replace(l)};
+  </script>
+  <script type="text/javascript">
+   if (window.jstiming) window.jstiming.load.tick('headEnd');
+  </script>
+ </head>
+ <body>
+  <div class="navbar section" id="navbar">
+   <div class="widget Navbar" id="Navbar1">
+    <script type="text/javascript">
+     function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+    </script>
+    <div id="navbar-iframe-container">
+    </div>
+    <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+     gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+          if (gapi.iframes &amp;&amp; gapi.iframes.getContext) {
+            gapi.iframes.getContext().openChild({
+                url: 'https://www.blogger.com/navbar.g?targetBlogID\0756088150582281556517\46blogName\75LLVM+Project+Blog\46publishMode\75PUBLISH_MODE_HOSTED\46navbarType\75SILVER\46layoutType\75LAYOUTS\46searchRoot\75http://blog.llvm.org/search\46blogLocale\75en\46v\0752\46homepageUrl\75http://blog.llvm.org/\46targetPostID\0751873482367127479118\46blogPostOrPageUrl\75http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html\46vt\75-6871119982503739098',
+                where: document.getElementById("navbar-iframe-container"),
+                id: "navbar-iframe"
+            });
+          }
+        });
+    </script>
+    <script type="text/javascript">
+     (function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '//pagead2.googlesyndication.com/pagead/js/google_top_exp.js';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+    </script>
+   </div>
+  </div>
+  <div id="outer-wrapper">
+   <div id="wrap2">
+    <!-- skip links for text browsers -->
+    <span id="skiplinks" style="display:none;">
+     <a href="#main">
+      skip to main
+     </a>
+     |
+     <a href="#sidebar">
+      skip to sidebar
+     </a>
+    </span>
+    <div id="content-wrapper">
+     <div id="crosscol-wrapper" style="text-align:center">
+      <div class="crosscol section" id="crosscol">
+      </div>
+     </div>
+     <div id="main-wrapper">
+      <div class="main section" id="main">
+       <div class="widget Header" id="Header1">
+        <div id="header-inner">
+         <div class="titlewrapper">
+          <h1 class="title">
+           <a href="http://blog.llvm.org/">
+            LLVM Project Blog
+           </a>
+          </h1>
+         </div>
+         <div class="descriptionwrapper">
+          <p class="description">
+           <span>
+            LLVM Project News and Details from the Trenches
+           </span>
+          </p>
+         </div>
+        </div>
+       </div>
+       <div class="widget Blog" id="Blog1">
+        <div class="blog-posts hfeed">
+         <!-- google_ad_section_start(name=default) -->
+         <div class="date-outer">
+          <h2 class="date-header">
+           <span>
+            Tuesday, January 20, 2015
+           </span>
+          </h2>
+          <div class="date-posts">
+           <div class="post-outer">
+            <div class="post hentry">
+             <a name="1873482367127479118">
+             </a>
+             <h3 class="post-title entry-title">
+              <a href="http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html">
+               LLDB is Coming to Windows
+              </a>
+             </h3>
+             <div class="post-header-line-1">
+             </div>
+             <div class="post-body entry-content">
+              We've spoken in the
+              <a href="http://blog.llvm.org/2014/07/clangllvm-on-windows-update.html">
+               past
+              </a>
+              about teaching Clang to fully support Windows and be compatible with MSVC. Until now, a big missing piece in this story has been debugging the clang-generated executables. Over the past 6 months, we've started working on making LLDB work well on Windows and support debugging both regular Windows programs and those produced by Clang.
+              <br/>
+              <div>
+               <br/>
+              </div>
+              <div>
+               Why not use an existing debugger such as GDB, Visual Studio's, or WinDBG? There are a lot of factors in making this kind of decision. For example, while GDB understands the DWARF debug information produced by Clang on Windows, it doesn't understand the Microsoft C++ ABI or debug information format. On the other hand, neither Visual Studio nor WinDBG understand the DWARF debug information produced by Clang. With LLDB, we can teach it to support
+               <i>
+                both
+               </i>
+               of these formats, making it usable with a wider range of programs. There are also other reasons why we're really excited to work on LLDB for Windows, such as the tight integration with Clang which lets it support all of the same C++ features in its expression parser that Clang supports in your source code. We're also looking to continue adding new functionality to the debugging experience going forward, and having an open source debugger that is part of the larger LLVM project makes this really easy.
+              </div>
+              <div>
+               <br/>
+              </div>
+              <div>
+               The past few months have been spent porting LLDB's core codebase to Windows. We've been fixing POSIX assumptions, enhancing the OS abstraction layer, and removing platform specific system calls from generic code. Sometimes we have needed to take on significant refactorings to build abstractions where they are necessary to support platform specific differences. We have also worked to port the test infrastructure to Windows and set up build bots to ensure things stay green.
+              </div>
+              <div>
+               <br/>
+              </div>
+              <div>
+               This preliminary bootstraping work is mostly complete, and you can use LLDB to debug simple executables generated with Clang on Windows today. Note the use of the word "simple". At last check, approximately 50% of LLDB's tests fail on Windows. Our baseline, however, which is a single 32-bit executable (i.e. no shared libraries), single-threaded application built and linked with Clang and LLD using DWARF debug information, works today. We've tested all of the fundamental functionality such as:
+              </div>
+              <div>
+               <ol>
+                <li>
+                 Various methods of setting breakpoints (address, source file+line, symbol name, etc)
+                </li>
+                <li>
+                 Stopping at and continuing from breakpoints
+                </li>
+                <li>
+                 Process inspection while stopped, such as stack unwinding, frame setting, memory examination, local variables, expression evaluation, stepping, etc (one notable exception to this is that step-over doesn't yet work well in the presence of limited symbol information).
+                </li>
+               </ol>
+               <div>
+                Of course, there is still more to be done. Here are some of the areas we're planning to work on next:
+               </div>
+              </div>
+              <div>
+               <ol>
+                <li>
+                 Fixing low hanging fruit by improving the pass-rate of the test suite.
+                </li>
+                <li>
+                 Better support for debugging multi-threaded applications.
+                </li>
+                <li>
+                 Support for debugging crash dumps.
+                </li>
+                <li>
+                 Support for debugging x64 binaries.
+                </li>
+                <li>
+                 Enabling stepping through shared libraries.
+                </li>
+                <li>
+                 Understanding PDB (for debugging system libraries, and executables generated with MSVC). Although the exact format of PDB is undocumented, Microsoft still provides a rich API for querying PDB in the form of the DIA SDK.
+                </li>
+                <li>
+                 Adding debugging commands familiar to users of WinDBG (e.g. !handle, !peb, etc)
+                </li>
+                <li>
+                 Remote debugging
+                </li>
+                <li>
+                 Symbol server support
+                </li>
+                <li>
+                 Visual Studio integration
+                </li>
+               </ol>
+               <div>
+                If you're using Clang on Windows, we would encourage you to
+                <a href="http://lldb.llvm.org/build.html#BuildingLldbOnWindows">
+                 build LLDB
+                </a>
+                (it should be in the Windows
+                <a href="http://llvm.org/builds/">
+                 LLVM installer
+                </a>
+                soon) and let us know your thoughts by posting them to
+                <a href="http://lists.cs.uiuc.edu/mailman/listinfo/lldb-dev">
+                 lldb-dev
+                </a>
+                . Make sure you
+                <a href="http://llvm.org/bugs/enter_bug.cgi?product=lldb">
+                 file bugs
+                </a>
+                against LLDB if you notice anything wrong, and we would love for you to dive into the code and help out. If you see something wrong, dig in and try to fix it, and post your patch to
+                <a href="http://lists.cs.uiuc.edu/mailman/listinfo/lldb-commits">
+                 lldb-commits
+                </a>
+                .
+               </div>
+              </div>
+              <div style="clear: both;">
+              </div>
+             </div>
+             <div class="post-footer">
+              <div class="post-footer-line post-footer-line-1">
+               <span class="post-author vcard">
+                Posted by
+                <span class="fn">
+                 Zachary Turner
+                </span>
+               </span>
+               <span class="post-timestamp">
+                at
+                <a class="timestamp-link" href="http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html" rel="bookmark" title="permanent link">
+                 <abbr class="published" title="2015-01-20T10:48:00-08:00">
+                  10:48 AM
+                 </abbr>
+                </a>
+               </span>
+               <span class="post-icons">
+                <span class="item-control blog-admin pid-897129623">
+                 <a href="https://www.blogger.com/post-edit.g?blogID=6088150582281556517&amp;postID=1873482367127479118&amp;from=pencil" title="Edit Post">
+                  <img alt="" class="icon-action" height="18" src="//img2.blogblog.com/img/icon18_edit_allbkg.gif" width="18"/>
+                 </a>
+                </span>
+               </span>
+               <span class="post-backlinks post-comment-link">
+               </span>
+              </div>
+              <div class="post-footer-line post-footer-line-2">
+               <span class="post-labels">
+                Labels:
+                <a href="http://blog.llvm.org/search/label/Clang" rel="tag">
+                 Clang
+                </a>
+                ,
+                <a href="http://blog.llvm.org/search/label/LLDB" rel="tag">
+                 LLDB
+                </a>
+               </span>
+              </div>
+              <div class="post-footer-line post-footer-line-3">
+               <span class="post-location">
+               </span>
+              </div>
+             </div>
+            </div>
+            <div class="comments" id="comments">
+             <a name="comments">
+             </a>
+             <div id="backlinks-container">
+              <div id="Blog1_backlinks-container">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <!-- google_ad_section_end -->
+        </div>
+        <div class="blog-pager" id="blog-pager">
+         <span id="blog-pager-newer-link">
+          <a class="blog-pager-newer-link" href="http://blog.llvm.org/2015/01/llvm-weekly-56-jan-26th-2015.html" id="Blog1_blog-pager-newer-link" title="Newer Post">
+           Newer Post
+          </a>
+         </span>
+         <span id="blog-pager-older-link">
+          <a class="blog-pager-older-link" href="http://blog.llvm.org/2015/01/llvm-weekly-55-jan-19th-2015.html" id="Blog1_blog-pager-older-link" title="Older Post">
+           Older Post
+          </a>
+         </span>
+         <a class="home-link" href="http://blog.llvm.org/">
+          Home
+         </a>
+        </div>
+        <div class="clear">
+        </div>
+        <div class="post-feeds">
+        </div>
+        <script type="text/javascript">
+         window.___gcfg = {'lang': 'en'};
+        </script>
+       </div>
+      </div>
+     </div>
+     <div id="sidebar-wrapper">
+      <div class="sidebar section" id="sidebar">
+       <div class="widget Image" id="Image1">
+        <h2>
+         LLVM Logo
+        </h2>
+        <div class="widget-content">
+         <a href="http://blog.llvm.org/">
+          <img alt="LLVM Logo" height="136" id="Image1_img" src="http://llvm.org/img/DragonSmall.png" width="136"/>
+         </a>
+         <br/>
+        </div>
+        <div class="clear">
+        </div>
+        <span class="widget-item-control">
+         <span class="item-control blog-admin">
+          <a class="quickedit" href="//www.blogger.com/rearrange?blogID=6088150582281556517&amp;widgetType=Image&amp;widgetId=Image1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Image1"));' target="configImage1" title="Edit">
+           <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+          </a>
+         </span>
+        </span>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="widget Label" id="Label1">
+        <h2>
+         Labels
+        </h2>
+        <div class="widget-content list-label-widget-content">
+         <ul>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/Clang">
+            Clang
+           </a>
+           <span dir="ltr">
+            (104)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/llvmweekly">
+            llvmweekly
+           </a>
+           <span dir="ltr">
+            (79)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/C%2B%2B">
+            C++
+           </a>
+           <span dir="ltr">
+            (17)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/optimization">
+            optimization
+           </a>
+           <span dir="ltr">
+            (13)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/meta">
+            meta
+           </a>
+           <span dir="ltr">
+            (9)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/MC">
+            MC
+           </a>
+           <span dir="ltr">
+            (7)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/LLVM-IR">
+            LLVM-IR
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/devmtg">
+            devmtg
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/llvm-users">
+            llvm-users
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-2.7">
+            new-in-llvm-2.7
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-3.3">
+            new-in-llvm-3.3
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/LLDB">
+            LLDB
+           </a>
+           <span dir="ltr">
+            (4)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/jit">
+            jit
+           </a>
+           <span dir="ltr">
+            (4)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/codegen">
+            codegen
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-3.0">
+            new-in-llvm-3.0
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/sanitizer">
+            sanitizer
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/testing">
+            testing
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/OpenMP">
+            OpenMP
+           </a>
+           <span dir="ltr">
+            (2)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/Products">
+            Products
+           </a>
+           <span dir="ltr">
+            (2)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/GHC">
+            GHC
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/GSoC">
+            GSoC
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/KLEE">
+            KLEE
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/SelectionDAG">
+            SelectionDAG
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/Warnings">
+            Warnings
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/asip">
+            asip
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/dragonegg">
+            dragonegg
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/eda">
+            eda
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/libc%2B%2B">
+            libc++
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/modernizer">
+            modernizer
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-2.8">
+            new-in-llvm-2.8
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-3.1">
+            new-in-llvm-3.1
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/new-in-llvm-3.4">
+            new-in-llvm-3.4
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/tce">
+            tce
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/tta">
+            tta
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://blog.llvm.org/search/label/vliw">
+            vliw
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+         </ul>
+         <div class="clear">
+         </div>
+         <span class="widget-item-control">
+          <span class="item-control blog-admin">
+           <a class="quickedit" href="//www.blogger.com/rearrange?blogID=6088150582281556517&amp;widgetType=Label&amp;widgetId=Label1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Label1"));' target="configLabel1" title="Edit">
+            <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+           </a>
+          </span>
+         </span>
+         <div class="clear">
+         </div>
+        </div>
+       </div>
+       <div class="widget BlogArchive" id="BlogArchive1">
+        <h2>
+         Blog Archive
+        </h2>
+        <div class="widget-content">
+         <div id="ArchiveList">
+          <div id="BlogArchive1_ArchiveList">
+           <ul class="hierarchy">
+            <li class="archivedate expanded">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy toggle-open">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2015-01-01T00:00:00-08:00&amp;updated-max=2016-01-01T00:00:00-08:00&amp;max-results=34">
+              2015
+             </a>
+             <span class="post-count" dir="ltr">
+              (34)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_07_01_archive.html">
+                July
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_06_01_archive.html">
+                June
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_05_01_archive.html">
+                May
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_04_01_archive.html">
+                April
+               </a>
+               <span class="post-count" dir="ltr">
+                (6)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_03_01_archive.html">
+                March
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_02_01_archive.html">
+                February
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate expanded">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy toggle-open">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2015_01_01_archive.html">
+                January
+               </a>
+               <span class="post-count" dir="ltr">
+                (6)
+               </span>
+               <ul class="posts">
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/llvm-weekly-56-jan-26th-2015.html">
+                  LLVM Weekly - #56, Jan 26th 2015
+                 </a>
+                </li>
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html">
+                  LLDB is Coming to Windows
+                 </a>
+                </li>
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/llvm-weekly-55-jan-19th-2015.html">
+                  LLVM Weekly - #55, Jan 19th 2015
+                 </a>
+                </li>
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/llvm-weekly-54-jan-12th-2015.html">
+                  LLVM Weekly - #54, Jan 12th 2015
+                 </a>
+                </li>
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/using-clang-for-chrome-production.html">
+                  Using clang for Chrome production builds on Linux
+                 </a>
+                </li>
+                <li>
+                 <a href="http://blog.llvm.org/2015/01/llvm-weekly-53-jan-5th-2015.html">
+                  LLVM Weekly - #53, Jan 5th 2015
+                 </a>
+                </li>
+               </ul>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2014-01-01T00:00:00-08:00&amp;updated-max=2015-01-01T00:00:00-08:00&amp;max-results=50">
+              2014
+             </a>
+             <span class="post-count" dir="ltr">
+              (56)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_12_01_archive.html">
+                December
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_11_01_archive.html">
+                November
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_10_01_archive.html">
+                October
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_09_01_archive.html">
+                September
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_08_01_archive.html">
+                August
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_07_01_archive.html">
+                July
+               </a>
+               <span class="post-count" dir="ltr">
+                (6)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_06_01_archive.html">
+                June
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_05_01_archive.html">
+                May
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_04_01_archive.html">
+                April
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_03_01_archive.html">
+                March
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_02_01_archive.html">
+                February
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2014_01_01_archive.html">
+                January
+               </a>
+               <span class="post-count" dir="ltr">
+                (3)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2013-01-01T00:00:00-08:00&amp;updated-max=2014-01-01T00:00:00-08:00&amp;max-results=23">
+              2013
+             </a>
+             <span class="post-count" dir="ltr">
+              (23)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_11_01_archive.html">
+                November
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_10_01_archive.html">
+                October
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_09_01_archive.html">
+                September
+               </a>
+               <span class="post-count" dir="ltr">
+                (3)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_08_01_archive.html">
+                August
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_07_01_archive.html">
+                July
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_06_01_archive.html">
+                June
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_05_01_archive.html">
+                May
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_04_01_archive.html">
+                April
+               </a>
+               <span class="post-count" dir="ltr">
+                (7)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2013_03_01_archive.html">
+                March
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2012-01-01T00:00:00-08:00&amp;updated-max=2013-01-01T00:00:00-08:00&amp;max-results=4">
+              2012
+             </a>
+             <span class="post-count" dir="ltr">
+              (4)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2012_12_01_archive.html">
+                December
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2012_11_01_archive.html">
+                November
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2012_01_01_archive.html">
+                January
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2011-01-01T00:00:00-08:00&amp;updated-max=2012-01-01T00:00:00-08:00&amp;max-results=11">
+              2011
+             </a>
+             <span class="post-count" dir="ltr">
+              (11)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2011_12_01_archive.html">
+                December
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2011_11_01_archive.html">
+                November
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2011_09_01_archive.html">
+                September
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2011_05_01_archive.html">
+                May
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2011_04_01_archive.html">
+                April
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2010-01-01T00:00:00-08:00&amp;updated-max=2011-01-01T00:00:00-08:00&amp;max-results=17">
+              2010
+             </a>
+             <span class="post-count" dir="ltr">
+              (17)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_12_01_archive.html">
+                December
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_09_01_archive.html">
+                September
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_06_01_archive.html">
+                June
+               </a>
+               <span class="post-count" dir="ltr">
+                (3)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_05_01_archive.html">
+                May
+               </a>
+               <span class="post-count" dir="ltr">
+                (3)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_04_01_archive.html">
+                April
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_02_01_archive.html">
+                February
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2010_01_01_archive.html">
+                January
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://blog.llvm.org/search?updated-min=2009-01-01T00:00:00-08:00&amp;updated-max=2010-01-01T00:00:00-08:00&amp;max-results=6">
+              2009
+             </a>
+             <span class="post-count" dir="ltr">
+              (6)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://blog.llvm.org/2009_12_01_archive.html">
+                December
+               </a>
+               <span class="post-count" dir="ltr">
+                (6)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </div>
+         </div>
+         <div class="clear">
+         </div>
+         <span class="widget-item-control">
+          <span class="item-control blog-admin">
+           <a class="quickedit" href="//www.blogger.com/rearrange?blogID=6088150582281556517&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target="configBlogArchive1" title="Edit">
+            <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+           </a>
+          </span>
+         </span>
+         <div class="clear">
+         </div>
+        </div>
+       </div>
+       <div class="widget Text" id="Text1">
+        <h2 class="title">
+         About The LLVM Blog
+        </h2>
+        <div class="widget-content">
+         This blog is intended to be a news feed for information about the
+         <a href="http://llvm.org/">
+          LLVM Compiler Infrastructure
+         </a>
+         and related subprojects.
+         <div>
+          <br/>
+         </div>
+         <div>
+          We welcome new contributors.  If you'd like to write a post, please get in touch with
+          <a href="mailto:sabre@nondot.org">
+           Chris
+          </a>
+          .
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+        <span class="widget-item-control">
+         <span class="item-control blog-admin">
+          <a class="quickedit" href="//www.blogger.com/rearrange?blogID=6088150582281556517&amp;widgetType=Text&amp;widgetId=Text1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Text1"));' target="configText1" title="Edit">
+           <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+          </a>
+         </span>
+        </span>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- spacer for skins that want sidebar and main to be the same height-->
+     <div class="clear">
+     </div>
+    </div>
+    <!-- end content-wrapper -->
+   </div>
+  </div>
+  <!-- end outer-wrapper -->
+  <script type="text/javascript">
+   if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+  </script>
+  <script src="https://www.blogger.com/static/v1/widgets/71600398-widgets.js" type="text/javascript">
+  </script>
+  <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   if (typeof(BLOG_attachCsiOnload) != 'undefined' &amp;&amp; BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";window['blogger_blog_id'] = '6088150582281556517';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d6088150582281556517','//blog.llvm.org/2015/01/lldb-is-coming-to-windows.html','6088150582281556517');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '6088150582281556517', 'bloggerUrl': 'https://www.blogger.com', 'title': 'LLVM Project Blog', 'pageType': 'item', 'postId': '1873482367127479118', 'url': 'http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html', 'canonicalUrl': 'http://blog.llvm.org/2015/01/lldb-is-coming-to-windows.html', 'canonicalHomepageUrl': 'http://blog.llvm.org/', 'homepageUrl': 'http://blog.llvm.org/', 'blogspotFaviconUrl': 'http://blog.llvm.org/favicon.ico', 'enabledCommentProfileImages': true, 'adultContent': false, 'disableAdSenseWidget': false, 'analyticsAccountNumber': '', 'searchLabel': '', 'searchQuery': '', 'pageName': 'LLDB is Coming to Windows', 'pageTitle': 'LLVM Project Blog: LLDB is Coming to Windows', 'encoding': 'UTF-8', 'locale': 'en', 'localeUnderscoreDelimited': 'en', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42LLVM Project Blog - Atom\42 href\75\42http://blog.llvm.org/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42LLVM Project Blog - RSS\42 href\75\42http://blog.llvm.org/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42LLVM Project Blog - Atom\42 href\75\42https://www.blogger.com/feeds/6088150582281556517/posts/default\42 /\76\n\n', 'meTag': '', 'openIdOpTag': '', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var b\75window,f\75\42chrome\42,g\75\42tick\42,k\75\42jstiming\42;(function(){function d(a){this.t\75{};this.tick\75function(a,d,c){var e\75void 0!\75c?c:(new Date).getTime();this.t[a]\75[e,d];if(void 0\75\75c)try{b.console.timeStamp(\42CSI/\42+a)}catch(h){}};this[g](\42start\42,null,a)}var a;b.performance\46\46(a\75b.performance.timing);var n\75a?new d(a.responseStart):new d;b.jstiming\75{Timer:d,load:n};if(a){var c\75a.navigationStart,h\75a.responseStart;0\74c\46\46h\76\75c\46\46(b[k].srt\75h-c)}if(a){var e\75b[k].load;0\74c\46\46h\76\75c\46\46(e[g](\42_wtsrt\42,void 0,c),e[g](\42wtsrt_\42,\42_wtsrt\42,h),e[g](\42tbsd_\42,\42wtsrt_\42))}try{a\75null,\nb[f]\46\46b[f].csi\46\46(a\75Math.floor(b[f].csi().pageT),e\46\0460\74c\46\46(e[g](\42_tbnd\42,void 0,b[f].csi().startE),e[g](\42tbnd_\42,\42_tbnd\42,c))),null\75\75a\46\46b.gtbExternal\46\46(a\75b.gtbExternal.pageT()),null\75\75a\46\46b.external\46\46(a\75b.external.pageT,e\46\0460\74c\46\46(e[g](\42_tbnd\42,void 0,b.external.startE),e[g](\42tbnd_\42,\42_tbnd\42,c))),a\46\46(b[k].pt\75a)}catch(p){}})();b.tickAboveFold\75function(d){var a\0750;if(d.offsetParent){do a+\75d.offsetTop;while(d\75d.offsetParent)}d\75a;750\76\75d\46\46b[k].load[g](\42aft\42)};var l\75!1;function m(){l||(l\75!0,b[k].load[g](\42firstScrollTime\42))}b.addEventListener?b.addEventListener(\42scroll\42,m,!1):b.attachEvent(\42onscroll\42,m);\n })();\74/script\076', 'mobileHeadScript': '', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/cda3ddef07a85452', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'sf': 'n', 'tf': ''}}, {'name': 'skin', 'data': {'vars': {'sidebarBgColor': '#ffffff', 'mainVisitedLinkColor': '#800080', 'sidebarTitleColor': '#000000', 'mainTextColor': '#000000', 'bodyFont': 'normal normal 100% \47Trebuchet MS\47, verdana, sans-serif', 'sidebarVisitedLinkColor': '#800080', 'dateHeaderColor': '#808080', 'endSide': 'right', 'startSide': 'left', 'sidebarLinkColor': '#0000ff', 'sidebarTextColor': '#000000', 'mainBgColor': '#f5f5f5', 'mainLinkColor': '#0000ff'}, 'override': ''}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\75classic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\75flipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\75magazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\75mosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\75sidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\75snapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\75timeslide'}}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', null, document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'main', null, document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/1803213197-lbx.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/1185134592-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ImageView', new _WidgetInfo('Image1', 'sidebar', null, document.getElementById('Image1'), {'resize': false}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label1', 'sidebar', null, document.getElementById('Label1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr', 'loadingMessage': 'Loading...'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_TextView', new _WidgetInfo('Text1', 'sidebar', null, document.getElementById('Text1'), {}, 'displayModeFull'));
+  </script>
+ </body>
+</html>

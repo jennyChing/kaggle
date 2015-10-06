@@ -1,0 +1,1959 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Blissic | Interactive Lyrics Website With No Ads
+  </title>
+  <script type="text/javascript">
+   if (screen.width &lt;= 769) {
+	document.location = "/m";
+	}
+  </script>
+  <meta content="Blissic is a cool user-generated lyrics website. Share your verses with your friends and assemble them to create your own song." name="description"/>
+  <meta content="lyrics to royals, royals lyrics, lyrics, song words, song lyrics, lyric,  songtext, lyrics database, words to songs, lyrics search, a-z lyrics, az lyrics, azlyrics, rap genius, rapgenius, metrolyrics, metro lyrics" name="keywords"/>
+  <meta content="" name="classification"/>
+  <link href="http://www.lelandtran.com/front/Blissic_lyric_collaboration_platform_square.png" rel="image_src"/>
+  <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="/css/redmond/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" type="text/css"/>
+  <script src="/js/jquery-1.9.1.min.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.tmpl.min.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.stylish-select.js" type="text/javascript">
+  </script>
+  <script src="/js/common.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.tinyscrollbar.min.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery-ui-1.9.2.custom.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var DevSite=1;
+	var BASE_URL = '/';
+	var WEB_ROOT = 'http://www.blissic.com/';
+	var CDN_ROOT = 'https://s3-us-west-2.amazonaws.com/static.blissic.com/';
+	var CDN_IMG_ROOT = 'https://s3-ap-southeast-1.amazonaws.com/testblissic/';
+	var IS_LOGGED ='0';
+		var public_firstName='';
+  </script>
+  <script type="text/javascript">
+   var fb_param = {};
+fb_param.pixel_id = '6008770329756';
+fb_param.value = '0.00';
+fb_param.currency = 'USD';
+(function(){
+  var fpw = document.createElement('script');
+  fpw.async = true;
+  fpw.src = '//connect.facebook.net/en_US/fp.js';
+  var ref = document.getElementsByTagName('script')[0];
+  ref.parentNode.insertBefore(fpw, ref);
+})();
+  </script>
+ </head>
+ <body>
+  <noscript>
+   <img alt="" height="1" src="https://www.facebook.com/offsite_event.php?id=6008770329756&amp;value=0&amp;currency=USD" style="display:none" width="1"/>
+  </noscript>
+  <div class="leftSec">
+   <div class="left_menu_fixed">
+    <div class="setting_tab">
+     <ul class="tabing">
+      <li class="icon_1">
+       <div class="Notication" style="display:none">
+       </div>
+      </li>
+     </ul>
+    </div>
+    <div class="tabing_container">
+    </div>
+    <!---------  -------------------------------------------------------             -->
+    <div class="scrollbar3">
+     <div class="scrollbar">
+      <div class="track">
+       <div class="thumb">
+        <div class="end">
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="viewport">
+      <div class="overview">
+       <div class="left_nav">
+        <ul class="menu">
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+    <script type="text/javascript">
+     var objScrollbarMenu=$('.scrollbar3');
+objScrollbarMenu.tinyscrollbar();
+objScrollbarMenu.tinyscrollbar_update();
+    </script>
+    <!--  ----------------------------------------------------          -->
+   </div>
+  </div>
+  <script type="text/javascript">
+   $(document).ready(function(){
+		
+		$('.setting_tab ul.tabing li a').click(function(){
+		$('.setting_tab ul.tabing li').removeClass('active');
+		$('.tabing_container .msgPreview').hide();
+		
+		$(this).parent().toggleClass('active');
+		var subTask = $(this).parent().find('div.Notication').attr('id');
+		$('.tabing_container, .left_nav, #'+subTask+'Message').toggle();
+		if($('.scrollbar3').find('div.left_nav').css('display')=='block'){
+			$(this).parent().removeClass('active');
+		}
+		
+		//Reseting the count to 0
+		if($('#'+subTask).text() != ''){
+			
+			$.ajax({
+				url: "/frontajax/" + Math.random(),
+				type: "POST",
+				data: {'requesttype':'ajax', 'action':'resetCount', 'subTask':subTask},
+				dataType: "json",
+				success: function(data){
+					if(data.status == 200){
+						$('#'+data.subTask).html('0');
+						$('#'+data.subTask).hide();
+					} 
+				}				
+			});
+		}
+		$('.tabing_container').height($(window).height()-50);
+		
+	});
+	//Call the function to get all notificatons
+		/// To close comments popup (Verse) 
+	$('.verses_expend .close').click(function(){$('#transparent-div').hide();$('.verses_expend').hide();});
+});
+  </script>
+  <div class="right_sec">
+   <!--start hader section form here-->
+   <div class="hade_sec">
+    <div class="hade_sec_fixed">
+     <div class="logo">
+      <a href="http://www.blissic.com/">
+      </a>
+      <ul class="top_tabs">
+       <li>
+        <a href="javascript:void(0);">
+         Log In
+        </a>
+       </li>
+       <li>
+        <a href="javascript:void(0);">
+         Sign Up
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="search">
+      <form action="/search/" id="searchFrm" method="post" name="searchFrm">
+       <input id="textToSearch" name="textToSearch" onblur="if(this.placeholder=='') this.placeholder='Search for Artists, Verses and Lyrics';" onfocus="if(this.placeholder=='Search for Artists, Verses and Lyrics') this.placeholder='';" placeholder="Search for Artists, Verses and Lyrics" type="text" value=""/>
+       <input id="searchNow" type="submit"/>
+      </form>
+     </div>
+     <script>
+      $(document).ready(function(){$('#textToSearch').keypress(function(e){if(e.which == 13) {	$('#searchNow').trigger('click');}	});});
+     </script>
+    </div>
+    <div class="clear">
+    </div>
+   </div>
+   <div class="middle_sec">
+    <link href="/player/circle.skin4/circle.player.css" rel="stylesheet"/>
+    <script src="/player/js/jquery.transform2d.js" type="text/javascript">
+    </script>
+    <script src="/player/js/jquery.grab.js" type="text/javascript">
+    </script>
+    <script src="/player/js/jquery.jplayer.js" type="text/javascript">
+    </script>
+    <script src="/player/js/mod.csstransforms.min.js" type="text/javascript">
+    </script>
+    <script src="/player/js/circle.player.js" type="text/javascript">
+    </script>
+    <link href="/css/toplyrics.css" rel="stylesheet"/>
+    <div class="latestsongs">
+     <div class="page-content clearfix">
+      <div class="grid_12 grid_12_landing">
+       <div class="module no-margin">
+        <header>
+         <!--&lt;p class="more-link"&gt;
+							&lt;a href="#" title="Submit Lyrics" rel="nofollow" onmousedown="ev('Submit Lyrics');"&gt;+ Submit Lyrics&lt;/a&gt; | &lt;a href="#" title="View Top 100" onmousedown="ev('View Top 100');"&gt;View Top 100&lt;/a&gt;
+						&lt;/p&gt;-->
+         <h3>
+          <span>
+           Latest
+          </span>
+          Lyrics
+         </h3>
+        </header>
+        <div class="content song-list clearfix">
+         <ul class="grid_4 alpha">
+          <li>
+           <span class="num">
+            1
+           </span>
+           <a class="title " href="/lyrics/id/326" onmousedown="ev('Featured Songs','Item');" title="Timber">
+            Timber Lyrics
+           </a>
+           <span class="artist">
+            Pitbull
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            2
+           </span>
+           <a class="title " href="/lyrics/id/293" onmousedown="ev('Featured Songs','Item');" title="Royals">
+            Royals Lyrics
+           </a>
+           <span class="artist">
+            Lorde
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            3
+           </span>
+           <a class="title hasvid" href="/lyrics/id/307" onmousedown="ev('Featured Songs','Item');" title="Counting Stars">
+            Counting Stars Lyrics
+           </a>
+           <span class="artist">
+            OneRepublic
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            4
+           </span>
+           <a class="title " href="/lyrics/id/316" onmousedown="ev('Featured Songs','Item');" title="The Monster">
+            The Monster Lyrics
+           </a>
+           <span class="artist">
+            Eminem
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            5
+           </span>
+           <a class="title " href="lyrics/id/296" onmousedown="ev('Featured Songs','Item');" title="Wrecking Ball">
+            Wrecking Ball Lyrics
+           </a>
+           <span class="artist">
+            Miley Cyrus
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            6
+           </span>
+           <a class="title " href="/lyrics/id/336" onmousedown="ev('Featured Songs','Item');" title="Pompeii">
+            Pompeii Lyrics
+           </a>
+           <span class="artist">
+            Bastille
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            7
+           </span>
+           <a class="title " href="lyrics/id/297" onmousedown="ev('Featured Songs','Item');" title="Applause">
+            Applause Lyrics
+           </a>
+           <span class="artist">
+            Lady Gaga
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            8
+           </span>
+           <a class="title " href="/lyrics/id/282" onmousedown="ev('Featured Songs','Item');" title="Roar">
+            Roar Lyrics
+           </a>
+           <span class="artist">
+            Katy Perry
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            9
+           </span>
+           <a class="title " href="lyrics/id/300" onmousedown="ev('Featured Songs','Item');" title="Safe and Sound">
+            Safe and Sound Lyrics
+           </a>
+           <span class="artist">
+            Capital Cities
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            10
+           </span>
+           <a class="title " href="lyrics/id/301" onmousedown="ev('Featured Songs','Item');" title="Still Into You">
+            Still Into You Lyrics
+           </a>
+           <span class="artist">
+            Paramore
+           </span>
+          </li>
+         </ul>
+         <ul class="grid_4">
+          <li>
+           <span class="num">
+            11
+           </span>
+           <a class="title " href="/lyrics/id/287" onmousedown="ev('Featured Songs','Item');" title="Wake Me Up">
+            Wake Me Up Lyrics
+           </a>
+           <span class="artist">
+            Avicii
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            12
+           </span>
+           <a class="title " href="/lyrics/id/303" onmousedown="ev('Featured Songs','Item');" title="Southern Girl">
+            Southern Girl Lyrics
+           </a>
+           <span class="artist">
+            Tim McGraw
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            13
+           </span>
+           <a class="title " href="/lyrics/id/304" onmousedown="ev('Featured Songs','Item');" title="Summertime Sadness">
+            Summertime Sadness Lyrics
+           </a>
+           <span class="artist">
+            Lana Del Rey
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            14
+           </span>
+           <a class="title " href="/lyrics/id/306" onmousedown="ev('Featured Songs','Item');" title="Crooked Smile">
+            Crooked Smile Lyrics
+           </a>
+           <span class="artist">
+            J. Cole
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            15
+           </span>
+           <a class="title " href="/lyrics/id/305" onmousedown="ev('Featured Songs','Item');" title="Holy Grail">
+            Holy Grail Lyrics
+           </a>
+           <span class="artist">
+            Jay-Z
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            16
+           </span>
+           <a class="title " href="lyrics/id/294" onmousedown="ev('Featured Songs','Item');" title="Unconditionally">
+            Unconditionally Lyrics
+           </a>
+           <span class="artist">
+            Katy Perry
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            17
+           </span>
+           <a class="title " href="/lyrics/id/324" onmousedown="ev('Featured Songs','Item');" title="Hey Brother">
+            Hey Brother Lyrics
+           </a>
+           <span class="artist">
+            Avicii
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            18
+           </span>
+           <a class="title " href="/lyrics/id/308" onmousedown="ev('Featured Songs','Item');" title="Aw Naw">
+            Aw Naw Lyrics
+           </a>
+           <span class="artist">
+            Chris Young
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            19
+           </span>
+           <a class="title " href="/lyrics/id/309" onmousedown="ev('Featured Songs','Item');" title="It Goes Like This">
+            It Goes Like This Lyrics
+           </a>
+           <span class="artist">
+            Thomas Rhett
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            20
+           </span>
+           <a class="title " href="/lyrics/id/311" onmousedown="ev('Featured Songs','Item');" title="Slow Down">
+            Slow Down Lyrics
+           </a>
+           <span class="artist">
+            Selena Gomez
+           </span>
+          </li>
+         </ul>
+         <ul class="grid_4 omega">
+          <li>
+           <span class="num">
+            21
+           </span>
+           <a class="title " href="/lyrics/id/310" onmousedown="ev('Featured Songs','Item');" title="Love More">
+            Love More Lyrics
+           </a>
+           <span class="artist">
+            Chris Brown
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            22
+           </span>
+           <a class="title " href="/lyrics/id/313" onmousedown="ev('Featured Songs','Item');" title="Brave">
+            Brave Lyrics
+           </a>
+           <span class="artist">
+            Sara Bareilles
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            23
+           </span>
+           <a class="title " href="/lyrics/id/314" onmousedown="ev('Featured Songs','Item');" title="Clarity">
+            Clarity Lyrics
+           </a>
+           <span class="artist">
+            Zedd
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            24
+           </span>
+           <a class="title " href="/lyrics/id/315" onmousedown="ev('Featured Songs','Item');" title="Sunny and 75">
+            Sunny and 75 Lyrics
+           </a>
+           <span class="artist">
+            Joe Nichols
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            25
+           </span>
+           <a class="title hasvid" href="/lyrics/id/319" onmousedown="ev('Featured Songs','Item');" title="We Can't Stop">
+            We Can't Stop Lyrics
+           </a>
+           <span class="artist">
+            Miley Cyrus
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            26
+           </span>
+           <a class="title " href="/lyrics/id/320" onmousedown="ev('Featured Songs','Item');" title="Burn">
+            Burn Lyrics
+           </a>
+           <span class="artist">
+            Ellie Goulding
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            27
+           </span>
+           <a class="title " href="/lyrics/id/295" onmousedown="ev('Featured Songs','Item');" title="Hold On, We're Going Home">
+            Hold On, We're Going Home Lyrics
+           </a>
+           <span class="artist">
+            Drake
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            28
+           </span>
+           <a class="title " href="/lyrics/id/317" onmousedown="ev('Featured Songs','Item');" title="Carolina">
+            Carolina Lyrics
+           </a>
+           <span class="artist">
+            Parmalee
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            29
+           </span>
+           <a class="title " href="/lyrics/id/318" onmousedown="ev('Featured Songs','Item');" title="Get Lucky">
+            Get Lucky Lyrics
+           </a>
+           <span class="artist">
+            Daft Punk
+           </span>
+          </li>
+          <li>
+           <span class="num">
+            30
+           </span>
+           <a class="title " href="/lyrics/id/312" onmousedown="ev('Featured Songs','Item');" title="We Were Us">
+            We Were Us Lyrics
+           </a>
+           <span class="artist">
+            Keith Urban
+           </span>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="clear">
+    </div>
+   </div>
+   <!--latest songs-->
+   <div class="clear">
+   </div>
+   <div class="mid_left_sec mid_left_sec_land">
+    <div class="mid_left_art mid_left_art_land">
+     <div class="tabCont">
+      <ul class="tabs">
+       <li class="active landingTabs">
+        <a href="javascript:void(0);">
+         Lyrics
+        </a>
+       </li>
+       <li class="landingTabs">
+        <a href="javascript:void(0);">
+         Tracks
+        </a>
+       </li>
+       <li class="landingTabs">
+        <a href="javascript:void(0);">
+         Verses
+        </a>
+       </li>
+      </ul>
+      <ul class="tabs tabs_filter">
+       <li class="landingTabs active">
+        <a href="javascript:void(0);">
+         All Time
+        </a>
+       </li>
+       <li class="landingTabs">
+        <a href="javascript:void(0);">
+         Today
+        </a>
+       </li>
+       <li class="landingTabs">
+        <a href="javascript:void(0);">
+         This Month
+        </a>
+       </li>
+      </ul>
+      <div class="fav_discover" id="tab_contents">
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+    </div>
+    <div class="clear">
+    </div>
+   </div>
+   <div class="mid_right_sec mid_right_sec_land">
+    <div class="mid_right_art mid_left_art2">
+     <p class="landing-about">
+      Featured Covers
+     </p>
+     <ul class="tabs tabs_filter">
+      <li class="lyric-tittle" id="lilyrictitle" lyric_id="287" lyrictitle="Wake-Me-Up-Lyrics" userid="Avicii">
+       <a href="javascript:void(0);" id="a-lyrictitle">
+        Wake Me Up
+       </a>
+      </li>
+     </ul>
+     <div class="fav_discover" id="tab_contentsx">
+      <div class="lyrics_tab lTracks">
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up201" onclick="favoriteAction(201,'like_cnt201','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          8
+         </div>
+         <div class="arrow_down" id="like_dw201" onclick="favoriteAction(201,'like_cnt201','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="JakobKarlberg" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          Jakob Karlberg
+         </p>
+         <p class="text_2">
+          @JakobKarlberg
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f1">
+         </div>
+         <div class="big cp-container" id="cp_container_f1">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f1','#cp_container_f1','5250ba91ae752.mp3');
+       </script>
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up198" onclick="favoriteAction(198,'like_cnt198','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          7
+         </div>
+         <div class="arrow_down" id="like_dw198" onclick="favoriteAction(198,'like_cnt198','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="RUNAGROUND" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          Andy Kirk
+         </p>
+         <p class="text_2">
+          @RUNAGROUND
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f2">
+         </div>
+         <div class="big cp-container" id="cp_container_f2">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f2','#cp_container_f2','5250b36719ca4.mp3');
+       </script>
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up199" onclick="favoriteAction(199,'like_cnt199','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          5
+         </div>
+         <div class="arrow_down" id="like_dw199" onclick="favoriteAction(199,'like_cnt199','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="Beth" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          Beth Music
+         </p>
+         <p class="text_2">
+          @Beth
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f3">
+         </div>
+         <div class="big cp-container" id="cp_container_f3">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f3','#cp_container_f3','5250b65f786be.mp3');
+       </script>
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up200" onclick="favoriteAction(200,'like_cnt200','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          4
+         </div>
+         <div class="arrow_down" id="like_dw200" onclick="favoriteAction(200,'like_cnt200','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="HEYY" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          HEYY Music
+         </p>
+         <p class="text_2">
+          @HEYY
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f4">
+         </div>
+         <div class="big cp-container" id="cp_container_f4">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f4','#cp_container_f4','5250b85148813.mp3');
+       </script>
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up203" onclick="favoriteAction(203,'like_cnt203','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          3
+         </div>
+         <div class="arrow_down" id="like_dw203" onclick="favoriteAction(203,'like_cnt203','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="MadilynBailey" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          Madilyn Bailey
+         </p>
+         <p class="text_2">
+          @MadilynBailey
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f5">
+         </div>
+         <div class="big cp-container" id="cp_container_f5">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f5','#cp_container_f5','5250ca5c5edff.mp3');
+       </script>
+       <div class="tab_cont" lyric_id="287" lyric_title="Wake Me Up">
+        <div class="sec_one">
+         <div class="arrow_up" id="like_up205" onclick="favoriteAction(205,'like_cnt205','track',0,1)">
+         </div>
+         <div class="number" id="like_cnt${id}">
+          2
+         </div>
+         <div class="arrow_down" id="like_dw205" onclick="favoriteAction(205,'like_cnt205','track',0,-1)">
+         </div>
+        </div>
+        <div class="sec_two">
+         <img alt="" height="46" id="AnnaMarie" src="http://www.blissic.com/images/no_photo_66_66.jpg" width="46"/>
+        </div>
+        <div class="sec_three">
+         <p class="text_1">
+          Anna Marie
+         </p>
+         <p class="text_2">
+          @AnnaMarie
+         </p>
+        </div>
+        <div class="sec_four">
+         <div class="cp-jplayer" id="jquery_jplayer_f6">
+         </div>
+         <div class="big cp-container" id="cp_container_f6">
+          <div class="cp-buffer-holder">
+           <div class="cp-buffer-1">
+           </div>
+           <div class="cp-buffer-2">
+           </div>
+          </div>
+          <div class="cp-progress-holder">
+           <div class="cp-progress-1">
+           </div>
+           <div class="cp-progress-2">
+           </div>
+          </div>
+          <div class="cp-circle-control">
+          </div>
+          <ul class="cp-controls">
+           <li>
+            <a class="cp-play" tabindex="1">
+             play
+            </a>
+           </li>
+           <li>
+            <a class="cp-pause" style="display:none;" tabindex="1">
+             pause
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="clear">
+       </div>
+       <script>
+        iniTracks('#jquery_jplayer_f6','#cp_container_f6','525c91a69b044.mp3');
+       </script>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <p class="landing-about">
+      About Us
+     </p>
+     <ul class="about-ul">
+      <li>
+       <a href="/page/about">
+        About
+       </a>
+      </li>
+      <li>
+       <a href="/page/contact">
+        Contact
+       </a>
+      </li>
+      <li>
+       <a href="/page/terms">
+        Terms
+       </a>
+      </li>
+      <li>
+       <a href="/page/privacy">
+        Privacy
+       </a>
+      </li>
+     </ul>
+     <div class="clear">
+     </div>
+    </div>
+    <div class="clear">
+    </div>
+   </div>
+   <div class="clear">
+   </div>
+   <script id="tpl_lyrics" type="text/x-jquery-tmpl">
+    &lt;div class="lyr_dis"&gt;&lt;div class="sec_one "&gt;&lt;div class="play"&gt; 
+	{{if track}}
+		&lt;div id="jquery_jplayer_${id}" class="cp-jplayer"&gt;&lt;/div&gt;&lt;div id="cp_container_${id}" class="big cp-container"&gt;&lt;div class="cp-buffer-holder"&gt;&lt;div class="cp-buffer-1"&gt;&lt;/div&gt;&lt;div class="cp-buffer-2"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="cp-progress-holder"&gt;&lt;div class="cp-progress-1"&gt;&lt;/div&gt;&lt;div class="cp-progress-2"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="cp-circle-control"&gt;&lt;/div&gt;&lt;ul class="cp-controls"&gt;&lt;li&gt;&lt;a class="cp-play" tabindex="1"&gt;play&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a class="cp-pause" style="display:none;" tabindex="1"&gt;pause&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+	{{/if}}
+   &lt;/div&gt;&lt;/div&gt;&lt;div class="sec_two"&gt;&lt;img id="${userid}" width="48" height="48" src="${showNoPhoto(photo)}" alt="" /&gt;&lt;/div&gt;
+  &lt;div class="sec_three"&gt;&lt;p class="text_1"&gt;${first_name} ${last_name} &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;
+  &lt;h2 class="follow follow2" id="${uid}"&gt;&lt;a href="/${userid}/${lyrics_dash_title}/${id}"&gt;${title}&lt;/a&gt;&lt;/h2&gt;
+  &lt;/div&gt;&lt;div class="sec_four   "&gt;&lt;div class="${lkclass}" id="divlike${id}" onclick="favoriteAction(${id},'divlike${id}','lyrics',0,1)" &gt;&lt;/div&gt;&lt;div class="like_no" id="like_cnt${id}" &gt;&lt;p class="txt"&gt;${count_like }&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;
+   </script>
+   <!-- Track Template ---------------------------------------- -->
+   <script id="tpl_discover_track" type="text/x-jquery-tmpl">
+    &lt;div class="lyr_track"&gt;&lt;div class="lyr_traArt"&gt;&lt;div class="left_sec"&gt;&lt;div class="arrow_up{{if like_value == '1'}}_like{{/if}}" id="like_up${id}" onclick="favoriteAction(${id},'like_cnt${id}','track',0,1)"&gt;&lt;/div&gt;
+	&lt;div class="number{{if likeCount&lt;0}}_min{{/if}}" id="like_cnt${id}"&gt;${likeCount}&lt;/div&gt;&lt;div class="arrow_down{{if like_value == '-1'}}_like{{/if}}" id="like_dw${id}" onclick="favoriteAction(${id},'like_cnt${id}','track',0,-1)"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="sec_right"&gt;&lt;div class="sec_one sec_one_2"&gt;&lt;div class="play"&gt;
+	{{if track}}&lt;div id="jquery_jplayer_${id}" class="cp-jplayer"&gt;&lt;/div&gt;&lt;div id="cp_container_${id}" class=" big cp-container"&gt;&lt;div class="cp-buffer-holder"&gt;&lt;div class="cp-buffer-1"&gt;&lt;/div&gt;&lt;div class="cp-buffer-2"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="cp-progress-holder"&gt;&lt;div class="cp-progress-1"&gt;&lt;/div&gt;&lt;div class="cp-progress-2"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="cp-circle-control"&gt;&lt;/div&gt;&lt;ul class="cp-controls"&gt;&lt;li&gt;&lt;a class="cp-play" tabindex="1"&gt;play&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a class="cp-pause" style="display:none;" tabindex="1"&gt;pause&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;{{/if}}
+	&lt;/div&gt;&lt;/div&gt;&lt;div class="sec_two"&gt;&lt;img id="${userid}" width="48" height="48" src="${showNoPhoto(photo)}" alt=""&gt;&lt;/div&gt;&lt;div style="" class="sec_three"&gt;&lt;p class="text_1"&gt;${first_name} ${last_name} &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;&lt;h2 class="follow follow2" id="${uid}"&gt;&lt;a class="a_${uid}" href="/${l_userid}/${lyrics_dash_title}/${lyric_id}"&gt;${title}&lt;/a&gt;&lt;/h2&gt;
+	&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;
+   </script>
+   <!-- Verse Template ---------------------------------------- -->
+   <script id="tpl_discover_verse" type="text/x-jquery-tmpl">
+    &lt;div class="fav_arti" id="fv_${id}"&gt;&lt;div class="left"&gt;&lt;img user_id="${userid}" height="48" width="48" src="${showNoPhoto(photo)}" /&gt;&lt;/div&gt;&lt;div class="right"&gt;&lt;p class="text_2"&gt;${dt_time}&lt;/p&gt;&lt;p class="text_1" user_id="${userid}"&gt;&lt;b&gt;${first_name} ${last_name} &lt;/b&gt; &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;&lt;p id="cverse_${id}p" class="text_1 "&gt;{{html nl2br(verse)}}&lt;/p&gt;
+	&lt;div class="icon_sec"&gt;
+&lt;div class="verse_tag"  &gt;{{html tags}}&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;div class="expend expend_popup" onclick="popExpandDecode(${id},'expand','most_pop','most_pop')"&gt;&lt;a href="javascript:void(0)"&gt;Decode&lt;/a&gt;&lt;/div&gt;
+&lt;div class="reverse decode_popup ${reveres_class}" verse_id="${id}" &gt;&lt;a href="javascript:void(0)"&gt;{{if reveres_class}}Reversed{{else}}Reverse {{/if}}&lt;/a&gt;&lt;/div&gt;&lt;div class="${star_class}" onclick="favoriteAction(${id},this.id,'verse',0)" id="user_fev_Vrs${id}"&gt;&lt;a href="javascript:void(0)"&gt;${no_favorites}&lt;/a&gt;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;
+   </script>
+   <!---       Expand verse  ---- -->
+   <div class="verses_decode" id="decode_popup" style="display:none;">
+    <div class="close">
+    </div>
+    <div class="top_sec">
+     Verse
+    </div>
+    <div class="mid_sec">
+     <div class="tab_con exp_verses">
+      <div class="left">
+       <img alt="" height="48" id="exp_img" imguserid="" src="images/news_img.png" width="48"/>
+      </div>
+      <div class="right">
+       <p class="text_2" id="exp_time">
+       </p>
+       <p class="text_1" id="exp_username">
+       </p>
+       <p class="text_3" id="exp_verse">
+       </p>
+       <div class="icon_sec" id="exp_icon">
+       </div>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <!--start tab from here-->
+     <div class="tab_section_decode">
+      <div class="tabCont_decode">
+       <ul class="tabs_decode">
+        <li onclick="popExpandDecode(ex_object_id,'expand','most_pop')">
+         <a href="tab_most">
+          Most Popular
+         </a>
+        </li>
+        <li onclick="popExpandDecode(ex_object_id,'expand','new')">
+         <a href="tab_new">
+          Newest
+         </a>
+        </li>
+        <li onclick="popExpandDecode(ex_object_id,'expand','old')">
+         <a href="tab_old">
+          Oldest
+         </a>
+        </li>
+       </ul>
+       <div class="tab_container_decode" id="list_comments">
+       </div>
+       <div class="clear">
+       </div>
+      </div>
+     </div>
+     <!--end tab from here-->
+    </div>
+    <div class="bot_sec" onclick="commentMore(ex_object_id,ex_comm_newOld,'more')">
+     <a href="javascript:void(0)">
+      More
+     </a>
+    </div>
+   </div>
+   <script id="tpl_expand_decode" type="text/x-jquery-tmpl">
+    &lt;div class="tab_con ${last_cmt}"&gt;  &lt;div class="arrow_sec"&gt;
+&lt;div id="like_up_cmmt${id}" class="${like_value=='1'?'arrow_up_like':'arrow_up'}" onclick="favoriteAction(${id},'like_cnt_cmmt${id}','comment',0,1)" &gt;&lt;/div&gt;
+&lt;div id="like_cnt_cmmt${id}" class="${(no_like&gt;=0)?'number':'number_min'}"&gt;${no_like}&lt;/div&gt;
+&lt;div id="like_dw_cmmt${id}" class="${like_value=='-1'?'arrow_down_like':'arrow_down'}" onclick="favoriteAction(${id},'like_cnt_cmmt${id}','comment',0,-1)" &gt;&lt;/div&gt;
+&lt;/div&gt;&lt;div class="left"&gt;&lt;img id="${userid}" width="66" height="61" src="${showNoPhoto(photo)}" alt=""/&gt;&lt;/div&gt;
+&lt;div class="right"&gt;&lt;p class="text_2"&gt;${dt_time}&lt;/p&gt;&lt;p class="text_1" id="${userid}" &gt;&lt;b&gt;${first_name} ${last_name}&lt;/b&gt; &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;&lt;p class="text_1"&gt;${comment}&lt;/p&gt;&lt;/div&gt;
+&lt;div class="clear"&gt;&lt;/div&gt;&lt;/div&gt;
+   </script>
+   <!--- Reveres by popup -->
+   <div class="verses_decode" id="div_reverse_by" style="display:none;">
+    <div class="close">
+    </div>
+    <div class="top_sec" id="no_reverse">
+     Reverses
+    </div>
+    <div class="mid_sec">
+     <div class="tab_con exp_verses" id="cont_reverseby">
+     </div>
+     <ul class="tabs_decode">
+      <li class="active" id="rev_user_new">
+       <a href="javascript:void(0)">
+        Newest
+       </a>
+      </li>
+      <li id="rev_user_old">
+       <a href="javascript:void(0)">
+        Oldest
+       </a>
+      </li>
+     </ul>
+     <div class="exp_gerysec exp_gerysec_reverse" id="reverse_users">
+     </div>
+    </div>
+    <div class="bot_sec">
+     <a href="javascript:void(0)" id="revs_count" reversecnt="0">
+     </a>
+    </div>
+   </div>
+   <script id="tpl_reverseBy" type="text/x-jquery-tmpl">
+    &lt;div class="left"&gt;&lt;img imguserid="${userid}" parent_id="${id}" width="48" height="48" id="${userid}" alt="" src="${showNoPhoto(photo)}" /&gt;&lt;/div&gt;
+&lt;div class="right"&gt;
+&lt;p class="text_2" &gt;${dt_time}&lt;/p&gt;
+&lt;p class="text_1" &gt;${first_name} ${last_name} &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;
+&lt;p class="text_3" &gt;{{html nl2br(verse)}}&lt;/p&gt;
+&lt;div class="icon_sec" &gt;
+	&lt;div class="expend collapse"&gt;&lt;a href="javascript:void(0)"&gt;Collapse&lt;/a&gt;&lt;/div&gt;
+	&lt;div onclick="favoriteAction(${id},this.id,'verse',0)" class="${star_class}" id="exp_nofav"&gt;&lt;a href="javascript:void(0)"&gt;${no_favorites}&lt;/a&gt;&lt;/div&gt;
+	&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;
+   </script>
+   <script id="tpl_reverse_users" type="text/x-jquery-tmpl">
+    &lt;div class="follow_con revese_pop" id="follow_con_${id}" blocked="{{if blocked==0}}Y{{else}}N{{/if}}" isFollowing="${is_following}"  subTask="" ajaxRunning="N"&gt; 	
+&lt;div class="left"&gt;&lt;img id="${userid}" src="${showNoPhoto(photo)}" alt="" width="48" height="48" /&gt;&lt;/div&gt;
+&lt;div class="mid"&gt;&lt;p id="${userid}" class="text_1 text_1_reverse"&gt;${first_name} ${last_name} &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;&lt;p user_id="${userid}" class="text_reverse_nofollowers"&gt;${no_followers} Followers&lt;/p&gt;&lt;/div&gt;
+{{if is_logged=='n'}}
+&lt;div class="right"&gt;	
+&lt;div class="follow_drop"&gt;&lt;a href="#"&gt;&lt;/a&gt;
+&lt;div class="follow_box"&gt;
+	&lt;div class="tool"&gt;&lt;/div&gt;
+	&lt;div messageto="${id}"  class="box_sec" id="${id}popup"&gt;&lt;p class="email"&gt;Send a Direct Message&lt;/p&gt;
+	&lt;p class="block" subtask="blockUser"&gt;Block @${userid}&lt;/p&gt;&lt;p class="block" subTask="reportUser"&gt;Report @${userid} for spam&lt;/p&gt;
+	&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class="follow_btn" id="${id}"&gt;
+	&lt;img style="display:none" class="blockedUser" src="http://www.blissic.com/images/blocked_btn.png" alt="" border="0" /&gt;
+	&lt;img style="display:none" class="unblockUser" src="http://www.blissic.com/images/unblock_btn.png" alt="" border="0" /&gt;
+	&lt;img style="display:none" class="followingUser" src="http://www.blissic.com/images/following_btn.png" alt="" border="0" /&gt;
+	&lt;img style="display:none" class="followUser" src="http://www.blissic.com/images/follow_btn.png" alt="" border="0" /&gt;
+	&lt;img style="display:none" class="ajaxLoader" src="http://www.blissic.com/images/ajax_loader_white.gif" alt="" border="0" /&gt;
+	&lt;img style="display:none" class="unfollowUser" src="http://www.blissic.com/images/unfollow.png" alt="" border="0" /&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+{{/if}}&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;
+   </script>
+   <!-- Template for followings -->
+   <script id="followTpl" type="text/x-jquery-tmpl">
+    {{if id!=''}}
+&lt;div class="follow_con" id="follow_con_${id}" blocked="{{if blocked == '1' }}Y{{else}}N{{/if}}" isFollowing="${isFollowing}" subTask="" ajaxRunning="N"&gt;
+	{{if full_name != ''}}
+	&lt;div class="left"&gt;&lt;img id="${userid}" src="${showNoPhoto(photo)}" alt="" width="48" height="48" /&gt;&lt;/div&gt;
+	&lt;div class="mid"&gt;
+		&lt;p id="${userid}" class="text_1"&gt;${full_name} &lt;span&gt;@${userid}&lt;/span&gt;&lt;/p&gt;
+		&lt;p class="text_2"&gt;${biography}&lt;/p&gt;
+	&lt;/div&gt;
+
+	&lt;div class="right"&gt;
+		&lt;div class="follow_drop"&gt;&lt;a href="#"&gt;&lt;/a&gt;
+			&lt;div class="follow_box"&gt;
+				&lt;div class="tool"&gt;&lt;/div&gt;
+				&lt;div messageto="${id}" class="box_sec" id="${id}popup"&gt;
+					&lt;p class="email"&gt;Send a Direct Message&lt;/p&gt;
+					&lt;p class="block" subtask="blockUser"&gt;Block @${userid}&lt;/p&gt;
+					&lt;p class="block" subTask="reportUser"&gt;Report @${userid} for spam&lt;/p&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class="follow_btn" id="${id}"&gt;
+			&lt;img style="display:none" class="blockedUser" src="http://www.blissic.com/images/blocked_btn.png" alt="" border="0" /&gt;	
+			&lt;img style="display:none" class="unblockUser" src="http://www.blissic.com/images/unblock_btn.png" alt="" border="0" /&gt;
+			&lt;img style="display:none" class="followingUser" src="http://www.blissic.com/images/following_btn.png" alt="" border="0" /&gt;
+			&lt;img style="display:none" class="unfollowUser" src="http://www.blissic.com/images/unfollow.png" alt="" border="0" /&gt;
+			&lt;img style="display:none" class="followUser" src="http://www.blissic.com/images/follow_btn.png" alt="" border="0" /&gt;
+			&lt;img style="display:none" class="ajaxLoader" src="http://www.blissic.com/images/ajax_loader_white.gif" alt="" border="0" /&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	{{else}}
+	&lt;div class="follow_btn" id="${id}"&gt;
+		&lt;img style="display:none" class="blockedUser" src="http://www.blissic.com/images/blocked_btn.png" alt="" border="0" /&gt;	
+		&lt;img style="display:none" class="unblockUser" src="http://www.blissic.com/images/unblock_btn.png" alt="" border="0" /&gt;
+		&lt;img style="display:none" class="followingUser" src="http://www.blissic.com/images/following_btn.png" alt="" border="0" /&gt;
+		&lt;img style="display:none" class="unfollowUser" src="http://www.blissic.com/images/unfollow.png" alt="" border="0" /&gt;
+		&lt;img style="display:none" class="followUser" src="http://www.blissic.com/images/follow_btn.png" alt="" border="0" /&gt;
+		&lt;img style="display:none" class="ajaxLoader" src="http://www.blissic.com/images/ajax_loader_white.gif" alt="" border="0" /&gt;
+	&lt;/div&gt;
+	{{/if}}
+&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;/div&gt;
+{{/if}}
+   </script>
+   <!-- -->
+   <script>
+    function initFollowUnfollow(){
+	$('.follow_con').each(function(){
+		showButton($(this));
+	});
+	
+	
+	$('.follow_con .follow_btn img').hover(function(){
+		var con_id = $(this).parent().attr('id');
+		var objCon = $('#follow_con_'+con_id);
+		
+		if(objCon.attr('ajaxRunning') == 'N'){
+			if(objCon.attr('blocked') == 'Y'){
+				objCon.find('.follow_btn img.blockedUser').hide();
+				objCon.find('.follow_btn img.unblockUser').show();
+			} else if(objCon.attr('isFollowing') == 'Y'){
+				objCon.find('.follow_btn img.followingUser').hide();
+				objCon.find('.follow_btn img.unfollowUser').show();
+			} 	
+		}
+		
+	}, function(){
+		var con_id = $(this).parent().attr('id');
+		var objCon = $('#follow_con_'+con_id);
+		
+		if(objCon.attr('ajaxRunning') == 'N'){
+			if(objCon.attr('blocked') == 'Y'){
+				objCon.find('.follow_btn img.unblockUser').hide();
+				objCon.find('.follow_btn img.blockedUser').show();
+			} else if(objCon.attr('isFollowing') == 'Y'){
+				objCon.find('.follow_btn img.unfollowUser').hide();
+				objCon.find('.follow_btn img.followingUser').show();
+			}
+		}
+	});
+	
+	
+
+	$('.follow_con .follow_btn img').click(function(){
+	
+		/* if user not logged in */
+		if(0&lt;=0) {
+				alert('Please login first.');
+				return false;
+				}
+				
+		var con_id = $(this).parent().attr('id');
+		var objCon = $('#follow_con_'+con_id);
+		//if(objCon.attr('subTask') != 'follow')
+		performBlockUnblock(objCon);
+	});
+		
+	
+	$('.follow_box .box_sec p.block').click(function(){
+	
+		/* if user not logged in */
+		if(0&lt;=0) {
+				alert('Please login first.');
+				return false;
+				}
+				
+		var con_id = parseInt($(this).parent().attr('id'));
+		var objCon = $('#follow_con_'+con_id);
+		if(confirm('Are sure tiy want to continue?')){
+			objCon.attr('subtask', $(this).attr('subtask'));
+			performBlockUnblock(objCon);
+		}
+	});
+	
+	$('.follow_box .box_sec p.email').click(function(){
+		
+		/* if user not logged in */
+		if(0&lt;=0) {
+				alert('Please login first.');
+				return false;
+				}
+	
+		$('.verses_expend .top_sec').html('Send Message');
+		$('.verses_expend .mid_sec').html('&lt;div class="inbox_replay"&gt;&lt;form id="followMessage"&gt;&lt;input type="hidden" name="requesttype" value="ajax"&gt;&lt;input type="hidden" name="action" value="save_conversation"&gt;&lt;input type="hidden" name="message_to" value="'+$(this).parent().attr('messageto')+'"&gt;&lt;div&gt;&lt;textarea name="message" id="message"&gt;&lt;/textarea&gt;&lt;/div&gt;&lt;div align="right"&gt;&lt;input type="button" value="Send" onclick="saveMsg();" name=""&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;');
+		$('#transparent-div').css('display', 'block');
+		$('.verses_expend').css('display', 'block');
+	});
+}
+
+
+function performBlockUnblock(objCon){		
+	$.ajax({
+		url: "/frontajax/" + Math.random(),
+		type: "POST",
+		data: {'requesttype':'ajax', 'action':'followUnfollow', 'subTask':objCon.attr('subTask'), 'id':objCon.find('.follow_btn').attr('id')},
+		dataType: "json",
+		beforeSend: function(){
+			objCon.attr('ajaxRunning','Y');
+			objCon.find('.follow_btn img').hide();
+			objCon.find('.ajaxLoader').show();
+		},
+		success: function(data){
+			objCon = $('#follow_con_'+data.id);
+			
+			// check user loggedin
+			if(data.is_loggedin==1){
+				alert(data.msg);
+				showButton(objCon);
+				return false;
+			} 
+						
+			if(data.status == 200){
+				//show_message(data.msg, 'info');
+				objCon.attr('blocked', data.blocked);
+				objCon.attr('isFollowing', data.isFollowing);
+				if(data.isFollowing == 'N' &amp;&amp; '' == 'followings')
+					objCon.remove()
+				//Show count - its now only showing on public profile page
+				$('.public_proTop .num_rig .number').html(data.cntFollower);
+				
+				//Showig the button
+				showButton(objCon);
+			} else {
+				show_message(data.msg, 'error');
+				showButton(objCon);
+			}
+			
+			objCon.attr('ajaxRunning','N');
+		},
+		error: function(data) {
+			show_message('Error!!! Please try again later', 'error');
+			objCon.attr('ajaxRunning','N');
+			showButton(objCon);
+		}
+	});
+}
+
+function showButton(objCon){
+	objCon.find('.ajaxLoader').hide();
+	if(objCon.attr('blocked') == 'Y'){
+		objCon.find('.follow_btn img.blockedUser').show();
+		objCon.attr('subTask', 'unblock');
+	} else if(objCon.attr('isFollowing') == 'Y'){
+		objCon.find('.follow_btn img.followingUser').show();
+		objCon.attr('subTask', 'unfollow');
+	} else {
+		objCon.find('.follow_btn img.followUser').show();
+		objCon.attr('subTask', 'follow');
+	}
+}
+
+function saveMsg(){
+	$.ajax({
+		url: "/front/frontajax/"+Math.random(),
+		type: "POST",
+		data: $('#followMessage').serialize(),
+		dataType: "json",
+		beforeSend: function(){
+			$('.verses_expend .mid_sec').html('');
+		},
+		success: function(data){
+			if(data.status == 200){
+				show_message('Message successfully posted', 'info');
+			} else {
+				show_message('Unable to post message', 'error');
+			}
+			$('#transparent-div').hide();
+			$('.verses_expend').hide();
+		}
+	});
+}
+   </script>
+   <script src="/js/comment_expand.js" type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    var limit_offset=-1;
+var load_next_set = true;
+/* show track, verses and lyrics */
+function getLyricsTracksVerse(){
+	
+	var container=$('#tab_contents');
+	var act=$('ul.tabs:first li.active a').text();  
+	var action='discover_lyrics';
+		
+		switch(act){
+		case 'Lyrics':	action='discover_lyrics'; break;
+		case 'Tracks':	action='discover_track_landing'; break;
+		case 'Verses':	action='discover_verse'; break;
+		}
+			
+	var option=$('ul.tabs_filter li.active a').text();
+	
+	var opt=1;
+		switch(option){
+		case 'Today':opt=1; break;
+		case 'This Month':opt=3; break;
+		case 'All Time':opt=6; break;
+		}
+			
+			$.ajax({
+				url: "/front/frontajax/"+Math.random(),
+				type: "POST",
+				data: 'requesttype=ajax&amp;action='+action+'&amp;option='+opt+'&amp;limit_offset='+limit_offset+'&amp;landing_noitems=yes',
+				dataType: "json",
+				beforeSend: function(){
+						
+					 if(limit_offset&lt;0)	$('#tab_contents').html('&lt;div class="loading_white"&gt;&nbsp;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;');
+					 else 				$('#tab_contents').append('&lt;div class="loading_white"&gt;&nbsp;&lt;/div&gt;&lt;div class="clear"&gt;&lt;/div&gt;');
+				},
+				
+				success: function(data){
+									
+				   //container.find('div.loading_white').remove();
+					var tempName='';
+				
+					if(action=='discover_lyrics'){ 
+						tpldata=data.discover_lyrics;
+						tempName='#tpl_lyrics';
+					}
+					if(action=='discover_verse'){ 
+						tpldata=data.discover_verse;
+						tempName='#tpl_discover_verse';
+					}
+				  
+				  if(action=='discover_track_landing'){ 
+						tpldata=data.discover_track;
+						tempName='#tpl_discover_track';
+					}
+				  
+				  
+				  if(data.status == 200 &amp;&amp; tpldata){
+				    
+					container.find('div.loading_white').remove();
+					$(tempName).tmpl(tpldata).appendTo('#tab_contents');
+					revesePopup();   /* reverse popup*/
+					
+				/* 	//redirect to user public profile */
+						$('#tab_contents div.lyr_dis div.sec_two img, .lyr_traArt .sec_right .sec_two img, .fav_arti .left img').click(function (){
+							window.location.href="/"+$(this).attr('id');
+						});
+						
+						$('.fav_arti .left img').click(function (){window.location.href="/"+$(this).attr('user_id');});						
+							
+					
+					 if(action=='discover_track_landing'){ 
+							$.each(tpldata, function( key, value ) {
+								if(value.track){iniTracks('#jquery_jplayer_'+value.id,'#cp_container_'+value.id,value.track);}
+							});
+					}
+					
+					if(action=='discover_lyrics'){ 
+							$.each(tpldata, function( key, value ) {
+								if(value.track){iniTracks('#jquery_jplayer_'+value.id,'#cp_container_'+value.id,value.track);}
+							});
+					}
+					
+					load_next_set = true;
+					limit_offset=data.limit_offset;
+					$(window).trigger('resize');
+									
+					}else{
+					if(limit_offset&lt;0) container.append('&lt;div class="recordNotFound"&gt;Nothing has been posted yet.&lt;/div&gt;');
+					}
+					container.find('div.loading_white').remove();
+				  $(window).trigger('resize');
+				}
+		});
+	}
+   </script>
+   <script type="text/javascript">
+    $(document).ready(function(){
+	 
+	 getLyricsTracksVerse();
+	
+	$('.mid_left_art .tabCont ul.tabs li').click(function (){
+				$('#tab_contents').html('');
+				$(this).parent().find('li').removeClass('active');
+				$(this).addClass('active');
+				limit_offset=-1;
+				load_next_set = true;
+				getLyricsTracksVerse();
+		});	
+	
+	/* //redirect profile */
+	$('.lyrics_tab .tab_cont .sec_two img').click(function (){
+		window.location.href="/"+$(this).attr('id');
+	});		
+	
+	/* // change the lyric title */
+	$('#tab_contentsx div.lyrics_tab .tab_cont').hover(function (){
+	
+		$('#a-lyrictitle').text($(this).attr('lyric_title'));
+		$('#lilyrictitle').attr('lyric_id',$(this).attr('lyric_id'));
+	});
+	
+	$('#lilyrictitle').click(function (){
+		window.location.href="/"+$(this).attr('userid')+"/"+$(this).attr('lyrictitle')+"/"+$(this).attr('lyric_id');
+	});
+	
+	$('.lyrics_tab .tab_cont:last').addClass('trackBottBorderNone');
+	
+	});
+	
+	$(window).scroll(function(){
+	if (($(window).scrollTop() + 50) &gt; $(document).height() - $(window).height() &amp;&amp; load_next_set){
+		load_next_set = false; getLyricsTracksVerse();
+	} 
+   });
+   </script>
+   <!-- UserVoice JavaScript SDK (only needed once on a page) -->
+   <script>
+    /*(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/TWDmn4M6vRAAnYyxwsbcEQ.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})() */
+   </script>
+   <!-- A tab to launch the Classic Widget -->
+   <script>
+    /*
+UserVoice = window.UserVoice || [];
+UserVoice.push(['showTab', 'classic_widget', {
+  mode: 'full',
+  primary_color: '#1ba1e2',
+  link_color: '#1ba1e2',
+  default_mode: 'feedback',
+  forum_id: 202657,
+  support_tab_name: 'Contact',
+  tab_label: 'Feedback',
+  tab_color: '#1ba1e2',
+  tab_position: 'middle-right',
+  tab_inverted: false
+}]); */
+   </script>
+   <script>
+    /*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-35291514-1', 'blissic.com');
+  ga('send', 'pageview');
+*/
+   </script>
+   <div class="clear">
+   </div>
+  </div>
+  <img id="img_facebooksign_landingtop" src="http://www.blissic.com/images/facebook_sign.png" width="172"/>
+  <script src="/js/jquery-validate.min.js" type="text/javascript">
+  </script>
+  <!-- login popup ---- -->
+  <script src="http://www.blissic.com/js/jquery-validate.min.js" type="text/javascript">
+  </script>
+  <!-- login popup ---- -->
+  <div class="lyrics_expend popbott_padding" id="userLoginpop" style="display:none;">
+   <div class="close">
+   </div>
+   <div class="top_sec">
+    Login
+   </div>
+   <div class="mid_sec">
+    <div class="signup-login">
+     <form action="" id="userForm" method="post">
+      <h1>
+       Welcome Back!
+      </h1>
+      <div class="clear">
+      </div>
+      <div class="fblogin">
+       <img id="img_facebooksign" src="http://www.blissic.com/images/facebook_sign.png" width="180"/>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="form">
+       <p class="text">
+        Email
+       </p>
+       <input id="username" name="username" type="text" value=""/>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="text">
+        Password
+       </p>
+       <input id="password" name="password" type="password"/>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="form login_btn">
+       <div class="gery_btn">
+        <a href="javascript:void(0)" id="front_login">
+         Login
+        </a>
+       </div>
+      </div>
+      <div class="chkBox">
+       <input id="remember_user" tabindex="3" type="checkbox"/>
+       <p>
+        Keep me logged in
+       </p>
+      </div>
+      <br/>
+      <div class="chkBox" style="padding-left:0;">
+       <p>
+        <a href="javascript:void(0)" id="forgetPassword">
+         Forgot Password?
+        </a>
+       </p>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+  <!-- login popup ---- -->
+  <!-- Signup popup ---- -->
+  <div class="lyrics_expend popbott_padding" id="userSignup1" style="display:none;">
+   <div class="close">
+   </div>
+   <div class="top_sec">
+    Sign Up
+   </div>
+   <div class="mid_sec">
+    <div class="signup-login">
+     <form action="" id="frm_userSingup1" method="post">
+      <input name="requesttype" type="hidden" value="ajax"/>
+      <input name="action" type="hidden" value="registerUser"/>
+      <h1>
+       Join Blissic today!
+      </h1>
+      <div class="clear">
+      </div>
+      <div class="fblogin2">
+       <img id="img_facebooksign2" src="http://www.blissic.com/images/facebook_sign.png" width="180"/>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="form">
+       <p class="text">
+        First Name or Band Name
+       </p>
+       <input data-required="" id="user_first_name" name="user_first_name" type="text" value=""/>
+       <p class="text_1">
+        Name is required!
+       </p>
+       <p class="text_success">
+        Name looks good.
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="text">
+        Last Name
+       </p>
+       <input name="user_last_name" type="text" value=""/>
+       <p class="text_1">
+       </p>
+       <p class="text_success">
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="text">
+        Email Address
+       </p>
+       <input data-pattern="^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$" data-required="" data-validate="usr_email_id" id="user_email_id" name="user_email_id" type="text" value=""/>
+       <p class="text_1">
+        This email is already in use!
+       </p>
+       <p class="uniqueChecking">
+       </p>
+       <p class="text_success">
+        Email Address looks good.
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="text">
+        Create a Password
+       </p>
+       <input data-pattern="^[a-zA-Z0-9\!\@\#\$\%\^\&amp;\*()\-\_\+\=\?]{8,15}$" data-required="" data-validate="usr_password" id="user_password" name="user_password" type="password"/>
+       <p class="text_1">
+        Password must be at least 8 characters
+       </p>
+       <p class="text_success">
+        Password looks good.
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="text">
+        Choose your username
+       </p>
+       <input data-pattern="^[a-zA-Z0-9\_]{1,}$" data-required="" data-validate="usr_userid" id="user_userid" name="user_userid" type="text"/>
+       <p class="text_1">
+        Please enter proper username
+       </p>
+       <p class="uniqueChecking">
+       </p>
+       <p class="text_success">
+        Username looks good.
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <div class="form">
+       <p class="checking thick">
+        <input data-validate="terms_confirmed" id="chk_confirm" name="chk_confirm" type="checkbox" value="Y"/>
+        By checking this box, you agree to our
+        <a href="http://www.blissic.com/page/terms">
+         terms
+        </a>
+        .
+       </p>
+       <p class="text_1">
+        You must agree to our terms &amp; conditions to sign up.
+       </p>
+       <div class="clear">
+       </div>
+      </div>
+      <br/>
+      <div class="clear">
+      </div>
+      <div class="gery_btn gery_btn2" id="btn_signup1">
+       <a href="javascript:void(0)" id="front_login">
+        Create My Account
+       </a>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+  <!-- congratulation popup ---- -->
+  <div class="lyrics_expend popbott_padding" id="userSignup2" style="display:none;">
+   <div class="close">
+   </div>
+   <div class="top_sec">
+    Sign Up
+   </div>
+   <div class="mid_sec">
+    <div class="signup-login">
+     <h1 class="cong">
+      Congratulation!
+     </h1>
+     <div class="clear">
+     </div>
+     <!--&lt;iframe src="http://player.vimeo.com/video/68009846?byline=0&amp;portrait=0&amp;color=1ca0e1" width="430" height="290" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen&gt;&lt;/iframe&gt;-->
+     <div class="clear">
+     </div>
+     <h3 class="congH3">
+      An  email  confirmation  has  been  sent.  Please  click  on  the  link  provided  to  activate  your  account. If you do not see the email, please check your junk folder as it may be blocked by your email client.
+     </h3>
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   $(document).ready(function(){
+		
+	
+	/* User login Popup 	******************************/
+	$('.top_tabs li:first').click(function(){
+	$('#transparent-div,#userLoginpop').show();
+	$("html, body").animate({ scrollTop: 0 }, 100); // scroll to top
+	});
+	
+	$('.top_tabs li:last').click(function(){
+	$('#transparent-div,#userSignup1').show();
+	$("html, body").animate({ scrollTop: 0 }, 100); // scroll to top
+	});
+	
+	
+	$('#username,#password').keypress(function(e){
+		if(e.which == 13) {	$('#front_login').trigger('click');}
+		});	
+	$('#btn_signup1').click(function(){$('#frm_userSingup1').submit();});
+	
+	//submit form 1
+		$('#frm_userSingup1').validate({
+		onKeyup : false,
+		sendForm : false,
+		eachValidField : function() {$(this).closest('div').removeClass('error').addClass('success');},
+		eachInvalidField : function() {$(this).closest('div').removeClass('success').addClass('error');},
+		valid: function(){
+			//Ajax call to save data
+				$.ajax({
+					url: "/frontajax/" + Math.random(),
+					type: "POST",
+					async: false,
+					data: $('#frm_userSingup1').serialize(),
+					dataType: "json",
+					beforeSend: function(){$('.sign_button .showLoader').addClass('loading');},
+					success: function(data){
+						if(data.status == 200){			
+							show_message(data.msg, 'info');
+							$('.lyrics_expend,#transparent-div').hide();
+							$('#transparent-div,#userSignup2').show();
+						}	
+					},
+					error: function(data) {show_message(msg, 'error');}
+					});
+		  }
+	});
+	
+	/* User login */
+	$('#front_login').click(function(){
+		
+		if($('#username').val() == ''){alert('Please enter user name');return false;}
+		if($('#password').val() == ''){alert('Please enter password');return false;}
+		
+		$.ajax({
+			url: WEB_ROOT+"frontajax/" + Math.random(),
+			type: "POST",
+			data: {'username':$('#username').val(), 'password':$('#password').val(), 'requesttype':'ajax', 'action':'userLogin', 'remember':$('#remember_user').is(':checked') },
+			dataType: "json",
+			beforeSend: function(){$('.uniqueChecking').show();},
+			success: function(data){
+				$('.uniqueChecking').hide();
+				if(data.status == 200){location.href = WEB_ROOT+'home/';} else{alert(data.msg);}
+			},
+			error: function(data) {
+				$('.uniqueChecking').hide();
+				var msg = '';
+				if(data.msg){msg = data.msg;}else{msg = 'Unable to login!'}
+				alert(data.msg);
+			}
+		});
+	});
+	
+	
+		$.validateExtend({
+				
+		terms_confirmed: {
+			required : true,
+			conditional : function(value) {if($('#chk_confirm').is(':checked')) 	return true; else return false;}
+		},
+		usr_password : {
+			required : true,
+			conditional : function(value) {
+				if(value=='') {$('#user_password + p').html('Password is required!');return false;}
+				if(value.length&gt;=8 &amp;&amp; value.length&lt;=15 ){return true;}
+				if(value.length&lt;8){$('#user_password + p').html('Password must be atleast 8 characters');return false;}
+				if(value.length&gt;15){$('#user_password + p').html('Password must be less than 15 characters');return false;}
+			},
+			pattern : /^[a-zA-Z0-9\!\@\#\$\%\^\&amp;\*()\-\_\+\=\?]{8,15}$/
+		},
+		usr_email_id:{
+			required : true,
+			conditional : function(value) {
+				if(value=='') {$('#user_email_id + p').html('Email Address is required!');return false;}
+				if(checkUniqueEmail(value)==true){$('#user_email_id + p').html('This email address is not valid.');return true;}
+				else{$('#user_email_id + p').html('This email is already in use!');return false;}
+				return true;	
+			},
+			pattern : /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/
+		},
+		usr_userid:{
+			required : true,
+			conditional : function(value) {
+				if(value=='') {$('#user_userid + p').html('User Name is required!');return false;}
+				if(checkUniqueUser(value)==false){$('#user_userid + p').html(' This username is already in use!');return false;}
+				else{$('#user_userid + p').html('Please enter a proper username!');return true;}
+			},
+			pattern : /^[a-zA-Z0-9\_]{1,}$/
+		}
+	});
+});
+  </script>
+  <script type="text/javascript">
+   $(document).ready(function(){
+			$('.close, #transparent-div').click(function(){$('.lyrics_expend,#transparent-div').hide();});
+		});
+	
+	//Facebook
+	$('#img_facebooksign,#img_facebooksign2,#img_facebooksign_landingtop').click(function(){
+		FB.init({
+			appId : '390045131100941', // App ID
+			status : true, // check login status
+			cookie : true, // enable cookies to allow the server to access the session
+			xfbml : true // parse XFBML
+		}); 
+
+		FB.login(function(response) {
+		window.location.href="http://www.blissic.com/social_login/action/fb";},
+			{scope:'user_birthday,email'});
+		FB.api('/me', function(response) {
+			if(response.id!= undefined)
+				window.location.href='http://www.blissic.com/home';
+		});
+	});
+  </script>
+  <!--Facebook, Twitter, Google Plus Float Sharer Starts-->
+  <!--HTML section-->
+  <div class="float_sharer ">
+   <div class="fb-like" data-layout="box_count" data-send="false" data-show-faces="false" data-width="50">
+   </div>
+  </div>
+  <a class="twitter-share-button" data-count="vertical" data-lang="en" data-size="medium" href="https://twitter.com/share">
+  </a>
+  <g:plusone annotation="bubble" size="tall">
+  </g:plusone>
+  <!--Script section-->
+  <!--Facebook-->
+  <div id="fb-root">
+  </div>
+  <script>
+   (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+  </script>
+  <!--Twitter-->
+  <script>
+   !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+  </script>
+  <!--Google Plus-->
+  <script type="text/javascript">
+   (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+  </script>
+  <!--Facebook, Twitter, Google Plus Float Sharer Ends-->
+  <div id="transparent-div">
+  </div>
+  <script>
+   $(document).ready(function(){
+	/// To close comments popup (Verse) 
+	$('.verses_expend .close').click(function(){$('#transparent-div').hide();$('.verses_expend').hide();});
+	$('.close, #transparent-div').click(function(){	$('.lyrics_expend,#transparent-div').hide();});
+		
+	// To resize window
+	$(window).resize(function(){
+		$('.mid_right_sec,.mid_left_sec').attr('style','');
+		if($('.mid_left_sec').height()&gt;$('.mid_right_sec').height())  $('.mid_right_sec,.mid_left_sec').height($('.mid_left_sec').height()+30);
+		else   														  $('.mid_left_sec,.mid_right_sec').height($('.mid_right_sec').height()+30);
+ 	});
+	$(window).trigger('resize');   
+});
+  </script>
+ </body>
+</html>

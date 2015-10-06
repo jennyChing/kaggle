@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en-us">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   The Math Behind the Beauty
+  </title>
+  <meta content="Why do we find some people more attractive than others? This page looks at the math behind the beauty." name="description"/>
+  <style type="text/css">
+   #interWrap{clear:both;padding:6px;border:1px solid #165a71;border-radius:5px;margin-top:1em;font-size:0.9em;position:relative;
+    -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;}
+  #controls{width:40%;display:table-cell}
+  #chooseOwn{display:table-cell;vertical-align:top}
+  #ownPicUrl{width:95%}
+  #chooseColor,#hiddenP{visibility:hidden}
+  #chooseColor svg{margin-right:5px}
+  #faces{display:table;width:100%;margin-bottom:5em}
+  #goBack, #goForward{display:table-cell;vertical-align:middle;position:relative}  
+  #choose img,#chooseColor svg,#goBack svg,#goForward svg{cursor:pointer}
+  #goBack{text-align:right}
+  #pix{min-height:400px;margin:0;text-align:center;padding:0;display:table-cell;vertical-align:middle;}
+  #pix img{margin:0;padding:0}
+  #draggable{padding:0;background:none;cursor:move;position:absolute;display:none}
+  .ui-resizable-e{background-image:url("beautyMath/vertical-handle2.png");background-repeat:repeat-y;width:13px;}
+  .ui-resizable-s{background-image:url("beautyMath/horizontal-handle2.png");background-repeat:repeat-x;height:13px}
+  .ui-icon {background:#fff;bottom:-4px;right:-4px}
+  #copy{margin:0;padding:0;font-size:0.8em;clear:both}
+  
+/*! COPIED HERE TO FIX CSS ERRORS! (and reduce domain lookups)
+* jQuery UI - v1.10.3 - 2013-05-03
+* http://jqueryui.com
+* Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css
+* Copyright 2013 jQuery Foundation and other contributors Licensed MIT */
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon {
+	display: block;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+}
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+
+
+.ui-button-text-icon-primary .ui-button-icon-primary,
+.ui-button-text-icons .ui-button-icon-primary,
+.ui-button-icons-only .ui-button-icon-primary {
+	left: .5em;
+}
+.ui-button-text-icon-secondary .ui-button-icon-secondary,
+.ui-button-text-icons .ui-button-icon-secondary,
+.ui-button-icons-only .ui-button-icon-secondary {
+	right: .5em;
+}
+
+/* button sets */
+.ui-buttonset {
+	margin-right: 7px;
+}
+.ui-buttonset .ui-button {
+	margin-left: 0;
+	margin-right: -.3em;
+}
+
+/* workarounds */
+/* reset extra padding in Firefox, see h5bp.com/l */
+input.ui-button::-moz-focus-inner,
+button.ui-button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+.ui-resizable {
+	position: relative;
+}
+.ui-resizable-handle {
+	position: absolute;
+	font-size: 0.1px;
+	display: block;
+}
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+	display: none;
+}
+.ui-resizable-n {
+	cursor: n-resize;
+	height: 7px;
+	width: 100%;
+	top: -5px;
+	left: 0;
+}
+.ui-resizable-s {
+	cursor: s-resize;
+	height: 7px;
+	width: 100%;
+	bottom: -5px;
+	left: 0;
+}
+.ui-resizable-e {
+	cursor: e-resize;
+	width: 7px;
+	right: -5px;
+	top: 0;
+	height: 100%;
+}
+.ui-resizable-w {
+	cursor: w-resize;
+	width: 7px;
+	left: -5px;
+	top: 0;
+	height: 100%;
+}
+.ui-resizable-se {
+	cursor: se-resize;
+	width: 12px;
+	height: 12px;
+	right: 1px;
+	bottom: 1px;
+}
+.ui-resizable-sw {
+	cursor: sw-resize;
+	width: 9px;
+	height: 9px;
+	left: -5px;
+	bottom: -5px;
+}
+.ui-resizable-nw {
+	cursor: nw-resize;
+	width: 9px;
+	height: 9px;
+	left: -5px;
+	top: -5px;
+}
+.ui-resizable-ne {
+	cursor: ne-resize;
+	width: 9px;
+	height: 9px;
+	right: -5px;
+	top: -5px;
+}
+.ui-selectable-helper {
+	position: absolute;
+	z-index: 100;
+	border: 1px dotted black;
+}
+.ui-slider {
+	position: relative;
+	text-align: left;
+}
+.ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 1.2em;
+	height: 1.2em;
+	cursor: default;
+}
+.ui-slider .ui-slider-range {
+	position: absolute;
+	z-index: 1;
+	font-size: .7em;
+	display: block;
+	border: 0;
+	background-position: 0 0;
+}
+
+/* For IE8 - See #6727
+CSS ERROR 
+.ui-slider.ui-state-disabled .ui-slider-handle,
+.ui-slider.ui-state-disabled .ui-slider-range {
+	filter: inherit;
+}
+*/
+.ui-slider-horizontal {
+	height: .8em;
+}
+.ui-slider-horizontal .ui-slider-handle {
+	top: -.3em;
+	margin-left: -.6em;
+}
+.ui-slider-horizontal .ui-slider-range {
+	top: 0;
+	height: 100%;
+}
+.ui-slider-horizontal .ui-slider-range-min {
+	left: 0;
+}
+.ui-slider-horizontal .ui-slider-range-max {
+	right: 0;
+}
+
+.ui-slider-vertical {
+	width: .8em;
+	height: 100px;
+}
+.ui-slider-vertical .ui-slider-handle {
+	left: -.3em;
+	margin-left: 0;
+	margin-bottom: -.6em;
+}
+.ui-slider-vertical .ui-slider-range {
+	left: 0;
+	width: 100%;
+}
+.ui-slider-vertical .ui-slider-range-min {
+	bottom: 0;
+}
+.ui-slider-vertical .ui-slider-range-max {
+	top: 0;
+}
+.ui-spinner {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	padding: 0;
+	vertical-align: middle;
+}
+.ui-spinner-input {
+	border: none;
+	background: none;
+	color: inherit;
+	padding: 0;
+	margin: .2em 0;
+	vertical-align: middle;
+	margin-left: .4em;
+	margin-right: 22px;
+}
+.ui-spinner-button {
+	width: 16px;
+	height: 50%;
+	font-size: .5em;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	position: absolute;
+	cursor: default;
+	display: block;
+	overflow: hidden;
+	right: 0;
+}
+/* more specificity required here to overide default borders */
+.ui-spinner a.ui-spinner-button {
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+}
+/* vertical centre icon */
+.ui-spinner .ui-icon {
+	position: absolute;
+	margin-top: -8px;
+	top: 50%;
+	left: 0;
+}
+.ui-spinner-up {
+	top: 0;
+}
+.ui-spinner-down {
+	bottom: 0;
+}
+
+/* TR overrides */
+.ui-spinner .ui-icon-triangle-1-s {
+	/* need to fix icons sprite */
+	background-position: -65px -16px;
+}
+.ui-tabs {
+	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+	padding: .2em;
+}
+.ui-tabs .ui-tabs-nav {
+	margin: 0;
+	padding: .2em .2em 0;
+}
+.ui-tabs .ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0;
+	margin: 1px .2em 0 0;
+	border-bottom-width: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+.ui-tabs .ui-tabs-nav li a {
+	float: left;
+	padding: .5em 1em;
+	text-decoration: none;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	margin-bottom: -1px;
+	padding-bottom: 1px;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a,
+.ui-tabs .ui-tabs-nav li.ui-tabs-loading a {
+	cursor: text;
+}
+.ui-tabs .ui-tabs-nav li a, /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
+	cursor: pointer;
+}
+.ui-tabs .ui-tabs-panel {
+	display: block;
+	border-width: 0;
+	padding: 1em 1.4em;
+	background: none;
+}
+.ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}
+body .ui-tooltip {
+	border-width: 2px;
+}
+
+/* Component containers
+----------------------------------*/
+.ui-widget {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.1em;
+}
+.ui-widget .ui-widget {
+	font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1em;
+}
+
+.ui-widget-content a {
+	color: #222222;
+}
+.ui-widget-header {
+	border: 1px solid #aaaaaa;
+	background: #cccccc url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+	color: #222222;
+	font-weight: bold;
+}
+.ui-widget-header a {
+	color: #222222;
+}
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	border: 1px solid #d3d3d3;
+	background: #e6e6e6 url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #555555;
+}
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited {
+	color: #555555;
+	text-decoration: none;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	border: 1px solid #999999;
+	background: #dadada url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #212121;
+}
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+	border: 1px solid #aaaaaa;
+	background: #ffffff url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #212121;
+}
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+	border: 1px solid #fcefa1;
+	background: #fbf9ee url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
+	color: #363636;
+}
+.ui-state-highlight a,
+.ui-widget-content .ui-state-highlight a,
+.ui-widget-header .ui-state-highlight a {
+	color: #363636;
+}
+.ui-state-error,
+.ui-widget-content .ui-state-error,
+.ui-widget-header .ui-state-error {
+	border: 1px solid #cd0a0a;
+	background: #fef1ec url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
+	color: #cd0a0a;
+}
+.ui-state-error a,
+.ui-widget-content .ui-state-error a,
+.ui-widget-header .ui-state-error a {
+	color: #cd0a0a;
+}
+.ui-state-error-text,
+.ui-widget-content .ui-state-error-text,
+.ui-widget-header .ui-state-error-text {
+	color: #cd0a0a;
+}
+.ui-priority-primary,
+.ui-widget-content .ui-priority-primary,
+.ui-widget-header .ui-priority-primary {
+	font-weight: bold;
+}
+.ui-priority-secondary,
+.ui-widget-content .ui-priority-secondary,
+.ui-widget-header .ui-priority-secondary {
+	opacity: .7;
+	/* ERROR filter:Alpha(Opacity=70); */
+	font-weight: normal;
+}
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+	opacity: .35;
+	/* ERROR filter:Alpha(Opacity=35); */
+	background-image: none;
+}
+.ui-state-disabled .ui-icon {
+	/* ERROR filter:Alpha(Opacity=35);  For IE8 - See #6059 */
+}
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon {
+	width: 16px;
+	height: 16px;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_222222_256x240.png);
+}
+.ui-widget-header .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_222222_256x240.png);
+}
+.ui-state-default .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_888888_256x240.png);
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_454545_256x240.png);
+}
+.ui-state-active .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_454545_256x240.png);
+}
+.ui-state-highlight .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_2e83ff_256x240.png);
+}
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+	background-image: url(http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_cd0a0a_256x240.png);
+}
+
+/* positioning */
+.ui-icon-blank { background-position: 16px 16px; }
+.ui-icon-carat-1-n { background-position: 0 0; }
+.ui-icon-carat-1-ne { background-position: -16px 0; }
+.ui-icon-carat-1-e { background-position: -32px 0; }
+.ui-icon-carat-1-se { background-position: -48px 0; }
+.ui-icon-carat-1-s { background-position: -64px 0; }
+.ui-icon-carat-1-sw { background-position: -80px 0; }
+.ui-icon-carat-1-w { background-position: -96px 0; }
+.ui-icon-carat-1-nw { background-position: -112px 0; }
+.ui-icon-carat-2-n-s { background-position: -128px 0; }
+.ui-icon-carat-2-e-w { background-position: -144px 0; }
+.ui-icon-triangle-1-n { background-position: 0 -16px; }
+.ui-icon-triangle-1-ne { background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-position: -32px -16px; }
+.ui-icon-triangle-1-se { background-position: -48px -16px; }
+.ui-icon-triangle-1-s { background-position: -64px -16px; }
+.ui-icon-triangle-1-sw { background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w { background-position: -144px -16px; }
+.ui-icon-arrow-1-n { background-position: 0 -32px; }
+.ui-icon-arrow-1-ne { background-position: -16px -32px; }
+.ui-icon-arrow-1-e { background-position: -32px -32px; }
+.ui-icon-arrow-1-se { background-position: -48px -32px; }
+.ui-icon-arrow-1-s { background-position: -64px -32px; }
+.ui-icon-arrow-1-sw { background-position: -80px -32px; }
+.ui-icon-arrow-1-w { background-position: -96px -32px; }
+.ui-icon-arrow-1-nw { background-position: -112px -32px; }
+.ui-icon-arrow-2-n-s { background-position: -128px -32px; }
+.ui-icon-arrow-2-ne-sw { background-position: -144px -32px; }
+.ui-icon-arrow-2-e-w { background-position: -160px -32px; }
+.ui-icon-arrow-2-se-nw { background-position: -176px -32px; }
+.ui-icon-arrowstop-1-n { background-position: -192px -32px; }
+.ui-icon-arrowstop-1-e { background-position: -208px -32px; }
+.ui-icon-arrowstop-1-s { background-position: -224px -32px; }
+.ui-icon-arrowstop-1-w { background-position: -240px -32px; }
+.ui-icon-arrowthick-1-n { background-position: 0 -48px; }
+.ui-icon-arrowthick-1-ne { background-position: -16px -48px; }
+.ui-icon-arrowthick-1-e { background-position: -32px -48px; }
+.ui-icon-arrowthick-1-se { background-position: -48px -48px; }
+.ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+.ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
+.ui-icon-arrowthick-1-w { background-position: -96px -48px; }
+.ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
+.ui-icon-arrowthick-2-n-s { background-position: -128px -48px; }
+.ui-icon-arrowthick-2-ne-sw { background-position: -144px -48px; }
+.ui-icon-arrowthick-2-e-w { background-position: -160px -48px; }
+.ui-icon-arrowthick-2-se-nw { background-position: -176px -48px; }
+.ui-icon-arrowthickstop-1-n { background-position: -192px -48px; }
+.ui-icon-arrowthickstop-1-e { background-position: -208px -48px; }
+.ui-icon-arrowthickstop-1-s { background-position: -224px -48px; }
+.ui-icon-arrowthickstop-1-w { background-position: -240px -48px; }
+.ui-icon-arrowreturnthick-1-w { background-position: 0 -64px; }
+.ui-icon-arrowreturnthick-1-n { background-position: -16px -64px; }
+.ui-icon-arrowreturnthick-1-e { background-position: -32px -64px; }
+.ui-icon-arrowreturnthick-1-s { background-position: -48px -64px; }
+.ui-icon-arrowreturn-1-w { background-position: -64px -64px; }
+.ui-icon-arrowreturn-1-n { background-position: -80px -64px; }
+.ui-icon-arrowreturn-1-e { background-position: -96px -64px; }
+.ui-icon-arrowreturn-1-s { background-position: -112px -64px; }
+.ui-icon-arrowrefresh-1-w { background-position: -128px -64px; }
+.ui-icon-arrowrefresh-1-n { background-position: -144px -64px; }
+.ui-icon-arrowrefresh-1-e { background-position: -160px -64px; }
+.ui-icon-arrowrefresh-1-s { background-position: -176px -64px; }
+.ui-icon-arrow-4 { background-position: 0 -80px; }
+.ui-icon-arrow-4-diag { background-position: -16px -80px; }
+.ui-icon-extlink { background-position: -32px -80px; }
+.ui-icon-newwin { background-position: -48px -80px; }
+.ui-icon-refresh { background-position: -64px -80px; }
+.ui-icon-shuffle { background-position: -80px -80px; }
+.ui-icon-transfer-e-w { background-position: -96px -80px; }
+.ui-icon-transferthick-e-w { background-position: -112px -80px; }
+.ui-icon-folder-collapsed { background-position: 0 -96px; }
+.ui-icon-folder-open { background-position: -16px -96px; }
+.ui-icon-document { background-position: -32px -96px; }
+.ui-icon-document-b { background-position: -48px -96px; }
+.ui-icon-note { background-position: -64px -96px; }
+.ui-icon-mail-closed { background-position: -80px -96px; }
+.ui-icon-mail-open { background-position: -96px -96px; }
+.ui-icon-suitcase { background-position: -112px -96px; }
+.ui-icon-comment { background-position: -128px -96px; }
+.ui-icon-person { background-position: -144px -96px; }
+.ui-icon-print { background-position: -160px -96px; }
+.ui-icon-trash { background-position: -176px -96px; }
+.ui-icon-locked { background-position: -192px -96px; }
+.ui-icon-unlocked { background-position: -208px -96px; }
+.ui-icon-bookmark { background-position: -224px -96px; }
+.ui-icon-tag { background-position: -240px -96px; }
+.ui-icon-home { background-position: 0 -112px; }
+.ui-icon-flag { background-position: -16px -112px; }
+.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-cart { background-position: -48px -112px; }
+.ui-icon-pencil { background-position: -64px -112px; }
+.ui-icon-clock { background-position: -80px -112px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-zoomin { background-position: -128px -112px; }
+.ui-icon-zoomout { background-position: -144px -112px; }
+.ui-icon-search { background-position: -160px -112px; }
+.ui-icon-wrench { background-position: -176px -112px; }
+.ui-icon-gear { background-position: -192px -112px; }
+.ui-icon-heart { background-position: -208px -112px; }
+.ui-icon-star { background-position: -224px -112px; }
+.ui-icon-link { background-position: -240px -112px; }
+.ui-icon-cancel { background-position: 0 -128px; }
+.ui-icon-plus { background-position: -16px -128px; }
+.ui-icon-plusthick { background-position: -32px -128px; }
+.ui-icon-minus { background-position: -48px -128px; }
+.ui-icon-minusthick { background-position: -64px -128px; }
+.ui-icon-close { background-position: -80px -128px; }
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-key { background-position: -112px -128px; }
+.ui-icon-lightbulb { background-position: -128px -128px; }
+.ui-icon-scissors { background-position: -144px -128px; }
+.ui-icon-clipboard { background-position: -160px -128px; }
+.ui-icon-copy { background-position: -176px -128px; }
+.ui-icon-contact { background-position: -192px -128px; }
+.ui-icon-image { background-position: -208px -128px; }
+.ui-icon-video { background-position: -224px -128px; }
+.ui-icon-script { background-position: -240px -128px; }
+.ui-icon-alert { background-position: 0 -144px; }
+.ui-icon-info { background-position: -16px -144px; }
+.ui-icon-notice { background-position: -32px -144px; }
+.ui-icon-help { background-position: -48px -144px; }
+.ui-icon-check { background-position: -64px -144px; }
+.ui-icon-bullet { background-position: -80px -144px; }
+.ui-icon-radio-on { background-position: -96px -144px; }
+.ui-icon-radio-off { background-position: -112px -144px; }
+.ui-icon-pin-w { background-position: -128px -144px; }
+.ui-icon-pin-s { background-position: -144px -144px; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-seek-next { background-position: -32px -160px; }
+.ui-icon-seek-prev { background-position: -48px -160px; }
+.ui-icon-seek-end { background-position: -64px -160px; }
+.ui-icon-seek-start { background-position: -80px -160px; }
+/* ui-icon-seek-first is deprecated, use ui-icon-seek-start instead */
+.ui-icon-seek-first { background-position: -80px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+.ui-icon-eject { background-position: -112px -160px; }
+.ui-icon-volume-off { background-position: -128px -160px; }
+.ui-icon-volume-on { background-position: -144px -160px; }
+.ui-icon-power { background-position: 0 -176px; }
+.ui-icon-signal-diag { background-position: -16px -176px; }
+.ui-icon-signal { background-position: -32px -176px; }
+
+
+.ui-icon-squaresmall-plus { background-position: -48px -208px; }
+.ui-icon-squaresmall-minus { background-position: -64px -208px; }
+.ui-icon-squaresmall-close { background-position: -80px -208px; }
+.ui-icon-grip-dotted-vertical { background-position: 0 -224px; }
+.ui-icon-grip-dotted-horizontal { background-position: -16px -224px; }
+.ui-icon-grip-solid-vertical { background-position: -32px -224px; }
+.ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
+.ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+  </style>
+  <meta content="Murray Bourne" name="author"/>
+  <meta content="/browserconfig.xml" name="msapplication-config"/>
+  <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="http://www.intmath.com/feed/" rel="alternate" title="intmath.com RSS Feed" type="application/rss+xml"/>
+  <link href="http://www.intmath.com/numbers/math-of-beauty.php" rel="canonical"/>
+  <link href="http://m.intmath.com/numbers/math-of-beauty.php" media="only screen and (max-width: 640px)" rel="alternate"/>
+  <link href="/includes/cssjs/math2015-05-18c.css" rel="stylesheet" type="text/css"/>
+  <style media="print" type="text/css">
+   body{background:none;font-family:Arial,Helvetica,sans-serif}
+  #logoTopnav{background:#e5edef url(/includes/images/bodyBG.png) repeat-x;width:100%;padding:6px;color:#fff}
+  #logoTopnav a{color:#fff;text-decoration:none}
+  h1{clear:both;margin-top:1em}
+  #wrapper {width:100%;margin:0;}
+  #bcWrap{margin:3px 0 0;border-radius:0;}
+  #content {font-size:10pt;width:100%;border:none;margin:0;padding:0}  #topNav,.googSearch,.googAdHori,#googBanner,#links,#subContent,.adinText,.bannerintext,#adunit,#box,#boxBott,#flashcontent,#flashcontent1,#flashcontent2,.dunmiss,#searchFb{display:none}
+  .ajaxtrigger{padding-left:2.5em}
+  .ddown{box-shadow:none;background:#fff}
+  </style>
+  <link href="/includes/cssjs/katex/katex.min-2015-05-18d.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div id="wrapper">
+   <div id="headerWrap">
+    <div id="header">
+     <div id="logoTopnav">
+      <div id="logo">
+       <div class="sprite" id="sqclogo">
+        <a href="http://www.intmath.com/" title="Home page of Interactive Mathematics">
+        </a>
+       </div>
+       <div id="logoTxt">
+        <a href="http://www.intmath.com/" title="Home page of Interactive Mathematics">
+         interactive mathematics
+        </a>
+        <br/>
+        Learn math by playing with it!
+       </div>
+      </div>
+      <!-- logo -->
+      <div id="topNav">
+       <ul id="hori">
+        <li>
+         <a href="http://www.intmath.com/">
+          home
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/help/sitemap.php">
+          sitemap
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/help/interactive-math-applications.php">
+          math interactives
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/blog/">
+          math blog
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/blog/squarecirclez-sitemap">
+          blog sitemap
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/help/site-info.php">
+          about
+         </a>
+        </li>
+        <li>
+         <a href="http://www.intmath.com/help/comments.php">
+          feedback
+         </a>
+        </li>
+       </ul>
+      </div>
+      <!-- topNav -->
+     </div>
+     <!-- logoTopnav -->
+     <div id="searchFb">
+      <form action="http://www.intmath.com/help/search-g.php" id="cse-search-box">
+       <div>
+        <input name="cx" type="hidden" value="partner-pub-2127235491321065:5426004799"/>
+        <input name="cof" type="hidden" value="FORID:9"/>
+        <input name="ie" type="hidden" value="UTF-8"/>
+        <input name="q" size="30" type="text" value=""/>
+        <input name="sa" type="submit" value="Search site"/>
+       </div>
+      </form>
+      <p class="socialLink fbsoc">
+       <a class="sprite socialicons" href="http://www.intmath.com/includes/social.php?u=http://www.intmath.com/numbers/math-of-beauty.php" rel="nofollow" title="Share this page!">
+       </a>
+      </p>
+     </div>
+    </div>
+    <!-- header -->
+   </div>
+   <div id="links">
+    <p class="linksHeader">
+     Chapter Contents
+    </p>
+    <ul id="linksul">
+     <li>
+      <a href="numbers-intro.php">
+       Numbers
+      </a>
+     </li>
+     <li>
+      <a href="1-integers.php">
+       1. Integers
+      </a>
+     </li>
+     <li class="sprite inter liTabbed">
+      <a href="counting-game.php">
+       1a. Counting Game
+      </a>
+     </li>
+     <li>
+      <a href="2-number-properties.php">
+       2. Number Properties
+      </a>
+     </li>
+     <li>
+      <a href="3-order-of-operations.php">
+       3. Order of Operations
+      </a>
+     </li>
+     <li>
+      <a href="4-powers-roots-radicals.php">
+       4. Powers, Roots and Radicals
+      </a>
+     </li>
+     <li>
+      <a href="5-approximate-numbers.php">
+       5. Approximate Numbers
+      </a>
+     </li>
+     <li class="sprite infor liTabbed">
+      <a href="pi.php">
+       5b. Pi
+      </a>
+     </li>
+     <li>
+      <a href="6-scientific-notation.php">
+       6. Scientific Notation
+      </a>
+     </li>
+     <li>
+      <a href="7-ratio-proportion.php">
+       7. Ratio and Proportion
+      </a>
+     </li>
+     <li class="sprite interTabbedCurrent">
+      7a. Math of Beauty
+     </li>
+     <li class="sprite inter liTabbed">
+      <a href="/help/problem-solver.php?title=numbers&amp;fid=12&amp;refTitle=inter*7a.%20Math%20of%20Beauty">
+       Numbers Problem Solver
+      </a>
+     </li>
+    </ul>
+    <ul id="linksComments">
+     <li>
+      <a href="/help/comments.php">
+       Comments, Questions?
+      </a>
+     </li>
+    </ul>
+    <p class="linksHeader">
+     Recommendation
+    </p>
+    <p class="imgCenter">
+     <a class="sprite mathvids" href="/help/math-videos/?topic=algebra" rel="nofollow">
+     </a>
+    </p>
+    <p>
+     Easy to understand algebra lessons on DVD. Try before you commit. More info:
+     <br/>
+     <a href="/help/math-videos/?topic=algebra" rel="nofollow">
+      MathTutorDVD.com
+     </a>
+    </p>
+    <p class="linksHeader">
+     Online Algebra Solver
+    </p>
+    <p>
+     Solve your algebra problem step by step!
+    </p>
+    <p class="probLink">
+     <a href="/help/problem-solver.php">
+      Online Algebra Solver 
+     </a>
+    </p>
+    <p class="linksHeader">
+     Share
+    </p>
+    <p class="socialLink">
+     <a class="sprite socialicons" href="http://www.intmath.com/includes/social.php?u=http://www.intmath.com/numbers/math-of-beauty.php" rel="nofollow" title="Share this page!">
+     </a>
+    </p>
+    <p>
+     Share this page.
+    </p>
+   </div>
+   <!-- links -->
+   <div id="content">
+    <div id="bcWrap">
+     <ul id="breadcrumb">
+      <li>
+       <a class="sprite" href="/">
+        Home
+       </a>
+      </li>
+      <li>
+       
+       <a href="/numbers/numbers-intro.php">
+        Numbers
+       </a>
+      </li>
+      <li>
+        7a. Math of Beauty
+      </li>
+     </ul>
+    </div>
+    <div id="googBanner">
+     <script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+     <!-- banner top intM -->
+     <ins class="adsbygoogle" data-ad-client="ca-pub-2127235491321065" data-ad-slot="6551473607" style="display:inline-block;width:728px;height:90px">
+     </ins>
+     <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+    </div>
+    <h1>
+     The Math Behind the Beauty
+    </h1>
+    <p class="smallCenter">
+     By M. Bourne
+    </p>
+    <div class="imgLt">
+     <img alt="Jessica Simpson - mathematics of beauty" height="173" src="http://intmstat.com/numbers/beautyMath/jessicaSimpson5_26.jpg" width="120"/>
+     <br/>
+     Jessica Simpson
+    </div>
+    <div class="dunmiss">
+     <h3>
+      On this page...
+     </h3>
+     <p>
+      Don't miss the
+      <a href="#beautiful">
+       beauty interactive
+      </a>
+      .
+     </p>
+    </div>
+    <p>
+     What has mathematics got to do with beauty? Actually, a lot. Physical attraction depends on
+     <b>
+      ratio
+     </b>
+     .
+    </p>
+    <p>
+     Our attraction to another person's body increases if that body is symmetrical and in proportion. Likewise, if a face is in proportion, we are
+more likely to notice it and find it beautiful.
+    </p>
+    <p>
+     Scientists believe that we perceive proportional bodies to be more healthy.
+    </p>
+    <div class="clearBoth imgCenter">
+     <img alt="davinci's Vitruvian Man showing Golden Ratio" height="314" src="http://intmstat.com/numbers/beautyMath/body_sm_ratios.jpg" width="300"/>
+     <br/>
+     Leonardo da Vinci's "Vitruvian Man",
+     <br/>
+     showing the golden ratio in body dimensions
+    </div>
+    <p>
+     Leonardo da Vinci's drawings of the human body emphasised its proportion. The ratio of the following distances is the Golden Ratio:
+    </p>
+    <blockquote>
+     (foot to navel) : (navel to head)
+    </blockquote>
+    <p>
+     Similarly, buildings are more attractive if the proportions used follow the Golden Ratio.
+    </p>
+    <h2>
+     Golden Ratio
+    </h2>
+    <p>
+     The Golden Ratio (or "Golden Section") is based on
+     <b>
+      Fibonacci Numbers
+     </b>
+     , where every number in the sequence (after the second) is the sum of
+the previous 2 numbers:
+    </p>
+    <blockquote>
+     <p>
+      1, 1, 2, 3, 5, 8, 13, 21, ...
+     </p>
+    </blockquote>
+    <p>
+     We will see (below) how the Fibonnaci Numbers lead to the
+     <b>
+      Golden Ratio:
+     </b>
+    </p>
+    <blockquote>
+     <p>
+      <span class="intmath">
+       
+      </span>
+      = 1.618 033 ...
+     </p>
+    </blockquote>
+    <h2 id="beautiful">
+     Physical Beauty
+    </h2>
+    <p>
+     Why do many people feel that Jessica Simpson is beautiful?
+    </p>
+    <div class="imgLt">
+     <img alt="Marquardt's mask" height="185" src="http://intmstat.com/numbers/beautyMath/mask1.gif" width="135"/>
+     <br/>
+     Image
+     <a href="http://www.beautyanalysis.com/research/perfect-face/facial-masks/">
+      source
+     </a>
+    </div>
+    <p>
+     This mask of the human face is based on the Golden Ratio. The proportions of the length of the nose, the position of the eyes and the length
+  of the chin, all conform to some aspect of the Golden Ratio.
+    </p>
+    <div class="imgRt">
+     <img alt="Jessica Simpson and Marquardt mask" height="235" src="http://intmstat.com/numbers/beautyMath/jessica_mask2.jpg" width="184"/>
+    </div>
+    <p>
+     When placed over the photo of Jessica Simpson, we see there is a good fit (that is, the proportions of her face fit the geometrically "nice"
+  proportions of the mask, based on the Golden Ratio).
+    </p>
+    <p>
+     Her beauty is mathematical!
+    </p>
+    <p>
+     You can play with this concept in the following interactive.
+    </p>
+    <h2 id="beauty">
+     Math of Beauty Interactive
+    </h2>
+    <p>
+     In the following activity, you can check out the "mathematical beauty" (or not) of some famous people, or anyone you like.
+    </p>
+    <p>
+     Choose a mask, depending on whether the person is smiling or not, and line up the mask with the photo by dragging the mask. You can re-size the mask by dragging the bottom right corner, or the handles.
+    </p>
+    <p>
+     You can change the colour of the mask for better viewing.
+    </p>
+    <p>
+     You can use any picture on the Web. Just copy its URL (address) and paste it in the box. Click "Use my photo" and it should work.
+    </p>
+    <p>
+     This works best if your photos are like the ones I've used:
+    </p>
+    <ol>
+     <li>
+      The face is straight (vertical)
+     </li>
+     <li>
+      The face is looking directly at the camera
+     </li>
+     <li>
+      The photo is head and shoulders
+     </li>
+     <li>
+      The image is medium size
+     </li>
+    </ol>
+    <div id="interWrap">
+     <div id="dummyWrap">
+      <!-- so resizable works properly! -->
+      <div>
+       <div id="controls">
+        <div id="choose">
+         <p>
+          Choose mask:
+         </p>
+         <p>
+          <img alt="choose non smiling mask" height="27" id="chooseNon" src="beautyMath/choose-non.png" width="67"/>
+          <img alt="choose smiling mask" height="27" id="chooseSmile" src="beautyMath/choose-smile.png" width="67"/>
+         </p>
+         <p id="hiddenP">
+          You can resize the mask and move it up or down, left or right.
+         </p>
+        </div>
+        <div id="chooseColor">
+         <p>
+          Choose mask color:
+         </p>
+         <svg height="30" width="30">
+          <rect height="30" style="fill:#0000ff;stroke-width:2;stroke:#0000ff" width="30">
+          </rect>
+         </svg>
+         <svg height="30" width="30">
+          <rect height="30" style="fill:#00ff00;stroke-width:2;stroke:#00ff00" width="30">
+          </rect>
+         </svg>
+         <svg height="30" width="30">
+          <rect height="30" style="fill:#ff8800;stroke-width:2;stroke:#ff8800" width="30">
+          </rect>
+         </svg>
+         <svg height="30" width="30">
+          <rect height="30" style="fill:#ff00ff;stroke-width:2;stroke:#ff00ff" width="30">
+          </rect>
+         </svg>
+         <svg height="30" width="30">
+          <rect height="30" style="fill:#ffff80;stroke-width:2;stroke:#999" width="30">
+          </rect>
+         </svg>
+        </div>
+       </div>
+       <div id="chooseOwn">
+        <h3>
+         Use your own photo
+        </h3>
+        <p>
+         Paste the URL of a photo here
+        </p>
+        <p>
+         <input id="ownPicUrl" type="text"/>
+         <br/>
+         <button id="useMyPic">
+          Use my photo
+         </button>
+        </p>
+       </div>
+       <div id="faces">
+        <div id="goBack">
+         <svg height="30" version="1.1" viewbox="0 0 100 100" width="30">
+          <path d="M 100 0 L 100 100 L 30 50 L 100 0" stroke-width="15" style="stroke:#165a71;fill:#165a71;stroke-linejoin:round">
+          </path>
+         </svg>
+        </div>
+        <div id="pix">
+         <img alt="blonde model" height="265" src="beautyMath/blonde.jpg" width="360"/>
+        </div>
+        <div id="goForward">
+         <svg height="30" version="1.1" viewbox="0 0 100 100" width="30">
+          <path d="M 0 0 L 0 100 L 70 50 L 0 0" stroke-width="15" style="stroke:#165a71;fill:#165a71;stroke-linejoin:round">
+          </path>
+         </svg>
+        </div>
+        <div class="ui-widget-content" id="draggable">
+         <div id="nonsmilingsvg">
+          <svg height="300" id="svg3767" version="1.1" viewbox="-40 0 660 880" width="300" xmlns="http://www.w3.org/2000/svg">
+           <g id="layer1a" style="display:inline" transform="translate(-59.114226,-69.806345)">
+           </g>
+           <g id="layer3a" style="display:inline" transform="translate(-59.114226,-69.806345)">
+            <g id="g3037" transform="matrix(0.94092068,0,0,0.94935751,3.4923015,3.5382491)">
+             <path d="M 368.70871,71.827164 210.5923,72.072901 C 148.78803,74.129177 95.940208,121.33696 90.472872,184.49854 l 0,0 -0.980564,197.57423 62.756282,-27.52278 151.00728,30.47165 44.12551,57.99443 -1.96114,137.6139 -18.63075,50.13077 0,-164.15372 -35.30041,-58.97738 -124.53199,-33.42052 -77.464782,7.86365" id="path4294" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 326.70492,473.75802 -31.29358,68.53665 6.86397,112.05703 22.55304,3.93182 1.96114,-28.50574 41.10561,16.10611" id="path4296" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 368.12914,673.52274 c -17.37327,-4.84896 -31.6713,-15.72051 -42.32022,-29.98357" id="path4298" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 163.03482,441.05016 -0.98056,0 -71.581383,-58.48591 -29.417013,85.02573 44.125516,127.78434" id="path4300" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 92.434011,560.97084 -4.412556,57.01146 c 9.699836,46.73542 18.298105,96.11227 38.732395,138.59686 17.90105,33.09286 40.30157,66.18573 64.71741,99.27859 35.19399,38.3175 80.45049,58.70647 119.13887,77.16209 19.49152,6.48772 37.33538,13.48364 55.40202,12.47638 l 0.0811,0.006" id="path4302" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 366.87014,842.21923 c -48.50107,10.86246 -74.47861,36.6027 -57.73086,89.32617" id="path4304" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 263.05264,837.18158 102.95951,-1.96591 1.10314,0.12287" id="path4306" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 368.21842,807.6929 -48.29291,-0.98297 -57.85344,-48.16486 54.42145,-1.47443 10.78625,-3.93183 28.92672,12.28696 7.84452,1.96591 3.67714,0.12287" id="path4308" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 366.54785,737.70188 -24.06929,-5.69663 -82.64182,26.34168" id="path4310" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 212.5,498.79074 c 0,12.62365 -9.91369,22.85714 -22.14285,22.85714 -12.22916,0 -22.14286,-10.23349 -22.14286,-22.85714 0,-12.62365 9.9137,-22.85714 22.14286,-22.85714 12.22916,0 22.14285,10.23349 22.14285,22.85714 z" id="path4357" style="fill:#000000;fill-opacity:0;stroke:#ff00ff;stroke-width:3.41671586;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" transform="matrix(1.1313644,0,0,1.1442931,6.6851499,-142.77481)">
+             </path>
+             <path d="m 212.5,498.79074 c 0,12.62365 -9.91369,22.85714 -22.14285,22.85714 -12.22916,0 -22.14286,-10.23349 -22.14286,-22.85714 0,-12.62365 9.9137,-22.85714 22.14286,-22.85714 12.22916,0 22.14285,10.23349 22.14285,22.85714 z" id="path4357-1" style="fill:#000000;fill-opacity:0;stroke:#ff00ff;stroke-width:9.96181202;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" transform="matrix(0.3732207,0,0,0.40805161,151.3499,224.80319)">
+             </path>
+             <path d="m 369.21955,71.752693 153.94901,0.491483 c 61.80427,2.056268 114.65208,49.264054 120.11942,112.425634 l 0,0 0.98057,197.57423 -62.75628,-27.52277 -151.00728,30.47164 -44.12551,57.99443 1.96114,137.6139 18.63075,50.13079 0,-164.15374 35.30041,-58.97738 124.53199,-33.42052 77.46478,7.86365" id="path4294-7" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 407.23451,474.10786 31.115,68.35808 -6.86397,112.05699 -22.55303,3.93191 -1.96114,-28.50581 -40.32581,15.85018" id="path4296-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 367.01328,673.69063 c 16.07232,-5.74771 30.24306,-14.82318 40.93866,-29.98015" id="path4298-0" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 570.72603,441.22143 0.98057,0 71.58137,-58.48591 29.41702,85.02573 -44.12551,127.78434" id="path4300-9" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 641.32684,561.14211 4.41256,57.01147 c -9.69984,46.73544 -18.2981,96.1123 -38.7324,138.59685 -17.90105,33.09289 -40.30157,66.18569 -64.7174,99.27859 -35.194,38.31754 -80.45049,58.70652 -119.13888,77.1621 -19.49152,6.4877 -37.2091,13.60994 -55.40201,12.28695 l -1.87877,0.01" id="path4302-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 366.76814,842.26766 c 48.50107,10.86246 74.60119,36.72559 57.85343,89.44905" id="path4304-8" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 470.70822,837.35284 -102.95951,-1.9659 -1.716,4e-5" id="path4306-8" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 367.62613,807.74126 46.20922,-0.86004 57.85344,-48.16488 -54.42145,-1.47441 -10.78625,-3.93182 -28.92672,12.28695 -7.84453,1.96591 -1.96113,0" id="path4308-2" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 365.68615,737.70569 25.59615,-5.52916 81.5054,26.84674" id="path4310-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 212.5,498.79074 c 0,12.62365 -9.91369,22.85714 -22.14285,22.85714 -12.22916,0 -22.14286,-10.23349 -22.14286,-22.85714 0,-12.62365 9.9137,-22.85714 22.14286,-22.85714 12.22916,0 22.14285,10.23349 22.14285,22.85714 z" id="path4357-5" style="fill:#000000;fill-opacity:0;stroke:#ff00ff;stroke-width:3.41671586;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" transform="matrix(-1.1313644,0,0,1.1442931,727.0757,-142.60354)">
+             </path>
+             <path d="m 212.5,498.79074 c 0,12.62365 -9.91369,22.85714 -22.14285,22.85714 -12.22916,0 -22.14286,-10.23349 -22.14286,-22.85714 0,-12.62365 9.9137,-22.85714 22.14286,-22.85714 12.22916,0 22.14285,10.23349 22.14285,22.85714 z" id="path4357-1-5" style="fill:#000000;fill-opacity:0;stroke:#ff00ff;stroke-width:9.96181202;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" transform="matrix(-0.3732207,0,0,0.40805161,582.41096,224.97446)">
+             </path>
+            </g>
+           </g>
+          </svg>
+         </div>
+         <div id="smilingsvg">
+          <svg height="300" id="svg3061" version="1.1" viewbox="-20 0 660 860" width="300" xmlns="http://www.w3.org/2000/svg">
+           <g id="layer1b" style="display:inline" transform="translate(-140.03108,11.99139)">
+           </g>
+           <g id="layer3b" style="display:inline" transform="translate(-140.03108,11.99139)">
+            <g id="g4024" transform="matrix(1.3360018,0,0,1.0987856,-43.666203,-93.645466)">
+             <path d="M 292.14286,775.93361 248.21429,599.1479 218.57143,588.79075 c -16.13355,-25.55235 -35.00862,-50.71305 -45,-77.14285" id="path3867" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 248.57143,599.1479 49.64286,-41.07143 15.35714,-25.35715 16.07143,-27.85714 9.28571,-5.35714 5.35714,2.14286 -11.07142,43.21428 7.14285,10.71429 -19.64285,0.35714 -7.14286,-21.42857" id="path3869" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 273.92857,611.29075 33.21429,-19.28571 37.5,0.35714 2.14285,3.92857 28.21429,0" id="path3871" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 282.14286,607.00504 52.14285,0.71428 40.35715,7.5" id="path3873" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 274.28571,610.93361 56.07143,49.28571 13.21429,6.07143 31.78571,0" id="path3875" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 297.85714,630.93361 0,-13.92857 0.35715,-0.71429" id="path3877" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 309.64286,641.29075 -0.35715,-15.71428" id="path3879" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="M 321.78571,649.86218 325,647.00504 l 5.71429,1.07143 5,6.42857 9.28571,-1.07143 2.5,5.71429 27.14286,0.35714 -0.35715,-32.5" id="path3881" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 326.78571,646.29075 0.35715,-18.57143" id="path3883" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 345.71429,652.36218 0.71428,-23.21428" id="path3885" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="M 375.71429,700.57647 C 322.34517,709.07139 271.26616,614.75326 273.92857,610.21932" id="path3887" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 333.92857,545.57647 13.57143,0 26.42857,28.21428" id="path3889" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <path d="m 374.28571,560.21932 c -11.15028,-1.45588 -19.08332,-8.27384 -27.5,-14.28571 l 9.64286,-38.57143 0.71429,-109.64286 -31.07143,-76.42856 -112.14286,-11.42858 -40.35714,30.71429 41.78571,-8.92857 103.92857,10 26.07143,70.71428 -1.07143,88.92857" id="path3891" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+             </path>
+             <g id="g3972" style="display:inline" transform="translate(4.5884694e-8,-2.0203051)">
+              <path d="m 457.22124,778.19899 43.92857,-176.78571 29.64286,-10.35715 c 16.13355,-25.55235 35.00862,-50.71305 45,-77.14285" id="path3867-1" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 500.79267,601.41328 -49.64286,-41.07143 -15.35714,-25.35715 -16.07143,-27.85714 -9.28571,-5.35714 -5.35714,2.14286 11.07142,43.21428 -7.14285,10.71429 19.64285,0.35714 7.14286,-21.42857" id="path3869-7" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 475.43553,613.55613 -33.21429,-19.28571 -37.5,0.35714 -2.14285,3.92857 -28.21429,0" id="path3871-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 467.22124,609.27042 -52.14285,0.71428 -40.35715,7.5" id="path3873-0" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 475.07839,613.19899 -56.07143,49.28571 -13.21429,6.07143 -31.78571,0" id="path3875-9" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 451.50696,633.19899 0,-13.92857 -0.35715,-0.71429" id="path3877-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 439.72124,643.55613 0.35715,-15.71428" id="path3879-8" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 427.57839,652.12756 -3.21429,-2.85714 -5.71429,1.07143 -5,6.42857 -9.28571,-1.07143 -2.5,5.71429 -27.14286,0.35714 0.35715,-32.5" id="path3881-8" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="M 422.57839,648.55613 422.22124,629.9847" id="path3883-2" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 403.64981,654.62756 -0.71428,-23.21428" id="path3885-4" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 373.64981,702.84185 c 53.36912,8.49492 104.44813,-85.82321 101.78572,-90.35715" id="path3887-5" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 415.43553,547.84185 -13.57143,0 -26.42857,28.21428" id="path3889-5" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 375.07839,562.4847 c 11.15028,-1.45588 19.08332,-8.27384 27.5,-14.28571 l -9.64286,-38.57143 -0.71429,-109.64286 31.07143,-76.42856 112.14286,-11.42858 40.35714,30.71429 -41.78571,-8.92857 -103.92857,10 -26.07143,70.71428 1.07143,88.92857" id="path3891-1" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 379.64827,92.962344 c 91.92388,0 92.93403,0 92.93403,0 51.19113,14.938176 80.54136,56.085436 105.05587,103.035556 l -1.30602,148.78829 3.51015,9.09137 17.99892,68.39451 -21.74366,91.14832 -0.4797,42.19182 c -6.88002,38.56388 -17.77456,75.40725 -31.31473,111.11678 l -48.48732,75.76144 -63.57833,58.52757 c -23.69589,13.75278 -33.07361,15.71412 -40.82452,16.33575 l -17.82561,0.12256" id="path3865-7" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 579.00696,353.91328 -52.5,40.71428" id="path3895-1" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 527.22124,364.62756 -46.07143,-12.85714 -55.35714,51.42857" id="path3897-1" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 523.29267,409.62756 -42.14286,15 -38.92857,-13.92857 25.35715,27.85714 25,-0.35714 z" id="path3899-5" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
+              </path>
+              <path d="m 270,372.36218 c 0,10.45396 -7.67511,18.92857 -17.14285,18.92857 -9.46774,0 -17.14286,-8.47461 -17.14286,-18.92857 0,-10.45396 7.67512,-18.92857 17.14286,-18.92857 9.35136,0 16.97741,8.27506 17.14025,18.59896" id="path3901-2" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline" transform="matrix(-1,0,0,1,734.72124,18.693954)">
+              </path>
+             </g>
+             <path d="m 381.83766,91.202035 c -91.92388,0 -105.05586,-0.505076 -105.05586,-0.505076 C 225.59067,105.63514 196.24044,146.7824 171.72593,193.73252 l 1.30602,148.78829 -3.51015,9.09137 -17.99892,68.39451 21.74366,91.14832 0.4797,42.19182 c 6.88002,38.56388 17.77456,75.40725 31.31473,111.11678 l 48.48732,75.76144 63.57833,58.52757 c 23.69589,13.75278 33.07361,15.71412 40.82452,16.33575 l 17.82561,0.12256" id="path3865" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+             </path>
+             <path d="m 170.35714,351.6479 52.5,40.71428" id="path3895" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+             </path>
+             <path d="m 222.14286,362.36218 46.07143,-12.85714 55.35714,51.42857" id="path3897" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+             </path>
+             <path d="m 226.07143,407.36218 42.14286,15 38.92857,-13.92857 -25.35715,27.85714 -25,-0.35714 z" id="path3899" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+             </path>
+             <path d="m 270,372.36218 c 0,10.45396 -7.67511,18.92857 -17.14285,18.92857 -9.46774,0 -17.14286,-8.47461 -17.14286,-18.92857 0,-10.45396 7.67512,-18.92857 17.14286,-18.92857 9.35136,0 16.97741,8.27506 17.14025,18.59896" id="path3901" style="fill:none;stroke:#ff00ff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" transform="translate(14.642857,16.428572)">
+             </path>
+            </g>
+           </g>
+           <g id="layer2" style="display:none" transform="translate(-140.03108,11.99139)">
+            <path d="M 376.7869,830.12862 C 368.70568,78.575129 368.70568,78.575129 368.70568,78.575129" id="path3095" style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1">
+            </path>
+           </g>
+          </svg>
+         </div>
+        </div>
+       </div>
+      </div>
+      <p id="copy">
+       Copyright  2013 www.intmath.com
+      </p>
+     </div>
+    </div>
+    <p class="explanation">
+     This interactive is based on the work of
+     <a href="http://www.beautyanalysis.com/research/perfect-face/facial-masks/">
+      Dr. Stephen Marquardt
+     </a>
+     (external site).
+    </p>
+    <p>
+     <b>
+      Disclaimer:
+     </b>
+     Of course, inner beauty is more important than external beauty...! Each person's perception of beauty is different.
+    </p>
+    <h2>
+     Back to the Mathematics...
+    </h2>
+    <p>
+     Let's look at the ratio of each number in the Fibonacci sequence to the one before it:
+    </p>
+    <div style="width:200px; float:left; margin:10px 20px;">
+     <p>
+      `1/1 = 1`
+     </p>
+     <p>
+      `2/1 = 2`
+     </p>
+     <p>
+      `3/2 = 1.5`
+     </p>
+     <p>
+      `5/3 = 1.666...`
+     </p>
+     <p>
+      `8/5 = 1.6`
+     </p>
+    </div>
+    <div style="width:200px; float:left; margin:10px 20px;">
+     <p>
+      `13/8 = 1.625`
+     </p>
+     <p>
+      `21/13 = 1.61538...`
+     </p>
+     <p>
+      `34/21 = 1.61905...`
+     </p>
+     <p>
+      `55/34 = 1.61764...`
+     </p>
+     <p>
+      `89/55 = 1.61861...`
+     </p>
+    </div>
+    <p class="clearBoth">
+     If we keep going, we produce an interesting number which mathematicians call "phi" (
+     <b>
+      Golden Ratio
+     </b>
+     or
+     <b>
+      Golden
+Section
+     </b>
+     ):
+    </p>
+    <blockquote>
+     <p>
+      `Phi = 1.618 033 988 7...`
+     </p>
+    </blockquote>
+    <p>
+     This ratio was used by architects and artists throughout history to produce objects of great beauty (like Michelangelo's "David" and
+the Greek temples.)
+    </p>
+    <div class="imgCenter">
+     <img alt="Parthenon showing Golden Ratio" height="277" src="http://intmstat.com/numbers/beautyMath/parthenon2.jpg" width="417"/>
+     <br/>
+     The Parthenon in Greece. The ratio of the distances indicated is the Golden Ratio.
+    </div>
+    <p>
+     Phi (
+     <span class="intmath">
+      
+     </span>
+     ) is like pi (
+     <span class="intmath">
+      
+     </span>
+     ) in the sense that it is an
+     <a href="2-number-properties.php">
+      irrational number
+     </a>
+     . There is no equivalent fraction for
+     <span class="intmath">
+      
+     </span>
+     and its decimal keeps going
+and never stops.
+    </p>
+    <div class="imgRt" style="text-align:center;">
+     <img alt="Sunflower showing Fibonacci spirals" height="227" src="http://intmstat.com/numbers/sunflower.jpg" width="274"/>
+     <br/>
+     Sunflower (
+     <a href="http://www.flickr.com/photos/kikisdad/40410814/">
+      Image source
+     </a>
+     )
+    </div>
+    <p>
+     The Golden Ratio also occurs in nature, in the patterns we see in sunflowers, pine cones and so on. This is largely because one of the best ways
+to efficiently pack things tightly together is using the Fibonacci sequence.
+    </p>
+    <div id="subContent">
+     <div id="relatedLinks">
+      <h2>
+       Related, useful or interesting articles
+      </h2>
+      <div id="blogRel">
+       <div id="blogPromo">
+        <div class="promoDb">
+         <p class="blogPromoHeader clearBoth">
+          <a href="http://www.intmath.com/blog/mathematics/updated-math-interactive-math-of-beauty-8618">
+           Updated Math of Beauty interactive
+          </a>
+         </p>
+         <p>
+          <a href="http://www.intmath.com/blog/mathematics/updated-math-interactive-math-of-beauty-8618">
+           <img alt="math of beauty" class="imgLt" height="100" src="http://intmstat.com/blog/2014/01/math-beauty.jpg" width="128"/>
+          </a>
+          This interactive allows you to  place a mask over the photos of so-called beautiful people, and see how close their face is to the ideal....
+         </p>
+        </div>
+        <p class="clearBoth">
+        </p>
+        <div class="promoDb">
+         <p class="blogPromoHeader clearBoth">
+          <a href="http://www.intmath.com/blog/mathematics/is-she-beautiful-the-new-golden-ratio-4149">
+           Is she beautiful? The new Golden Ratio
+          </a>
+         </p>
+         <p>
+          <a href="http://www.intmath.com/blog/mathematics/is-she-beautiful-the-new-golden-ratio-4149">
+           <img alt="marquardt" class="imgLt" height="119" src="http://intmstat.com/blog/2010/02/shania-twain-th.gif" width="128"/>
+          </a>
+          Beauty is defined by a new "Golden Ratio", new research shows....
+         </p>
+        </div>
+        <p class="clearBoth">
+        </p>
+        <div class="promoDb">
+         <p class="blogPromoHeader clearBoth">
+          <a href="http://www.intmath.com/blog/mathematics/math-of-the-moors-535">
+           Math of the Moors
+          </a>
+         </p>
+         <p>
+          The Moors were Muslims who overtook Spain in the 8th century AD, bringing with them a Renaissance of learning, especially in math and science....
+         </p>
+        </div>
+        <p class="clearBoth">
+        </p>
+       </div>
+      </div>
+      <div id="siteRel">
+       <h3>
+        On IntMath
+       </h3>
+       <p>
+        <a href="/complex-numbers/fractals.php">
+         Fractals
+        </a>
+        - intriguing designs made using mathematics
+       </p>
+       <p>
+        <a href="/plane-analytic-geometry/equiangular-spiral.php">
+         Nautilus shells
+        </a>
+        - whose shape involves exponentials and trigonometry
+       </p>
+       <p>
+        <a href="/trigonometric-graphs/7-lissajous-figures.php">
+         Lissajous figures
+        </a>
+        - more math-based patterns
+       </p>
+       <p>
+        <a href="/fourier-series/7-fast-fourier-transform-fft.php">
+         Digital audio and light
+        </a>
+        - CDs and light spectrums
+       </p>
+       <p>
+        <a href="pi.php">
+         Pi
+        </a>
+       </p>
+      </div>
+     </div>
+     <div id="botNav">
+      <div class="previous">
+       <a class="sprite" href="/numbers/7-ratio-proportion.php" id="leftarr">
+       </a>
+       <a href="/numbers/7-ratio-proportion.php" id="ltTxtLink">
+        7. Ratio and Proportion
+       </a>
+      </div>
+      <!-- previous -->
+      <div class="next">
+       <a href="/help/problem-solver.php?title=numbers&amp;fid=12&amp;refTitle=inter*7a.%20Math%20of%20Beauty" id="rtTxtLink">
+        Numbers Problem Solver
+       </a>
+       <a class="sprite" href="/help/problem-solver.php?title=numbers&amp;fid=12&amp;refTitle=inter*7a.%20Math%20of%20Beauty" id="rightarr">
+       </a>
+      </div>
+      <!-- next -->
+      <br class="clearBoth"/>
+     </div>
+     <!-- botNav -->
+     <div class="imgCenter">
+      <!-- Google -->
+      <script type="text/javascript">
+       &lt;!--
+google_ad_client = "ca-pub-2127235491321065";
+/* Banner end pg IntM */
+google_ad_slot = "2464211330";
+google_ad_width = 728;
+google_ad_height = 90;
+//--&gt;
+      </script>
+      <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+      </script>
+     </div>
+     <!-- google -->
+     <div id="adbookM">
+      <h3>
+       Online Algebra Solver
+      </h3>
+      <p class="probSolver">
+       This algebra solver can solve a wide range of math problems. (Please be patient while it loads.)
+      </p>
+      <p class="probLink">
+       <a class="sprite" href="/help/problem-solver.php" id="probsolv" title="Algebra problem solver">
+       </a>
+      </p>
+      <p class="probLink">
+       Go to:
+       <a href="/help/problem-solver.php">
+        Online algebra solver
+       </a>
+      </p>
+      <h3>
+       Algebra Lessons on DVD
+      </h3>
+      <p class="imgLt">
+       <a class="sprite mathvids" href="http://www.intmath.com/help/math-videos/?topic=algebra" rel="nofollow">
+       </a>
+      </p>
+      <p>
+       Easy to understand algebra lessons on DVD. See samples before you commit.
+      </p>
+      <p>
+       More info:
+       <a href="http://www.intmath.com/help/math-videos/?topic=algebra" rel="nofollow">
+        Algebra videos
+       </a>
+      </p>
+     </div>
+     <!-- adBookM -->
+     <div id="NLSU">
+      <div class="nlsu">
+       <h3>
+        The IntMath Newsletter
+       </h3>
+       <p>
+        Sign up for the free
+        <b>
+         IntMath Newsletter
+        </b>
+        . Get math study tips, information, news and updates each fortnight. Join thousands of satisfied students, teachers and parents!
+       </p>
+       <form action="/includes/newsletter/newsletter-signup.php" method="post" name="signup">
+        <input name="subject" type="hidden" value="Newsletter Signup"/>
+        <input name="refurl" type="hidden" value="/numbers/math-of-beauty.php"/>
+        <p>
+         Given name:
+         <span class="dred">
+          * required
+         </span>
+         <br/>
+         <input id="givenName" name="givenName" size="20" type="text" value=""/>
+         <br/>
+         Family name:
+         <br/>
+         <input id="familyName" name="familyName" size="20" type="text" value=""/>
+        </p>
+        <p>
+         email:
+         <span class="dred">
+          * required
+         </span>
+         <br/>
+         <input id="email" name="email" size="20" type="text" value=""/>
+        </p>
+        <p>
+         <input name="submit" type="submit" value="Subscribe me!"/>
+        </p>
+        <p class="small">
+         See the Interactive Mathematics
+         <a href="http://www.intmath.com/help/privacy.php">
+          spam guarantee
+         </a>
+         .
+        </p>
+       </form>
+      </div>
+     </div>
+     <div id="footer">
+      <p>
+       <a href="http://www.intmath.com/">
+        Home
+       </a>
+       |
+       <a href="http://www.intmath.com/help/sitemap.php">
+        Sitemap
+       </a>
+       |
+Author:
+       <a href="https://plus.google.com/+MurrayBourne/posts?rel=author" rel="me">
+        Murray Bourne+
+       </a>
+       |
+       <a href="http://www.intmath.com/help/site-info.php" rel="nofollow">
+        About &amp; Contact
+       </a>
+       |
+       <a href="http://www.intmath.com/help/comments.php" rel="nofollow">
+        Feedback &amp; questions
+       </a>
+       |
+       <a href="http://www.intmath.com/help/privacy.php" rel="nofollow">
+        Privacy
+       </a>
+       |
+       <a href="http://www.intmath.com/feed/">
+        IntMath feed
+       </a>
+       |
+       <a href="http://m.intmath.com/numbers/math-of-beauty.php">
+        Mobile
+       </a>
+       |
+      </p>
+      <p>
+       Page last modified: 15 April 2015
+      </p>
+     </div>
+     <!-- /footer -->
+    </div>
+    <!-- /subContent -->
+   </div>
+   <!-- /content -->
+   <div id="overlay">
+   </div>
+   <div class="box" id="box">
+    <a class="boxclose sprite" id="boxclose" title="Close">
+    </a>
+    <!--h3 id="boxh3"&gt;Share IntMath.com&lt;/h3-->
+    <div id="frameWrapper">
+     <div id="frameHolder">
+      Loading...
+     </div>
+     <button class="butt boxclose">
+      Close
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- /wrapper -->
+  <div id="boxBott">
+   <a class="boxclose sprite" title="Close">
+   </a>
+   <div id="frameWrapperBott">
+    <div id="frameHolderBott">
+     Loading...
+    </div>
+   </div>
+  </div>
+  <script>
+   var pollID = '';
+  var _gaq = _gaq || [];
+  var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-347284-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  // Search box
+  (function(){
+	 var script=document.createElement('script');
+	 script.type='text/javascript';
+	 url="//www.google.com/cse/brand?form=cse-search-box&amp;lang=en";
+	 script.src=url;
+	 document.body.appendChild(script);
+  })();
+  // Quantcast:
+  var _qevents=_qevents||[];(function(){var elem=document.createElement('script');elem.src=(document.location.protocol=="https:"?"https://secure":"http://edge")+".quantserve.com/quant.js";elem.async=true;elem.type="text/javascript";var scpt=document.getElementsByTagName('script')[0];scpt.parentNode.insertBefore(elem,scpt)})();
+  </script>
+  <script src="/includes/cssjs/ASCIIMathTeXKaTeX-2014-11-3.min.js">
+  </script>
+  <script src="/includes/cssjs/katex/katex.min.js">
+  </script>
+  <script>
+   var cb = function() {
+  var l = document.createElement('link'); l.rel = 'stylesheet';
+  l.href = "/includes/cssjs/math2015-05-18c.css";
+  var h = document.getElementsByTagName('head')[0];
+				  h.appendChild(l, h);
+				}
+  var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+	 window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  if (raf) {
+	  raf(cb);
+  } else {
+	  window.addEventListener('load', cb); 			
+  }
+  </script>
+  <script src="/includes/cssjs/jquery-1.11.1.min.js">
+  </script>
+  <script src="/includes/cssjs/ddivs-voting-2015-05-06.js">
+  </script>
+  <script src="/includes/cssjs/jquery-ui-1.10.4/js/jquery-ui-1.10.4.min.js">
+  </script>
+  <script>
+   /*
+ * jQuery UI Touch Punch 0.2.2
+ *
+ * Copyright 2011, Dave Furfero
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ *
+ * Depends:
+ *  jquery.ui.widget.js
+ *  jquery.ui.mouse.js
+ */
+(function(b){b.support.touch="ontouchend" in document;if(!b.support.touch){return;}var c=b.ui.mouse.prototype,e=c._mouseInit,a;function d(g,h){if(g.originalEvent.touches.length&gt;1){return;}g.preventDefault();var i=g.originalEvent.changedTouches[0],f=document.createEvent("MouseEvents");f.initMouseEvent(h,true,true,window,1,i.screenX,i.screenY,i.clientX,i.clientY,false,false,false,false,0,null);g.target.dispatchEvent(f);}c._touchStart=function(g){var f=this;if(a||!f._mouseCapture(g.originalEvent.changedTouches[0])){return;}a=true;f._touchMoved=false;d(g,"mouseover");d(g,"mousemove");d(g,"mousedown");};c._touchMove=function(f){if(!a){return;}this._touchMoved=true;d(f,"mousemove");};c._touchEnd=function(f){if(!a){return;}d(f,"mouseup");d(f,"mouseout");if(!this._touchMoved){d(f,"click");}a=false;};c._mouseInit=function(){var f=this;f.element.bind("touchstart",b.proxy(f,"_touchStart")).bind("touchmove",b.proxy(f,"_touchMove")).bind("touchend",b.proxy(f,"_touchEnd"));e.call(f);};})(jQuery);
+  $(function() {
+	 var ht,w,ratio,i=0,start=0,thisColor,dragW;
+	var pixArr = new Array("blonde.jpg","beyonce.jpg","fingers.jpg","justinB2.jpg","britney.jpg","david.jpg","green-eyes.jpg","fannwong.jpg","hayden2.jpg","alicia_keys.jpg","smile.jpg","jessicaAlba8.jpg","jessicaSimpson_opt2.jpg","lindsayLohan.jpg","perfect-skin.jpg","tom-cruise.jpg");	
+	var setUpDraggable = function() {		 
+		 pixht = $("#pix&gt;img").height();
+		 w = $("#pix&gt;img").width();
+		 mytop = $("#pix&gt;img").position().top;
+		 left = $("#pix&gt;img").position().left;
+		 $("#draggable").show();
+		 $("#draggable").css("top",mytop+"px");
+		 $("#draggable").css("left",(left-18)+"px");
+		 $("#draggable").css("height",(pixht+10)+"px");
+		 $("#draggable").css("width",(w+15)+"px");
+		 $("#goBack").css("z-index","999");
+		 $("#goForward").css("z-index","999");
+		 $("#draggable svg").attr("width",(w+15)+"px");
+		 $("#draggable svg").attr("height",(pixht+10)+"px");
+		 $("#draggable").find("path").attr("style","stroke:#ff00ff;fill:none;stroke-width:3");
+	 }
+	$("#pix&gt;img").attr("src","beautyMath/"+pixArr[0]);
+	var pixWidth = function() {
+		wid = $("#pix&gt;img").width();
+		$("#pix").css("width",(wid+10)+"px");
+		$("#err").remove();
+	}
+	pixWidth();
+	
+	
+	$("#draggable").draggable({ containment: "#interWrap" });
+	$("#draggable").resizable({
+		 containment: "#dummyWrap",
+		 resize: function( event, ui ) {
+			ht = $("#draggable").height();
+			dragW = $("#draggable").width();			;
+			$("#draggable svg").attr("width",dragW+"px");
+			$("#draggable svg").attr("height",ht+"px");	
+		 }
+	 });	 
+	 $(".ui-icon-gripsmall-diagonal-se").css("backgroundPosition","-64px -224px");
+
+	 $("#goForward svg").click( function(){
+			if(i&lt;pixArr.length-1 ) {
+				i++;
+			} else {
+				i=0;
+			}
+			$("#pix&gt;img").attr("src","beautyMath/"+pixArr[i]);			
+			$("#pix&gt;img").removeAttr("width")
+			$("#pix&gt;img").removeAttr("height");
+			$("#draggable").hide();
+			$("#chooseColor").css("visibility","hidden");
+			pixWidth();
+	 });
+	 $("#goBack svg").hover( function(){
+		$("path",this).attr("style", "fill:#fe7777;stroke:#fe7777");
+	 }, function() {
+		$("path",this).attr("style", "fill:#165a71;stroke:#165a71");
+	 })
+	 $("#goForward svg").hover( function(){
+		$("path",this).attr("style", "fill:#fe7777;stroke:#fe7777");
+	 }, function() {
+		$("path",this).attr("style", "fill:#165a71;stroke:#165a71");
+	 })	 
+	 $("#goBack svg").click( function(){
+			if(i&gt;0) {
+				i--;
+			} else {
+				i=pixArr.length-1;
+			}
+			$("#pix&gt;img").attr("src","beautyMath/"+pixArr[i]);
+			$("#pix&gt;img").removeAttr("width")
+			$("#pix&gt;img").removeAttr("height");			
+			$("#draggable").hide();
+			$("#chooseColor").css("visibility","hidden");
+			pixWidth();
+	 });
+	 $("#choose img").click( function(){
+			setUpDraggable();
+			$("#hiddenP").css("visibility","visible");
+			$("#chooseColor").css("visibility","visible");
+			$("#choose").css("z-index","999");
+	 });
+	 $("#chooseNon").click( function(){
+		$("#smilingsvg").hide();
+		$("#nonsmilingsvg").show();
+	 });
+	 $("#chooseSmile").click( function(){
+		$("#nonsmilingsvg").hide();
+		$("#smilingsvg").show();
+	 });
+	 $("#chooseColor svg").click( function(){
+		thisColor = $("rect",this).css("fill");
+		$("#draggable").find("path").attr("style","stroke:"+thisColor+";fill:none;stroke-width:3");
+	 });
+	 $("#useMyPic").click( function(){
+			$("#pix&gt;img").attr("src","");	 
+			var myPicUrl = $("#ownPicUrl").val();
+			$("#pix&gt;img").attr("src",myPicUrl).load(function() {
+				$("#pix&gt;img").css("max-width","650px")
+				pixWidth();
+			})
+			.error(function(){
+				if($("#err").length == 0) {
+					$("#pix").append("&lt;div id=\"err\"&gt;&lt;h3&gt;Oh, oh!&lt;/h3&gt;&lt;p&gt;Sorry, but that image does not exist. Check the URL again.&lt;/p&gt;&lt;p&gt;Remember to include the \"http://\" at the front.&lt;/p&gt;&lt;/div&gt;");
+				}
+			});
+	 });
+	 $("#ownPicUrl").focus(function(){
+			$(this).select();
+		});
+})
+  </script>
+ </body>
+</html>

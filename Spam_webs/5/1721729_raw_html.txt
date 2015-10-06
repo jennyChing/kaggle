@@ -1,0 +1,2932 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <title>
+   Getting Acquainted with Initial | CSS-Tricks
+  </title>
+  <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700" rel="stylesheet"/>
+  <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+  <meta content="#00aba9" name="msapplication-TileColor"/>
+  <meta content="/mstile-144x144.png" name="msapplication-TileImage"/>
+  <link href="/opensearch.xml" rel="search" title="CSS-Tricks Search" type="application/opensearchdescription+xml"/>
+  <link href="http://feeds.feedburner.com/CssTricks" rel="alternate" title="RSS 2.0" type="application/rss+xml"/>
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v2.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+  <meta content="If someone walked up to me the other day and asked me what the difference between inherit and initial is, I may have replied: &quot;What, there's a difference?&quot;" name="description"/>
+  <link href="https://css-tricks.com/getting-acquainted-with-initial/" rel="canonical"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Getting Acquainted with Initial | CSS-Tricks" property="og:title"/>
+  <meta content="If someone walked up to me the other day and asked me what the difference between inherit and initial is, I may have replied: &quot;What, there's a difference?&quot;" property="og:description"/>
+  <meta content="https://css-tricks.com/getting-acquainted-with-initial/" property="og:url"/>
+  <meta content="CSS-Tricks" property="og:site_name"/>
+  <meta content="https://www.facebook.com/CSSTricks" property="article:publisher"/>
+  <meta content="Article" property="article:section"/>
+  <meta content="2015-05-29T08:54:05+00:00" property="article:published_time"/>
+  <meta content="2015-06-04T10:02:04+00:00" property="article:modified_time"/>
+  <meta content="2015-06-04T10:02:04+00:00" property="og:updated_time"/>
+  <meta content="https://cdn.css-tricks.com/wp-content/uploads/2015/05/initial-diagram-inherit.jpg" property="og:image"/>
+  <meta content="https://cdn.css-tricks.com/wp-content/uploads/2015/05/initial-diagram.jpg" property="og:image"/>
+  <meta content="summary" name="twitter:card"/>
+  <meta content="If someone walked up to me the other day and asked me what the difference between inherit and initial is, I may have replied: &quot;What, there's a difference?&quot;" name="twitter:description"/>
+  <meta content="Getting Acquainted with Initial | CSS-Tricks" name="twitter:title"/>
+  <meta content="@Real_CSS_Tricks" name="twitter:site"/>
+  <meta content="CSS-Tricks" name="twitter:domain"/>
+  <meta content="https://cdn.css-tricks.com/wp-content/uploads/2015/05/initial-diagram-inherit.jpg" name="twitter:image:src"/>
+  <meta content="@geoffreygraham" name="twitter:creator"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="https://css-tricks.com/getting-acquainted-with-initial/feed/" rel="alternate" title="CSS-Tricks  Getting Acquainted with Initial Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"https:\/\/css-tricks.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <script>
+   var markdownify = {"ajax_url":"\/wp-admin\/admin-ajax.php","nonce":"2396d0fc4b"};
+  </script>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js" type="text/javascript">
+  </script>
+  <script src="https://cdn.css-tricks.com/wp-content/uploads/minqueue-cache/minqueue-3297a9ae-5c1f8046.js" type="text/javascript">
+  </script>
+  <link href="https://css-tricks.com/?p=202614" rel="shortlink"/>
+  <!-- Better Art Direction Styles -->
+  <script>
+   var markdownify = {"ajax_url":"\/wp-admin\/admin-ajax.php","nonce":"2396d0fc4b"};
+  </script>
+  <!--[if !IE]&gt;&lt;!-->
+  <link href="https://cdn.css-tricks.com/wp-content/themes/CSS-Tricks-12/style.css?v=6.7" rel="stylesheet"/>
+  <!--&lt;![endif]-->
+  <!--[if lt IE 9]&gt;
+  &lt;link rel="stylesheet" href="https://cdn.css-tricks.com/wp-content/themes/CSS-Tricks-12/css/oldie.css"&gt;
+  &lt;![endif]-->
+  <!--[if IE 9]&gt;
+  &lt;link rel="stylesheet" href="https://cdn.css-tricks.com/wp-content/themes/CSS-Tricks-12/style.css?v=6.7&gt;
+  &lt;![endif]-->
+ </head>
+ <body class="single single-post postid-202614 single-format-standard">
+  <script>
+   (function(){
+    var bsa = document.createElement('script');
+       bsa.async = true;
+       bsa.src = "//s3.buysellads.com/ac/bsa.js";
+    (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
+  })();
+  </script>
+  <div class="page-wrap">
+   <header class="top" id="top">
+    <div class="top-bar">
+     <a href="/">
+      <svg class="logo" viewbox="0 0 666 83" xmlns="http://www.w3.org/2000/svg">
+       <path d="M64.6 60c-1.7 0-3.2.6-4.2 1.5-8.5 7.3-20.6 10-31 5-9.7-4.7-15-15-15-25.5v-.2c0-10 5-20 14.2-25 10-5.4 22.3-3 30.8 4.2C66.2 25.7 75 14.8 68 9.2 55-1 36.2-3 21.6 4.5 8 11.5 0 26 0 41v.2c0 15.6 8.5 30.3 22.7 37 15.2 7 33.7 4.2 46-7 1.4-1 2.4-2.7 2.4-4.8.2-3.5-3-6.5-6.4-6.5zm52-25.4c-15.4-3.6-19-6.3-19-12.3V22c0-5.6 5.2-8.6 10.2-9.3 7.4-1 14.8 2 21 6 7.2 4.5 14.7-7.2 7-11-10-6.7-23.6-9.5-35.2-6-9.7 3-17 11.2-17 21.6v.2C83.7 38.2 93.4 43 110 47c14.6 3.5 18 6.6 18 12.2v.3c0 7-7.8 10-13.7 10-8.4 0-16.2-3-22.7-8.2-6.5-5.4-15 5.4-8 10.6 11 8.2 26.2 12.2 39.8 8.6 10.6-2.8 18.2-11 18.2-22.4V58c.2-13.2-8.4-19.3-25-23.4zm70 0c-15.5-3.6-19-6.3-19-12.5 0-5.7 5.3-8.8 10.3-9.4 7.3-1 14.7 2 20.8 6 7.3 4.4 14.8-7.3 7.2-11-10-6.7-23.7-9.5-35.3-6C161 4.7 154 13 154 23.2v.4C154 38 163.3 43 180 47c15 3.4 18 6.5 18 12v.4c0 7-7.6 9.8-13.6 10-8.4 0-16.2-3-22.7-8.2-6.5-5.4-15 5.4-8 10.5 11 8.3 26.2 12.4 39.8 8.8 10.6-2.8 18.2-11 18.2-22.4V58c.2-13-8.5-19-25.2-23.2zm64 4.5h-21.2c-8.4 0-8.5 13.5 0 13.5h21.3c8.5 0 8.4-13.4 0-13.4zm64-37.5h-52.4c-8.3 0-8.4 13 0 13h19.2v59.8c0 8.8 14 9 14 0v-60h19.3c8.2 0 8.2-12.8 0-12.8zm54.6 0H341c-4 0-7 3-7 7v65.8c0 8.8 14 9 14 0V53h17.5l19.2 24.6c2.3 3.2 6.6 5 10.2 2.7 4-2.5 3.6-7.5.8-10.8l-15.2-19c10.7-3.4 18-11 18-23.7v-.3c0-7-2.4-12.8-6.6-17-5-5-12.8-8-22.8-8zm15.4 26c0 8-6.4 13.2-16.3 13.2H348V14h20c10.4 0 16.6 4.8 16.6 13.2v.3zM422.4 1c-4 0-7 3-7 6.8v66.5c0 8.8 13.8 9 13.8 0V7.8c0-4-3-7-6.8-7zm88 59c-1.6 0-3.2.6-4.2 1.5-8.5 7.3-20.6 10-31 5-9.6-4.7-15-15-15-25.5v-.2c0-10 5-20 14.2-25 10-5.4 22.3-3 31 4.2 6.6 5.7 15.3-5.2 8.3-10.8C500.7-1 482-3 467.3 4.6c-13.5 7-21.5 21.3-21.5 36.4v.2c0 15.6 8.5 30.3 22.7 37 15.2 7 33.7 4.2 46.2-7 1.2-1 2.2-2.7 2.2-4.8 0-3.5-3-6.5-6.5-6.5zM568.2 36l24.6-23.8c3-2.7 3.6-7.4.3-10-3-2.7-7.6-1.8-10 1l-37.6 37.8V7.8c0-9-14-9-14 0v66.5c0 8.8 14 9 14 0V57.8l13-12.5 25.4 32.5c5.7 8 17.2-.6 11-8.5l-26.7-33zm72.8-1.6C625.5 31 622 28.3 622 22c0-5.7 5.3-8.8 10.3-9.4 7.4-1 14.8 2 21 6 7.2 4.4 14.7-7.3 7-11C650.4 1 636.7-2 625 1.7c-9.7 3-17 11-17 21.5v.2c0 14.7 9.7 19.6 26.4 23.6 14.7 3.5 17.8 6.6 17.8 12.2v.3c0 7-7.6 10-13.6 10-8.4 0-16-3-22.6-8.2-6.5-5.4-15 5.4-8 10.6 11 8.2 26.2 12.2 39.8 8.6 10.6-2.8 18.2-11 18.2-22.4V58c.3-13.2-8.4-19.3-25.2-23.4z">
+       </path>
+      </svg>
+     </a>
+    </div>
+    <a class="top-treehouse-ad group" href="http://teamtreehouse.com/join/think?utm_source=css-tricks&amp;utm_medium=display&amp;utm_content=leaderboard&amp;cid=1148">
+     <svg class="treehouse-logo" enable-background="new 0 0 606.777 133.209" height="133.209px" version="1.1" viewbox="0 0 606.777 133.209" width="606.777px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+      <g class="treehouse-logo-letter">
+       <path d="M169.271,99.972c-11.407,0-16.559-7.819-16.559-18.123V45.511c0-3.588,2.668-6.44,6.164-6.44
+    c3.404,0,6.164,2.852,6.164,6.44v6.255h11.499c3.036,0,5.704,2.3,5.704,5.52c0,3.036-2.668,5.335-5.704,5.335H165.04v18.951
+    c0,4.416,1.932,6.809,5.979,6.809c2.024,0,4.048-0.553,5.704-1.012c4.692-1.104,7.636,1.84,7.636,5.243
+    c0,2.024-1.012,4.14-3.864,5.428C177.275,99.512,172.768,99.972,169.271,99.972z" fill="#FFFFFF">
+       </path>
+       <path d="M222.813,56.458c0,2.484-1.932,5.796-5.796,5.796c-2.116,0-4.14-0.92-6.899-0.828
+    c-3.036,0.092-4.784,1.748-4.784,5.979V93.44c0,3.496-2.667,6.256-6.164,6.256c-3.404,0-6.164-2.76-6.164-6.256V65.106
+    c0-9.567,5.612-15.731,16.191-15.731c3.036,0,6.071,0.276,7.911,0.736C220.881,51.123,222.813,53.423,222.813,56.458z" fill="#FFFFFF">
+       </path>
+       <path d="M270.653,72.742c0,3.588-1.84,6.163-6.348,6.163h-24.471v0.92c0,5.797,4.416,8.924,10.58,8.924
+    c3.312,0,6.715-0.828,9.843-2.023c4.876-1.84,8.096,1.472,8.096,4.875c0,1.748-0.644,3.681-3.128,5.152
+    c-3.404,2.023-9.292,3.22-15.179,3.22c-12.695,0-21.251-8.003-22.171-19.503c-0.276-3.588-0.184-8.647,0-11.5
+    c1.104-11.958,9.66-19.594,21.711-19.594c12.511,0,21.067,8.372,21.067,21.342V72.742z M257.774,70.534
+    c0.644,0,1.012-0.367,1.012-1.104c0.276-5.612-3.22-9.384-9.2-9.384c-6.532,0-9.751,4.14-9.751,10.487H257.774z" fill="#FFFFFF">
+       </path>
+       <path d="M322.633,72.742c0,3.588-1.84,6.163-6.348,6.163h-24.471v0.92c0,5.797,4.416,8.924,10.58,8.924
+    c3.312,0,6.715-0.828,9.843-2.023c4.876-1.84,8.096,1.472,8.096,4.875c0,1.748-0.644,3.681-3.128,5.152
+    c-3.404,2.023-9.292,3.22-15.179,3.22c-12.695,0-21.251-8.003-22.171-19.503c-0.276-3.588-0.184-8.647,0-11.5
+    c1.104-11.958,9.66-19.594,21.711-19.594c12.511,0,21.067,8.372,21.067,21.342V72.742z M309.753,70.534
+    c0.644,0,1.012-0.367,1.012-1.104c0.276-5.612-3.22-9.384-9.2-9.384c-6.532,0-9.751,4.14-9.751,10.487H309.753z" fill="#FFFFFF">
+       </path>
+       <path d="M345.542,52.963c2.024-1.84,6.716-3.588,11.591-3.588c11.684,0,18.584,6.992,18.584,20.147v23.643
+    c0,3.68-2.576,6.531-6.256,6.531c-3.404,0-6.072-2.852-6.072-6.531V70.167c0-5.612-3.22-8.74-8.279-8.74
+    c-3.863,0-7.636,1.748-9.567,3.864v28.058c0,3.496-2.576,6.348-6.071,6.348c-3.404,0-6.256-2.852-6.256-6.348V39.531
+    c0-3.588,2.668-6.348,6.163-6.348c3.404,0,6.164,2.76,6.164,6.348V52.963z" fill="#FFFFFF">
+       </path>
+       <path d="M408.562,99.972c-12.052,0-21.159-7.728-22.079-18.675c-0.275-3.68-0.275-9.476,0-13.155
+    c0.92-11.04,10.027-18.767,22.079-18.767c12.144,0,21.067,7.728,21.987,18.767c0.275,3.68,0.275,9.384,0,13.063
+    C429.629,92.245,420.705,99.972,408.562,99.972z M418.312,70.074c-0.275-5.244-3.955-8.923-9.751-8.923s-9.384,3.68-9.844,8.923
+    c-0.185,2.483-0.185,6.808,0,9.2c0.46,5.243,4.048,8.923,9.844,8.923s9.384-3.68,9.751-8.923
+    C418.497,76.881,418.497,72.557,418.312,70.074z" fill="#FFFFFF">
+       </path>
+       <path d="M441.312,56.183c0-3.68,2.209-6.532,6.072-6.532c3.496,0,6.256,2.852,6.256,6.532v23.458
+    c0,5.52,3.588,8.556,8.832,8.556c4.047,0,7.083-1.196,9.016-2.392V55.999c0-3.496,2.575-6.348,6.163-6.348
+    c3.403,0,6.163,2.852,6.163,6.348v34.406c0,2.115-0.551,3.312-2.207,4.324c-2.852,2.023-9.568,5.243-19.411,5.243
+    c-13.247,0-20.884-7.175-20.884-20.147V56.183z" fill="#FFFFFF">
+       </path>
+       <path d="M532.391,83.965c0,10.303-8.556,16.007-19.227,16.007c-8.648,0-14.168-2.483-17.572-5.335
+    c-2.207-1.84-2.852-5.336-1.104-7.637c1.84-2.483,4.968-3.035,8.004-1.104c2.852,1.84,6.623,3.035,10.947,3.035
+    c4.783,0,6.992-1.747,6.992-4.23c0-2.024-1.473-3.404-5.336-4.324c-3.312-0.736-3.221-0.645-6.809-1.564
+    c-7.543-1.932-13.431-6.163-13.431-14.075c0-9.936,8.003-15.363,18.767-15.363c5.796,0,11.775,1.472,14.996,4.14
+    c2.668,2.208,2.483,5.979,0.551,8.188c-1.84,2.024-4.967,2.3-8.003,0.736c-2.392-1.196-5.612-2.024-8.003-2.024
+    c-4.601,0-6.532,1.748-6.532,3.956c0,1.932,1.38,3.22,5.52,4.14l6.532,1.472C527.883,72.19,532.391,76.698,532.391,83.965z" fill="#FFFFFF">
+       </path>
+       <path d="M583.45,72.742c0,3.588-1.84,6.163-6.348,6.163h-24.471v0.92c0,5.797,4.415,8.924,10.579,8.924
+    c3.312,0,6.716-0.828,9.844-2.023c4.876-1.84,8.096,1.472,8.096,4.875c0,1.748-0.645,3.681-3.128,5.152
+    c-3.403,2.023-9.292,3.22-15.179,3.22c-12.695,0-21.252-8.003-22.172-19.503c-0.275-3.588-0.184-8.647,0-11.5
+    c1.104-11.958,9.66-19.594,21.711-19.594c12.512,0,21.067,8.372,21.067,21.342V72.742z M570.57,70.534
+    c0.645,0,1.013-0.367,1.013-1.104c0.276-5.612-3.22-9.384-9.2-9.384c-6.531,0-9.751,4.14-9.751,10.487H570.57z" fill="#FFFFFF">
+       </path>
+      </g>
+      <g class="treehouse-logo-letter">
+       <path d="M593.32,56.023c0,0.63-0.48,1.11-1.11,1.11c-0.659,0-1.14-0.51-1.14-1.11v-5.16h-1.68
+    c-0.57,0-1.051-0.48-1.051-1.05c0-0.63,0.48-1.08,1.051-1.08h5.549c0.57,0,1.051,0.45,1.051,1.08c0,0.57-0.48,1.05-1.051,1.05
+    h-1.619V56.023z M600.1,49.963l0.96,4.2l0.99-4.2c0.18-0.84,0.899-1.35,1.649-1.35c0.871,0,1.561,0.51,1.74,1.56l0.87,5.52
+    c0.12,0.66-0.12,1.32-0.78,1.44c-0.779,0.15-1.289-0.3-1.38-0.96l-0.6-4.65l-1.08,4.35c-0.21,0.75-0.66,1.26-1.41,1.26
+    c-0.69,0-1.17-0.45-1.409-1.26l-1.08-4.38l-0.601,4.68c-0.09,0.66-0.6,1.11-1.38,0.96c-0.66-0.12-0.9-0.78-0.779-1.44l0.869-5.49
+    c0.18-1.08,0.9-1.59,1.74-1.59C599.199,48.613,599.92,49.123,600.1,49.963z" fill="#FFFFFF">
+       </path>
+      </g>
+      <path class="treehouse-logo-shape" d="M108.197,24.309c-4.414-2.496-11.464,1.518-15.745,8.964L84.7,46.756
+  c-2.832,5.606-2.443,12.281,1.149,17.434l0.226,0.324c3.592,5.153,8.408,9.917,10.002,11.614c0.936,1,1.653,2.232,2.048,3.643
+  c1.309,4.682-1.424,9.537-6.104,10.848c-4.682,1.309-9.539-1.424-10.848-6.105c-0.329-1.174-0.402-2.36-0.254-3.499
+  c0.251-1.934-0.369-5.083-3.143-8.177c-2.773-3.092-8.441,2.749-10.272,8.756l-0.086,0.275c-1.833,6.007-2.99,11.25-2.644,11.754
+  c0.207,0.301,0.397,0.617,0.573,0.946c2.571,4.839,0.734,10.845-4.104,13.417s-10.846,0.734-13.417-4.104
+  c-2.572-4.84-0.734-10.845,4.104-13.417c0.216-0.115,0.437-0.222,0.658-0.32c0.37-0.162,1.417-2.688,2.327-5.67
+  c0.911-2.983,1.648-5.4,1.648-5.4c0.098-0.317,0.182-0.632,0.259-0.943l4.896-17.482l-5.237,10.75
+  c-0.622-2.041-1.647-2.113-3.895-0.506c-1.355,0.969-3.596,2.879-4.691,3.662c-2.055,1.471-3.775,4.327-4.686,6.078
+  c-0.535,1.029-1.286,1.971-2.245,2.746c-3.749,3.043-9.255,2.469-12.296-1.279c-3.042-3.748-2.469-9.254,1.28-12.295
+  c1.099-0.893,2.349-1.475,3.644-1.756c2.203-0.478,9.693-5.054,14.207-8.283c0.808-0.579,1.486-1.125,2.037-1.632l12.05-9.152
+  l-10.494,5.672c0,0-1.068-0.108-2.377,0.037c-3.841,0.426-7.798,0.967-8.545,1.918c-0.441,0.562-0.967,1.073-1.577,1.51
+  c-3.502,2.523-8.388,1.729-10.911-1.775c-2.524-3.503-1.729-8.39,1.774-10.911c1.446-1.042,3.125-1.517,4.777-1.471
+  c2.808,0.077,10.201,1.576,16.384,0.48l1.589-0.281c6.185-1.096,13.588-6.48,16.54-12.026c0,0,2.888-5.073,6.452-11.333
+  c3.564-6.258,3.3-13.115-0.587-15.313l-7.041-3.98c-3.551-2.008-9.365-2.011-12.92-0.006L6.462,28.835
+  C2.908,30.838,0,35.817,0,39.897v53.416c0,4.08,2.908,9.059,6.462,11.062l48.486,27.335c3.555,2.004,9.369,2,12.92-0.008
+  l48.321-27.318c3.553-2.009,6.458-6.99,6.458-11.07V39.897c0-4.08-2.906-9.063-6.458-11.07
+  C116.189,28.827,112.61,26.804,108.197,24.309z" fill="#4CA454">
+      </path>
+     </svg>
+     <div class="treehouse-slogan">
+      <span class="treehouse-name">
+       Treehouse:
+      </span>
+      <span class="dreams">
+       Grow your CSS skills.
+      </span>
+      <strong class="love">
+       Land your dream job.
+      </strong>
+     </div>
+    </a>
+    <div class="second-bar">
+     <nav class="main-nav" id="main-nav">
+      <a class="home" href="/">
+       Blog
+      </a>
+      <a class="videos" href="/video-screencasts/">
+       Videos
+      </a>
+      <a class="almanac" href="/almanac/">
+       Almanac
+      </a>
+      <a class="snippets" href="/snippets/">
+       Snippets
+      </a>
+      <a class="forums" href="/forums/">
+       Forums
+      </a>
+      <a class="jobs" href="/jobs/">
+       Jobs
+      </a>
+      <a class="lodge" href="/lodge/">
+       Lodge
+      </a>
+     </nav>
+     <section class="search" role="search">
+      <form action="/search-results/" id="search-form">
+       <div class="flexy-search">
+        <label for="q" id="search-label">
+         <span class="screen-reader">
+          Search
+         </span>
+         <svg class="shape-search" viewbox="0 0 100 100">
+          <use xlink:href="#shape-search">
+          </use>
+         </svg>
+        </label>
+        <!-- type="text" here because of bug with youtube embeds UGHSKDGHK. -->
+        <input aria-labelledby="search-label" class="search-field" id="q" name="q" required="" type="text" value=""/>
+       </div>
+       <div>
+        <input class="screen-reader" type="submit" value="Search"/>
+       </div>
+      </form>
+     </section>
+    </div>
+   </header>
+   <div class="content-wrap">
+    <div class="grid group is-relative">
+     <section class="blog-posts grid-2-3 no-relative">
+      <article class="instapaper_body h-entry" id="post-202614" role="main">
+       <header class="article-header">
+        <h1 class="p-name">
+         Getting Acquainted with Initial
+        </h1>
+        <p class="time">
+         <a href="https://css-tricks.com/author/geoffreygrahamgmail-com/">
+          <img alt="" class="avatar avatar-200 photo" height="200" src="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=200&amp;d=mm&amp;r=pg" srcset="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=400&amp;d=mm&amp;r=pg 2x" width="200"/>
+          <span class="p-author">
+           Geoff Graham
+          </span>
+         </a>
+         //
+         <time class="dt-published" datetime="2015-05-29">
+          May 29, 2015
+         </time>
+        </p>
+       </header>
+       <div class="module e-content">
+        <div class="google-ad">
+         <div class="bsarocks bsap_3469a2a501a9e18091036aa0c89f9dcb" id="bsap_1279518">
+         </div>
+        </div>
+        <p>
+         If someone walked up to me the other day and asked me what the difference between
+         <code>
+          inherit
+         </code>
+         and
+         <code>
+          initial
+         </code>
+         is, I may have replied:
+        </p>
+        <p>
+         "What, there's a difference?"
+        </p>
+        <p>
+         <span id="more-202614">
+         </span>
+        </p>
+        <p>
+         I've been writing CSS for more than ten years, but I've somehow escaped understanding what exactly
+         <code>
+          initial
+         </code>
+         is or does. Call it ignorance, laziness, or luck, but
+         <code>
+          inherit
+         </code>
+         has gotten me by and I never thought to look up when
+         <code>
+          initial
+         </code>
+         might be used instead. So, this post is gonna share some of the things I learned.
+        </p>
+        <h3>
+         What
+         <code>
+          initial
+         </code>
+         means
+        </h3>
+        <p>
+         First off, the spec helps us understand the difference between an initial
+         <em>
+          keyword
+         </em>
+         and an initial
+         <em>
+          value
+         </em>
+         .
+        </p>
+        <ul>
+         <li>
+          <strong>
+           <a href="http://dev.w3.org/csswg/css-cascade/#initial">
+            Initial keyword
+           </a>
+           :
+          </strong>
+          If the cascaded value of a property is the initial keyword, the propertys initial value becomes its specified value.
+         </li>
+         <li>
+          <strong>
+           <a href="http://dev.w3.org/csswg/css-cascade/#initial-value">
+            Initial value
+           </a>
+           :
+          </strong>
+          Each property has an initial value, defined in the propertys definition table. If the property is not an inherited property, and the cascade does not result in a value, then the specified value of the property is its initial value.
+         </li>
+        </ul>
+        <p>
+         Umm, okay. I ran those definitions through Google Translate (joking!) and came out with this:
+        </p>
+        <blockquote>
+         <p>
+          The initial keyword is what is declared as the property where the initial value is the resulting output, as defined by the browser default.
+         </p>
+        </blockquote>
+        <p>
+         So, if the
+         <code>
+          initial
+         </code>
+         keyword is used here:
+        </p>
+        <pre rel="CSS">
+         <code>
+          .module {
+  color: initial;
+}
+         </code>
+        </pre>
+        <p>
+         ...then the
+         <code>
+          initial
+         </code>
+         value might return as
+         <code>
+          black
+         </code>
+         , if
+         <code>
+          black
+         </code>
+         is the browser default for that element's property.
+        </p>
+        <h3>
+         How it is different from
+         <code>
+          inherit
+         </code>
+        </h3>
+        <p>
+         If you're thinking this
+         <a href="http://www.w3.org/TR/CSS2/cascade.html#value-def-inherit">
+          sounds a lot like
+         </a>
+         <code>
+          inherit
+         </code>
+         , then you're absolutely right. It does sounds a heck of lot like that.
+        </p>
+        <p>
+         But
+         <code>
+          initial
+         </code>
+         and
+         <code>
+          inherit
+         </code>
+         are distinct in the extra step that
+         <code>
+          inherit
+         </code>
+         takes to check whether there are other properties it can use in the cascade before it moves to the initial value.
+        </p>
+        <figure class="align-none media-202641" id="post-202641">
+         <img alt="" src="https://cdn.css-tricks.com/wp-content/uploads/2015/05/initial-diagram-inherit.jpg"/>
+         <br/>
+         <figcaption>
+          H1 is looking to inherit a color value, which it finds in the body element.
+         </figcaption>
+        </figure>
+        <figure class="align-none media-202641" id="post-202641">
+         <img alt="" src="https://cdn.css-tricks.com/wp-content/uploads/2015/05/initial-diagram.jpg"/>
+         <br/>
+         <figcaption>
+          H1 is told to use its initial value, so it skips over the body element and goes to its roots.
+         </figcaption>
+        </figure>
+        <h3>
+         An example of the difference
+        </h3>
+        <p class="codepen" data-default-tab="result" data-height="320" data-slug-hash="wazyoV" data-theme-id="0" data-user="css-tricks">
+         See the Pen
+         <a href="http://codepen.io/team/css-tricks/pen/wazyoV/">
+          CSS Initial vs. Inherit
+         </a>
+         by CSS-Tricks (
+         <a href="http://codepen.io/css-tricks">
+          @css-tricks
+         </a>
+         ) on
+         <a href="http://codepen.io">
+          CodePen
+         </a>
+         .
+        </p>
+        <p>
+         See that? The properties in the left box are all set to inherit the values of the
+         <code>
+          .module
+         </code>
+         class since it the parent element. On the flip side, the properties in the right box are set to
+         <code>
+          initial
+         </code>
+         , which resets the element's properties to the browser defaults.
+        </p>
+        <h3>
+         When to use
+         <code>
+          initial
+         </code>
+        </h3>
+        <p>
+         I like to think of
+         <code>
+          initial
+         </code>
+         as a hard reset. It's easy for styles to get convoluted as CSS grows, and using
+         <code>
+          initial
+         </code>
+         is a way to clear things out so an element can go back to its natural state of being. If
+         <code>
+          initial
+         </code>
+         were old-school Nintendo, I would use it as the equivalent to pulling out a buggy game cartridge from the console and
+         <a href="https://www.youtube.com/watch?v=O3QPRDtWsgw" rel="nofollow">
+          blowing into it
+         </a>
+         (even though doing so
+         <a href="http://mentalfloss.com/article/12589/did-blowing-nintendo-cartridges-really-help" rel="nofollow">
+          supposedly had no effect
+         </a>
+         ).
+        </p>
+        <p>
+         But that doesn't mean
+         <code>
+          initial
+         </code>
+         is a silver bullet for resets. That's because initial values are still subject to browser defaults, which we know can
+         <a href="https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/">
+          vary from browser to browser
+         </a>
+         .
+        </p>
+        <p>
+         Oh wait, you use
+         <a href="http://meyerweb.com/eric/tools/css/reset/">
+          CSS resets
+         </a>
+         ? You can expect those to be used as initial values instead.
+        </p>
+        <p>
+         Bottom line: I would use
+         <code>
+          initial
+         </code>
+         to completely wipe out any inherited styles from an element and use
+         <code>
+          inherit
+         </code>
+         to make sure the element takes its cues from the nearest parent.
+        </p>
+        <h3>
+         A more practical use case
+        </h3>
+        <p>
+         Here's an example of how
+         <code>
+          initial
+         </code>
+         can be used to create alternating colored lines in tables.
+        </p>
+        <p class="codepen" data-default-tab="result" data-height="313" data-slug-hash="rVLmdd" data-theme-id="0" data-user="css-tricks">
+         See the Pen
+         <a href="http://codepen.io/team/css-tricks/pen/rVLmdd/">
+          CSS Initial
+         </a>
+         by CSS-Tricks (
+         <a href="http://codepen.io/css-tricks">
+          @css-tricks
+         </a>
+         ) on
+         <a href="http://codepen.io">
+          CodePen
+         </a>
+         .
+        </p>
+        <h3>
+         Browser Support
+        </h3>
+        <p>
+         <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/initial">
+          MDN has a nice breakdown
+         </a>
+         of the current support for
+         <code>
+          initial
+         </code>
+         . Note the glaring lack of IE support.
+        </p>
+        <table class="browser-support-table">
+         <thead>
+          <tr>
+           <th class="chrome">
+            <span>
+             Chrome
+            </span>
+           </th>
+           <th class="safari">
+            <span>
+             Safari
+            </span>
+           </th>
+           <th class="firefox">
+            <span>
+             Firefox
+            </span>
+           </th>
+           <th class="opera">
+            <span>
+             Opera
+            </span>
+           </th>
+           <th class="ie">
+            <span>
+             IE
+            </span>
+           </th>
+           <th class="android">
+            <span>
+             Android
+            </span>
+           </th>
+           <th class="iOS">
+            <span>
+             iOS
+            </span>
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td class="yep" data-browser-name="Chrome">
+            Yes
+           </td>
+           <td class="yep" data-browser-name="Safari">
+            Yes
+           </td>
+           <td class="yep" data-browser-name="Firefox">
+            19
+           </td>
+           <td class="yep" data-browser-name="Opera">
+            15
+           </td>
+           <td class="nope" data-browser-name="IE">
+            No
+           </td>
+           <td class="yep" data-browser-name="Android">
+            Yes
+           </td>
+           <td class="yep" data-browser-name="iOS">
+            Yes
+           </td>
+          </tr>
+         </tbody>
+        </table>
+        <h3>
+         Wrapping Up
+        </h3>
+        <p>
+         I've been racking my brain for some interesting use cases for
+         <code>
+          initial
+         </code>
+         . While I see a lot of potential usefulness in being able to use default styles on an element, I just haven't come across them in a practical applicationthough that could say a lot more about me than the property value itself.
+        </p>
+        <p>
+         Where this will come in real handy is when
+         <code>
+          all
+         </code>
+         gains more support
+         <a href="https://css-tricks.com/almanac/properties/a/all/">
+          as a property
+         </a>
+         . That would make declaring
+         <code>
+          all: initial
+         </code>
+         a real powerful tool for creating resets on any element.
+        </p>
+        <p>
+         Please share any situations where
+         <code>
+          initial
+         </code>
+         was something you had to use in a project. Bonus points if you've used it for any tricky feats.
+        </p>
+        <h5 class="share-on-title">
+         Share On
+        </h5>
+        <a class="share-on-link share-on-twitter" href="https://twitter.com/intent/tweet?text=Getting Acquainted with Initial&amp;url=https://css-tricks.com/getting-acquainted-with-initial/&amp;via=real_css_tricks">
+         Twitter
+        </a>
+        <a class="share-on-link share-on-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://css-tricks.com/getting-acquainted-with-initial/">
+         Facebook
+        </a>
+        <a class="share-on-link share-on-googleplus" href="https://plus.google.com/share?url=https://css-tricks.com/getting-acquainted-with-initial/">
+         Google+
+        </a>
+       </div>
+      </article>
+      <div class="bsap-doubles">
+       <div class="bsarocks bsap_3469a2a501a9e18091036aa0c89f9dcb" id="bsap_1250418">
+       </div>
+      </div>
+      <section id="comments">
+       <h1 class="h2 comments-title">
+        Comments
+       </h1>
+       <ol class="commentlist group">
+        <li class="comment even thread-even depth-1 buried" id="li-comment-1594956">
+         <div class="grid group comment-wrap" id="comment-1594956">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/4bf253314feb026eb2aa727e79b0f57e?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/4bf253314feb026eb2aa727e79b0f57e?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Mnesikles
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594956">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-29T08:59:04+00:00">
+              May 29, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             Going to not gonna.
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment odd alt depth-2" id="li-comment-1594958">
+           <div class="grid group comment-wrap" id="comment-1594958">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/95e8fcde6801578d5b8ea0fa0b673497?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/95e8fcde6801578d5b8ea0fa0b673497?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               MikeChipshop
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594958">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T09:29:59+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Woowoo, thats the sound of the grammar police!
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1594968">
+           <div class="grid group comment-wrap" id="comment-1594968">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/976e52b11ec8ae14d08debc051f82594?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/976e52b11ec8ae14d08debc051f82594?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               daGo
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594968">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T12:31:48+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Oh boy, come on!
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1594957">
+         <div class="grid group comment-wrap" id="comment-1594957">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/376deae39b17fad6cfb354fb62f69f41?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/376deae39b17fad6cfb354fb62f69f41?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             MaxArt
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594957">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-29T09:18:29+00:00">
+              May 29, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             <code>
+              display: none
+             </code>
+             works for every element, and its useful when you want to hide something using a class.
+            </p>
+            <p>
+             But what if you want to display it back with the correct value for a given element, without creating multiple selectors for each element?
+            </p>
+            <p>
+             Thats right, you could use
+             <code>
+              initial
+             </code>
+             .
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment even depth-2" id="li-comment-1594959">
+           <div class="grid group comment-wrap" id="comment-1594959">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Paul d'Aoust
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594959">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T10:20:05+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               This, here, is precisely the reason I want
+               <code>
+                initial
+               </code>
+               to be supported everywhere.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment byuser comment-author-geoffreygrahamgmail-com bypostauthor odd alt depth-2" id="li-comment-1594964">
+           <div class="grid group comment-wrap" id="comment-1594964">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Geoff Graham
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594964">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T11:53:23+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               That is nice!
+              </p>
+              <p>
+               Its also worth noting that
+               <code>
+                display: initial;
+               </code>
+               seems to always return
+               <code>
+                display: inline;
+               </code>
+               so there could be some funkiness there if not used carefully.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595007">
+           <div class="grid group comment-wrap" id="comment-1595007">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/c58e7bdd366b2f3b6d6c29e9283ea67a?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/c58e7bdd366b2f3b6d6c29e9283ea67a?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Amelia BR
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595007">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-01T17:57:58+00:00">
+                June 1, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Unfortunately, as Geoff point out, this nice use case wouldnt actually work as you hope.
+              </p>
+              <p>
+               The
+               <code>
+                initial
+               </code>
+               value is defined for each
+               <em>
+                property
+               </em>
+               , (e.g., for
+               <code>
+                display
+               </code>
+               ), not for any particular tag name (e.g.,
+               <code>
+                li
+               </code>
+               ).  The association between HTML tag names and display types is applied via a browser style sheet, which is treated just as an ordinary CSS stylesheet that is run before processing any of your websites styles.  Those default styles get reset with
+               <code>
+                initial
+               </code>
+               just as much as your own code does.
+              </p>
+              <p>
+               In contrast, there are a very small number of properties, such as
+               <code>
+                font-family
+               </code>
+               , where the specs dont specify an initial value.  In that case, the browsers default
+               <em>
+                is
+               </em>
+               the initial value.  However, if the browser applies different font families for headings versus paragraphs, that is again the browser style sheet, and an
+               <code>
+                initial
+               </code>
+               value will reset them both to the same overall default (whatever that may be).
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2 buried" id="li-comment-1595052">
+           <div class="grid group comment-wrap" id="comment-1595052">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/726abb1e822a0f3011b4e41c9bf97d99?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/726abb1e822a0f3011b4e41c9bf97d99?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               sd
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595052">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-05T10:46:43+00:00">
+                June 5, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               dgdgdg
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595060">
+           <div class="grid group comment-wrap" id="comment-1595060">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Paul d'Aoust
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595060">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-05T19:31:04+00:00">
+                June 5, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @Amelia: So the one use case I had for it is the use case it doesnt work for? Ah well, theres web dev for ya. Thank you for disabusing me of my hopes and dreams :D :D :D
+              </p>
+              <p>
+               Itd be great if there were
+               <em>
+                yet another
+               </em>
+               keyword for resetting to the browser default, along the lines of
+              </p>
+              <pre>
+               <code>
+                display: default;
+               </code>
+              </pre>
+              <p>
+               to reset block-level elements to
+               <code>
+                block
+               </code>
+               , inline elements to
+               <code>
+                inline
+               </code>
+               , etc.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-even depth-1" id="li-comment-1594960">
+         <div class="grid group comment-wrap" id="comment-1594960">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/25e1563eacbf883036c299f5b096d0d2?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Paul d'Aoust
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594960">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-29T10:21:47+00:00">
+              May 29, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <blockquote>
+             <p>
+              Oh wait, you use CSS resets? You can expect those to be used as initial values instead.
+             </p>
+            </blockquote>
+            <p>
+             Is that true? My understanding was that it would still reset your styles to the
+             <em>
+              browser
+             </em>
+             default, not that which was set up in the reset stylesheet. I mean, I would love it if the latter were the case, and if it is, please, someone tell me so I can have at least one reason to be happy about CSS :)
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment byuser comment-author-geoffreygrahamgmail-com bypostauthor even depth-2" id="li-comment-1594965">
+           <div class="grid group comment-wrap" id="comment-1594965">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Geoff Graham
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594965">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T11:55:12+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               I thought the exact same thing when I first started digging in, but found that CSS resets do indeed return as the value. You can play around with the example pen by adding a CSS reset and seeing how that impacts the style.
+              </p>
+              <p>
+               <iframe allowtransparency="true" class="cp_embed_iframe" frameborder="0" height="300" id="cp_embed_wazyoV" scrolling="no" src="https://codepen.io/team/css-tricks/embed/wazyoV?height=300&amp;slug-hash=wazyoV&amp;default-tab=result&amp;host=http%3A%2F%2Fcodepen.io" style="width: 100%; overflow: hidden;">
+               </iframe>
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1594977">
+           <div class="grid group comment-wrap" id="comment-1594977">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/9e53b1cb5d4f28084c74fff1919d817c?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/9e53b1cb5d4f28084c74fff1919d817c?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Dustin Woods
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594977">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-30T13:14:29+00:00">
+                May 30, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               From what I can tell, initial will not use the values specified in reset. It may appear that it does, however, because the initial value for many properties is the same as what reset defines. This means that it just so happens to be the same as reset. Here is an example where initial is clearly not using the value defined in reset:
+              </p>
+              <p>
+               <iframe allowtransparency="true" class="cp_embed_iframe" frameborder="0" height="300" id="cp_embed_doNmbj" scrolling="no" src="https://codepen.io/DustinWoods/embed/doNmbj?height=300&amp;slug-hash=doNmbj&amp;default-tab=result&amp;host=http%3A%2F%2Fcodepen.io" style="width: 100%; overflow: hidden;">
+               </iframe>
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595008">
+           <div class="grid group comment-wrap" id="comment-1595008">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/c58e7bdd366b2f3b6d6c29e9283ea67a?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/c58e7bdd366b2f3b6d6c29e9283ea67a?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Amelia BR
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595008">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-01T18:08:02+00:00">
+                June 1, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Pauls correct.  Although this would work in many cases, it is more by coincidence than design.
+              </p>
+              <p>
+               The point of most standard CSS reset techniques is to
+               <em>
+                cancel out
+               </em>
+               the browsers default HTML stylesheet and instead set values to the CSS initial value.  In these cases, you could use
+               <code>
+                initial
+               </code>
+               and get the same effect.
+              </p>
+              <p>
+               However, if you use any other type of CSS reset (to a value other than the initial value defined in the specs), you cant recreate that with
+               <code>
+                initial
+               </code>
+               .  For example, if you use a reset to change
+               <code>
+                box-sizing
+               </code>
+               to
+               <code>
+                border-box
+               </code>
+               on every element and before/after pseudo-element, thats very different from
+               <code>
+                box-sizing: initial
+               </code>
+               .
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2 buried" id="li-comment-1595053">
+           <div class="grid group comment-wrap" id="comment-1595053">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/726abb1e822a0f3011b4e41c9bf97d99?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/726abb1e822a0f3011b4e41c9bf97d99?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               sd
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595053">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-05T10:47:13+00:00">
+                June 5, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               asd
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-odd thread-alt depth-1" id="li-comment-1594961">
+         <div class="grid group comment-wrap" id="comment-1594961">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/8bedc29d5c44bffa0da0b1dc85248147?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/8bedc29d5c44bffa0da0b1dc85248147?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             sfddsfgergherghergher
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594961">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-29T10:22:26+00:00">
+              May 29, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             Total lack of IE support makes it pointless.
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment odd alt depth-2" id="li-comment-1594969">
+           <div class="grid group comment-wrap" id="comment-1594969">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/47bc57a779a73f495c9591c2957c1d50?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/47bc57a779a73f495c9591c2957c1d50?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Wynn
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594969">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T14:03:24+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Agreed, this makes IE pointless.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1594971">
+           <div class="grid group comment-wrap" id="comment-1594971">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/b3aa6f81421b273215e393570faf7b22?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/b3aa6f81421b273215e393570faf7b22?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Jamie
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594971">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T17:10:25+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               The IE team was/is sleeping all the time. When the great browsers are on to something, IE was/is nowhere to be seen!
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1594990">
+           <div class="grid group comment-wrap" id="comment-1594990">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/845a2b638e05690d61bcce4908147c02?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/845a2b638e05690d61bcce4908147c02?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Jon Schmitz
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594990">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-31T19:34:12+00:00">
+                May 31, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               IE is terrible. No doubt. But if they dont support it, you cant really use it. I hate it, but it is the way it is.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="li-comment-1594962">
+         <div class="grid group comment-wrap" id="comment-1594962">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/741dddbd2829607d51fbc9372a2fe690?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/741dddbd2829607d51fbc9372a2fe690?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Maxwell Terpstra
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594962">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-29T10:22:44+00:00">
+              May 29, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             Some of the diagrams and prose in this post are a little misleading.
+             <code>
+              initial
+             </code>
+             is
+             <em>
+              not
+             </em>
+             equivalent to inheriting from
+             <code>
+              :root
+             </code>
+             , and it is not always the browser default either.
+            </p>
+            <p>
+             <iframe allowtransparency="true" class="cp_embed_iframe" frameborder="0" height="300" id="cp_embed_NqdjwV" scrolling="no" src="https://codepen.io/telic/embed/NqdjwV?height=300&amp;slug-hash=NqdjwV&amp;default-tab=result&amp;host=http%3A%2F%2Fcodepen.io" style="width: 100%; overflow: hidden;">
+             </iframe>
+            </p>
+            <p>
+             The initial value is independant of any values set in the cascade,
+             <em>
+              including defaults set by the user-agent stylesheet
+             </em>
+             !  Case in point, the
+             <code>
+              initial
+             </code>
+             value in the above example pen causes the inner div to be inline instead of bock-level.
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment byuser comment-author-geoffreygrahamgmail-com bypostauthor odd alt depth-2" id="li-comment-1594966">
+           <div class="grid group comment-wrap" id="comment-1594966">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/ac0d6274a6cea04669e66a20ec0ea204?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Geoff Graham
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594966">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-29T11:56:23+00:00">
+                May 29, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               I can certainly see that, though the diagrams are illustrating a scenario rather than all cases. You are certainly correct here, though!
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1594982">
+           <div class="grid group comment-wrap" id="comment-1594982">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/a3320cc0a409262292da30d798068300?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/a3320cc0a409262292da30d798068300?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Kyrodes
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594982">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-05-30T22:03:09+00:00">
+                May 30, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               I found this:
+              </p>
+              <blockquote>
+               <p>
+                This keyword applies the initial value as defined in the CSS specifications. Sometimes this initial value makes sense (float: none), sometimes its there for historical reasons (background-repeat: repeat), and sometimes the spec writers made an essentially random-though-somewhat-defensible choice (color: black).
+               </p>
+              </blockquote>
+              <p>
+               <a href="http://www.quirksmode.org/css/cascading/values.html" rel="nofollow">
+                Source
+               </a>
+              </p>
+              <p>
+               Looks like it resets to a value defined by the specifications, dont matter whats the default value of the element. So
+               <code>
+                display
+               </code>
+               will be
+               <code>
+                inline
+               </code>
+               to
+               <code>
+                a
+               </code>
+               ,
+               <code>
+                div
+               </code>
+               ,
+               <code>
+                table
+               </code>
+               and even
+               <code>
+                option
+               </code>
+               . To me its basically useless.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1595051">
+           <div class="grid group comment-wrap" id="comment-1595051">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Brad Kemper
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595051">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-05T10:46:01+00:00">
+                June 5, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               This article seems to have a fundamental misunderstanding of initial. It is nothing like inherit, and it has nothing to with what properties are set on the root, aside from the root not being commonly styled much.
+              </p>
+              <p>
+               Initial is just the value of a property before any value is set by a style sheet, whether it is a browser (aka UA) style sheet, author (web designer or developer) style sheet, or user style sheet.
+              </p>
+              <p>
+               The UA style sheet can be thought of as the browser defaults, and can vary much more from browser to browser. Those variations are mostly eliminated by reset stylesheets, which also remove a lot of useful values, like margins on paragraphs.
+              </p>
+              <p>
+               But all conformant browsers start with the initial value as defined in the spec. Thats why the UA style sheet has div { display: block }, but they dont need a span { display: inline }, since inline is already the default initial value for the display property anyway, regardless of what the element is, until a stylesheet sets it to something else.
+              </p>
+              <p>
+               Inherit on the other hand, means that the value is taken from the parent element in the HTML. Some properties, like color inherit automatically, without having to set anything in the style sheet. Thats why if you have color: green on a P tag, you dont also have to set it on a SPAN inside the P (unless you are worried that the UA stylesheet has a color explicitly set for SPANs, but that is never the case).
+              </p>
+              <p>
+               If you use the inherit keyword as a value, it forces inheritance of the value from the parent, even if it is a property that doesnt normally inherit automatically, such as float. So if you had float: inherit on element A, and the parent B of that element A had float: left, then element A would also float to the left inside the floating element B.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595054">
+           <div class="grid group comment-wrap" id="comment-1595054">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Tom Potts
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595054">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-05T11:01:07+00:00">
+                June 5, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @Brad You are quite correct, except for one, slightly confusing thing: the
+               <code>
+                initial
+               </code>
+               and
+               <code>
+                inherit
+               </code>
+               keywords
+               <em>
+                are
+               </em>
+               similar in the specification, and are in fact defined in the same place. This is because they both override the usual rules for determining the value of a property. I believe this similarity of specification has led to a belief of similarity of function.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1595070">
+           <div class="grid group comment-wrap" id="comment-1595070">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Brad Kemper
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595070">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-06T10:23:38+00:00">
+                June 6, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @tom I dont think it is really accurate to say they override the usual rules for determining the value of a property. The keywords give a value to a property, same as any value does. Whether or not initial or inherit keywords have an effect still depends on selector specificity and order, whether or not  !important is there, and with author style sheets overriding UA style sheets, same as any other value.
+              </p>
+              <p>
+               What makes keyword values different from most others is that the used value varies from the specified value (not in itself unusual), but with initial getting its used value from the propertys initial value (as defined in the specification of the property), and inherit getting its used value from whatever its HTML parents used value. Those two effects are very different from each other, but they use keywords the same as any property would use a keyword, such as none or solid. All keyword values assign some meaningful value that generally depends on the property, and so do these. They both begin with the letter i, which I suppose can make it easier to confuse them.
+              </p>
+              <p>
+               The fact that they are defined in the same spec doesnt make them similar, any more than border is similar to background because they are in the same spec. Nor are solid and none are similar (as border styles), just because they apply to the same properties in the same spec and are defined in close proximity to each other. The main thing that makes initial and inherit similar is that they can apply to any property.
+              </p>
+              <p>
+               To truly understand what these two keywords do when assigned to a property, you just have to understand what they mean as concepts. The meaning exist regardless of whether or not there was ever a keyword that could be used as a property value. I think some people get confused because the keyword is something you can set. But even when not set, all properties have an initial value and many, many properties inherit anyway. Having an initial value prior to any CSS rules applying is a
+               <strong>
+                very
+               </strong>
+               different concept than looking at the HTML hierarchy to see if the parent element has a property value (like color or font size) that also should apply to the child. Once you understand those two concepts, then the meaning of the keywords you can use should be very clear and distinct.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595094">
+           <div class="grid group comment-wrap" id="comment-1595094">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Tom Potts
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595094">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-08T05:46:20+00:00">
+                June 8, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @Brad Both
+               <code>
+                initial
+               </code>
+               and
+               <code>
+                inherit
+               </code>
+               are keywords that are valid results of the cascade for any property, but moreover they are handled specially when computing the specified value; from the Cascade Level 3 working draft:
+              </p>
+              <blockquote>
+               <p>
+                The initial and inherit keywords are handled specially when they are the cascaded value of a property
+               </p>
+              </blockquote>
+              <p>
+               Thats what I mean by saying they are similar. What I meant by override the usual rules was just that usually the specified value of a property is the same as its cascaded value (if it has one); the exception is if the cascaded value is
+               <code>
+                inherit
+               </code>
+               or
+               <code>
+                initial
+               </code>
+               . As you say, this is not an override in the sense of
+               <code>
+                !important
+               </code>
+               , so perhaps that was my bad wording; I just meant the use of these keywords
+               <em>
+                if they are the result of the cascade
+               </em>
+               changes how the value of the property is computed.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1595224">
+           <div class="grid group comment-wrap" id="comment-1595224">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Brad Kemper
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595224">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-15T13:24:29+00:00">
+                June 15, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @Tom, OK, but know that having a used value that is different from the specified value is not at all unusual. For instance: width can have values specified as auto or a percentage, but the used value will be a concrete length measured in px.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595232">
+           <div class="grid group comment-wrap" id="comment-1595232">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Tom Potts
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595232">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-16T01:47:17+00:00">
+                June 16, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               @Brad
+               <br/>
+               Absolutely, yes. The unusual thing about
+               <code>
+                initial
+               </code>
+               is that it sets the
+               <em>
+                specified
+               </em>
+               value to be different from the cascaded value. So the HTML
+               <code>
+                &lt;div style="width: initial;"&gt;&lt;/div&gt;
+               </code>
+               (assuming no other CSS) would give the width property on that
+               <code>
+                div
+               </code>
+               a cascaded value of initial, a specified value of auto, and a computed value of some concrete width in px.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1594974">
+         <div class="grid group comment-wrap" id="comment-1594974">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/34c026e8532a4260747d3818ae7e78df?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/34c026e8532a4260747d3818ae7e78df?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Andrew Gates
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594974">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-30T04:18:48+00:00">
+              May 30, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             Seems like it could be more rope with which to hang ourselves.
+            </p>
+            <p>
+             That said, Ill take it. Perfect for those times when only the browsers default Times New Roman will do!
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="li-comment-1594979">
+         <div class="grid group comment-wrap" id="comment-1594979">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/a5d26e62cf938d607c72f1ff8044ac87?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/a5d26e62cf938d607c72f1ff8044ac87?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Sassigeek
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594979">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-05-30T16:08:35+00:00">
+              May 30, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             I didnt know this, Ive only ever used inherit so its nice to know exactly what initial does.
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1594992">
+         <div class="grid group comment-wrap" id="comment-1594992">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Tom Potts
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594992">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-01T01:51:42+00:00">
+              June 1, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             I hesitate to say it, because I think you know more about CSS than I ever will, but I think youve missed the point of
+             <code>
+              initial
+             </code>
+             . The initial value exists because  there needs to be some default for all possible values. The CSS specification cannot assume that there are any user-agent style sheets, so it needs to define a default value for all possible properties. These are mostly what you would expect, but there are some quirks. Because these are default values and do not reference any kind of selector, they are the same for all elements at all times. For example, as noted in a comment above, the initial value for
+             <code>
+              display
+             </code>
+             is
+             <code>
+              inline
+             </code>
+             , which makes sense for
+             <code>
+              span
+             </code>
+             elements, but not so much for
+             <code>
+              div
+             </code>
+             or
+             <code>
+              p
+             </code>
+             . (You can see a list of initial values in section 4.1 of the
+             <a href="http://www.w3.org/TR/CSS/" rel="nofollow">
+              Spec
+             </a>
+             ).
+            </p>
+            <p>
+             So your Google translation of the spec isnt quite right. A better description would be:
+            </p>
+            <blockquote>
+             <p>
+              The
+              <code>
+               initial
+              </code>
+              keyword is used to set the value of a property to the default value, as defined by the CSS specification.
+             </p>
+            </blockquote>
+            <p>
+             (Note there are some additional complications: you will see in the table that some of the initial values are listed as user-agent specific; however, this is separate from any user-agent style sheets, and is best thought of as a hard-coded default of the browser. Additionally, Ive glossed over the difference between the specified value and computed value, which is important because the
+             <code>
+              initial
+             </code>
+             keyword actually sets the
+             <em>
+              specified
+             </em>
+             value.)
+            </p>
+            <p>
+             So why would you use
+             <code>
+              initial
+             </code>
+             ? I honestly cant think of a real reason, outside of curiosity. It certainly cant be used as a hard reset; from the point of view of the CSS parser, theres no difference between
+             <code>
+              p { display: initial; }
+             </code>
+             and
+             <code>
+              p { display: inline; }
+             </code>
+             , so why would you use the less readable version?
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment even depth-2" id="li-comment-1594995">
+           <div class="grid group comment-wrap" id="comment-1594995">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/474e9b5418b02df6feda2f209f8ebba4?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/474e9b5418b02df6feda2f209f8ebba4?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Vesa Piittinen
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594995">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-01T08:40:23+00:00">
+                June 1, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               One actually practical solution is to use initial to restore font-size after applying zero font-size trick to get rid of white space between inline-block elements.
+              </p>
+              <pre>
+               <code>
+                container-of-inline-block-elements {
+    font-size: 0;
+}
+
+inline-block-element {
+    font-size: 16px; /* IE8- */
+    font-size: 1rem; /* IE9+ */
+    font-size: initial; /* rest */
+}
+               </code>
+              </pre>
+              <p>
+               If HTML root element size is left untouched then the end result should be about always the same: skipped inheritance. In this particular context initial gives at least slightly better explanation on what is happening.
+              </p>
+              <p>
+               Of course these days this is quite a bit of a niche case: it requires template based JS DOM usage or manually written HTML. Modern tools for DOM management like React or Mithril are white space free by design.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment odd alt depth-2" id="li-comment-1594997">
+           <div class="grid group comment-wrap" id="comment-1594997">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/a254561a07781161438ca390401be9c4?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/a254561a07781161438ca390401be9c4?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Geoff Graham
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594997">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-01T09:31:31+00:00">
+                June 1, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Very nice summary! I think youre spot on here and, at best, the use case is fuzzy to me as well. The funny thing is that while spec cannot assume user-agent stylesheets, the fact is that they are used predominantly throughout. That would mean a better (more inclusive) definition might be:
+              </p>
+              <blockquote>
+               <p>
+                The initial keyword is what is declared as the property where the initial value is the resulting output, as defined by the CSS specification, unless the browser has specified a default in many cases.
+               </p>
+              </blockquote>
+              <p>
+               I scratched my head for a good use case as well. Perhaps thats why Im only just getting acquainted with
+               <code>
+                initial
+               </code>
+               and have gotten by without it for so long. :)
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1 featured" id="li-comment-1594996">
+         <div class="grid group comment-wrap" id="comment-1594996">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/3518600b43ba3289eaa84b3922f6316f?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/3518600b43ba3289eaa84b3922f6316f?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Jason Karns
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1594996">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-01T09:10:25+00:00">
+              June 1, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             A good time to use
+             <code>
+              initial
+             </code>
+             is when developing a widget or web component that will be used in a variety of environments. Doin
+             <code>
+              #my-widget * { whatever: initial; }
+             </code>
+             is a lot easier than making a widget-specific reset sheet.
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment odd alt depth-2" id="li-comment-1595204">
+           <div class="grid group comment-wrap" id="comment-1595204">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Chris
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595204">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-13T02:54:27+00:00">
+                June 13, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Variety of Environments do exclude any IE (Desktop or mobile) then? What use is it then?
+              </p>
+              <p>
+               I (try ;) to use only properties which are either supported everywhere OR which have no desatrous effect if not used. But using initial potentially can mess up a layout completely so actually is not safe to use IMHO.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+          <li class="comment even depth-2" id="li-comment-1595225">
+           <div class="grid group comment-wrap" id="comment-1595225">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Brad Kemper
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595225">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-15T13:28:56+00:00">
+                June 15, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Excluding IE is a pretty good use case, though not intended by the spec writers. For instance, display:none; display:initial will hide something in IE, while displaying it as inline for all other browsers.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1 buried" id="li-comment-1595100">
+         <div class="grid group comment-wrap" id="comment-1595100">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/1f3a42a68d155b46c94ebe64ef18da10?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/1f3a42a68d155b46c94ebe64ef18da10?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Vivan
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595100">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-08T09:40:57+00:00">
+              June 8, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             This list is really awesome. This is my first time visit to your blog and i was really very impressed with your article. also you can see may official blog  Thank you.
+            </p>
+            <p>
+             <a href="http://www.1bag.co/" rel="nofollow">
+              http://www.1bag.co/
+             </a>
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="li-comment-1595205">
+         <div class="grid group comment-wrap" id="comment-1595205">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Chris
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595205">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-13T03:01:35+00:00">
+              June 13, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             Something I miss from These articles is a warning to maybe not use These properties which can be very harmful on Browsers which do not support them. In a lot of cases like here too this may be IE but there are other cases too like Display table in Firefox (positioning issue) or transform quirks in Chrome or Background-size values in (&lt;9?) Safari.
+            </p>
+            <p>
+             In combination with selective testing on only some Browsers in mostly one platform this can lead to sites simply not working everywhere and that is what the web is about, or is it?
+            </p>
+            <p>
+             I actually saw an example of of a lesser experience Developer using initial for Position which totally messed up layout in IE where it would have been easy to just use something like Position: static or so to make it working in (almost ;) every browser.
+            </p>
+            <p>
+             Sorry but TBH, I blame sites like CodePen to a certain extend, as they tend to write about new and admittedly exciting new stuff but failing to properly warn about Problems in older or less capable Browsers (which is NOT always IE BTW).
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1595219">
+         <div class="grid group comment-wrap" id="comment-1595219">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://0.gravatar.com/avatar/fd973d84e4e1e8df5d138ef0046de2cc?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://0.gravatar.com/avatar/fd973d84e4e1e8df5d138ef0046de2cc?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Jack McNicol
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595219">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-14T21:01:07+00:00">
+              June 14, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             I recently struggled with this issue as I believe
+             <code>
+              initial
+             </code>
+             did as you suggested. Reset the value back to the browser default for that
+             <em>
+              element
+             </em>
+             .
+             <br/>
+             But it actually resets the property not the element.
+             <br/>
+             See initial value for display is
+             <code>
+              inline
+             </code>
+             as defined here.
+             <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" rel="nofollow">
+              https://developer.mozilla.org/en-US/docs/Web/CSS/display
+             </a>
+            </p>
+            <p>
+             See the example
+             <a href="http://codepen.io/jackmcpickle/pen/xGrzYx/" rel="nofollow">
+              xGrzYx
+             </a>
+             by Jack McNicol (
+             <a href="http://codepen.io/jackmcpickle" rel="nofollow">
+              @jackmcpickle
+             </a>
+             ) on
+             <a href="http://codepen.io" rel="nofollow">
+              CodePen
+             </a>
+             .
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment even depth-2" id="li-comment-1595223">
+           <div class="grid group comment-wrap" id="comment-1595223">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/7bbda8f6d42ed09ae7a24ec5f190f694?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Brad Kemper
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595223">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-15T13:05:19+00:00">
+                June 15, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Just to be clear: inherit does not set the value back to the element default either. It sets it to the parent elements value for that property.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-even depth-1" id="li-comment-1595226">
+         <div class="grid group comment-wrap" id="comment-1595226">
+          <div class="comment-avatar grid-1-5">
+           <img alt="" class="avatar avatar-160 photo" height="160" src="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://1.gravatar.com/avatar/dd60af940773439f1b0c684a3af6db68?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+          </div>
+          <div class="comment-body group grid-4-5">
+           <div class="comment-author-wrap vcard">
+            <div class="comment-author">
+             Chris
+            </div>
+            <div class="comment-time">
+             <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595226">
+              <span class="screen-reader">
+               Permalink to comment
+              </span>
+              #
+             </a>
+             <time datetime="2015-06-15T14:34:09+00:00">
+              June 15, 2015
+             </time>
+            </div>
+           </div>
+           <div class="comment-content">
+            <p>
+             @Brad Kemper: Using display: initial to hide something from e.g. IE (but guess also older browsers like Androids, Opera Minis?) sounds like a horrible hack. No fallback whatsoever I guess? :(
+            </p>
+            <div class="reply">
+            </div>
+            <!-- .reply -->
+           </div>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment even depth-2" id="li-comment-1595233">
+           <div class="grid group comment-wrap" id="comment-1595233">
+            <div class="comment-avatar grid-1-5">
+             <img alt="" class="avatar avatar-160 photo" height="160" src="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=160&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg" srcset="https://2.gravatar.com/avatar/85349f30542f0a53fa9c3d12af8f6ed8?s=320&amp;d=https%3A%2F%2Fcss-tricks.com%2Fimages%2Fget-gravatar.png&amp;r=pg 2x" width="160"/>
+            </div>
+            <div class="comment-body group grid-4-5">
+             <div class="comment-author-wrap vcard">
+              <div class="comment-author">
+               Tom Potts
+              </div>
+              <div class="comment-time">
+               <a href="https://css-tricks.com/getting-acquainted-with-initial/#comment-1595233">
+                <span class="screen-reader">
+                 Permalink to comment
+                </span>
+                #
+               </a>
+               <time datetime="2015-06-16T01:51:26+00:00">
+                June 16, 2015
+               </time>
+              </div>
+             </div>
+             <div class="comment-content">
+              <p>
+               Doesnt sound like a good idea to me. If you do that, what are you really testing? Show this content only to those browsers that understand the
+               <code>
+                initial
+               </code>
+               keyword? There are a lot better ways to do capability testing or user agent sniffing.
+              </p>
+              <div class="reply">
+              </div>
+              <!-- .reply -->
+             </div>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <div class="module explanation">
+        This comment thread is closed. If you have important information to share, you can always
+        <a href="/contact/">
+         contact me
+        </a>
+        .
+       </div>
+      </section>
+     </section>
+     <aside class="grid-1-3 entry-unrelated sidebar">
+      <div class="module module-image-ad module-treehouse">
+       <div class="sidebar-treehouse-ad-wrap">
+        <iframe class="sidebar-treehouse-ad" scrolling="no" src="https://css-tricks.com/wp-content/themes/CSS-Tricks-12/ads/treehouse/1/">
+        </iframe>
+       </div>
+       <p>
+        <a href="http://teamtreehouse.com/join/now?utm_source=css-tricks&amp;utm_medium=display&amp;utm_content=sidebar&amp;cid=1148">
+         Treehouse
+        </a>
+        is where you go to learn HTML, CSS, and how to build iOS apps. It's a complete education in modern web and app technology, designed to get you ready for a hot new job or to kickstart your own business.
+       </p>
+      </div>
+      <div class="module group module-lodge">
+       <p class="intro-lodge">
+        <a href="/lodge/">
+         The Lodge
+        </a>
+        is a
+        <a href="/wp-login.php">
+         member login
+        </a>
+        only area with access to video training on how to build websites from scratch using the best modern tools.
+       </p>
+       <div class="lodge-actions">
+        <a class="button" href="/lodge/signup/">
+         Sign up!
+        </a>
+       </div>
+      </div>
+      <div class="module module-image-ad">
+       <a class="wufoo-ad-graphic" href="https://ad.doubleclick.net/ddm/clk/288475139;104033101;v" id="wufoo-ad-graphic">
+        <div id="i-produce-free-content">
+        </div>
+       </a>
+       <p>
+        <a href="https://ad.doubleclick.net/ddm/clk/288475025;104033101;p">
+         Wufoo
+        </a>
+        is the most powerful online form builder out there. Easily build multi-page forms, add logic and branching, customize the design, take payments, and much more.
+        <a href="https://ad.doubleclick.net/ddm/clk/288475756;104033101;a">
+         Tryitfree!
+        </a>
+        <img src="//ad.doubleclick.net/ad/N7439.1063086.CSS-TRICKS.COM/B7043538.104033101;sz=1x1;kw=[url_encoded_publisher_data];ord=2015-07-14T05:45:20+00:00?'); ?&gt;?"/>
+       </p>
+      </div>
+      <div class="module module-poll">
+       <div class="wp-polls" id="polls-53">
+        <form action="/index.php" class="wp-polls-form" id="polls_form_53" method="post">
+         <p style="display: none;">
+          <input id="poll_53_nonce" name="wp-polls-nonce" type="hidden" value="aac1bb3a29"/>
+         </p>
+         <p style="display: none;">
+          <input name="poll_id" type="hidden" value="53"/>
+         </p>
+         <h4>
+          What's your take on managing styles entirely in JavaScript?
+         </h4>
+         <div class="wp-polls-ans" id="polls-53-ans">
+          <ul class="wp-polls-ul group">
+           <li class="group">
+            <input id="poll-answer-299" name="poll_53" type="radio" value="299"/>
+            <label for="poll-answer-299">
+             Are you insane? This is an awful idea.
+            </label>
+           </li>
+           <li class="group">
+            <input id="poll-answer-300" name="poll_53" type="radio" value="300"/>
+            <label for="poll-answer-300">
+             It kinda rubs me the wrong way, but I'm trying to be open minded about it.
+            </label>
+           </li>
+           <li class="group">
+            <input id="poll-answer-301" name="poll_53" type="radio" value="301"/>
+            <label for="poll-answer-301">
+             I don't feel strongly about it either way.
+            </label>
+           </li>
+           <li class="group">
+            <input id="poll-answer-302" name="poll_53" type="radio" value="302"/>
+            <label for="poll-answer-302">
+             I think it's an interesting idea and makes sense in some situations.
+            </label>
+           </li>
+           <li class="group">
+            <input id="poll-answer-303" name="poll_53" type="radio" value="303"/>
+            <label for="poll-answer-303">
+             I love it. I'm all in. CSS is over.
+            </label>
+           </li>
+          </ul>
+          <p class="voting-buttons">
+           <input class="button" name="vote" onclick="poll_vote(53);" type="button" value="   Vote   "/>
+           <a class="button" href="#ViewPollResults" onclick="poll_result(53); return false;" title="View Results Of This Poll">
+            View Results
+           </a>
+          </p>
+         </div>
+        </form>
+       </div>
+      </div>
+     </aside>
+    </div>
+   </div>
+   <h2 class="pre-footer-title">
+    What now? I have some ideas for you.
+   </h2>
+   <section class="footer-calls-to-action">
+    <footer class="site-footer site-footer-codepen">
+     <h4>
+      Go explore CodePen!
+     </h4>
+     <p>
+      As a front end designer and developer, you should have an account on
+      <a href="http://codepen.io/">
+       CodePen
+      </a>
+      so you can save your snippets, present your ideas, and engage with other front end folk. I'd encourage you to go PRO as well, to unlock the full power of CodePen.
+     </p>
+     <a class="button" href="http://codepen.io/pro/">
+      Go PRO on CodePen
+     </a>
+    </footer>
+    <footer class="site-footer site-footer-newsletter">
+     <h4>
+      Get the newsletter!
+     </h4>
+     <p>
+      You should sign up for the CSS-Tricks newsletter. It's a clean copy of all the blog posts each week, combined together, right to your inbox. If email isn't your thing, there is an
+      <a href="http://feeds.feedburner.com/CssTricks">
+       RSS feed
+      </a>
+      ,
+      <a href="http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewPodcast?id=273881728">
+       iTunes
+      </a>
+      , and
+      <a href="/subscription-options/">
+       lots of other ways
+      </a>
+      to subscribe.
+     </p>
+     <form action="//chriscoyier.us2.list-manage.com/subscribe/post?u=155f5a9ccc4e24c318130cace&amp;id=197f127a68" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+      <p class="mc-field-group">
+       <label class="screen-reader" for="mce-EMAIL">
+        Email Address
+       </label>
+       <input class="required email" id="mce-EMAIL" name="EMAIL" placeholder="your@email.com" type="email"/>
+       <input class="button" id="mc-embedded-subscribe" name="Subscribe" type="submit" value="Subscribe"/>
+      </p>
+      <div class="clear" id="mce-responses">
+       <div class="response" id="mce-error-response" style="display:none">
+       </div>
+       <div class="response" id="mce-success-response" style="display:none">
+       </div>
+      </div>
+      <div style="position: absolute; left: -5000px;">
+       <input name="b_155f5a9ccc4e24c318130cace_197f127a68" type="text" value=""/>
+      </div>
+     </form>
+    </footer>
+    <footer class="site-footer site-footer-social">
+     <h4>
+      Let's be friends!
+     </h4>
+     <p>
+      I'm active on
+      <a href="http://codepen.io/chriscoyier/">
+       CodePen
+      </a>
+      ,
+      <a href="https://twitter.com/chriscoyier">
+       Twitter
+      </a>
+      ,
+      <a href="http://dribbble.com/chriscoyier">
+       Dribbble
+      </a>
+      , and
+      <a href="https://github.com/chriscoyier/">
+       GitHub
+      </a>
+      . CSS-Tricks is on
+      <a href="http://twitter.com/real_css_tricks">
+       Twitter
+      </a>
+      and
+      <a href="http://facebook.com/CSSTricks">
+       Facebook
+      </a>
+      , which are mostly just a way to follow new content. There is a
+      <a href="http://www.youtube.com/realcsstricks">
+       YouTube channel
+      </a>
+      for the screencasts as well.
+     </p>
+     <a class="button" href="https://twitter.com/chriscoyier">
+      Follow me on Twitter
+     </a>
+    </footer>
+    <footer class="site-footer site-footer-shoptalk">
+     <h4>
+      Listen to ShopTalk!
+     </h4>
+     <p>
+      <a href="http://shoptalkshow.com/">
+       ShopTalk Show
+      </a>
+      is a weekly audio podcast I do with my friend
+      <a href="http://daverupert.com/">
+       Dave Rupert
+      </a>
+      . We have guests on to help us answer
+      <a href="http://shoptalkshow.com/ask/">
+       your questions
+      </a>
+      about all things web design and development.
+     </p>
+     <a class="button" href="http://itunes.apple.com/podcast/id493890455">
+      Subscribe on iTunes
+     </a>
+    </footer>
+    <footer class="site-footer site-footer-lodge">
+     <h4>
+      Subscribe to The Lodge!
+     </h4>
+     <p>
+      <a href="/lodge/">
+       The Lodge
+      </a>
+      is a members-only, ad-free video learning area here on CSS-Tricks. Just like the free screencasts, but organized into four large complete series. Membership is also the #1 best way to support CSS-Tricks.
+     </p>
+     <a class="button" href="/lodge/signup/">
+      Signup for The Lodge
+     </a>
+    </footer>
+    <footer class="site-footer site-footer-jobs">
+     <h4>
+      Peruse Jobs!
+     </h4>
+     <p>
+      Always good to
+      <a href="/jobs/">
+       keep your eye on the field
+      </a>
+      .
+     </p>
+     <p>
+      If you're looking to hire, posting your job on the CodePen job board means it will be shown here on CSS-Tricks and on the ShopTalk job board as well.
+     </p>
+     <a class="button" href="https://codepen.io/jobs/post/">
+      Post a Job
+     </a>
+    </footer>
+   </section>
+   <h2 class="pre-footer-title">
+    We can do the real footer now.
+   </h2>
+   <footer class="site-footer site-footer-links">
+    <h4>
+     Site Links
+    </h4>
+    <p>
+     <a href="/contact/">
+      Contact
+     </a>
+     <a href="/about/">
+      About
+     </a>
+     <a href="/advertising/">
+      Advertise
+     </a>
+     <a href="/guest-posting/">
+      Guest Posting
+     </a>
+     <a href="/license/">
+      License
+     </a>
+     <a href="/archives/">
+      Archives
+     </a>
+     <a href="/store/">
+      Store
+     </a>
+     <a href="/jobs/">
+      Jobs
+     </a>
+    </p>
+   </footer>
+   <footer class="site-footer site-footer-colophon">
+    <h4>
+     Colophon
+    </h4>
+    <p>
+     CSS-Tricks* is created, written by, and maintained by
+     <a href="http://chriscoyier.net">
+      Chris Coyier
+     </a>
+     . It is built on
+     <a href="http://wordpress.org/">
+      WordPress
+     </a>
+     , hosted by
+     <a href="http://mediatemple.7eer.net/c/154587/168246/2795">
+      Media Temple
+     </a>
+     , and the assets are served by
+     <a href="http://tracking.maxcdn.com/c/13088/3982/378">
+      MaxCDN
+     </a>
+     . The fonts are Source Sans and Source Code Pro. It is made possible by viewers like you who subscribe to
+     <a href="/lodge/">
+      The Lodge
+     </a>
+     and through advertising for products and services I like.
+    </p>
+    <p class="mega-big-time-warning">
+     <small>
+      *May or may not contain any actual "CSS" or "Tricks".
+     </small>
+    </p>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+    <span>
+    </span>
+   </footer>
+  </div>
+  <svg class="screen-reader" height="0" width="0">
+   <defs>
+    <path d="M74.957.955h-15.139c-1.307 0-2.59.1-3.844.293l-.811.151c4.645 2.666 8.469 6.605 10.986 11.343h9.584c7.322 0 13.258 5.937 13.258 13.259 0 7.321-5.938 13.258-13.258 13.258h-16.555c-3.305 0-6.324-1.212-8.645-3.212l-.004.003-.002-.003c-.494-.414-.886-.802-1.206-1.148-.7-.764-1.011-1.303-1.011-1.303l.002-.003-.002-.003c-1.505-2.15-2.389-4.766-2.389-7.589 0-2.746.834-5.296 2.263-7.413l.127-.176c-1.736-1.473-3.978-2.367-6.429-2.367h-5.041c-1.325 3.052-2.067 6.416-2.067 9.956 0 3.538.737 6.903 2.061 9.955.244.562.509 1.11.792 1.651.237.449.482.896.746 1.332l.054.088.147.23c2.792 4.463 6.948 7.98 11.888 9.973.608.246 1.225.473 1.856.67l.104.031.318.09c.27.08.541.162.814.232l.01.003c2 .513 4.096.787 6.254.787h15.137c13.832.001 25.045-11.212 25.045-25.043s-11.211-25.045-25.043-25.045zM25.542 51.045h15.137c1.308 0 2.592-.102 3.846-.294l.811-.151c-4.646-2.664-8.47-6.604-10.987-11.342h-9.585c-7.322 0-13.257-5.936-13.257-13.259 0-7.322 5.935-13.257 13.257-13.257h16.555c3.304 0 6.323 1.212 8.645 3.212l.002-.003.002.003c.495.413.888.801 1.206 1.148.701.762 1.012 1.302 1.012 1.302l-.002.003.002.003c1.506 2.15 2.391 4.766 2.391 7.588 0 2.746-.835 5.297-2.264 7.412l-.127.176c1.735 1.475 3.979 2.369 6.428 2.369h5.043c1.324-3.053 2.064-6.417 2.064-9.957 0-3.539-.736-6.903-2.061-9.955-.244-.561-.51-1.111-.792-1.651-.237-.451-.481-.898-.746-1.332l-.054-.089-.146-.23c-2.792-4.463-6.949-7.981-11.888-9.973-.608-.245-1.226-.471-1.856-.67l-.103-.032-.318-.089c-.27-.081-.541-.162-.816-.232l-.009-.002c-2-.515-4.095-.788-6.255-.788h-15.135c-13.832 0-25.044 11.212-25.044 25.044 0 13.833 11.212 25.046 25.044 25.046z" id="shape-link">
+    </path>
+    <path d="M3.327,96.684C5.534,98.895,8.434,100,11.331,100s5.797-1.105,8.004-3.316l21.321-21.322
+    c5.83,3.188,12.393,4.897,19.223,4.897c10.721,0,20.798-4.172,28.379-11.752c15.646-15.644,15.646-41.105,0.002-56.755
+    C80.677,4.171,70.598,0,59.877,0C49.159,0,39.08,4.171,31.504,11.752c-7.581,7.576-11.756,17.655-11.756,28.376
+    c0,6.832,1.71,13.396,4.9,19.226L3.327,80.675C-1.096,85.094-1.096,92.266,3.327,96.684z M59.879,68.938
+    c-7.695,0-14.93-2.996-20.371-8.435c-5.443-5.442-8.439-12.677-8.439-20.375c0-7.695,2.996-14.933,8.439-20.372
+    c5.441-5.44,12.676-8.436,20.369-8.436c7.698,0,14.936,2.997,20.378,8.436c11.231,11.236,11.231,29.515,0,40.747
+    C74.812,65.941,67.575,68.938,59.879,68.938z" id="shape-search">
+    </path>
+    <path d="M0,49.993c0,7.387,6.007,13.394,13.396,13.394h40.691L42.898,74.407c-2.543,2.507-3.94,5.827-3.94,9.36
+    c0,3.539,1.407,6.863,3.952,9.364C45.428,95.616,48.809,97,52.402,97c3.6,0,6.978-1.384,9.516-3.891l34.159-33.623
+    c2.53-2.489,3.923-5.81,3.923-9.342v-0.307c0-3.545-1.4-6.867-3.943-9.358L61.914,6.869c-5.243-5.16-13.775-5.16-19.014,0
+    c-2.539,2.495-3.942,5.821-3.942,9.354c0,3.535,1.403,6.862,3.942,9.354L54.1,36.604H13.396C6.012,36.604,0.001,42.61,0,49.993z" id="shape-arrow-right">
+    </path>
+   </defs>
+  </svg>
+  <script>
+   var pollsL10n = {"ajax_url":"https:\/\/css-tricks.com\/wp-admin\/admin-ajax.php","text_wait":"Your last request is still being processed. Please wait a while ...","text_valid":"Please choose a valid poll answer.","text_multiple":"Maximum number of choices allowed: ","show_loading":"0","show_fading":"1"};
+  </script>
+  <script src="https://cdn.css-tricks.com/wp-content/uploads/minqueue-cache/minqueue-cb4ed8f2-ecc60d3d.js" type="text/javascript">
+  </script>
+  <script src="https://cdn.css-tricks.com/wp-content/themes/CSS-Tricks-12/js/min/global-min.js?v=6.6">
+  </script>
+  <script async="" src="//assets.codepen.io/assets/embed/ei.js">
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-68528-29', 'auto');
+  ga('send', 'pageview');
+  </script>
+ </body>
+</html>
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Minified using disk
+Page Caching using apc
+Database Caching 39/50 queries in 0.019 seconds using apc
+Content Delivery Network via cdn.css-tricks.com
+
+ Served from: css-tricks.com @ 2015-07-13 22:45:20 by W3 Total Cache -->

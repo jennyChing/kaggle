@@ -1,0 +1,986 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+ <head>
+  <script type="text/javascript">
+   &lt;!--
+        // parseUri 1.2.2
+        // (c) Steven Levithan &lt;stevenlevithan.com&gt;
+        // MIT License
+
+        function parseUri (str) {
+            var	o   = parseUri.options,
+                    m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+                    uri = {},
+                    i   = 14;
+
+            while (i--) uri[o.key[i]] = m[i] || "";
+
+            uri[o.q.name] = {};
+            uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+                if ($1) uri[o.q.name][$1] = $2;
+            });
+
+            return uri;
+        };
+
+        parseUri.options = {
+            strictMode: false,
+            key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+            q:   {
+                name:   "queryKey",
+                parser: /(?:^|&amp;)([^&amp;=]*)=?([^&amp;]*)/g
+            },
+            parser: {
+                strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+                loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+            }
+        };
+
+        function createCookie(name,value,days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                var expires = "; expires="+date.toGMTString();
+            }
+            else var expires = "";
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i &lt; ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            createCookie(name,"",-1);
+        }
+
+        function areCookiesEnabled() {
+            var r = false;
+            createCookie("cookiesEnabled", "true", 1);
+            if (readCookie("cookiesEnabled") != null) {
+                r = true;
+                eraseCookie("cookiesEnabled");
+            }
+            return r;
+        }
+
+        (function(){
+            var referrer = '';
+            var referrerKw = '';
+            if (typeof document.referrer != 'undefined') {
+                // pound's for google.
+                var oUri = parseUri(document.referrer.replace('#','?'));
+
+                referrer = oUri.host;
+                if (typeof oUri.queryKey.q != 'undefined') {
+                    referrerKw = decodeURIComponent(oUri.queryKey.q).replace('site:essortment.com','').replace(/[^a-zA-Z0-9\s]+/g,' ').replace(/\s\s/g,' ');
+                } else if (typeof oUri.queryKey.p != 'undefined') {
+                    referrerKw = decodeURIComponent(oUri.queryKey.p).replace('site:essortment.com','').replace(/[^a-zA-Z0-9\s]+/g,' ').replace(/\s\s/g,' ');
+                } else {
+                    referrerKw = 'pregnancy parenting';
+                }
+            }
+            // oUri.file == 'google.html' ||
+            if ((referrer.indexOf('.google.com') &gt; -1 || referrer.indexOf('.yahoo.com') &gt; -1 || referrer.indexOf('.bing.com') &gt; -1) &amp;&amp; areCookiesEnabled()) {
+                oUri = parseUri(document.location.href);
+
+                if (referrerKw.length &gt; 0) {
+                    // "&amp;cof=FORID%3A10&amp;sa=Search&amp;cx=partner-pub-6167988213978292%3A6447045120&amp;ie=UTF-8&amp;ss=1280j221896j10&amp;ref=" + referrer + "%2F&amp;siteurl=www.essortment.com" + encodeURIComponent(oUri.path))
+                    document.location.replace("/search.htm?r=" + encodeURIComponent(oUri.relative) + "&amp;q=" + encodeURIComponent(referrerKw));
+                }
+            }
+        })();
+        // --&gt;
+  </script>
+  <meta content="1986-05-16 00:00:00" name="date"/>
+  <meta charset="utf-8"/>
+  <meta content="129B5DE6FF8DD0ECBDD457C93FF101E3" name="msvalidate.01"/>
+  <meta content="Essortment" property="og:site_name"/>
+  <meta content="141718515877590" property="fb:app_id"/>
+  <meta content="" property="fb:admins"/>
+  <link href="http://www.essortment.com/css.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.essortment.com/favicon.ico" rel="shortcut icon"/>
+  <link href="http://www.essortment.com/favicon.ico" rel="icon"/>
+  <!-- Custom JS to render Google AdSense ads -->
+  <script src="http://www.essortment.com/adsense.js" type="text/javascript">
+  </script>
+  <!-- End Custom JS to render Google AdSense ads -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript">
+  </script>
+  <script src="http://www.essortment.com/jquery.scrollto.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   if (typeof readCookie != 'function') {
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0;i &lt; ca.length;i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                }
+                return null;
+            }
+        }
+
+        var gUtmSource = '';
+        var gUtmMedium = '';
+        (function(){
+            var pattern=/utm_source=([a-zA-Z0-9]+)&amp;utm_medium=([a-zA-Z0-9]+)/;
+            var result = pattern.exec(readCookie('utm_params'));
+
+            if (result != null &amp;&amp; result.length == 3) {
+                gUtmSource = result[1];
+                gUtmMedium = result[2];
+            }
+        })();
+
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = document.location.href;
+            }
+            name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+            var regexS = "[\\?&amp;]"+name+"=([^&amp;#]*)";
+            var regex = new RegExp( regexS );
+            var results = regex.exec( url );
+            if( results == null )
+            return '';
+            else
+            return results[1];
+        }
+
+        function IsAdWords() {
+            var utmSource = getParameterByName("utm_source");
+
+            if (utmSource.length &gt; 0) {
+                utmSource = decodeURIComponent(utmSource);
+                utmSource = utmSource.replace(/[^a-zA-Z0-9\_\-]+/g,'');
+
+                createCookie("utm_source", utmSource);
+
+                if (utmSource.toLowerCase() == "adwords") {
+                    return true;
+                }
+            } else if (readCookie("utm_source") != null) {
+                if (readCookie("utm_source").toLowerCase() == "adwords") {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+		function doAutoSearch()
+		{
+			if ('referrer' in document &amp;&amp; 'host' in location &amp;&amp; (getParameterByName('afsforce', document.location.search) == 1 || document.referrer.length &gt; 0) &amp;&amp; document.referrer.substring(0, location.host.length + 7) != 'http://' + location.host)
+			{
+				var utm_medium = decodeURIComponent(getParameterByName('utm_medium', document.location.search)).replace(/\+/g, " ");
+				var utm_source = decodeURIComponent(getParameterByName('utm_source', document.location.search)).replace(/\+/g, " ");
+				var keywords = decodeURIComponent(getParameterByName('q', document.location.search)).replace(/\+/g, " ");
+				if (keywords.length &gt; 0 &amp;&amp; utm_medium.length &gt; 0)
+				{
+					if (utm_source.length &gt; 0)
+					{
+						$('#cse-search-box').append('&lt;input type="hidden" name="utm_source" value="' + utm_source + '" /&gt;');
+					}
+					if (utm_medium.length &gt; 0)
+					{
+						$('#cse-search-box').append('&lt;input type="hidden" name="channel" value="' + utm_medium + '" /&gt;');
+					}
+					$('#cse-search-box input[name="q"]').val(keywords);
+					$('#cse-search-box').submit();
+				}
+			}
+		}
+  </script>
+  <script src="//cdn.optimizely.com/js/7970001.js">
+  </script>
+  <title>
+   Teen Parenting
+  </title>
+  <meta content="Teen parenting isn't easy. They must live two lives in one, as a teen and as a parent. A teen mom faces so many more issues than an" name="description"/>
+  <meta content="Teen parenting isn't easy. They must live two lives in one, as a teen and as a parent. A teen mom faces so many more issues than an" property="og:description"/>
+  <meta content="Teen Parenting" property="og:title"/>
+  <link href="http://www.essortment.com/teen-parenting-50093.html" rel="canonical"/>
+  <meta content="http://www.essortment.com/teen-parenting-50093.html" property="og:url"/>
+  <meta content="http://www.essortment.com/images/essortment_glass_73x73.jpg" property="og:image"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Teen parenting isn't easy. They must live two lives in one, as a teen and as a parent. A teen mom faces so many more issues than an" name="description"/>
+  <meta content="article" name="template"/>
+  <!-- START OMNITURE CODE -->
+  <meta content="en-US" name="wa_lr" scheme="DMINSTR2"/>
+  <meta content="23112" property="legacyKey"/>
+  <meta content="23112" name="contentid" scheme="DMINSTR2"/>
+  <meta content="Pregnancy &amp; Parenting" name="category" scheme="DMINSTR2"/>
+  <meta content="Legacy Article" name="pagetype" scheme="DMINSTR2"/>
+  <meta content="ESTC" name="siteid" scheme="DMINSTR2"/>
+  <!-- END OMNITURE CODE -->
+  <script type="text/javascript">
+   var tag = escape('pub-6167988213978292;1000000006|pub-6167988213978292;1000000006|pub-6167988213978292;1000000006');
+    	document.write ('&lt;meta name="ltvtag" scheme="DMINSTR2" content="' + tag + '"&gt;');
+  </script>
+  <script src="http://scripts.demandmedia.com/wm.js" type="text/javascript">
+  </script>
+  <!-- Set up Yahoo related text ads -->
+  <script type="text/javascript">
+   // Get the keywords, if any.
+		// If opYahoo1Click is equal to one, then forget it.
+		if (typeof(opYahoo1Click) != 'undefined' &amp;&amp; opYahoo1Click == 1) {
+			document.write('\n\n&lt;!-- One click ads disabled by Optimost. --&gt;\n');
+		} else {
+			var keywords = '';
+			if (document.referrer != '') {
+				var domainName = document.referrer.split('/')[2].toLowerCase();
+				if (domainName.indexOf('google.com') &gt; -1 || domainName.indexOf('ask.com') &gt; -1 || domainName.indexOf('bing.com') &gt; -1) {
+					keywords = getParameterByName('q', document.referrer);
+				} else if (domainName.indexOf('yahoo.com') &gt; -1) {
+					keywords = getParameterByName('p', document.referrer);
+				}
+			}
+			// Allow back door keywords.
+			var backDoorKeywords = getParameterByName('k', document.location.href);
+			if (backDoorKeywords != '') {
+				keywords = backDoorKeywords;
+			}
+			// Build ad URL and display it.
+			if (keywords != '') {
+				var url = 'http://xml.demandmedia.overture.com/d/search/p/demandmedia/js/?Partner=enom_retargeting_search&amp;config=1234567890&amp;serveUrl=' + encodeURIComponent(window.location.href) + '&amp;Keywords=' + keywords + '&amp;maxCount=4&amp;cb=' + Math.floor(Math.random() * 100000);
+				// this doesn't appear to be used anymore, commenting it out.
+				// document.write('&lt;SCR' + 'IPT LANGUAGE=JavaScript1.1 SRC="' + url + '"&gt;&lt;/SCR'+'IPT&gt;');
+			}
+		}
+  </script>
+  <style type="text/css">
+   .yahoo336x280 { width:336px; margin-left:180px; text-align:left; }
+        .yahoo336x280 a.title { font-size:15px; font-weight:bold; color:#437AAE; text-decoration:underline; }
+        .yahoo336x280 a.host { font-size:15px; font-weight:normal; color:#437AAE; text-decoration:none; text-transform:lowercase; }
+        .yahoo336x280 p.desc { font-size:15px; font-weight:normal; color:#000; text-decoration:none; }
+
+        .yahoo300x250 { width:336px; text-align:left; }
+        .yahoo300x250 a.title { font-size:15px; font-weight:bold; color:#437AAE; text-decoration:underline; }
+        .yahoo300x250 a.host { font-size:15px; font-weight:normal; color:#437AAE; text-decoration:none; text-transform:lowercase; }
+        .yahoo300x250 p.desc { font-size:15px; font-weight:normal; color:#000; text-decoration:none; }
+  </style>
+  <script type="text/javascript">
+   &lt;!--
+        function YahooShowListings(k) {
+            if (k==null){k=1;}
+            var i=((k-1)*24)+6;
+            var j=0;
+            while (i &lt; zSr.length &amp;&amp; j &lt; 4 ) {
+                var descr = zSr[i++]; // listing description
+                var unused1 = zSr[i++]; // (ignore)
+                var clickURL = zSr[i++]; // listing link
+                var title = zSr[i++]; // listing title
+                var sitehost = zSr[i++]; // advertisers domain name
+                var unused2 = zSr[i++]; // (ignore)
+                document.write('&lt;a class="title" target="_new" href="' + clickURL + '"&gt;' + title + '&lt;/a&gt; ');
+                document.write('&lt;a class="host" target="_new" href="http://' + sitehost + '/"&gt;' + sitehost + '&lt;/a&gt;');
+                document.write('&lt;p class="desc"&gt;' + descr + '&lt;/p&gt;');
+                j++;
+            }
+        }
+        // --&gt;
+  </script>
+  <script type="text/javascript">
+   var strCategoryNameUrlSafe = 'pregnancy-parenting';
+        var bolIsQS = false;
+
+        if (typeof bolShowMediaNet == "undefined")
+        {
+          var bolShowMediaNet = true;
+        }
+
+        if (!bolShowMediaNet &amp;&amp; (typeof document.referrer != 'undefined')) {
+            var objURI = parseUri(document.referrer.replace('#','?'));
+            var strRefHost = objURI.host;
+
+            if ((strRefHost.indexOf('.essortment.com') &gt; -1 &amp;&amp; objURI.file == 'search.htm' &amp;&amp; (typeof objURI.queryKey.r != 'undefined')) || strRefHost.indexOf('.yahoo.com') &gt; -1 || strRefHost.indexOf('.bing.com') &gt; -1 || strRefHost.indexOf('.google.com') &gt; -1) {
+                bolIsQS = true;
+
+                if (typeof objURI.queryKey.q != 'undefined') {
+                    var strRefKeywords = decodeURIComponent(objURI.queryKey.q).replace('site:essortment.com','').replace(/[^a-zA-Z0-9\s]+/g,' ').replace(/\s\s/g,' ');
+                } else if (typeof objURI.queryKey.p != 'undefined') {
+                    var strRefKeywords = decodeURIComponent(objURI.queryKey.p).replace('site:essortment.com','').replace(/[^a-zA-Z0-9\s]+/g,' ').replace(/\s\s/g,' ');
+                } else {
+                    var strRefKeywords = 'pregnancy parenting';
+                }
+
+                var strURI = parseUri(document.location.href).protocol + '://' + parseUri(document.location.href).host + parseUri(document.location.href).path;
+
+                document.write('&lt;scr' + 'ipt type="text/javascript" src="http://xml.overture.com/d/search/p/demandmedia/js/?Partner=enom_essortment_qs_search&amp;mkt=us&amp;serveUrl=' + encodeURIComponent(strURI) + '&amp;Keywords=' + encodeURIComponent(strRefKeywords) + '&amp;outputCharEnc=utf8&amp;keywordCharEnc=utf8&amp;maxCount=8&amp;adultFilter=any&amp;cb=123abc"&gt;&lt;/scr' + 'ipt&gt;');
+            }
+        }
+  </script>
+  <!-- BEGIN Krux Control Tag -->
+  <script class="kxct" data-id="JSZXnYMG" data-timing="async" data-version="1.9" type="text/javascript">
+   window.Krux||((Krux=function(){Krux.q.push(arguments)}).q=[]);
+	  (function(){
+	    var k=document.createElement('script');k.type='text/javascript';k.async=true;
+	    var m,src=(m=location.href.match(/\bkxsrc=([^&amp;]+)/))&amp;&amp;decodeURIComponent(m[1]);
+	    k.src = /^https?:\/\/([a-z0-9_\-\.]+\.)?krxd\.net(:\d{1,5})?\//i.test(src) ? src : src === "disable" ? "" :
+	      (location.protocol==="https:"?"https:":"http:")+"//cdn.krxd.net/controltag?confid=JSZXnYMG"
+	  ;
+	    var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(k,s);
+	  }());
+  </script>
+  <!-- END Krux Controltag -->
+  <!-- BEGIN DFP Legacy Interchange Tag -->
+  <script>
+   window.Krux || ((Krux = function() {
+	    Krux.q.push(arguments);
+	  }).q = []);
+	  (function() {
+	    function retrieve(n) {
+	      var m, k = 'kx' + n;
+	      if (window.localStorage) {
+	        return window.localStorage[k] || "";
+	      } else if (navigator.cookieEnabled) {
+	        m = document.cookie.match(k + '=([^;]*)');
+	        return (m &amp;&amp; unescape(m[1])) || "";
+	      } else {
+	        return '';
+	      }
+	    }
+	    Krux.user = retrieve('user');
+	    Krux.segments = retrieve('segs') &amp;&amp; retrieve('segs').split(',') || [];
+	    
+	    //DFP Premium Interchange
+	    var dfpp = [];
+	    if (Krux.user) {
+	      dfpp.push('kuid=' + Krux.user);
+	    }
+	    for (var i = 0; i &lt; Krux.segments.length; i++ ) {
+	      dfpp.push('ksg=' + Krux.segments[i]);
+	    }
+	    Krux.dfppKeyValues = dfpp.length ? dfpp.join(';') + ';' : '';
+	  })();
+  </script>
+  <!-- END DFP Legacy Interchange Tag -->
+ </head>
+ <body>
+  <div id="master">
+   <div class="flc" id="header">
+    <a class="track" rel="http://www.essortment.com/">
+     <img alt="Articles - Free Online Articles on Health, Science, Education" class="sprites essortment_glassGIF logo" src="http://www.essortment.com/images/clear.gif"/>
+    </a>
+    <div class="search">
+     <!-- BEGIN Google Search Code -->
+     <form action="/search.htm" id="cse-search-box">
+      <div>
+       <input name="cof" type="hidden" value="FORID:10"/>
+       <input name="q" size="31" type="text"/>
+       <input name="sa" type="submit" value="Search"/>
+       <input name="cx" type="hidden" value="partner-pub-6167988213978292:6447045120"/>
+       <input name="ie" type="hidden" value="UTF-8"/>
+       <!-- &lt;input type="hidden" name="cx" value="partner-pub-6167988213978292:2fh5d1-ontm" /&gt; -->
+       <!-- &lt;input type="hidden" name="ie" value="ISO-8859-1" /&gt; -->
+      </div>
+     </form>
+     <script type="text/javascript">
+      doAutoSearch();
+     </script>
+     <script src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en" type="text/javascript">
+     </script>
+     <!-- END Google Search Code -->
+    </div>
+   </div>
+   <!-- /#header -->
+   <div id="breadcrumbs">
+    <ol class="flc">
+     <li>
+      <a class="track" rel="http://www.essortment.com/">
+       Home
+      </a>
+      <span class="sprites liPNG">
+      </span>
+     </li>
+     <li>
+      <a href="http://www.essortment.com/pregnancy-parenting/">
+       Pregnancy &amp; Parenting
+      </a>
+      <span class="sprites liPNG">
+      </span>
+     </li>
+     <li class="last">
+      <a href="http://www.essortment.com/teen-parenting-50093.html">
+       Teen Parenting
+      </a>
+     </li>
+    </ol>
+   </div>
+   <!-- /#breadcrumbs -->
+   <div class="article" id="pageframe">
+    <div class="flc">
+     <br/>
+    </div>
+    <div class="massiveContainer">
+     <div class="massive flc">
+      <div class="left module token">
+       <div class="mainbody flc">
+        <div class="particulars flc">
+         <!--&lt;img class="avatar" alt="" src="http://www.essortment.com/images/blank.jpg" height="64" width="64"/&gt;-->
+         <!-- google_ad_section_start -->
+         <h1 class="articletitle">
+          Teen Parenting
+         </h1>
+         <!-- google_ad_section_end -->
+        </div>
+        <!-- /.particulars -->
+        <div class="content">
+         <div class="leftsidebar" id="leftsidebar">
+          <!-- BEGIN POD Related Ad Links Widget -->
+          <script charset="utf-8" type="text/javascript">
+           HL_WIDGET_OPTIONS = {
+									"header": "Pregnancy &amp; Parenting Ads",
+									"linksResultsPageUrl" : "/radlinks.htm",
+									"widgetID" : 800,
+									"customerID" : 91
+									}
+          </script>
+          <script charset="utf-8" id="hotlinksScript" src="http://js.hotkeys.com/js/widget/hotlinks.js" type="text/javascript">
+          </script>
+          <!-- END    Related Ad Links Widget -->
+          <div class="catentry" id="relatedestc">
+          </div>
+          <script>
+           _DMW_loc = "relatedestc";   
+								  _DMW_title = "More Like This";   
+								  _DMW_id = "25";   
+								  _DMW_type = "VERTICAL";
+								  _dmwm.collectWidgets();
+          </script>
+          <script>
+           _DMW_loc = "trehow";   
+								  _DMW_title = "Trending Now";   
+								  _DMW_id = "46";   
+								  _DMW_type = "VERTICAL";
+								  _dmwm.collectWidgets();
+          </script>
+          <script>
+           window._DMWO = window._DMWO || {};
+								  window._DMWO.sbsehow = window._DMWO.sbsehow || {};
+									window._DMWO.sbsehow.imgSize = [100, 72];
+									window._DMWO.sbsehow.imgLoc = 'top';
+/*
+								  _DMW_loc = "bottomehow";  
+								  _DMW_title = "Popular Partner Articles";  
+								  _DMW_id = "41";  
+								  _DMW_type = "HORIZONTAL";  
+								  _dmwm.collectWidgets();
+                         */
+          </script>
+          <div data-type="adTracking" id="DMINSTR" name="&amp;adunit_id=pub-6167988213978292&amp;ad_unit_type=CNT&amp;ad_unit_network=GAP&amp;revenue_basis=CPC&amp;ad_position=LB&amp;revenue_tag=1000000006" type="adimpression">
+           <div class="ad google" id="GoogleAdsense160x600">
+            <script type="text/javascript">
+             &lt;!--
+										google_ad_client = "pub-6167988213978292";
+										google_ad_width = 160;
+										google_ad_height = 600;
+										google_ad_format = "160x600_as";
+										google_ad_channel ="1000000006, 2244068056, 2426488435";
+										if (gUtmSource.toLowerCase() == 'adwords') { google_ad_channel = google_ad_channel + ', ' + gUtmMedium; }
+										google_color_border = "FFFFFF";
+										google_color_bg = "FFFFFF";
+										google_color_link = "437AAE";
+										google_color_url = "437AAE";
+										google_color_text = "000000";//--&gt;
+            </script>
+            <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+            </script>
+           </div>
+           <!-- /ad.google -->
+          </div>
+          <!-- /DMINSTR -->
+         </div>
+         <!-- /.leftsidebar -->
+         <div id="main-content">
+          <div data-type="adTracking" id="DMINSTR" name="&amp;adunit_id=pub-6167988213978292&amp;ad_unit_type=CNT&amp;ad_unit_network=GAP&amp;revenue_basis=CPC&amp;ad_position=MT&amp;revenue_tag=1000000006" type="adimpression">
+           <div class="ad subgoogle" id="GoogleAdsense336x280">
+            <script type="text/javascript">
+             if (bolIsQS)
+            {
+                document.write('&lt;div class="yahoo336x280"&gt;');
+                YahooShowListings(1);
+                document.write('&lt;/div&gt;');
+            }
+            else
+            {
+                if (strCategoryNameUrlSafe == 'arts-culture')
+                {
+                    ad_order = 1;
+                    num_ads = 4;
+                    type = 'text_image_flash';
+                    channels = '1000000006, 7461115626, 2426488435, 6499374751, 1930890257';
+                    if (gUtmSource.toLowerCase() == 'adwords') { channels = channels + ', ' + gUtmMedium; }
+                    ad_client = 'pub-6167988213978292';
+                    class_name = '';
+                    image_size = '336x280';
+                    print_google_ad(ad_order,num_ads,type,channels,ad_client,class_name);
+                }
+                else
+                {
+                    google_ad_client = "pub-6167988213978292";
+                    google_ad_width = 336;
+                    google_ad_height = 280;
+                    google_ad_format = "336x280_as";
+                    google_ad_channel = "1000000006, 7461115626, 2426488435, 1930890257";
+                    if (gUtmSource.toLowerCase() == 'adwords') { google_ad_channel = google_ad_channel + ', ' + gUtmMedium; }
+                    google_color_border = "FFFFFF";
+                    google_color_bg = "FFFFFF";
+                    google_color_link = "437AAE";
+                    google_color_url = "437AAE";
+                    google_color_text = "000000";
+                    document.write('&lt;scr' + 'ipt type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"&gt;&lt;/scr' + 'ipt&gt;');
+                }
+            }
+            </script>
+           </div>
+          </div>
+          <!-- /DMINSTR -->
+          <!-- google_ad_section_start -->
+          <!-- Else if it is old/legacy content -->
+          <h2 class="summary">
+           Teen parenting isn't easy. They must live two lives in one, as a teen and as a parent. A teen mom faces so many more issues than an
+          </h2>
+          <div class="KonaBody">
+           <div class="articleContentPart">
+            <div data-cme-module="stronglinks" data-cme-module-max="10" data-cme-module-min="0">
+             <p>
+              Raising a child isn't an easy thing to do. Raising a child while the parents are still in their teens is even harder. Dealing with the day to day chores that involves a baby and trying to work and get an education is very stressful on any teen.
+             </p>
+            </div>
+            <p>
+            </p>
+            <p>
+             As a former teen mom, I wouldn't wish a teen pregnancy on any teen. Trying to work, go to school, raise a baby and still having some growing up to do is nowhere near easy. Dealing with a checkbook, a husband, a newborn, a job and finishing school at sixteen was hard. I managed, just like many other teen moms but I do wish things could have been easier so I could have enjoyed my first born even more, without all the added stress.
+            </p>
+            <p>
+            </p>
+            <p>
+             A teen mom faces more than just the bills and the baby. A teen mom often deals with becoming stereotypical in the eyes of those around her, strangers, friends and all. Many people don't wish to acknowledge the fact that it only takes once to get pregnant, which may very well be the case for the girl in question. Yet many people will look at her as lowly, assuming she got pregnant on purpose and slept around often. Her parenting skills are doubted, even if she follows the most popular of the parenting experts.
+            </p>
+            <div data-type="adTracking" id="DMINSTR" name="&amp;adunit_id=pub-6167988213978292&amp;ad_unit_type=CNT&amp;ad_unit_network=GAP&amp;revenue_basis=CPC&amp;ad_position=M2&amp;revenue_tag=1000000006" type="adimpression">
+             <div class="ad googleinline" id="GoogleAdsense300x250">
+              <script type="text/javascript">
+               if (bolIsQS)
+            {
+                document.write('&lt;div class="yahoo300x250"&gt;');
+                YahooShowListings(2);
+                document.write('&lt;/div&gt;');
+            }
+            else
+            {
+                if (strCategoryNameUrlSafe == 'arts-culture')
+                {
+                    ad_order = 2;
+                    num_ads = 4;
+                    type = 'text_image_flash';
+                    channels = '1000000006, 5990168106, 2426488435, 1936588302';
+                    if (gUtmSource.toLowerCase() == 'adwords') { channels = channels + ', ' + gUtmMedium; }
+                    ad_client = 'pub-6167988213978292';
+                    class_name = '';
+                    image_size = '300x250';
+                    print_google_ad(ad_order,num_ads,type,channels,ad_client,class_name);
+                }
+                else
+                {
+                    google_ad_client = "pub-6167988213978292";
+                    google_ad_width = 300;
+                    google_ad_height = 250;
+                    google_ad_format = "300x250_as";
+                    google_ad_channel = "1000000006, 5990168106, 2426488435";
+                    if (gUtmSource.toLowerCase() == 'adwords') { google_ad_channel = google_ad_channel + ', ' + gUtmMedium; }
+                    google_color_border = "FFFFFF";
+                    google_color_bg = "FFFFFF";
+                    google_color_link = "437AAE";
+                    google_color_url = "437AAE";
+                    google_color_text = "000000";
+                    document.write('&lt;scr' + 'ipt type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"&gt;&lt;/scr' + 'ipt&gt;');
+                }
+            }
+              </script>
+             </div>
+            </div>
+            <!--DMINSTR-->
+            <p>
+            </p>
+            <p>
+             Being "the talk of the town" often hurts and is rarely justifiable.
+            </p>
+            <p>
+            </p>
+            <p>
+             Closer to home, teen moms have to deal with relationship problems that may not be such a problem for a mom to be who has been in a relationship for a longer period of time. Boyfriends tend to drop out of the picture or promise to be around, only to leave later. Often the mom will realize he isn't the best person in the world to be a dad, so she doesn't push the issue. Child support is a problem, since most young dads, like the mom, are still in school or not making very much at work. There are some great teen dads out there but unfortunately, they are few and far between.
+            </p>
+            <p>
+            </p>
+            <p>
+             If the mom decides to stay with her parents, she deals with relationship issues on this front too. All to often grandparents want to take over. How can they not? It's extremely hard to step back and let your teen parent another child while you know they're so young, especially if the parenting styles they have aren't what the grandparents practiced on their own children.  Babysitting, parenting styles, doubting the ability of the teen-- All these can truly affect a teen mom in a negative way.
+            </p>
+            <p>
+            </p>
+            <p>
+             Finishing school and working to support a baby is also a big problem. In today's world, a college degree is almost a must for any good paying job. A high school education is even more important. If a teen mom still has to go to school and work, she has very little time to be a mother. The worst part of it all, is that usually, that's what a teen mom really wants to be. Most teen moms don't want to be part of the statistics. They don't want to be looked down on. They do want to take care of their child, or children, in hopes that they grow up to be strong people. They also want to show the world that they can be a good parent. It's just too bad that society doesn't readily give them that credit.
+            </p>
+           </div>
+           <!-- google_ad_section_end -->
+           <div id="divPhotoCredit">
+           </div>
+           <div style="display: block">
+            <div id="incite-bottom-frame">
+             <h4 class="DM53-widget-header DM53-widget-header1" style="clear: both; line-height: 1.4em; border-bottom: 3px solid #DDDDDD; font-size: 16px; font-weight:400; color:#333333; text-shadow: 0 2px 3px #BBBBBB;">
+              Trending Now
+             </h4>
+             <script class="herbie-script" data-id="5">
+              (function(){
+                                var insEl = document.getElementsByTagName("script")[0],
+                                    script = document.createElement("script");
+                                script.src="http://scripts.demandmedia.com/herbie/b101.js";
+                                script.async = true;
+                                insEl.parentNode.insertBefore(script,insEl);
+                            }());
+             </script>
+            </div>
+            <div id="bottomehow">
+            </div>
+            <!-- vestigial DIV -->
+           </div>
+          </div>
+          <!-- /.KonaBody -->
+         </div>
+        </div>
+        <!-- /.content -->
+       </div>
+       <!-- /.mainbody -->
+      </div>
+      <!-- /.left.module -->
+      <div class="right module" id="sidebar">
+       <div class="ad square">
+        <!-- BEGIN STANDARD TAG - 300 x 250 - Essortment: Run-of-site - DO NOT MODIFY -->
+        <!-- BEGIN 300 x 250 - Essortment: Run-of-site - DO NOT MODIFY -->
+        <script type="text/javascript">
+         var kruxKeyValues = '';
+							if (typeof window.Krux.dfppKeyValues !== "undefined" &amp;&amp; window.Krux.dfppKeyValues.length &gt; 0) {
+								kruxKeyValues = window.Krux.dfppKeyValues;
+							}
+							ord=Math.floor(Math.random()*10000000000000000);
+							document.write(modify_dart_tag('&lt;script language="JavaScript" src="http://ad.doubleclick.net/adj/dmd.essortment/;tile=1;dcopt=ist;%dx%;' + kruxKeyValues + 'sz=300x250;ord=' + ord + '?" type="text/javascript"&gt;&lt;\/script&gt;'));
+        </script>
+        <noscript>
+         <a href="http://ad.doubleclick.net/jump/dmd.essortment/;tile=1;sz=300x250;ord=123456789?" target="_blank">
+          <img alt="" border="0" height="250" src="http://ad.doubleclick.net/ad/dmd.essortment/;tile=1;sz=300x250;ord=123456789?" width="300"/>
+         </a>
+        </noscript>
+        <!-- END 300 x 250 - Essortment: Run-of-site -->
+        <!-- END TAG -->
+       </div>
+       <!-- /.ad.square -->
+       <div class="catentry" id="trehowed">
+       </div>
+       <!-- div class="catentry"&gt;
+						&lt;h2 class="entryheader smaller"&gt;Popular Articles&lt;/h2&gt;
+						&lt;ul class="tracked trackedID-2 bullet normal"&gt;
+						
+							
+							&lt;li class="flc"&gt;&lt;span class="sprites liPNG"&gt;&lt;/span&gt; &lt;span&gt;&lt;a href="http://www.essortment.com/common-conflicts-two-income-families-fighting-working-mothers-careers-36981.html"&gt;Common Conflicts Of Two Income Families: Fighting, Working Mothers, And Careers&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
+							
+						
+							
+							&lt;li class="flc"&gt;&lt;span class="sprites liPNG"&gt;&lt;/span&gt; &lt;span&gt;&lt;a href="http://www.essortment.com/helping-teen-deal-peer-pressure-50062.html"&gt;Helping Your Teen Deal With Peer Pressure&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
+							
+						
+							
+							&lt;li class="flc"&gt;&lt;span class="sprites liPNG"&gt;&lt;/span&gt; &lt;span&gt;&lt;a href="http://www.essortment.com/raising-only-child-socialization-50581.html"&gt;Raising An Only Child And Socialization&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
+							
+						
+							
+							&lt;li class="flc"&gt;&lt;span class="sprites liPNG"&gt;&lt;/span&gt; &lt;span&gt;&lt;a href="http://www.essortment.com/family-parenting-encourage-teen-stay-school-37003.html"&gt;Family And Parenting: How To Encourage Your Teen To Stay In School&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
+							
+						
+							
+							&lt;li class="flc"&gt;&lt;span class="sprites liPNG"&gt;&lt;/span&gt; &lt;span&gt;&lt;a href="http://www.essortment.com/welcome-teen-moms-50048.html"&gt;Welcome Teen Moms&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
+							
+						
+						&lt;/ul&gt;
+					&lt;/div-->
+       <!-- /.catentry -->
+       <div class="catentry">
+        <h2 class="entryheader smaller">
+         More Essortment Articles
+        </h2>
+        <ul class="tracked trackedID-4 bullet normal">
+         <li class="flc">
+          <span class="sprites liPNG">
+          </span>
+          <span>
+           <a href="http://www.essortment.com/parenting-tips-can-afford-stay-home-children-50413.html">
+            Parenting Tips: How Can I Afford To Stay Home With My Children?
+           </a>
+          </span>
+         </li>
+         <li class="flc">
+          <span class="sprites liPNG">
+          </span>
+          <span>
+           <a href="http://www.essortment.com/parenting-tips-single-mothers-50344.html">
+            Parenting Tips For Single Mothers
+           </a>
+          </span>
+         </li>
+         <li class="flc">
+          <span class="sprites liPNG">
+          </span>
+          <span>
+           <a href="http://www.essortment.com/advice-teen-parents-50091.html">
+            Advice For Teen Parents
+           </a>
+          </span>
+         </li>
+         <li class="flc">
+          <span class="sprites liPNG">
+          </span>
+          <span>
+           <a href="http://www.essortment.com/single-parenting-advice-cope-living-parents-50534.html">
+            Single Parenting Advice: How To Cope With Living With Your Parents
+           </a>
+          </span>
+         </li>
+         <li class="flc">
+          <span class="sprites liPNG">
+          </span>
+          <span>
+           <a href="http://www.essortment.com/preparing-teen-drivers-permit-50057.html">
+            Preparing A Teen For A Driver's Permit
+           </a>
+          </span>
+         </li>
+        </ul>
+       </div>
+       <!-- /.catentry -->
+      </div>
+      <!-- /.right.module -->
+     </div>
+     <!-- /.massive -->
+    </div>
+    <!-- /.massiveContainer -->
+    <div id="bottom">
+     <div class="tabs">
+      <ul class="controls flc">
+       <li>
+        <div class="spritesRepeatX controls02PNG a">
+         <span>
+          <span>
+           Popular Articles
+          </span>
+         </span>
+        </div>
+       </li>
+      </ul>
+      <div class="tabmaster">
+       <div class="tabwrap">
+        <!-- Popular Articles -->
+        <div class="tabentry" id="popular-articles">
+         <div class="slide-master flc">
+          <div class="viewport2">
+           <img alt="" height="93" src="http://www.essortment.com/images/pregnancy-parenting.jpg" width="144"/>
+           <ul class="left">
+            <li>
+             <a href="http://www.essortment.com/information-parents-anorexic-teen-girls-signs-symptoms-treatments-50092.html">
+              Information For Parents Of Anorexic Teen Girls: Signs, Symptoms, And Treatments
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/mentor-teen-mom-50050.html">
+              How To Mentor A Teen Mom
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/working-moms-parenting-36965.html">
+              Working Moms &amp; Parenting
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/money-tips-budgeting-one-income-families-36992.html">
+              Money Tips: Budgeting For One-Income Families
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/pets-babies-harmful-one-another-56997.html">
+              Are Pets And Babies Harmful To One Another?
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/family-parenting-begin-letting-teen-date-37027.html">
+              Family And Parenting: How And When To Begin Letting Your Teen Date
+             </a>
+            </li>
+           </ul>
+           <ul class="left">
+            <li>
+             <a href="http://www.essortment.com/positive-ways-discipline-children-50476.html">
+              Positive Ways To Discipline Children
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/can-cord-blood-used-51262.html">
+              How Can Cord Blood Be Used?
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/family-parenting-teen-modeling-jobs-good-idea-50094.html">
+              Family And Parenting: Are Teen Modeling Jobs A Good Idea?
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/training-teens-respectful-50042.html">
+              Training Teens To Be Respectful
+             </a>
+            </li>
+            <li>
+             <a href="http://www.essortment.com/family-parenting-becoming-stay-at-home-mom-right-choice-you-36957.html">
+              Family And Parenting: Is Becoming A Stay-At-Home Mom The Right Choice For You?
+             </a>
+            </li>
+           </ul>
+          </div>
+          <!-- /.viewport -->
+         </div>
+         <!-- /.slide-master -->
+        </div>
+        <!-- /.tabentry -->
+       </div>
+       <!-- /.tabwrap -->
+      </div>
+      <!-- /.tabmaster -->
+     </div>
+     <!-- /.tabs -->
+    </div>
+    <!-- /#bottom -->
+    <div class="ad banner">
+     <!-- BEGIN STANDARD TAG - 728 x 90 - Essortment: Run-of-site - DO NOT MODIFY -->
+     <script type="text/javascript">
+      var kruxKeyValues = '';
+				if (typeof window.Krux.dfppKeyValues !== "undefined" &amp;&amp; window.Krux.dfppKeyValues.length &gt; 0) {
+					kruxKeyValues = window.Krux.dfppKeyValues;
+				}
+				//ord=Math.random()*10000000000000000;
+				document.write(modify_dart_tag('&lt;script language="JavaScript" src="http://ad.doubleclick.net/adj/dmd.essortment/;tile=2;%dx%;' + kruxKeyValues + 'sz=728x90;ord=' + ord + '?" type="text/javascript"&gt;&lt;\/script&gt;'));
+     </script>
+     <noscript>
+      <a href="http://ad.doubleclick.net/jump/dmd.essortment/;tile=2;sz=728x90;ord=123456789?" target="_blank">
+       <img alt="" border="0" height="90" src="http://ad.doubleclick.net/ad/dmd.essortment/;tile=2;sz=728x90;ord=123456789?" width="728"/>
+      </a>
+     </noscript>
+     <!-- END TAG -->
+    </div>
+    <!-- /.ad.banner -->
+    <!-- Kontera ContentLink -->
+    <script type="text/javascript">
+     var dc_UnitID = 14;
+			var dc_PublisherID = 7763;
+			var dc_AdLinkColor = 'blue';
+			var dc_adprod='ADL';
+			var dc_startInterval = 30000;
+			var dc_flowMode = 4;
+    </script>
+    <script src="http://kona.kontera.com/javascript/lib/KonaLibInline.js" type="text/javascript">
+    </script>
+    <!-- Kontera ContentLink -->
+   </div>
+   <!-- /#pageframe.home -->
+  </div>
+  <!-- /#master -->
+  <script type="text/javascript">
+   request_google_ads();
+	&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        if ('referrer' in document &amp;&amp; (typeof console != "undefined")) {
+            console.log('referrer: ' + document.referrer);
+        }
+  </script>
+  <!-- /.massive -->
+  <div class="module flc" id="footer">
+   <p>
+    <a id="_bapw-link">
+     <img id="_bapw-icon" style="display:inline !important;vertical-align:middle !important"/>
+     AdChoices
+    </a>
+    |
+    <a class="track" rel="http://www.essortment.com/privacy.htm">
+     Privacy Policy
+    </a>
+    |
+    <a class="track" rel="http://www.essortment.com/disclaimer.htm">
+     Terms of Use
+    </a>
+   </p>
+  </div>
+  <!-- /#footer.module -->
+  <div id="legals">
+   <p>
+     Demand Media 2011
+   </p>
+  </div>
+  <!-- /#legals -->
+  <!-- Google Analytics -->
+  <script src="http://opt-n.net/adj/portal.aspx?cat=main" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   insertBot();
+  </script>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _uacct = "UA-2130855-11";
+			_udn="essortment.com";
+			urchinTracker();
+  </script>
+  <!-- end Google Analytics -->
+  <!-- Begin comScore Tag -->
+  <script type="text/javascript">
+   document.write(unescape("%3Cscript src='" + (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js' %3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   COMSCORE.beacon({ c1:2, c2:6036385, c3:"", c4:"", c5:"", c6:"", c15:"" });
+  </script>
+  <noscript>
+   <img alt="" height="0" src="http://b.scorecardresearch.com/b?c1=2&amp;c2=6036385&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c15=&amp;cv=1.3&amp;cj=1" style="display:none" width="0"/>
+  </noscript>
+  <!-- End comScore Tag -->
+  <script src="http://vs.dmtracker.com/tags/vsboone.js">
+  </script>
+  <script src="http://i.lsimg.net/ls_images/vs.js" type="text/javascript">
+  </script>
+  <noscript>
+   <img src="http://vs.dmtracker.com/images/zig.gif?Log=1"/>
+  </noscript>
+  <!-- /#pageframe.home -->
+  <!-- /#master -->
+  <script type="text/javascript">
+   request_google_ads();
+  </script>
+  <script type="text/javascript">
+   if (!IsAdWords()) {
+            var infolinks_pid = 1496668;
+            var infolinks_wsid = 1;
+            document.write('&lt;scr'+'ipt type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"&gt;&lt;/scr'+'ipt&gt;');
+        }
+  </script>
+  <script src="http://www.essortment.com/common.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   (function(){var e=document,b,a=(e.location.protocol=="https:"?"https":"http"),c=(a=="https"?"https://info.evidon.com/c/betrad/pub/":"http://cdn.betrad.com/pub/");e.getElementById("_bapw-icon").src=c+"icon1.png";
+			e.getElementById("_bapw-link").onclick=function(){var f=this;function d(i,l){var j=e.getElementsByTagName("head")[0]||e.documentElement,h=false,g=e.createElement("script");function k(){g.onload=g.onreadystatechange=null;
+			j.removeChild(g);l()}g.src=i;g.onreadystatechange=function(){if(!h&amp;&amp;(this.readyState=="loaded"||this.readyState=="complete")){h=true;k()}};g.onload=k;j.insertBefore(g,j.firstChild)}this.onclick="return false";
+			d(a+"://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js",function(){d(c+"pub1.js",function(){BAPW.i(f,{pid:46,ocid:374},false)})});return false};b=new Image();b.src=a+"://l.betrad.com/pub/p.gif?pid=46&amp;ocid=374&amp;ii=1&amp;r="+Math.random()}());
+  </script>
+ </body>
+</html>

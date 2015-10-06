@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns#">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="" name="description"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <link href="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/themes/infosec/style.css" rel="stylesheet"/>
+  <link href="http://resources.infosecinstitute.com/xmlrpc.php" rel="pingback"/>
+  <script>
+   var ajaxUrl = 'http://resources.infosecinstitute.com/wp-admin/admin-ajax.php';
+  </script>
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v2.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+  <title>
+   Nmap Evade Firewall &amp; Scripting - InfoSec Institute
+  </title>
+  <meta content="Nmap is the most powerful scanner that is used to perform so many functions including port scanning, service detection, and even vulnerability detection. N" name="description"/>
+  <link href="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" rel="canonical"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Nmap Evade Firewall &amp; Scripting - InfoSec Institute" property="og:title"/>
+  <meta content="Nmap is the most powerful scanner that is used to perform so many functions including port scanning, service detection, and even vulnerability detection. N" property="og:description"/>
+  <meta content="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" property="og:url"/>
+  <meta content="InfoSec Institute" property="og:site_name"/>
+  <meta content="feature" property="article:tag"/>
+  <meta content="firewalls" property="article:tag"/>
+  <meta content="nmap" property="article:tag"/>
+  <meta content="Hacking" property="article:section"/>
+  <meta content="2012-08-29T14:52:54+00:00" property="article:published_time"/>
+  <meta content="2012-08-29T15:46:31+00:00" property="article:modified_time"/>
+  <meta content="2012-08-29T15:46:31+00:00" property="og:updated_time"/>
+  <meta content="http://resources.infosecinstitute.com/wp-content/uploads/inetvis-nmap_decoy_gridsweep1.jpg" property="og:image"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/feed/" rel="alternate" title="InfoSec Institute  Nmap Evade Firewall &amp; Scripting Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/resources.infosecinstitute.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/captcha/css/style.css?ver=4.2.2" id="cptch_stylesheet-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/wpjobboard/public/css/wpjb-glyphs.css?ver=4.2.2" id="wpjb-glyphs-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/wpjobboard/public/css/frontend.css?ver=4.3.1" id="wpjb-css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/enlighter/resources/EnlighterJS.min.css?ver=4.2.2" id="enlighter-local-css" media="all" rel="stylesheet" type="text/css"/>
+  <!-- This site uses the Google Analytics by Yoast plugin v5.4.2 - Universal enabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-146509-8', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('require', 'displayfeatures');
+	__gaTracker('send','pageview');
+  </script>
+  <!-- / Google Analytics by Yoast -->
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/themes/infosec/js/vendor/modernizr.min.js" type="text/javascript">
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/themes/infosec/js/vendor/device.min.js" type="text/javascript">
+  </script>
+  <script src="//ajax.googleapis.com/ajax/libs/mootools/1.5.1/mootools-yui-compressed.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/enlighter/resources/EnlighterJS.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="http://resources.infosecinstitute.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://resources.infosecinstitute.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://resources.infosecinstitute.com/?p=9748" rel="shortlink"/>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */window.addEvent('domready', function(){if (typeof EnlighterJS == "undefined"){return;};EnlighterJS.Util.Init('pre.EnlighterJSRAW', 'code.EnlighterJSRAW', {"language":"standard","theme":"git","indent":-1,"hover":"hoverEnabled","showLinenumbers":true,"rawButton":true,"infoButton":true,"windowButton":true,"rawcodeDoubleclick":false,"grouping":true,"cryptex":{"enabled":true,"email":"mail@example.tld"}});});/* ]]&gt; */
+  </script>
+  <style id="syntaxhighlighteranchor" type="text/css">
+  </style>
+ </head>
+ <body class="single single-post postid-9748 single-format-standard without-series">
+  <div id="fb-root">
+  </div>
+  <header class="masthead">
+   <div>
+    <div class="col-3-3">
+     <nav class="top-left">
+      <ul>
+       <li>
+        <a href="http://infosecinstitute.com">
+         InfoSec Institute
+        </a>
+        <ul>
+         <li>
+          <a href="http://www.infosecinstitute.com/courses/security.html">
+           IT Security Boot Camps
+          </a>
+         </li>
+         <li>
+          <a href="http://www.infosecinstitute.com/infosec_institute/contact_us.html">
+           Contact InfoSec
+          </a>
+         </li>
+         <li>
+          <a href="http://www.infosecinstitute.com/enterprise-wide-training2.html">
+           Enterprise &amp; Government
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a href="http://www.intenseschool.com">
+         Intense School
+        </a>
+       </li>
+      </ul>
+     </nav>
+     <nav class="top-right">
+      <ul>
+      </ul>
+     </nav>
+    </div>
+   </div>
+   <div>
+    <div class="col-3-3">
+     <div class="logo">
+      <a href="http://resources.infosecinstitute.com">
+       <img alt="InfoSec Institute" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/themes/infosec/assets/imagery/logo.svg" title="InfoSec Institute" width="126"/>
+      </a>
+     </div>
+     <a class="menu-button mobile" data-attr="main:toggle" href="#site-navigation">
+      Menu
+     </a>
+     <nav class="main" id="site-navigation">
+      <a aria-hidden="true" class="mobile" data-attr="main:remove" href="#">
+       Close Menu
+      </a>
+      <a aria-hidden="true" class="mobile" data-attr="topics:remove" href="#">
+       Back
+      </a>
+      <a aria-hidden="true" class="mobile" data-attr="content-archives:remove" href="#">
+       Back
+      </a>
+      <ul>
+       <li class="mobile menu-item menu-item-type-custom menu-item-object-custom menu-item-4748">
+        <a href="http://infosec.wpengine.com">
+         Return Home
+        </a>
+       </li>
+       <li class="has-dropdown menu-item menu-item-type-custom menu-item-object-custom menu-item-4750 menu-item-has-children">
+        <a data-attr="topics:set" href="">
+         Topics
+        </a>
+        <ul data-menu-container="topics">
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/hacking-2/" title="Hacking">
+           Hacking
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/certifications-training/" title="IT Certifications">
+           IT Certifications
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/forensics-2/" title="Forensics">
+           Forensics
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/application-security-2/" title="Application Security">
+           Application Security
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/pen-testing-1/" title="Penetration Testing">
+           Penetration Testing
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/general-security-2/" title="General Security">
+           General Security
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/interviews/" title="Interviews">
+           Interviews
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/virtualization-security/" title="Virtualization Security">
+           Virtualization Security
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/wireless-security/" title="Wireless Security">
+           Wireless Security
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/scada-2/" title="SCADA">
+           SCADA
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/reverse-engineering-2/" title="Reverse Engineering">
+           Reverse Engineering
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/data-recovery/" title="Data Recovery">
+           Data Recovery
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/exploit-development/" title="Exploit Development">
+           Exploit Development
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/compliance-auditing/" title="Management, Compliance, &amp; Auditing">
+           Management, Compliance, &amp; Auditing
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/incident-response-resources/" title="Incident Response">
+           Incident Response
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/certifications-training/cisa/" title="CISA">
+           CISA
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/certifications-training/cism/" title="CISM">
+           CISM
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/category/certifications-training/cissp/" title="CISSP">
+           CISSP
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-4758">
+        <a href="http://resources.infosecinstitute.com/contributors/">
+         Contributors
+        </a>
+       </li>
+       <li class="has-dropdown desktop menu-item menu-item-type-custom menu-item-object-custom menu-item-30046 menu-item-has-children">
+        <a data-attr="content-archives:set" href="#">
+         Content Archives
+        </a>
+        <ul data-menu-container="content-archives">
+         <li>
+          <a href="http://resources.infosecinstitute.com/2015/" title="2015">
+           2015
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/2014/" title="2014">
+           2014
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/2013/" title="2013">
+           2013
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/2012" title="2012">
+           2012
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/2011" title="2011">
+           2011
+          </a>
+         </li>
+         <li>
+          <a href="http://resources.infosecinstitute.com/2010" title="2010">
+           2010
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li class="mobile menu-item menu-item-type-custom menu-item-object-custom menu-item-30121">
+        <a href="http://resources.infosecinstitute.com/2015">
+         Content Archives
+        </a>
+       </li>
+       <li class=" menu-item menu-item-type-custom menu-item-object-custom menu-item-32332">
+        <a href="http://certs.infosecinstitute.com">
+         Certification Tracker
+        </a>
+       </li>
+      </ul>
+     </nav>
+     <nav class="search">
+      <form action="http://www2.infosecinstitute.com/s/12882/ntpoCCBNQ1ttbNTP3ylPLZZeUqLrVgCT" class="search-form" method="get">
+       <fieldset>
+        <input class="icon search" id="search" name="s" type="text" value=""/>
+        <input class="icon search" title="Search" type="submit"/>
+       </fieldset>
+      </form>
+     </nav>
+    </div>
+   </div>
+  </header>
+  <main>
+   <section class="hero full">
+    <div class="post-col-3-3 wrapper">
+     <div class="post-col-2-3 hook" style="background-image: url('http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//inetvis-nmap_decoy_gridsweep1-1024x0-c-default.jpg');">
+      <header>
+       <h1>
+        Nmap Evade Firewall &amp; Scripting
+       </h1>
+       <div class="meta">
+        Posted in
+        <a href="/category/hacking-2">
+         Hacking
+        </a>
+        on August 29, 2012
+       </div>
+      </header>
+      <div class="share horizontal">
+       <span class="icon share-l" data-attr="share:toggle">
+        Share
+       </span>
+       <ul>
+        <li class="twitter">
+         <a class="twitter-share-button" data-count-url="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" data-hashtags="infosec" data-related="infosecedu" data-size="medium" data-text="Nmap Evade Firewall &amp; Scripting" data-url="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" data-via="InfosecEdu" href="https://twitter.com/share">
+          Tweet
+         </a>
+        </li>
+        <li class="google">
+         <div class="g-plus" data-action="share" data-annotation="bubble">
+         </div>
+        </li>
+        <li class="linkedin">
+         <script data-counter="right" type="IN/Share">
+         </script>
+        </li>
+        <li class="reddit">
+         <script src="//www.redditstatic.com/button/button1.js" type="text/javascript">
+         </script>
+        </li>
+        <li class="facebook">
+         <div class="fb-like" data-action="like" data-layout="button_count" data-share="false" data-show-faces="false" data-width="90">
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="post-col-1-3">
+      <div class="endemic-ad" style="background-image: url(http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/5-17.png);">
+       <div>
+        <h3>
+         Ethical Hacking Boot Camp
+        </h3>
+        <h4>
+         Our most popular course!
+        </h4>
+        <p>
+        </p>
+        <a href="http://www2.infosecinstitute.com/l/12882/2015-05-05/mxr5t" target="_blank">
+         Click Here!
+        </a>
+       </div>
+      </div>
+      <div class="skillset box empty">
+       <h3>
+        Skillset
+       </h3>
+       <a href="#skillset-modal" rel="modal:open">
+        What's this?
+       </a>
+       <p>
+        Practice for certification success with the
+        <a href="http://www.skillset.com" style="color:#8bc7e4;">
+         Skillset library of over 100,000 practice test questions
+        </a>
+        . We analyze your responses and can determine when you are ready to sit for the test.
+       </p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="content full">
+    <div class="col-3-3 wrapper">
+     <div class="main post-col-2-3">
+      <article class="post-content">
+       <p>
+        Nmap is the most powerful scanner that is used to perform so many functions including port scanning, service detection, and even vulnerability detection.
+        <a href="http://resources.infosecinstitute.com/nmap/">
+         Nmap from beginner to advanced
+        </a>
+        <a href="http://resources.infosecinstitute.com/nmap/">
+         has covered many basic concepts and commands, and in this second part of this series of articles I will discuss some advanced techniques of Nmap.
+        </a>
+       </p>
+       <p style="text-align: center;">
+        <span style="text-decoration: underline; text-align: center;">
+         How to Evade a Firewall/IDS
+        </span>
+       </p>
+       <p>
+        Firewalls and IDS (intrusion detection systems) normally play an important role to defend the remote target very well from a security point of view because these hardwares and softwares are capable of blocking the intrusion, but in the case of penetration testing you need to bypass these tools to get the right result otherwise you will be misled. Nmap can scan the firewall and other intrusion detection systems on the remote target computer, as it uses different types of techniques to fight against these softwares and the techniques are dependent on the remote software. There are two types of firewall that might be installed on the target computer:
+       </p>
+       <ul style="margin-left: 45pt;">
+        <li>
+         Host based firewall (A firewall is running on a single target computer, for example you are running a firewall on your computer)
+        </li>
+        <li>
+         Network based firewall (A firewall has been installed and is running to protect the entire network and has been deployed at the node of the network, it might be LAN)
+        </li>
+       </ul>
+       <p>
+        There are two types of IDS/IPS also available that might be installed on the target machine, this is the situation that a penetration tester needs to
+        <span style="color: black;">
+         tackle. There are so many different type of Nmap techniques that can be used in this situation, for example:
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          TCP ACK Scan (-sA)
+         </strong>
+        </span>
+       </p>
+       <p>
+        It is always good to send the ACK packets rather than the SYN packets because if there is any active firewall working on the remote computer then because of the ACK packets the firewall cannot create the log, since firewalls treat ACK packet as the response of the SYN packet. The TCP ACK scan requires the root privileges at the attacker side and it performs very well for the stateless firewall and IDS. As a penetration tester you need to check the response of a firewall; there might be four types of responses:
+       </p>
+       <ul>
+        <li>
+         Open port (few ports in the case of the firewall)
+        </li>
+        <li>
+         Closed port (most ports are closed because of the firewall)
+        </li>
+        <li>
+         Filtered (Nmap is not sure whether the port is open or not)
+        </li>
+        <li>
+         Unfiltered (Nmap can access the port but is still confused about the open status of the port)
+        </li>
+       </ul>
+       <p>
+        So these are some important responses that you might get during a penetration testing. ACK scan is slightly different from the other types of scanning techniques because it has not been designed to discover the open ports, but it has an ability to determine the
+        <em>
+         filtered
+        </em>
+        and
+        <em>
+         unfiltered
+        </em>
+        responses. Lets compare the two results of an ACK scan.
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 415px;">
+          </col>
+          <col style="width: 416px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Enabled
+             </strong>
+             <br/>
+            </span>
+           </td>
+           <td style="border-top: solid black 0.125pt; border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Disabled
+             </strong>
+            </span>
+           </td>
+          </tr>
+          <tr>
+           <td style="border-left: solid black 0.125pt; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -sA 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 13:30 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00077s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              All 1000 scanned ports on 192.168.1.9 are
+              <strong>
+               filtered
+              </strong>
+             </span>
+            </p>
+           </td>
+           <td style="border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -sA 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 13:31 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00020s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              All 1000 scanned ports on 192.168.1.9 are
+              <strong>
+               unfiltered
+              </strong>
+              <br/>
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        So now it is very easy to find out whether the target computer has a firewall enabled or not, since a simple ACK scan means there is a lower chance of detection at the victim side but a high chance for the attacker to discover the firewall. The result of a SYN scan for both the situations are as follows:
+       </p>
+       <p>
+        <img alt="" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/082912_1952_NmapEvadeFi1.jpg" width="600"/>
+       </p>
+       <p>
+        Note: The victim is the Windows computer for all the cases with the three situations.
+       </p>
+       <ul>
+        <li>
+         Firewall enabled
+        </li>
+        <li>
+         Firewall enabled + all ports are closed
+        </li>
+        <li>
+         Firewall disabled
+        </li>
+       </ul>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          TCP Window Scan (-sW)
+         </strong>
+         <span style="color: black;">
+          Very similar to the ACK scan with a little difference, the TCP window scan has been designed to differentiate between open and closed ports instead of showing unfiltered. It also requires the root privilege to execute. Lets examine the different responses of a TCP window scan.
+          <br/>
+         </span>
+        </span>
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 415px;">
+          </col>
+          <col style="width: 416px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Enabled
+             </strong>
+            </span>
+           </td>
+           <td style="border-top: solid black 0.125pt; border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Disabled
+             </strong>
+            </span>
+           </td>
+          </tr>
+          <tr>
+           <td style="border-left: solid black 0.125pt; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -sW 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 13:50 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00051s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              All 1000 scanned ports on 192.168.1.9 are
+              <strong>
+               filtered
+              </strong>
+             </span>
+            </p>
+           </td>
+           <td style="border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -sW 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 13:51 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00071s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              All 1000 scanned ports on 192.168.1.9 are
+              <strong>
+               closed
+              </strong>
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        <span style="color: black;">
+         This type of scan does not open any active session with the target computer, so there is no chance that the victims computer can create a log of the activities. It works on the simple phenomena to send ACK packets and receive a single RST packet in response.
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          Fragment Packets (-f)
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         It is a very general concept and can be used in so many different situations, for example: if the target machine does not have the capabilities to handle larger packets then the fragmentation technique is useful to evade the firewall. The parameter of this technique is
+         <em>
+          -f,
+         </em>
+         it just split the request into small segments of IP packets called the fragmented IP packets. You can use
+         <em>
+          -f
+         </em>
+         twice
+         <em>
+          -ff
+         </em>
+         if you want to further break the IP headers.
+         <br/>
+        </span>
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 277px;">
+          </col>
+          <col style="width: 277px;">
+          </col>
+          <col style="width: 277px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Enabled
+             </strong>
+            </span>
+           </td>
+           <td style="border-top: solid black 0.125pt; border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <strong>
+             Firewall enabled + all ports are closed
+            </strong>
+           </td>
+           <td style="border-top: solid black 0.125pt; border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Firewall Disabled
+             </strong>
+             <br/>
+            </span>
+           </td>
+          </tr>
+          <tr>
+           <td style="border-left: solid black 0.125pt; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -f 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 14:21 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00056s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Not shown: 998 filtered ports
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              PORT STATE SERVICE
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              139/tcp open netbios-ssn
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              445/tcp open microsoft-ds
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              MAC Address: 08:00:27:66:13:9B (Cadmus Computer Systems)
+              <br/>
+             </span>
+            </p>
+           </td>
+           <td style="border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -ff 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 14:24 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00083s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              All 1000 scanned ports on 192.168.1.9 are filtered
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              MAC Address: 08:00:27:66:13:9B (Cadmus Computer Systems)
+             </span>
+            </p>
+           </td>
+           <td style="border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -f 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 14:20 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.9
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.00057s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Not shown: 997 closed ports
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              PORT STATE SERVICE
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              135/tcp open msrpc
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              139/tcp open netbios-ssn
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              445/tcp open microsoft-ds
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              MAC Address: 08:00:27:66:13:9B (Cadmus Computer Systems)
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          Spoof MAC Address
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         This one is the simpler techniques,you can spoof your MAC (attacker MAC) address., MAC address spoofing creates a very difficult situation for the victim to identify the computer who originated the incoming request. Nmap can select a completely random MAC address for each and every scan based on the vendor name, the other option is to manually specify the MAC address (by doing this an attacker can spoof the address of a computer on the same network). Nmap has the database called
+         <em>
+          nmap-mac-prefixes
+         </em>
+         and
+         <em>
+          <br/>
+         </em>
+         whenever the vendor name is given it looks on the database to find the suitable MAC address.
+         <br/>
+        </span>
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 831px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap spoof-mac Cisco 192.168.1.3
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 17:18 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Spoofing MAC address 00:00:0C:6D:3F:26 (Cisco Systems)
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 192.168.1.3
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Host is up (0.00036s latency).
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Not shown: 996 filtered ports
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              PORT STATE SERVICE
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              23/tcp closed telnet
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              80/tcp closed http
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              139/tcp open netbios-ssn
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              445/tcp open microsoft-ds
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              MAC Address: 08:00:27:66:13:9B (Cadmus Computer Systems)
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <ol>
+        <li>
+         <div style="text-align: center;">
+          <h3>
+           <span style="color: blue;">
+            <span style="text-decoration: underline;">
+             Nmap Timing Option
+            </span>
+            <span style="color: black;">
+             <br/>
+            </span>
+           </span>
+          </h3>
+         </div>
+        </li>
+       </ol>
+       <p>
+        <span style="color: black;">
+         Timing option is a very important and an interesting feature of a Nmap, since sometimes you need to make a delay between every request. There are so many reasons for this but the most important reason is stress on the network; sometimes the victims computer and even a network cannot handle a big request. As a penetration tester you need to make sure that your scanning should not be treated as a Denial of Service attack (DoS), so the timely response and request are very important aspects in scanning. Nmap has so many features and parameters that can be very helpful to scan a target in a timely manner, the fragmentation technique (-f) as discussed is also a useful technique to split your request into multiple segments. The other important parameters are discussed below:
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          Delay (scan_delay)
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         This is the best parameter that can be used to control the delay between each and every request Since you can control the time between each probe you need to be make sure to use the timing in integer form and do not forget to mention the unit of time:
+         <br/>
+        </span>
+       </p>
+       <ul>
+        <li>
+         <span style="color: black;">
+          ms (millisecond) e.g. 5ms
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          s (second) e.g. 5s
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          m (minute) e.g. 5m
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          h (hour) e.g. 5h
+          <br/>
+         </span>
+        </li>
+       </ul>
+       <p>
+        <span style="color: black;">
+         Lets consider an example:
+         <br/>
+        </span>
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 415px;">
+          </col>
+          <col style="width: 416px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Simple Scan
+             </strong>
+             <br/>
+            </span>
+           </td>
+           <td style="border-top: solid black 0.125pt; border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             <strong>
+              Delay Scan
+             </strong>
+            </span>
+           </td>
+          </tr>
+          <tr>
+           <td style="border-left: solid black 0.125pt; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap localhost
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Nmap done: 1 IP address (1 host up) scanned in 0.21 second
+             </span>
+            </p>
+           </td>
+           <td style="border-left: none; border-bottom: solid black 0.125pt; border-right: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap scan_delay 5ms localhost
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             .
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Nmap done: 1 IP address (1 host up) scanned in 5.31 seconds
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          Host Timeout Option (host-timeout)
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         Sometimes a host takes too much time to respond and if you are scanning an entire network then it is very difficult to wait for a single host. There might be so many reasons behind a slow response, for example the network connectivity and the firewall, so if you dont want to waste your time then you can set a time limit.
+         <br/>
+        </span>
+       </p>
+       <p>
+        <img alt="" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/082912_1952_NmapEvadeFi2.jpg" width="600"/>
+        <span style="color: black;">
+         <br/>
+        </span>
+       </p>
+       <p style="text-align: center;">
+        <span style="text-decoration: underline; color: blue; text-align: center;">
+         Nmap Scripting
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         Nmap scripting is one the best features that Nmap has. Nmap scripts are very useful for the penetration tester because they can save so much time and effort. The Nmap scripting engine has more than 400 scripts at the time of this writing, and you can create your own script and everyone can create a script and submit it to the script engine to help the community of penetration tester.
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         Nmap scripts can perform so many different functions from vulnerability scanning to exploitation and from malware detection to brute forcing. In this section I will discuss some of the best Nmap scripts and their usage:
+         <span style="color: blue;">
+          <strong>
+           <br/>
+          </strong>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          smb-check-vulns
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         This is one of the important scripts that can scan to check the vulnerabilities:
+         <br/>
+        </span>
+       </p>
+       <ul>
+        <li>
+         <span style="color: black;">
+          MS08-067 Windows vulnerability that can be exploited
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          Conficker malware on the target machine
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          Denial of service vulnerability of Windows 2000
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          MS06-025 Windows vulnerability
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          MS07-029 Windows vulnerability
+         </span>
+        </li>
+       </ul>
+       <p>
+        <img alt="" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/082912_1952_NmapEvadeFi3.jpg" width="600"/>
+        <span style="color: blue;">
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         Now it is very easy to find the above vulnerabilities on the target machine, and you can easily exploit it via Metasploit.
+         <span style="color: blue;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          Http-enum
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         If you want to enumerate on the web server to find the directories of the website then this is the best Nmap script for this purpose. The http-enum script is also used to discover the open ports and to list softwares with their version of each port.
+         <em>
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          root@bt:~# nmap -sV script=http-enum 127.0.0.1
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          Starting Nmap 5.51 ( http://nmap.org ) at 2012-07-28 18:47 PKT
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          Nmap scan report for localhost (127.0.0.1)
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          Host is up (0.000036s latency).
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          Not shown: 997 closed ports
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          PORT STATE SERVICE VERSION
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          80/tcp open http Apache httpd 2.2.14 ((Ubuntu))
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          | http-enum:
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          | /login.php: Possible admin folder
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          | /login/: Login page
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          | /login.php: Login page
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          | /logs/: Logs
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <img alt="" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/082912_1952_NmapEvadeFi4.jpg" width="600"/>
+        <span style="color: black;">
+         <br/>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          samba-vuln-cve-2012-1182
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         The script to perform the desired scanning against the target machine to find the Samba heap overflow vulnerability CVE-2012-1182.
+         <em>
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          nmap script=samba-vuln-cve-2012-1182 -p 139 target
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          nmap script=samba-vuln-cve-2012-1182 -p 139 192.168.1.3
+         </em>
+         <span style="color: blue;">
+          <strong>
+           <br/>
+          </strong>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          smtp-strangeport
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         So many organizations are running their SMTP server on the non standard port for security reasons. Smtp-strangeport is the script to find out whether the SMTP is running on the standard port or not.
+         <em>
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          nmap -sV script=smtp-strangeport target
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          http-php-version
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         As the name suggests, this script has been created to get the PHP version from the web server. The software version is very important for a penetration tester to find the respective vulnerability, so this script is very helpful for web application penetration testing.
+         <em>
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         <em>
+          nmap -sV script=http-php-version target
+          <br/>
+         </em>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         The Nmap scripting engine contains so many scripts that you can even find several scripts for a specific softwareor platform. For example: if you want to do penetration testing on a website which is based on WordPress then you can use Nmap scripts for this purpose.
+         <br/>
+        </span>
+       </p>
+       <ul>
+        <li>
+         <span style="color: black;">
+          http-wordpress-plugins
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          http-wordpress-enum
+          <br/>
+         </span>
+        </li>
+        <li>
+         <span style="color: black;">
+          http-wordpress-brute
+          <span style="color: blue;">
+           <strong>
+            <br/>
+           </strong>
+          </span>
+         </span>
+        </li>
+       </ul>
+       <p>
+        <span style="color: blue;">
+         <strong>
+          dns-blacklist
+         </strong>
+         <span style="color: black;">
+          <br/>
+         </span>
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         This is the best script in my view to find the blacklisted IP addresses. All you need to do is just provide an IP, then the script checks it for the DNS anti-spam and proxy blacklist.
+         <br/>
+        </span>
+       </p>
+       <div style="margin-left: 2pt;">
+        <table border="0" style="border-collapse: collapse;">
+         <colgroup>
+          <col style="width: 831px;">
+          </col>
+         </colgroup>
+         <tbody valign="top">
+          <tr>
+           <td style="border: solid black 0.125pt; padding: 5px;">
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             # nmap -sn 67.213.218.72 script dns-blacklist
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Starting Nmap 5.61TEST4 ( http://nmap.org ) at 2012-07-28 23:54 PKT
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Nmap scan report for 67.213.218.72
+             <br/>
+            </span>
+            <span style="font-family: Times New Roman; font-size: 12pt;">
+             Host is up (0.24s latency).
+             <br/>
+            </span>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              Host script results:
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              | dns-blacklist:
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              | PROXY
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              | dnsbl.tornevall.org  PROXY
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              | IP marked as abusive host
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              | Proxy is working
+              <br/>
+             </span>
+            </p>
+            <p>
+             <span style="font-family: Times New Roman; font-size: 12pt;">
+              |_ Proxy has been scanned
+             </span>
+            </p>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p style="text-align: center;">
+        <span style="text-decoration: underline; color: blue; text-align: center;">
+         Conclusion
+        </span>
+       </p>
+       <p>
+        <span style="color: black;">
+         This article is an effort to cover the most important aspects of Nmap from beginning to advanced so that everyone can learn even without previous knowledge. This is not the end because Nmap has a lot of features, you can do many things by using Nmap. I recommend you to practice with it every day because practice makes a man perfect.
+        </span>
+       </p>
+       <div class="share vertical">
+        <ul>
+         <li class="twitter">
+          <a class="twitter-share-button" data-count="vertical" data-count-url="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" data-hashtags="infosec" data-related="infosecedu" data-size="medium" data-text="Nmap Evade Firewall &amp; Scripting" data-url="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/" data-via="InfosecEdu" href="https://twitter.com/share">
+           Tweet
+          </a>
+         </li>
+         <li class="google">
+          <div class="g-plus" data-action="share" data-annotation="vertical-bubble">
+          </div>
+         </li>
+         <li class="linkedin">
+          <script data-counter="top" type="IN/Share">
+          </script>
+         </li>
+         <li class="reddit">
+          <script src="//www.redditstatic.com/button/button2.js" type="text/javascript">
+          </script>
+         </li>
+         <li class="facebook">
+          <div class="fb-like" data-action="like" data-layout="box_count" data-share="false" data-show-faces="false" data-width="90">
+          </div>
+         </li>
+        </ul>
+       </div>
+      </article>
+      <section class="post-author ">
+       <div class="image">
+        <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/3ed04524c53fdb1bba265eb4e89f2520?s=96&amp;d=mm&amp;r=g" srcset="http://0.gravatar.com/avatar/3ed04524c53fdb1bba265eb4e89f2520?s=192&amp;d=mm&amp;r=g 2x" width="96"/>
+       </div>
+       <div class="name">
+        <span>
+         Author
+        </span>
+        <h5>
+         <a href="http://resources.infosecinstitute.com/author/irfan-shakeel">
+          Irfan Shakeel
+         </a>
+        </h5>
+       </div>
+       <div class="description">
+       </div>
+      </section>
+     </div>
+     <ul class="sidebar post-col-1-3">
+      <li class="practice-exams">
+       <h4>
+        Free Practice Exams
+       </h4>
+       <ul>
+        <li>
+         <a href="https://www.skillset.com/certifications/ccna" target="_blank">
+          <img alt="CCNA Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//cisco-ccna-logo-lbox-72x40-ffffff.jpg" width="36"/>
+          CCNA Practice Exam
+         </a>
+        </li>
+        <li>
+         <a href="https://www.skillset.com/certifications/comptia-networkplus" target="_blank">
+          <img alt="Network + Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//netplus-lbox-72x40-ffffff.jpg" width="36"/>
+          Network + Practice Exam
+         </a>
+        </li>
+        <li>
+         <a href="https://www.skillset.com/certifications/pmp" target="_blank">
+          <img alt="PMP Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//pmi-lbox-72x40-ffffff.jpg" width="36"/>
+          PMP Practice Exam
+         </a>
+        </li>
+        <li>
+         <a href="https://www.skillset.com/certifications/securityplus" target="_blank">
+          <img alt="Security+ Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//sec+-lbox-72x40-ffffff.jpg" width="36"/>
+          Security+ Practice Exam
+         </a>
+        </li>
+        <li>
+         <a href="https://www.skillset.com/certifications/ceh" target="_blank">
+          <img alt="CEH Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//CEH1-lbox-72x40-ffffff.jpg" width="36"/>
+          CEH Practice Exam
+         </a>
+        </li>
+        <li>
+         <a href="https://www.skillset.com/certifications/cissp" target="_blank">
+          <img alt="CISSP Practice Exam" height="20" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//cissp-lbox-72x40-ffffff.jpg" width="36"/>
+          CISSP Practice Exam
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="editors-choice">
+       <h4>
+        Editors Choice
+       </h4>
+       <ul>
+        <li>
+         <a class="icon post-s" href="http://resources.infosecinstitute.com/certification-tracker-cissp/">
+          Certification Tracker  CISSP
+         </a>
+        </li>
+        <li>
+         <a class="icon post-s" href="http://resources.infosecinstitute.com/35-awesome-infosec-influencers-you-need-to-follow/">
+          35 Awesome InfoSec Influencers You Need to Follow
+         </a>
+        </li>
+        <li>
+         <a class="icon post-s" href="http://resources.infosecinstitute.com/securing-web-apis-part-ii-creating-an-api-authenticated-with-oauth-2-in-node-js/">
+          Creating an API authenticated with OAuth 2 in Node.js
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="bootcamps">
+       <h4>
+        Related Boot Camps
+       </h4>
+       <ul>
+        <li>
+         <a class="icon right-arrow" href="http://www.infosecinstitute.com/courses/security.html" target="_blank">
+          Information Security
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.intenseschool.com/boot_camp/cisco/ccna" target="_blank">
+          CCNA
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.intenseschool.com/boot_camp/pm/pm_professional" target="_blank">
+          PMP
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.infosecinstitute.com/courses/microsoft-training.html" target="_blank">
+          Microsoft
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.infosecinstitute.com/courses/incident_respone_network_forensics.html" target="_blank">
+          Incident Response
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.infosecinstitute.com/courses/information-assurance.html" target="_blank">
+          Information Assurance
+         </a>
+        </li>
+        <li>
+         <a class="icon right-arrow" href="http://www.infosecinstitute.com/courses/8570-training.html" target="_blank">
+          8570
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="author-posts">
+       <h4>
+        More Posts by Author
+       </h4>
+       <ul>
+        <li>
+         <a class="icon arrow-right" href="http://resources.infosecinstitute.com/metadata-and-information-security/">
+          <img alt="MetaData and Information Security" height="38" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//metadata-sized-76x76-c-default.jpg" width="38"/>
+          <h5>
+           MetaData and Information Security
+          </h5>
+         </a>
+        </li>
+        <li>
+         <a class="icon arrow-right" href="http://resources.infosecinstitute.com/social-media-security-risk/">
+          <img alt="Social Media &amp; Security Risk" height="38" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//03-Social-Media-Management8777-76x76-c-default.jpg" width="38"/>
+          <h5>
+           Social Media &amp; Security Risk
+          </h5>
+         </a>
+        </li>
+        <li>
+         <a class="icon arrow-right" href="http://resources.infosecinstitute.com/nmap/">
+          <img alt="Nmap from Beginner to Advanced" height="38" src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//inetvis-nmap_decoy_gridsweep-76x76-c-default.jpg" width="38"/>
+          <h5>
+           Nmap from Beginner to Advanced
+          </h5>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+     <ul class="random-posts ">
+      <li style="background-image: url('http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//07092015-books-237x237-c-default.jpg');">
+       <a class="icon post-l" href="http://resources.infosecinstitute.com/certification-tracker-cissp/" title="Certification Tracker  CISSP">
+        <h3>
+         Certification Tracker  CISSP
+        </h3>
+       </a>
+      </li>
+      <li style="background-image: url('http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//podcasts-237x237-c-default.jpg');">
+       <a class="icon post-l" href="http://resources.infosecinstitute.com/35-awesome-infosec-influencers-you-need-to-follow/" title="35 Awesome InfoSec Influencers You Need to Follow">
+        <h3>
+         35 Awesome InfoSec Influencers You Need
+        </h3>
+       </a>
+      </li>
+      <li style="background-image: url('http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//API-Logo-237x237-c-default.gif');">
+       <a class="icon post-l" href="http://resources.infosecinstitute.com/securing-web-apis-part-ii-creating-an-api-authenticated-with-oauth-2-in-node-js/" title="Creating an API authenticated with OAuth 2 in Node.js">
+        <h3>
+         Creating an API authenticated with OAuth
+        </h3>
+       </a>
+      </li>
+      <li style="background-image: url('http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads//Buffer-Overflow02042014-237x237-c-default.jpg');">
+       <a class="icon post-l" href="http://resources.infosecinstitute.com/stack-based-buffer-overflow-in-win-32-platform-part-8/" title="Analyzing and Writing a Local Exploit 2">
+        <h3>
+         Analyzing and Writing a Local Exploit
+        </h3>
+       </a>
+      </li>
+     </ul>
+     <div id="disqus_thread">
+      <div id="dsq-content">
+       <ul id="dsq-comments">
+        <li class="comment even thread-even depth-1" id="dsq-comment-264583">
+         <div class="dsq-comment-header" id="dsq-comment-header-264583">
+          <cite id="dsq-cite-264583">
+           http://ceh.fav.cc
+           <span id="dsq-author-user-264583">
+            Someshwar
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-264583">
+          <div class="dsq-comment-message" id="dsq-comment-message-264583">
+           <p>
+            Very informative and useful article.
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-309030">
+         <div class="dsq-comment-header" id="dsq-comment-header-309030">
+          <cite id="dsq-cite-309030">
+           <span id="dsq-author-user-309030">
+            manojsingh
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-309030">
+          <div class="dsq-comment-message" id="dsq-comment-message-309030">
+           <p>
+            can we add this for fingerprinting SQli
+            <br/>
+            nmap -T4 -A -v script sql-injection 127.0.0.1
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="dsq-comment-589565">
+         <div class="dsq-comment-header" id="dsq-comment-header-589565">
+          <cite id="dsq-cite-589565">
+           <span id="dsq-author-user-589565">
+            Pantuts
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-589565">
+          <div class="dsq-comment-message" id="dsq-comment-message-589565">
+           <p>
+            Nice tuts! Tnx for the spoof-mac option :)
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1182211">
+         <div class="dsq-comment-header" id="dsq-comment-header-1182211">
+          <cite id="dsq-cite-1182211">
+           http://irsecteam.org
+           <span id="dsq-author-user-1182211">
+            ali reza
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-1182211">
+          <div class="dsq-comment-message" id="dsq-comment-message-1182211">
+           <p>
+            hey man
+           </p>
+           <p>
+            thanks a lot:X
+           </p>
+           <p>
+            i use of your article for book;x
+           </p>
+           <p>
+            i referenced your site iinto my article:X
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="dsq-comment-1206604">
+         <div class="dsq-comment-header" id="dsq-comment-header-1206604">
+          <cite id="dsq-cite-1206604">
+           http://www.qlbi.com
+           <span id="dsq-author-user-1206604">
+            
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-1206604">
+          <div class="dsq-comment-message" id="dsq-comment-message-1206604">
+           <p>
+            good man thanks lotx  nice ^_^
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1211593">
+         <div class="dsq-comment-header" id="dsq-comment-header-1211593">
+          <cite id="dsq-cite-1211593">
+           <span id="dsq-author-user-1211593">
+            Ethacal hacker
+           </span>
+          </cite>
+         </div>
+         <div class="dsq-comment-body" id="dsq-comment-body-1211593">
+          <div class="dsq-comment-message" id="dsq-comment-message-1211593">
+           <p>
+            Hi
+            <br/>
+            very good good good ? thanks
+           </p>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+       </ul>
+      </div>
+     </div>
+    </div>
+   </section>
+   <footer class="site-footer">
+    <div class="ctas full">
+     <div class="col-3-3 wrapper">
+      <div class="col-1-3">
+       <h6>
+        About InfoSec
+       </h6>
+       <p>
+        InfoSec Institute is the best source for high quality
+        <a href="http://www.infosecinstitute.com" style="color:#fff;">
+         information security training
+        </a>
+        . We have been training Information Security and IT Professionals since 1998 with a diverse lineup of relevant training courses. In the past 16 years, over 50,000 individuals have trusted InfoSec Institute for their professional development needs!
+       </p>
+      </div>
+      <div class="col-1-3">
+       <h6>
+        Connect with us
+       </h6>
+       <p>
+        Stay up to date with
+        <a href="http://www.infosecinstitute.com" style="color:#fff;">
+         InfoSec Institute
+        </a>
+        and
+        <a href="http://www.intenseschool.com" style="color:#fff;">
+         Intense School
+        </a>
+        - at info@infosecinstitute.com
+       </p>
+       <ul class="footer-social">
+        <li>
+         <div class="fb-like" data-action="like" data-href="http://resources.infosecinstitute.com" data-layout="button_count" data-share="false" data-show-faces="false" data-width="90">
+         </div>
+        </li>
+        <li>
+         <a class="twitter-follow-button" data-lang="en" data-show-count="false" href="https://twitter.com/infosecedu">
+          Follow @infosecedu
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="col-1-3">
+       <form action="/newsletter/signup" class="mailchimp has-loader" method="post" novalidate="">
+        <aside>
+         <h6>
+          Join our newsletter
+         </h6>
+         <p>
+          Get the latest news, updates &amp; offers straight to your inbox.
+         </p>
+        </aside>
+        <fieldset>
+         <input name="EMAIL" placeholder="Enter your email" title="Email address" type="email" value=""/>
+         <input class="generic-cta green" type="submit" value="Subscribe"/>
+         <input name="b_2593cfe26893087ed36e00fe3_ba06ce498c" tabindex="-1" type="text" value=""/>
+        </fieldset>
+       </form>
+      </div>
+     </div>
+    </div>
+    <div class="navigation full">
+     <div class="col-3-3 wrapper">
+      <nav class="footer">
+       <ul>
+       </ul>
+      </nav>
+      <div class="copyright">
+        InfoSec Institute 2015
+      </div>
+     </div>
+    </div>
+   </footer>
+  </main>
+  <div class="modal">
+   <div class="modal-inner">
+    <a rel="modal:close">
+     Close
+    </a>
+    <div class="modal-content">
+    </div>
+   </div>
+  </div>
+  <div id="modal-hidden">
+   <div id="download">
+    <div class="pardot form">
+     <h4 class="pardot-title">
+      File download
+     </h4>
+     <form action="https://go.pardot.com/l/12882/2014-12-11/cqhcw" id="download-form" method="post">
+      <input name="url" type="hidden" value="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/"/>
+      <ul>
+       <li data-required="">
+        <label>
+         First Name
+        </label>
+        <input name="first_name"/>
+       </li>
+       <li data-required="">
+        <label>
+         Last Name
+        </label>
+        <input name="last_name"/>
+       </li>
+       <li data-required="">
+        <label>
+         Work Phone Number
+        </label>
+        <input name="phone"/>
+       </li>
+       <li data-required="">
+        <label>
+         Work Email Address
+        </label>
+        <input name="email"/>
+       </li>
+       <li>
+        <label>
+         Job Title
+        </label>
+        <input name="job_title"/>
+       </li>
+       <li>
+        <label>
+         Does your employer pay for training?
+        </label>
+        <div class="dd">
+         <select name="employer_paid_training">
+          <option value="No">
+           No
+          </option>
+          <option value="Yes">
+           Yes
+          </option>
+         </select>
+        </div>
+       </li>
+       <li class="training-timeline">
+        <label>
+         What is your timeline for training?
+        </label>
+        <div class="dd">
+         <select name="training_timeline">
+          <option value="N/A">
+          </option>
+          <option value="Within a month">
+           Within a month
+          </option>
+          <option value="1-3 months">
+           1-3 months
+          </option>
+          <option value="3-6 months">
+           3-6 months
+          </option>
+          <option value="6-12 months">
+           6-12 months
+          </option>
+          <option value="Over 1 year">
+           Over 1 year
+          </option>
+         </select>
+        </div>
+       </li>
+       <li class="full">
+        <input name="entry_id" type="hidden" value="9748"/>
+        <input name="entry_title" type="hidden" value="Nmap Evade Firewall &amp; Scripting"/>
+        <input name="entry_url" type="hidden" value="http://resources.infosecinstitute.com/nmap-evade-firewall-scripting/"/>
+        <input class="generic-cta green" type="submit" value="Download files"/>
+       </li>
+      </ul>
+      <p>
+       InfoSec institute respects your privacy and will never use your personal information for anything other than to notify you of your requested course pricing. We will never sell your information to third parties. You will not be spammed.
+      </p>
+      <div style="position:absolute; left:-9999px; top: -9999px;">
+       <label for="pardot_extra_field">
+        Comments
+       </label>
+       <input id="pardot_extra_field" name="pardot_extra_field" type="text"/>
+      </div>
+     </form>
+    </div>
+   </div>
+   <div id="skillset-modal">
+    <div class="skillset window">
+     <h4>
+      What is Skillset?
+     </h4>
+     <aside>
+      <div class="left">
+       <h3>
+        Skillset
+       </h3>
+       <h5>
+        Practice tests &amp; assessments.
+       </h5>
+      </div>
+      <div class="right">
+       <p>
+        Practice for certification success with the Skillset library of over 100,000 practice test questions. We analyze your responses and can determine when you are ready to sit for the test. Along your journey to exam readiness, we will:
+       </p>
+       <p>
+       </p>
+       <p>
+        1. Determine which required skills your knowledge is sufficient
+        <br/>
+        2. Which required skills you need to work on
+        <br/>
+        3. Recommend specific skills to practice on next
+        <br/>
+        4. Track your progress towards a certification exam
+       </p>
+      </div>
+     </aside>
+    </div>
+   </div>
+  </div>
+  <script src="//platform.linkedin.com/in.js" type="text/javascript">
+   lang: en_US
+  </script>
+  <script>
+   window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+  </script>
+  <script>
+   (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.3&amp;appId=552038044933986";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+  </script>
+  <script async="" defer="" src="https://apis.google.com/js/platform.js">
+  </script>
+  <script>
+   var postID = 9748;
+  </script>
+  <script type="text/javascript">
+   &lt;!--
+piCId = '1951';
+piAId = '13882';
+
+
+(function() {
+	function async_load(){
+		var s = document.createElement('script'); s.type = 'text/javascript';
+		s.src = ('https:' == document.location.protocol ? 'https://pi' : 'http://cdn') + '.pardot.com/pd.js';
+		var c = document.getElementsByTagName('script')[0]; c.parentNode.insertBefore(s, c);
+	}
+	if(window.attachEvent) { window.attachEvent('onload', async_load); }
+	else { window.addEventListener('load', async_load, false); }
+})();
+--&gt;
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/akismet/_inc/form.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/themes/infosec/app.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.2.2","language":"","remote_auth_s3":"W10= c5bb60fe3fc06af6f06a8f0b5590d422376959a8 1436909142","api_key":"1TA9XhBKpqfZxr6kJiBvCescmAiajXtudB0o4aJYPZguLsFA5bUOtWPGbsoOAiku","sso":{"name":"InfoSec Institute","button":false,"url":"http:\/\/resources.infosecinstitute.com\/wp-login.php","logout":"http:\/\/resources.infosecinstitute.com\/wp-login.php?action=logout","width":"800","height":"700"}},"disqusIdentifier":"9748 http:\/\/infosec.wpengine.com\/?p=9748","disqusShortname":"infosecinstituteresources","disqusTitle":"Nmap Evade Firewall &amp; Scripting","disqusUrl":"http:\/\/resources.infosecinstitute.com\/nmap-evade-firewall-scripting\/","options":{"manualSync":false},"postId":"9748"};
+/* ]]&gt; */
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var countVars = {"disqusShortname":"infosecinstituteresources"};
+/* ]]&gt; */
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/disqus-comment-system/media/js/count.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var icegram_pre_data = {"ajax_url":"http:\/\/resources.infosecinstitute.com\/wp-admin\/admin-ajax.php","post_obj":{"is_home":false,"page_id":9748,"action":"display_messages","shortcodes":[],"cache_compatibility":"yes"}};
+/* ]]&gt; */
+  </script>
+  <script src="http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/plugins/icegram/assets/js/main.js?ver=1.9.1" type="text/javascript">
+  </script>
+ </body>
+</html>

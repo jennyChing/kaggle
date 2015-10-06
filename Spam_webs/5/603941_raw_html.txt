@@ -1,0 +1,973 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html dir="ltr" version="XHTML+RDFa 1.0" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head profile="http://www.w3.org/1999/xhtml/vocab">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="https://kdenlive.org/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"/>
+  <link href="/node/3462" rel="shortlink"/>
+  <link href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram" rel="canonical"/>
+  <meta content="Drupal 7 (http://drupal.org)" name="Generator"/>
+  <title>
+   Introducing Scopes: The Audio Spectrum and the Spectrogram | Kdenlive
+  </title>
+  <style media="all" type="text/css">
+   @import url("https://kdenlive.org/modules/system/system.base.css?nr0co1");
+@import url("https://kdenlive.org/modules/system/system.menus.css?nr0co1");
+@import url("https://kdenlive.org/modules/system/system.messages.css?nr0co1");
+@import url("https://kdenlive.org/modules/system/system.theme.css?nr0co1");
+  </style>
+  <style media="all" type="text/css">
+   @import url("https://kdenlive.org/modules/aggregator/aggregator.css?nr0co1");
+@import url("https://kdenlive.org/modules/book/book.css?nr0co1");
+@import url("https://kdenlive.org/modules/comment/comment.css?nr0co1");
+@import url("https://kdenlive.org/sites/all/modules/date/date_api/date.css?nr0co1");
+@import url("https://kdenlive.org/modules/field/theme/field.css?nr0co1");
+@import url("https://kdenlive.org/sites/all/modules/mollom/mollom.css?nr0co1");
+@import url("https://kdenlive.org/modules/node/node.css?nr0co1");
+@import url("https://kdenlive.org/modules/poll/poll.css?nr0co1");
+@import url("https://kdenlive.org/modules/user/user.css?nr0co1");
+@import url("https://kdenlive.org/sites/all/modules/views/css/views.css?nr0co1");
+  </style>
+  <style media="all" type="text/css">
+   @import url("https://kdenlive.org/sites/all/modules/ctools/css/ctools.css?nr0co1");
+  </style>
+  <style media="all" type="text/css">
+   @import url("https://kdenlive.org/themes/bartik/css/layout.css?nr0co1");
+@import url("https://kdenlive.org/themes/bartik/css/style.css?nr0co1");
+@import url("https://kdenlive.org/sites/kdenlive.org/files/color/bartik-d101a4c6/colors.css?nr0co1");
+  </style>
+  <style media="print" type="text/css">
+   @import url("https://kdenlive.org/themes/bartik/css/print.css?nr0co1");
+  </style>
+  <!--[if lte IE 7]&gt;
+&lt;link type="text/css" rel="stylesheet" href="https://kdenlive.org/themes/bartik/css/ie.css?nr0co1" media="all" /&gt;
+&lt;![endif]-->
+  <!--[if IE 6]&gt;
+&lt;link type="text/css" rel="stylesheet" href="https://kdenlive.org/themes/bartik/css/ie6.css?nr0co1" media="all" /&gt;
+&lt;![endif]-->
+  <script src="https://kdenlive.org/misc/jquery.js?v=1.4.4" type="text/javascript">
+  </script>
+  <script src="https://kdenlive.org/misc/jquery.once.js?v=1.2" type="text/javascript">
+  </script>
+  <script src="https://kdenlive.org/misc/drupal.js?nr0co1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   &lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"bartik","theme_token":"xMbfvXjYjJwimMEjliMH58l5rKpVLfBu03vrft_vnWc","js":{"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"modules\/aggregator\/aggregator.css":1,"modules\/book\/book.css":1,"modules\/comment\/comment.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/mollom\/mollom.css":1,"modules\/node\/node.css":1,"modules\/poll\/poll.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"themes\/bartik\/css\/layout.css":1,"themes\/bartik\/css\/style.css":1,"themes\/bartik\/css\/colors.css":1,"themes\/bartik\/css\/print.css":1,"themes\/bartik\/css\/ie.css":1,"themes\/bartik\/css\/ie6.css":1}}});
+//--&gt;&lt;!]]&gt;
+  </script>
+ </head>
+ <body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-3462 node-type-blog">
+  <div id="skip-link">
+   <a class="element-invisible element-focusable" href="#main-content">
+    Skip to main content
+   </a>
+  </div>
+  <div id="page-wrapper">
+   <div id="page">
+    <div class="without-secondary-menu" id="header">
+     <div class="section clearfix">
+      <a href="/" id="logo" rel="home" title="Home">
+       <img alt="Home" src="https://kdenlive.org/sites/default/files/pixture_reloaded_small.png"/>
+      </a>
+      <div id="name-and-slogan">
+       <div id="site-name">
+        <strong>
+         <a href="/" rel="home" title="Home">
+          <span>
+           Kdenlive
+          </span>
+         </a>
+        </strong>
+       </div>
+       <div id="site-slogan">
+        Free and open source video editor for GNU/Linux, Mac OS X and FreeBSD
+       </div>
+      </div>
+      <!-- /#name-and-slogan -->
+      <div class="navigation" id="main-menu">
+       <h2 class="element-invisible">
+        Main menu
+       </h2>
+       <ul class="links clearfix" id="main-menu-links">
+        <li class="menu-280 first">
+         <a href="/features">
+          Features
+         </a>
+        </li>
+        <li class="menu-389">
+         <a href="/downloading-and-installing-kdenlive" title="Installing Kdenlive">
+          Download
+         </a>
+        </li>
+        <li class="menu-4992">
+         <a href="/resources">
+          Resources
+         </a>
+        </li>
+        <li class="menu-9377">
+         <a href="/page-not-found">
+          Help
+         </a>
+        </li>
+        <li class="menu-1035">
+         <a href="/contribution-manual" title="">
+          Contribute
+         </a>
+        </li>
+        <li class="menu-326 last">
+         <a href="http://forum.kde.org/viewforum.php?f=262" title="">
+          Forums
+         </a>
+        </li>
+       </ul>
+      </div>
+      <!-- /#main-menu -->
+     </div>
+    </div>
+    <!-- /.section, /#header -->
+    <div class="clearfix" id="main-wrapper">
+     <div class="clearfix" id="main">
+      <div id="breadcrumb">
+       <h2 class="element-invisible">
+        You are here
+       </h2>
+       <div class="breadcrumb">
+        <a href="/">
+         Home
+        </a>
+        
+        <a href="/blog">
+         Blogs
+        </a>
+        
+        <a href="/blogs/granjow">
+         Granjow's blog
+        </a>
+       </div>
+      </div>
+      <div class="column sidebar" id="sidebar-first">
+       <div class="section">
+        <div class="region region-sidebar-first">
+         <div class="block block-views" id="block-views-kde-forums-block">
+          <h2>
+           KDE Forums
+          </h2>
+          <div class="content">
+           <div class="view view-kde-forums view-id-kde_forums view-display-id-block view-dom-id-28a9ca884d817fd7b20bfe5aa0033e7e">
+            <div class="view-content">
+             <div class="views-row views-row-1 views-row-odd views-row-first">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=265&amp;t=125550&amp;p=331674#p331674">
+                 Kdenlive General Discussion :: SlideShow Clips, Frame Duration Confusion
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-2 views-row-even">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=265&amp;t=125557&amp;p=331713#p331713">
+                 Kdenlive General Discussion :: Kdenlive tutorials not working
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-3 views-row-odd">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=265&amp;t=125560&amp;p=331728#p331728">
+                 Kdenlive General Discussion :: Trouble with colors, textlayers and h264 video (w. sample)
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-4 views-row-even">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=265&amp;t=125568&amp;p=331760#p331760">
+                 Kdenlive General Discussion :: Hey everyone - Noob Question about Transitioning
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-5 views-row-odd">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=266&amp;t=125573&amp;p=331777#p331777">
+                 Kdenlive Gallery :: UFO Sighting
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-6 views-row-even">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=279&amp;t=125577&amp;p=331801#p331801">
+                 Development :: mantis, should we still report bugs there...?
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-7 views-row-odd">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=266&amp;t=125612&amp;p=331926#p331926">
+                 Kdenlive Gallery :: What are Hackers?
+                </a>
+               </span>
+              </div>
+             </div>
+             <div class="views-row views-row-8 views-row-even views-row-last">
+              <div class="views-field views-field-title">
+               <span class="field-content">
+                <a href="https://forum.kde.org/viewtopic.php?f=272&amp;t=125642&amp;p=331985#p331985">
+                 Rendering Codecs &amp; Formats :: Rendering stops at 99%
+                </a>
+               </span>
+              </div>
+             </div>
+            </div>
+            <h2 class="element-invisible">
+             Pages
+            </h2>
+            <div class="item-list">
+             <ul class="pager">
+              <li class="pager-current first">
+               1
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C1" title="Go to page 2">
+                2
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C2" title="Go to page 3">
+                3
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C3" title="Go to page 4">
+                4
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C4" title="Go to page 5">
+                5
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C5" title="Go to page 6">
+                6
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C6" title="Go to page 7">
+                7
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C7" title="Go to page 8">
+                8
+               </a>
+              </li>
+              <li class="pager-item">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C8" title="Go to page 9">
+                9
+               </a>
+              </li>
+              <li class="pager-ellipsis">
+               
+              </li>
+              <li class="pager-next">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C1" title="Go to next page">
+                next 
+               </a>
+              </li>
+              <li class="pager-last last">
+               <a href="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?page=0%2C15" title="Go to last page">
+                last 
+               </a>
+              </li>
+             </ul>
+            </div>
+            <div class="view-footer">
+             <div style="text-align:right">
+              <a href="http://forum.kde.org/viewforum.php?f=262">
+               More
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="block block-aggregator" id="block-aggregator-feed-10">
+          <h2>
+           Bugs
+          </h2>
+          <div class="content">
+           <div class="item-list">
+            <ul>
+             <li class="first">
+              <a href="https://bugs.kde.org/show_bug.cgi?id=350177">
+               [Bug 350177] Feature request: add mute function for playback in clip monitor
+              </a>
+             </li>
+             <li>
+              <a href="https://bugs.kde.org/show_bug.cgi?id=350071">
+               [Bug 350071] Special characters in titles make titles disappear in render
+              </a>
+             </li>
+             <li>
+              <a href="https://bugs.kde.org/show_bug.cgi?id=350061">
+               [Bug 350061] Fails to build on ubuntu armhf (OpenGL != OpenGLES)
+              </a>
+             </li>
+             <li>
+              <a href="https://bugs.kde.org/show_bug.cgi?id=350030">
+               [Bug 350030] Cant move curves bottom black control to right.
+              </a>
+             </li>
+             <li class="last">
+              <a href="https://bugs.kde.org/show_bug.cgi?id=350017">
+               [Bug 350017] Curves handles are lost when clip is deselected
+              </a>
+             </li>
+            </ul>
+           </div>
+           <div class="more-link">
+            <a href="/aggregator/sources/10" title="View this feed's recent news.">
+             More
+            </a>
+           </div>
+          </div>
+         </div>
+         <div class="block block-user" id="block-user-login">
+          <h2>
+           User login
+          </h2>
+          <div class="content">
+           <form accept-charset="UTF-8" action="/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram?destination=node/3462" id="user-login-form" method="post">
+            <div>
+             <div class="form-item form-type-textfield form-item-name">
+              <label for="edit-name">
+               Username
+               <span class="form-required" title="This field is required.">
+                *
+               </span>
+              </label>
+              <input class="form-text required" id="edit-name" maxlength="60" name="name" size="15" type="text" value=""/>
+             </div>
+             <div class="form-item form-type-password form-item-pass">
+              <label for="edit-pass">
+               Password
+               <span class="form-required" title="This field is required.">
+                *
+               </span>
+              </label>
+              <input class="form-text required" id="edit-pass" maxlength="128" name="pass" size="15" type="password"/>
+             </div>
+             <div class="item-list">
+              <ul>
+               <li class="first last">
+                <a href="/user/password" title="Request new password via e-mail.">
+                 Request new password
+                </a>
+               </li>
+              </ul>
+             </div>
+             <input name="form_build_id" type="hidden" value="form-t8OfXUuAzTbz3nCeX2zPcNjWavwv5mZ93MZGBFcVE8w"/>
+             <input name="form_id" type="hidden" value="user_login_block"/>
+             <div class="form-actions form-wrapper" id="edit-actions">
+              <input class="form-submit" id="edit-submit" name="op" type="submit" value="Log in"/>
+             </div>
+            </div>
+           </form>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- /.section, /#sidebar-first -->
+      <div class="column" id="content">
+       <div class="section">
+        <a id="main-content">
+        </a>
+        <h1 class="title" id="page-title">
+         Introducing Scopes: The Audio Spectrum and the Spectrogram
+        </h1>
+        <div class="tabs">
+        </div>
+        <div class="region region-content">
+         <div class="block block-system" id="block-system-main">
+          <div class="content">
+           <div class="node node-blog node-promoted node-full clearfix" id="node-3462">
+            <div class="meta submitted">
+             Submitted by
+             <span class="username">
+              Granjow
+             </span>
+             on Sat, 12/25/2010 - 12:51
+            </div>
+            <div class="content clearfix">
+             <div class="field field-name-body field-type-text-with-summary field-label-hidden">
+              <div class="field-items">
+               <div class="field-item even">
+                <p>
+                 In the next version of kdenlive you will again find new scopes. This time not for video but for audio! I will also give some tips about audio in general (recording, perception, etc.), not only about kdenlives scopes.
+                </p>
+                <p>
+                 <a href="http://kdenlive.org/sites/default/files/images/audiospectrum-example.png">
+                  <img src="http://kdenlive.org/sites/default/files/images/audiospectrum-example.preview.png" style="width: 480px;"/>
+                 </a>
+                </p>
+                <p>
+                 <a href="http://kdenlive.org/users/granjow/introducing-scopes-audio-spectrum-and-spectrogram">
+                  read more 
+                 </a>
+                </p>
+                <!--break-->
+                <h2 class="i">
+                 First of all, the scopes
+                </h2>
+                <dl class="thumb">
+                 <dt>
+                  <a href="http://kdenlive.org/sites/default/files/images/kdenlive-spectrogram.png">
+                   <img src="http://kdenlive.org/sites/default/files/images/kdenlive-spectrogram.preview.png"/>
+                  </a>
+                 </dt>
+                 <dd>
+                  Spectrogram screenshot
+                 </dd>
+                </dl>
+                <p>
+                 The audio scopes are documented in-depth in
+                 <a href="http://granjow.net/uploads/kdenlive/kdenlive-audioscopes.pdf">
+                  Audio Scopes for kdenlive (PDF)
+                 </a>
+                 . You may skip the technical/mathematical part  it is not necessary for understanding the scope, and the maths behind is not very trivial. The rest might be interesting though.
+                </p>
+                <p>
+                 Nevertheless, a quick overview over the features currently available.
+                </p>
+                <h3 class="i">
+                 Audio Spectrum
+                </h3>
+                <p>
+                 This scope displays the frequency spectrum for each frame. Low frequencies are on the left, high frequencies on the right. And the higher the bar, the louder this frequency.
+                </p>
+                <p>
+                 Loudness is measured in
+                 <a href="http://en.wikipedia.org/wiki/Decibel">
+                  decibel
+                 </a>
+                 in the spectrum. (To be very precise, the unit used in the scope is
+                 <a href="http://en.wikipedia.org/wiki/DBFS">
+                  dbFS
+                 </a>
+                 , so 0dB refers to the maximum possible loudness that can be achieved with the digital input signal.) If all frequencies have equal loudness, you can adjust the range to display by dragging vertically. Simply dragging adjusts the lower threshold, Shift+drag adjusts the maximum loudness to display. Horizontal dragging adjusts the maximum frequency to display samples for.
+                </p>
+                <p>
+                 But what is this display useful for? One thing is that, as described in the PDF linked at the top, you can visually distinguish between good and bad sound quality: If there are no frequencies higher than, like, 3kHz, then the audio quality most likely is not too good.
+                </p>
+                <p>
+                 (If you have no clue how high 3kHz are, which is nothing unusual since our ears do not deliver numerical values to our brain, you can use a program like
+                 <a href="http://arachnoid.com/SignalGen/index.html">
+                  SignalGen
+                 </a>
+                 or
+                 <a href="http://audacity.de/">
+                  Audacity
+                 </a>
+                 to generate a sine wave with 3kHz (which is 3000Hz).)
+                </p>
+                <p>
+                 Something else the frequency spectrum is useful for is to avoid
+                 <em>
+                  <a href="http://en.wikipedia.org/wiki/Clipping_%28signal_processing%29">
+                   clipping
+                  </a>
+                 </em>
+                 . The same effect that can be seen with colors, e.g. in the
+                 <a href="http://kdenlive.org/users/granjow/introducing-color-scopes-waveform-and-rgb-parade">
+                  RGB parade
+                 </a>
+                 , and actually with every signal that is digitalized. More about this below.
+                </p>
+                <h3 class="i">
+                 Spectrogram
+                </h3>
+                <p>
+                 The
+                 <a href="http://en.wikipedia.org/wiki/Spectrogram">
+                  Spectrogram
+                 </a>
+                 does the same as the Audio Spectrum: It shows the frequency distribution. With the difference though that the frequencies are not shown for one frame only. Similar to the RGB Parade for colors are stronger (louder) frequencies represented by brighter pixels; this allows to put a whole frames spectrum in one line.
+                </p>
+                <h3 class="i">
+                 What the scopes might help in as well
+                </h3>
+                <p>
+                 To maintain equal loudness over multiple shots. Consider
+                 <a href="http://www.youtube.com/watch?v=ZWXU3mScCzM">
+                  this review
+                 </a>
+                 about the Nikon D7000, and listen at 7:00 and 11:00. At 7:00 you can hear the reviewer loud and clear, at 11:00 you need to turn up the volume to even understand something. This should
+                 <em>
+                  not
+                 </em>
+                 happen.
+                </p>
+                <h2 class="i">
+                 Sound
+                </h2>
+                <p>
+                 Now a few interesting details about sound.
+                </p>
+                <h3 class="i">
+                 Clipping
+                </h3>
+                <dl class="thumb">
+                 <dt>
+                  <a href="http://kdenlive.org/sites/default/files/images/Zoom%20H4n%20audio%20levels.jpg">
+                   <img src="http://kdenlive.org/sites/default/files/images/Zoom%20H4n%20audio%20levels.preview.jpg"/>
+                  </a>
+                 </dt>
+                 <dd>
+                  Audio levels on a Zoom H4n
+                 </dd>
+                </dl>
+                <p>
+                 As mentioned above sound can clip as well. Everyone has heared this already. This is how it sounds (Extracts from James Edwards Greensleeves, cc-nc-by-sa, link at the end of this article):
+                </p>
+                <ul>
+                 <li>
+                  <a href="http://granjow.net/uploads/kdenlive/samples/James-Edwards-Greensleeves-original.ogg">
+                   Original
+                  </a>
+                  <span style="font-size: .8em;">
+                   (Just noticed that Firefox plays .ogg natively :) )
+                  </span>
+                 </li>
+                 <li>
+                  <a href="http://granjow.net/uploads/kdenlive/samples/James-Edwards-Greensleeves-overdriven-24dB.ogg">
+                   Volume increased by 24dB
+                  </a>
+                  : Massive clipping!
+                 </li>
+                 <li>
+                  <a href="http://granjow.net/uploads/kdenlive/samples/James-Edwards-Greensleeves-overdriven-24dB-reverted.ogg">
+                   Volume afterwards decreased by 24dB
+                  </a>
+                   the clipping effect is irreversible
+                 </li>
+                </ul>
+                <p>
+                 Clipping is also very well visible in the audio wave itself, if you e.g. open the samples above with Audacity. (If you want to reproduce the above effect with Audacity, make sure to select allow overdrive, otherwise it will
+                 <a href="http://en.wikipedia.org/wiki/Dynamic_range_compression">
+                  prevent clipping
+                 </a>
+                 . When decreasing the volume afterwards do not use the same project since Audacity actually stores values that are bigger than the maximum amplitude value (.aup files only). This is great for editing, and perhaps one day we will have that for color as well in kdenlive )
+                </p>
+                <p>
+                 So when may clipping occur?
+                </p>
+                <ol>
+                 <li>
+                  When recording audio. The input gain can be adjusted on the audio recorder. (Usually. For the Nikon D90 you cannot adjust anything for example. But its audio is not really usable anyway.) If the gain is too high, it might record for example low talking at a good volume, but clip as soon as someone rises his/her voice. Therefore input gain is usually adjusted such that the mean volume and peaks do not exceed a certain limit.
+                  <br/>
+                  This limit depends on the expected dynamic audio range. A common choice is 12dB for the mean volume and maximally 6dB for peaks.
+                 </li>
+                 <li>
+                  When editing. There are multiple volume effects in kdenlive. If you raise the volume too much, you will experience clipping. (Try it.)
+                  <br/>
+                  To prevent clipping in kdenlive, you actually do quite the same as when recording audio. Try to keep peak values below 6dB. If you need one cut to be really much louder than the rest and you cannot raise it any further, then you need to lower everything else.
+                 </li>
+                </ol>
+                <h3 class="i">
+                 Damping
+                </h3>
+                <p>
+                 The further away you are from the sound source, the quieter you hear it. Until finally it will be as loud as the noise floor of your microphone and audio recorder. To maintain a good
+                 <a href="http://en.wikipedia.org/wiki/Signal-to-noise_ratio">
+                  SNR
+                 </a>
+                 you will therefore usually try to keep your microphone as close as possible to the sound source. Such that the signal is much stronger than the noise (and with the input gain adjusted such that no clipping occurs).
+                </p>
+                <p>
+                 But that is not everything yet. (Actually the above point was not about dampening at all but merely about wave propagation.) There is one interesting aspect, which is that higher frequencies are absorbed much stronger than low frequencies. Unlike the previous points this is not a problem but rather an interesting variable: If you record someones voice and want to put him far away in the video (next room for example), lower the higher frequencies (using Audacitys Equalizer effect for example).
+                </p>
+                <h3 class="i">
+                 Our ear
+                </h3>
+                <p>
+                 What is louder, a sine wave of 200Hz or a sine wave of 4kHz?
+                </p>
+                <ul>
+                 <li>
+                  <a href="http://granjow.net/uploads/kdenlive/samples/Sine-200Hz.ogg">
+                   200 Hz Sine
+                  </a>
+                 </li>
+                 <li>
+                  <a href="http://granjow.net/uploads/kdenlive/samples/Sine-4000Hz.ogg">
+                   4000 Hz Sine
+                  </a>
+                 </li>
+                </ul>
+                <p>
+                 They have both been generated with the same amplitude (volume). But our ear is most sensible on the frequencies we talk in. To read more about our ear,
+                 <a href="http://en.wikipedia.org/wiki/Hearing_%28sense%29">
+                  Wikipedia
+                 </a>
+                 is a good starting point.
+                </p>
+                <h2 class="i">
+                 Links
+                </h2>
+                <ul>
+                 <li>
+                  <a href="http://www.jamendo.com/en/artist/James_Edwards">
+                   James Edwards
+                  </a>
+                  at Jamendo
+                 </li>
+                 <li>
+                  <a href="http://www.isi.ee.ethz.ch/teaching/courses/ak1/akustik-schallausbreitung-im-freien.pdf">
+                   Damping of frequencies in air (PDF)
+                  </a>
+                  , German
+                 </li>
+                 <li>
+                  <a href="http://vimeo.com/videoschool/lesson/2/capturing-good-sound">
+                   Capturing good sound
+                  </a>
+                  at Vimeo, about microphones.
+                 </li>
+                 <li>
+                  <a href="http://www.dvxuser.com/V6/showthread.php?207009-Db-level-peaks-matter-in-this-situation&amp;highlight=audio+clipping">
+                   Thread about audio and clipping
+                  </a>
+                  at dvxuser.com (I think it is a good idea to search for interesting forum threads there for yourself if you are interested)
+                 </li>
+                </ul>
+                <h2 class="i">
+                 Thanks 
+                </h2>
+                <p>
+                  for reading! I hope you will have fun with the scopes in the next kdenlive version.
+                 <img src="http://kdenlive.org/sites/default/files/images/switzerland.png" style="vertical-align: bottom; padding-left: 4px; height: 12px"/>
+                </p>
+                <p>
+                 <em>
+                  Simon A. Eugster (Granjow)
+                 </em>
+                </p>
+                <style type="text/css">
+                 &lt;!--/*--&gt;&lt;![CDATA[/* &gt;&lt;!--*/
+
+h2.i { font-size: 1.6em; }
+h3.i { color: #555; }
+dl.thumb {
+  background-color: #f8f8f8;
+  border: 1px solid #aaa;
+  float: right;
+  margin-left: 1em;
+  padding: 15px;
+  width: 270px;
+}
+dl.thumb dt img {
+  border: 1px solid #aaa;
+  width: 268px;
+}
+dl.thumb a {
+  border: none;
+}
+
+/*--&gt;&lt;!]]&gt;*/
+                </style>
+               </div>
+              </div>
+             </div>
+            </div>
+            <div class="link-wrapper">
+             <ul class="links inline">
+              <li class="blog_usernames_blog first">
+               <a href="/blogs/granjow" title="Read Granjow's latest blog entries.">
+                Granjow's blog
+               </a>
+              </li>
+              <li class="comment_forbidden last">
+              </li>
+             </ul>
+            </div>
+            <div class="comment-wrapper" id="comments">
+             <h2 class="title">
+              Comments
+             </h2>
+             <a id="comment-12475">
+             </a>
+             <div class="comment clearfix">
+              <div class="attribution">
+               <div class="submitted">
+                <p class="commenter-name">
+                 <span class="username">
+                  Dalgo
+                 </span>
+                </p>
+                <p class="comment-time">
+                 Tue, 12/28/2010 - 00:25
+                </p>
+                <p class="comment-permalink">
+                 <a class="permalink" href="/comment/12475#comment-12475" rel="bookmark">
+                  Permalink
+                 </a>
+                </p>
+               </div>
+              </div>
+              <div class="comment-text">
+               <div class="comment-arrow">
+               </div>
+               <h3>
+                <a class="permalink" href="/comment/12475#comment-12475" rel="bookmark">
+                 Re: Introducing Scopes: The Audio Spectrum and the Spectrogram
+                </a>
+               </h3>
+               <div class="content">
+                <div class="field field-name-comment-body field-type-text-long field-label-hidden">
+                 <div class="field-items">
+                  <div class="field-item even">
+                   <p>
+                    By the way, when will came out next kdenlive version? :)
+                   </p>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <!-- /.content -->
+               <ul class="links inline">
+                <li class="comment_forbidden first last">
+                </li>
+               </ul>
+              </div>
+              <!-- /.comment-text -->
+             </div>
+             <div class="indented">
+              <a id="comment-12492">
+              </a>
+              <div class="comment comment-by-node-author clearfix">
+               <div class="attribution">
+                <div class="submitted">
+                 <p class="commenter-name">
+                  <span class="username">
+                   Granjow
+                  </span>
+                 </p>
+                 <p class="comment-time">
+                  Wed, 12/29/2010 - 08:31
+                 </p>
+                 <p class="comment-permalink">
+                  <a class="permalink" href="/comment/12492#comment-12492" rel="bookmark">
+                   Permalink
+                  </a>
+                 </p>
+                </div>
+               </div>
+               <div class="comment-text">
+                <div class="comment-arrow">
+                </div>
+                <h3>
+                 <a class="permalink" href="/comment/12492#comment-12492" rel="bookmark">
+                  Re: Introducing Scopes: The Audio Spectrum and the Spectrogram
+                 </a>
+                </h3>
+                <div class="content">
+                 <div class="field field-name-comment-body field-type-text-long field-label-hidden">
+                  <div class="field-items">
+                   <div class="field-item even">
+                    <p>
+                     Usually when its done. Which is when there are enough changes worth a new release, and when these are stable enough. ;)
+                    </p>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <!-- /.content -->
+                <ul class="links inline">
+                 <li class="comment_forbidden first last">
+                 </li>
+                </ul>
+               </div>
+               <!-- /.comment-text -->
+              </div>
+             </div>
+             <a id="comment-12487">
+             </a>
+             <div class="comment clearfix">
+              <div class="attribution">
+               <div class="submitted">
+                <p class="commenter-name">
+                 <span class="username">
+                  gab3d
+                 </span>
+                </p>
+                <p class="comment-time">
+                 Wed, 12/29/2010 - 03:30
+                </p>
+                <p class="comment-permalink">
+                 <a class="permalink" href="/comment/12487#comment-12487" rel="bookmark">
+                  Permalink
+                 </a>
+                </p>
+               </div>
+              </div>
+              <div class="comment-text">
+               <div class="comment-arrow">
+               </div>
+               <h3>
+                <a class="permalink" href="/comment/12487#comment-12487" rel="bookmark">
+                 Re: Introducing Scopes: The Audio Spectrum and the Spectrogram
+                </a>
+               </h3>
+               <div class="content">
+                <div class="field field-name-comment-body field-type-text-long field-label-hidden">
+                 <div class="field-items">
+                  <div class="field-item even">
+                   <p>
+                    great article Simon, as always very informative, thanks!
+                   </p>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <!-- /.content -->
+               <ul class="links inline">
+                <li class="comment_forbidden first last">
+                </li>
+               </ul>
+              </div>
+              <!-- /.comment-text -->
+             </div>
+             <div class="indented">
+              <a id="comment-12490">
+              </a>
+              <div class="comment comment-by-node-author clearfix">
+               <div class="attribution">
+                <div class="submitted">
+                 <p class="commenter-name">
+                  <span class="username">
+                   Granjow
+                  </span>
+                 </p>
+                 <p class="comment-time">
+                  Wed, 12/29/2010 - 08:24
+                 </p>
+                 <p class="comment-permalink">
+                  <a class="permalink" href="/comment/12490#comment-12490" rel="bookmark">
+                   Permalink
+                  </a>
+                 </p>
+                </div>
+               </div>
+               <div class="comment-text">
+                <div class="comment-arrow">
+                </div>
+                <h3>
+                 <a class="permalink" href="/comment/12490#comment-12490" rel="bookmark">
+                  Re: Introducing Scopes: The Audio Spectrum and the Spectrogram
+                 </a>
+                </h3>
+                <div class="content">
+                 <div class="field field-name-comment-body field-type-text-long field-label-hidden">
+                  <div class="field-items">
+                   <div class="field-item even">
+                    <p>
+                     Thanks! :)
+                    </p>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <!-- /.content -->
+                <ul class="links inline">
+                 <li class="comment_forbidden first last">
+                 </li>
+                </ul>
+               </div>
+               <!-- /.comment-text -->
+              </div>
+             </div>
+             <a id="comment-21255">
+             </a>
+             <div class="comment clearfix">
+              <div class="attribution">
+               <div class="submitted">
+                <p class="commenter-name">
+                 <span class="username">
+                  ttguy
+                 </span>
+                </p>
+                <p class="comment-time">
+                 Mon, 04/22/2013 - 08:43
+                </p>
+                <p class="comment-permalink">
+                 <a class="permalink" href="/comment/21255#comment-21255" rel="bookmark">
+                  Permalink
+                 </a>
+                </p>
+               </div>
+              </div>
+              <div class="comment-text">
+               <div class="comment-arrow">
+               </div>
+               <h3>
+                <a class="permalink" href="/comment/21255#comment-21255" rel="bookmark">
+                 Re: Introducing Scopes: The Audio Spectrum and the Spectrogram
+                </a>
+               </h3>
+               <div class="content">
+                <div class="field field-name-comment-body field-type-text-long field-label-hidden">
+                 <div class="field-items">
+                  <div class="field-item even">
+                   <p>
+                    Granjow,
+                    <br/>
+                    What is the difference between the white and the blue peaks on the Audio Spectrum - see this screen shot?
+                    <br/>
+                    <a href="http://userbase.kde.org/File:Audio_spectogram.png">
+                     http://userbase.kde.org/File:Audio_spectogram.png
+                    </a>
+                   </p>
+                  </div>
+                 </div>
+                </div>
+               </div>
+               <!-- /.content -->
+               <ul class="links inline">
+                <li class="comment_forbidden first last">
+                </li>
+               </ul>
+              </div>
+              <!-- /.comment-text -->
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- /.section, /#content -->
+     </div>
+    </div>
+    <!-- /#main, /#main-wrapper -->
+    <div id="footer-wrapper">
+     <div class="section">
+     </div>
+    </div>
+    <!-- /.section, /#footer-wrapper -->
+   </div>
+  </div>
+  <!-- /#page, /#page-wrapper -->
+ </body>
+</html>

@@ -1,0 +1,3942 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+ <head>
+  <meta content="IE=9" http-equiv="X-UA-Compatible"/>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <meta content="True" name="HandheldFriendly"/>
+  <title>
+   Introduction to Octrees - Game Programming - Articles - Articles - GameDev.net
+  </title>
+  <meta content="MTQyMQ==" name="Adtomatik-tag"/>
+  <link href="http://www.gamedev.net/favicon.ico" rel="shortcut icon"/>
+  <link href="http://uploads.gamedev.net/e14d50251aa05eb7871f488e29d611a2.png" rel="image_src"/>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+			jsDebug			= 0; /* Must come before JS includes */
+			USE_RTE			= 0;
+			DISABLE_AJAX	= parseInt(0); /* Disables ajax requests where text is sent to the DB; helpful for charset issues */
+			inACP			= false;
+			var isRTL		= false;
+			var rtlIe		= '';
+			var rtlFull		= '';
+		//]]&gt;
+  </script>
+  <link href="http://public.gamedev5.net/public/style_css/css_20/ipcontent_print.css?ipbv=fecb1fa549b772838bdcdebcb7eda10b" media="print" rel="stylesheet" title="Main" type="text/css"/>
+  <link href="http://public.gamedev5.net/public/min/index.php?ipbv=fecb1fa549b772838bdcdebcb7eda10b&amp;f=public/style_css/css_20/hub.css,public/style_css/css_20/gdshowcase.css,public/style_css/css_20/legacy.css,public/style_css/css_20/nexusAccountCredit.css,public/style_css/css_20/news.css,public/style_css/css_20/ipb_codetoolbar.css,public/style_css/css_20/gdnetsprite.css,public/style_css/css_20/shCoreDefault.css,public/style_css/css_20/ipb_styles.css,public/style_css/css_20/ipb_profile.css,public/style_css/css_20/ipdownloads.css,public/style_css/css_20/ipcontent.css,public/style_css/css_20/ipb_common.css,public/style_css/css_20/calendar_select.css,public/style_css/css_20/links.css,public/style_css/css_20/gdnet.css,public/style_css/css_20/responsive.css,public/style_css/prettify.css" media="screen,print" rel="stylesheet" type="text/css"/>
+  <!--[if lte IE 7]&gt;
+	&lt;link rel="stylesheet" type="text/css" title='Main' media="screen" href="http://public.gamedev5.net/public/style_css/css_20/ipb_ie.css" /&gt;
+&lt;![endif]-->
+  <!--[if lte IE 8]&gt;
+	&lt;style type='text/css'&gt;
+		.ipb_table { table-layout: fixed; }
+		.ipsLayout_content { width: 99.5%; }
+	&lt;/style&gt;
+&lt;![endif]-->
+  <!-- Forces resized images to an admin-defined size -->
+  <style type="text/css">
+   img.bbc_img {
+			max-width: 640px !important;
+			max-height: 640px !important;
+		}
+  </style>
+  <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css"/>
+  <meta content="Introduction to Octrees - Game Programming - Articles - Articles" property="og:title"/>
+  <meta content="GameDev.net" property="og:site_name"/>
+  <meta content="article" property="og:type"/>
+  <meta content="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-04376700-1389746712_thumb.png" property="og:image"/>
+  <meta content="What exactly is an Octree? If youre completely unfamiliar with them, I recommend reading the wikipedia article (read time: ~5 minutes). This is a sufficient description of what it is but is barely enough to give any ideas on what its used for..." name="description"/>
+  <meta content="What exactly is an Octree? If youre completely unfamiliar with them, I recommend reading the wikipedia article (read time: ~5 minutes). This is a sufficient description of what it is but is barely enough to give any ideas on what its used for..." property="og:description"/>
+  <meta content="Introduction,Octrees,What,exactly,Octree?,youre,completely,unfamiliar,them,recommend,reading,wikipedia,article,read,time,minutes,This,sufficient,description" name="keywords"/>
+  <meta content="game development, game, development, industry, games, gaming, gamer, make games, game programming, programming, game art, art, media, social gaming, game music, audio, design, publishing, publisher, publish, game books, graphics, gpu, networking, artificial intelligence, ai, physics, multiplayer, mmorpg, c++, lua, c, maya, 3dsmax, photoshop, visual studio, xna, windows, linux, xbox, ps3, wii" name="gdnet"/>
+  <meta content="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529" name="identifier-url"/>
+  <meta content="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529" property="og:url"/>
+  <meta content="http://uploads.gamedev.net/e14d50251aa05eb7871f488e29d611a2.png" property="og:image"/>
+  <meta content="true" name="HandheldFriendly"/>
+  <meta content="width=device-width, height=device-height, user-scalable=no" name="viewport"/>
+  <!-- All resources can be remote -->
+  <script src="http://public.gamedev5.net/public/js/3rd_party/syntaxhighlighter/scripts/shCore.js" type="text/javascript">
+  </script>
+  <script src="http://public.gamedev5.net/public/js/3rd_party/syntaxhighlighter/scripts/shAutoloader.js" type="text/javascript">
+  </script>
+  <!--[if IE]&gt;
+		&lt;script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <script type="text/javascript">
+   var resizeTimer;
+
+  function GetWidth()
+  {
+          var x = 0;
+          if (self.innerHeight)
+          {
+                  x = self.innerWidth;
+          }
+          else if (document.documentElement &amp;&amp; document.documentElement.clientHeight)
+          {
+                  x = document.documentElement.clientWidth;
+          }
+          else if (document.body)
+          {
+                  x = document.body.clientWidth;
+          }
+          return x;
+  }
+
+function resizer() {
+	googletag.pubads().refresh([window.Leaderslot]);
+}
+
+window.addEventListener("resize", function(){ 
+	clearTimeout(resizeTimer);
+	resizeTimer = setTimeout(resizer, 250);
+});
+
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+
+googletag.cmd.push(function() {
+
+var mapLeader = googletag.sizeMapping().
+		addSize([320, 200], [320, 50]).
+		addSize([640, 200], [468, 60]).
+		addSize([980, 200], [728, 90]).
+/*addSize([1000, 200], [970,90]).*/
+		build();
+
+
+
+
+window.Leaderslot = googletag.defineSlot('/1004699/Leaderboard_Main', [[320, 50], [468, 60], [728, 90], [970, 90]], 'div-gpt-ad-1410074947216-0').defineSizeMapping(mapLeader).addService(googletag.pubads());
+
+var client_width = GetWidth();
+
+if (client_width &gt; 960)
+{
+
+
+googletag.defineSlot('/1004699/Box_Main', [300, 250], 'div-gpt-ad-1412653010761-0').addService(googletag.pubads());
+
+
+}
+
+
+
+
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+});
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/prototype/1.7/prototype.js" type="text/javascript">
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8/scriptaculous.js?load=effects,dragdrop,builder" type="text/javascript">
+  </script>
+  <script charset="UTF-8" src="http://public.gamedev5.net/public/min/index.php?ipbv=34011&amp;nck=fb99e14e49767998a66e3b7a9956074d&amp;charset=UTF-8&amp;f=public/js/ipb.js,cache/lang_cache/1/ipb.lang.js,public/js/ips.hovercard.js,public/js/ips.quickpm.js,public/js/ips.sharelinks.js,public/js/ips.rating.js,public/js/ips.like.js,public/js/ips.comments.js" type="text/javascript">
+  </script>
+  <script src="https://www.google.com/jsapi?" type="text/javascript">
+  </script>
+  <script src="https://www.google.com/jsapi?" type="text/javascript">
+  </script>
+  <script src="http://www.gamedev.net/public/js/ips.googleSearchpop.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   if ( typeof ipb.googleSearch == 'object' )
+	{
+		ipb.googleSearch.cseKey = '015339353205569714001:onzj1byha_k';
+                ipb.googleSearch.linkTarget = 'new';
+                ipb.googleSearch.tabImage = '0';
+                ipb.googleSearch.tabBlog = '0';
+                ipb.googleSearch.tabVideo = '0';
+                ipb.googleSearch.tabWeb = '0';
+                ipb.googleSearch.tabBook = '0';
+                ipb.googleSearch.tabNews = '0';
+                ipb.googleSearch.popwidth = '800';
+                ipb.googleSearch.popheight = '480';
+                ipb.googleSearch.popupyn = '0';
+		ipb.googleSearch.alwaysDefault = true;
+	}
+	else
+	{
+		$( document ).observe( 'dom:loaded', function()
+		{
+			
+			$( 's_google' ).up( '.special' ).remove();
+		});
+	}
+  </script>
+  <script src="http://public.gamedev5.net/public/js/squote.js" type="text/javascript">
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <script src="http://public.gamedev5.net/public/js/3rd_party/tabs/tabs.js" type="text/javascript">
+  </script>
+  <!--&lt;script type='text/javascript' src='http://public.gamedev5.net/public/js/ratewidget.js?nck=fb99e14e49767998a66e3b7a9956074d2'&gt;&lt;/script&gt;-->
+  <script type="text/javascript">
+   // see whether device supports touch events (a bit simplistic, but...)
+var hasTouch = ("ontouchstart" in window);
+var iOS5 = /iPad|iPod|iPhone/.test(navigator.platform) &amp;&amp; "matchMedia" in window;
+
+document.observe("dom:loaded", function() {
+
+var viewport = document.viewport.getDimensions();
+
+if (viewport.width &lt;= 640)
+{
+$("dark").hide();
+
+}
+ 
+// hook touch events for drop-down menus
+// NB: if has touch events, then has standards event handling too
+// but we don't want to run this code on iOS5+
+if (hasTouch &amp;&amp; document.querySelectorAll &amp;&amp; !iOS5) {
+    var i, len, element,
+        dropdowns = document.querySelectorAll("#dark li.drop &gt; a");
+ 
+    function menuTouch(event) {
+        // toggle flag for preventing click for this link
+        var i, len, noclick = !(this.dataNoclick);
+ 
+        // reset flag on all links
+        for (i = 0, len = dropdowns.length; i &lt; len; ++i) {
+            dropdowns[i].dataNoclick = false;
+        }
+ 
+        // set new flag value and focus on dropdown menu
+        this.dataNoclick = noclick;
+        this.focus();
+    }
+ 
+    function menuClick(event) {
+        // if click isn't wanted, prevent it
+        if (this.dataNoclick) {
+            event.preventDefault();
+        }
+    }
+ 
+    for (i = 0, len = dropdowns.length; i &lt; len; ++i) {
+        element = dropdowns[i];
+        element.dataNoclick = false;
+        element.addEventListener("touchstart", menuTouch, false);
+        element.addEventListener("click", menuClick, false);
+    }
+}
+
+});document.observe("dom:loaded", function() {var FAVE_TEMPLATE = '';    
+var ajaxUrl = ipb.vars['base_url'] + "app=search&amp;module=ajax&amp;section=taginfo&amp;md5check=" + ipb.vars['secure_hash'];
+ipb.hoverCardRegister.initialize( 'taginfo', { 'w' : '300px', 'delay': 750, 'position' : 'bottomLeft' ,  'getId': true, 'setIdParam': 'tag', /*'ajaxUrl' : ajaxUrl,*/ 'callback' : initTagLike } );
+function initTagLike(hoverCardObject, id)
+{
+var ajaxUrl = ipb.vars['base_url'] + "app=search&amp;module=ajax&amp;section=taginfo&amp;md5check=" + ipb.vars['secure_hash'] + "&amp;tag=" + encodeURIComponent($(id).readAttribute('hovercard-id'));
+     new Ajax.Request( ajaxUrl,
+						{
+				    		method: 'post',
+                            evalJS: 'true',
+							onSuccess: function(t)
+							{
+							    hoverCardObject.card.update(t.responseText);
+                    			ipb.delegate.register('.ftoggle' , ipb.like.clicked );
+                    			ipb.delegate.register('._fsubmit', ipb.like.save );
+                    			ipb.delegate.register('._funset' , ipb.like.remove );
+                    			ipb.delegate.register('._fmore'  , ipb.like.more );
+                    			
+                    			/* Make sure hcards work */
+                    			ipb.like.resetEvents();
+							}
+					       });	
+}
+
+});
+
+  var _gaq = _gaq || [];
+var pluginUrl =
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-279474-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+  <link href="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529" rel="canonical"/>
+  <link href="http://uploads.gamedev.net/e14d50251aa05eb7871f488e29d611a2.png" rel="image_src"/>
+  <meta content="news" name="medium"/>
+  <link href="http://www.gamedev.net/rss/forums/1-gamedevnet-forums-rss/" rel="alternate" title="GameDev.net Forums RSS" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/blog/" rel="alternate" title="GameDev.net Journals RSS feed " type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/gallery/" rel="alternate" title="IP.Gallery Images RSS Feed" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/calendar/1-events-calendar/" rel="alternate" title="Events Calendar" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/downloads/" rel="alternate" title="Last 10 Submissions RSS Feed" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1-articles/" rel="alternate" title="Articles" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3-books/" rel="alternate" title="Books" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/35-contests/" rel="alternate" title="Contests" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/16-events/" rel="alternate" title="Events" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37-indie-project/" rel="alternate" title="Indie Project" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/38-indie-project-stories/" rel="alternate" title="Indie Project Stories" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/4-jobs/" rel="alternate" title="Jobs" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/11-news/" rel="alternate" title="News" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/33-showdown/" rel="alternate" title="Showdown" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/32-sweet-snippets/" rel="alternate" title="Sweet Snippets" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c940-technical/" rel="alternate" title="Articles: Technical" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c941-creative/" rel="alternate" title="Articles: Creative" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c942-business/" rel="alternate" title="Articles: Business" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c970-reviews/" rel="alternate" title="Articles: Reviews" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c969-gamedevnet-soapbox/" rel="alternate" title="Articles: GameDev.net Soapbox" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c968-closed-articles/" rel="alternate" title="Articles: Closed Articles" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c943-game-programming/" rel="alternate" title="Articles: Game Programming" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c944-general-programming/" rel="alternate" title="Articles: General Programming" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c945-graphics-programming-and-theory/" rel="alternate" title="Articles: Graphics Programming and Theory" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c946-directx-and-xna/" rel="alternate" title="Articles: DirectX and XNA" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c947-opengl/" rel="alternate" title="Articles: OpenGL" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c948-multiplayer-and-network-programming/" rel="alternate" title="Articles: Multiplayer and Network Programming" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c949-artificial-intelligence/" rel="alternate" title="Articles: Artificial Intelligence" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c950-math-and-physics/" rel="alternate" title="Articles: Math and Physics" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c951-mobile-development/" rel="alternate" title="Articles: Mobile Development" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c952-apis-and-tools/" rel="alternate" title="Articles: APIs and Tools" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c953-game-design/" rel="alternate" title="Articles: Game Design" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c954-music-and-sound/" rel="alternate" title="Articles: Music and Sound" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c955-visual-arts/" rel="alternate" title="Articles: Visual Arts" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c956-breaking-into-the-industry/" rel="alternate" title="Articles: Breaking Into the Industry" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c957-business-and-law/" rel="alternate" title="Articles: Business and Law" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c958-interviews/" rel="alternate" title="Articles: Interviews" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/1c963-production-and-management/" rel="alternate" title="Articles: Production and Management" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c959-technical/" rel="alternate" title="Books: Technical" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c962-creative/" rel="alternate" title="Books: Creative" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c966-industry-related/" rel="alternate" title="Books: Industry Related" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c964-business-and-law/" rel="alternate" title="Books: Business and Law" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c965-production-and-management/" rel="alternate" title="Books: Production and Management" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c960-general-programming/" rel="alternate" title="Books: General Programming" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/3c961-apis-and-tools/" rel="alternate" title="Books: APIs and Tools" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c971-free-to-play/" rel="alternate" title="Indie Project: Free to Play" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c972-action/" rel="alternate" title="Indie Project: Action" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c973-adventure/" rel="alternate" title="Indie Project: Adventure" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c974-strategy/" rel="alternate" title="Indie Project: Strategy" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c975-rpg/" rel="alternate" title="Indie Project: RPG" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c976-massively-multiplayer/" rel="alternate" title="Indie Project: Massively Multiplayer" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c977-casual/" rel="alternate" title="Indie Project: Casual" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c978-simulation/" rel="alternate" title="Indie Project: Simulation" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c979-racing/" rel="alternate" title="Indie Project: Racing" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c980-sports/" rel="alternate" title="Indie Project: Sports" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c981-animation-modeling/" rel="alternate" title="Indie Project: Animation &amp;  Modeling" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c982-audio-production/" rel="alternate" title="Indie Project: Audio Production" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c983-design-illustration/" rel="alternate" title="Indie Project: Design &amp; Illustration" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c984-education/" rel="alternate" title="Indie Project: Education" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c985-photo-editing/" rel="alternate" title="Indie Project: Photo Editing" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c986-software-training/" rel="alternate" title="Indie Project: Software Training" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c987-utilities/" rel="alternate" title="Indie Project: Utilities" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/37c988-video-production/" rel="alternate" title="Indie Project: Video Production" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/ccs/11c920-gdnet-marketplace-news/" rel="alternate" title="News: GDNet Marketplace News" type="application/rss+xml"/>
+  <link href="http://www.gamedev.net/rss/classifieds/" rel="alternate" title="Classifieds RSS Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+		/* ---- URLs ---- */
+		ipb.vars['base_url'] 			= 'http://www.gamedev.net/index.php?s=7be39447c930e579460295b71a68714b&amp;';
+		ipb.vars['board_url']			= 'http://www.gamedev.net';
+		ipb.vars['img_url'] 			= "http://public.gamedev5.net//public/style_images/master";
+		ipb.vars['loading_img'] 		= 'http://public.gamedev5.net//public/style_images/master/loading.gif';
+		ipb.vars['active_app']			= 'ccs';
+		ipb.vars['upload_url']			= 'http://uploads.gamedev.net';
+		/* ---- Member ---- */
+		ipb.vars['member_id']			= parseInt( 0 );
+		ipb.vars['is_supmod']			= parseInt( 0 );
+		ipb.vars['is_admin']			= parseInt( 0 );
+		ipb.vars['secure_hash'] 		= '880ea6a14ea49e853634fbdc5015a024';
+		ipb.vars['session_id']			= '7be39447c930e579460295b71a68714b';
+		ipb.vars['twitter_id']			= 0;
+		ipb.vars['fb_uid']				= 0;
+		ipb.vars['auto_dst']			= parseInt( 0 );
+		ipb.vars['dst_in_use']			= parseInt(  );
+		ipb.vars['is_touch']			= false;
+		ipb.vars['member_group']		= {"g_mem_info":"1"}
+		/* ---- cookies ----- */
+		ipb.vars['cookie_id'] 			= 'gd_';
+		ipb.vars['cookie_domain'] 		= '.gamedev.net';
+		ipb.vars['cookie_path']			= '/';
+		/* ---- Rate imgs ---- */
+		ipb.vars['rate_img_on']			= 'http://public.gamedev5.net//public/style_images/master/star.png';
+		ipb.vars['rate_img_off']		= 'http://public.gamedev5.net//public/style_images/master/star_off.png';
+		ipb.vars['rate_img_rated']		= 'http://public.gamedev5.net//public/style_images/master/star_rated.png';
+		/* ---- Uploads ---- */
+		ipb.vars['swfupload_swf']		= 'http://www.gamedev.net/public/js/3rd_party/swfupload/swfupload.swf';
+		ipb.vars['swfupload_enabled']	= true;
+		ipb.vars['use_swf_upload']		= ( '' == 'flash' ) ? true : false;
+		ipb.vars['swfupload_debug']		= false;
+		/* ---- other ---- */
+		ipb.vars['highlight_color']     = "#ade57a";
+		ipb.vars['charset']				= "UTF-8";
+		ipb.vars['time_offset']			= "-6";
+		ipb.vars['hour_format']			= "12";
+		ipb.vars['seo_enabled']			= 1;
+		
+		ipb.vars['seo_params']			= {"start":"-","end":"\/","varBlock":"?","varPage":"page-","varSep":"&amp;","varJoin":"="};
+		
+		/* Templates/Language */
+		ipb.templates['inlineMsg']		= "";
+		ipb.templates['ajax_loading'] 	= "&lt;div id='ajax_loading'&gt;&lt;img src='http://public.gamedev5.net//public/style_images/master/ajax_loading.gif' alt='" + ipb.lang['loading'] + "' /&gt;&lt;/div&gt;";
+		ipb.templates['close_popup']	= "&lt;img src='http://public.gamedev5.net//public/style_images/master/close_popup.png' alt='x' /&gt;";
+		ipb.templates['rss_shell']		= new Template("&lt;ul id='rss_menu' class='ipbmenu_content'&gt;#{items}&lt;/ul&gt;");
+		ipb.templates['rss_item']		= new Template("&lt;li&gt;&lt;a href='#{url}' title='#{title}'&gt;#{title}&lt;/a&gt;&lt;/li&gt;");
+		
+		ipb.templates['autocomplete_wrap'] = new Template("&lt;ul id='#{id}' class='ipb_autocomplete' style='width: 250px;'&gt;&lt;/ul&gt;");
+		ipb.templates['autocomplete_item'] = new Template("&lt;li id='#{id}' data-url='#{url}'&gt;&lt;img src='#{img}' alt='' class='ipsUserPhoto ipsUserPhoto_mini' /&gt;&nbsp;&nbsp;#{itemvalue}&lt;/li&gt;");
+		ipb.templates['page_jump']		= new Template("&lt;div id='#{id}_wrap' class='ipbmenu_content'&gt;&lt;h3 class='bar'&gt;Jump to page&lt;/h3&gt;&lt;p class='ipsPad'&gt;&lt;input type='text' class='input_text' id='#{id}_input' size='8' /&gt; &lt;input type='submit' value='Go' class='input_submit add_folder' id='#{id}_submit' /&gt;&lt;/p&gt;&lt;/div&gt;");
+		ipb.templates['global_notify'] 	= new Template("&lt;div class='popupWrapper'&gt;&lt;div class='popupInner'&gt;&lt;div class='ipsPad'&gt;#{message} #{close}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;");
+		
+		
+		ipb.templates['header_menu'] 	= new Template("&lt;div id='#{id}' class='ipsHeaderMenu boxShadow'&gt;&lt;/div&gt;");
+		
+		Loader.boot();
+	//]]&gt;
+  </script>
+ </head>
+ <body id="ipboard_body">
+  <p class="hide" id="content_jump">
+   <a id="top">
+   </a>
+   <a accesskey="m" href="#j_content" title="Jump to content">
+    Jump to content
+   </a>
+  </p>
+  <div id="ipbwrapper">
+   <!-- ::: TOP BAR: Sign in / register or user drop down and notification alerts ::: -->
+   <div class="clearfix" id="header_bar">
+    <div class="main_width">
+     <ul class="ipsList_inline right" id="admin_bar">
+     </ul>
+     <div class="not_logged_in" id="user_navigation">
+      <ul class="ipsList_inline right">
+       <li>
+        <span class="services">
+         <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;serviceClick=facebook">
+          <span class="ip_facebook ip_sprite">
+          </span>
+         </a>
+         <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;serviceClick=twitter">
+          <span class="ip_twitter ip_sprite">
+          </span>
+         </a>
+         <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;do=process&amp;use_google=1&amp;auth_key=880ea6a14ea49e853634fbdc5015a024" id="googleIcon" title="Log In with Google">
+          <img alt="Log In with Google" src="http://public.gamedev5.net/public//style_extra/signin/login-google-icon.png" style="margin-top:-10px"/>
+         </a>
+         <div id="googleOptions" style="display:none;">
+          <h3>
+           Google Sign in options
+          </h3>
+          <form action="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;do=process&amp;use_google=1" id="googleLogin" method="post">
+           <input name="auth_key" type="hidden" value="880ea6a14ea49e853634fbdc5015a024"/>
+           <input name="referer" type="hidden" value="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529"/>
+           <fieldset id="googlesignin_options">
+            <ul class="ipsForm ipsForm_vertical ipsPad_double">
+             <li class="ipsField ipsField_checkbox clearfix">
+              <input checked="checked" class="input_check" id="remember" name="rememberMe" type="checkbox" value="1"/>
+              <p class="ipsField_content">
+               <label for="remember">
+                Remember me
+               </label>
+               <br/>
+               <span class="desc lighter">
+                This is not recommended for shared computers
+               </span>
+              </p>
+             </li>
+             <li class="ipsField ipsField_checkbox clearfix">
+              <input class="input_check" id="invisible" name="anonymous" type="checkbox" value="1"/>
+              <p class="ipsField_content">
+               <label for="invisible">
+                Sign in anonymously
+               </label>
+               <br/>
+               <span class="desc lighter">
+                Don't add me to the active users list
+               </span>
+              </p>
+             </li>
+             <li class="ipsPad_top ipsForm_center desc ipsType_smaller">
+              <a href="http://www.gamedev.net/privacypolicy/" rel="nofollow">
+               Privacy Policy
+              </a>
+             </li>
+            </ul>
+           </fieldset>
+           <div class="ipsForm_submit ipsForm_center">
+            <input class="ipsButton" type="submit" value="Sign In"/>
+           </div>
+          </form>
+         </div>
+         <script type="text/javascript">
+          var _googleLogin = null;
+function googlePop()
+{
+if ( !$('googleOptions') )
+{
+return false;
+}
+if( !_googleLogin )
+{
+ _googleLogin = new ipb.Popup( 'google', { 
+type: 'pane',
+initial: $('googleOptions').innerHTML,
+hideAtStart: false,
+w: '600px',
+modal: 'true'
+} );
+}
+else
+{
+ _googleLogin.show();
+}
+}
+ $('googleIcon').observe( 'click', function(e) {
+googlePop();
+        Event.stop(e);
+        return false;
+  });
+         </script>
+        </span>
+        <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login" title="Sign In">
+         Sign In
+        </a>
+        <a href="#" id="sign_in">
+        </a>
+       </li>
+       <li>
+        <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=register" id="register_link" title="Create Account">
+         Create Account
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+   <!-- ::: BRANDING STRIP: Logo and search box ::: -->
+   <div id="branding">
+    <div class="main_width">
+     <div id="logo">
+      <div id="chat-tab-count-wrap">
+       <span class="ipsHasNotifications" id="chat-tab-count" style="display:none;" title="">
+        12
+       </span>
+      </div>
+      <script type="text/javascript">
+       // And then move
+document.observe("dom:loaded", function(){
+	var _thisHtml	= $('nav_app_ipchat').down('a').innerHTML;
+	_thisHtml = _thisHtml + $('chat-tab-count-wrap').innerHTML;
+	$('nav_app_ipchat').down('a').update( _thisHtml ).setStyle( { position: 'relative' } );
+	$('chat-tab-count-wrap').remove();
+	$('chat-tab-count').show();
+});
+      </script>
+      <a accesskey="1" href="http://www.gamedev.net" rel="home" title="Go to community index">
+       <span class="gd_small_logo sprite">
+       </span>
+      </a>
+     </div>
+     <div id="navmenu">
+      <a class="box-shadow-menu" href="#" onclick="Effect.toggle('dark', 'appear', {duration: 0.1}); return false;">
+      </a>
+     </div>
+     <div id="leaderboard">
+      <!-- Leaderboard_Main -->
+      <div id="div-gpt-ad-1410074947216-0">
+       <script type="text/javascript">
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1410074947216-0'); });
+       </script>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- ::: APPLICATION TABS ::: -->
+   <div class="main_width">
+    <div class="right" id="search">
+     <form action="http://www.gamedev.net/index.php?app=core&amp;module=search&amp;do=search&amp;fromMainBar=1" id="search-box" method="post">
+      <fieldset>
+       <label class="hide" for="main_search">
+        Search
+       </label>
+       <a accesskey="4" class="advanced_search sprite right" href="http://www.gamedev.net/index.php?app=core&amp;module=search&amp;search_in=ccs" id="adv_search" rel="search" title="Advanced Search">
+        Advanced
+       </a>
+       <span class="right" id="search_wrap">
+        <input class="inactive" id="main_search" name="search_term" size="17" tabindex="6" type="text"/>
+        <span class="choice ipbmenu clickable" id="search_options" style="display: none">
+        </span>
+        <ul class="ipbmenu_content ipsPad" id="search_options_menucontent" style="display: none">
+         <li class="title">
+          <strong>
+           Search section:
+          </strong>
+         </li>
+         <li class="special">
+          <label for="s_google" title="Google">
+           <input class="input_radio" id="s_google" name="search_app" type="radio" value="google"/>
+           Google
+          </label>
+         </li>
+         <li class="special">
+          <label for="s_ccs_db" title="This database">
+           <input checked="checked" class="input_radio" id="s_ccs_cat" name="search_app" type="radio" value="ccs:database:1"/>
+           <strong>
+            This database
+           </strong>
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_forums" title="Forums">
+           <input class="input_radio" id="s_forums" name="search_app" type="radio" value="forums"/>
+           Forums
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_members" title="Members">
+           <input class="input_radio" id="s_members" name="search_app" type="radio" value="members"/>
+           Members
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_core" title="Help Files">
+           <input class="input_radio" id="s_core" name="search_app" type="radio" value="core"/>
+           Help Files
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_blog" title="Developer Journals">
+           <input class="input_radio" id="s_blog" name="search_app" type="radio" value="blog"/>
+           Developer Journals
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_gallery" title="Gallery">
+           <input class="input_radio" id="s_gallery" name="search_app" type="radio" value="gallery"/>
+           Gallery
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_calendar" title="Calendar">
+           <input class="input_radio" id="s_calendar" name="search_app" type="radio" value="calendar"/>
+           Calendar
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_downloads" title="Downloads">
+           <input class="input_radio" id="s_downloads" name="search_app" type="radio" value="downloads"/>
+           Downloads
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_ccs" title="Resources">
+           <input class="input_radio" id="s_ccs" name="search_app" type="radio" value="ccs"/>
+           Resources
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_nexus" title="Store">
+           <input class="input_radio" id="s_nexus" name="search_app" type="radio" value="nexus"/>
+           Store
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_classifieds" title="Classifieds">
+           <input class="input_radio" id="s_classifieds" name="search_app" type="radio" value="classifieds"/>
+           Classifieds
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_tracker" title="Tracker">
+           <input class="input_radio" id="s_tracker" name="search_app" type="radio" value="tracker"/>
+           Tracker
+          </label>
+         </li>
+         <li class="app">
+          <label for="s_links" title="Links">
+           <input class="input_radio" id="s_links" name="search_app" type="radio" value="links"/>
+           Links
+          </label>
+         </li>
+        </ul>
+        <input class="submit_input clickable" type="submit" value="Search"/>
+       </span>
+      </fieldset>
+     </form>
+    </div>
+    <nav id="dark">
+     <ul>
+      <li>
+       <a href="/">
+        Home
+       </a>
+      </li>
+      <li>
+       <a href="/forum/31-for-beginners/">
+        For Beginners
+       </a>
+      </li>
+      <li class="drop">
+       <a href="/page/resources">
+        Articles
+       </a>
+       <ul class="menu">
+        <li>
+         <a href="/page/resources">
+          All Articles
+         </a>
+        </li>
+        <li>
+         <a href="/page/resources/_/gdnethelp/how-to-publish-on-gamedevnet-r2927" style="background:#009900;color:white;border-top:solid 1px #00cc00">
+          Post an Article
+         </a>
+        </li>
+        <li class="drop">
+         <a href="/page/resources/_/technical/">
+          Technical
+         </a>
+         <ul>
+          <li>
+           <a href="/page/resources/_/technical/game-programming/">
+            Game Programming
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/general-programming/">
+            General Programming
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/graphics-programming-and-theory/">
+            Graphics Programming and Theory
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/directx-and-xna/">
+            DirectX and XNA
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/opengl/">
+            OpenGL
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/multiplayer-and-network-programming/">
+            Multiplayer and Network Programming
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/artificial-intelligence/">
+            Artificial Intelligence
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/math-and-physics/">
+            Math and Physics
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/mobile-development/">
+            Mobile Development
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/technical/apis-and-tools/">
+            APIs and Tools
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="drop">
+         <a href="/page/resources/_/creative/">
+          Creative
+         </a>
+         <ul>
+          <li>
+           <a href="/page/resources/_/creative/game-design/">
+            Game Design
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/creative/music-and-sound/">
+            Music and Sound
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/creative/visual-arts/">
+            Visual Arts
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="drop">
+         <a href="/page/resources/_/business/">
+          Business
+         </a>
+         <ul>
+          <li>
+           <a href="/page/resources/_/business/breaking-into-the-industry/">
+            Breaking into the Industry
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/business/production-and-management/">
+            Production and Management
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/business/interviews/">
+            Interviews
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/business/business-and-law/">
+            Business and Law
+           </a>
+          </li>
+          <li>
+           <a href="/page/resources/_/business/435/">
+            Event Coverage
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="drop">
+       <a href="/index">
+        Forums
+       </a>
+       <ul class="menu">
+        <li>
+         <a href="/index">
+          All Forums
+         </a>
+        </li>
+        <li class="drop">
+         <a href="/forum/122-community-interaction/">
+          Community Interaction
+         </a>
+         <ul>
+          <li>
+           <a href="/forum/3-gdnet-lounge/">
+            GDNet Lounge
+           </a>
+          </li>
+          <li>
+           <a href="/forum/157-coding-horrors/">
+            Coding Horrors
+           </a>
+          </li>
+          <li>
+           <a href="/forum/158-article-writing/">
+            Article Writing
+           </a>
+          </li>
+          <li>
+           <a href="/forum/4-gdnet-comments-suggestions-and-ideas/">
+            GDNet Comments, Suggestions and Ideas
+           </a>
+          </li>
+          <li>
+           <a href="/forum/6-your-announcements/">
+            Your Announcements
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="drop">
+         <a href="/forum/123-the-technical-side/">
+          Technical
+         </a>
+         <ul>
+          <li>
+           <a href="/forum/11-game-programming/">
+            Game Programming
+           </a>
+          </li>
+          <li>
+           <a href="/forum/21-general-programming/">
+            General Programming
+           </a>
+          </li>
+          <li>
+           <a href="/forum/12-graphics-programming-and-theory/">
+            Graphics Programming and Theory
+           </a>
+          </li>
+          <li>
+           <a href="/forum/10-directx-and-xna/">
+            DirectX and XNA
+           </a>
+          </li>
+          <li>
+           <a href="/forum/25-opengl/">
+            OpenGL
+           </a>
+          </li>
+          <li>
+           <a href="/forum/15-multiplayer-and-network-programming/">
+            Multiplayer and Network Programming
+           </a>
+          </li>
+          <li>
+           <a href="/forum/9-artificial-intelligence/">
+            Artificial Intelligence
+           </a>
+          </li>
+          <li>
+           <a href="/forum/20-math-and-physics/">
+            Math and Physics
+           </a>
+          </li>
+          <li>
+           <a href="/forum/39-mobile-and-console-development/">
+            Mobile &amp; Console Development
+           </a>
+          </li>
+          <li>
+           <a href="/forum/159-build-systems-and-source-control/">
+            Build Systems &amp; Source Control
+           </a>
+          </li>
+          <li>
+           <a href="/forum/41-apis-and-tools/">
+            APIs and Tools
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="drop">
+         <a href="/forum/124-the-creative-side/">
+          Creative
+         </a>
+         <ul>
+          <li>
+           <a href="/forum/17-game-design/">
+            Game Design
+           </a>
+          </li>
+          <li>
+           <a href="/forum/32-writing-for-games/">
+            Writing For Games
+           </a>
+          </li>
+          <li>
+           <a href="/forum/19-music-and-sound/">
+            Music and Sound
+           </a>
+          </li>
+          <li>
+           <a href="/forum/18-visual-arts/">
+            Visual Arts
+           </a>
+          </li>
+          <li>
+           <a href="/gallery">
+            Gallery
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="drop">
+         <a href="/forum/133-the-business-side/">
+          Business
+         </a>
+         <ul>
+          <li>
+           <a href="/forum/101-breaking-into-the-games-industry/">
+            Breaking into the Industry
+           </a>
+          </li>
+          <li>
+           <a href="/forum/5-the-business-and-law-of-game-development/">
+            Business &amp; Law
+           </a>
+          </li>
+          <li>
+           <a href="/forum/155-production-and-management/">
+            Production &amp; Management
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="drop">
+       <a href="/blogs">
+        Community
+       </a>
+       <ul class="menu">
+        <li>
+         <a href="/blogs">
+          Developer Journals
+         </a>
+        </li>
+        <li>
+         <a href="/page/showdown/">
+          Screenshot Showdown
+         </a>
+        </li>
+        <li>
+         <a href="/subscribe">
+          GDNet+ Subscriptions
+         </a>
+        </li>
+        <li>
+         <a href="/gallery">
+          Gallery
+         </a>
+        </li>
+        <li>
+         <a href="/books">
+          Books
+         </a>
+        </li>
+        <li>
+         <a href="/store/">
+          Store
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="/sm/">
+        Top Members
+       </a>
+      </li>
+      <li class="drop">
+       <a href="/classifieds">
+        Classifieds
+       </a>
+       <ul class="menu">
+        <li>
+         <a href="/classifieds/category/4-job-offers/">
+          Job Offers
+         </a>
+        </li>
+        <li>
+         <a href="/classifieds/category/2-contractors/">
+          Contractors For Hire
+         </a>
+        </li>
+        <li>
+         <a href="/classifieds/category/21-contract-projects/">
+          Contract Projects
+         </a>
+        </li>
+        <li>
+         <a href="/classifieds/category/5-hobbyist-projects/">
+          Hobbyist Projects
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="/files">
+        Marketplace
+       </a>
+      </li>
+      <!--&lt;li&gt;&lt;a href="/info/media"&gt;Advertise&lt;/a&gt;&lt;/li&gt;-->
+     </ul>
+    </nav>
+   </div>
+   <!-- ::: MAIN CONTENT AREA ::: -->
+   <div class="clearfix" id="content">
+    <!-- ::: NAVIGATION BREADCRUMBS ::: -->
+    <div class="clearfix" id="secondary_navigation">
+     <ol class="breadcrumb top ipsList_inline left">
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+       <a href="http://www.gamedev.net/page/index.html/" itemprop="url" title="Return to Home">
+        <span itemprop="title">
+         Home
+        </span>
+       </a>
+      </li>
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+       <span class="nav_sep">
+        
+       </span>
+       <a href="http://www.gamedev.net/page/resources" itemprop="url" title="Return to Articles">
+        <span itemprop="title">
+         Articles
+        </span>
+       </a>
+      </li>
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+       <span class="nav_sep">
+        
+       </span>
+       <a href="http://www.gamedev.net/page/resources/_/technical/" itemprop="url" title="Return to Technical">
+        <span itemprop="title">
+         Technical
+        </span>
+       </a>
+      </li>
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+       <span class="nav_sep">
+        
+       </span>
+       <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/" itemprop="url" title="Return to Game Programming">
+        <span itemprop="title">
+         Game Programming
+        </span>
+       </a>
+      </li>
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+       <span class="nav_sep">
+        
+       </span>
+       <span itemprop="title">
+        Article: Introduction to Octrees
+       </span>
+      </li>
+     </ol>
+     <div class="desc right" style="margin-top: -7px">
+      <div style="display: inline-block; position: relative; top: -6px;">
+       <a data-tooltip="View the stuff you chose to follow" href="/index.php?app=core&amp;module=search&amp;do=followed" style="padding-right:10px; border-right: solid 1px black; margin-right: 5px">
+        Watched Content
+       </a>
+       <a data-tooltip="View new stuff on the site" href="/index.php?app=core&amp;module=search&amp;do=viewNewContent&amp;search_app=forums&amp;search_app_filters[forums][searchInKey]=&amp;period=today&amp;userMode=&amp;followedItemsOnly=0" style="padding-right:10px; border-right: solid 1px black; margin-right: 5px">
+        New Content
+       </a>
+      </div>
+      <a data-tooltip="Join our Facebook group!" href="http://www.facebook.com/GameDev.net" target="new">
+       <span class="Facebook sprite" style="margin-right: 3px">
+       </span>
+      </a>
+      <a data-tooltip="Follow us on Twitter!" href="http://twitter.com/gdevnet" target="new">
+       <span class="Twitter sprite" style="margin-right: 3px">
+       </span>
+      </a>
+      <a data-tooltip="Join our Linkedin group!" href="http://www.linkedin.com/groups?about=&amp;gid=132271&amp;trk=anet_ug_grppro" target="new">
+       <span class="Linkedin sprite" style="margin-right: 3px">
+       </span>
+      </a>
+      <a alt="RSS Feed" class="clickable" href="" id="rss_feed" target="new">
+       <span class="Rss sprite" style="margin-right: 3px">
+       </span>
+      </a>
+     </div>
+    </div>
+    <br/>
+    <!-- ::: CONTENT ::: -->
+    <div class="message">
+     <p class="bbc_center">
+      <strong class="bbc">
+       <span style="font-size: 18px;">
+        Banner advertising on our site currently available from just $5!
+       </span>
+      </strong>
+     </p>
+     <br/>
+     <p class="bbc_center">
+      <span style="font-size: 14px;">
+       <strong class="bbc">
+        1.
+       </strong>
+       <a class="bbc_url" href="http://www.gamedev.net/forum-4/announcement-16-banner-advertising-from-just-5/">
+        Learn about the promo
+       </a>
+       .
+       <strong class="bbc">
+        2.
+       </strong>
+       <a class="bbc_url" href="http://www.gamedev.net/store/">
+        Sign up for GDNet+
+       </a>
+       .
+       <strong class="bbc">
+        3.
+       </strong>
+       <a class="bbc_url" href="http://www.gamedev.net/store/product/14-728x90-leaderboard-ad/">
+        Set up your advert!
+       </a>
+      </span>
+     </p>
+    </div>
+    <br/>
+    <div class="clearfix">
+     <script src="http://public.gamedev5.net/public/js/3rd_party/prettify/prettify.js" type="text/javascript">
+     </script>
+     <script src="http://public.gamedev5.net/public/js/3rd_party/prettify/lang-sql.js" type="text/javascript">
+     </script>
+     <!-- By default we load generic code, php, css, sql and xml/html; load others here if desired -->
+     <script type="text/javascript">
+      //&lt;![CDATA[
+		Event.observe( window, 'load', function(e){ prettyPrint() });
+	//]]&gt;
+     </script>
+     <script language="javascript">
+      &lt;!--
+function confirmSubmit(prompt)
+{
+var agree=confirm(prompt);
+if (agree)
+	return true ;
+else
+	return false ;
+}
+// --&gt;
+     </script>
+     <div class="ipsLayout ipsLayout_withright ipsLayout_largeright">
+      <div class="ipsLayout_right">
+       <div class="ipsSideBlock wide" id="block_RelatedArticles">
+        <h3>
+         More Like This
+        </h3>
+        <ul>
+         <li droid="" sans="" style="margin-bottom:8px;font-size:13px;font-family:">
+          <a href="http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/quadtrees-r1303">
+           Quadtrees
+          </a>
+          <br/>
+         </li>
+         <li droid="" sans="" style="margin-bottom:8px;font-size:13px;font-family:">
+          <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/practical-collision-detection-r736">
+           Practical Collision Detection
+          </a>
+          <br/>
+         </li>
+         <li droid="" sans="" style="margin-bottom:8px;font-size:13px;font-family:">
+          <a href="http://www.gamedev.net/page/resources/_/technical/general-programming/c-trees-part-2-basic-coretreefun-r2233">
+           C++ Trees Part 2: Basic core::treeFunctionality
+          </a>
+          <br/>
+         </li>
+         <li droid="" sans="" style="margin-bottom:8px;font-size:13px;font-family:">
+          <a href="http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/dynamic-3d-scene-graphs-r2590">
+           Dynamic 3D Scene Graphs
+          </a>
+          <br/>
+         </li>
+         <li droid="" sans="" style="margin-bottom:8px;font-size:13px;font-family:">
+          <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/object-oriented-scene-management-r1812">
+           Object-Oriented Scene Management
+          </a>
+          <br/>
+         </li>
+        </ul>
+       </div>
+       <!-- Box_Main -->
+       <div id="div-gpt-ad-1412653010761-0" style="width:300px; height:250px;margin-bottom:10px">
+        <script type="text/javascript">
+         googletag.cmd.push(function() { googletag.display('div-gpt-ad-1412653010761-0'); });
+        </script>
+       </div>
+       <div class="ipsSideBlock wide">
+        <h3>
+         Categories
+         <a href="http://www.gamedev.net/page/resources?view=categories">
+          <u>
+           (See All)
+          </u>
+         </a>
+        </h3>
+        <ul style="margin-top: 10px;">
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/technical/">
+           Technical
+          </a>
+          <ul style="margin-left: 15px;margin-top:5px; margin-bottom: 15px;">
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/">
+             Game Programming
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/general-programming/">
+             General Programming
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/">
+             Graphics Programming and Theory
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/directx-and-xna/">
+             DirectX and XNA
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/opengl/">
+             OpenGL
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/multiplayer-and-network-programming/">
+             Multiplayer and Network Programming
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/artificial-intelligence/">
+             Artificial Intelligence
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/math-and-physics/">
+             Math and Physics
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/mobile-development/">
+             Mobile Development
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/technical/apis-and-tools/">
+             APIs and Tools
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/creative/">
+           Creative
+          </a>
+          <ul style="margin-left: 15px;margin-top:5px; margin-bottom: 15px;">
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/creative/game-design/">
+             Game Design
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/creative/music-and-sound/">
+             Music and Sound
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/creative/visual-arts/">
+             Visual Arts
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/business/">
+           Business
+          </a>
+          <ul style="margin-left: 15px;margin-top:5px; margin-bottom: 15px;">
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/business/435/">
+             Event Coverage
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/business/breaking-into-the-industry/">
+             Breaking Into the Industry
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/business/business-and-law/">
+             Business and Law
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/business/interviews/">
+             Interviews
+            </a>
+           </li>
+           <li>
+            <a href="http://www.gamedev.net/page/resources/_/business/production-and-management/">
+             Production and Management
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/gdnethelp/">
+           Gamedev.net Help
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="ipsSideBlock wide">
+        <h3>
+         <a href="/hub/resources/">
+          Recent Resources
+         </a>
+        </h3>
+        <ul>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/technical/math-and-physics/math-for-game-developers-probability-and-randomness-r4114">
+           Math for Game Developers: Probability and Randomness
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jul 09 2015 12:28 PM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/technical/math-and-physics/math-for-game-developers-probability-and-randomness-r4114">
+            7 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/technical/apis-and-tools/how-the-pvs-studio-team-improved-unreal-engines-code-r4110">
+           How the PVS-Studio Team Improved Unreal Engine's Code
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jul 01 2015 12:53 AM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/technical/apis-and-tools/how-the-pvs-studio-team-improved-unreal-engines-code-r4110">
+            1 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/business/breaking-into-the-industry/when-your-best-isnt-good-enough-a-tale-of-failure-part-ii-r4109">
+           When Your Best Isn't Good Enough: A Tale of Failure (Part II)
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jul 02 2015 03:18 AM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/business/breaking-into-the-industry/when-your-best-isnt-good-enough-a-tale-of-failure-part-ii-r4109">
+            2 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/business/breaking-into-the-industry/when-your-best-isnt-good-enough-a-tale-of-failure-part-i-r4108">
+           When Your Best Isn't Good Enough: A Tale of Failure (Part I)
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jun 30 2015 11:12 PM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/business/breaking-into-the-industry/when-your-best-isnt-good-enough-a-tale-of-failure-part-i-r4108">
+            3 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/coverage-buffer-as-main-occlusion-culling-technique-r4103">
+           Coverage Buffer as main Occlusion Culling technique
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jun 24 2015 09:41 PM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/coverage-buffer-as-main-occlusion-culling-technique-r4103">
+            16 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/creative/game-design/designing-for-multi-age-coop-play-r4101">
+           Designing for multi-age coop play
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jun 24 2015 03:59 PM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/creative/game-design/designing-for-multi-age-coop-play-r4101">
+            1 Comments
+           </a>
+          </p>
+         </li>
+         <li>
+          <a href="http://www.gamedev.net/page/resources/_/technical/mobile-development/designing-a-mobile-game-technology-stack-r4100">
+           Designing a Mobile Game Technology Stack
+          </a>
+          <br/>
+          <p class="meta">
+           <span class="postdate">
+            Jun 23 2015 11:36 PM
+           </span>
+           |
+           <a class="discussion" href="http://www.gamedev.net/page/resources/_/technical/mobile-development/designing-a-mobile-game-technology-stack-r4100">
+            6 Comments
+           </a>
+          </p>
+         </li>
+        </ul>
+        <p class="more">
+         <a href="/hub/resources/">
+          Show more 
+         </a>
+         |
+         <a href="/index.php?app=core&amp;module=search&amp;do=new_posts&amp;search_app=ccs">
+          View all recent resources
+         </a>
+        </p>
+       </div>
+      </div>
+      <div class="ipsLayout_content">
+       <div class="__like right" data-app="ccs" data-area="ccs_custom_database_1_records" data-isfave="" data-relid="3529">
+        <span class="ipsButton_extra right _fmore clickable" data-tooltip="6 member(s) follow this" title="6 member(s) follow this">
+         <img src="http://public.gamedev5.net//public/style_images/master/icon_users.png"/>
+         <strong>
+          6
+         </strong>
+        </span>
+       </div>
+       <script type="text/javascript">
+        var FAVE_TEMPLATE = new Template( "&lt;h3&gt;Unfollow&lt;/h3&gt;&lt;div class='ipsPad'&gt;&lt;span class='desc'&gt;If you unfollow you will no longer receive any notifications&lt;/span&gt;&lt;br /&gt;&lt;p class='ipsForm_center'&gt;&lt;input type='button' value='Unfollow' class='input_submit _funset' /&gt;&lt;/p&gt;&lt;/div&gt;");
+       </script>
+       <script src="/public/js/ratewidget.js?nck=3" type="text/javascript">
+       </script>
+       <script type="text/javascript">
+        ipb.ratewidget.database_id = 1;
+       </script>
+       <div style="margin-left: -8px;">
+        <div style="position:absolute;">
+         <a class="voteaction_like vdisabled" data-tooltip="&lt;b&gt;You must login to GameDev.net&lt;/b&gt;&lt;br/&gt;Login to vote on this post.&lt;br/&gt;" href="#" id="vote_3529">
+          Like
+         </a>
+         <div class="votecard">
+          <div>
+           <em>
+            <strong>
+             40
+            </strong>
+            <span>
+             Likes
+            </span>
+           </em>
+          </div>
+         </div>
+         <a class="voteaction_dislike vdisabled" data-tooltip="&lt;b&gt;You must login to GameDev.net&lt;/b&gt;&lt;br/&gt;Login to vote on this post.&lt;br/&gt;" href="#" id="vote_3529">
+          Dislike
+         </a>
+        </div>
+       </div>
+       <div style="margin-left: 50px">
+        <h1 class="ipsType_pagetitle" style="font-size: 27px; font-weight: 700">
+         <!--ARTICLE TITLE-->
+         Introduction to Octrees
+        </h1>
+        <p class="ipsType_pagedesc">
+         <!--ARTICLE AUTHOR/EMAIL-->
+         <b>
+          By
+          <!--email address?-->
+          <a href="/user/13892-slayemin">
+           Eric Nevala
+          </a>
+          <!--ARTICLE COMPANY NAME/WEBPAGE-->
+         </b>
+         | Published Jan 20 2014 03:46 PM in
+         <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/">
+          Game Programming
+         </a>
+         <br/>
+         Peer Reviewed by (
+         <a href="/user/89462-servant-of-the-lord">
+          Servant of the Lord
+         </a>
+         ,
+         <a href="/user/36615-jbadams">
+          jbadams
+         </a>
+         ,
+         <a href="/user/105019-apatriarca">
+          apatriarca
+         </a>
+         )
+        </p>
+        <a class="ipsTag _hovertrigger" hovercard-id="data structure" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=data%2Bstructure">
+         <span>
+          data structure
+         </span>
+        </a>
+        <a class="ipsTag _hovertrigger" hovercard-id="collision detection" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=collision%2Bdetection">
+         <span>
+          collision detection
+         </span>
+        </a>
+        <a class="ipsTag _hovertrigger" hovercard-id="frustum culling" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=frustum%2Bculling">
+         <span>
+          frustum culling
+         </span>
+        </a>
+        <a class="ipsTag _hovertrigger" hovercard-id="octrees" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=octrees">
+         <span>
+          octrees
+         </span>
+        </a>
+        <a class="ipsTag _hovertrigger" hovercard-id="c#" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=c%23">
+         <span>
+          c#
+         </span>
+        </a>
+        <a class="ipsTag _hovertrigger" hovercard-id="xna" hovercard-ref="taginfo" href="http://www.gamedev.net/index.php?app=search&amp;module=tags&amp;section=view&amp;tag=xna">
+         <span>
+          xna
+         </span>
+        </a>
+        <br/>
+       </div>
+       <div id="article">
+        <div class="ipsBox" style="background: none; padding-left: 15px; border-top: dotted 1px #eee; margin-top: 4px">
+         <div class="ipsPad">
+          <!--class="yui3-cssreset yui3-cssbase"-->
+          <div id="article_body" style="padding: 5px; min-height: 250px; ">
+           <div id="artstats" style="display:none;">
+            <span class="ipsButton secondary" onclick="$('artstats').hide();" style="float:right">
+             Hide
+            </span>
+            <br/>
+            <br/>
+            <div style="height: 270px">
+             <div id="statgraph" style="height: 250px; min-width: 500px">
+             </div>
+            </div>
+            <br/>
+            <br/>
+           </div>
+           <!--ARTICLE REPORTING MESSAGE-->
+           <!--ARTICLE ATTACHED RESOURCE FILE-->
+           <div style="background-color:rgb(240, 248, 241)">
+            <img src="/public/style_images/attach_article.png" style="margin-left:-5px"/>
+            <a href="http://uploads.gamedev.net/df88c7189d5846e557a1376dbb0b1e2a.zip">
+             <b>
+              Download attached article resource
+             </b>
+            </a>
+           </div>
+           <br/>
+           <div style="margin-left: 15px; margin-bottom: 20px; float: right; width: 250px;">
+            <img height="150" src="/interface/esi/track.php?a=3529&amp;cb=069babd6ed78eb6cf088f929c817248d&amp;r=e14d50251aa05eb7871f488e29d611a2.png" style="float:right; margin-bottom: 10px; margin-left: 15px;border: solid 1px black;" width="250"/>
+            <a href="http://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.gamedev.net%2Fpage%2Fresources%2F_%2Ftechnical%2Fgame-programming%2Fintroduction-to-octrees-r3529%3F">
+             <img src="/images/articles/icons/facebook.png" style="float:left;margin-right:5px;"/>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text=Introduction+to+Octrees&amp;url=http%3A%2F%2Fwww.gamedev.net%2Fpage%2Fresources%2F_%2Ftechnical%2Fgame-programming%2Fintroduction-to-octrees-r3529%3F">
+             <img src="/images/articles/icons/twitter.png" style="float:left;margin-right:5px;"/>
+            </a>
+            <a href="https://plus.google.com/share?url=http%3A%2F%2Fwww.gamedev.net%2Fpage%2Fresources%2F_%2Ftechnical%2Fgame-programming%2Fintroduction-to-octrees-r3529%3F">
+             <img src="/images/articles/icons/googleplus.png" style="float:left;margin-right:5px;"/>
+            </a>
+            <a href="http://www.gamedev.net/index.php?s=7be39447c930e579460295b71a68714b&amp;app=forums&amp;module=extras&amp;section=forward&amp;url=aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5Pw,,&amp;title=Introduction+to+Octrees">
+             <img src="/images/articles/icons/email.png" style="float:left;margin-right:5px;"/>
+            </a>
+            <a href="http://www.reddit.com/submit?url=http%3A%2F%2Fwww.gamedev.net%2Fpage%2Fresources%2F_%2Ftechnical%2Fgame-programming%2Fintroduction-to-octrees-r3529%3F">
+             <img src="/images/articles/icons/reddit.png" style="float:left;margin-right:5px;"/>
+            </a>
+           </div>
+           <div class="ipsType_textblock ipsPad">
+            What exactly is an Octree? If you're completely unfamiliar with them, I recommend reading the
+            <a class="bbc_url" href="http://en.wikipedia.org/wiki/Octree" rel="nofollow external" title="External link">
+             wikipedia article
+            </a>
+            (read time: ~5 minutes). This is a sufficient description of what it
+            <i>
+             is
+            </i>
+            but is barely enough to give any ideas on what it's used for and how to actually implement one. In this article, I will do my best to take you through the steps necessary to create an octree data structure through conceptual explanations, pictures, and code, and show you the considerations to be made at each step along the way. I don't expect this article to be the authoritative way to do octrees, but it should give you a really good start and act as a good reference.
+            <br/>
+            <br/>
+            <h2>
+             Assumptions
+            </h2>
+            <br/>
+            Before we dive in, I'm going to be making a few assumptions about you as a reader:
+            <br/>
+            <br/>
+            <ol class="bbc">
+             <li>
+              You are very comfortable with programming in a C-syntax-style language (I will be using C# with XNA).
+             </li>
+             <li>
+              You have programmed some sort of tree-like data structure in the past, such as a
+              <a class="bbc_url" href="http://en.wikipedia.org/wiki/Binary_search_tree" rel="nofollow external" title="External link">
+               binary search tree
+              </a>
+              and are familiar with recursion and its strengths and pitfalls.
+             </li>
+             <li>
+              You know how to do collision detection with bounding rectangles, bounding spheres, and bounding frustums.
+             </li>
+             <li>
+              You have a good grasp of common data structures (arrays, lists, etc) and understand
+              <a class="bbc_url" href="http://en.wikipedia.org/wiki/Big_O_notation" rel="nofollow external" title="External link">
+               Big-O notation
+              </a>
+              (you can also learn about Big-O in
+              <a class="bbc_url" href="http://www.gamedev.net/page/resources/_/technical/general-programming/writing-fast-code-introduction-to-algorithms-and-big-o-r3442" title="">
+               this GDnet article
+              </a>
+              ).
+             </li>
+             <li>
+              You have a development environment project which contains spatial objects which need collision tests.
+             </li>
+            </ol>
+            <br/>
+            <h2>
+             Setting the stage
+            </h2>
+            <br/>
+            Let's suppose that we are building a very large game world which can contain thousands of physical objects of various types, shapes and sizes, some of which must collide with each other. Each frame we need to find out which objects are intersecting with each other and have some way to handle that intersection. How do we do it without killing performance?
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-48142200-1389658066.png" id="ipb-attach-url-19429-0-72667100-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Octree_1a.png - Size: 12.91KB, Downloads: 0">
+              <img alt="Attached Image: Octree_1a.png" class="attach" height="381" id="ipb-attach-img-19429-0-72667100-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-48142200-1389658066_thumb.png" style="width:480;height:381" width="480"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            <h2>
+             Brute force collision detection
+            </h2>
+            <br/>
+            The simplest method is to just compare each object against every other object in the world. Typically, you can do this with two
+            <tt>
+             for
+            </tt>
+            loops. The code would look something like this:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             foreach(gameObject myObject in ObjList)
+{
+	foreach(gameObject otherObject in ObjList)
+	{
+		if(myObject == otherObject) continue;	//avoid self collision check
+		if(myObject.CollidesWith(otherObject))
+		{
+			//code to handle the collision
+		}
+	}
+}
+            </pre>
+            <br/>
+            Conceptually, this is what we're doing in our picture:
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-04938500-1389737247.png" id="ipb-attach-url-19441-0-72751600-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Octree_1c.png - Size: 56.85KB, Downloads: 0">
+              <img alt="Attached Image: Octree_1c.png" class="attach" height="640" id="ipb-attach-img-19441-0-72751600-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-04938500-1389737247_thumb.png" style="width:326;height:640" width="326"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            Each red line is an expensive CPU test for intersection. Naturally, you should feel horrified by this code because it is going to run in O(N^2) time. If you have 10,000 objects, then you're going to be doing 100,000,000 collision checks (hundred million). I don't care how fast your CPU is or how well you've tuned your math code, this code would reduce your computer to a sluggish crawl. If you're running your game at 60 frames per second, you're looking at 60 * 100 million calculations per second! It's nuts. It's insane. It's crazy. Let's not do this if we can avoid it, at least not with a large set of objects. This would
+            <i>
+             only
+            </i>
+            be acceptable if we're only checking, say, 10 items against each other (100 checks is palatable). If you know in advance that your game is only going to have a very small number of objects (ie, asteriods), you can probably get away with using this brute force method for collision detection and ignore octrees altogether. If/when you start noticing performance problems due to too many collision checks per frame, consider some simple targeted optimizations:
+            <br/>
+            <br/>
+            1. How much computation does your current collision routine take? Do you have a square root hidden away in there (ie, a distance check)? Are you doing a granular collision check (pixel vs pixel, triangle vs triangle, etc)? One common technique is to perform a rough, coarse check for collision before testing for a granular collision check. You can give your objects an enclosing bounding rectangle or bounding sphere and test for intersection with these before testing against a granular check which may involve a lot more math and computation time.
+            <br/>
+            <br/>
+            <p class="message note">
+             <strong>
+              Note:
+             </strong>
+             Use a "distance squared" check for comparing distance between objects to avoid using the square root method. Square root calculation typically uses the newtonian method of approximation and can be computationally expensive.
+            </p>
+            <br/>
+            2. Can you get away with calculating fewer collision checks? If your game runs at 60 frames per second, could you skip a few frames? If you know certain objects behave deterministically, can you "solve" for when they will collide ahead of time (ie, pool ball vs. side of pool table). Can you reduce the number of objects which need to be checked for collisions? A technique for this would be to separate objects into several lists. One list could be your "stationary" objects list. They never have to test for collision against each other. The other list could be your "moving" objects, which need to be tested against all other moving objects and against all stationary objects. This could reduce the number of necessary collision tests to reach an acceptable performance level.
+            <br/>
+            <br/>
+            3. Can you get away with removing some object collision tests when performance becomes an issue? For example, a smoke particle
+            <i>
+             could
+            </i>
+            interact with a surface object and follow its contours to create a nice aesthetic effect, but it wouldn't break game play if you hit a predefined limit for collision checks and decided to stop ignoring smoke particles for collision. Ignoring
+            <i>
+             essential
+            </i>
+            game object movement would certainly break game play though (ei, player bullets stop intersecting with monsters). So, perhaps maintaining a priority list of collision checks to compute would help. First you handle the high priority collision tests, and if you're not at your threshold, you can handle lower priority collision tests. When the threshold is reached, you dump the rest of the items in the priority list or defer them for testing at a later time.
+            <br/>
+            <br/>
+            4. Can you use a faster but still simplistic method for collision detection to get away from a O(N^2) runtime? If you eliminate the objects you've already checked for collisions against, you can reduce the runtime to O(N(N+1)/2), which is much faster and still easy to implement. (technically, it's still O(N^2))
+            <br/>
+            <br/>
+            In terms of software engineering, you may end up spending more time than it's worth fine-tuning a bad algorithm &amp; data structure choice to squeeze out a few more ounces of performance. The cost vs. benefit ratio becomes increasingly unfavorable and it becomes time to choose a better data structure to handle collision detection. Spatial partioning algorithms are the proverbial nuke to solving the runtime problem for collision detection. At a small upfront cost to performance, they'll reduce your collision detection tests to logarithmic runtime. The upfront costs of development time and CPU overhead are easily outweighed by the scalability benefits and performance gains.
+            <br/>
+            <br/>
+            <h2>
+             Conceptual background on spatial partioning
+            </h2>
+            <br/>
+            Let's take a step back and look at spatial partitioning and trees in general before diving into Octrees. If we don't understand the conceptual idea, we have no hope of implementing it by sweating over code.
+            <br/>
+            <br/>
+            Looking at the brute force implementation above, we're essentially taking every object in the game and comparing their positions against all other objects in the game to see if any are touching. All of these objects are contained spatially within our game world. Well, if we create an enclosing box around our game world and figure out which objects are contained within this enclosing box, then we've got a region of space with a list of contained objects within it. In this case, it would contain every object in the game. We can notice that if we have an object on one corner of the world and another object way on the other side, we don't really need to, or want to, calculate a collision check against them every frame. It'd be a waste of precious CPU time. So, let's try something interesting! If we divide our world exactly in half, we can create three seperate lists of objects. The first list of objects, List A, contains all objects on the left half of the world. The second list, List B, contains objects on the right half of the world. Some objects may touch the dividing line such that they're on each side of the line, so we'll create a third list, List C, for these objects.
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-11639700-1389661386.png" id="ipb-attach-url-19431-0-72692200-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Octree_2a.png - Size: 16.95KB, Downloads: 0">
+              <img alt="Attached Image: Octree_2a.png" class="attach" height="415" id="ipb-attach-img-19431-0-72692200-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-11639700-1389661386_thumb.png" style="width:480;height:415" width="480"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            We can notice that with each subdivision, we're spatially reducing the world in half and collecting a list of objects in that resulting half. We can elegantly create a binary search tree to contain these lists. Conceptually, this tree should look something like so:
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-19401600-1389661556.png" id="ipb-attach-url-19432-0-72748500-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Octree_2b.png - Size: 10.03KB, Downloads: 0">
+              <img alt="Attached Image: Octree_2b.png" class="attach" height="244" id="ipb-attach-img-19432-0-72748500-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-19401600-1389661556_thumb.png" style="width:480;height:244" width="480"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            In terms of pseudo code, the tree data structure would look something like this:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             public class BinaryTree
+{
+    //This is a list of all of the objects contained within this node of the tree
+   	private List&lt;GameObject&gt; m_objectList;
+    
+    //These are pointers to the left and right child nodes in the tree
+    private BinaryTree m_left, m_right;
+    
+    //This is a pointer to the parent object (for upward tree traversal).
+    private BinaryTree m_parent;
+}
+            </pre>
+            <br/>
+            We know that all objects in List A will never intersect with any objects in List B, so we can almost eliminate half of the number of collision checks. We've still got the objects in List C which could touch objects in either list A or B, so we'll have to check all objects in List C against all objects in Lists A, B &amp; C. If we continue to sub-divide the world into smaller and smaller parts, we can further reduce the number of necessary collision checks by half each time.
+            <br/>
+            <br/>
+            This is the general idea behind spatial partitioning. There are many ways to subdivide a world into a tree-like data structure (
+            <a class="bbc_url" href="http://en.wikipedia.org/wiki/BSP_tree" rel="nofollow external" title="External link">
+             BSP trees
+            </a>
+            ,
+            <a class="bbc_url" href="http://en.wikipedia.org/wiki/Quad_tree" rel="nofollow external" title="External link">
+             Quad Trees
+            </a>
+            ,
+            <a class="bbc_url" href="http://en.wikipedia.org/wiki/Kd-tree" rel="nofollow external" title="External link">
+             K-D trees
+            </a>
+            , OctTrees, etc). Now, by default, we're just assuming that the best division is a cut in half, right down the middle, since we're assuming that all of our objects will be somewhat uniformally distributed throughout the world. It's not a bad assumption to make, but some spatial division algorithms may decide to make a cut such that each side has an equal amount of objects (a weighted cut) so that the resulting tree is more balanced. However, what happens if all of these objects move around? In order to maintain a near even division, you'd have to either shift the splitting plane or completely rebuild the tree each frame. It'd be a bit of a mess with a lot of complexity. So, for my implementation of a spatial partioning tree I decided to cut right down the middle every time. As a result, some trees may end up being a bit more sparse than others, but that's okay -- it doesn't cost much.
+            <br/>
+            <br/>
+            <h2>
+             To subdivide or not to subdivide? That is the question.
+            </h2>
+            <br/>
+            Let's assume that we have a somewhat sparse region with only a few objects. We could continue subdividing our space until we've found the smallest possible enclosing area for that object. But is that really necessary? Let's remember that the whole
+            <i>
+             reason
+            </i>
+            we're creating a tree is to reduce the number of collision checks we need to perform each frame -- not to create a perfectly enclosing region of space for every object. Here are the rules I use for deciding whether to subdivide or not:
+            <br/>
+            <ul class="bbc">
+             <li>
+              If we create a subdivision which only contains one object, we can stop subdividing even though we
+              <i>
+               could
+              </i>
+              keep dividing further. This rule will become an important part of the criteria for what defines a "leaf node" in our octree.
+             </li>
+             <li>
+              The other important criteria is to set a minimum size for a region. If you have an extremely small object which is nanometers in size (or, god forbid, you have a bug and forgot to initialize an object size!), you're going to keep subdividing to the point where you potentially overflow your call stack. For my own implementation, I defined the smallest containing region to be a 1x1x1 cube. Any objects in this teeny cube will just have to be run with the O(N^2) brute force collision test (I don't anticipate many objects anyways!).
+             </li>
+             <li>
+              If a containing region doesn't contain any objects, we shouldn't try to include it in the tree.
+             </li>
+            </ul>
+            We can take our subdivision by half one step further and divide the 2D world space into
+            <i>
+             quadrants
+            </i>
+            . The logic is essentially the same, but now we're testing for collision with four squares instead of two rectangles. We can continue subdividing each square until our rules for termination are met. The representation of the world space and corresponding data structure for a quad tree would look something like this:
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-51009600-1389735662.png" id="ipb-attach-url-19440-0-72748500-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Quadtree_1a.png - Size: 44.65KB, Downloads: 0">
+              <img alt="Attached Image: Quadtree_1a.png" class="attach" height="444" id="ipb-attach-img-19440-0-72748500-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-51009600-1389735662_thumb.png" style="width:480;height:444" width="480"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            If the quad tree subdivision and data structure makes sense, then an octree should be pretty straight forward as well. We're just adding a third dimension, using bounding cubes instead of bounding squares, and have eight possible child nodes instead of four. Some of you might wonder what should happen if you have a game world with non-cubic dimensions, say 200x300x400. You can still use an octree with cubic dimensions -- some child nodes will just end up empty if the game world doesn't have anything there. Obviously, you'll want to set the dimensions of your octree to at least the largest dimension of your game world.
+            <br/>
+            <br/>
+            <h2>
+             Octree Construction
+            </h2>
+            <br/>
+            So, as you've read, an octree is a special type of subdividing tree commonly used for objects in 3D space (or anything with 3 dimensions). Our enclosing region is going to be a three dimensionsal rectangle (commonly a cube). We will then apply our subdivision logic above, and cut our enclosing region into eight smaller rectangles. If a game object completely fits within one of these subdivided regions, we'll push it down the tree into that node's containing region. We'll then recursively continue subdividing each resulting region until one of our breaking conditions is met. At the end, we should expect to have a nice tree-like data structure.
+            <br/>
+            <br/>
+            <p class="message note">
+             <strong>
+              Note:
+             </strong>
+             My implementation of the octree can contain objects which have either a bounding sphere and/or a bounding rectangle. You'll see a lot of code I use to determine which is being used.
+            </p>
+            <br/>
+            In terms of our
+            <tt>
+             Octree
+            </tt>
+            class data structure, I decided to do the following for each tree:
+            <br/>
+            <ul class="bbc">
+             <li>
+              Each node has a bounding region which defines the enclosing region
+             </li>
+             <li>
+              Each node has a reference to the parent node
+             </li>
+             <li>
+              Contains an array of eight child nodes (use arrays for code simplicity and cache performance)
+             </li>
+             <li>
+              Contains a list of objects contained within the current enclosing region
+             </li>
+             <li>
+              I use a byte-sized bitmask for figuring out which child nodes are actively being used (
+              <i>
+               the optimization benefits at the cost of additional complexity is somewhat debatable
+              </i>
+              )
+             </li>
+             <li>
+              I use a few static variables to indicate the state of the tree
+             </li>
+            </ul>
+            Here is the code for my
+            <tt>
+             Octree
+            </tt>
+            class outline:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             public class OctTree
+{
+	BoundingBox m_region;
+
+	List&lt;Physical&gt; m_objects;
+
+	/// &lt;summary&gt;
+	/// These are items which we're waiting to insert into the data structure. 
+	/// We want to accrue as many objects in here as possible before we inject them into the tree. This is slightly more cache friendly.
+	/// &lt;/summary&gt;
+	static Queue&lt;Physical&gt; m_pendingInsertion = new Queue&lt;Physical&gt;();
+
+	/// &lt;summary&gt;
+	/// These are all of the possible child octants for this node in the tree.
+	/// &lt;/summary&gt;
+	OctTree[] m_childNode = new OctTree[8];
+
+	/// &lt;summary&gt;
+	/// This is a bitmask indicating which child nodes are actively being used.
+	/// It adds slightly more complexity, but is faster for performance since there is only one comparison instead of 8.
+	/// &lt;/summary&gt;
+	byte m_activeNodes = 0;
+
+	/// &lt;summary&gt;
+	/// The minumum size for enclosing region is a 1x1x1 cube.
+	/// &lt;/summary&gt;
+	const int MIN_SIZE = 1;
+
+	/// &lt;summary&gt;
+	/// this is how many frames we'll wait before deleting an empty tree branch. Note that this is not a constant. The maximum lifespan doubles
+	/// every time a node is reused, until it hits a hard coded constant of 64
+	/// &lt;/summary&gt;
+	int m_maxLifespan = 8;          //
+	int m_curLife = -1;             //this is a countdown time showing how much time we have left to live
+
+	/// &lt;summary&gt;
+	/// A reference to the parent node is nice to have when we're trying to do a tree update.
+	/// &lt;/summary&gt;
+	OctTree _parent;
+	
+	static bool m_treeReady = false;       //the tree has a few objects which need to be inserted before it is complete
+	static bool m_treeBuilt = false;       //there is no pre-existing tree yet.
+	
+}
+            </pre>
+            <br/>
+            <h2>
+             Initializing the enclosing region
+            </h2>
+            <br/>
+            The first step in building an octree is to define the enclosing region for the entire tree. This will be the bounding box for the root node of the tree which initially contains all objects in the game world. Before we go about initializing this bounding volume, we have a few design decisions we need to make:
+            <br/>
+            <br/>
+            1. What
+            <i>
+             should
+            </i>
+            happen if an object moves outside of the bounding volume of the root node? Do we want to resize the entire octree so that all objects are enclosed? If we do, we'll have to completely rebuild the octree from scratch. If we don't, we'll need to have some way to either handle out of bounds objects, or ensure that objects never go out of bounds.
+            <br/>
+            <br/>
+            2. How do we want to create the enclosing region for our octree? Do we want to use a preset dimension, such as a 200x400x200 (X,Y,Z) rectangle? Or do we want to use a cubic dimension which is a power of 2? What should be the
+            <i>
+             smallest
+            </i>
+            allowable enclosing region which cannot be subdivided?
+            <br/>
+            <br/>
+            Personally, I decided that I would use a cubic enclosing region with dimensions which are a power of 2, and sufficiently large to completely enclose my world. The smallest allowable cube is a 1x1x1 unit region. With this, I know that I can always cleanly subdivide my world and get integer numbers (even though the
+            <tt>
+             Vector3
+            </tt>
+            uses floats). I also decided that my enclosing region would enclose the entire game world, so if an object leaves this region, it should be quietly destroyed. At the smallest octant, I will have to run a brute force collision check against all other objects, but I don't realistically expect more than 3 objects to occupy that small of an area at a time, so the performance costs of O(N^2) are completely acceptable.
+            <br/>
+            <br/>
+            So, I normally just initialize my octree with a constructor which takes a region size and a list of items to insert into the tree. I feel it's barely worth showing this part of the code since it's so elementary, but I'll include it for completeness. Here are my constructors:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /*Note: we want to avoid allocating memory for as long as possible since there can be lots of nodes.*/
+/// &lt;summary&gt;
+/// Creates an oct tree which encloses the given region and contains the provided objects.
+/// &lt;/summary&gt;
+/// &lt;param name="region"&gt;The bounding region for the oct tree.&lt;/param&gt;
+/// &lt;param name="objList"&gt;The list of objects contained within the bounding region&lt;/param&gt;
+private OctTree(BoundingBox region, List&lt;Physical&gt; objList)
+{
+	m_region = region;
+	m_objects = objList;
+	m_curLife = -1;
+}
+
+public OctTree()
+{
+	m_objects = new List&lt;Physical&gt;();
+	m_region = new BoundingBox(Vector3.Zero, Vector3.Zero);
+	m_curLife = -1;
+}
+
+/// &lt;summary&gt;
+/// Creates an octTree with a suggestion for the bounding region containing the items.
+/// &lt;/summary&gt;
+/// &lt;param name="region"&gt;The suggested dimensions for the bounding region. 
+/// Note: if items are outside this region, the region will be automatically resized.&lt;/param&gt;
+public OctTree(BoundingBox region)
+{
+	m_region = region;
+	m_objects = new List&lt;Physical&gt;();
+	m_curLife = -1;
+}
+            </pre>
+            <br/>
+            <h2>
+             Building an initial octree
+            </h2>
+            <br/>
+            I'm a big fan of
+            <a class="bbc_url" href="http://en.wikipedia.org/wiki/Lazy_initialization" rel="nofollow external" title="External link">
+             lazy initialization
+            </a>
+            . I try to avoid allocating memory or doing work until I absolutely have to. In the case of my octree, I avoid building the data structure as long as possible. We'll accept a user's request to insert an object into the data structure, but we don't actually have to build the tree until someone runs a query against it. What does this do for us? Well, let's assume that the process of constructing and traversing our tree is somewhat computationally expensive. If a user wants to give us 1,000 objects to insert into the tree, does it make sense to recompute every subsequent enclosing area a thousand times? Or, can we save some time and do a bulk blast? I created a "pending" queue of items and a few flags to indicate the build state of the tree. All of the inserted items get put into the pending queue and when a query is made, those pending requests get flushed and injected into the tree. This is especially handy during a game loading sequence since you'll most likely be inserting thousands of objects at once. After the game world has been loaded, the number of objects injected into the tree is orders of magnitude fewer.
+            <br/>
+            <br/>
+            My lazy initialization routine is contained within my
+            <tt>
+             UpdateTree()
+            </tt>
+            method. It checks to see if the tree has been built, and builds the data structure if it doesn't exist and has pending objects.
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// Processes all pending insertions by inserting them into the tree.
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;Consider deprecating this?&lt;/remarks&gt;
+private void UpdateTree()   //complete &amp; tested
+{
+	if (!m_treeBuilt)
+	{
+		while (m_pendingInsertion.Count != 0)
+			m_objects.Add(m_pendingInsertion.Dequeue());
+
+		BuildTree();
+	}
+	else
+	{
+		while (m_pendingInsertion.Count != 0)
+			Insert(m_pendingInsertion.Dequeue());
+	}
+
+	m_treeReady = true;
+}
+            </pre>
+            <br/>
+            As for building the tree itself, this can be done recursively. So for each recurisive iteration, I start off with a list of objects contained within the bounding region. I check my termination rules, and if we pass, we create eight subdivided bounding areas which are perfectly contained within our enclosed region. Then, I go through every object in my given list and test to see if any of them will fit perfectly within any of my octants. If they do fit, I insert them into a corresponding list for that octant. At the very end, I check the counts on my corresponding octant lists and create new octrees and attach them to our current node, and mark my bitmask to indicate that those child octants are actively being used. All of the left over objects have been pushed down to us from our parent, but can't be pushed down to any children, so logically, this must be the smallest octant which can contain the object.
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// Naively builds an oct tree from scratch.
+/// &lt;/summary&gt;
+private void BuildTree()    //complete &amp; tested
+{
+	//terminate the recursion if we're a leaf node
+	if (m_objects.Count &lt;= 1)
+		return;
+
+	Vector3 dimensions = m_region.Max - m_region.Min;
+
+	if (dimensions == Vector3.Zero)
+	{
+		FindEnclosingCube();
+		dimensions = m_region.Max - m_region.Min;
+	}
+
+	//Check to see if the dimensions of the box are greater than the minimum dimensions
+	if (dimensions.X &lt;= MIN_SIZE &amp;&amp; dimensions.Y &lt;= MIN_SIZE &amp;&amp; dimensions.Z &lt;= MIN_SIZE)
+	{
+		return;
+	}
+
+	Vector3 half = dimensions / 2.0f;
+	Vector3 center = m_region.Min + half;
+
+	//Create subdivided regions for each octant
+	BoundingBox[] octant = new BoundingBox[8];
+	octant[0] = new BoundingBox(m_region.Min, center);
+	octant[1] = new BoundingBox(new Vector3(center.X, m_region.Min.Y, m_region.Min.Z), new Vector3(m_region.Max.X, center.Y, center.Z));
+	octant[2] = new BoundingBox(new Vector3(center.X, m_region.Min.Y, center.Z), new Vector3(m_region.Max.X, center.Y, m_region.Max.Z));
+	octant[3] = new BoundingBox(new Vector3(m_region.Min.X, m_region.Min.Y, center.Z), new Vector3(center.X, center.Y, m_region.Max.Z));
+	octant[4] = new BoundingBox(new Vector3(m_region.Min.X, center.Y, m_region.Min.Z), new Vector3(center.X, m_region.Max.Y, center.Z));
+	octant[5] = new BoundingBox(new Vector3(center.X, center.Y, m_region.Min.Z), new Vector3(m_region.Max.X, m_region.Max.Y, center.Z));
+	octant[6] = new BoundingBox(center, m_region.Max);
+	octant[7] = new BoundingBox(new Vector3(m_region.Min.X, center.Y, center.Z), new Vector3(center.X, m_region.Max.Y, m_region.Max.Z));
+
+	//This will contain all of our objects which fit within each respective octant.
+	List&lt;Physical&gt;[] octList = new List&lt;Physical&gt;[8];
+	for (int i = 0; i &lt; 8; i++) octList[i] = new List&lt;Physical&gt;();
+
+	//this list contains all of the objects which got moved down the tree and can be delisted from this node.
+	List&lt;Physical&gt; delist = new List&lt;Physical&gt;();
+
+	foreach (Physical obj in m_objects)
+	{
+		if (obj.BoundingBox.Min != obj.BoundingBox.Max)
+		{
+			for (int a = 0; a &lt; 8; a++)
+			{
+				if (octant[a].Contains(obj.BoundingBox) == ContainmentType.Contains)
+				{
+					octList[a].Add(obj);
+					delist.Add(obj);
+					break;
+				}
+			}
+		}
+		else if (obj.BoundingSphere.Radius != 0)
+		{
+			for (int a = 0; a &lt; 8; a++)
+			{
+				if (octant[a].Contains(obj.BoundingSphere) == ContainmentType.Contains)
+				{
+					octList[a].Add(obj);
+					delist.Add(obj);
+					break;
+				}
+			}
+		}
+	}
+
+	//delist every moved object from this node.
+	foreach (Physical obj in delist)
+		m_objects.Remove(obj);
+
+	//Create child nodes where there are items contained in the bounding region
+	for (int a = 0; a &lt; 8; a++)
+	{
+		if (octList[a].Count != 0)
+		{
+			m_childNode[a] = CreateNode(octant[a], octList[a]);
+			m_activeNodes |= (byte)(1 &lt;&lt; a);
+			m_childNode[a].BuildTree();
+		}
+	}
+
+	m_treeBuilt = true;
+	m_treeReady = true;
+}
+
+private OctTree CreateNode(BoundingBox region, List&lt;Physical&gt; objList)  //complete &amp; tested
+{
+	if (objList.Count == 0)
+		return null;
+
+	OctTree ret = new OctTree(region, objList);
+	ret._parent = this;
+
+	return ret;
+}
+
+private OctTree CreateNode(BoundingBox region, Physical Item)
+{
+	List&lt;Physical&gt; objList = new List&lt;Physical&gt;(1); //sacrifice potential CPU time for a smaller memory footprint
+	objList.Add(Item);
+	OctTree ret = new OctTree(region, objList);
+	ret._parent = this;
+	return ret;
+}
+            </pre>
+            <br/>
+            <h2>
+             Updating a tree
+            </h2>
+            <br/>
+            Let's imagine that our tree has a lot of
+            <i>
+             moving
+            </i>
+            objects in it. If any object moves, there is a good chance that the object has moved outside of its enclosing octant. How do we handle changes in object position while maintaining the integrity of our tree structure?
+            <br/>
+            <br/>
+            <strong>
+             Technique 1: Keep it super simple, trash &amp; rebuild everything.
+            </strong>
+            <br/>
+            <br/>
+            Some implementations of an Octree will completely rebuild the entire tree every frame and discard the old one. This is super simple and it works, and if this is all you need, then prefer the simple technique. The general concensus is that the upfront CPU cost of rebuilding the tree every frame is much cheaper than running a brute force collision check, and programmer time is too valuable to be spent on an unnecessary optimization.
+            <br/>
+            <br/>
+            For those of us who like challenges and to over-engineer things, the "trash &amp; rebuild" technique comes with a few small problems:
+            <br/>
+            <br/>
+            <ol class="bbc">
+             <li>
+              You're constantly allocating and deallocating memory each time you rebuild your tree. Allocating new memory comes with a small cost. If possible, you want to minimize the amount of memory being allocated and reallocated over time by reusing memory you've already got.
+             </li>
+             <li>
+              Most of the tree is unchanging, so it's a waste of CPU time to rebuild the same branches over and over again.
+             </li>
+            </ol>
+            <br/>
+            <strong>
+             Technique 2: Keep the existing tree, update the changed branches
+            </strong>
+            <br/>
+            <br/>
+            I noticed that most branches of a tree don't need to be updated. They just contain stationary objects. Wouldn't it be nice if, instead of rebuilding the entire tree every frame, we just updated the parts of the tree which needed an update? This technique keeps the existing tree and updates only the branches which had an object which moved. It's a bit more complex to implement, but it's a lot more fun too, so let's really get into that!
+            <br/>
+            <br/>
+            During my first attempt at this, I mistakenly thought that an object in a child node could only go up or down one traversal of the tree. This is wrong. If an object in a child node reaches the edge of that node, and that edge also happens to be an edge for the enclosing parent node, then that object needs to be inserted above its parent, and possibly up even further. So, the bottom line is that we don't know how far up an object needs to be pushed up the tree. Just as well, an object can move such that it can be neatly enclosed in a child node, or that child's child node. We don't know how far
+            <i>
+             down
+            </i>
+            the tree we can go. Fortunately since we include a reference to each node's parent, we can easily solve this problem recursively with minimal computation!
+            <br/>
+            <br/>
+            The general idea behind the update algorithm is to first let all objects in the tree update themselves. Some may move or change in size. We want to get a list of every object which moved, so the object update method should return to us a boolean value indicating if its bounding area changed. Once we've got a list of all of our moved objects, we want to start at our current node and try to traverse
+            <i>
+             up
+            </i>
+            the tree until we find a node which completely encloses the moved object (most of the time, the current node still encloses the object). If the object isn't completely enclosed by the current node, we keep moving it up to its next parent node. In the worst case, our root node will be guaranteed to contain the object. After we've moved our object as far
+            <i>
+             up
+            </i>
+            the tree as possible, we'll try to move it as far down the tree as we can. Most of the time, if we moved the object up, we won't be able to move it back down. But, if the object moved so that a child node of the current node could contain it, we have the chance to push it back down the tree. It's important to be able to move objects down the tree as well, or else all moving objects would eventually migrate to the top and we'd start getting some performance problems during collision detection routines.
+            <br/>
+            <br/>
+            <strong>
+             Branch Removal
+            </strong>
+            <br/>
+            <br/>
+            In some cases, an object will move out of a node and that node will no longer have any objects contained within it, nor have any children which contain objects. If this happens, we have an
+            <i>
+             empty branch
+            </i>
+            and we need to mark it as such and prune this dead branch off the tree. There is an interesting question hiding here:
+            <i>
+             When
+            </i>
+            do you want to prune the dead branches off a tree? Allocating new memory costs time, so if we're just going to
+            <i>
+             reuse
+            </i>
+            this same region in a few cycles, why not keep it around for a bit? How long can we keep it around before it becomes more expensive to maintain the dead branch? I decided to give each of my nodes a count down timer which activates when the branch is dead. If an object moves into this nodes octant while the death timer is active, I double the lifespan and reset the death timer. This ensures that octants which are frequently used are hot and stick around, and nodes which are infrequently used are removed before they start to cost more than they're worth. A practical example of this usefulness would be apparent when you have a machine gun shooting a stream of bullets. Those bullets follow in close succession of each other, so it'd be a shame to immediately delete a node as soon as the first bullet leaves it, only to recreate it a fraction of a second later as the second bullet re-enters it. And if there's a lot of bullets, we can probably keep these octants around for a little while. If a child branch is empty and hasn't been used in a while, it's safe to prune it out of our tree.
+            <br/>
+            <br/>
+            Anyways, let's look at the code which does all of this magic. First up, we have the
+            <tt>
+             Update()
+            </tt>
+            method. This is a method which is recursively called on all child trees. It moves all objects around, does some house keeping work for the data structure, and then moves each moved object into its correct node (parent or child).
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             public void Update(GameTime gameTime)
+{
+	if (m_treeBuilt == true)
+	{
+		//Start a count down death timer for any leaf nodes which don't have objects or children.
+		//when the timer reaches zero, we delete the leaf. If the node is reused before death, we double its lifespan.
+		//this gives us a "frequency" usage score and lets us avoid allocating and deallocating memory unnecessarily
+		if (m_objects.Count == 0)
+		{
+			if (HasChildren == false)
+			{
+				if (m_curLife == -1)
+					m_curLife = m_maxLifespan;
+				else if (m_curLife &gt; 0)
+				{
+					m_curLife--;
+				}
+			}
+		}
+		else
+		{
+			if (m_curLife != -1)
+			{
+				if(m_maxLifespan &lt;= 64)
+					m_maxLifespan *= 2;
+				m_curLife = -1;
+			}
+		}
+		List&lt;Physical&gt; movedObjects = new List&lt;Physical&gt;(m_objects.Count);
+
+		//go through and update every object in the current tree node
+		foreach (Physical gameObj in m_objects)
+		{
+			//we should figure out if an object actually moved so that we know whether we need to update this node in the tree.
+			if (gameObj.Update(gameTime))
+			{
+				movedObjects.Add(gameObj);
+			}
+		}
+
+		//prune any dead objects from the tree.
+		int listSize = m_objects.Count;
+		for (int a = 0; a &lt; listSize; a++)
+		{
+			if (!m_objects[a].Alive)
+			{
+				if (movedObjects.Contains(m_objects[a]))
+					movedObjects.Remove(m_objects[a]);
+				m_objects.RemoveAt(a--);
+				listSize--;
+			}
+		}
+
+		//recursively update any child nodes.
+		for( int flags = m_activeNodes, index = 0; flags &gt; 0; flags &gt;&gt;=1, index++)
+			if ((flags &amp; 1) == 1) m_childNode[index].Update(gameTime);
+
+
+		//If an object moved, we can insert it into the parent and that will insert it into the correct tree node.
+		//note that we have to do this last so that we don't accidentally update the same object more than once per frame.
+		foreach (Physical movedObj in movedObjects)
+		{
+			OctTree current = this;
+
+			//figure out how far up the tree we need to go to reinsert our moved object
+			//we are either using a bounding rect or a bounding sphere
+			//try to move the object into an enclosing parent node until we've got full containment
+			if (movedObj.BoundingBox.Max != movedObj.BoundingBox.Min)
+			{
+				while (current.m_region.Contains(movedObj.BoundingBox) != ContainmentType.Contains)
+					if (current._parent != null) current = current._parent;
+					else break; //prevent infinite loops when we go out of bounds of the root node region
+			}
+			else
+			{
+				while (current.m_region.Contains(movedObj.BoundingSphere) != ContainmentType.Contains)//we must be using a bounding sphere, so check for its containment.
+					if (current._parent != null) current = current._parent;
+					else break;
+			}
+
+			//now, remove the object from the current node and insert it into the current containing node.
+			m_objects.Remove(movedObj);
+			current.Insert(movedObj);   //this will try to insert the object as deep into the tree as we can go.
+		}
+
+		//prune out any dead branches in the tree
+		for (int flags = m_activeNodes, index = 0; flags &gt; 0; flags &gt;&gt;= 1, index++)
+			if ((flags &amp; 1) == 1 &amp;&amp; m_childNode[index].m_curLife == 0) 
+			{
+				m_childNode[index] = null;
+				m_activeNodes ^= (byte)(1 &lt;&lt; index);       //remove the node from the active nodes flag list
+			}
+
+		//now that all objects have moved and they've been placed into their correct nodes in the octree, we can look for collisions.
+		if (IsRoot == true)
+		{
+			//This will recursively gather up all collisions and create a list of them.
+			//this is simply a matter of comparing all objects in the current root node with all objects in all child nodes.
+			//note: we can assume that every collision will only be between objects which have moved.
+			//note 2: An explosion can be centered on a point but grow in size over time. In this case, you'll have to override the update method for the explosion.
+			List&lt;IntersectionRecord&gt; irList = GetIntersection(new List&lt;Physical&gt;());
+
+			foreach (IntersectionRecord ir in irList)
+			{
+				if (ir.PhysicalObject != null)
+					ir.PhysicalObject.HandleIntersection(ir);
+				if (ir.OtherPhysicalObject != null)
+					ir.OtherPhysicalObject.HandleIntersection(ir);
+			}
+		}
+		
+	}
+	else
+	{
+
+	}
+}
+            </pre>
+            <br/>
+            Note that we call an
+            <tt>
+             Insert()
+            </tt>
+            method for moved objects. The insertion of objects into the tree is
+            <i>
+             very
+            </i>
+            similar to the method used to build the initial tree.
+            <tt>
+             Insert()
+            </tt>
+            will try to push objects as far down the tree as possible. Notice that I also try to avoid creating new bounding areas if I can use an existing one from a child node.
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// A tree has already been created, so we're going to try to insert an item into the tree without rebuilding the whole thing
+/// &lt;/summary&gt;
+/// &lt;typeparam name="T"&gt;A physical object&lt;/typeparam&gt;
+/// &lt;param name="Item"&gt;The physical object to insert into the tree&lt;/param&gt;
+private void Insert&lt;T&gt;(T Item) where T : Physical
+{
+	/*make sure we're not inserting an object any deeper into the tree than we have to.
+		-if the current node is an empty leaf node, just insert and leave it.*/
+	if (m_objects.Count &lt;= 1 &amp;&amp; m_activeNodes == 0)
+	{
+		m_objects.Add(Item);
+		return;
+	}
+
+	Vector3 dimensions = m_region.Max - m_region.Min;
+	//Check to see if the dimensions of the box are greater than the minimum dimensions
+	if (dimensions.X &lt;= MIN_SIZE &amp;&amp; dimensions.Y &lt;= MIN_SIZE &amp;&amp; dimensions.Z &lt;= MIN_SIZE)
+	{
+		m_objects.Add(Item);
+		return;
+	}
+	Vector3 half = dimensions / 2.0f;
+	Vector3 center = m_region.Min + half;
+
+	//Find or create subdivided regions for each octant in the current region
+	BoundingBox[] childOctant = new BoundingBox[8];
+	childOctant[0] = (m_childNode[0] != null) ? m_childNode[0].m_region : new BoundingBox(m_region.Min, center);
+	childOctant[1] = (m_childNode[1] != null) ? m_childNode[1].m_region : new BoundingBox(new Vector3(center.X, m_region.Min.Y, m_region.Min.Z), new Vector3(m_region.Max.X, center.Y, center.Z));
+	childOctant[2] = (m_childNode[2] != null) ? m_childNode[2].m_region : new BoundingBox(new Vector3(center.X, m_region.Min.Y, center.Z), new Vector3(m_region.Max.X, center.Y, m_region.Max.Z));
+	childOctant[3] = (m_childNode[3] != null) ? m_childNode[3].m_region : new BoundingBox(new Vector3(m_region.Min.X, m_region.Min.Y, center.Z), new Vector3(center.X, center.Y, m_region.Max.Z));
+	childOctant[4] = (m_childNode[4] != null) ? m_childNode[4].m_region : new BoundingBox(new Vector3(m_region.Min.X, center.Y, m_region.Min.Z), new Vector3(center.X, m_region.Max.Y, center.Z));
+	childOctant[5] = (m_childNode[5] != null) ? m_childNode[5].m_region : new BoundingBox(new Vector3(center.X, center.Y, m_region.Min.Z), new Vector3(m_region.Max.X, m_region.Max.Y, center.Z));
+	childOctant[6] = (m_childNode[6] != null) ? m_childNode[6].m_region : new BoundingBox(center, m_region.Max);
+	childOctant[7] = (m_childNode[7] != null) ? m_childNode[7].m_region : new BoundingBox(new Vector3(m_region.Min.X, center.Y, center.Z), new Vector3(center.X, m_region.Max.Y, m_region.Max.Z));
+
+	//First, is the item completely contained within the root bounding box?
+	//note2: I shouldn't actually have to compensate for this. If an object is out of our predefined bounds, then we have a problem/error.
+	//          Wrong. Our initial bounding box for the terrain is constricting its height to the highest peak. Flying units will be above that.
+	//             Fix: I resized the enclosing box to 256x256x256. This should be sufficient.
+	if (Item.BoundingBox.Max != Item.BoundingBox.Min &amp;&amp; m_region.Contains(Item.BoundingBox) == ContainmentType.Contains)
+	{
+		bool found = false;
+		//we will try to place the object into a child node. If we can't fit it in a child node, then we insert it into the current node object list.
+		for(int a=0;a&lt;8;a++)
+		{
+			//is the object fully contained within a quadrant?
+			if (childOctant[a].Contains(Item.BoundingBox) == ContainmentType.Contains)
+			{
+				if (m_childNode[a] != null)
+					m_childNode[a].Insert(Item);   //Add the item into that tree and let the child tree figure out what to do with it
+				else
+				{
+					m_childNode[a] = CreateNode(childOctant[a], Item);   //create a new tree node with the item
+					m_activeNodes |= (byte)(1 &lt;&lt; a);
+				}
+				found = true;
+			}
+		}
+		if(!found) m_objects.Add(Item);
+
+	}
+	else if (Item.BoundingSphere.Radius != 0 &amp;&amp; m_region.Contains(Item.BoundingSphere) == ContainmentType.Contains)
+	{
+		bool found = false;
+		//we will try to place the object into a child node. If we can't fit it in a child node, then we insert it into the current node object list.
+		for (int a = 0; a &lt; 8; a++)
+		{
+			//is the object contained within a child quadrant?
+			if (childOctant[a].Contains(Item.BoundingSphere) == ContainmentType.Contains)
+			{
+				if (m_childNode[a] != null)
+					m_childNode[a].Insert(Item);   //Add the item into that tree and let the child tree figure out what to do with it
+				else
+				{
+					m_childNode[a] = CreateNode(childOctant[a], Item);   //create a new tree node with the item
+					m_activeNodes |= (byte)(1 &lt;&lt; a);
+				}
+				found = true;
+			}
+		}
+		if (!found) m_objects.Add(Item);
+	}
+	else
+	{
+		//either the item lies outside of the enclosed bounding box or it is intersecting it. Either way, we need to rebuild
+		//the entire tree by enlarging the containing bounding box
+		//BoundingBox enclosingArea = FindBox();
+		BuildTree();
+	}
+}
+            </pre>
+            <br/>
+            <h2>
+             Collision Detection
+            </h2>
+            <br/>
+            Finally, our octree has been built and everything is as it should be. How do we perform collision detection against it?
+            <br/>
+            <br/>
+            First, let's list out the different ways we want to look for collisions:
+            <br/>
+            <br/>
+            <ol class="bbc">
+             <li>
+              <strong>
+               Frustum intersections.
+              </strong>
+              We may have a frustum which intersects with a region of the world. We only want the objects which intersect with the given frustum. This is particularly useful for culling regions outside of the camera view space, and for figuring out what objects are within a mouse selection area.
+             </li>
+             <li>
+              <strong>
+               Ray intersections.
+              </strong>
+              We may want to shoot a directional ray from any given point and want to know either the nearest intersecting object, or get a list of all objects which intersect that ray (like a rail gun). This is very useful for
+              <a class="bbc_url" href="http://away3d.com/tutorials/Introduction_to_Mouse_Picking" rel="nofollow external" title="External link">
+               mouse picking
+              </a>
+              . If the user clicks on the screen, we want to draw a ray into the world and figure out what they clicked on.
+             </li>
+             <li>
+              <strong>
+               Bounding Box intersections.
+              </strong>
+              We want to know which objects in the world are intersecting a given bounding box. This is most useful for "box" shaped game objects (houses, cars, etc).
+             </li>
+             <li>
+              <strong>
+               Bounding Sphere Intersections.
+              </strong>
+              We want to know which objects are intersecting with a given bounding sphere. Most objects will probably be using a bounding sphere for coarse collision detection since the mathematics is computationally the least expensive and somewhat easy.
+             </li>
+            </ol>
+            <br/>
+            The main idea behind recursive collision detection processing for an octree is that you start at the root/current node and test for intersection with all objects in that node against the intersector. Then, you do a bounding box intersection test against all active child nodes with the intersector. If a child node fails this intersection test, you can completely ignore the rest of that child's tree. If a child node passes the intersection test, you recursively traverse down the tree and repeat. Each node should pass a
+            <i>
+             list
+            </i>
+            of intersection records up to its caller, which appends those intersections to its own list of intersections. When the recursion finishes, the original caller will get a list of every intersection for the given intersector. The beauty of this is that it takes very little code to implement and performance is very fast.
+            <br/>
+            <br/>
+            In a lot of these collisions, we're probably going to be getting a lot of results. We're also going to want to have some way of responding to each collision, depending on what objects are colliding. For example, a player hero should pick up a floating bonus item (quad damage!), but a rocket shouldn't explode if it hits said bonus item. I created a new class to contain information about each intersection. This class contains references to the intersecting objects, the point of intersection, the normal at the point of intersection, etc. These intersection records become quite useful when you pass them to an object and tell them to handle it. For completeness and clarity, here is my intersection record class:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             public class IntersectionRecord
+{
+	
+	Vector3 m_position;
+	/// &lt;summary&gt;
+	/// This is the exact point in 3D space which has an intersection.
+	/// &lt;/summary&gt;
+	public Vector3 Position { get { return m_position; } }
+
+	
+	Vector3 m_normal;
+	/// &lt;summary&gt;
+	/// This is the normal of the surface at the point of intersection
+	/// &lt;/summary&gt;
+	public Vector3 Normal { get { return m_normal; } }
+
+	Ray m_ray;
+	/// &lt;summary&gt;
+	/// This is the ray which caused the intersection
+	/// &lt;/summary&gt;
+	public Ray Ray { get { return m_ray; } }
+
+	Physical m_intersectedObject1;
+	/// &lt;summary&gt;
+	/// This is the object which is being intersected
+	/// &lt;/summary&gt;
+	public Physical PhysicalObject 
+	{ 
+		get { return m_intersectedObject1; }
+		set { m_intersectedObject1 = value; }
+	}
+
+	Physical m_intersectedObject2;
+	/// &lt;summary&gt;
+	/// This is the other object being intersected (may be null, as in the case of a ray-object intersection)
+	/// &lt;/summary&gt;
+	public Physical OtherPhysicalObject
+	{
+		get { return m_intersectedObject2; }
+		set { m_intersectedObject2 = value; }
+	}
+
+	/// &lt;summary&gt;
+	/// this is a reference to the current node within the octree for where the collision occurred. In some cases, the collision handler
+	/// will want to be able to spawn new objects and insert them into the tree. This node is a good starting place for inserting these objects
+	/// since it is a very near approximation to where we want to be in the tree.
+	/// &lt;/summary&gt;
+	OctTree m_treeNode;     
+
+	/// &lt;summary&gt;
+	/// check the object identities between the two intersection records. If they match in either order, we have a duplicate.
+	/// &lt;/summary&gt;
+	/// &lt;param name="otherRecord"&gt;the other record to compare against&lt;/param&gt;
+	/// &lt;returns&gt;true if the records are an intersection for the same pair of objects, false otherwise.&lt;/returns&gt;
+	public override bool Equals(object otherRecord)
+	{
+		IntersectionRecord o = (IntersectionRecord)otherRecord;
+		//
+		//return (m_intersectedObject1 != null &amp;&amp; m_intersectedObject2 != null &amp;&amp; m_intersectedObject1.ID == m_intersectedObject2.ID);
+		if (otherRecord == null)
+			return false;
+		if (o.m_intersectedObject1.ID == m_intersectedObject1.ID &amp;&amp; o.m_intersectedObject2.ID == m_intersectedObject2.ID)
+			return true;
+		if (o.m_intersectedObject1.ID == m_intersectedObject2.ID &amp;&amp; o.m_intersectedObject2.ID == m_intersectedObject1.ID)
+			return true;
+		return false;
+	}
+
+	double m_distance;
+	/// &lt;summary&gt;
+	/// This is the distance from the ray to the intersection point. 
+	/// You'll usually want to use the nearest collision point if you get multiple intersections.
+	/// &lt;/summary&gt;
+	public double Distance { get { return m_distance; } }
+
+	private bool m_hasHit = false;
+	public bool HasHit
+	{
+		get { return m_hasHit; }
+	}
+
+	public IntersectionRecord()
+	{
+		m_position = Vector3.Zero;
+		m_normal = Vector3.Zero;
+		m_ray = new Ray();
+		m_distance = float.MaxValue;
+		m_intersectedObject1 = null;
+	}
+
+	public IntersectionRecord(Vector3 hitPos, Vector3 hitNormal, Ray ray, double distance)
+	{
+		m_position = hitPos;
+		m_normal = hitNormal;
+		m_ray = ray;
+		m_distance = distance;
+		//m_hitObject = hitGeom;
+		m_hasHit = true;
+	}
+
+	/// &lt;summary&gt;
+	/// Creates a new intersection record indicating whether there was a hit or not and the object which was hit.
+	/// &lt;/summary&gt;
+	/// &lt;param name="hitObject"&gt;Optional: The object which was hit. Defaults to null.&lt;/param&gt;
+	public IntersectionRecord(Physical hitObject = null)
+	{
+		m_hasHit = hitObject != null;
+		m_intersectedObject1 = hitObject;
+		m_position = Vector3.Zero;
+		m_normal = Vector3.Zero;
+		m_ray = new Ray();
+		m_distance = 0.0f;
+	}
+}
+            </pre>
+            <br/>
+            <h2>
+             Intersection with a Bounding Frustum
+            </h2>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// Gives you a list of all intersection records which intersect or are contained within the given frustum area
+/// &lt;/summary&gt;
+/// &lt;param name="frustum"&gt;The containing frustum to check for intersection/containment with&lt;/param&gt;
+/// &lt;returns&gt;A list of intersection records with collisions&lt;/returns&gt;
+private List&lt;IntersectionRecord&gt; GetIntersection(BoundingFrustum frustum, Physical.PhysicalType type = Physical.PhysicalType.ALL)
+{
+	if (m_objects.Count == 0 &amp;&amp; HasChildren == false)   //terminator for any recursion
+		return null;
+
+	List&lt;IntersectionRecord&gt; ret = new List&lt;IntersectionRecord&gt;();
+
+	//test each object in the list for intersection
+	foreach (Physical obj in m_objects)
+	{
+
+		//skip any objects which don't meet our type criteria
+		if ((int)((int)type &amp; (int)obj.Type) == 0)
+			continue;
+
+		//test for intersection
+		IntersectionRecord ir = obj.Intersects(frustum);
+		if (ir != null) ret.Add(ir);
+	}
+
+	//test each object in the list for intersection
+	for (int a = 0; a &lt; 8; a++)
+	{
+		if (m_childNode[a] != null &amp;&amp; (frustum.Contains(m_childNode[a].m_region) == ContainmentType.Intersects || frustum.Contains(m_childNode[a].m_region) == ContainmentType.Contains))
+		{
+			List&lt;IntersectionRecord&gt; hitList = m_childNode[a].GetIntersection(frustum);
+			if (hitList != null)
+			{
+				foreach (IntersectionRecord ir in hitList)
+					ret.Add(ir);
+			}
+		}
+	}
+	return ret;
+}
+            </pre>
+            <br/>
+            The bounding frustum intersection list can be used to only render objects which are visible to the current camera view. I use a scene database to figure out how to render all objects in the game world. Here is a snippet of code from my rendering function which uses the bounding frustum of the active camera:
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// This renders every active object in the scene database
+/// &lt;/summary&gt;
+/// &lt;param name="gameTime"&gt;&lt;/param&gt;
+public int Render()
+{
+	int triangles = 0;
+
+	//Renders all visible objects by iterating through the oct tree recursively and testing for intersection 
+    //with the current camera view frustum
+	foreach (IntersectionRecord ir in m_octTree.AllIntersections(m_cameras[m_activeCamera].Frustum))
+	{
+		ir.PhysicalObject.SetDirectionalLight(m_globalLight[0].Direction, m_globalLight[0].Color);
+		ir.PhysicalObject.View = m_cameras[m_activeCamera].View;
+		ir.PhysicalObject.Projection = m_cameras[m_activeCamera].Projection;
+		ir.PhysicalObject.UpdateLOD(m_cameras[m_activeCamera]);
+		triangles += ir.PhysicalObject.Render(m_cameras[m_activeCamera]);
+	}
+
+	return triangles;
+}
+            </pre>
+            <br/>
+            <h2>
+             Intersection with a Ray
+            </h2>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             /// &lt;summary&gt;
+/// Gives you a list of intersection records for all objects which intersect with the given ray
+/// &lt;/summary&gt;
+/// &lt;param name="intersectRay"&gt;The ray to intersect objects against&lt;/param&gt;
+/// &lt;returns&gt;A list of all intersections&lt;/returns&gt;
+private List&lt;IntersectionRecord&gt; GetIntersection(Ray intersectRay, Physical.PhysicalType type = Physical.PhysicalType.ALL)
+{
+	if (m_objects.Count == 0 &amp;&amp; HasChildren == false)   //terminator for any recursion
+		return null;
+
+	List&lt;IntersectionRecord&gt; ret = new List&lt;IntersectionRecord&gt;();
+
+	//the ray is intersecting this region, so we have to check for intersection with all of our contained objects and child regions.
+	
+	//test each object in the list for intersection
+	foreach (Physical obj in m_objects)
+	{
+		//skip any objects which don't meet our type criteria
+		if ((int)((int)type &amp; (int)obj.Type) == 0)
+			continue;
+
+		if (obj.BoundingBox.Intersects(intersectRay) != null)
+		{
+			IntersectionRecord ir = obj.Intersects(intersectRay);
+			if (ir.HasHit)
+				ret.Add(ir);
+		}
+	}
+
+	// test each child octant for intersection
+	for (int a = 0; a &lt; 8; a++)
+	{
+		if (m_childNode[a] != null &amp;&amp; m_childNode[a].m_region.Intersects(intersectRay) != null)
+		{
+			List&lt;IntersectionRecord&gt; hits = m_childNode[a].GetIntersection(intersectRay, type);
+			if (hits != null)
+			{
+				foreach (IntersectionRecord ir in hits)
+					ret.Add(ir);
+			}
+		}
+	}
+
+	return ret;
+}
+            </pre>
+            <br/>
+            <h2>
+             Intersection with a list of objects
+            </h2>
+            <br/>
+            This is a particularly useful recursive method for determining if a list of objects in the current node intersect with any objects in any child nodes (See:
+            <tt>
+             Update()
+            </tt>
+            method for usage). It's the method which will be used most frequently, so it's good to get this right and efficient. What we want to do is start at the root node of the tree. We compare all objects in the current node against all other objects in the current node for collision. We gather up any of those collisions as intersection records, and insert them into a list. We then pass our list of tested objects down to our child nodes. The child nodes will then test their objects against themselves, then against the objects we passed down to them. The child nodes will capture any collisions in a list, and return that list to its parent. The parent then takes the collision list recieved from its child nodes and appends it to its own list of collisions, finally returning it to its caller.
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-01691100-1389745331.png" id="ipb-attach-url-19443-0-72772900-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Collision_1a.png - Size: 31.01KB, Downloads: 0">
+              <img alt="Attached Image: Collision_1a.png" class="attach" height="214" id="ipb-attach-img-19443-0-72772900-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-01691100-1389745331_thumb.png" style="width:480;height:214" width="480"/>
+             </a>
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-25026100-1389746008.png" id="ipb-attach-url-19445-0-72792500-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Collision_1b.png - Size: 219.42KB, Downloads: 0">
+              <img alt="Attached Image: Collision_1b.png" class="attach" height="144" id="ipb-attach-img-19445-0-72792500-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-25026100-1389746008_thumb.png" style="width:480;height:144" width="480"/>
+             </a>
+             <br/>
+            </p>
+            <br/>
+            If you count out the number of collision tests in the illustration above, you can see that we conducted 29 hit tests and recieved 4 hits. This is much better than [11*11 = 121] hit tests.
+            <br/>
+            <br/>
+            <pre class="prettyprint lang-auto linenums:0">
+             private List&lt;IntersectionRecord&gt; GetIntersection(List&lt;Physical&gt; parentObjs, Physical.PhysicalType type = Physical.PhysicalType.ALL)
+{
+	List&lt;IntersectionRecord&gt; intersections = new List&lt;IntersectionRecord&gt;();
+	//assume all parent objects have already been processed for collisions against each other.
+	//check all parent objects against all objects in our local node
+	foreach (Physical pObj in parentObjs)
+	{
+		foreach (Physical lObj in m_objects)
+		{
+			//We let the two objects check for collision against each other. They can figure out how to do the coarse and granular checks.
+			//all we're concerned about is whether or not a collision actually happened.
+			IntersectionRecord ir = pObj.Intersects(lObj);
+			if (ir != null)
+			{
+                intersections.Add(ir);
+			}
+		}
+	}
+
+	//now, check all our local objects against all other local objects in the node
+	if (m_objects.Count &gt; 1)
+	{
+		#region self-congratulation
+		/*
+		 * This is a rather brilliant section of code. Normally, you'd just have two foreach loops, like so:
+		 * foreach(Physical lObj1 in m_objects)
+		 * {
+		 *      foreach(Physical lObj2 in m_objects)
+		 *      {
+		 *           //intersection check code
+		 *      }
+		 * }
+		 * 
+		 * The problem is that this runs in O(N*N) time and that we're checking for collisions with objects which have already been checked.
+		 * Imagine you have a set of four items: {1,2,3,4}
+		 * You'd first check: {1} vs {1,2,3,4}
+		 * Next, you'd check {2} vs {1,2,3,4}
+		 * but we already checked {1} vs {2}, so it's a waste to check {2} vs. {1}. What if we could skip this check by removing {1}?
+		 * We'd have a total of 4+3+2+1 collision checks, which equates to O(N(N+1)/2) time. If N is 10, we are already doing half as many collision checks as necessary.
+		 * Now, we can't just remove an item at the end of the 2nd for loop since that would break the iterator in the first foreach loop, so we'd have to use a
+		 * regular for(int i=0;i&lt;size;i++) style loop for the first loop and reduce size each iteration. This works...but look at the for loop: we're allocating memory for
+		 * two additional variables: i and size. What if we could figure out some way to eliminate those variables?
+		 * So, who says that we have to start from the front of a list? We can start from the back end and still get the same end results. With this in mind,
+		 * we can completely get rid of a for loop and use a while loop which has a conditional on the capacity of a temporary list being greater than 0.
+		 * since we can poll the list capacity for free, we can use the capacity as an indexer into the list items. Now we don't have to increment an indexer either!
+		 * The result is below.
+		 */
+		#endregion
+
+		List&lt;Physical&gt; tmp = new List&lt;Physical&gt;(m_objects.Count);
+		tmp.AddRange(m_objects);
+		while (tmp.Count &gt; 0)
+		{
+			foreach (Physical lObj2 in tmp)
+			{
+				if (tmp[tmp.Count - 1] == lObj2 || (tmp[tmp.Count - 1].IsStatic &amp;&amp; lObj2.IsStatic))
+					continue;
+				IntersectionRecord ir = tmp[tmp.Count - 1].Intersects(lObj2);
+				if (ir != null)
+					intersections.Add(ir);
+			}
+
+			//remove this object from the temp list so that we can run in O(N(N+1)/2) time instead of O(N*N)
+			tmp.RemoveAt(tmp.Count-1);
+		}
+	}
+
+	//now, merge our local objects list with the parent objects list, then pass it down to all children.
+	foreach (Physical lObj in m_objects)
+		if (lObj.IsStatic == false)
+			parentObjs.Add(lObj);
+	//parentObjs.AddRange(m_objects);
+
+	//each child node will give us a list of intersection records, which we then merge with our own intersection records.
+	for (int flags = m_activeNodes, index = 0; flags &gt; 0; flags &gt;&gt;= 1, index++)
+		if ((flags &amp; 1) == 1) intersections.AddRange(m_childNode[index].GetIntersection(parentObjs, type));
+	
+	return intersections;
+}
+            </pre>
+            <br/>
+            <h2>
+             Screenshot Demos
+            </h2>
+            <br/>
+            <p style="text-align:center">
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-61892600-1389746704.png" id="ipb-attach-url-19446-0-72848800-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Demo_1a.png - Size: 259.79KB, Downloads: 0">
+              <img alt="Attached Image: Demo_1a.png" class="attach" height="372" id="ipb-attach-img-19446-0-72848800-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-61892600-1389746704_thumb.png" style="width:480;height:372" width="480"/>
+             </a>
+             <br/>
+             This is a view of the game world from a distance showing the outlines for each bounding volume for the octree.
+             <br/>
+             <br/>
+             <a class="resized_img" href="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-04376700-1389746712.png" id="ipb-attach-url-19447-0-72853600-1436904404" rel="lightbox[40d400032e3634b2f7d501d74c38ab0c]" title="Demo_1b.png - Size: 281.92KB, Downloads: 0">
+              <img alt="Attached Image: Demo_1b.png" class="attach" height="372" id="ipb-attach-img-19447-0-72853600-1436904404" src="http://uploads.gamedev.net/monthly_01_2014/ccs-13892-0-04376700-1389746712_thumb.png" style="width:480;height:372" width="480"/>
+             </a>
+             <br/>
+             This view shows a bunch of successive projectiles moving through the game world with the frequently-used nodes being preserved instead of deleted.
+             <br/>
+            </p>
+            <br/>
+            <h2>
+             Complete Code Sample
+            </h2>
+            <br/>
+            I've attached a complete code sample of the octree class, the intersection record class, and my generic physical object class. I don't guarantee that they're all bug free since it's all a work in progress and hasn't been rigorously tested yet.
+           </div>
+           <!--ARTICLE ATTACHED RESOURCE FILE-->
+           <br/>
+           <br/>
+           <div style="background-color:rgb(240, 248, 241)">
+            <img src="/public/style_images/attach_article.png" style="margin-left:-5px"/>
+            <a href="http://uploads.gamedev.net/df88c7189d5846e557a1376dbb0b1e2a.zip">
+             <b>
+              Download attached article resource
+             </b>
+            </a>
+           </div>
+           <br/>
+           <br/>
+           <br/>
+           <h2>
+            About the Author(s)
+           </h2>
+           <br/>
+           <i>
+            I am currently an independent game developer working on my first game. I have a four year degree in computer science &amp; software engineering, and a minor in philosophy. My philosophical instinct is saying, "don't judge my correctness based on my credentials, but upon rigorous testing of my given claims."
+           </i>
+           <br/>
+           <br/>
+           <h2>
+            License
+           </h2>
+           <br/>
+           <i>
+            <a href="http://www.gamedev.net/page/resources/_/gdnethelp/publishing-licenses-r2923">
+             Public Domain
+            </a>
+           </i>
+          </div>
+          <br/>
+          <br/>
+         </div>
+        </div>
+       </div>
+       <!-- end id=article -->
+       <div class="ipsPad">
+        <div style="float: left">
+         <ul class="topic_share left shareButtons ipsList_inline">
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=twitter;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_twitter" rel="nofollow" target="_blank" title="Share this link via Twitter">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/twitter.png"/>
+           </a>
+          </li>
+          <li class="fbLike">
+           <div class="fb-like" data-action="like" data-href="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529" data-layout="button_count" data-send="false" data-show-faces="false" data-width="150">
+           </div>
+           <div id="fb-root">
+           </div>
+          </li>
+          <script>
+           (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&amp;appId=128221277204697";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+          </script>
+          <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+           {lang: 'en-GB'}
+          </script>
+          <li>
+           <div class="googlePlusOne">
+            <g:plusone count="false" size="small">
+            </g:plusone>
+           </div>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=digg;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_digg" rel="nofollow" target="_blank" title="Share this link via Digg">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/digg.png"/>
+           </a>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=reddit;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_reddit" rel="nofollow" target="_blank" title="Share this link via Reddit">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/reddit.png"/>
+           </a>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=email;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_email" rel="nofollow" target="_blank" title="Share this link via Email">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/email.png"/>
+           </a>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=print;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_print" rel="nofollow" target="_blank" title="Print">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/print.png"/>
+           </a>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=download;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_download" rel="nofollow" target="_blank" title="Download">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/download.png"/>
+           </a>
+          </li>
+          <li>
+           <a class="_slink" href="http://www.gamedev.net/index.php?sharelink=blogthis;aHR0cDovL3d3dy5nYW1lZGV2Lm5ldC9wYWdlL3Jlc291cmNlcy9fL3RlY2huaWNhbC9nYW1lLXByb2dyYW1taW5nL2ludHJvZHVjdGlvbi10by1vY3RyZWVzLXIzNTI5;SW50cm9kdWN0aW9uIHRvIE9jdHJlZXM,&amp;overrideApp=ccs" id="slink_blogthis" rel="nofollow" target="_blank" title="Share this link via Blog This">
+            <img src="http://public.gamedev5.net/public/style_extra/sharelinks/blogthis.png"/>
+           </a>
+          </li>
+         </ul>
+         <script type="text/javascript">
+          ipb.sharelinks.url   = "http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529";
+		ipb.sharelinks.title = "Introduction to Octrees";
+		ipb.sharelinks.bname = "GameDev.net";
+         </script>
+        </div>
+        <br style="clear: both"/>
+       </div>
+       <br style="clear: both"/>
+       <span style="font-size:18px; font-weight: bold">
+        Comments
+       </span>
+       <a name="comments">
+       </a>
+       <br/>
+       <div class="ipsBox">
+        <div class="ipsBox_container ipsPad">
+         <div class="comment_wrap">
+          <script type="text/javascript">
+           ipb.templates['comment_moderation'] = new Template("&lt;div id='comment_moderate_box' class='ipsFloatingAction' style='display: none'&gt;&lt;span class='desc'&gt;With &lt;span id='comment_count'&gt;#{count}&lt;/span&gt; checked comments: &lt;/span&gt;&lt;select name='modOptions' class='input_select' id='commentModAction'&gt;&lt;option value='approve'&gt;Approve&lt;/option&gt;&lt;option value='hide'&gt;Hide&lt;/option&gt;&lt;option value='unhide'&gt;Unhide&lt;/option&gt;&lt;option value='delete'&gt;Delete&lt;/option&gt;&lt;/select&gt;&nbsp;&nbsp;&lt;input type='button' class='input_submit' id='submitModAction' value='Go' /&gt;&lt;/div&gt;");
+	
+	ipb.templates['comment_delete'] = new Template("&lt;h3&gt;Confirm Delete&lt;/h3&gt;&lt;div class='ipsPad ipsForm_center desc'&gt;Are you sure you want to delete this comment?&lt;br /&gt;&lt;br /&gt;&lt;input type='button' class='input_submit' id='delPush' onclick='ipb.comments.deleteIt(event)' value='Delete comment now' /&gt;");
+	
+	ipb.templates['comment_hide'] = new Template("&lt;form action='#{url}' method='post'&gt;&lt;h3&gt;Hide Comment&lt;/h3&gt;&lt;div class='ipsPad ipsForm_center desc'&gt;This option hides the comment, but moderators may still be able to view it.&lt;br /&gt;&lt;br /&gt;&lt;input type='text' name='reason' id='hidePop_reason' value='' class='input_text' style='width: 60%' /&gt; &lt;input type='submit' class='input_submit' value='Hide Comment' /&gt;&lt;/form&gt;");
+          </script>
+          <a id="commentsStart">
+          </a>
+          <div class="ipsComment_wrap" id="comment_wrap">
+           <a id="comment_37302">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="37302" id="comment_id_37302">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/200358-serumas/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://www.gravatar.com/avatar/b9cd4b33c421e0cb16d9486bb946b292?s=100&amp;d=http%3A%2F%2Fpublic.gamedev5.net%2F%2Fpublic%2Fstyle_images%2Fmaster%2Fprofile%2Fdefault_large.png"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="200358" hovercard-ref="member" href="http://www.gamedev.net/user/200358-serumas/" title="View Profile">
+               <span itemprop="name">
+                serumas
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=37302" rel="bookmark" title="Get the permalink">
+               Jan 21 2014 02:03 PM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_37302">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Im not a fan of quadtree or octree, but must admit that article its one of the best...
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_37302', { domLikeStripId: 'like_post_37302', app: 'ccs', type: 'comment_id', typeid: '37302' }, parseInt('1') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+           <a id="comment_38226">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="38226" id="comment_id_38226">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/221959-luorax/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://www.gravatar.com/avatar/027562ff66e30315d2d98446d7c0edd3?s=100&amp;d=http%3A%2F%2Fpublic.gamedev5.net%2F%2Fpublic%2Fstyle_images%2Fmaster%2Fprofile%2Fdefault_large.png"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="221959" hovercard-ref="member" href="http://www.gamedev.net/user/221959-luorax/" title="View Profile">
+               <span itemprop="name">
+                luorax
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=38226" rel="bookmark" title="Get the permalink">
+               Aug 27 2014 03:58 PM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_38226">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Only one comment? Really? Man, this tutorial is amazing! I plan on implementing something similar into my game engine in the near future and I'm sure I will be able to do it using this tutorial only!
+              </p>
+              <p>
+              </p>
+              <p>
+               Thank you very much for this amazing work &lt;3
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_38226', { domLikeStripId: 'like_post_38226', app: 'ccs', type: 'comment_id', typeid: '38226' }, parseInt('0') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+           <a id="comment_38771">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="38771" id="comment_id_38771">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/221856-mohessaid/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://www.gravatar.com/avatar/2d67040ccb8e3d1e3e37d11ed49e06c9?s=100&amp;d=http%3A%2F%2Fpublic.gamedev5.net%2F%2Fpublic%2Fstyle_images%2Fmaster%2Fprofile%2Fdefault_large.png"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="221856" hovercard-ref="member" href="http://www.gamedev.net/user/221856-mohessaid/" title="View Profile">
+               <span itemprop="name">
+                mohessaid
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=38771" rel="bookmark" title="Get the permalink">
+               Jan 17 2015 11:00 AM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_38771">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Wow! Unbelievable, this article is so detailed, thank you professor.
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_38771', { domLikeStripId: 'like_post_38771', app: 'ccs', type: 'comment_id', typeid: '38771' }, parseInt('0') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+           <a id="comment_38776">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="38776" id="comment_id_38776">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/192297-zepelin/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://www.gravatar.com/avatar/399d0713012619ead19104ada98c23cd?s=100&amp;d=http%3A%2F%2Fpublic.gamedev5.net%2F%2Fpublic%2Fstyle_images%2Fmaster%2Fprofile%2Fdefault_large.png"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="192297" hovercard-ref="member" href="http://www.gamedev.net/user/192297-zepelin/" title="View Profile">
+               <span itemprop="name">
+                zepelin
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=38776" rel="bookmark" title="Get the permalink">
+               Jan 18 2015 09:11 AM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_38776">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Very interesting article, thanks for the explanations!
+              </p>
+              <p>
+              </p>
+              <p>
+               However, the code would need to be reviewed a little bit, with blocks of codes being put in separate methods, GetIntersection being coded once for all as generic for any kind of intersection checks (with common logic of type check and children intersection tests) - except maybe for the last one (list of objects), where you could also avoid to use a separate tmp list of Physical, and just keep the index of the last object to treat in m_objects instead.
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_38776', { domLikeStripId: 'like_post_38776', app: 'ccs', type: 'comment_id', typeid: '38776' }, parseInt('1') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+           <a id="comment_38922">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="38922" id="comment_id_38922">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/13892-slayemin/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://uploads.gamedev.net/profile/photo-thumb-13892.jpg?_r=1402372243"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="13892" hovercard-ref="member" href="http://www.gamedev.net/user/13892-slayemin/" title="View Profile">
+               <span itemprop="name">
+                slayemin
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=38922" rel="bookmark" title="Get the permalink">
+               Mar 17 2015 02:13 PM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_38922">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Yeah, I found some bugs in my code later on and fixed them. I think the in-place update may have been overly complicating things and adding additional potential sources for errors. I recommend using my code implementation as a good starting point / reference instead of blindly just copy/pasting it. I'm sure someone smarter than I could design it much better, but this was my second iteration
+               <img alt=":)" class="bbc_emoticon" src="http://public.gamedev5.net//public/style_emoticons/default/smile.png"/>
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_38922', { domLikeStripId: 'like_post_38922', app: 'ccs', type: 'comment_id', typeid: '38922' }, parseInt('0') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+           <a id="comment_38947">
+           </a>
+           <div class="ipsComment clearfix " data-commentid="38947" id="comment_id_38947">
+            <div class="ipsComment_author">
+             <div class="right">
+              <a class="ipsUserPhotoLink left" data-tooltip="User" href="http://www.gamedev.net/user/181264-cephalo/">
+               <img alt="Photo" class="ipsUserPhoto ipsUserPhoto_mini" src="http://www.gravatar.com/avatar/1bd89db67792cb0d1fcd38cec4e9bf00?s=100&amp;d=http%3A%2F%2Fpublic.gamedev5.net%2F%2Fpublic%2Fstyle_images%2Fmaster%2Fprofile%2Fdefault_large.png"/>
+              </a>
+             </div>
+             <div class="clear">
+              <a class="_hovertrigger url fn name " data-ipb="noparse" hovercard-id="181264" hovercard-ref="member" href="http://www.gamedev.net/user/181264-cephalo/" title="View Profile">
+               <span itemprop="name">
+                cephalo
+               </span>
+              </a>
+              <br/>
+             </div>
+             <span class="post_id">
+              <a class="desc lighter ipsType_smaller" href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529&amp;do=findComment&amp;comment_id=38947" rel="bookmark" title="Get the permalink">
+               Mar 24 2015 02:07 PM
+              </a>
+             </span>
+            </div>
+            <div class="ipsComment_comment" id="comment_38947">
+             <div class="comment_content" style="min-width:150px;">
+              <p>
+               Great article and super useful code. I have one question. In theFindEnclosingCube() method, there is this:
+              </p>
+              <pre class="prettyprint lang-">
+               //gets the most significant bit value, so that we essentially do a Ceiling(X) with the 
+            //ceiling result being to the nearest power of 2 rather than the nearest integer.
+            int x = Calc.SigBit(highX);
+              </pre>
+              <p>
+               Did you intend for that to be the highest significant bit of highX, or the largest power of 2 that contains highX? I assume it was the highest that contains the number, so I replaced it with:
+              </p>
+              <pre class="prettyprint lang-">
+               /// Round up to next higher power of 2 (return x if it's already a power
+        /// of 2).
+        int pow2roundup(int x)
+        {
+            if (x &lt; 0)
+                return 0;
+            --x;
+            x |= x &gt;&gt; 1;
+            x |= x &gt;&gt; 2;
+            x |= x &gt;&gt; 4;
+            x |= x &gt;&gt; 8;
+            x |= x &gt;&gt; 16;
+            return x + 1;
+
+        }
+              </pre>
+              <p>
+               I probably broke the whole thing... Haven't put it into action yet.
+              </p>
+             </div>
+             <ul class="ipsComment_controls ipsList_inline ipsType_smaller">
+              <li class="right">
+               <script type="text/javascript">
+                ipb.global.registerReputation( 'rep_comment_38947', { domLikeStripId: 'like_post_38947', app: 'ccs', type: 'comment_id', typeid: '38947' }, parseInt('0') );
+               </script>
+              </li>
+             </ul>
+            </div>
+           </div>
+          </div>
+          <script type="text/javascript">
+           ipb.global.post_width			= 500;
+	document.observe("dom:loaded", function(){
+		ipb.comments.parentId = 3529;
+		ipb.comments.setData( {"counts":{"commentTotal":"6","thisPageCount":6,"perPage":25,"curStart":0},"settings":{"urls-showParent":"app=ccs&amp;module=pages&amp;section=pages&amp;do=redirect&amp;database=1&amp;record=%s","urls-report":""},"canModerate":false,"fromApp":"ccs-records","thisApp":"ccs","repType":"comment_id","enableRep":true,"autoSaveKey":"comment-ccs_database_comments-3529","baseUrl":"app=ccs&amp;module=pages&amp;section=comments&amp;database=1&amp;record=3529","formUrl":"http:\/\/www.gamedev.net\/index.php?app=ccs&amp;database=1&amp;record=3529","formApp":"ccs","formModule":"pages","formSection":"comments","captcha":"&lt;fieldset id='captcha' class='recaptcha'&gt;\n\t&lt;ul class='ipsForm ipsForm_vertical'&gt;\n\t\t&lt;li class='ipsField'&gt;\n\t\t\t&lt;label class='ipsField_title'&gt;Security Check &lt;span class='ipsForm_required'&gt;*&lt;\/span&gt;&lt;\/label&gt;\n\t\t\t&lt;div class='ipsField_content'&gt;\n\t\t\t\t&lt;script type='text\/javascript'&gt;\n\t\t\t\t\t\tvar RecaptchaOptions = { \n\t\t\t\t\t\t\t\t\t\t\t\tlang : 'en',\n\t\t\t\t\t\t\t\t\t\t\t\ttheme : 'clean',\n\t\t\t\t\t\t\t\t\t\t\t\ttabindex: 49\n\t\t\t\t\t\t\t\t\t\t\t\t};\n\t\t\t\t\t&lt;\/script&gt;&lt;script type=\"text\/javascript\" src=\"https:\/\/www.google.com\/recaptcha\/api\/challenge?k=6LcpWAMAAAAAAA4klDtDNuDH6LsGgBX5mBoJ3naK\"&gt;&lt;\/script&gt;\n\t\t\t\t\t&lt;noscript&gt;\n\t\t\t\t\t&lt;iframe src=\"https:\/\/www.google.com\/recaptcha\/api\/noscript?k=6LcpWAMAAAAAAA4klDtDNuDH6LsGgBX5mBoJ3naK\" height=\"300\" width=\"500\" frameborder=\"0\"&gt;&lt;\/iframe&gt;&lt;br\/&gt;\n\t\t\t\t\t&lt;textarea name=\"recaptcha_challenge_field\" rows=\"3\" cols=\"40\"&gt;&lt;\/textarea&gt;\n\t\t\t\t\t&lt;input type=\"hidden\" name=\"recaptcha_response_field\" value=\"manual_challenge\"\/&gt;\n\t\t\t\t\t&lt;\/noscript&gt;\n\t\t\t&lt;\/div&gt;\n\t\t&lt;\/li&gt;\n\t&lt;\/ul&gt;\n&lt;\/fieldset&gt;","ajaxSaveUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=add&amp;database=1&amp;record=3529","ajaxDeleteUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=delete&amp;database=1&amp;record=3529","ajaxModerateUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=moderate&amp;database=1&amp;record=3529","ajaxShowEditUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=showEdit&amp;database=1&amp;record=3529","ajaxSaveEditUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=saveEdit&amp;database=1&amp;record=3529","ajaxFetchReplyUrl":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=ajax&amp;section=comments&amp;do=fetchReply&amp;database=1&amp;record=3529","findLastComment":"http:\/\/www.gamedev.net\/index.php?s=7be39447c930e579460295b71a68714b&amp;app=ccs&amp;module=pages&amp;section=pages&amp;do=redirect&amp;database=1&amp;record=3529&amp;comment=_last_"} );
+	});
+          </script>
+         </div>
+        </div>
+       </div>
+       <br/>
+       Note: Please offer only
+       <b>
+        positive
+       </b>
+       ,
+       <b>
+        constructive
+       </b>
+       comments - we are looking to promote a positive atmosphere where collaboration is valued above all else.
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+      </div>
+     </div>
+     <script type="text/javascript">
+      ipb.vars['image_resize']		= 0;
+ipb.global.post_width			= 500;
+Event.observe( window, 'load', function(){
+	// Resize images
+	$$('.article_body').each( function(elem){
+		ipb.global.findImgs( $( elem ) );
+	});
+});
+     </script>
+     <script src="http://public.gamedev.net/public/js/3rd_party/prettify/prettify.js" type="text/javascript">
+     </script>
+     <script src="http://public.gamedev.net/public/js/3rd_party/prettify/lang-sql.js" type="text/javascript">
+     </script>
+     <!-- By default we load generic code, php, css, sql and xml/html; load others here if desired -->
+     <script type="text/javascript">
+      //&lt;![CDATA[
+		Event.observe( window, 'load', function(e){ prettyPrint() });
+	//]]&gt;
+     </script>
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+     </script>
+     <script type="text/javascript">
+      jQuery.noConflict();
+     </script>
+     <script src="http://public.gamedev5.net/public/js/3rd_party/highstock/highstock.js">
+     </script>
+     <script src="http://public.gamedev5.net/public/js/3rd_party/highstock/modules/exporting.js">
+     </script>
+     <script type="text/javascript">
+      function ShowGraph() {
+ 
+ var requrl = ipb.vars['base_url'] + "app=ccs&amp;module=ajax&amp;section=getstats&amp;md5check=" +ipb.vars['secure_hash'] + "&amp;article_id=3529";
+ 
+    jQuery.getJSON(requrl, function(data) {
+        // Create the chart
+        window.chart = new Highcharts.StockChart({
+            chart : {
+                renderTo : 'statgraph'
+            },
+
+            title : {
+                text : 'Daily Article Views'
+            },
+
+            rangeSelector: {
+		        selected: 1
+		    },         
+		    
+	    exporting: {
+		buttons: {
+			exportButton: {
+				enabled: false
+			},
+			printButton: {
+				enabled: false
+			}
+		}
+	    },
+            
+	    navigator : {
+				enabled : false
+			},
+			            
+            series : [{
+                type : 'column',
+                name : 'Daily Views',
+                data : data,
+                dataGrouping: {
+                	enabled: true,
+                	forced: false,
+                	smoothed: false
+                },
+                tooltip: {
+                    valueDecimals: 0
+                }
+            }]
+        });
+    });
+
+
+};
+     </script>
+    </div>
+    <ol class="breadcrumb bottom ipsList_inline left clearfix clear">
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+       <span itemprop="title">
+        Home
+       </span>
+      </a>
+     </li>
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span class="nav_sep">
+       <b>
+        
+       </b>
+      </span>
+      <a href="http://www.gamedev.net/page/index.html/" itemprop="url" title="Return to Home">
+       <span itemprop="title">
+        Home
+       </span>
+      </a>
+     </li>
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span class="nav_sep">
+       <b>
+        
+       </b>
+      </span>
+      <a href="http://www.gamedev.net/page/resources" itemprop="url" title="Return to Articles">
+       <span itemprop="title">
+        Articles
+       </span>
+      </a>
+     </li>
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span class="nav_sep">
+       <b>
+        
+       </b>
+      </span>
+      <a href="http://www.gamedev.net/page/resources/_/technical/" itemprop="url" title="Return to Technical">
+       <span itemprop="title">
+        Technical
+       </span>
+      </a>
+     </li>
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span class="nav_sep">
+       <b>
+        
+       </b>
+      </span>
+      <a href="http://www.gamedev.net/page/resources/_/technical/game-programming/" itemprop="url" title="Return to Game Programming">
+       <span itemprop="title">
+        Game Programming
+       </span>
+      </a>
+     </li>
+     <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span class="nav_sep">
+       <b>
+        
+       </b>
+      </span>
+      <span itemprop="title">
+       Article: Introduction to Octrees
+      </span>
+     </li>
+    </ol>
+   </div>
+   <!-- ::: FOOTER (Change skin, language, mark as read, etc) ::: -->
+   <div class="main_width clearfix clear" id="footer_utilities">
+    <a href="#top" id="backtotop" rel="nofollow" title="Go to top">
+     <span class="gdtop sprite" style="margin-top:5px">
+     </span>
+    </a>
+    <ul class="ipsList_inline left">
+     <li>
+      <a href="#" id="new_language" rel="nofollow">
+       English (USA)
+      </a>
+      <ul class="ipbmenu_content with_checks" id="new_language_menucontent" style="display: none">
+       <li class="selected">
+        <a href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=pages&amp;do=redirect&amp;page=2&amp;k=880ea6a14ea49e853634fbdc5015a024&amp;setlanguage=1&amp;langurlbits=app=ccs&amp;module=pages&amp;section=pages&amp;folder=/resources&amp;page=_&amp;cal_id=&amp;langid=1">
+         English (USA)
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=ccs&amp;module=pages&amp;section=pages&amp;do=redirect&amp;page=2&amp;k=880ea6a14ea49e853634fbdc5015a024&amp;setlanguage=1&amp;langurlbits=app=ccs&amp;module=pages&amp;section=pages&amp;folder=/resources&amp;page=_&amp;cal_id=&amp;langid=2">
+         English (USA) (COPY)
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=all&amp;k=880ea6a14ea49e853634fbdc5015a024" id="mark_all_read" rel="nofollow" title="Mark all as read">
+       Mark Community Read
+      </a>
+      <ul class="ipbmenu_content" id="mark_all_read_menucontent" style="display: none">
+       <li>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=forums&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Forums
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=members&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Members
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=blog&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Developer Journals
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=gallery&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Gallery
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=downloads&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Downloads
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=ccs&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Resources
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=nexus&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Store
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=classifieds&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Classifieds
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=tracker&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Tracker
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=app&amp;markApp=links&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         Links
+        </a>
+       </li>
+       <li>
+        <a href="http://www.gamedev.net/index.php?app=forums&amp;module=forums&amp;section=markasread&amp;marktype=all&amp;k=880ea6a14ea49e853634fbdc5015a024">
+         <strong>
+          Mark all as read
+         </strong>
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a accesskey="6" href="http://www.gamedev.net/index.php?app=core&amp;module=help" rel="help" title="View help">
+       Help
+      </a>
+     </li>
+    </ul>
+   </div>
+   <div id="partnercontainer">
+    <div class="partners">
+     <div style="margin-top:6px;">
+      PARTNERS
+     </div>
+     <div class="pNav">
+      <a href="http://www.design3.com/" target="new">
+       <span class="design3_dark_tagline sprite">
+       </span>
+      </a>
+     </div>
+     <div class="pNav" style="margin-top:3px; width:130px">
+      <a href="http://www.worldgamingexecutives.com/page/articles-2" target="new">
+       <span class="wge sprite">
+       </span>
+      </a>
+     </div>
+     <div class="pNav">
+      <a href="http://www.packtpub.com/" target="new">
+       <span class="packt sprite">
+       </span>
+      </a>
+     </div>
+     <!--
+             &lt;div class="pNav" style='margin: 12px 0 5px 0;width: 220px;'&gt;
+                &lt;a href="http://www.game-connection.com/gameconn/" target="new"&gt;&lt;img src="http://public.gamedev.net/images/partners/gameconnection.png"  height="24" width="24" border="0"&gt;&lt;/a&gt;
+             &lt;/div&gt;
+-->
+     <div class="pNav" style="margin-top:3px; width:80px">
+      <a href="http://www.chinajoy.net/" target="new">
+       <span class="chinajoy sprite">
+       </span>
+      </a>
+     </div>
+     <div class="pNav" style="margin: -10px 0 0 50px;">
+      <a href="http://www.assembla.com/plans?affiliate=GameDev" target="new">
+       <span class="assembla-logo-small sprite">
+       </span>
+      </a>
+     </div>
+     <!--
+&lt;div class="pNav" style="margin: -3px 0 0 50px;"&gt;
+                &lt;a href="http://gdconf.com/" target="new"&gt;&lt;span class="gdc_logo sprite"&gt;&lt;/span&gt;&lt;/a&gt;
+             &lt;/div&gt;
+-->
+    </div>
+   </div>
+   <div id="footercontainer">
+    <div class="footer">
+     <div class="fRef">
+      <a href="http://www.gamedev.net/">
+       <span class="logo_small sprite">
+       </span>
+      </a>
+      <div class="fRef-text">
+       Copyright  1999-2015 GameDev.Net LLC
+       <p>
+        <br/>
+        GameDev.net, the GameDev.net logo, and GDNet are trademarks of GameDev.net, LLC
+        <br/>
+       </p>
+      </div>
+     </div>
+     <div class="fNav">
+      <h5>
+       Navigation
+      </h5>
+      <ul>
+       <li>
+        <a href="/">
+         Home
+        </a>
+       </li>
+       <li>
+        <a href="/forum/31-for-beginners/">
+         For Beginners
+        </a>
+       </li>
+       <li>
+        <a href="/forum/123-the-technical-side/">
+         Technical
+        </a>
+       </li>
+       <li>
+        <a href="/forum/124-the-creative-side/">
+         Creative
+        </a>
+       </li>
+       <li>
+        <a href="/forum/133-the-business-side/">
+         Business
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="fNav">
+      <h5>
+       Customer Service
+      </h5>
+      <ul>
+       <li>
+        <a href="/subscribe/">
+         GDNet+ Subscriptions
+        </a>
+       </li>
+       <li>
+        <a href="/classifieds">
+         Job Advertising
+        </a>
+       </li>
+       <li>
+        <a href="/info/legal/tos.htm">
+         Terms of Service
+        </a>
+       </li>
+       <li>
+        <a href="/info/legal/tos.htm#privacy">
+         Privacy Policy
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="fNav">
+      <h5>
+       Company Info
+      </h5>
+      <ul>
+       <li>
+        <a href="/info/about">
+         About Us
+        </a>
+       </li>
+       <li>
+        <a href="/info/media/">
+         Advertise on Gamedev.net
+        </a>
+       </li>
+       <li>
+        <a href="/info/about/contact.html">
+         Contact Us
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div style="clear:both">
+      <!--empty-->
+     </div>
+     <!--empty-->
+    </div>
+   </div>
+  </div>
+  <script src="http://public.gamedev5.net/public/js/3rd_party/lightbox.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+	// Lightbox Configuration
+	LightboxOptions = Object.extend({
+	    fileLoadingImage:        'http://public.gamedev5.net//public/style_images/master/lightbox/loading.gif',     
+	    fileBottomNavCloseImage: 'http://public.gamedev5.net//public/style_images/master/lightbox/closelabel.gif',
+	    overlayOpacity: 0.8,   // controls transparency of shadow overlay
+	    animate: true,         // toggles resizing animations
+	    resizeSpeed: 10,        // controls the speed of the image resizing animations (1=slowest and 10=fastest)
+	    borderSize: 10,         //if you adjust the padding in the CSS, you will need to update this variable
+		// When grouping images this is used to write: Image # of #.
+		// Change it for non-english localization
+		labelImage: "Image",
+		labelOf: "of"
+	}, window.LightboxOptions || {});
+/* Watch for a lightbox image and set up our downloadbutton watcher */
+document.observe('click', (function(event){
+    var target = event.findElement('a[rel*="lightbox"]') || event.findElement('area[rel*="lightbox"]') || event.findElement('span[rel*="lightbox"]');
+    if (target) {
+        event.stop();
+        gbl_addDownloadButton();
+    }
+}).bind(this));
+var _to    = '';
+var _last  = '';
+function gbl_addDownloadButton()
+{
+	if ( typeof( ipsLightbox.lightboxImage ) != 'undefined' &amp;&amp; ipsLightbox.lightboxImage.src )
+	{
+		if ( _last != ipsLightbox.lightboxImage.src )
+		{
+			if ( ! $('gbl_d') )
+			{
+				$('bottomNav').insert( { top: "&lt;div id='gbl_d' style='text-align:right;padding-bottom:4px;'&gt;&lt;/div&gt;" } );
+			}
+			
+			$('gbl_d').update( "&lt;a href='"+ ipsLightbox.lightboxImage.src + "' target='_blank'&gt;&lt;img src='http://public.gamedev5.net//public/style_images/master/lightbox/download-icon.png' /&gt;&lt;/a&gt;" );
+			
+			_last = ipsLightbox.lightboxImage.src;
+		}
+	}
+	
+	/* Check for init and then keep checking for new image */
+	_to = setTimeout( "gbl_addDownloadButton()", 1000 );
+}
+//]]&gt;
+  </script>
+  <div id="inline_login_form" style="display: none">
+   <form action="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;do=process" id="login" method="post">
+    <input name="auth_key" type="hidden" value="880ea6a14ea49e853634fbdc5015a024"/>
+    <input name="referer" type="hidden" value="http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-octrees-r3529"/>
+    <h3>
+     Sign In
+    </h3>
+    <div class="ipsBox_notice">
+     <ul class="ipsList_inline">
+      <li>
+       <a class="ipsButton_secondary" href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;do=process&amp;use_google=1&amp;auth_key=880ea6a14ea49e853634fbdc5015a024" id="googleAjax">
+        <img alt="Google" src="http://www.gamedev.net/public/style_extra/signin/login-google-icon.png"/>
+        Use Google
+       </a>
+      </li>
+     </ul>
+    </div>
+    <script type="text/javascript">
+     $('googleAjax').observe( 'click', function(e) { 
+if ( $('inline_login_form') )
+{
+$('inline_login_form').hide();
+$('sign_in_popup_inner').hide();
+$('sign_in_popup_close').hide();
+}
+googlePop();
+Event.stop(e);
+
+return false;
+  });
+    </script>
+    <div class="ipsBox_notice">
+     <ul class="ipsList_inline">
+      <li>
+       <a class="ipsButton_secondary" href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;serviceClick=facebook">
+        <img alt="Facebook" src="http://public.gamedev5.net//public/style_images/master/loginmethods/facebook.png"/>
+        Use Facebook
+       </a>
+      </li>
+      <li>
+       <a class="ipsButton_secondary" href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=login&amp;serviceClick=twitter">
+        <img alt="Twitter" src="http://public.gamedev5.net//public/style_images/master/loginmethods/twitter.png"/>
+        Use Twitter
+       </a>
+      </li>
+     </ul>
+    </div>
+    <br/>
+    <div class="ipsForm ipsForm_horizontal">
+     <fieldset>
+      <ul>
+       <li class="ipsField">
+        <div class="ipsField_content">
+         Need an account?
+         <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=register" title="Register now!">
+          Register now!
+         </a>
+        </div>
+       </li>
+       <li class="ipsField ipsField_primary">
+        <label class="ipsField_title" for="ips_username">
+         Username
+        </label>
+        <div class="ipsField_content">
+         <input class="input_text" id="ips_username" name="ips_username" size="30" tabindex="0" type="text"/>
+        </div>
+       </li>
+       <li class="ipsField ipsField_primary">
+        <label class="ipsField_title" for="ips_password">
+         Password
+        </label>
+        <div class="ipsField_content">
+         <input class="input_text" id="ips_password" name="ips_password" size="30" tabindex="0" type="password"/>
+         <br/>
+         <a href="https://www.gamedev.net/index.php?app=core&amp;module=global&amp;section=lostpass" title="Retrieve password">
+          I've forgotten my password
+         </a>
+        </div>
+       </li>
+       <li class="ipsField ipsField_checkbox">
+        <input checked="checked" class="input_check" id="inline_remember" name="rememberMe" tabindex="0" type="checkbox" value="1"/>
+        <div class="ipsField_content">
+         <label for="inline_remember">
+          <strong>
+           Remember me
+          </strong>
+          <br/>
+          <span class="desc lighter">
+           This is not recommended for shared computers
+          </span>
+         </label>
+        </div>
+       </li>
+       <li class="ipsField ipsField_checkbox">
+        <input class="input_check" id="inline_invisible" name="anonymous" tabindex="0" type="checkbox" value="1"/>
+        <div class="ipsField_content">
+         <label for="inline_invisible">
+          <strong>
+           Sign in anonymously
+          </strong>
+          <br/>
+          <span class="desc lighter">
+           Don't add me to the active users list
+          </span>
+         </label>
+        </div>
+       </li>
+       <li class="ipsPad_top ipsForm_center desc ipsType_smaller">
+        <a href="http://www.gamedev.net/privacypolicy/" rel="nofollow">
+         Privacy Policy
+        </a>
+       </li>
+      </ul>
+     </fieldset>
+     <div class="ipsForm_submit ipsForm_center">
+      <input class="ipsButton" tabindex="0" type="submit" value="Sign In"/>
+     </div>
+    </div>
+   </form>
+  </div>
+  <div id="infobar" style="display:none">
+   <div id="infobarmsg">
+   </div>
+  </div>
+  <div id="nav_app_ipchat" style="display:none">
+   <a href="">
+   </a>
+  </div>
+ </body>
+</html>

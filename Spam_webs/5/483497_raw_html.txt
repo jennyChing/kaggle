@@ -1,0 +1,559 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <link href="/css/eaatv.css" rel="stylesheet" type="text/css"/>
+  <title>
+   EAA Video Player - Your Source for Aviation Videos
+  </title>
+  <!-- Facebook code -->
+  <meta content="Savor:  A 29-year-old's Third Homebuilt" property="og:title"/>
+  <meta content="homebuilt, scratch, built, homebuilding, Chris, EAA, Airventure, 2010, composite, savor, design" property="og:description"/>
+  <meta content="http://brightcove04.o.brightcove.com/627008079/627008079_615386024001_savor2-thumb.jpg?pubId=627008079" property="og:image"/>
+  <!-- End Facebook code -->
+  <script src="http://admin.brightcove.com/js/BrightcoveExperiences.js" type="text/javascript">
+  </script>
+  <script src="http://admin.brightcove.com/js/APIModules_all.js" type="text/javascript">
+  </script>
+  <script language="javascript" src="/js/MobileCompatibility.js" type="text/javascript">
+  </script>
+  <script language="javascript" src="/js/SelectOptimalRendition.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" src="http://connect.facebook.net/en_US/all.js" type="text/javascript">
+  </script>
+  <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js" type="text/javascript">
+  </script>
+  <script language="JavaScript" type="text/javascript">
+   //    function onTemplateLoaded(pID) {
+//        try {
+//            //document.getElementById("events").value = "";
+//            //log("onTemplateLoaded");
+
+//            experience = brightcove.getExperience(pID);
+//            experienceModule = experience.getModule(APIModules.EXPERIENCE);
+//            videoPlayer = experience.getModule(APIModules.VIDEO_PLAYER);
+
+//            experienceModule.addEventListener(BCExperienceEvent.TEMPLATE_READY, myOnTemplateReady);
+
+//        } catch (ex) {
+//            //log(ex);
+//        }
+//    }
+
+    function myOnTemplateReady(event) {
+        //document.getElementById("loadButton").disabled = false;
+    }
+
+    function callLoadVideo(videoID) {
+        videoPlayer.loadVideo(videoID);
+    }
+
+    //function log(message){
+    //    document.getElementById("events").value += message + "\n";
+    //}
+
+    $(document).ready(function() {
+        displayMessage(1, -1);
+
+});
+
+
+function displayMessage(page, remainder) {
+    var pageUrl = '/video.aspx';
+    var video = '615390307001';
+    $.ajax({
+        type: "POST",
+        url: pageUrl + '/getVideoList',
+        data: '{video: "' + video + '", page: "' + page + '", remainder: "' + remainder + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(msg) {
+            // Replace the div's content with the page method's return.
+            //$('#Result').text(msg.d).html();//encode html
+            $('#Result').html(msg.d).text(); //decode html
+            if (order == 'recent') {
+                $("#MostRecent").removeClass('sort');
+                $("#MostRecent").addClass('sortselect');
+                $("#MostPopular").removeClass('sortselect');
+                $("#MostPopular").addClass('sort');
+            }
+            if (order == 'popular') {
+                $("#MostPopular").removeClass('sort');
+                $("#MostPopular").addClass('sortselect');
+                $("#MostRecent").removeClass('sortselect');
+                $("#MostRecent").addClass('sort');
+            }
+
+        },
+        failure: function(response) {
+            alert(response.d);
+        }
+    });
+}
+  </script>
+  <meta content="300" name="video_height"/>
+  <meta content="460" name="video_width"/>
+  <meta content="video" name="medium"/>
+  <link href="http://brightcove04.o.brightcove.com/627008079/627008079_615386024001_savor2-thumb.jpg?pubId=627008079" rel="image_src"/>
+  <link href="http://c.brightcove.com/services/viewer/federated_f9/90015277001?isVid=1&amp;isUI=1&amp;publisherID=627008079&amp;playerID=90015277001&amp;domain=embed&amp;videoId=615390307001" rel="video_src"/>
+  <meta content="Savor:  A 29-year-old's Third Homebuilt" name="title"/>
+  <meta content="Savor:  A 29-year-old's Third Homebuilt" name="og:title"/>
+  <meta content="http://www.eaavideo.org/video.aspx?v=615390307001" name="og:url"/>
+  <meta content="Twenty nine year old Chris Christiansen flew his third original design to Oshkosh this summer and caught the attention of many on the flight line." name="description"/>
+  <link href="/rss.ashx" rel="alternate" title="eaavideo.org" type="application/rss+xml"/>
+  <title>
+  </title>
+ </head>
+ <body onload="setFocus()">
+  <form action="video.aspx?v=615390307001" id="aspnetForm" method="post" name="aspnetForm">
+   <div>
+    <input id="__VIEWSTATE" name="__VIEWSTATE" type="hidden" value="/wEPDwUKLTExNDU0NDc2MQ9kFgJmD2QWBAIBD2QWAgIBD2QWBGYPFgIeBFRleHQFngM8IS0tIEZhY2Vib29rIGNvZGUgLS0+DQo8bWV0YSBwcm9wZXJ0eT0ib2c6dGl0bGUiIGNvbnRlbnQ9IlNhdm9yOiAgQSAyOS15ZWFyLW9sZCdzIFRoaXJkIEhvbWVidWlsdCIvPg0KPG1ldGEgcHJvcGVydHk9Im9nOmRlc2NyaXB0aW9uIiBjb250ZW50PSJob21lYnVpbHQsIHNjcmF0Y2gsIGJ1aWx0LCBob21lYnVpbGRpbmcsIENocmlzLCBFQUEsIEFpcnZlbnR1cmUsIDIwMTAsIGNvbXBvc2l0ZSwgc2F2b3IsIGRlc2lnbiIgLz4NCjxtZXRhIHByb3BlcnR5PSJvZzppbWFnZSIgY29udGVudD0iaHR0cDovL2JyaWdodGNvdmUwNC5vLmJyaWdodGNvdmUuY29tLzYyNzAwODA3OS82MjcwMDgwNzlfNjE1Mzg2MDI0MDAxX3Nhdm9yMi10aHVtYi5qcGc/cHViSWQ9NjI3MDA4MDc5IiAvPg0KPCEtLSBFbmQgRmFjZWJvb2sgY29kZSAtLT5kAgEPFgIfAAXxBjxtZXRhIG5hbWU9InZpZGVvX2hlaWdodCIgY29udGVudD0iMzAwIi8+DQo8bWV0YSBuYW1lPSJ2aWRlb193aWR0aCIgY29udGVudD0iNDYwIiAvPg0KPG1ldGEgbmFtZT0ibWVkaXVtIiBjb250ZW50PSJ2aWRlbyIgLz4NCjxsaW5rIHJlbD0iaW1hZ2Vfc3JjIiBocmVmPSJodHRwOi8vYnJpZ2h0Y292ZTA0Lm8uYnJpZ2h0Y292ZS5jb20vNjI3MDA4MDc5LzYyNzAwODA3OV82MTUzODYwMjQwMDFfc2F2b3IyLXRodW1iLmpwZz9wdWJJZD02MjcwMDgwNzkiIC8+DQo8bGluayByZWw9InZpZGVvX3NyYyIgaHJlZj0iaHR0cDovL2MuYnJpZ2h0Y292ZS5jb20vc2VydmljZXMvdmlld2VyL2ZlZGVyYXRlZF9mOS85MDAxNTI3NzAwMT9pc1ZpZD0xJmlzVUk9MSZwdWJsaXNoZXJJRD02MjcwMDgwNzkmcGxheWVySUQ9OTAwMTUyNzcwMDEmZG9tYWluPWVtYmVkJnZpZGVvSWQ9NjE1MzkwMzA3MDAxIiAvPg0KPG1ldGEgbmFtZT0idGl0bGUiIGNvbnRlbnQ9IlNhdm9yOiAgQSAyOS15ZWFyLW9sZCZhcG9zO3MgVGhpcmQgSG9tZWJ1aWx0IiAvPg0KPG1ldGEgbmFtZT0ib2c6dGl0bGUiIGNvbnRlbnQ9IlNhdm9yOiAgQSAyOS15ZWFyLW9sZCZhcG9zO3MgVGhpcmQgSG9tZWJ1aWx0IiAvPg0KPG1ldGEgbmFtZT0ib2c6dXJsIiBjb250ZW50PSJodHRwOi8vd3d3LmVhYXZpZGVvLm9yZy92aWRlby5hc3B4P3Y9NjE1MzkwMzA3MDAxIiAvPg0KPG1ldGEgbmFtZT0iZGVzY3JpcHRpb24iIGNvbnRlbnQ9IlR3ZW50eSBuaW5lIHllYXIgb2xkIENocmlzIENocmlzdGlhbnNlbiBmbGV3IGhpcyB0aGlyZCBvcmlnaW5hbCBkZXNpZ24gdG8gT3Noa29zaCB0aGlzIHN1bW1lciBhbmQgY2F1Z2h0IHRoZSBhdHRlbnRpb24gb2YgbWFueSBvbiB0aGUgZmxpZ2h0IGxpbmUuIiAvPg0KZAIDD2QWBAIFD2QWAgIBDxYCHwAF4Q88ZGl2IGNsYXNzPSJjaGFubmVsbWVudSI+PGEgaHJlZj0iL2RlZmF1bHQuYXNweCI+SG9tZTwvYT48L2Rpdj4NCjxkaXYgY2xhc3M9ImNoYW5uZWxtZW51Ij48YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX25ld3MiPk5ld3MgJiBGZWF0dXJlczwvYT48L2Rpdj4NCjxkaXYgY2xhc3M9ImNoYW5uZWxtZW51Ij48YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX2F2Ij5BaXJWZW50dXJlPC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbHN1YiI+PGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDE0Ij4yMDE0PC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDEzIj4yMDEzPC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDEyIj4yMDEyPC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDExIj4yMDExPC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDEwIj4yMDEwPC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDA5Ij4yMDA5PC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDA4Ij4yMDA4PC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9hdl8yMDA3Ij4yMDA3PC9hPjwvZGl2PjxkaXYgY2xhc3M9ImNoYW5uZWxtZW51Ij48YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX2hpbnRzIj5IaW50cyBmb3IgSG9tZWJ1aWxkZXJzPC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbHN1YiI+PGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9oaW50c19nZW5lcmFsIj5HZW5lcmFsPC9hPiwgPGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9oaW50c19zaGVldG1ldGFsIj5TaGVldCBNZXRhbDwvYT4sIDxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfaGludHNfdHViZWZhYnJpYyI+VHViZSAvIEZhYnJpYzwvYT4sIDxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfaGludHNfd29vZCI+V29vZDwvYT4sIDxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfaGludHNfY29tcG9zaXRlIj5Db21wb3NpdGU8L2E+LCA8YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX2hpbnRzX2VsZWN0cmljYWwiPkVsZWN0cmljYWw8L2E+PC9kaXY+PGRpdiBjbGFzcz0iY2hhbm5lbG1lbnUiPjxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfaG9tZWJ1aWxkaW5nIj5Ib21lYnVpbGRpbmc8L2E+PC9kaXY+DQo8ZGl2IGNsYXNzPSJjaGFubmVsbWVudSI+PGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9sZWFybmluZyI+TGVhcm5pbmcgdG8gRmx5PC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbG1lbnUiPjxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfZ2EiPkdlbmVyYWwgQXZpYXRpb248L2E+PC9kaXY+DQo8ZGl2IGNsYXNzPSJjaGFubmVsbWVudSI+PGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF92aW50YWdlIj5WaW50YWdlIEFpcmNyYWZ0PC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbG1lbnUiPjxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfd2FyYmlyZHMiPldhcmJpcmRzPC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbG1lbnUiPjxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfYWVyb2JhdGljcyI+QWVyb2JhdGljczwvYT48L2Rpdj4NCjxkaXYgY2xhc3M9ImNoYW5uZWxtZW51Ij48YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX3VsdHJhbGlnaHRzIj5VbHRyYWxpZ2h0czwvYT48L2Rpdj4NCjxkaXYgY2xhc3M9ImNoYW5uZWxtZW51Ij48YSBocmVmPSIvY2hhbm5lbC5hc3B4P2NoPWNoX2xzYSI+TGlnaHQgU3BvcnQgQWlyY3JhZnQ8L2E+PC9kaXY+DQo8ZGl2IGNsYXNzPSJjaGFubmVsbWVudSI+PGEgaHJlZj0iL2NoYW5uZWwuYXNweD9jaD1jaF9oaXN0b3J5Ij5BdmlhdGlvbiBIaXN0b3J5PC9hPjwvZGl2Pg0KPGRpdiBjbGFzcz0iY2hhbm5lbG1lbnUiPjxhIGhyZWY9Ii9jaGFubmVsLmFzcHg/Y2g9Y2hfd2ViaW5hcnMiPldlYmluYXJzPC9hPjwvZGl2Pg0KZAIHD2QWAgIBD2QWCGYPDxYCHwAFXzxhIGhyZWY9ImphdmFzY3JpcHQ6Y2FsbExvYWRWaWRlbygnNjE1MzkwMzA3MDAxJyk7Ij5TYXZvcjogIEEgMjkteWVhci1vbGQncyBUaGlyZCBIb21lYnVpbHQ8L2E+ZGQCAg8PFgIfAAUSU2VwdGVtYmVyIDIyLCAyMDEwZGQCAw8PFgIfAAWSAVR3ZW50eSBuaW5lIHllYXIgb2xkIENocmlzIENocmlzdGlhbnNlbiBmbGV3IGhpcyB0aGlyZCBvcmlnaW5hbCBkZXNpZ24gdG8gT3Noa29zaCB0aGlzIHN1bW1lciBhbmQgY2F1Z2h0IHRoZSBhdHRlbnRpb24gb2YgbWFueSBvbiB0aGUgZmxpZ2h0IGxpbmUuZGQCBA8PFgIfAAUVNiBtaW51dGVzLCA0OCBzZWNvbmRzZGRk4SoMF6e4yh3OqxtQ9VEcUVccWek="/>
+   </div>
+   <script type="text/javascript">
+    //&lt;![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]&gt;
+   </script>
+   <script src="/WebResource.axd?d=1L4ULBpkKoG7YSURbdb6IKqcKO610RRAfznIGIunH3iMn6aeMX0Gz0fqA7nnkDfbeM9fnklMzha8aNOa4Lxg1bh6qD01&amp;t=635675982721934449" type="text/javascript">
+   </script>
+   <div>
+    <input id="__VIEWSTATEGENERATOR" name="__VIEWSTATEGENERATOR" type="hidden" value="F548D46F"/>
+    <input id="__SCROLLPOSITIONX" name="__SCROLLPOSITIONX" type="hidden" value="0"/>
+    <input id="__SCROLLPOSITIONY" name="__SCROLLPOSITIONY" type="hidden" value="0"/>
+    <input id="__EVENTTARGET" name="__EVENTTARGET" type="hidden" value=""/>
+    <input id="__EVENTARGUMENT" name="__EVENTARGUMENT" type="hidden" value=""/>
+    <input id="__EVENTVALIDATION" name="__EVENTVALIDATION" type="hidden" value="/wEWAwKQwpSWCwLE5ML0AgL9n+COAuwZUDw+6wTSb8QkCJWLBaMU5ccv"/>
+   </div>
+   <div id="centerwrap">
+    <!-- Overall container for centering site -->
+    <div id="mainblock">
+     <!-- Container for header and both columns -->
+     <div id="header">
+      <!-- Container for header -->
+      <table border="0" cellpadding="0" cellspacing="0" width="976">
+       <tr>
+        <td align="left" valign="middle" width="488">
+         <div id="logo">
+          <a href="/">
+           <img border="0" src="/images/eaavideo_head.png"/>
+          </a>
+         </div>
+        </td>
+        <td align="right" valign="middle" width="488">
+         <div id="rightmenu">
+          <table border="0" cellpadding="0" cellspacing="0" width="208">
+           <tr>
+            <td align="right" colspan="2" valign="middle">
+             <a href="http://www.eaa.org">
+              <img border="0" src="images/poweredby.png"/>
+             </a>
+            </td>
+           </tr>
+           <tr>
+            <td width="100">
+             <div class="topmenu">
+              <a href="/recent.aspx">
+               Most Recent
+              </a>
+             </div>
+            </td>
+            <td width="108">
+             <div class="topmenu">
+              <a href="/popular7.aspx">
+               Most Popular
+              </a>
+             </div>
+            </td>
+           </tr>
+          </table>
+         </div>
+        </td>
+       </tr>
+      </table>
+      <!-- Header control -->
+     </div>
+     <!-- End container for header -->
+     <div id="leftcolumn">
+      <!-- Container for left column -->
+      <div id="ctl00_Panel1" onkeypress="javascript:return WebForm_FireDefaultButton(event, 'ctl00_btnSearch')">
+       <div id="searchbox">
+        <table border="0" cellpadding="0" cellspacing="0" width="202">
+         <tr>
+          <td align="left" valign="top">
+           <span class="searchhead">
+            Search All Videos
+           </span>
+          </td>
+         </tr>
+         <tr>
+          <td>
+           <div style="padding-bottom: 3px;">
+            <input id="ctl00_txtSearch" name="ctl00$txtSearch" style="width: 202px; font-size: 16px;" type="text"/>
+           </div>
+          </td>
+         </tr>
+         <tr>
+          <td align="right" valign="top">
+           <script type="text/javascript">
+            function setFocus() {
+                                            document.getElementById('ctl00_txtSearch').focus();
+                                        }
+           </script>
+           <input id="ctl00_btnSearch" name="ctl00$btnSearch" type="submit" value="Search"/>
+          </td>
+         </tr>
+        </table>
+       </div>
+      </div>
+      <span class="channelhead">
+       Channels
+      </span>
+      <br/>
+      <div class="channelmenu">
+       <a href="/default.aspx">
+        Home
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_news">
+        News &amp; Features
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_av">
+        AirVenture
+       </a>
+      </div>
+      <div class="channelsub">
+       <a href="/channel.aspx?ch=ch_av_2014">
+        2014
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2013">
+        2013
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2012">
+        2012
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2011">
+        2011
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2010">
+        2010
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2009">
+        2009
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2008">
+        2008
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_av_2007">
+        2007
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_hints">
+        Hints for Homebuilders
+       </a>
+      </div>
+      <div class="channelsub">
+       <a href="/channel.aspx?ch=ch_hints_general">
+        General
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_hints_sheetmetal">
+        Sheet Metal
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_hints_tubefabric">
+        Tube / Fabric
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_hints_wood">
+        Wood
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_hints_composite">
+        Composite
+       </a>
+       ,
+       <a href="/channel.aspx?ch=ch_hints_electrical">
+        Electrical
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_homebuilding">
+        Homebuilding
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_learning">
+        Learning to Fly
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_ga">
+        General Aviation
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_vintage">
+        Vintage Aircraft
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_warbirds">
+        Warbirds
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_aerobatics">
+        Aerobatics
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_ultralights">
+        Ultralights
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_lsa">
+        Light Sport Aircraft
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_history">
+        Aviation History
+       </a>
+      </div>
+      <div class="channelmenu">
+       <a href="/channel.aspx?ch=ch_webinars">
+        Webinars
+       </a>
+      </div>
+      <!--
+&lt;a href="http://www.eaa.org/spiritmovie/" target="_blank"&gt;&lt;img style="display: block; margin: auto; padding-top: 20px; padding-bottom: 1px;" src="/images/spiritmovie.png" border="0" /&gt;&lt;/a&gt;
+Narrated by actor Harrison Ford. The 17-minute video presents an insider's look at people who share the passion for aviation as they participate in "The World's Greatest Aviation Celebration." &lt;a href="http://www.eaa.org/spiritmovie/" target="_blank"&gt;Click to view movie&lt;/a&gt;
+
+&lt;a href="/channel.aspx?ch=ch_timeless"&gt;&lt;img style="display: block; margin: auto; padding-top: 20px; padding-bottom: 1px;" src="/images/timeless.png" border="0" /&gt;&lt;/a&gt;
+Nulla non dolor fringilla mi vestibulum blandit. Quisque vestibulum sem quis purus. Proin mattis tellus vitae risus. Etiam at purus. Quisque vestibulum. &lt;a href="/channel.aspx?ch=ch_timeless"&gt;Watch them now&lt;/a&gt;
+-->
+      <!-- Left column (navigation) control -->
+      <div style="margin-bottom: 0px; margin-top: 10px; padding: 0; width: 180px;">
+      </div>
+      <!-- begin ad tag (Rectangle 180x150) -->
+      <center>
+       <a href="http://ad.doubleclick.net/jump/d.site203.tmus/Rectangle;sz=180x150;ord=[$gmt$]?" target="_blank">
+        <img alt="" border="0" height="150" src="http://ad.doubleclick.net/ad/d.site203.tmus/Rectangle;sz=180x150;ord=[$gmt$]?" width="180"/>
+       </a>
+       <!-- End ad tag -->
+      </center>
+      <div style="margin-bottom: 10px; margin-top: 0px; padding: 0; width: 180px;">
+      </div>
+      <div style="margin-bottom: 0px; margin-top: 0px; padding: 0; width: 180px;">
+       <script src="http://connect.facebook.net/en_US/all.js#xfbml=1">
+       </script>
+       <fb:activity colorscheme="dark" header="true" height="400" recommendations="true" site="eaavideo.org" width="218">
+       </fb:activity>
+      </div>
+     </div>
+     <!-- Close of left column -->
+     <div id="rightcolumn">
+      <!-- Container for right column -->
+      <div style="margin-top: 10px; padding: 0">
+       <!-- begin ad tag (Leaderboard 728x90) -->
+       <a href="http://ad.doubleclick.net/jump/d.site203.tmus/Leaderboard;sz=728x90;ord=[$gmt$]?" target="_blank">
+        <img alt="" border="0" height="90" src="http://ad.doubleclick.net/ad/d.site203.tmus/Leaderboard;sz=728x90;ord=[$gmt$]?" width="728"/>
+       </a>
+       <!-- End ad tag -->
+      </div>
+      <div id="ctl00_ContentPlaceHolder1_foundVideo">
+       <br/>
+       <div id="videoplayer" style="margin-bottom:0px;">
+        <!-- Start of Brightcove Player -->
+        <object class="BrightcoveExperience" id="myExperience">
+         <param name="bgcolor" value="#FFFFFF">
+         </param>
+         <param name="width" value="728">
+         </param>
+         <param name="height" value="409">
+         </param>
+         <param name="autoStart" value="true">
+         </param>
+         <param name="playerID" value="90015277001">
+         </param>
+         <param name="publisherID" value="627008079">
+         </param>
+         <param name="@videoPlayer" value="615390307001">
+         </param>
+         <param name="isVid" value="true">
+         </param>
+         <param name="isUI" value="true">
+         </param>
+         <param name="dynamicStreaming" value="true">
+         </param>
+         <param name="wmode" value="transparent">
+         </param>
+        </object>
+        <script type="text/javascript">
+         //runMobileCompatibilityScript('myExperience', 'anId');
+        </script>
+        <!--
+        This script tag will cause the Brightcove Players defined above it to be created as soon
+        as the line is read by the browser. If you wish to have the player instantiated only after
+        the rest of the HTML is processed and the page load is complete, remove the line.
+        -->
+        <script type="text/javascript">
+         brightcove.createExperiences();
+        </script>
+       </div>
+       <div style="background-color:#999999;padding:5px;margin-bottom:8px">
+        <div id="fb-root">
+        </div>
+        <script>
+         window.fbAsyncInit = function() {
+                        FB.init({ appId: '133453836672754', status: true, cookie: true,
+                            xfbml: true
+                        });
+                    };
+                    (function() {
+                        var e = document.createElement('script'); e.async = true;
+                        e.src = document.location.protocol +
+                      '//connect.facebook.net/en_US/all.js';
+                        document.getElementById('fb-root').appendChild(e);
+                    } ());
+        </script>
+        <fb:like href="http://www.eaavideo.org/video.aspx?v=615390307001">
+        </fb:like>
+       </div>
+       <!-- End of Brightcove Player -->
+       <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 7px;" width="675">
+        <tr>
+         <td align="left" class="titlehead" valign="top" width="545">
+          <a href="#">
+           <span id="ctl00_ContentPlaceHolder1_lblFeaturedHeadline">
+            <a href="javascript:callLoadVideo('615390307001');">
+             Savor:  A 29-year-old's Third Homebuilt
+            </a>
+           </span>
+          </a>
+         </td>
+         <td align="right" valign="top" width="130">
+          <!-- AddThis Button BEGIN -->
+          <!-- AddThis Button END -->
+         </td>
+        </tr>
+       </table>
+       <span style="font-size: 16px">
+        <span id="ctl00_ContentPlaceHolder1_lblFeaturedDate">
+         September 22, 2010
+        </span>
+        -
+        <span id="ctl00_ContentPlaceHolder1_lblFeaturedDesc">
+         Twenty nine year old Chris Christiansen flew his third original design to Oshkosh this summer and caught the attention of many on the flight line.
+        </span>
+       </span>
+       <table border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px; margin-bottom: 10px;" width="675">
+        <tr>
+         <td align="left" valign="top" width="337">
+          <span id="ctl00_ContentPlaceHolder1_lblFeaturedMinutes">
+           6 minutes, 48 seconds
+          </span>
+         </td>
+         <td align="right" valign="top" width="338">
+          <span id="ctl00_ContentPlaceHolder1_lblFeaturedViews">
+          </span>
+         </td>
+        </tr>
+       </table>
+       <div id="rule1">
+       </div>
+       <!-- Fancy horizontal rule thingy -->
+       <table border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;" width="675">
+        <!-- Sort header -->
+        <tr>
+         <td align="left" valign="middle" width="337">
+          <span class="channelhead">
+           Related Videos
+          </span>
+         </td>
+         <td align="right" valign="middle" width="338">
+          <!--&lt;table border="0" cellspacing="0" cellpadding="0"&gt;
+          &lt;tr&gt;
+            &lt;td&gt;&lt;span style="margin-right: 3px;"&gt;SORT BY:&lt;/span&gt; &lt;/td&gt;
+                &lt;td&gt;&lt;div id="MostRecent"&gt;Most Recent&lt;/div&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;div id="MostPopular"&gt;Most Popular&lt;/div&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;-->
+         </td>
+        </tr>
+       </table>
+       <div id="Result">
+       </div>
+      </div>
+      <span id="ctl00_ContentPlaceHolder1_lblNoResults">
+      </span>
+      <!-- End of sorted videos -->
+     </div>
+     <!-- Close of right column -->
+    </div>
+    <!-- Close of main block -->
+   </div>
+   <!-- Close of center wrap -->
+   <div style="clear: both;">
+   </div>
+   <div id="footer">
+    For more information about EAA, visit us at:
+    <a href="http://www.eaa.org" target="_blank">
+     www.eaa.org
+    </a>
+    <br/>
+    Copyright  2015 EAA, Inc. |
+    <a href="http://www.eaa.org/disclaimer.asp" target="_blank">
+     Privacy Policy &amp; Disclaimer
+    </a>
+    |
+    <a href="http://www.eaa.org/contactus.asp" target="_blank">
+     Contact Us
+    </a>
+    <!-- Footer control -->
+   </div>
+   <script type="text/javascript">
+    //&lt;![CDATA[
+
+theForm.oldSubmit = theForm.submit;
+theForm.submit = WebForm_SaveScrollPositionSubmit;
+
+theForm.oldOnSubmit = theForm.onsubmit;
+theForm.onsubmit = WebForm_SaveScrollPositionOnSubmit;
+//]]&gt;
+   </script>
+  </form>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-2593170-13']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+  </script>
+ </body>
+</html>

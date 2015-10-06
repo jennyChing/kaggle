@@ -1,0 +1,668 @@
+<html>
+ <head>
+  <meta content="All About Chinese Numbers.  Find Chinese equivalents to English numbers." name="description"/>
+  <meta content="Chinese, Java, numbers, numerals, numerology, mathematics, shuzi, ten, one, zero, digits" name="keywords"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Chinese Numbers
+  </title>
+  <base href="http://www.mandarintools.com/"/>
+  <script language="javascript" type="text/javascript">
+   &lt;!--
+    function sf() {
+       var allcookies = document.cookie;
+
+       if (allcookies == "") return false;
+
+       var start = allcookies.indexOf("numbers=", 0);
+       if (start == -1) return false;
+       start += 8;
+       var end = allcookies.indexOf(';', start);
+       if (end == -1) end = allcookies.length;
+
+       var cookieval = allcookies.substring(start, end);
+
+       var a = cookieval.split('&amp;'); // break into name/value pairs
+       var prefhash = new Object();
+       for (var i=0; i &lt; a.length; i++) { 
+         a[i] = a[i].split(':');
+         prefhash[a[i][0]] = a[i][1];
+       }
+
+       document.numberForm.englishtype.selectedIndex = prefhash["englishtype.selectedIndex"];
+       document.numberForm.chinesetype.selectedIndex = prefhash["chinesetype.selectedIndex"];
+
+       document.forms[0].elements[0].focus();
+    }
+
+
+    function savePref() 
+    {
+       var cookieval = "";
+
+       cookieval = "chinesetype.selectedIndex:" + document.numberForm.chinesetype.selectedIndex + '&amp;';
+       cookieval += "englishtype.selectedIndex:" + document.numberForm.englishtype.selectedIndex;
+
+       var cookie = 'numbers=' + cookieval;
+       var today = new Date();
+       var expiry = new Date(today.getTime() + 28 * 24 * 60 * 60 * 1000); // plus 28 days
+       cookie += "; expires=" + expiry.toGMTString();
+       cookie += "; path=/";
+       document.cookie = cookie;
+    }
+
+    var http_request = false;
+
+    function insertNumber(num) {
+       document.numberForm.numbers.value += num;
+    }
+
+    function translateNumber() {
+        var query = encodeURIComponent(document.numberForm.numbers.value);
+
+        var url = "http://www.mandarintools.com/cgi-bin/numbersu8.pl?numbers=" + query +
+	   "&amp;englishtype=" + document.numberForm.englishtype.value  + "&amp;chinesetype=" + 
+	   document.numberForm.chinesetype.value;
+        http_request = false;
+
+        if (window.XMLHttpRequest) { // Mozilla, Safari,...
+            http_request = new XMLHttpRequest();
+	    if (http_request.overrideMimeType) {
+                //http_request.overrideMimeType('text/xml');
+                // See note below about this line
+            }
+        } else if (window.ActiveXObject) { // IE
+            try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {}
+            }
+        }
+
+        if (!http_request) {
+            alert('Giving up :( Cannot create an XMLHTTP instance)');
+            return false;
+        }
+        http_request.onreadystatechange = resultContents;
+        http_request.open('GET', url, true);
+        http_request.send(null);
+
+	return false;
+    }
+
+    function resultContents() {
+        if (http_request.readyState == 4) {
+            ;
+            if (http_request.status == 200) {
+	        // Set innerHTML in vocab div
+		document.getElementById("results").innerHTML = http_request.responseText;
+		// alert(http_request.responseText);
+            } else {
+      		document.getElementById("results").innerHTML = "&nbsp;";
+                // alert('There was a problem with the request.');
+            }
+        }
+    }
+
+
+// --&gt;
+  </script>
+ </head>
+ <body bgcolor="LIGHTYELLOW" onload="sf();" onunload="savePref();">
+  <center>
+   <h1>
+    Chinese Numbers
+   </h1>
+  </center>
+  <form action="http://www.mandarintools.com/cgi-bin/numbersu8.pl" method="GET" name="numberForm" onsubmit="return translateNumber();">
+   <table align="CENTER" border="1" cellpadding="2" width="700">
+    <tr>
+     <td align="left" valign="top">
+      <b>
+       Chinese/English Number(s)
+       <b>
+       </b>
+      </b>
+     </td>
+     <td align="left" valign="top">
+      <b>
+       Results:
+      </b>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      <textarea cols="37" name="numbers" rows="10">
+      </textarea>
+     </td>
+     <td align="left" valign="top">
+      <span id="results">
+      </span>
+     </td>
+    </tr>
+    <tr>
+     <td align="CENTER" colspan="2">
+      <input type="submit" value="Convert!"/>
+      <input onclick="document.getElementById('results').innerHTML = ''; sf();" type="reset" value="Clear"/>
+     </td>
+    </tr>
+    <tr>
+     <td colspan="2">
+      Output English as:
+      <select name="englishtype">
+       <option selected="" value="arabic">
+        Arabic Numbers
+       </option>
+       <option value="comma">
+        Arabic Numbers with commas
+       </option>
+       <option value="words">
+        English Words
+       </option>
+      </select>
+      Output Chinese as:
+      <select name="chinesetype">
+       <!-- &lt;OPTION SELECTED VALUE="gif"&gt; Picture -->
+       <option value="trad">
+        Traditional
+       </option>
+       <option value="simp">
+        Simplified
+       </option>
+       <option value="pinyin">
+        Pinyin
+       </option>
+       <option value="formaltrad">
+        Formal trad.
+       </option>
+       <option value="formalsimp">
+        Formal simp.
+       </option>
+      </select>
+      <!-- &lt;br&gt;
+&lt;INPUT type="checkbox" name="usegif" value="on"&gt;Display Chinese with GIFs -->
+     </td>
+    </tr>
+    <tr>
+     <td colspan="2">
+      Type one Chinese or English number per line in the form above and click "Convert".  The equivalent number will appear in the Results area.  You can also enter Chinese by clicking on the Chinese numbers in the table below.
+     </td>
+    </tr>
+   </table>
+   <p>
+    The
+    <a href="download/ChineseNumbersU8.pm">
+     Chinese Number Conversion Perl module
+    </a>
+    used above to convert between Chinese character numbers and Arabic numbers is available for download.
+   </p>
+   <hr/>
+   <h3>
+    A Brief Description of the Chinese Number System
+   </h3>
+   <table align="CENTER" border="2" cellpadding="2">
+    <tr>
+     <td>
+     </td>
+     <td>
+      0
+     </td>
+     <td>
+      1
+     </td>
+     <td>
+      2
+     </td>
+     <td>
+      3
+     </td>
+     <td>
+      4
+     </td>
+     <td>
+      5
+     </td>
+     <td>
+      6
+     </td>
+     <td>
+      7
+     </td>
+     <td>
+      8
+     </td>
+     <td>
+      9
+     </td>
+     <td>
+      10
+     </td>
+     <td>
+      100
+     </td>
+     <td>
+      1000
+     </td>
+     <td>
+      10000
+     </td>
+     <td>
+      100000000
+     </td>
+    </tr>
+    <tr>
+     <td>
+      Traditional
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/96F6.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E00.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E8C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E09.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/56DB.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E94.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/516D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E03.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/516B.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E5D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5341.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/767E.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5343.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/842C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5104.gif" width="16"/>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      Simplified
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/96F6.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E00.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E8C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E09.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/56DB.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E94.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/516D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E03.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/516B.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E5D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5341.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/767E.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5343.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E07.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4EBF.gif" width="16"/>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      Formal Trad. (Daxie)
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/96F6.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/58F9.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/8CB3.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/53C3.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/8086.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4F0D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/9678.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/67D2.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/634C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/7396.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/62FE.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4F70.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4EDF.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/842C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/5104.gif" width="16"/>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      Formal Simp. (Daxie)
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/96F6.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/58F9.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/8D30.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/53C2.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/8086.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4F0D.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/9646.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/67D2.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/634C.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/7396.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/62FE.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4F70.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4EDF.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4E07.gif" width="16"/>
+     </td>
+     <td>
+      <img height="30" onclick="insertNumber('');" src="cgi-bin/ugif/4EBF.gif" width="16"/>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      Pinyin
+     </td>
+     <td>
+      ling2
+     </td>
+     <td>
+      yi1
+     </td>
+     <td>
+      er4
+     </td>
+     <td>
+      san1
+     </td>
+     <td>
+      si4
+     </td>
+     <td>
+      wu3
+     </td>
+     <td>
+      liu4
+     </td>
+     <td>
+      qi1
+     </td>
+     <td>
+      ba1
+     </td>
+     <td>
+      jiu3
+     </td>
+     <td>
+      shi2
+     </td>
+     <td>
+      bai3
+     </td>
+     <td>
+      qian1
+     </td>
+     <td>
+      wan4
+     </td>
+     <td>
+      yi4
+     </td>
+    </tr>
+   </table>
+   <p>
+    While China has for many uses adopted the
+Arabic numeral system familiar around the world, it also still uses
+its native Chinese character number system.  The Chinese system is
+also a base-10 system, but has important differences in the way the
+numbers are represented.  Chinese has characters for numbers 0 through
+9, as seen above.  In addition to the character shown above for zero,
+a simple circle is also used.  Pronunciation for the characters uses
+the standard Romanization scheme in China called
+    <a href="http://icg.harvard.edu/~pinyin/">
+     "pinyin"
+    </a>
+    .  The number at
+the end of the pinyin indicates the tone.
+   </p>
+   <p>
+    Eleven in Chinese is "ten one".  Twelve is
+"ten two", and so on.  Twenty is "Two ten", twenty-one is "two ten
+one" (2*10 + 1), and so on up to 99.  One-hundred is "one hundred".
+One-hundred and one is "one hundred zero one".  One hundred and eleven
+is "one hundred one ten one".  Notice that for eleven alone, you only
+need "ten one" and not "one ten one", but when used in a larger number
+(such as 111), you must add the extra "one".  One thousand and above
+is done in a similar fashion, where you say how many thousands you
+have, then how many hundreds, tens, and ones.  An exception to this is
+for zeroes.  When a zero occurs in the number (except at the end), you
+need to say "zero", but only once for two or more consecutive zeroes.
+So one-thousand and one would be "one thousand zero one", where zero
+stands in for the hundreds and tens places.  Try different numbers in
+the converter above to practice and check on other numbers.
+   </p>
+   <p>
+    What is different from American English is
+that when you get to ten-thousand, Chinese has its own word (wan4),
+unlike English where you must use a compound of ten and thousand.
+Only after ten thousand does Chinese start using compounds itself.
+One-hundred thousand is "one ten wan4" (where wan4 is the Chinese word
+for ten-thousand that English lacks).  Chinese goes on like this until
+100 million (yi4), where it introduces a new character.  This happens
+every four decimal places, unlike American English where it happens
+every three decimal places (thousand, million, billion, trillion,
+etc. are all separated by three decimal places).
+   </p>
+   <p>
+    Regular Chinese characters for numbers use
+relatively few strokes.  The characters for one, two, and three are
+just one, two and three parallel horizontal strokes, respectively.  To
+prevent fraud when writing checks and other cases where fraud is
+possible, Chinese also uses a series of more complex characters for
+the numbers.  It is easy to change a "one" into a "two" in regular
+characters, but with the formal complex characters, this is
+impossible.  See above for a listing of the equivalent formal
+characters.
+   </p>
+   <p>
+    As in English, one can also abbreviate a
+number by just listing the digits with the tens, hundreds, thousands,
+etc. omitted (as the web counter below does).
+   </p>
+   <p>
+    When talking about amounts, sometimes a
+variant of two is used in the hundred-million, ten-thousand, thousand,
+or hundreds place:
+    <img src="cgi-bin/ugif/5169.gif"/>
+    (liang3).  It is
+never used in the tens place.  Sometimes when used as an amount it can
+also replace two alone.
+   </p>
+   <p>
+    Shorthand characters also exist for twenty
+and thirty and are often used in newspapers, especially in dates.
+These are
+    <img src="cgi-bin/ugif/5EFF.gif"/>
+    (nian4) for twenty and
+    <img src="cgi-bin/ugif/5345.gif"/>
+    (sa4) for thirty.
+   </p>
+   <p>
+    To express fractions and percents, Chinese
+uses the denominator followed by the two characters
+    <img src="cgi-bin/ugif/5206.gif"/>
+    <img src="cgi-bin/ugif/4E4B.gif"/>
+    (fen1
+zhi1, "parts of"), followed by the numerator.  So two-thirds would be
+"three fen1zhi1 two".  In the case of percents, you would say "hundred
+fen1zhi1 amount", e.g. the way to say 63% is "hundred fen1zhi1 six ten
+three".  When used in percents, just say hundred and not "one hundred".
+   </p>
+   <p>
+    The decimal point is expressed with the character
+    <img src="cgi-bin/ugif/9EDE.gif"/>
+    (dian3).
+   </p>
+   <p>
+   </p>
+   <h4>
+    Other Chinese Number Links:
+   </h4>
+   <ul>
+    <li>
+     <a href="http://en.wikipedia.org/wiki/Chinese_numerals">
+      Chinese numerals
+     </a>
+     article at
+     <a href="http://www.wikipedia.org/">
+      Wikipedia
+     </a>
+    </li>
+    <li>
+     <a href="http://www.amazon.com/exec/obidos/ASIN/0893463760">
+      Chinese Numbers : Significance, Symbolism and Traditions
+     </a>
+     : book on Chinese numbers
+    </li>
+    <li>
+     A perl script that
+     <a href="ftp://ftp.cis.upenn.edu/pub/melamed/tools/gb2mixed/gb2mixed">
+      translates GB characters (including numbers) into ASCII equivalents
+     </a>
+    </li>
+    <li>
+     <a href="http://aleph0.clarku.edu/~djoyce/mathhist/china.html">
+      History of Mathematics in China
+     </a>
+    </li>
+    <li>
+     <a href="http://www-groups.dcs.st-and.ac.uk/~history/HistTopics/Chinese_numerals.html">
+      Chinese Numerals
+     </a>
+    </li>
+    <li>
+     <a href="http://wwli.com/downloads/index.html">
+      Chinese Numbers Screen Saver
+     </a>
+    </li>
+    <li>
+     <a href="http://mini.net/tcl/2746.html">
+      Code to generate Chinese numbers
+     </a>
+    </li>
+    <li>
+     <a href="http://toshuo.com/?page_id=164">
+      On-line Chinese-Arabic number conversion tool
+     </a>
+    </li>
+    <li>
+     <a href="http://numbertrans.sourceforge.net/">
+      NumberTrans
+     </a>
+     : Java Number Translator
+    </li>
+   </ul>
+   <p>
+   </p>
+   <center>
+    This page has had
+    <img src="http://www.mandarintools.com/cgi-bin/ccount.pl/numbers"/>
+    hits
+since October 7, 1999.
+   </center>
+  </form>
+ </body>
+</html>

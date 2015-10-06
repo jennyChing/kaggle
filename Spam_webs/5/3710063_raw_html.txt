@@ -1,0 +1,3258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <link href="https://chrome.google.com/webstore/detail/ipnkbfghfedbaoojfdbenicffddmobml" rel="chrome-webstore-item"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="Livememe Meme Generator - Livememe is the best place to generate memes online, hands down. Our wicked-fast meme generator is compatible with more browsers and devices than any other meme generator site out there. Our meme maker sometimes even adds special effects which polish your meme's appearance. If you want to make a meme, give our meme generator a try today!" name="description"/>
+  <meta content="get the best memes at livememe.com" property="og:description"/>
+  <meta content="article" property="og:type"/>
+  <meta content="livememe" property="og:site_name"/>
+  <style type="text/css">
+   a.searcha:link {text-decoration: none; color:#000000;}
+a.searcha:visited {text-decoration: none; color:#000000;}
+a.searcha:active {text-decoration: none; color:#000000;}
+a.searcha:hover {text-decoration: none; color:#000000;}
+
+A:visited { color: #800080; }
+A:link { color: #000080; }
+
+input::-webkit-input-placeholder {
+    color:    #808080;
+}
+input:-moz-placeholder {
+    color:    #808080;
+}
+input:-ms-input-placeholder {
+    color:    #808080;
+}
+
+.nsimg {
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -o-user-select: none;
+ user-select: none;
+}
+  </style>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var server_count = 1;
+
+var template_sid = 0;
+var template_id = 0;
+
+
+var func_load_time = new Date().getTime();
+
+
+function base36bytesToInt (s) {
+  var v = 0;
+  for (var i = 0; i&lt;s.length; i++) {
+    var ch = s.charCodeAt(i);
+    if (ch&gt;=0x61 &amp;&amp; ch&lt;=0x7a) {
+      v = (v*36) + ch + 10-0x61;
+    } else if (ch&gt;=0x41 &amp;&amp; ch&lt;=0x5a) {
+      v = (v*36) + ch + 10-0x41; 
+    } else if (ch&gt;=0x30 &amp;&amp; ch&lt;=0x39) {
+      v = (v*36) + ch - 0x30;
+    }
+  }
+  return v;
+}
+
+
+function base36intToBytes (a) {
+  if (a == 0) {
+   return "0";
+  }
+  var s = "";
+  var j = 8;
+  var v;
+  while (a &gt; 0 &amp;&amp; j &gt; 0) {
+   v = a%36;
+   j--;
+   if (v &lt;= 9) {
+    s = String.fromCharCode(0x30 + v) + s;
+   } else {
+    s = String.fromCharCode(0x61 + v - 10) + s;
+   }
+   a -= v;
+   a /= 36;
+  }
+  return s;
+}
+
+function loadScript (u) {
+  var o = document.createElement("script");
+	o.src = u;
+	o.type = "text/javascript";
+	document.getElementsByTagName("head")[0].appendChild(o);
+}
+
+  function toURLvar (v) {
+   return encodeURI((""+v).split("\\").join("\\\\").split("/").join("\\-")).split("#").join("%23");
+  }
+
+var elem = document.createElement('canvas');
+var cis = !!(elem.getContext &amp;&amp; elem.getContext('2d'));
+
+
+
+
+
+var ldbtns = [];
+
+function getBtnByProperty (prop, targ) {
+  var o;
+  for (var i = ldbtns.length-1; i&gt;=0; i--) {
+    o = ldbtns[i];
+    if (o[prop] == targ) {
+      return o;
+    }
+  }
+}
+
+var btrdo = {};
+btrdo.rd_iv = -1;
+btrdo.btns = [];
+
+function btnRedrawLoop () {
+  for (var i = btrdo.btns.length-1; i&gt;=0; i--) {
+    var o = btrdo.btns[i];
+    o.rdto ++;
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var av = .4;
+    if (o.rdto &gt;= 100) {
+      av = 1;
+      btrdo.btns.splice(i, 1);
+      o.redrawing = false;
+     }
+    o.internalRedraw(av);
+  }
+  if (btrdo.btns.length == 0) {
+    clearInterval(btrdo.rd_iv);
+    btrdo.rd_iv = -1;
+  }
+ }
+
+function makeBtn (pdiv, u, ww, hh, cmx, cmy, cmw, cmh) {
+  var div = document.createElement('div');
+  div.style.position = 'absolute';
+  div.style.left = cmx+'px';
+  div.style.top = cmy+'px';
+  div.style.width = cmw+'px';
+  div.style.height = cmh+'px';
+  if (cis) {
+    div.style.background = 'rgba(0, 0, 0, 0)';
+    div.style.opacity = '0.0';
+  }
+  
+  var ii = new Image();
+  var o = {};
+  o.onclick = function () {};
+  o.onload = function () {};
+  o.u = u;
+  o.div = div;
+  o.ww = ww;
+  o.hh = hh;
+  o.cmx = cmx;
+  o.cmy = cmy;
+  o.cmw = cmw;
+  o.cmh = cmh;
+  o.ii = ii;
+  o.redrawing = false;
+  /*
+  o.ppdiv = ppdiv;
+  var pdiv = document.createElement('div');
+  ppdiv.appendChild(pdiv);
+  */
+  $(pdiv).css({position: 'relative', width: ww+'px', height: hh+'px', 'margin-left': 'auto', 'margin-right': 'auto', opacity: 0});
+  o.pdiv = pdiv;
+  o.pda = 0;
+  
+  if (cis) {
+    var canvas,ctx;
+    canvas = document.createElement('canvas');
+    canvas.width = ww;
+    canvas.height = hh;
+    ctx = canvas.getContext('2d');
+    o.canvas = canvas;
+    $(canvas).css({position: 'absolute', left: '0px', top: '0px'});
+    o.ctx = ctx;
+    
+    var buf_canvas,buf_ctx;
+    buf_canvas = document.createElement('canvas');
+    buf_canvas.width = ww;
+    buf_canvas.height = hh;
+    buf_ctx = buf_canvas.getContext('2d');
+    o.buf_canvas = buf_canvas;
+    o.buf_ctx = buf_ctx;
+    pdiv.appendChild(canvas);
+  }
+  pdiv.appendChild(div);
+  o.div = div;
+  ldbtns.push(o);
+  ii.onload = function () {
+    var o = getBtnByProperty('ii', this);
+    var u = o.u;
+    var div = o.div;
+    var pdiv = o.pdiv;
+    var canvas = o.canvas;
+    if (cis) {
+     o.ctx.globalAlpha = 1;
+     o.ctx.clearRect(0, 0, canvas.width, canvas.height);
+     //o.buf_ctx.drawImage(o.ii, 0, 3 * o.hh, o.ww, o.hh, 0, 0, o.ww, o.hh);
+     o.buf_ctx.drawImage(o.ii, 0, 0, o.ww, o.hh, 0, 0, o.ww, o.hh);
+     o.ctx.drawImage(o.buf_canvas, 0, 0);
+    } else {
+     pdiv.style.background = 'url("'+u+'")';
+    }
+    pdiv.style.width = o.ww+'px';
+    pdiv.style.height = o.hh+'px';
+    pdiv.style.backgroundPosition = '0px 0px';
+    div.style.cursor = 'pointer';
+    o.mo = false;
+    o.md = false;
+    o.dis = false;
+    o.bsha = 0;
+    o.redraw = function () {
+     o.rdto = 0;
+     o.addToRedrawArray();
+    }
+   
+   o.addToRedrawArray = function () {
+     if (btrdo.rd_iv == -1) {
+      btrdo.rd_iv = setInterval('btnRedrawLoop()', 35);
+     }
+     if (!this.redrawing) {
+      this.redrawing = true;
+      btrdo.btns.push(this); 
+     }
+   }
+   
+   o.internalRedraw = function (av) {
+      var sy = 0;
+      if (this.md) { 
+        sy = (2 * this.hh);
+      } else if (this.mo) {
+        sy = this.hh;
+      }
+     if (cis) {
+       var buf_canvas = this.buf_canvas;
+       var buf_ctx = this.buf_ctx;
+       buf_ctx.globalAlpha = av;
+       buf_ctx.drawImage(this.ii, 0, sy, this.ww, this.hh, 0, 0, this.ww, this.hh);
+       
+       var canvas = this.canvas;
+       var ctx = this.ctx;
+       
+       var dbsha;
+       if ((!this.dis) &amp;&amp; (this.mo)) {
+        dbsha = 1;
+       } else {
+        dbsha = 0.3;
+       }
+       
+       if (this.bsha &lt; dbsha) {
+        this.bsha += .1;
+        if (this.bsha &gt;= dbsha) {
+         this.bsha = dbsha;
+        }
+       } else {
+        this.bsha -= .1;
+        if (this.bsha &lt;= dbsha) {
+         this.bsha = dbsha;
+        }
+       }
+       
+       ctx.globalAlpha = 1;
+       ctx.clearRect(0, 0, canvas.width, canvas.height);
+       
+       ctx.globalAlpha = this.bsha;
+       ctx.drawImage(this.ii, 0, 3 * this.hh, this.ww, this.hh, 0, 0, this.ww, this.hh);
+
+       ctx.globalAlpha = 1;
+       ctx.drawImage(buf_canvas, 0, 0);
+     } else {
+       this.pdiv.style.backgroundPosition = '0px '+((sy&gt;0)?(-sy):0)+'px';
+     }
+     var dpda = this.dis?.25:1;
+     this.pda += (dpda - this.pda) * .15;
+     if (Math.abs(this.dpda - this.pda) &lt; .1) {
+      this.pda = this.dpda; 
+     }
+     this.pdiv.style.opacity = this.pda;
+   }
+
+    o.setEnabled = function (e) {
+      o.dis = !e;
+      o.redraw();
+      if (e) { 
+       o.div.style.cursor = 'pointer';
+      } else {
+       o.mo = false;
+       o.md = false;
+       o.pdiv.style.backgroundPosition = '0px 0px';
+       o.div.style.cursor = 'auto';
+      }
+    }
+    $(div).mouseover(function () {
+      var o = getBtnByProperty('div', this);
+      if (!o.dis) {
+       o.mo = true;
+       o.redraw();
+      }
+    });
+    $(div).mouseout(function () {
+      var o = getBtnByProperty('div', this);
+      if (!o.dis) {
+       o.mo = false;
+       o.redraw();
+       //o.pdiv.style.backgroundPosition = '0px 0px';
+      }
+    });
+    $(div).mousedown(function () {
+      var o = getBtnByProperty('div', this);
+      if (!o.dis) {
+       o.md = true;
+       o.redraw();
+       //o.pdiv.style.backgroundPosition = '0px -'+(2 * o.hh)+'px';
+      }
+    });
+    $(div).mouseup(function () {
+      var o = getBtnByProperty('div', this);
+      if (!o.dis) {
+       o.internalRedraw(1);
+       o.md = false;
+       o.redraw();
+       //o.pdiv.style.backgroundPosition = '0px 0px'; 
+      }
+    });
+    $(window).mouseup(function () {
+      for (var i = ldbtns.length-1; i&gt;=0; i--) {
+        var o = ldbtns[i];
+        if (o.md) {
+         o.md = false;
+         o.redraw();
+        }
+      }
+    });
+    $(div).click(function () {
+      var o = getBtnByProperty('div', this);
+      if (!o.dis) {
+       o.onclick();
+      }
+    });
+    o.redraw();
+    o.onload();
+  }
+  ii.src = u;
+  return o;
+}
+
+
+
+
+
+var memes = [
+{n:"Confession Bear", ph:"old p was qi94poh", d: "p:vhfkku9, a:gzley81, female:t3rnjj5, dangling:562mgn5, sunglasses:fvpdt4x, cat:lm3f9oh, redditor:ksx6co1, happy:dcus0xt"},
+{n:"Angry Walter - Am I The Only One Around Here?", d: "p:26gji81, shaved:3juy5d, grumpy cat:22iqe5d"},
+{n:"Good Guy Greg", d:"p:fj2k5nl, smoke-free:kvpa4ch, animated smoke:2b003q9, vomiting joints eternally:l0hc2ld, female:hzvjh41, male morphing into female:9fqr25d, bad luck:6t5g9t, scumbag:jmaggqp, bad luck scumbag:llivie9, reddit:nj309z5, cat:jw4h681, dog:cpld7tt"},
+{n:"Redditor's Wife", d:"p:k2ruh8h"},
+{n:"Skeptical Fry", d:"a:mkq8roh, p:doret1d, female:slo2a8x, bart:rijgvhd, robot:hzgcx4x, redditor:9jre0wx, foul:kzgji81"},
+{n:"Bad Joke Eel", d:"p:ouvswch"},
+{n:"Why The Fudge - Annoyed Picard", d:"p:h71295t, dramatic zoom:nt60url, original episode footage:s2dw0pt, borg queen:9gp7ayp, creepy reddit alien version:ravhbc1, female:lwuu9, zoidberg:ldzco8x, worf:o613135"},
+{n:"One Does Not Simply", d:"p:p2mv9b5"},
+{n:"Downvoting Roman", d:"p:o84gs75, a:u9spba9, original movie footage:u6zasyp"},
+{n:"Scumbag Steve", d:"p:puvjwh, canadian:sl59r29"},
+{n:"Success Kid", d:"d:myayb5t, p:myayb5t, fist pump:oeawroh, beard:nesajr5, wolverine claws:jobgc8x, link (from zelda):2o86nfl, forever alone:amote1t, redditor:v9qh8pt, paranoid:fc43y69, foul:g20qu2p"},
+{n:"Lazy College Senior", d:"p:2sy1zi9"},
+{n:"Insanity Wolf", d:"p:jm70e75, canadian:ib1m6sh"},
+{n:"Actual Advice Mallard", d:"p:eowikf5, a:577w2kh, malicious advice:v2o1k01, angry advice:e9wmitd, paranoid advice:tja9fsx, slowpoke:vau8h9d, foul:efcpcpt, baby:syfck1t"},
+{n:"Malicious Advice Mallard", d:"p:v2o1k01, actual advice:eowikf5, angry advice:e9wmitd, paranoid advice:tja9fsx, slowpoke:vau8h9d, foul:efcpcpt, baby:syfck1t"},
+{n:"First World Problems", d:"p:1ii9cip, animated tear of sorrow:hf2nmdd"},
+{n:"Socially Awkward Penguin", d:"p:9wdsu0x, female:b3mjpkx, walking:k6g5fdt, guitar:t2sguyp"},
+{n:"Good Girl Gina", d:"p:dtyj1j5, a:9k98ukh"},
+{n:"Look At All The", d:"p:8894oox, a:itffsch, night:jr55ntt"},
+{n:"Sudden Clarity Clarence", d:"p:3giakh, a:6kqpf7l"},
+{n:"Office Space Lumbergh", d:"p:so3gwu9"},
+{n:"Grumpy Cat", d:"p:gui940x"},
+{n:"Socially Awesome Awkward Penguin", d:"p:66mlp7l, wavy:i40umyp"},
+{n:"Slowpoke", d:"p:7pi5xvl, fastpoke:g6vulup"},
+{n:"Scumbag Brain", d:"p:5t0yrtt"},
+{n:"Foul Bachelor Frog", d:"p:3c0j6wx, couple:uym8poh"},
+{n:"Matrix Morpheus - What If I Told You", d:"p:fgtk0gx, female:c7xtnk1, cat:3y64eqp"},
+{n:"Socially Awkward Awesome Penguin", d:"p:uzj9dpd, wavy:9y1s8u9"},
+{n:"Fudge Me, Right?", d:"p:94pwe81"},
+{n:"Third World Success Kid", d:"p:br4lrcx"},
+{n:"10 Guy", d:"p:3r9hjdt"},
+{n:"Tough Spongebob", d:"p:gfy539d"},
+{n:"Condescending Wonka", d:"p:knqle75"},
+{n:"Pepperidge Farm Remembers", d:"p:ayg3dwh"},
+{n:"Schrute Facts", d:"p:mf04ig1"},
+{n:"Overly Attached Girlfriend", d:"p:fapexwh"},
+{n:"Too Dingdang High", d:"p:ug1iysh, pointing down:9gcvdy9, confessiom:a4zkhpd, stoner:921bgwx"},
+{n:"Brace Yourselves", d:"p:fjt0lcx, shaved:p22fi75, female:ebe148x"},
+{n:"Captain Hindsight", d:"p:it71vz5, female:gks0a69"},
+{n:"Sophisticated Cat", d:"p:uoleydd, grumpy:8mkfs1"},
+{n:"Aaaand It's Gone", d:"p:d6u5vkx, female:h0ava5d, night:q7zwfr5"},
+{n:"Dating Site Murderer", d:"p:4ap9ow1"},
+{n:"Scumbag Stacy", d:"p:hsokdnl"},
+{n:"Bad Luck Brian", d:"p:mu1qxi9"},
+{n:"Zoidberg", d:"p:9khve8x, eating cake:7fo95ep"},
+{n:"Super Cool Ski Instructor", d:"p:ei5nsv5, female:5sc3a3l, cat version:c542n4x, drug-induced animation:82hhush"},
+{n:"Sheltering Suburban Mom", d:"p:vgu0foh"},
+{n:"Scumbag Teacher", d:"p:irquo8x"},
+{n:"Mad Karma with Jim Cramer", d:"p:34arekh"},
+{n:"American Eagle", d:"p:30og01, waving flag:azsghj5"},
+{n:"I Don't Know What To Do", d:"p:ld1vaxt"},
+{n:"Lame Pun Coon", d:"p:qpudfq9"},
+{n:"Pickup Line Scientist", d:"p:unkzy75"},
+{n:"The Most Interesting Man In The World", d:"p:mwzsty9, foul:c6fvsrl, underwater:rfr78w1"},
+{n:"Scumbag College Liberal", d:"p:a5gzsrl"},
+{n:"Toy Story Everywhere", d:"p:djr6cip, a:c9g5l41"},
+{n:"Overly Manly Man", d:"p:40whs69"},
+{n:"Ain't Nobody Got Time For That", d:"p:svzje81"},
+{n:"So Much Room For Activities", d:"p:acckt7l"},
+{n:"Redditor's Husband", d:"p:tjusvhd"},
+{n:"Pickup-Line Panda", d:"p:6zw7ixt"},
+{n:"Upvoting Obama", d:"p:bmb99dt"},
+{n:"Desk Spiderman", d:"p:ugpbsrl"},
+{n:"Anti-Joke Chicken", d:"p:8meklk1"},
+{n:"Fudge It Bill Murray", d:"p:njm7std"},
+{n:"Philosoraptor", d:"p:id60czl"},
+{n:"Grandma Finds the Internet", d:"p:jfbx68x"},
+{n:"Paranoid Parrot", d:"p:pwr796p"},
+{n:"Misunderstood Douchebag", d:"p:r3w843l"},
+{n:"Fudge It Bill O'Reilly", d:"p:gabnbxd, a:1gsdu4h"},
+{n:"Today Was A Good Day", d:"p:qoy5uwx"},
+{n:"Live Dangerously Austin Powers", d:"p:nzoc82p"},
+{n:"Gordon Ramsay", d:"p:e72f3xd"},
+{n:"Would Be So Happy", d:"p:3dvnitd"},
+{n:"Evil Plotting Raccoon", d:"p:nz22wrl, creepy human hands:neh0ls1"},
+{n:"Courage Wolf", d:"p:im3k4u9, a:it7mpvl"},
+{n:"Annoying Facebook Girl", d:"p:7i9zs5d"},
+{n:"Sephorually Oblivious Rhino", d:"p:jvp2wap"},
+{n:"It's Not Going to Happen", d:"p:ak4xj7l"},
+{n:"Joker Mind Loss", d:"p:c21pjvl"},
+{n:"Confession Kid", d:"p:r9k6m4h"},
+{n:"Almost Politically Correct Redneck", d:"p:r7kildt"},
+{n:"Conspiracy Keanu", d:"p:en3zoyp"},
+{n:"Musically Oblivious 8th Grader", d:"p:ai52va9"},
+{n:"Give Me Karma", d:"p:tf4f7cx"},
+{n:"Good Guy Boss", d:"p:ct8mj9d"},
+{n:"Milton - I Was Told There Would Be X", d:"p:d5kih8h"},
+{n:"What Really Grinds My Gears", d:"p:v79cu4h, female:v85cxa9, brian the dog:kkxbtlt"},
+{n:"Skeptical Third World Kid", d:"p:gsw11kx"},
+{n:"Scumbag Parents", d:"p:qdvvidd"},
+{n:"What Year Is It (Jumanji)", d:"p:3wblnoh"},
+{n:"And Then I Told Them", d:"p:ki0t9q9"},
+{n:"Helpful Tyler Durden", d:"p:jz79phd"},
+{n:"First Day on the Internet Kid", d:"p:56kx68x"},
+{n:"Disaster Girl", d:"p:sd2jptt"},
+{n:"Scumbag Redditor", d:"p:5kprcjl"},
+{n:"Obi Wan Chosen One", d:"p:ij0zukh"},
+{n:"Scumbag Driver", d:"p:tl9kt5t"},
+{n:"I Will Find You (Liam Neeson)", d:"p:3qkyv4x"},
+{n:"Forever Alone", d:"p:2jdy9wh"},
+{n:"Socially Awkward Couple", d:"p:ghatrj5"},
+{n:"Successful Black Man", d:"p:2qnmnq9"},
+{n:"Annoying Childhood Friend", d:"p:65pk3dt, creepy smile:sgoq2sh"},
+{n:"Oblivious Suburban Mom", d:"p:c35xhwh"},
+{n:"All The Things", d:"a:feal941, creepy redditor version:tzvbxwh"},
+{n:"Martin Luther King - I Have A Dream", d:"p:gcsof7l"},
+{n:"Business Cat", d:"p:c06p7nl"},
+{n:"Advice Dog", d:"p:bbs240x"},
+{n:"Overeducated Problems", d:"p:1unjgh"},
+{n:"Hypnotoad", d:"p:jygoggx"},
+{n:"Drunk Baby", d:"p:1i6eyo1"},
+{n:"Pick-up Line Michael Cera", d:"p:e08wbep"},
+{n:"Princess Leia Only Hope", d:"p:ijqoi8x"},
+{n:"Scumbag Body", d:"p:p8zgm69"},
+{n:"Forrest Gump - I Am Not A Smart Man", d:"p:8b7yxnl"},
+{n:"The Dude - You're Not Wrong, You're Just An Asshole", d:"p:eb5djfl"},
+{n:"Confused Gandalf - I Have No Memory Of This Place", d:"p:6mpczdt"},
+{n:"Scumbag God", d:"p:c87nuv5"},
+{n:"So You're Telling Me There's a Chance", d:"p:u520kbl"},
+{n:"Y U NO", d:"p:pc80lep"},
+{n:"Vengenace Dad", d:"p:5ldf3hd"},
+{n:"Bane - Batman", d:"p:adq02wx"},
+{n:"Hipster Kitty", d:"p:cbhz6ld"},
+{n:"Drew Carey Whose Line Is It Anyway", d:"p:pit348x"},
+{n:"Socially Awesome Penguin", d:"p:bqi468x"},
+{n:"Aliens Guy", d:"p:t5qeeg1"},
+{n:"Don't Remember Asking You A Goddingdang Thing", d:"p:34nace9"},
+{n:"I Double Dare You", d:"p:ns7g4ip"},
+{n:"Lois Griffin", d:"p:3ilbnr5"},
+{n:"Things Are Getting Pretty Serious", d:"p:6641rq9"},
+{n:"Blackjack Bender - I'll Make My Own", d:"p:k5ks5i9"},
+{n:"Household Magician", d:"p:ejh0kjl"},
+{n:"Bill Murray - So I Got That Going For Me, Which is Nice", d:"p:n1qoqtd"},
+{n:"Technologically Impaired Duck", d:"p:srg31pd"},
+{n:"Foul Bachelorette Frog", d:"p:1o5iu69, couple:uym8poh"},
+{n:"Joseph Ducreux", d:"p:2v6ep4x"},
+{n:"Aristocat", d:"p:psqmgxt"},
+{n:"Old Money Dog", d:"p:tn3lqpt"},
+{n:"Ridiculously Photogenic Guy", d:"p:f2am8m9"},
+{n:"High Expectations Asian Father", d:"p:35lec3l"},
+{n:"Zoidberg - You Should Feel Bad", d:"p:t36fazl"},
+{n:"1990s Problems", d:"p:6ogmvq9"},
+{n:"Inappropriate Joke Bill Clinton", d:"p:7kbuxq9"},
+{n:"What Is This, A Thing For Ants?", d:"p:sktl2kh"},
+{n:"Emperor Palpatine - Good, Good, Let The Hate Flow Through You", d:"p:2fp0ish"},
+{n:"PTSD Clarinet Kid", d:"p:qnhgaxt"},
+{n:"Karate Kyle", d:"p:dkvzee9"},
+{n:"Lawyer Dog", d:"p:juyp36p"},
+{n:"Maximus - Are You Not Entertained?", d:"p:b2juosh"},
+{n:"Sephorual Picard", d:"p:f10xu9t"},
+{n:"It Wasn't Like The Movies At All!", d:"p:ny2oykh"},
+{n:"Rich Raven", d:"p:rut51s1"},
+{n:"Unpopular Opinion Puffin", d:"p:pypst41"},
+{n:"I Guarantee It", d:"p:eab1dhd"},
+{n:"Archer (Do You Want X? Because That's How You Get X)", d:"p:caiqnmp"},
+{n:"Bad Guy Boss / Scumbag Boss", d:"p:ppaeao1"},
+{n:"Ordinary Muslim Man", d:"p:4v78dvl"},
+{n:"Sephorually Oblivious Female", d:"p:9iaunkx"},
+{n:"Oh My God, Who The Hizzeck Cares?", d:"p:8sk0km9"},
+{n:"Successful White Man", d:"p:qny10rl"},
+{n:"Forgetful Fish Dory", d:"p:wz0l9d, overweight:h4gfbgh"},
+{n:"Unhelpful Helpful Guy", d:"p:2z9km2p"},
+{n:"Ridiculously Photogenic Prison Inmate", d:"p:nwk9w8x"},
+{n:"Scumbag Genetics", d:"p:g5ciiv5"},
+{n:"Skyrim", d:"p:52lskpt"},
+{n:"Scumbag Toddler", d:"p:6idecw1"},
+{n:"College Freshman", d:"p:taphx4x"},
+{n:"Viggo Explains Reddit", d:"p:e7t8ww1"},
+{n:"Fashion Advice Mallard (actually a Mandarin)", d:"p:7k26v5t"},
+{n:"Maury Determined That Was a Lie", d:"p:aopt10h"},
+{n:"It's a Trap", d:"p:tvoz5k1"},
+{n:"Inigo Montoya Sees You Keep Using That Word And He Doesn't Think It Means What You Think It Means", d:"p:328mqm9"},
+{n:"Back In My Day", d:"p:a5jt9fl"},
+{n:"Push It Somewhere Else Patrick", d:"p:hcu2t35"},
+{n:"Angry Advice Mallard", d:"p:e9wmitd"},
+{n:"Life Lesson Leopard", d:"p:op7dlhd"},
+{n:"Vindictive Girls", d:"p:5v11uo1"},
+{n:"Scumbag Christian", d:"p:97dirsx"},
+{n:"Scumbag Sean", d:"p:gjiwxup"},
+{n:"Don't Be a Dummy Dolphin", d:"p:34puox"},
+{n:"Overlord Manatee", d:"p:4ayme2p"},
+{n:"That's My Secret", d:"p:qbsajcx"},
+{n:"You Have No Power Here", d:"p:2yh28wx"},
+{n:"Scumbag Congress / Scumbag Government", d:"p:88gf75t"},
+{n:"Jesse Pinkman - Yeah, Science Bitch!", d:"p:jbbckpt"},
+{n:"Actually, I'm Not Even Mad; That's Amazing", d:"p:4y9nl1d"},
+{n:"Dr. Evil \"Quotation Marks\"", d:"p:8yc0ejl"},
+{n:"Overly Suave IT Guy", d:"p:3vktyip"},
+{n:"Small Fact Frog", d:"p:8pocach"},
+{n:"Cable Guy Rubbing His Own Nipples", d:"p:5wex3s1"},
+{n:"Hagrid Shouldn't Have Done That, He Should Not Have Done That", d:"p:jpzw0td"},
+{n:"Priority Peter", d:"p:4d1lftt"},
+{n:"Scumbag Couple", d:"p:ofrr98h"},
+{n:"We've Got Dodgson Over Here - See, Nobody Cares", d:"p:hstv3a9"},
+{n:"Rafiki The Wise", d:"p:24mnbdt"},
+{n:"Scumbag Student", d:"p:sprvxhd"},
+{n:"Popular Opinion Polar Bear", d:"p:rb0724h"},
+{n:"Obi Wan Kenobi - Now, That's a Name I've Not Heard in a Long Time", d:"p:qvgo3sx"},
+{n:"Xerxes - I Am A Generous God", d:"p:exfcqv5"},
+{n:"Butthurt Dweller", d:"p:p5mu6v5"},
+{n:"Sorry I Annoyed You With My Friendship", d:"p:2mdcegx"},
+{n:"Baby Insanity Wolf", d:"p:coxce0x"},
+{n:"Darth Vader - I Find Your Lack Of Faith Disturbing", d:"p:up97269"},
+{n:"Could You Fudgeing Not?", d:"p:nyd61tt"},
+{n:"Weird Stuff I Do Potoo", d:"p:awo3z8h"},
+{n:"Contemplative Dog", d:"p:jcymyv5"},
+{n:"Business Baby", d:"p:u9j3vlt"},
+{n:"Dave Chappelle - Y'all Got Any More", d:"p:1hxseyp"},
+{n:"Dr. Seuss - Cat in the Hat", d:"p:txp5b9d"},
+{n:"Confucius Say...", d:"p:e0l8im9"},
+{n:"Fortunate Boyfriend Problems", d:"p:50jkzl"},
+{n:"False Fact Nancy Grace", d:"p:qvzltkx"},
+{n:"Fallout Vault Boy", d:"p:ta2pgxt"},
+{n:"Terrible Twist Tiger", d:"p:6kwomm9"},
+{n:"Uncomfortable Situation Seal", d:"p:4g80ssh"},
+{n:"Kevin Durant - You Da Real MVP", d:"p:cqja4dd"},
+{n:"Sarcastic Bear", d:"p:lsx0yip"},
+{n:"Kermit the Frog - But That's None Of My Business", d:"p:lax72o1"},
+{n:"I've Made a Huge Mistake", d:"p:4t3fbq9"},
+{n:"Billy Mays - But Wait, There's More", d:"p:fdvxjz5"},
+{n:"A Million Dollars Isn't Cool... You Know What's Cool? A Billion Dollars", d:"p:rtx6lr5"},
+{n:"That's Not How It Works, That's Not How Any Of This Works", d:"p:c1foypt"},
+{n:"Oh, I'm Sorry, I Thought This Was America", d:"p:3vlkuwx"},
+{n:"Oprah - You Get A Car, And You Get A Car", d:"p:a6y7tpd"},
+{n:"Groundskeeper Willie Hears Ya, Willie Don't Care", d:"p:jpos97l"},
+{n:"Go To The Winchester, Have a Nice Cold Pint, and Wait For All Of This To Blow Over", d:"p:uivqwrl"},
+{n:"Mugatu - That Is So Hot Right Now", d:"p:fx4bmqp"},
+{n:"Mugatu - Doesn't Anybody Notice This? I Feel Like I'm Taking Crazy Pills", d:"p:37clq4h"},
+{n:"I Don't Know What We're Yelling About", d:"p:186zc5d"},
+{n:"90s Success Kid", d:"p:q7tenhd"},
+{n:"60 Percent Of The Time, It Works Every Time", d:"p:tmxw4ld"},
+{n:"Syndrome - When Everyone's Super, No One Is", d:"p:67mmmkh"},
+{n:"I'm In a Glass Case of Emotion", d:"p:7dkrn6p"},
+{n:"Boy, That Escalated Quickly", d:"p:a9k01y9"},
+{n:"I Immediately Regret This Decision", d:"p:qwipxpd"},
+{n:"You're Not Making Christianity Any Better, You're Just Making Rock and Roll Worse", d:"p:27qcwgx"},
+{n:"That's a Bold Strategy/Move, Cotton, Let's See If It Pays Off For Them", d:"p:abxl5c1"},
+{n:"Minor Mistake Marvin", d:"p:rfafye9"},
+{n:"At This Point, I'm Too Afraid To Ask Andy", d:"p:9wksyjl"},
+{n:"Satisfied Seal of Approval", d:"p:5cxpjcx"},
+{n:"Look At Me, I'm The Captain Now", d:"p:gunemg1"},
+{n:"Dissatisfied Seal", d:"p:v9129gh"},
+{n:"Disappointed Cat", d:"p:3x2ms5d"},
+{n:"The \"Hi, I'd Like To Speak To A Manager\" Haircut", d:"p:ed9dhwh"}
+];
+
+for (var mmi = memes.length-1; mmi &gt;= 0; mmi--) {
+ var s = memes[mmi].n;
+ if (s.indexOf("Fudge") &gt;= 0) {
+  s = s.split("dge").join("ck");
+  memes[mmi].n = s;
+ }
+ if (s.indexOf("ingdang") &gt;= 0) {
+  s = s.split("ingdang").join("amn");
+  memes[mmi].n = s;
+ }
+ if (s.indexOf("izzeck") &gt;= 0) {
+  s = s.split("izzeck").join("ell");
+  memes[mmi].n = s;
+ }
+ if (s.indexOf("ephor") &gt;= 0) {
+  s = s.split("ephor").join("ex");
+  memes[mmi].n = s;
+ }
+}
+  </script>
+  <title>
+   livememe.com - Skeptical Third World Kid
+  </title>
+  <script type="text/javascript">
+   var album_name = "Skeptical Third World Kid";
+  </script>
+  <script type="text/javascript">
+   var hex_album_name = "536B6570746963616C20546869726420576F726C64204B6964";album_name = '';for (var i = 0; i&lt;hex_album_name.length; i+=2) { album_name += String.fromCharCode(parseInt(hex_album_name.substr(i, 2), 16));}
+  </script>
+  <meta content="livememe.com - Skeptical Third World Kid" name="title"/>
+  <meta content="livememe.com - Skeptical Third World Kid" property="og:title"/>
+  <script type="text/javascript">
+   var dank_meme = 0; var tcb = '594F55205350524159205741544552204F4E205448452047524F554E4420544F204D414B45205448452047524153532047524F57'; var bcb = '5448454E2050415920534F4D454F4E4520544F20435554205448452047524153532E2E2E3F';
+  </script>
+  <meta content="http://www.livememe.com/gp17qbl" property="og:url"/>
+  <meta content="http://t1.livememe.com/is5v74_4.jpg" property="og:image"/>
+  <link href="http://t1.livememe.com/is5v74_4.jpg" rel="image_src"/>
+  <meta content="Skeptical Third World Kid YOU SPRAY WATER ON THE GROUND TO MAKE THE GRASS GROW THEN PAY SOMEONE TO CUT THE GRASS...?" name="keywords"/>
+  <meta content="width=625" name="viewport"/>
+  <script type="text/javascript">
+   var img_w = 625, img_h = 641, orig_album_id = 'kgu2cl', capdms = ['16.0,12.0,593.0,161.0', '16.0,427.0,593.0,202.0'], r_pl = "http://redd.it/2a2zgo", r_au = "SuitedPenguin", r_ti = "Exchange student dropped this one on me today...";
+  </script>
+  <title>
+   livememe
+  </title>
+  <script type="text/javascript">
+   if (dank_meme) {
+    img_w = 666;
+   }
+
+      var template_sid = 0;
+      var template_id = 0;
+
+      var album_sid = 0;
+      var album_id = 0;
+
+	  var advanimexto_target_url = '';
+   var advanimexto_helptext = '';
+	  var advanimexto_radio_d = '';
+	  var advanimexto_cur_radio = 0;
+   var advanimexto_want_dank = 0;
+      
+      var hu = window.location.href;
+      var aqu = hu.slice(hu.indexOf('?') + 1);
+      hu = hu.split('?')[0];
+      if (hu.indexOf("/") &gt;= 0) {
+        u = hu.split("/");
+        u = u[u.length-1];
+		u = u.split(".");
+		u = u[0];
+		u = u.split("_");
+		u = u[0];
+        var v = base36bytesToInt(u);
+        template_sid = v%32;
+        v -= template_sid;
+        v /= 32;
+        template_id = base36intToBytes(v);
+      }
+      var v;
+      for (var i = 0; i&lt;template_sid.length; i++) {
+        v = template_sid.charCodeAt(i); 
+        if (v &gt;= 0x30 &amp;&amp; v &lt;= 0x39) {
+          // valid template_sid char
+        } else {
+          template_sid = template_sid.substr(0,i);
+          break;
+        }
+      }
+      template_sid = Number(template_sid);
+      for (var i = template_id.length - 1; i&gt;=0; i--) {
+        v = template_id.charCodeAt(i); 
+        if ((v &gt;= 0x30 &amp;&amp; v &lt;= 0x39) || (v &gt;= 0x61 &amp;&amp; v &lt;= 0x7a)) {
+          // valid template_id char
+        }
+      }
+      
+if (template_id == 'y') {
+ template_id = 'p59ijr';
+ template_sid = 1;
+}
+
+
+var mchis = false; // manually changed image size
+if (album_name == 'Contemplative Dog') {
+ if ((img_w == 1024) &amp;&amp; (img_h == 682)) {
+  img_w = 666;
+  img_h = 444;
+  mchis = true;
+ }
+}
+
+if (album_name == 'You Da Real MVP') {
+ img_w = 607;
+ img_h = 404;
+ mchis = true;
+}
+
+if (template_id == 'm2wfzo') {
+ img_w = 630;
+ img_h = 408;
+ mchis = true;
+}
+
+
+var mi_shown = false;
+ function miLoaded () {
+  var mi = document.getElementById("memeImage");
+	mi_shown = true;
+       //$(mi).fadeIn(250);
+ }
+  </script>
+ </head>
+ <body style="background: #F0F0F0; margin: 0px; height: 100%;">
+  <!--&lt;script type="text/javascript" src="http://static.livememe.com/notify.js"&gt;&lt;/script&gt;-->
+  <div id="searchholder" style="position: absolute; top: 44px; z-index: 100; width: 240px; z-index: 560; display: none;">
+  </div>
+  <script type="text/javascript">
+   for (var i = memes.length-1; i&gt;=0; i--) {
+	var o = memes[i];
+	o.alpha = .4;
+	o.pos = i;
+	o.ln = o.n.toLowerCase();
+}
+
+	var div = document.createElement("div");
+	var surtch = document.createElement("input");
+	surtch.id = "surtch";
+	surtch.placeholder = "search for a meme";
+	surtch.style.outline = 'none';
+	$(surtch).css({width:'188px',height:'18px', position: 'absolute', left: '28px', top: '32px', 'font-family': "Verdana, sans-serif"});
+	div.appendChild(surtch);
+	$(surtch).hide();
+
+
+ 
+	var uliodivh = document.createElement('div');
+	$(uliodivh).css({position:'absolute', left: '23px', top: '25px', 'z-index': 669});
+
+	var uliodiv = document.createElement('div');
+	uliodivh.appendChild(uliodiv);
+	var ulio = makeBtn(uliodiv, 'http://i.lvme.me/uploadimage.png', 116, 40, 6, 7, 105, 25);
+	ulio.onclick = function () {
+	  this.setEnabled(false);
+	  setTimeout("ulioEnable()", 2500);
+	  window.location = "http://www.livememe.com/edit";
+    }
+
+	function ulioEnable () {
+	 ulio.setEnabled(true); 
+	}
+
+
+	var searchholder = document.getElementById("searchholder");
+ 
+ var search_bg_div = document.createElement('div');
+ $(search_bg_div).css({position: 'absolute', margin: '0px', padding: '0px', width: '201px', height: '23px', left:'18px', top:'29px', 'background-color': '#FFFFFF', opacity: 1, border: '2px solid #B0D0F0'});
+ searchholder.appendChild(search_bg_div);
+ 
+ $(surtch).css({background: 'transparent url(http://i.lvme.me/search2.png) right no-repeat', border: 'none'});
+ 
+	searchholder.appendChild(div);
+ 
+	document.body.appendChild(uliodivh);
+ 
+ 
+ 
+
+	$(function () {
+	  $(surtch).show();
+	  $(ulio).show();
+	  if (Math.random() &lt; .1) {
+		  dzfn();
+	  }
+	});
+
+
+
+	var want_search_mtm = 0;
+	var last_search_text = "";
+
+
+
+ function searchLoop () {
+  var t = (""+surtch.value).toLowerCase();
+  var going = false;
+  if (t != last_search_text) {
+    var valid = false;
+    for (var i = t.length-1; i&gt;=0; i--) {
+      var v = t.charCodeAt(i);
+      if (v &gt; 0x20) {
+       valid = true;
+       break; 
+      }
+    }
+    if (!valid) {
+      t = "";
+    }
+    if (t != last_search_text) {
+     last_search_text = t;
+    	going = true;
+    }
+  }
+  if (going) {
+   t = t.trim();
+   var empty = true;
+   for (var i = t.length-1; i&gt;=0; i--) {
+     var v = t.charCodeAt(i);
+     if (v &gt; 0x20) {
+      empty = false;
+      break; 
+     }
+   }
+   var prev_lits = [];
+   for (var i = 0; i&lt;memes.length; i++) {
+    if (memes[i].lit) {
+     prev_lits.push(i);
+    }
+   }
+   prev_lits = prev_lits.join(",");
+   if (empty) {
+    for (var i = memes.length-1; i&gt;=0; i--) {
+   		var o = memes[i];
+   		o.lit = true;
+    }
+   } else {
+    var lit_count = 0;
+    for (var i = memes.length-1; i&gt;=0; i--) {
+   		var o = memes[i];
+   		o.lit = false;
+     if (t.length &gt; 0) {
+      var ln = o.ln;
+      if (ln.indexOf(t) &gt;= 0) {
+       o.lit = true;
+       lit_count++;
+      }
+     }
+    }
+    if (lit_count == 0) {
+     for (var i = memes.length-1; i&gt;=0; i--) {
+    		var o = memes[i];
+    		o.lit = true;
+     }
+    }
+   }
+   var cur_lits = [];
+   for (var i = 0; i&lt;memes.length; i++) {
+    if (memes[i].lit) {
+     cur_lits.push(i);
+    }
+   }
+   cur_lits = cur_lits.join(",");
+   if (prev_lits != cur_lits) {
+    resizeMemeMenu();
+    for (var i = memes.length-1; i&gt;=0; i--) {
+     var mo = memes[i];
+     var o = mo.o;
+     o.fr = -(140/1)*Math.pow((o.tx + o.ty)/memes.length, .75);
+     o.hfr = 0;
+     o.div.style.opacity = o.backdiv.style.opacity = 0;
+     o.cur_alpha = 0;
+     o.div_shown = false;
+     o.div.style.display = o.backdiv.style.display = 'none';
+    }
+    meme_menu_shown = false;
+    showMemeMenu(true);
+   }
+ 	}
+ }
+
+
+
+	var searchloop_iv = -1;
+
+	surtch.onfocus = function () {
+	 if (searchloop_iv == -1) {
+	  searchloop_iv = setInterval('searchLoop()', 100);
+	 } 
+	}
+
+	surtch.onblur = function () {
+	 if (searchloop_iv != -1) {
+	   clearInterval(searchloop_iv);
+	   searchloop_iv = -1;
+	 } 
+	}
+  </script>
+  <div id="logo" style="width: 100%; height: 250px; position: absolute; top: -25px; z-index: 31;">
+  </div>
+  <div id="redditInfoHolder" style="position: absolute; width: 100%; left: 0px; top: 84px; z-index: 432; color: #404040; font-family: Verdana, sans-serif; font-size: 11px; display: none;">
+   <div id="redditInfo" style="text-align: center; margin-left: auto; margin-right: auto; width: 400px; height: 66px; word-wrap: break-word; overflow: hidden;">
+   </div>
+  </div>
+  <div id="memeImageHolder" style="position: relative; margin-left: auto; margin-right: auto; margin-top: 152px; z-index: 33;">
+   <noscript>
+    <img border="0" id="memeImage" onload="miLoaded()" src="http://i.lvme.me/gp17qbl.jpg"/>
+   </noscript>
+  </div>
+  <script type="text/javascript">
+   var tsvcr = '2227766';
+  </script>
+  <script type="text/javascript">
+   var holder = document.getElementById("memeImageHolder");
+holder.style.width = img_w+'px';
+holder.style.height = img_h+'px';
+if (!window.jQuery) {
+ var mih = document.getElementById('memeImageHolder');
+ if (mih) {
+  mih.style.marginTop = '16px';
+ }
+}
+//$(holder).width(img_w).height(img_h);
+
+
+var img = document.createElement('img');
+img.border = 0;
+img.id = 'memeImage';
+img.style.position = 'absolute';
+img.style.left = '0px';
+img.style.top = '0px';
+img.onload = miLoaded;
+document.getElementById('memeImageHolder').appendChild(img);
+
+
+
+if (mchis || (template_id == 'txp7fo') || (template_id == '93npkv') || (template_id == 'mertkh') || (template_id == '7r49ag') || (template_id == 'rych6r') || (template_id == 'b3bb0g') || (template_id == 'gbuq4h') || (template_id == '41ts0j') || (template_id == 'dst1no') || (template_id == 'v4j2dn') || (template_id == 'm54s57')) {
+ img.width = img_w;
+ img.height = img_h;
+}
+
+
+
+
+if ((orig_album_id == 'jt7nnl') || (orig_album_id == '4ulymy')) {
+ function tryLoadOag () {
+  var going = true;
+  for (var i = capdms.length-1; i&gt;=0; i--) {
+   var pts = capdms[i].split(',');
+   if (((Number(pts[1]) + Number(pts[3])) &lt;= 126) || (Number(pts[1]) &gt; 260)) {
+	
+   } else {
+	going = false;
+   }
+  }
+  if (going) {
+   loadScript("http://i.lvme.me/oag.js");
+  }
+ }
+ tryLoadOag();
+}
+
+if (orig_album_id == 'mr68kc') {
+ function tryLoadPotoo () {
+  var going = true;
+  for (var i = capdms.length-1; i&gt;=0; i--) {
+   var pts = capdms[i].split(',');
+   if (((Number(pts[1]) + Number(pts[3])) &lt;= 179) || (Number(pts[1]) &gt; 255)) {
+	   
+   } else {
+	   going = false;
+   }
+  }
+  if (going) {
+   loadScript("http://i.lvme.me/potoo.js");
+  }
+ }
+ tryLoadPotoo();
+}
+
+
+
+
+
+
+
+
+if (template_id == 'gjvhx7') {
+ loadScript('http://i.lvme.me/umbrellaman.js');
+}
+
+if (template_id == 'qs9oi8') {
+ loadScript('http://i.lvme.me/cancer.js');
+}
+
+if (template_id == 'ewwg48') {
+ loadScript('http://i.lvme.me/bclol.js');
+}
+
+if (template_id == '7zw9cn') {
+ loadScript('http://i.lvme.me/snowflake.js');
+}
+
+if (template_id == 'nw2uaw') {
+ loadScript('http://i.lvme.me/horse.js');
+}
+
+if (template_id == 'bwv70p') {
+ loadScript('http://i.lvme.me/c2e.js');
+}
+
+if (template_id == 'tpjty8') {
+ loadScript('http://i.lvme.me/c2e2.js');
+}
+
+if (template_id == '6i293l') {
+ loadScript('http://i.lvme.me/c2e3.js');
+}
+
+if (template_id == 'fy68b6') {
+ loadScript('http://i.lvme.me/snooad.js');
+}
+
+
+ 
+ 
+
+
+ if (template_id == 'pja3py') {
+  var nbp = document.createElement('img');
+  nbp.src = 'http://i.lvme.me/nobears.png';
+  nbp.style.position = 'absolute';
+  nbp.style.left = '-120px';
+  nbp.style.top = '-115px';
+  nbp.style.zIndex = 0x7fffffff;
+  document.getElementById('memeImageHolder').appendChild(nbp);
+ }
+
+
+
+
+
+
+
+var pghsd = false;
+  </script>
+  <div id="captionz" style="display: none;">
+   Skeptical Third World Kid:  YOU SPRAY WATER ON THE GROUND TO MAKE THE GRASS GROW THEN PAY SOMEONE TO CUT THE GRASS...?
+  </div>
+  <div id="dinkdiv" style="position: absolute; left: 16px; top: 144px; width: 160px; z-index: 888888; display: block; text-align: center;">
+   <script type="text/javascript">
+    var dinks = []; dinks.push({i: "h7kjmi"}); dinks.push({i: "txxufk"}); dinks.push({i: "8a91be"}); dinks.push({i: "5qoxdl"}); dinks.push({i: "xxkjod"}); dinks.push({i: "ei2qdx"}); dinks.push({i: "g99cuj"}); dinks.push({i: "lddkf3"}); dinks.push({i: "tgtrcf"}); dinks.push({i: "e80uoc"}); dinks.push({i: "2fg1i0"}); dinks.push({i: "5mjbjt"}); dinks.push({i: "xuyj1q"}); dinks.push({i: "w3qc8l"}); dinks.push({i: "v6w1ag"}); dinks.push({i: "sovaws"});
+   </script>
+  </div>
+  <div id="gmtadiv" style="position: absolute; right: 6px; top: 24px; z-index: 888888;">
+   <div style="text-align: right;">
+    <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+    </script>
+    <!-- livememe vertical skinny -->
+    <ins class="adsbygoogle" data-ad-client="ca-pub-0051214680937399" data-ad-slot="5918240715" style="display:inline-block;width:160px;height:600px">
+    </ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <script type="text/javascript">
+     pghsd = true;
+    </script>
+   </div>
+  </div>
+  <script type="text/javascript">
+   if (template_id == 'ua2gvu') {
+              if (typeof(dinks) != 'undefined') {
+               dinks = undefined;
+              }
+             }
+             if (template_id == '93r8pj') {
+              if (typeof(dinks) != 'undefined') {
+               dinks = undefined;
+              }
+             }
+             if (!pghsd) {
+              dinks = undefined;
+             }
+             if (template_id == 'au8zar') {
+               var gmta = document.getElementById('gmtadiv');
+               gmta.style.marginTop = '1585px';
+             }
+             
+             
+             /*
+             if (pghsd) {
+              var teaserdivh = document.createElement('div');
+              $(teaserdivh).css({position:'absolute', left: '143px', top: '5px', 'z-index': 670, visibility: 'hidden'});
+
+              var teaserdiv = document.createElement('div');
+              teaserdivh.appendChild(teaserdiv);
+ 
+              var teaser_pg = '';
+              var teaser_fn = '';
+ 
+              var v = Math.floor(Math.random()*7);
+              if (v == 0) {
+               teaser_pg = 'eowikf5';
+               teaser_fn = 'mallard-teaser';
+              } else if (v == 1) {
+               teaser_pg = 'vhfkku9';
+               teaser_fn = 'bear-teaser';
+              } else if (v == 2) {
+               teaser_pg = '5cxpjcx';
+               teaser_fn = 'satisfied-teaser';
+              } else if (v == 3) {
+               teaser_pg = '4g80ssh';
+               teaser_fn = 'seal-teaser';
+              } else if (v == 4) {
+               teaser_pg = 'puvjwh';
+               teaser_fn = 'scumbag-teaser';
+              } else if (v == 5) {
+               teaser_pg = '9wksyjl';
+               teaser_fn = 'andy-teaser';
+              } else if (v == 6) {
+               teaser_pg = 'rfafye9';
+               teaser_fn = 'marvin-teaser';
+              }
+ 
+              var teaser = makeBtn(teaserdiv, 'http://static.livememe.com/'+teaser_fn+'.png', 350, 65, 10, 9, 330, 45);
+              teaser.onclick = function () {
+               advanimexto_target_url = 'http://www.livememe.com/'+teaser_pg;
+               advanimexto_radio_d = '';
+               advanimexto_cur_radio = 0;
+               showEditor();
+              }
+ 
+              document.body.appendChild(teaserdivh);
+             }
+             */
+  </script>
+  <style type="text/css">
+   a.rpl:link {text-decoration: none; color:#000080;}
+		a.rpl:visited {text-decoration: none; color:#000080;}
+		a.rpl:hover {text-decoration: none; color:#400080;}
+		a.rpl:active {text-decoration: none; color:#000000;}
+  
+		a.terma:link {text-decoration: none; color:#808080;}
+		a.terma:visited {text-decoration: none; color:#808080;}
+		a.terma:hover {text-decoration: none; color:#808080;}
+		a.terma:active {text-decoration: none; color:#808080;}
+  </style>
+  <script type="text/javascript">
+   var spidey;
+  var spidey_y = 0;
+  var spidey_dir = 0;
+  function spideyLolz () {
+   if (spidey_dir == 0) {
+    spidey_y++;
+    if (spidey_y &gt;= 55) {
+     spidey_dir = 1;
+    }
+   } else if (spidey_dir &lt; 30) {
+    spidey_dir++;
+   } else {
+    spidey_y--;
+   }
+   spidey.style.bottom = (-57 + spidey_y)+'px';
+  }
+  
+  
+  var goldy;
+  var goldy_a;
+  var goldy_fr = 0;
+  
+  function goldyLolz () {
+   goldy_fr++;
+   var v = .5 * (1 - Math.cos(Math.PI * Math.max(0, Math.min(50, goldy_fr))/50));
+   v *= 400;
+   v += Math.cos(goldy_fr / 12) * 30;
+   v -= 200;
+   goldy_a.style.bottom = Math.round(v)+'px';
+  }
+  
+  
+  
+  
+  
+  
+
+
+
+		var lccpz = ("" + document.getElementById('captionz').innerHTML).toLowerCase();
+		
+		if (typeof(dinks) != 'undefined') {
+			if (cis) {
+				var dinkdiv = document.getElementById('dinkdiv');
+				var dinko = {ac: 0, lc: 0};
+    while (dinks.length &gt; 5) {
+     dinks.splice(0, 1);
+    }
+				for (var i = 0; i&lt;dinks.length; i++) {
+					var o = dinks[i];
+					o.fi = base36intToBytes(base36bytesToInt(o.i)*32 + 1);
+					o.href = "http://www.livememe.com/"+o.fi;
+					o.src = "http://cdn.livememe.com/"+o.fi+"_2.jpg";
+					var img = document.createElement('img');
+					o.img = img;
+					$.data(img, 'o', o);
+					img.onload = function () {
+					 var o = $.data(this, 'o');
+					 var nw = this.width;
+					 var nh = this.height;
+					 if ((nw &lt;= 2) || (nh &lt;= 2)) {
+					  return;
+					 }
+					 if ((nw &gt; 83) || (nh &gt; 83)) {
+					  var sc = Math.min(83/nw, 83/nh);
+					  nw *= sc;
+					  nh *= sc;
+					  nw = Math.round(nw);
+					  nh = Math.round(nh);
+					  this.width = nw;
+					  this.height = nh;
+					 }
+					 o.width = nw;
+					 o.height = nh;
+					 o.loaded = true;
+					 dinko.lc++;
+					 tryLoadDinks();
+					}
+					dinko.ac++;
+					img.border = 0;
+					img.src = o.src;
+					if (i &gt;= 7) break;
+				}
+
+				function tryLoadDinks () {
+				 if (dinko.ac == dinko.lc) {
+					
+
+				    $(window).mouseup(function () {
+				      for (var i = dinks.length-1; i&gt;=0; i--) {
+				        var o = dinks[i];
+				        if (o.loaded) {
+						 if (o.md) {
+					         o.md = false;
+					         o.redraw();
+						 }
+				        }
+				      }
+				    });
+
+					
+				  var curh = 0;
+				  for (var i = 0; i&lt;dinks.length; i++) {
+				   var o = dinks[i];
+				   if (o.loaded) {
+					var mrdiv = document.createElement('div');
+					o.mrdiv = mrdiv;
+					mrdiv.style.position = 'absolute';
+					mrdiv.style.width = o.width+'px';
+					mrdiv.style.height = o.height+'px';
+					mrdiv.style.cursor = 'pointer';
+					
+					var mhc = document.createElement('canvas');
+					mhc.width = o.width;
+					mhc.height = o.height;
+					mrdiv.appendChild(mhc); // need to do this to give 'substance' to the div and make it clickable, a condition which IE idiotically requires.
+					
+					var canvas = document.createElement('canvas');
+					canvas.style.position = 'absolute';
+					canvas.width = o.width+16;
+					canvas.height = o.height+16;
+					var ctx = canvas.getContext('2d');
+					o.canvas = canvas;
+					o.ctx = ctx;
+					
+					
+					
+					mrdiv.style.left = (8 + Math.round(80 - (o.width/2)))+'px';
+					mrdiv.style.top = (curh+8)+'px';
+					
+					canvas.style.left = Math.round(80 - (o.width/2))+'px';
+					canvas.style.top = curh+'px';
+					
+					
+					curh += o.height + 8;
+					
+					
+
+			        var shc = document.createElement('canvas');
+					shc.width = o.width+16;
+					shc.height = o.height+16;
+					var sctx = shc.getContext('2d');
+
+				    sctx.shadowOffsetX = 0;
+				    sctx.shadowOffsetY = 2;
+				    sctx.shadowBlur = 8;
+				    sctx.shadowColor = "black";
+
+				    sctx.fillStyle = "#FFFFFF";
+
+					sctx.fillRect(8, 8, o.width, o.height);
+
+
+					o.shadow = shc;
+					
+					dinkdiv.appendChild(canvas);
+					dinkdiv.appendChild(mrdiv);
+					
+					
+					o.onclick = function () {
+					 window.location = this.href;
+					}
+					
+					o.redraw = function () {
+					 var ctx = this.ctx;
+					 var canvas = this.canvas;
+					 ctx.globalAlpha = 1;
+					 ctx.clearRect(0,0,this.width+16,this.height+16);
+					 ctx.globalAlpha = .5;
+					 ctx.drawImage(this.shadow, 0, 0);
+					 ctx.globalAlpha = 1;
+					 try {
+						ctx.drawImage(this.img, 8, 8, this.width, this.height);
+					 } catch (e) {  }
+					 if (this.md) {
+					  ctx.globalCompositeOperation = 'darker';
+					  ctx.globalAlpha = .3;
+					  ctx.fillStyle = '#000000';
+					  ctx.fillRect(8, 8, this.width, this.height);
+					  canvas.style.opacity = 1;
+					 } else if (this.mo) {
+						/*
+					  ctx.globalCompositeOperation = 'lighter';
+					  ctx.globalAlpha = .15;
+					  ctx.fillStyle = '#FFFFFF';
+					  ctx.fillRect(8, 8, this.width, this.height);
+					*/
+					  canvas.style.opacity = 1;
+					 } else {
+					  canvas.style.opacity = .6;
+					 }
+					 ctx.globalCompositeOperation = 'source-over';
+					}
+					
+					$.data(mrdiv, 'o', o);
+					
+					$(mrdiv).mouseover(function () {
+				      var o = $.data(this, 'o');
+				      if (!o.dis) {
+				       o.mo = true;
+				       o.redraw();
+				      }
+				    });
+				    $(mrdiv).mouseout(function () {
+				      var o = $.data(this, 'o');
+				      if (!o.dis) {
+				       o.mo = false;
+				       o.redraw();
+				       //o.pdiv.style.backgroundPosition = '0px 0px';
+				      }
+				    });
+				    $(mrdiv).mousedown(function () {
+				      var o = $.data(this, 'o');
+				      if (!o.dis) {
+				       o.md = true;
+				       o.redraw();
+				       //o.pdiv.style.backgroundPosition = '0px -'+(2 * o.hh)+'px';
+				      }
+				    });
+				    $(mrdiv).mouseup(function () {
+				      var o = $.data(this, 'o');
+				      if (!o.dis) {
+				       o.md = false;
+				       o.redraw();
+				       //o.pdiv.style.backgroundPosition = '0px 0px'; 
+				      }
+				    });
+				    $(mrdiv).click(function () {
+				      var o = $.data(this, 'o');
+				      if (!o.dis) {
+				       o.onclick();
+				      }
+				    });
+				    
+				    o.redraw();
+				   }
+				  }
+				 }
+				}
+			}
+		}
+		
+		if ( (typeof(r_pl) != 'undefined') &amp;&amp; (template_id != 'xghjb4') &amp;&amp; (template_id != 'xz61o5') &amp;&amp; (template_id != 'fx5nv4') &amp;&amp; (template_id != 'lj7bqj') &amp;&amp; (template_id != 'au8zar') &amp;&amp; (template_id != 'oc7bh8')) {
+			$('#logo').css({display: 'none'});
+			$('#redditInfoHolder').css({display: 'inline'});//.hide();
+			var redditInfo = document.getElementById('redditInfo');
+			var a = document.createElement('a');
+			a.href = r_pl;
+			a.className = "rpl";
+			$(a).css({'font-size': '14px', 'font-weight': 'bold'});
+   if (template_id == '4u0cwp') {
+    r_ti = r_ti.split('sweet').join('gay');
+   }
+			var tn = document.createTextNode(r_ti);
+	        a.appendChild(tn);
+			redditInfo.appendChild(a);
+			var br = document.createElement('br');
+			redditInfo.appendChild(br);
+			var tn = document.createTextNode("submitted by "+r_au);
+			redditInfo.appendChild(tn);
+  } else {
+   var mih = document.getElementById('memeImageHolder');
+   if (mih) {
+    mih.style.marginTop = '114px';
+   }
+   var gmta = document.getElementById('gmtadiv');
+   gmta.style.top = '114px';
+			//$('#logo').css({background: 'url(http://i.lvme.me/logo6.png) no-repeat top center'});
+		}
+		
+		var doc_ready = false;
+  
+		
+ var wwv;
+		function resizeContent () {
+		 if (doc_ready) {
+		  var wv = 2 + $(window).width();
+    var hv = 2 + $(window).height();
+    var extra = 0;
+    wwv = wv;
+    var gmta = document.getElementById("gmtadiv");
+		  if ((wv - img_w) &lt; 390) {
+     extra = 390-(wv - img_w);
+     gmta.style.right = (6 - Math.floor(extra/2))+'px';
+		  } else {
+     gmta.style.right = '6px';
+		  }
+    
+    if (typeof(teaserdivh) != 'undefined') {
+     if (wv &lt; 1200) {
+      teaserdivh.style.display = 'none';
+     } else {
+      teaserdivh.style.display = 'inline';
+     }
+     teaserdivh.style.left = Math.round(wv/2 - 237/2 - 350)+'px';
+    }
+    
+		  if ((wv - img_w) &lt; 390) {
+  			$('#dinkdiv').hide();
+		  } else {
+  			$('#dinkdiv').show();
+		  }
+    
+    make_meme_div.style.left = Math.round(wv/2 - 237/2)+'px';
+    make_meme_region_div.style.left = Math.round(wv/2 - 223/2)+'px';
+    searchholder.style.left = Math.round(wv/2 - 240/2)+'px';
+    if (meme_menu_inited) {
+     resizeMemeMenu();
+    }
+	  }
+  }
+		
+		var gifpngX = 0;
+		var gifpngY = 0;
+		var gifpngFr = 0;
+			function moveGif () {
+				var gif = document.getElementById('gifpng');
+				gifpngFr++;
+				gifpngX -= 2;
+				gifpngY = Math.cos(gifpngFr/10)*20;
+			$(gif).css({left: gifpngX+'px', top: Math.round(280+gifpngY)+'px'});
+			}
+			
+			
+		var dotz = {};
+		var doDotz = function () {};
+				
+		$(function () {
+		  doc_ready = true;
+		  resizeContent();
+    
+    if (typeof(teaserdivh) != 'undefined') {
+     teaserdivh.style.visibility = 'visible';
+    }
+
+
+    if (template_id == 'bj7aqg') {
+     spidey = document.createElement('img');
+     spidey.style.position = 'fixed';
+     spidey.style.zIndex = '999999';
+     spidey.style.right = '225px';
+     spidey.style.bottom = '-57px';
+     spidey.onload = function () {
+      setInterval('spideyLolz()', 50);
+      document.body.appendChild(spidey);
+     }
+     spidey.src = 'http://i.lvme.me/puffan.png';
+    }
+    
+    
+    
+    
+    if (template_id == 'v6qg1w') {
+     goldy_a = document.createElement('a');
+     goldy_a.href = 'http://www.reddit.com/gold?goldtype=gift&amp;months=1&amp;thing=t3_28lhai';
+     goldy = document.createElement('img');
+     goldy_a.style.position = 'fixed';
+     goldy_a.style.zIndex = '999999';
+     goldy_a.style.left = Math.floor($(window).width()/2 - 665/2)+'px';
+     goldy_a.style.bottom = '-200px';
+     goldy_a.style.width = '665px';
+     goldy_a.style.height = '200px';
+     goldy.width = 665;
+     goldy.height = 200;
+     goldy.style.border = '0px';
+     goldy.border = 0;
+     goldy.onload = function () {
+      setInterval('goldyLolz()', 50);
+      goldy_a.appendChild(goldy);
+      document.body.appendChild(goldy_a);
+     }
+     goldy.src = 'http://i.lvme.me/lolgold2.png';
+    }
+    
+    
+    
+    
+    
+    
+   
+		 if (typeof(tsvcr) != 'undefined') {
+		  tsvcr = Number(tsvcr);
+		  if (tsvcr &lt; 18) {
+		   
+			dotz.iv = 'none';
+			dotz.y = 0;
+			dotz.a = 0;
+			dotz.fr = 0;
+
+			doDotz = function () {
+			 dotz.dd.style.backgroundPosition = '0px '+(-dotz.y*38)+'px';
+			 dotz.y++;
+			 if (dotz.y &gt;= 10) {
+			  dotz.y = 0;
+			 }
+			 dotz.fr++;
+			 if (dotz.fr &lt; 25) {
+			  dotz.a = Math.min(1, dotz.fr/25);
+			  dotz.dd.style.opacity = dotz.a;
+			 }
+			 if (dotz.fr &gt; 125) {
+			  dotz.a = Math.max(0, ((125 + 133)-dotz.fr)/133);
+			  dotz.dd.style.opacity = dotz.a;
+			  if (dotz.a &lt;= 0) {
+			   dotz.p2r.removeChild(dotz.dd);
+			   clearInterval(dotz.iv);
+			  }
+			 }
+			}
+
+
+			var p2r = document.getElementById('post2reddit');
+			if (p2r) {
+				dotz.p2r = p2r;
+
+				for (var i = p2r.childNodes.length-1; i&gt;=0; i--) {
+				 var o = p2r.childNodes[i];
+				 if (o.tagName) {
+				  if ((""+o.tagName).toLowerCase() == 'div') {
+				   o.style.zIndex = 501;
+				   var dd = document.createElement('div');
+				   dotz.dd = dd;
+				   dd.style.zIndex = 500;
+				   dd.style.position = 'absolute';
+				   dd.style.left = '1px';
+				   dd.style.top = '3px';
+				   dd.style.width = '169px';
+				   dd.style.height = '38px';
+				   dd.style.opacity = 0;
+				   dd.style.background = 'url("http://i.lvme.me/dots.png")';
+				   p2r.insertBefore(dd, p2r.firstChild);
+				   var ii = document.createElement('img');
+				   ii.onload = function () {
+				    dotz.iv = setInterval('doDotz()', 50);
+				   }
+				   ii.src = 'http://i.lvme.me/dots.png';
+				   break;
+				  }
+				 }
+				}
+		    }
+           
+		  }
+		 }
+		
+	  });
+	  
+    $(window).resize(function () {
+     if (doc_ready) {
+      resizeContent();
+     }
+    });
+
+      
+		
+    var mi = document.getElementById("memeImage");
+		// re-add fb stuff via a direct embed ?func
+		
+    
+    var imgshadow = undefined;
+    var imgshadow_ctx = undefined;
+    var imgshadow_iv = -1;
+    
+    
+    
+    function showPlain () {
+     var terms_div = document.getElementById('terms_div');
+     terms_div.style.visibility = 'visible';
+     var btnz = document.getElementById('btnz');
+     btnz.style.visibility = 'visible';
+     if (cis) {
+       $(mi).css({position: 'absolute', left: '0px', top: '0px', 'z-index': 421});
+      
+       var canvas,context, canvas2,context2;
+       canvas = document.createElement('canvas');
+       canvas2 = document.createElement('canvas');
+       canvas.width = canvas2.width = img_w + 400;//96;
+       canvas.height = canvas2.height = img_h + 400;//96;
+       context = canvas.getContext('2d');
+       context2 = canvas2.getContext('2d');
+       context.shadowOffsetX = 0;
+       context.shadowOffsetY = 10;
+       context.shadowColor = '#000000';
+
+       context.fillStyle = "#000000";
+       var xx = 200; // 48
+       var yy = 200; // 48
+      
+       var x1 = xx + 1;
+       var y1 = yy + 1;
+       var x2 = x1 + img_w-2;
+       var y2 = y1 + img_h-2;
+       context.beginPath();
+      
+       context.moveTo(x1, y1);
+       context.lineTo(x2, y1);
+       context.lineTo(x2, y2);
+       context.lineTo(x1, y2);
+       context.closePath();
+      
+       context.globalAlpha = .6;
+       context.shadowBlur = 120;
+       context.fill();
+       context.shadowBlur = 60;
+       context.fill();
+       context.globalAlpha = 1;
+       context.shadowBlur = 32;
+       context.shadowOffsetY = 6;
+       context.fill();
+       context.shadowBlur = 16;
+       context.shadowOffsetY = 5;
+       context.fill();
+       context.shadowBlur = 8;
+       context.shadowOffsetY = 3;
+       context.fill();
+       context.shadowBlur = 6;
+       context.shadowOffsetY = 0;
+       context.fill();
+      
+       context.shadowBlur = 0;
+       context.shadowOffsetY = 0;
+       context.fillRect(xx+1, yy+1, img_w-2, img_h-2);
+      
+
+       $(canvas2).css({position: 'absolute', left: '-'+xx+'px', top: '-'+yy+'px', 'z-index': 419});
+       holder.appendChild(canvas2);
+      
+       context2 = canvas2.getContext('2d');
+       context2.globalAlpha = .5;
+       context2.drawImage(canvas,0,0);
+
+      
+       var roundRect = function (ctx,sx,sy,w,h,r) {
+        var ex = sx+w;
+        var ey = sy+h;
+        var d2r = Math.PI/180;
+        if( ( ex - sx ) - ( 2 * r ) &lt; 0 ) { r = ( ( ex - sx ) / 2 ); } //ensure that the radius isn't too large for x
+        if( ( ey - sy ) - ( 2 * r ) &lt; 0 ) { r = ( ( ey - sy ) / 2 ); } //ensure that the radius isn't too large for y
+        ctx.beginPath();
+        ctx.moveTo(sx+r,sy);
+        ctx.lineTo(ex-r,sy);
+        ctx.arc(ex-r,sy+r,r,d2r*270,d2r*360,false);
+        ctx.lineTo(ex,ey-r);
+        ctx.arc(ex-r,ey-r,r,d2r*0,d2r*90,false);
+        ctx.lineTo(sx+r,ey);
+        ctx.arc(sx+r,ey-r,r,d2r*90,d2r*180,false);
+        ctx.lineTo(sx,sy+r);
+        ctx.arc(sx+r,sy+r,r,d2r*180,d2r*270,false);
+        ctx.closePath();
+       }
+      
+       context2.shadowBlur = 0;
+       context2.shadowOffsetY = 0;
+       context2.fillStyle = "#000000";
+       context2.globalAlpha = .025;
+       for (var k = 1; k&lt;=16; k++) {
+        context2.globalAlpha = .05 * Math.pow((1 + 16-k)/16, 1.5);
+        var j = k-2;
+        roundRect(context2, xx-j, yy-j, img_w+j*2, img_h+j*2, 2 + k/2);
+        context2.fill();
+       }
+      
+       imgshadow = canvas2;
+       imgshadow_ctx = context2;
+     }
+	
+	 
+   	 if (typeof(tsvcr) != 'undefined') {
+   	  tsvcr = Number(tsvcr);
+   	  if (tsvcr &lt; 1800) { // cover for 30 minutes
+   	 	 var img = document.createElement('img');
+   	  	img.border = 0;
+   	  	img.id = 'tempic';
+   	  	img.src = 'http://www.livememe.com/'+base36intToBytes(32 * base36bytesToInt(template_id) + 1)+'.jpg';
+   	  	img.width = img_w;
+   	  	img.height = img_h;
+   	  	img.style.position = 'absolute';
+   	  	img.style.left = '0px';
+   	  	img.style.top = '0px';
+   	  	img.style.zIndex = 9998;
+   	  	img.style.opacity = 0.01;
+   	  	document.getElementById('memeImageHolder').appendChild(img);
+   	  }
+   	 }
+     mi.src = 'http://i.lvme.me/'+base36intToBytes(32 * base36bytesToInt(template_id) + 1)+'.jpg';
+    }
+  </script>
+  <div id="odio" style="display: none; visibility: hidden;">
+  </div>
+  <div id="cbta" style="position: relative; width: 100%; height: 20px; z-index: 999999; margin-top: 20px; text-align: center; display: none; overflow: hidden;">
+  </div>
+  <div id="btnz" style="position: relative; width: 100%; z-index: 666; margin-top: 20px; text-align: center; visibility: hidden;">
+   <div id="post2reddit" style="width: 100%; z-index: 667; margin-top: 0px; text-align: center; display: inline-block;">
+   </div>
+   <div id="addcaptions" style="width: 100%; z-index: 668; margin-top: 0px; text-align: center; display: inline-block;">
+    <div id="spinholda" style="position: absolute; left: 157px; top: 10px; display: inline-block; width: 25px; height: 26px; visibility: hidden; opacity: 0;">
+    </div>
+   </div>
+  </div>
+  <div id="terms_div" style="position: relative; width: 100%; text-align: center; color: #A0A0A0; font-family: Verdana, sans-serif; font-size: 11px; margin-top: 120px; height: 32px; visibility: hidden;">
+   <a class="terma" href="/terms.php">
+    terms of service
+   </a>
+   -
+   <a class="terma" href="/privacy.php">
+    privacy policy
+   </a>
+   -
+   <a class="terma" href="/contact.php">
+    contact us
+   </a>
+  </div>
+  <script type="text/javascript">
+   if ((''+dank_meme) == '1') {
+ loadScript('/dank/'+orig_album_id+'.js');
+} else {
+ showPlain();
+}
+
+		
+
+if (typeof(tsvcr) != 'undefined') {
+ tsvcr = Number(tsvcr);
+ if (tsvcr &gt; 60) { // music starts after 60 secs
+
+  if ((template_id == "c9s53z") || (template_id == '1lo29k') || (template_id == 'tw7d8m') || (lccpz.indexOf("christmas music") &gt;= 0) || (lccpz.indexOf("christmas song") &gt;= 0) || (lccpz.indexOf("christmas jingle") &gt;= 0) || (lccpz.indexOf("xmas music") &gt;= 0) || (lccpz.indexOf("xmas song") &gt;= 0) || (lccpz.indexOf("xmas jingle") &gt;= 0) || (lccpz.indexOf("holiday music") &gt;= 0) || (lccpz.indexOf("holiday song") &gt;= 0) || (lccpz.indexOf("holiday jingle") &gt;= 0)) {
+   var ao = document.createElement("audio");
+   if (typeof(ao) != 'undefined') {
+    if (ao != null) {
+     ao.autoplay = "autoplay";
+     ao.src = "http://i.lvme.me/mariah.mp3";
+     ao.type = "audio/mp3";
+     var dv = document.getElementById("odio");
+     if (typeof(dv) != 'undefined') {
+      dv.appendChild(ao);
+     }
+    }
+   }
+  }
+  
+
+  if (template_id == "96wdy5") {
+   var ao = document.createElement("audio");
+   if (typeof(ao) != 'undefined') {
+    if (ao != null) {
+     ao.autoplay = "autoplay";
+     ao.src = "http://www.livememe.com/eott.mp3";
+     ao.type = "audio/mp3";
+     var dv = document.getElementById("odio");
+     if (typeof(dv) != 'undefined') {
+      dv.appendChild(ao);
+     }
+    }
+   }
+  }
+  
+
+ }
+}
+  
+    
+    
+    if (template_id == 'dzcs7i') {
+     var shake_fr = 0;
+     window.shakeItLikeAPolaroidPicture = function () {
+      var mrdiv;
+      var canvas;
+   			var curh = 0;
+      shake_fr++;
+      if (typeof(dinks) != 'undefined') {
+       for (var i = 0; i&lt;dinks.length; i++) {
+   					var o = dinks[i];
+   					mrdiv = o.mrdiv;
+					   if (typeof(o.vy) == 'undefined') {
+         o.vx = 0;
+         o.vy = 0;
+         o.xx = 0;
+         o.yy = 0;
+        }
+        var rx,ry;
+   					canvas = o.canvas;
+        if (mrdiv) {
+         if (canvas) {
+          rx = o.xx;
+          ry = o.yy;
+          
+          if (o.yy &gt; 3000) {
+           if (!o.done) {
+            o.done = true;
+            mrdiv.style.display = 'none';
+            canvas.style.display = 'none';
+           }
+          }
+					     
+          if (!o.falling) {
+           rx += Math.floor(10*Math.random()*(.6 + .4*Math.cos(shake_fr/3)));
+           ry += Math.floor(10*Math.random()*(.6 + .4*Math.cos(shake_fr/3)));
+          }
+          if (!o.dead) {
+      					mrdiv.style.left = (rx + 8 + Math.round(80 - (o.width/2)))+'px';
+      					mrdiv.style.top = (ry + curh+8)+'px';
+					   
+      					canvas.style.left = Math.round(rx + 80 - (o.width/2))+'px';
+      					canvas.style.top = (ry + curh)+'px';
+          }
+					   
+     					curh += o.height + 8;
+          
+          if (!o.falling) {
+           if (Math.random() &lt; .01) {
+            o.falling = true;
+            o.vx = Math.random()*4 - 2;
+           }
+          } else {
+           o.vy += 1;
+           o.xx += o.vx;
+           o.yy += o.vy;
+          }
+         }
+        }
+       }
+      }
+     }
+     setInterval('window.shakeItLikeAPolaroidPicture()', 50);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var cbto = {};
+    var cbt_iv;
+    var cbt_fr = 0;
+    var cbt_ldc = 0;
+    var cbtl = 0;
+    var cbtexts,cbguy1,cbguy2;
+    
+	   
+    function initCba () {
+  			if ((Math.random() &lt;= .5) &amp;&amp; (navigator.userAgent.toLowerCase().indexOf('chrome') &gt;= 0)) {
+  				if (typeof(captionbot_exists) == 'undefined') {
+		   
+       var wv = $(window).width();
+     
+       var cbt = document.getElementById('cbta');
+     
+       cbto.diffs = [250,180,318];
+     
+       cbto.diff = cbto.diffs[0];
+       cbto.xof = cbto.diff;
+       cbto.ldiff = cbto.diff;
+       cbto.ta = 0;
+     
+       cbt.style.height = '0px';
+       cbt.style.marginTop = '0px';
+       cbt.style.display = 'inline-block';
+       cbt.style.overflow = 'visible';
+     
+     
+  					cbtexts = document.createElement('div');
+       cbtexts.style.background = 'url("http://i.lvme.me/cbtexts.png")';
+       cbtexts.style.position = 'absolute';
+       cbtexts.style.zIndex = 99999999;
+       cbtexts.style.left = Math.round((wv-318)/2)+'px';
+       cbtexts.style.top = '0px';
+       cbtexts.style.overflow = 'hidden';
+       cbtexts.style.width = '318px';
+       cbtexts.style.height = '40px';
+       cbtexts.style.opacity = 0;
+       cbt.appendChild(cbtexts);
+     
+     
+  					cbguy1 = document.createElement('div');
+       cbguy1.style.background = 'url("http://i.lvme.me/cbguys.png")';
+       cbguy1.style.position = 'absolute';
+       cbguy1.style.left = Math.round((wv-318)/2 - 50)+'px';
+       cbguy1.style.top = '-19px';
+       cbguy1.style.zIndex = 99999998;
+       cbguy1.style.width = '50px';
+       cbguy1.style.height = '61px';
+       cbguy1.style.opacity = 0;
+       cbguy1.style.overflow = 'hidden';
+       cbt.appendChild(cbguy1);
+     
+     
+  					cbguy2 = document.createElement('div');
+       cbguy2.style.background = 'url("http://i.lvme.me/cbguys.png")';
+       cbguy2.style.position = 'absolute';
+       cbguy2.style.left = Math.round((wv-318)/2 + 318)+'px';
+       cbguy2.style.top = '-19px';
+       cbguy2.style.zIndex = 99999998;
+       cbguy2.style.width = '50px';
+       cbguy2.style.height = '61px';
+       cbguy2.style.opacity = 0;
+       cbguy2.style.overflow = 'hidden';
+       cbt.appendChild(cbguy2);
+     
+     
+  					cbto.ul = document.createElement('div');
+       cbto.ula = 0;
+       cbto.ul.style.background = 'url("http://i.lvme.me/cbul.png")';
+       cbto.ul.style.position = 'absolute';
+       cbto.ul.style.left = Math.round((wv-318)/2 + 318)+'px';
+       cbto.ul.style.top = '27px';
+       cbto.ul.style.zIndex = 99999991;
+       cbto.ul.style.width = '40px';
+       cbto.ul.style.height = '2px';
+       cbto.ul.style.opacity = 0;
+       cbt.appendChild(cbto.ul);
+     
+     
+       window.tryCbLoad = function () {
+        if (cbt_ldc == 3) {
+         cbt_iv = setInterval('cbtAnim()', 33);
+        }
+       }
+     
+       window.cbtAnim = function () {
+        cbt_fr++;
+		    
+        var cbgx = -(cbt_fr%12)*50;
+        cbguy1.style.backgroundPosition = cbgx+'px 0px';
+        cbguy2.style.backgroundPosition = cbgx+'px 0px';
+      
+        var cbt = document.getElementById('cbta');
+      
+        if (cbt_fr &lt;= 20) {
+         var amt = .5 * (1 - Math.cos(Math.PI * Math.min(20, cbt_fr)/20));
+       
+         cbt.style.height = Math.round(amt*40)+'px';
+         cbt.style.marginTop = Math.round(amt*20)+'px';
+        }
+        if ((cbt_fr &gt;= 10) &amp;&amp; (cbt_fr &lt;= 30)) {
+         cbtexts.style.opacity = (cbt_fr-10)/(30-10);
+        }
+        if (cbt_fr &lt; 30) {
+         cbto.ta = .5 * cbt_fr/30;
+         cbguy1.style.opacity = cbguy2.style.opacity = .1 * cbt_fr/30;
+        } else {
+         var cfr = (cbt_fr - 30)%89;
+         if (cfr &gt;= 18) {
+          if (cfr &lt;= 58) {
+           var a = (58-cfr)/(58-18);
+           cbto.ta = .1 + .9*Math.pow(a, 3);
+          } else if (cfr &lt;= 88) {
+           var a = (cfr-58)/(88-58);
+           cbto.ta = .1 + .9*Math.pow(a, 2);
+          }
+         }
+         if (cfr == 0) {
+          cbto.diff1 = cbto.diffs[cbtl];
+          cbto.diff2 = cbto.diffs[(cbtl + 1)%3];
+         }
+         var amt = .5 * (1 - Math.cos(Math.PI * Math.min(20, Math.max(0, cfr-48))/20));
+         cbto.xof = cbto.diff1 + (cbto.diff2 - cbto.diff1)*amt;
+         if (cfr &gt;= 38) {
+          if (cfr &lt;= 58) {
+           var a = (58-cfr)/(58-38);
+           cbtexts.style.opacity = a;
+          } else {
+           var a = (cfr-58)/(78-58);
+           cbtexts.style.opacity = a;
+          }
+          if (cfr == 58) {
+           cbtl++;
+           if (cbtl &gt;= 3) {
+            cbtl = 0;
+           }
+           cbto.ldiff = cbto.diff;
+           cbto.diff = cbto.diffs[cbtl];
+           cbtexts.style.backgroundPosition = '0px '+Math.round(-cbtl*40)+'px';
+          }
+        
+         }
+        }
+      
+		    
+        var wv = $(window).width();
+        cbguy1.style.left = Math.round((wv-cbto.xof)/2 - 50)+'px';
+        cbguy2.style.left = Math.round((wv-cbto.xof)/2 + cbto.xof)+'px';
+        cbtexts.style.left = Math.round((wv-cbto.diff)/2)+'px';
+      
+        cbto.ul.style.left = Math.round((wv - (cbto.xof - 32))/2)+'px';
+        cbto.ul.style.width = Math.round(cbto.xof - 32)+'px';
+      
+        if (cbto.mo) {
+         cbto.ula += (1 - cbto.ula) * .2;
+        } else {
+         cbto.ula -= .12;
+         if (cbto.ula &lt;= 0) cbto.ula = 0;
+        }
+      
+        cbto.ul.style.opacity = cbto.ula + (cbto.ula * cbto.ta - cbto.ula) * .7;
+        if (cbt_fr &gt;= 30) {
+         cbguy1.style.opacity = cbguy2.style.opacity = .1 + .6*cbto.ula;
+        }
+        
+        if (typeof(captionbot_exists) != 'undefined') {
+         $('#cbta').hide();
+         clearInterval(cbt_iv);
+        }
+      
+       }
+     
+       var cbii = document.createElement('img');
+       cbii.onload = function () {
+        cbt_ldc++;
+        tryCbLoad();
+       }
+       cbii.src = 'http://i.lvme.me/cbtexts.png';
+     
+     
+       var cbgg = document.createElement('img');
+       cbgg.onload = function () {
+        cbt_ldc++;
+        tryCbLoad();
+       }
+       cbgg.src = 'http://i.lvme.me/cbguys.png';
+     
+     
+       var cbuu = document.createElement('img');
+       cbuu.onload = function () {
+        cbt_ldc++;
+        tryCbLoad();
+       }
+       cbuu.src = 'http://i.lvme.me/cbul.png';
+     
+     
+       cbtexts.style.cursor = 'pointer';
+  					window.installedChromeExtension = function () {
+  					 $('#cbta').hide();
+  					 cbt.onclick = function () {};
+  					}
+
+
+  					  cbtexts.onclick = function () {
+  					   chrome.webstore.install(undefined, installedChromeExtension, function(e){console.log("uhh "+e);});
+  					   return false;
+  					  }
+       
+         cbtexts.onmouseover = function () {
+          cbto.mo = true;
+         }
+       
+         cbtexts.onmouseout = function () {
+          cbto.mo = false;
+         }
+		
+  				}
+  			}
+    }
+    
+    /*
+    $(function () {
+     if (typeof(tsvcr) != 'undefined') {
+  		  tsvcr = Number(tsvcr);
+  		  if (tsvcr &gt;= 1800) {
+ 	 		  setTimeout('initCba()', 1600);
+      }
+     }
+		  });
+    */
+  </script>
+  <div id="greybg" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #000000; display: none; z-index: 999998; opacity: 0.6;">
+  </div>
+  <div id="winderholder" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; display: none; z-index: 999999;">
+   <div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #000000; opacity: 0.5;">
+   </div>
+   <div id="datderewinder" style="position: relative; width: 780px; margin-left: auto; margin-right: auto; margin-top: 100px; padding-left: 25px; padding-top: 5px; border-radius:16px; border: 2px solid #000000; background-color: #eeeeee; visibility: visible;">
+    <div class="entry unvoted" style="display: none;">
+     <p class="title">
+      <a class="title loggedin " href="#" id="urlme">
+      </a>
+     </p>
+     <ul>
+      <li class="share">
+      </li>
+     </ul>
+    </div>
+    <div id="editordiv" style="font-family: Verdana; font-size: 12px;">
+     <!-- contains the editor -->
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   var a = document.getElementById('urlme');
+	  a.href = 'http://www.livememe.com/'+base36intToBytes(base36bytesToInt(template_id)*32 + template_sid);
+	  
+	  want_advanimexto = true;
+  </script>
+  <script type="text/javascript">
+   var shbi;
+   	var shbfr = 0;
+   	
+   	var spi_iv = -1;
+   	var spfr = 0;
+   	var spa = 0;
+   	var spsh = false;
+
+	var gbg_iv = -1;
+	var gbgfr = 0;
+
+   	function spinna () {
+     var spinholda = document.getElementById('spinholda');
+   	 spfr++;
+   	 if (spfr &gt;= 24) {
+   	  spfr = 0; 
+ 	   }
+ 	   if (spsh) {
+  	   spa += .07;
+  	   if (spa &gt;= .7) {
+  	    spa = .7;
+      }
+       } else {
+      spa -= .05;
+      if (spa &lt;= 0) {
+       spa = 0;
+       clearInterval(spi_iv);
+       spinholda.style.visibility = 'hidden';
+       spi_iv = -1;
+      }
+     }
+     spinholda.style.backgroundPosition = '-'+(spfr*25)+'px 0px';
+     spinholda.style.opacity = spa;
+  }
+
+
+function gbgfi () {
+ gbgfr++;
+if (gbgfr &gt;= 7) {
+ gbgfr = 7;
+ clearInterval(gbg_iv);
+ gbg_iv = -1;
+}
+ var gbg = document.getElementById('greybg');
+ gbg.style.opacity = 0.3 * gbgfr/7;
+}
+
+		
+		
+  	var cbtn = undefined;
+  	var cbo = {};
+  	
+  	
+    
+    
+		var div = document.getElementById('post2reddit');
+		
+		var divvin = true;
+		
+		if (typeof(r_pl) != 'undefined') {
+			 if (typeof(tsvcr) != 'undefined') {
+			  tsvcr = Number(tsvcr);
+			  if (tsvcr &lt; (1.67 * 86400)) {
+		       div.style.display = 'none';
+		       divvin = false;
+		      }
+		     }
+		}
+		
+		if (template_id == 'nw2uaw') {
+		 divvin = false;	
+		}
+		
+		if (divvin) {
+		
+		    function myUrl () {
+		     return "http://www.livememe.com/"+base36intToBytes(base36bytesToInt(template_id)*32 + template_sid);
+		    }
+		
+				var p2ro = makeBtn(div, 'http://i.lvme.me/post3reddit.png', 171, 55, 6, 7, 161, 32);
+				//var p2ro = makeBtn(div, 'http://static.lvme.me/rhb.png', 80, 69, 9, 5, 65, 54);
+				p2ro.onclick = function () {
+				  this.setEnabled(false);
+				  setTimeout("p2roEnable()", 2500);
+      var sub = 'AdviceAnimals';
+      if (album_name == 'Fallout Vault Boy') {
+       sub = 'gaming';
+      }
+				  window.location = "http://www.reddit.com/r/"+sub+"/submit?url="+escape(myUrl()+"")+"&amp;title="+escape(album_name);
+		    }
+	    }
+    
+    function p2roEnable () {
+     p2ro.setEnabled(true); 
+    }
+    
+    
+		
+		var div = document.getElementById('addcaptions');
+		
+  	var wofx = 0;
+
+		var acbo = makeBtn(div, 'http://i.lvme.me/addcaptions7.png', 141, 55, 6, 7, 131, 32);
+//		var acbo = makeBtn(div, 'http://static.lvme.me/addcaptions4.png', 183, 55, 11, 7, 161, 32);
+		var dcac = false;
+		var did_ever_show_editor = false;
+		acbo.onclick = function () {
+		 if (typeof(acbo.setEnabled) != 'undefined') {
+			 did_ever_show_editor = true;
+	         acbo.setEnabled(false);
+		     advanimexto_target_url = '';
+		     advanimexto_radio_d = '';	
+			 advanimexto_cur_radio = 0;
+    if (dank_meme) {
+     advanimexto_want_dank = 1;
+    } else {
+     advanimexto_want_dank = 0;
+    }
+		     showEditor();
+		 }
+        }
+
+    var tse_iv = -1;
+    function tryShowEditor () {
+	 if (!did_ever_show_editor) {
+		acbo.onclick();
+	 }
+	 if (did_ever_show_editor) {
+	  clearInterval(tse_iv);
+	 }
+	}
+ 
+ if (window.location.href.indexOf('_caption') &gt;= 0) {
+	 $(function () {
+		tse_iv = setInterval('tryShowEditor()', 100);
+	 });
+	}
+    
+    
+    
+	var loaded_current = false;
+ 
+ 
+ window.advanimFlashIsWorking = function (a) {
+  window.advanim_flash_works = true;
+ }
+ 
+ var div = document.createElement('div');
+ div.id = 'tifwtestdiv';
+ div.innerHTML = '&lt;object name="tifwtest" width="1" height="1" id="tifwtestid" data="https://livememe.com/tifw.swf" type="application/x-shockwave-flash"&gt;&lt;param name="wmode" value="opaque" /&gt;&lt;param name="allowScriptAccess" value="always" /&gt;&lt;param name="allowNetworking" value="all" /&gt;&lt;param name="salign" value="lt" /&gt;&lt;param name="scale" value="noscale" /&gt;&lt;param name="movie" value="https://livememe.com/tifw.swf"/&gt;&lt;/object&gt;';
+ document.body.appendChild(div);
+ 
+    
+ function showEditor () {
+	 if (typeof(advanimexto) != 'undefined') {
+	  showAdvAnim();
+	 } else if (!loaded_current) {
+	  dcac = true;
+		 loaded_current = true;
+  	loadScript("https://www.livememe.com/cur10.js?a=311559");
+	 }
+	}
+    
+    
+    
+    function advanimScriptLoaded () {
+      if (dcac) {
+        dcac = false;
+        showAdvAnim();
+      }
+    }
+    
+    function showAdvAnim () {
+   	 if (spi_iv == -1) {
+   	  spi_iv = setInterval('spinna()', 33);
+ 	   }
+   	 spsh = true;
+     var sphd = document.getElementById('spinholda');
+     sphd.style.visibility = 'visible';
+     sphd.style.backgroundImage = 'url(http://static.lvme.me/spinna4.png)';
+     
+     
+     
+
+   	 if (cbtn == undefined) {
+     	 var winder = document.getElementById('datderewinder');
+        cbtn = document.createElement('div');
+        winder.appendChild(cbtn);
+        cbtn.style.position = 'absolute';
+        cbtn.style.left = '766px';
+        cbtn.style.top = '8px';
+        cbtn.style.background = 'url("http://static.lvme.me/close.png")';
+        cbtn.style.width = '31px';
+        cbtn.style.height = '31px';
+        cbtn.style.cursor = 'pointer';
+        cbo.mo = false;
+        cbo.md = false;
+        cbo.dis = false;
+
+        cbtn.onmouseover = function () {
+         if (!cbo.dis) {
+          cbo.mo = true;
+          this.style.backgroundPosition = '0px -31px';
+         }
+        }
+        cbtn.onmouseout = function () {
+         if (!cbo.dis) {
+          cbo.mo = false; 
+          this.style.backgroundPosition = '0px 0px';
+         }
+        }
+        cbtn.onmousedown = function () {
+         if (!cbo.dis) {
+          cbo.md = true;
+          this.style.backgroundPosition = '0px -62px';
+         }
+        }
+        cbtn.onmouseup = function () {
+         if (!cbo.dis) {
+          cbo.md = false;
+          this.style.backgroundPosition = '0px 0px';
+         }
+        }
+        cbtn.onclick = function () {
+         var winder = document.getElementById('datderewinder');
+         winder.style.visibility = 'hidden';
+         var wh = document.getElementById('winderholder');
+         wh.style.display = 'none';
+		 var gbg = document.getElementById('greybg');
+		 gbg.style.display = 'none';
+         //start_mdh = 0;
+         smwfr = 0;
+         acbo.setEnabled(true);
+         advanimexto.last_generated_captioner.onclick(); // like clicking "cancel" which used to say "add captions"
+         return false;
+        }
+      }
+
+   	 advanimexto.extraInputCallback = function () {
+       var winder = document.getElementById('datderewinder');
+       var wh = document.getElementById('winderholder');
+       winder.style.visibility = 'visible';
+       smw_iv = setInterval('showMemeWin()', 33);
+
+       
+       wofx = advanimexto.nw-450;
+       winder.style.width = (780 + wofx)+'px';
+       cbtn.style.left = (766 + wofx)+'px';
+
+   	  if (spi_iv == -1) {
+   	   spi_iv = setInterval('spinna()', 33);
+ 	    }
+   	  spsh = false;
+ 	   }
+      var wh = document.getElementById('winderholder');
+      wh.style.display = 'inline';
+	  var gbg = document.getElementById('greybg');
+	  gbg.style.display = 'inline';
+      wh.style.opacity = 0;
+	  gbg.style.opacity = 0;
+	  gbgfr = 0;
+   	  if (gbg_iv == -1) {
+   	   gbg_iv = setInterval('gbgfi()', 33);
+ 	    }
+
+      advanimexto.submit_to_reddit = false;
+      advanimexto.hide_loadie = true;
+      advanimexto.last_generated_captioner.onclick();
+   	  acbo.setEnabled(false);
+      //btn.style.display = 'none';
+      //advanimexto.extraInputCallback();
+ 	   return false;
+	  }
+	  
+	
+	
+	function clickedAdvAnimRadio (val) {
+		if (advanimexto_radio_d.length &gt; 0) {
+			var dds = advanimexto_radio_d.split(", ");
+			for (var qq = 0; qq&lt;dds.length; qq++) {
+				if (qq == val) {
+					advanimexto_cur_radio = val;
+					var cdds = dds[qq].split(":");
+					smwfr = 0;
+					advanimexto.preserve_captions = true;
+					advanimexto.last_generated_captioner.onclick(); // like clicking "cancel" which used to say "add captions"
+					advanimexto_target_url = "http://www.livememe.com/"+cdds[1];
+     if (cdds[0] == 'd') { // dank maymay detected
+      advanimexto_want_dank = 1;
+     } else {
+      advanimexto_want_dank = 0;
+     }
+					showEditor();
+				}
+			}
+		}
+	}
+	  
+	  
+    
+   
+   var smwfr = 0;
+   var smw_iv = '';
+   var smfrs = 6;
+   function showMemeWin () {
+     smwfr++;
+      if (smwfr &gt;= smfrs) {
+	    smwfr = smfrs;
+	  }
+      var winder = document.getElementById('datderewinder');
+      var wh = document.getElementById('winderholder');
+      var amt = (1 - Math.cos((smwfr/smfrs)*Math.PI))/2;
+      wh.style.opacity = amt;
+      //if (navigator.userAgent.toLowerCase().indexOf('chrome') == -1) { // Remarkably, chrome's 3d css actually renders rather poorly
+       //winder.style['-webkit-transform'] = winder.style['-moz-transform'] = winder.style.MozTransform = 'perspective(1600px) rotateX('+(-Math.round(32 * (1 - amt) * 100)/100)+'deg)'; // Safari, FF, and Chrome
+      //}
+      if (smwfr &gt;= smfrs) {
+	    smwfr = smfrs;
+        clearInterval(smw_iv);
+      }
+    }
+
+
+
+
+
+
+
+		function dzfn () {
+
+		var FlashDetect=new function(){var self=this;self.installed=false;self.raw="";self.major=-1;self.minor=-1;self.revision=-1;self.revisionStr="";var activeXDetectRules=[{"name":"ShockwaveFlash.ShockwaveFlash.7","version":function(obj){return getActiveXVersion(obj);}},{"name":"ShockwaveFlash.ShockwaveFlash.6","version":function(obj){var version="6,0,21";try{obj.AllowScriptAccess="always";version=getActiveXVersion(obj);}catch(err){}
+		return version;}},{"name":"ShockwaveFlash.ShockwaveFlash","version":function(obj){return getActiveXVersion(obj);}}];var getActiveXVersion=function(activeXObj){var version=-1;try{version=activeXObj.GetVariable("$version");}catch(err){}
+		return version;};var getActiveXObject=function(name){var obj=-1;try{obj=new ActiveXObject(name);}catch(err){obj={activeXError:true};}
+		return obj;};var parseActiveXVersion=function(str){var versionArray=str.split(",");return{"raw":str,"major":parseInt(versionArray[0].split(" ")[1],10),"minor":parseInt(versionArray[1],10),"revision":parseInt(versionArray[2],10),"revisionStr":versionArray[2]};};var parseStandardVersion=function(str){var descParts=str.split(/ +/);var majorMinor=descParts[2].split(/\./);var revisionStr=descParts[3];return{"raw":str,"major":parseInt(majorMinor[0],10),"minor":parseInt(majorMinor[1],10),"revisionStr":revisionStr,"revision":parseRevisionStrToInt(revisionStr)};};var parseRevisionStrToInt=function(str){return parseInt(str.replace(/[a-zA-Z]/g,""),10)||self.revision;};self.majorAtLeast=function(version){return self.major&gt;=version;};self.minorAtLeast=function(version){return self.minor&gt;=version;};self.revisionAtLeast=function(version){return self.revision&gt;=version;};self.versionAtLeast=function(major){var properties=[self.major,self.minor,self.revision];var len=Math.min(properties.length,arguments.length);for(i=0;i&lt;len;i++){if(properties[i]&gt;=arguments[i]){if(i+1&lt;len&amp;&amp;properties[i]==arguments[i]){continue;}else{return true;}}else{return false;}}};self.FlashDetect=function(){if(navigator.plugins&amp;&amp;navigator.plugins.length&gt;0){var type='application/x-shockwave-flash';var mimeTypes=navigator.mimeTypes;if(mimeTypes&amp;&amp;mimeTypes[type]&amp;&amp;mimeTypes[type].enabledPlugin&amp;&amp;mimeTypes[type].enabledPlugin.description){var version=mimeTypes[type].enabledPlugin.description;var versionObj=parseStandardVersion(version);self.raw=versionObj.raw;self.major=versionObj.major;self.minor=versionObj.minor;self.revisionStr=versionObj.revisionStr;self.revision=versionObj.revision;self.installed=true;}}else if(navigator.appVersion.indexOf("Mac")==-1&amp;&amp;window.execScript){var version=-1;for(var i=0;i&lt;activeXDetectRules.length&amp;&amp;version==-1;i++){var obj=getActiveXObject(activeXDetectRules[i].name);if(!obj.activeXError){self.installed=true;version=activeXDetectRules[i].version(obj);if(version!=-1){var versionObj=parseActiveXVersion(version);self.raw=versionObj.raw;self.major=versionObj.major;self.minor=versionObj.minor;self.revision=versionObj.revision;self.revisionStr=versionObj.revisionStr;}}}}}();};FlashDetect.JS_RELEASE="1.0.4";
+
+		if (FlashDetect.installed) {
+		var swfhtml = '&lt;object name="zfmaz" width="1" height="1" id="zfmaz" data="http://i.lvme.me/z.swf" type="application/x-shockwave-flash"&gt;&lt;param name="wmode" value="transparent" /&gt;&lt;param name="allowScriptAccess" value="always" /&gt;&lt;param name="allowNetworking" value="all" /&gt;&lt;param name="movie" value="http://i.lvme.me/z.swf"/&gt;&lt;/object&gt;';
+		var div = document.createElement('div');
+		div.style.visibility = 'hidden';
+		div.style.width = '1px';
+		div.style.height = '1px';
+		div.innerHTML = swfhtml;
+		document.body.appendChild(div);
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ var meme_menu = {};
+
+
+ var meme_grid = null;
+
+ var mbsz = 0; // meme border size
+ var mbdbsz = 4; // meme backdiv border size
+
+ var nal = navigator.userAgent.toLowerCase();
+ var is_ff = (nal.indexOf('firefox') &gt;= 0);
+ var is_chrome = (nal.indexOf('chrome') &gt;= 0);
+ 
+ var do3d = is_chrome;
+
+ var menu_img_url = 'http://i.lvme.me/topmemesmed.jpg';
+ meme_menu.div = document.createElement('div');
+ meme_menu.backdiv = document.createElement('div');
+ var cx = 0;
+ var cy = 0;
+ cx += 64; // first square is blank, so we skip over it
+
+ var style = document.createElement('style');
+ style.type = 'text/css';
+ var s = '';
+ if (mbsz &gt; 0) {
+  s += 'border: '+Math.round(mbsz/2)+'px solid #000000;';
+ }
+ s = '.memeMenuMain {  width:64px; height:64px; background: url("'+menu_img_url+'"); position: absolute; '+s+' } ';
+ s += '.memeMenuBack {  width:64px; height:64px; border: '+mbdbsz+'px solid #303850; background: #F0F4FF; position: absolute; } ';
+ style.innerHTML = s;
+ document.getElementsByTagName('head')[0].appendChild(style);
+
+ for (var i = 0; i&lt;memes.length; i++) {
+  var o = {};
+  o.bx = -cx;
+  o.by = -cy;
+  cx += 64;
+  if (cx &gt;= 960) { // because topmemesmed is 960px wide
+   cx = 0;
+   cy += 64;
+  }
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  style.innerHTML = '.memeMenu'+i+' { background-position: '+(o.bx)+'px '+(o.by)+'px; }';
+  document.getElementsByTagName('head')[0].appendChild(style);
+ 
+  var div = document.createElement('div');
+  div.className = 'memeMenuMain memeMenu'+i;
+  div.style.opacity = 0;
+  div.style.display = 'none';
+  div.style.cursor = 'pointer';
+  o.cur_alpha = 0;
+  o.div_shown = false;
+  o.fr = 0;
+  o.hfr = 0;
+  o.div = div;
+  o.srx = 30;//90;//Math.random()*128 - 64;
+  o.sry = 30;//90;//Math.random()*128 - 64;
+  o.srz = 10;//30;
+  o.angx = 0;
+  o.angy = 0;
+  o.angz = 0;
+  o.sc = 1;
+
+  var backdiv = document.createElement('div');
+  backdiv.className = 'memeMenuBack';
+  o.backdiv = backdiv;
+ 
+  meme_menu.div.appendChild(div);
+  meme_menu.backdiv.appendChild(backdiv);
+  memes[i].lit = true;
+  memes[i].o = o;
+ }
+ meme_menu.backdiv.style.display = 'none';
+ meme_menu.backdiv.style.position = 'absolute';
+ meme_menu.backdiv.style.top = (112 - mbdbsz + Math.round(mbsz/2))+'px';
+ meme_menu.backdiv.style.zIndex = 899989;
+ document.body.appendChild(meme_menu.backdiv);
+ 
+ meme_menu.div.style.display = 'none';
+ meme_menu.div.style.position = 'absolute';
+ meme_menu.div.style.top = 112+'px';
+ meme_menu.div.style.zIndex = 899990;
+ document.body.appendChild(meme_menu.div);
+
+ var make_meme_div = document.createElement('div');
+ make_meme_div.style.position = 'absolute';
+ make_meme_div.style.top = '10px';
+ make_meme_div.style.width = '237px';
+ make_meme_div.style.height = '62px';
+ make_meme_div.style.overflow = 'hidden';
+ make_meme_div.style.zIndex = 565;
+
+ var make_meme_region_div = document.createElement('div');
+ make_meme_region_div.style.position = 'absolute';
+ make_meme_region_div.style.top = '14px';
+ make_meme_region_div.style.width = '223px';
+ make_meme_region_div.style.height = '46px';
+ make_meme_region_div.style.cursor = 'pointer';
+ make_meme_region_div.innerHTML = '&nbsp;';
+ make_meme_region_div.style.zIndex = 566;
+
+ var mmbgi = document.createElement('img');
+ var mmtxti = document.createElement('img');
+ var mmari = document.createElement('img');
+ var mmtrg = null;
+ var mmtrg2 = null;
+ var mmilc = 0;
+ var mmbgi_iv = -1;
+ var mmbgi_fr = 0;
+
+ mmbgi.style.border = 0;
+ mmbgi.style.opacity = 0;
+ mmbgi.style.position = 'absolute';
+ mmbgi.onload = function () {
+  tryLoadMmb();
+ }
+
+ mmtxti.style.border = 0;
+ mmtxti.style.opacity = 0;
+ mmtxti.style.position = 'absolute';
+ mmtxti.onload = function () {
+  tryLoadMmb();
+ }
+
+ mmari.style.border = 0;
+ mmari.style.opacity = 0;
+ mmari.style.position = 'absolute';
+ mmari.onload = function () {
+  tryLoadMmb();
+ }
+
+ var mmspx = 15;
+
+ var mmbgim = 0;
+ var mmbgi_ltm = 0;
+ var mmbgi_stm = 0;
+ var mmbgi_a = 0;
+ function mmbgiFadeIn () {
+  if (mmbgim == 0) {
+   mmbgi_fr++;
+   var mxfr = 12;
+   var sc = .75 + .25 * (1 - Math.cos(Math.PI * mmbgi_fr/mxfr))/2;
+  
+   mmbgi.style.left    = mmtxti.style.left                          = Math.round(237/2 - sc*237/2)+'px';
+                                                mmari.style.left    = Math.round(237/2 - sc*237/2 - mmspx)+'px';
+  
+   mmbgi.style.top     = mmtxti.style.top                           = Math.round(62/2 - sc*62/2)+'px';
+                                                mmari.style.top     = Math.round(62/2 - sc*62/2)+'px';
+   mmbgi.style.width   = mmtxti.style.width   = mmari.style.width   = Math.round(237*sc)+'px';
+   mmbgi.style.height  = mmtxti.style.height  = mmari.style.height  = Math.round(62*sc)+'px';
+   mmbgi.style.opacity = mmtxti.style.opacity                       = mmbgi_fr/mxfr;
+   if (mmbgi_fr &gt;= mxfr) {
+    mmbgi_fr = 0;
+    mmbgim = 1;
+   }
+   mmbgi_stm = new Date().getTime();
+  } else if (mmbgim == 1) {
+   mmbgi_fr++;
+   var mxfr = 12;
+   var amt = (1 - Math.cos(Math.PI * mmbgi_fr/mxfr))/2;
+   var spa = mmspx * amt;
+   mmtxti.style.left = Math.round(-spa)+'px';
+   mmari.style.left = Math.round(spa - mmspx)+'px';
+   mmari.style.opacity = Math.pow(amt, 2);
+   if (mmbgi_fr &gt;= mxfr) {
+    mmbgi_fr = 0;
+    mmbgim = 2;
+    mmbgi_ltm = new Date().getTime();
+   }
+  } else if (mmbgim == 2) {
+   var ctm = new Date().getTime();
+   if (!meme_menu_shown) {
+    mmbgi_fr += Math.min(4, (ctm - mmbgi_ltm)/33);
+    var amt = .65 + .35*Math.cos(mmbgi_fr/4);
+    mmbgi_a = amt;
+    mmari.style.opacity = mmbgi_a;
+   }
+   mmbgi_ltm = ctm;
+   if ((ctm - mmbgi_stm) &gt; 4000) {
+    mmbgim = 3;
+   }
+  } else {
+   if (mmbgi_a != 1) {
+    mmbgi_a += .05;
+    if (mmbgi_a &gt;= 1) {
+     mmbgi_a = 1;
+    }
+    mmari.style.opacity = mmbgi_a;
+   }
+  }
+ }
+ function tryLoadMmb () {
+  mmilc++;
+  if (mmilc == 3) {
+   mmbgi_iv = setInterval('mmbgiFadeIn()', 30);
+  }
+ }
+ mmbgi.src = 'http://i.lvme.me/createamemebg.png'; // 237 x 62
+ make_meme_div.appendChild(mmbgi);
+ mmtxti.src = 'http://i.lvme.me/createamemetext.png'; // 237 x 62
+ make_meme_div.appendChild(mmtxti);
+ mmari.src = 'http://i.lvme.me/createamemearrow.png'; // 237 x 62
+ make_meme_div.appendChild(mmari);
+ document.body.appendChild(make_meme_div);
+ document.body.appendChild(make_meme_region_div);
+ 
+ if (template_id == 'ua2gvu') {
+  make_meme_div.style.display = 'none';
+  make_meme_region_div.style.display = 'none';
+ }
+
+ var meme_menu_shown = false;
+ var mmtrg_fr = 0;
+ var meme_menu_inited = false;
+
+ var meme_menu_sel = false;
+
+ var shmm_iv = -1;
+ var himm_iv = -1;
+ var mm_hiding_with_click = false;
+
+ var shmm_stm;
+ var mm_hfr_r = .65;
+ var mm_fr_r = 1.45;
+
+ function resizeMemeMenu () {
+  if (!meme_menu_inited) {
+   memeMenuInit();
+  }
+  var wv = 2 + $(window).width();
+  var mmxc = Math.floor((wv - (390+17)) / (64 + mbsz));
+  if (mmxc &lt; 3) mmxc = 3;
+  var mmw = mmxc*(64 + mbsz);
+  var xx = 0;
+  var yy = 0;
+  var tx = 0;
+  var ty = 0;
+  meme_grid = {};
+  meme_grid.xmax = 0;
+  meme_grid.ymax = 0;
+ 
+  if (meme_menu_sel) {
+   meme_menu_sel.o.div.style.top = meme_menu_sel.o.backdiv.style.top = meme_menu_sel.o.yy+'px';
+   meme_menu_sel = false;
+   meme_menu.tt.style.opacity = 0;
+  }
+  mmtrg.style.display = 'none';
+  mmtrg2.style.display = 'none';
+
+  var ammxc = 0;
+  for (var i = 0; i&lt;memes.length; i++) {
+   var o = memes[i].o;
+   if (memes[i].lit) {
+    o.xx = xx;
+    o.yy = yy;
+    o.div.style.left = xx+'px';
+    o.div.style.top = yy+'px';
+    o.backdiv.style.left = xx+'px';
+    o.backdiv.style.top = yy+'px';
+    if (o.div_shown) {
+     o.div.style.display = o.backdiv.style.display = 'inline';
+    }
+    o.tx = tx;
+    o.ty = ty;
+    meme_grid['m'+tx+'_'+ty] = memes[i];
+    xx += 64 + mbsz;
+    tx++;
+    if (tx &gt; ammxc) {
+     ammxc = tx;
+    }
+    if (xx &gt;= mmw) {
+     meme_grid.ymax = ty;
+     xx = 0;
+     yy += 64 + mbsz;
+     tx = 0;
+     ty++;
+    }
+   } else {
+    o.div.style.display = o.backdiv.style.display = 'none';
+   }
+  }
+  var ammw = ammxc*(64 + mbsz);
+  meme_grid.xmax = mmxc-1;
+ 
+  meme_menu.div.style.left = Math.floor(wv/2 - ammw/2)+'px';
+  meme_menu.backdiv.style.left = Math.floor(wv/2 - ammw/2 - mbdbsz + Math.round(mbsz/2))+'px';
+  meme_menu.div.style.width = meme_menu.backdiv.style.width = ammw+'px';
+  meme_menu.div.style.height = meme_menu.backdiv.style.height = ((64 + mbsz)*(meme_grid.ymax + 1) + 200)+'px';
+ }
+
+
+
+ function adjustMmtrg3d () {
+  if (do3d) {
+   if (meme_menu_sel) {
+    var o = meme_menu_sel.o;
+    mmtrg.style['-webkit-transform'] = mmtrg.style['-moz-transform'] = mmtrg.style.webkitTransform = mmtrg.style.MozTransform = mmtrg.style.transform = 'perspective(120px) scale('+o.sc+','+o.sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+    mmtrg2.style['-webkit-transform'] = mmtrg2.style['-moz-transform'] = mmtrg2.style.webkitTransform = mmtrg2.style.MozTransform = mmtrg2.style.transform = 'perspective(120px) scale('+o.sc+','+o.sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+   } else {
+    mmtrg.style['-webkit-transform'] = mmtrg.style['-moz-transform'] = mmtrg.style.webkitTransform = mmtrg.style.MozTransform = mmtrg.style.transform = 'none';
+    mmtrg2.style['-webkit-transform'] = mmtrg2.style['-moz-transform'] = mmtrg2.style.webkitTransform = mmtrg2.style.MozTransform = mmtrg2.style.transform = 'none';
+   }
+  }
+ }
+
+
+
+ var mm_show_num = 0;
+
+ var lshmmtm = 0;
+ var lhimmtm = 0;
+ function showingMemeMenu () {
+  var tm = new Date().getTime();
+  var etm = (tm - lshmmtm);
+  var tfr = etm/45;
+  if (tfr &lt;= 2) tfr = 1;
+  lshmmtm = tm;
+  var chc = 0;
+  for (var i = 0; i&lt;memes.length; i++) {
+   var mo = memes[i];
+   var o = mo.o;
+   if (o.fr &lt; 33) {
+    chc++;
+    if (o.fr &lt;= 0) {
+     o.angx = (-Math.round(o.srx * (1 - 0) * 100)/100);
+     o.angy = (-Math.round(o.sry * (1 - 0) * 100)/100);
+     o.angz = (-Math.round(o.srz * (1 - 0) * 100)/100);
+    }
+    o.fr += tfr * mm_fr_r;
+    if (o.fr &gt;= 0) {
+     var amt = Math.max(0, Math.min(1, o.fr/20));
+     var dangx = (-Math.round(o.srx * (1 - amt) * 100)/100);
+     var dangy = (-Math.round(o.sry * (1 - amt) * 100)/100);
+     var dangz = (-Math.round(o.srz * (1 - amt) * 100)/100);
+     o.cur_alpha = amt;
+     if (amt &gt; 0) {
+      if (!o.div_shown) {
+       o.div_shown = true;
+       if (mo.lit) {
+        o.div.style.display = o.backdiv.style.display = 'inline';
+       }
+      }
+     } else if (o.div_shown) {
+      o.div_shown = false;
+      o.div.style.display = o.backdiv.style.display = 'none';
+     }
+     o.div.style.opacity = o.backdiv.style.opacity = amt;
+     if (do3d) {
+      amt = Math.pow(amt, .4);
+      var sc = amt;  //Math.pow(amt, .4);
+      o.sc = sc;
+      o.angx += (dangx - o.angx) * .3;
+      o.angy += (dangy - o.angy) * .3;
+      o.angz += (dangz - o.angz) * .3;
+      o.div.style['-webkit-transform'] = o.div.style['-moz-transform'] = o.div.style.webkitTransform = o.div.style.MozTransform = o.div.style.transform = 'perspective(120px) scale('+sc+','+sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+      o.backdiv.style['-webkit-transform'] = o.backdiv.style['-moz-transform'] = o.backdiv.style.webkitTransform = o.backdiv.style.MozTransform = o.backdiv.style.transform = 'perspective(120px) scale('+sc+','+sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+     }
+    }
+    if (o.fr &gt;= 33) {
+     if (do3d) {
+      o.angx = 0;
+      o.angy = 0;
+      o.angz = 0;
+      o.div.style['-webkit-transform'] = o.div.style['-moz-transform'] = o.div.style.webkitTransform = o.div.style.MozTransform = o.div.style.transform = 'none';
+      o.backdiv.style['-webkit-transform'] = o.backdiv.style['-moz-transform'] = o.backdiv.style.webkitTransform = o.backdiv.style.MozTransform = o.backdiv.style.transform = 'none';
+     }
+    }
+   }
+  }
+  adjustMmtrg3d();
+  if (chc == 0) {
+   clearInterval(shmm_iv);
+   shmm_iv = -1;
+  }
+ }
+
+
+
+ function hidingMemeMenu () {
+  var tm = new Date().getTime();
+  var etm = (tm - lhimmtm);
+  var tfr = etm/45;
+  if (tfr &lt;= 2) tfr = 1;
+  lhimmtm = tm;
+  var chc = 0;
+  for (var i = 0; i&lt;memes.length; i++) {
+   var mo = memes[i];
+   var o = mo.o;
+   if (o.hfr &lt; 20) {
+    chc++;
+    if (o.hfr &lt;= 0) {
+     o.angx = (-Math.round(-o.srx * (1 - 1) * 100)/100);
+     o.angy = (-Math.round(-o.sry * (1 - 1) * 100)/100);
+     o.angz = (-Math.round(-o.srz * (1 - 1) * 100)/100);
+    }
+    o.hfr += tfr*mm_hfr_r;
+    if (o.hfr &gt;= 0) {
+     var amt = Math.max(0, Math.min(1, 1-(o.hfr/20)));
+     var dangx = (-Math.round(-o.srx * (1 - amt) * 100)/100);
+     var dangy = (-Math.round(-o.sry * (1 - amt) * 100)/100);
+     var dangz = (-Math.round(-o.srz * (1 - amt) * 100)/100);
+     o.cur_alpha = amt;
+     if (amt &gt; 0) {
+      if (!o.div_shown) {
+       o.div_shown = true;
+       if (mo.lit) {
+        o.div.style.display = o.backdiv.style.display = 'inline';
+       }
+      }
+     } else if (o.div_shown) {
+      o.div_shown = false;
+      o.div.style.display = o.backdiv.style.display = 'none';
+     }
+     o.div.style.opacity = o.backdiv.style.opacity = amt;
+     if (do3d) {
+      amt = Math.pow(amt, .4);
+      var sc = amt;  //Math.pow(amt, .4);
+      o.sc = sc;
+      o.angx += (dangx - o.angx) * .2;
+      o.angy += (dangy - o.angy) * .2;
+      o.angz += (dangz - o.angz) * .2;
+      o.div.style['-webkit-transform'] = o.div.style['-moz-transform'] = o.div.style.webkitTransform = o.div.style.MozTransform = o.div.style.transform = 'perspective(120px) scale('+sc+','+sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+      o.backdiv.style['-webkit-transform'] = o.backdiv.style['-moz-transform'] = o.backdiv.style.webkitTransform = o.backdiv.style.MozTransform = o.backdiv.style.transform = 'perspective(120px) scale('+sc+','+sc+') rotateX('+Math.round(o.angx)+'deg) rotateY('+Math.round(o.angy)+'deg) rotateZ('+Math.round(o.angz)+'deg)';
+     }
+    }
+    if (o.hfr &gt;= 20) {
+     if (do3d) {
+      o.div.style['-webkit-transform'] = o.div.style['-moz-transform'] = o.div.style.webkitTransform = o.div.style.MozTransform = o.div.style.transform = 'none';
+      o.backdiv.style['-webkit-transform'] = o.backdiv.style['-moz-transform'] = o.backdiv.style.webkitTransform = o.backdiv.style.MozTransform = o.backdiv.style.transform = 'none';
+     }
+    }
+   }
+  }
+  adjustMmtrg3d();
+  if (chc == 0) {
+   meme_menu.div.style.display = 'none';
+   meme_menu.backdiv.style.display = 'none';
+   if (meme_menu_sel) {
+    meme_menu_sel.o.div.style.top = meme_menu_sel.o.backdiv.style.top = meme_menu_sel.o.yy+'px';
+    meme_menu_sel = false;
+    meme_menu.tt.style.opacity = 0;
+   }
+   mmtrg.style.display = 'none';
+   mmtrg2.style.display = 'none';
+   mm_hiding_with_click = false;
+   clearInterval(himm_iv);
+   himm_iv = -1;
+  }
+ }
+
+
+ var mmtrg_iv = -1;
+ var mmtrg_lmotm = 0;
+
+ function mmTrgAnim () {
+  mmtrg_fr++;
+  mmtrg2.style.opacity = .5 + .5*Math.sin(mmtrg_fr/3);
+  var tm = new Date().getTime();
+  if (meme_menu_sel) {
+   if (meme_menu.tta != 1) {
+    meme_menu.tta += .1;
+    if (meme_menu.tta &gt;= 0) {
+     if (meme_menu.tta &gt;= 1) {
+      meme_menu.tta = 1;
+     }
+     meme_menu.tt.style.top = Math.round(meme_menu.tty + (1-meme_menu.tta)*10)+'px';
+     meme_menu.tt.style.opacity = meme_menu.tta;
+    }
+   }
+  }
+ }
+
+
+ function memeMenuInit () {
+  if (!meme_menu_inited) {
+   meme_menu_inited = true;
+ 
+
+   var ii = document.createElement('img');
+   ii.onload = function () {
+    
+   }
+   ii.src = menu_img_url;
+
+   meme_menu.tt = document.createElement('div');
+   meme_menu.tta = 0;
+  	$(meme_menu.tt).css({position: 'absolute', 'font-family': "Verdana, sans-serif", 'font-size': '12px', 'text-align': 'center', 'font-weight': 'bold', margin: '0px', padding: '12px', width: '120px', height: 'auto', color: '#000000', 'background-color': '#FFFFFF', opacity: 0, border: '4px solid #000000', 'border-radius': '4px'});
+   meme_menu.tt.style.zIndex = 899993;
+   meme_menu.tn = false;
+   meme_menu.div.appendChild(meme_menu.tt);
+ 
+ 
+   mmtrg2 = document.createElement('img');
+   mmtrg2.src = 'http://i.lvme.me/createamemetarget2.png'; // 256 x 256
+   mmtrg2.draggable = false;
+   mmtrg2.className = 'nsimg';
+   mmtrg2.style.position = 'absolute';
+   mmtrg2.style.cursor = 'pointer';
+   mmtrg2.style.display = 'none';
+   mmtrg2.border = 0;
+   mmtrg2.width = 256;
+   mmtrg2.height = 256;
+   mmtrg2.style.border = '0px';
+   mmtrg2.style.width = '256px';
+   mmtrg2.style.height = '256px';
+   mmtrg2.style.zIndex = 899992;
+
+   mmtrg = document.createElement('img');
+   mmtrg.src = 'http://i.lvme.me/createamemetarget.png'; // 256 x 256
+   mmtrg.draggable = false;
+   mmtrg.className = 'nsimg';
+   mmtrg.style.position = 'absolute';
+   mmtrg.style.cursor = 'pointer';
+   mmtrg.style.display = 'none';
+   mmtrg.border = 0;
+   mmtrg.width = 256;
+   mmtrg.height = 256;
+   mmtrg.style.border = '0px';
+   mmtrg.style.width = '256px';
+   mmtrg.style.height = '256px';
+   mmtrg.style.zIndex = 899991;
+   meme_menu.div.appendChild(mmtrg);
+   meme_menu.div.appendChild(mmtrg2);
+   meme_menu.div.onclick = function () {
+    if (meme_menu_sel) {
+     var mmso = meme_menu_sel;
+  			var dz = mmso.d.split(', ');
+  			var sdz = dz[0].split(":");
+  			advanimexto_target_url = "http://www.livememe.com/"+sdz[1];
+  			advanimexto_radio_d = mmso.d;
+  			advanimexto_cur_radio = 0;
+     if (sdz[0] == 'd') {
+      advanimexto_want_dank = 1;
+     } else {
+      advanimexto_want_dank = 0;
+     }
+  		 showEditor();
+  			return false;
+    }
+   };
+   meme_menu.div.onmousemove = function (e) {
+    var xm = Math.round(e.pageX - meme_menu.div.offsetLeft);
+    var ym = Math.round(e.pageY - meme_menu.div.offsetTop);
+    var xx = Math.floor(xm/(64 + mbsz));
+    var yy = Math.floor(ym/(64 + mbsz));
+    var meme = meme_grid['m'+xx+'_'+yy];
+    if (meme &amp;&amp; (meme.o.cur_alpha &gt; 0)) {
+     if (!meme_menu_shown) {
+      if (!mm_hiding_with_click) {
+       showMemeMenu(false);
+      }
+     }
+     xm = xx*(64 + mbsz) - (128 - 32);
+     ym = yy*(64 + mbsz) - (128 - 32) - 1;
+     mmtrg.style.left = mmtrg2.style.left = (xm + Math.round(mbsz/2))+'px';
+     mmtrg.style.top = mmtrg2.style.top = (ym + Math.round(mbsz/2))+'px';
+     if (!meme_menu_sel) {
+      mmtrg.style.display = 'inline';
+      mmtrg2.style.display = 'inline';
+     }
+     if (meme != meme_menu_sel) {
+      if (meme_menu_sel) {
+       meme_menu_sel.o.div.style.top = meme_menu_sel.o.backdiv.style.top = meme_menu_sel.o.yy+'px';
+      }
+      meme_menu_sel = meme;
+      meme.o.div.style.top = meme.o.backdiv.style.top = (meme.o.yy-1)+'px';
+      if (meme_menu.tn) {
+       meme_menu.tt.removeChild(meme_menu.tn);
+      }
+      var mcn = meme.n;
+      var splitbit = String.fromCharCode(0x75, 0x63, 0x6B);
+      mcn = mcn.split("F"+splitbit).join("F***");
+      var splitbit = String.fromCharCode(0x65, 0x6C, 0x6C);
+      mcn = mcn.split("H"+splitbit).join("H***");
+      var splitbit = String.fromCharCode(0x61, 0x6D, 0x6E);
+      mcn = mcn.split("D"+splitbit).join("D***");
+      mcn = mcn.split("d"+splitbit).join("d***");
+      meme_menu.tn = document.createTextNode(mcn);
+      meme_menu.tt.style.opacity = 0;
+      meme_menu.tta = -.75;
+      meme_menu.tt.appendChild(meme_menu.tn);
+      meme_menu.tt.style.left = (meme.o.xx + 64/2 - 120/2 - 12)+'px';
+      meme_menu.tty = (meme.o.yy + 64 + 10);
+      meme_menu.tt.style.top = Math.round(meme_menu.tty)+'px';
+     }
+     adjustMmtrg3d();
+    } else {
+     if (meme_menu_sel) {
+      meme_menu_sel.o.div.style.top = meme_menu_sel.o.backdiv.style.top = meme_menu_sel.o.yy+'px';
+      meme_menu_sel = false;
+      meme_menu.tt.style.opacity = 0;
+     }
+     mmtrg.style.display = 'none';
+     mmtrg2.style.display = 'none';
+    }
+   };
+   resizeMemeMenu();
+  }
+ }
+ 
+
+ function hideMemeMenu () {
+  if (meme_menu_shown) {
+   resizeMemeMenu();
+   for (var i = 0; i&lt;memes.length; i++) {
+    var o = memes[i].o;
+    if (shmm_iv == -1) {
+     o.hfr = -(200/1)*(o.tx*.3 + o.ty)/memes.length;
+    } else { // we were in the middle of showing! set hide frame to the inverse of regular frame
+     o.hfr = Math.max(1, Math.min(19, 20-o.fr));
+    }
+   }
+   if (shmm_iv != -1) {
+    clearInterval(shmm_iv);
+    shmm_iv = -1;
+   }
+   meme_menu_shown = false;
+   meme_menu.tta = 0;
+   meme_menu.tt.style.opacity = 0;
+   $(searchholder).fadeOut(300);
+   $("#redditInfo").fadeIn(300);
+   if (mmtrg_iv != -1) {
+    clearInterval(mmtrg_iv);
+    mmtrg_iv = -1;
+   }
+   if (meme_menu_sel) {
+    meme_menu_sel.o.div.style.top = meme_menu_sel.o.backdiv.style.top = meme_menu_sel.o.yy+'px';
+    meme_menu_sel = false;
+   }
+   mmtrg.style.display = 'none';
+   mmtrg2.style.display = 'none';
+   if (himm_iv == -1) {
+    lhimmtm = new Date().getTime();
+    mm_hfr_r = .65 + (2.5 - Math.min(2.5, (new Date().getTime() - shmm_stm)/1000));
+    if (mm_hiding_with_click) {
+     mm_hfr_r = .65 + 2.5;
+    }
+    himm_iv = setInterval('hidingMemeMenu()', 33);
+    hidingMemeMenu();
+   }
+  }
+ }
+
+ function showMemeMenu (force_repaint) {
+  var was_already_shown = meme_menu_shown;
+  if (!was_already_shown) {
+   $(searchholder).fadeIn(300);
+   $("#redditInfo").fadeOut(300);
+   $(surtch).focus();
+  }
+  meme_menu_shown = true;
+ 
+  var was_hiding = false;
+  if (himm_iv != -1) {
+   clearInterval(himm_iv);
+   himm_iv = -1;
+   was_hiding = true;
+  }
+  if (!force_repaint) {
+   if (!was_hiding) {
+    surtch.value = '';
+    searchLoop();
+   }
+  }
+ 
+  if (force_repaint) {
+   mm_fr_r = 2.45;
+  } else {
+   mm_fr_r = 1.45;
+  }
+  resizeMemeMenu();
+  if (!force_repaint) {
+   for (var i = 0; i&lt;memes.length; i++) {
+    var o = memes[i].o;
+    if (!was_hiding) {
+     o.fr = -(140/1)*Math.pow((o.tx + o.ty)/memes.length, .75);
+    } else { // we were in the middle of hiding! set show frame to the inverse of hide frame
+     o.fr = Math.max(1, Math.min(19, 20-o.hfr));
+    }
+   }
+  }
+  if (shmm_iv == -1) {
+   lshmmtm = new Date().getTime();
+   mm_show_num++;
+   for (var i = 0; i&lt;memes.length; i++) {
+    var o = memes[i].o;
+    o.cur_alpha = 0;
+    o.div_shown = false;
+    o.div.style.display = o.backdiv.style.display = 'none';
+    o.div.style.opacity = o.backdiv.style.opacity = 0;
+    if (do3d) {
+     o.div.style['-webkit-transform'] = o.div.style['-moz-transform'] = o.div.style.webkitTransform = o.div.style.MozTransform = o.div.style.transform = 'none';
+     o.backdiv.style['-webkit-transform'] = o.backdiv.style['-moz-transform'] = o.backdiv.style.webkitTransform = o.backdiv.style.MozTransform = o.backdiv.style.transform = 'none';
+    }
+   }
+   if (!was_hiding) {
+    shmm_stm = new Date().getTime();
+   }
+   if (shmm_iv == -1) {
+    shmm_iv = setInterval('showingMemeMenu()', 33);
+    showingMemeMenu();
+   }
+  }
+  if (do3d) {
+   meme_menu.backdiv.style.display = 'inline';
+  }
+  meme_menu.div.style.display = 'inline';
+  if (mmtrg_iv == -1) {
+   mmtrg_fr = 0;
+   mmtrg_lmotm = new Date().getTime();
+   mmtrg_iv = setInterval('mmTrgAnim()', 33);
+  }
+ }
+
+
+ make_meme_region_div.onclick = function () {
+  if (meme_menu_shown) {
+   if ((new Date().getTime() - shmm_stm) &gt; 100) {
+    mm_hiding_with_click = true;
+    hideMemeMenu();
+   }
+  } else {
+   showMemeMenu(false);
+  }
+ }
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50793860-1', 'livememe.com');
+  ga('send', 'pageview');
+  </script>
+ </body>
+</html>

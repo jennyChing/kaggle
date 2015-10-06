@@ -1,0 +1,958 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head profile="http://gmpg.org/xfn/11">
+  <meta content="12c1aad5287fb8f61e816c31517651f0" name="verifyownership"/>
+  <title>
+   Hacking websites: cross site request forgery | TehGeekTive
+  </title>
+  <meta content="7E65EC8AF1FC7AB1922FF0712BA9B0F7" name="msvalidate.01"/>
+  <link href="http://rss.icerocket.com/xmlfeed?id=502871" rel="alternate" title="RSS 2.0" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._idl = {};
+    _idl.variant = "banner";
+    (function() {
+        var idl = document.createElement('script');
+        idl.type = 'text/javascript';
+        idl.async = true;
+        idl.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'members.internetdefenseleague.org/include/?url=' + (_idl.url || '') + '&amp;campaign=' + (_idl.campaign || '') + '&amp;variant=' + (_idl.variant || 'banner');
+        document.getElementsByTagName('body')[0].appendChild(idl);
+    })();
+  </script>
+  <link href="https://plus.google.com/u/0/107636204139283411688" rel="author"/>
+  <meta content="General" http-equiv="rating"/>
+  <meta content="en" http-equiv="content-language"/>
+  <meta content="never" name="expires"/>
+  <meta content="English" name="language"/>
+  <meta content="Manny - Manuel Cheta - http://about.me/manuel-cheta" name="publisher"/>
+  <meta content="Manny - Manuel Cheta - http://about.me/manuel-cheta" name="copyright"/>
+  <meta content="Brasov" name="city"/>
+  <meta content="Romania" name="country"/>
+  <meta content="Brasov, Romania" name="geography"/>
+  <!-- &lt;script src="//dihq71mhvy8o7.cloudfront.net/js/modal-embed.js?v=1" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt; -->
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="http://tehgeektive.com/wp-content/themes/headlines/style.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://tehgeektive.com/feed/" rel="alternate" title="RSS 2.0" type="application/rss+xml"/>
+  <link href="http://tehgeektive.com/xmlrpc.php" rel="pingback"/>
+  <!--[if IE 6]&gt;
+&lt;script type="text/javascript" src="http://tehgeektive.com/wp-content/themes/headlines/includes/js/pngfix.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="http://tehgeektive.com/wp-content/themes/headlines/includes/js/menu.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" type="text/css" media="all" href="http://tehgeektive.com/wp-content/themes/headlines/css/ie6.css" /&gt;
+&lt;![endif]-->
+  <!--[if IE 7]&gt;
+&lt;link rel="stylesheet" type="text/css" media="all" href="http://tehgeektive.com/wp-content/themes/headlines/css/ie7.css" /&gt;
+&lt;![endif]-->
+  <!-- All in One SEO Pack 2.2.7 by Michael Torbert of Semper Fi Web Design[285,364] -->
+  <meta content="There are three major ways to hack a website: sql injection, cross site scripting and cross site request forgery. I published a post about sql injection and" name="description"/>
+  <link href="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/" rel="canonical"/>
+  <!-- /all in one seo pack -->
+  <link href="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/feed/" rel="alternate" title="TehGeekTive  Hacking websites: cross site request forgery Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/tehgeektive.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://tehgeektive.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.2.1" id="contact-form-7-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://tehgeektive.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" id="wp-pagenavi-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://tehgeektive.com/wp-content/plugins/jetpack/_inc/genericons/genericons/genericons.css?ver=3.1" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://tehgeektive.com/wp-content/plugins/jetpack/css/jetpack.css?ver=3.6" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://tehgeektive.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://tehgeektive.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="http://tehgeektive.com/wp-content/themes/headlines/includes/js/superfish.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://tehgeektive.com/wp-content/themes/headlines/includes/js/woo_tabs.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="http://tehgeektive.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://tehgeektive.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://tehgeektive.com/2013/12/02/poop-transplant-really-scishow-explains-why/" rel="prev" title="Poop transplant. Really? SciShow explains why!"/>
+  <link href="http://tehgeektive.com/2013/12/04/no-logic-there-imperial-measurements/" rel="next" title="No logic there: imperial measurements"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://wp.me/p1TLac-Vb" rel="shortlink"/>
+  <meta content="Headlines 2.4.1" name="generator"/>
+  <meta content="Woo Framework Version 2.6.5" name="generator"/>
+  <link href="http://tehgeektive.com/wp-content/themes/headlines/styles/blue.css" rel="stylesheet" type="text/css"/>
+  <link href="http://tehgeektive.com/wp-content/themes/headlines/custom.css" rel="stylesheet" type="text/css"/>
+  <!-- Woo Styling -->
+  <style type="text/css">
+   #logo img { display:none; }
+#logo .site-title, #logo .site-description { display:block; }
+  </style>
+  <!-- Jetpack Open Graph Tags -->
+  <meta content="article" property="og:type"/>
+  <meta content="Hacking websites: cross site request forgery" property="og:title"/>
+  <meta content="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/" property="og:url"/>
+  <meta content="There are three major ways to hack a website: sql injection, cross site scripting and cross site request forgery. I published a post about sql injection and cross site scripting recently and now le..." property="og:description"/>
+  <meta content="2013-12-03T20:04:39+00:00" property="article:published_time"/>
+  <meta content="2013-12-03T20:07:15+00:00" property="article:modified_time"/>
+  <meta content="TehGeekTive" property="og:site_name"/>
+  <meta content="https://s0.wp.com/i/blank.jpg" property="og:image"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="summary" name="twitter:card"/>
+  <style id="custom-css-css">
+   .comments{display:none}blockquote{quotes:"''" "''"}blockquote:before{content:open-quote;float:left;font-size:36px}.entry blockquote p{margin:0;margin-left:30px}.entry blockquote{padding:5px 0 0 30px;color:#666;font-style:italic;font-family:serif}.entry p{margin:0 0 15px;font-size:18px;font-family:Georgia;text-align:justify}
+  </style>
+  <!--[if lte IE 7]&gt;
+&lt;script type="text/javascript"&gt;
+jQuery(function() {
+	var zIndexNumber = 1000;
+	jQuery('div').each(function() {
+		jQuery(this).css('zIndex', zIndexNumber);
+		zIndexNumber -= 1;
+	});
+});
+&lt;/script&gt;
+&lt;![endif]-->
+  <!-- Place this tag in the &lt;head&gt; of your document-->
+  <script type="text/javascript">
+   (function() {var po = document.createElement("script");po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(po, s);})();
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26504604-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script type="text/javascript">
+   widgetContext = {"url":"https:\u002F\u002Fopenmedia.org\u002Fwidgets\u002Fstop-secrecy?width=260\u0026height=460\u0026src=aux", "width":"260", "height":"705", "widgetid":"web_widget_iframe_9c82eae7a4902042e4b47b5c826fa5e6", "scrolling":"auto"};
+  </script>
+  <script id="web_widget_iframe_9c82eae7a4902042e4b47b5c826fa5e6" src="https://openmedia.org/sites/all/modules/contrib/web_widgets/iframe/web_widgets_iframe.js">
+  </script>
+  <script>
+   jQuery(document).ready(function(){
+
+jQuery("a:contains('TGT Store')").html("&lt;img src='http://tehgeektive.com/wp-content/uploads/2014/11/buynow.png' width='174' style='margin-top: -10px;margin-left: -27px;' /&gt;");
+
+jQuery(".widget_text h3:contains('BUY NOW')").html("&lt;a href='http://tehgeektive.com/tgt-store/'&gt;&lt;img src='http://tehgeektive.com/wp-content/uploads/2014/11/buynow.png' width='174' style='margin-top: -19px;margin-left: -27px;' /&gt;&lt;/a&gt;");
+});
+  </script>
+ </head>
+ <body>
+  <div id="fb-root">
+  </div>
+  <script>
+   (function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) {return;}  js = d.createElement(s); js.id = id;  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&amp;appId=166793243401443";  fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
+  </script>
+  <div id="container">
+   <div id="top">
+    <div id="page-nav">
+     <div class="col-full">
+      <ul class="fl" id="nav">
+       <li>
+        <a href="http://tehgeektive.com">
+         <img alt="Home" class="ico-home" src="http://tehgeektive.com/wp-content/themes/headlines/images/ico-home.png"/>
+        </a>
+       </li>
+       <li class="page_item page-item-2">
+        <a href="http://tehgeektive.com/about-tgt/">
+         About TGT
+        </a>
+       </li>
+       <li class="page_item page-item-8">
+        <a href="http://tehgeektive.com/the-author/">
+         The Author
+        </a>
+       </li>
+       <li class="page_item page-item-5561">
+        <a href="http://tehgeektive.com/tgt-store/">
+         TGT Store
+        </a>
+       </li>
+      </ul>
+      <!-- /#nav1 -->
+      <ul class="rss fr">
+       <li>
+        <a href="http://tehgeektive.com/feed/">
+         Posts
+        </a>
+       </li>
+      </ul>
+      <!-- /.rss -->
+     </div>
+     <!-- /.col-full -->
+    </div>
+    <!-- /#page-nav -->
+    <div class="col-full" id="header">
+     <div id="logo">
+      <div id="head-left">
+       <span class="site-title">
+        <a href="http://tehgeektive.com">
+         TehGeekTive
+        </a>
+       </span>
+       <span class="site-description">
+        Eat culture: science, tech and web!
+       </span>
+      </div>
+      <!--  leaderboard ad-->
+      <div style="padding-left: 10px;float: right;">
+       <script type="text/javascript">
+        &lt;!--
+google_ad_client = "ca-pub-5620262597565502";
+/* TGT leaderboard */
+google_ad_slot = "5714389913";
+google_ad_width = 728;
+google_ad_height = 90;
+//--&gt;
+       </script>
+       <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+       </script>
+      </div>
+      <!-- leaderboard end -->
+     </div>
+     <!-- /#logo -->
+    </div>
+    <!-- /#header -->
+    <div id="navigation">
+     <div id="cat-nav">
+      <div class="col-full">
+       <ul class="fl" id="secnav">
+        <li>
+         <a href="http://tehgeektive.com/category/blogging-wordpress/">
+          blogging&amp;wordpress
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/comic/">
+          comic
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/ebooks/">
+          ebooks
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/entertainment/">
+          entertainment
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/geek/">
+          geek
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/infographics/">
+          infographics
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/learn/">
+          learn
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/on-the-web/">
+          on the web
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/opinion/">
+          opinion
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/science/">
+          science
+         </a>
+        </li>
+        <li>
+         <a href="http://tehgeektive.com/category/tech/">
+          tech
+         </a>
+        </li>
+       </ul>
+       <!-- /#nav2 -->
+       <div class="fr" id="search">
+        <form action="http://tehgeektive.com" id="searchform" method="get">
+         <input class="field" id="s" name="s" onblur="if (this.value == '') {this.value = 'Enter keywords...';}" onfocus="if (this.value == 'Enter keywords...') {this.value = '';}" type="text" value="Enter keywords..."/>
+         <input class="submit btn" src="http://tehgeektive.com/wp-content/themes/headlines/images/ico-search.png" type="image" value="Go"/>
+        </form>
+       </div>
+       <!-- /#search -->
+      </div>
+      <!-- /.col-full -->
+     </div>
+     <!-- /#cat-nav -->
+    </div>
+    <!-- /#navigation -->
+   </div>
+   <!--/#top-->
+   <div class="col-full" id="content">
+    <div class="col-left" id="main">
+     <div class="box">
+      <div class="post">
+       <h1 class="title">
+        Hacking websites: cross site request forgery
+       </h1>
+       <p class="post-meta">
+        <img alt="" src="http://tehgeektive.com/wp-content/themes/headlines/images/ico-time.png"/>
+        03. Dec, 2013
+        <span class="comments">
+         <img alt="" src="http://tehgeektive.com/wp-content/themes/headlines/images/ico-comment.png"/>
+         <a href="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/#respond">
+          0 Comments
+         </a>
+        </span>
+        <span style="margin-left: 10px;">
+         Written by
+         <a href="http://tehgeektive.com/the-author/">
+          Manny
+         </a>
+         <div class="entry">
+          <p>
+           <object height="360" width="640">
+            <param name="movie" value="//www.youtube.com/v/vRBihr41JTo?hl=en_US&amp;version=3">
+            </param>
+            <param name="allowFullScreen" value="true">
+            </param>
+            <param name="allowscriptaccess" value="always">
+            </param>
+            <embed allowfullscreen="true" allowscriptaccess="always" height="360" src="//www.youtube.com/v/vRBihr41JTo?hl=en_US&amp;version=3" type="application/x-shockwave-flash" width="640">
+            </embed>
+           </object>
+           <br/>
+           There are three major ways to hack a website: sql injection, cross site scripting and cross site request forgery. I published a post about
+           <a href="http://tehgeektive.com/2013/11/28/hacking-websites-sql-injection-and-cross-site-scripting/">
+            sql injection and cross site scripting
+           </a>
+           recently and now lets see what this third attack is all about.
+          </p>
+          <p>
+           <a href="http://www.tomscott.com/">
+            Tom Scott
+           </a>
+           explains that for this third attack to work a malitious hacker needs to copy the form from your bank account, for example, into a fake website, hide that form and then trigger it every time you access that site or interact with it.
+          </p>
+          <p>
+           The way the webdevelopers are fighting against this is by creating a token in the same page as the form and then send that token with the form data once you click the submit/go button.
+          </p>
+          <p>
+           If someone copies that token and then tries to use it later on, his form wont be accepted. The token updates each time the page the form is on is refreshed and it is unique to the user, ip, and current time.
+          </p>
+          <p>
+           A very neat trick to keep bad guys away from our bank accounts, that is for sure!
+          </p>
+          <div class="sharedaddy sd-sharing-enabled">
+           <div class="robots-nocontent sd-block sd-social sd-social-official sd-sharing">
+            <h3 class="sd-title">
+             Make others happy too. Share za love:
+            </h3>
+            <div class="sd-content">
+             <ul>
+              <li class="share-google-plus-1">
+               <div class="googleplus1_button">
+                <div class="g-plus" data-action="share" data-annotation="bubble" data-href="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/">
+                </div>
+               </div>
+              </li>
+              <li class="share-twitter">
+               <div class="twitter_button">
+                <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Ftehgeektive.com%2F2013%2F12%2F03%2Fhacking-websites-cross-site-request-forgery%2F&amp;counturl=http%3A%2F%2Ftehgeektive.com%2F2013%2F12%2F03%2Fhacking-websites-cross-site-request-forgery%2F&amp;count=horizontal&amp;text=Hacking%20websites%3A%20cross%20site%20request%20forgery%3A" style="width:101px; height:20px;">
+                </iframe>
+               </div>
+              </li>
+              <li class="share-facebook">
+               <div class="fb-share-button" data-href="http://tehgeektive.com/2013/12/03/hacking-websites-cross-site-request-forgery/" data-layout="button_count">
+               </div>
+              </li>
+              <li class="share-reddit">
+               <div class="reddit_button">
+                <iframe frameborder="0" height="22" scrolling="no" src="http://www.reddit.com/static/button/button1.html?width=120&amp;url=http%3A%2F%2Ftehgeektive.com%2F2013%2F12%2F03%2Fhacking-websites-cross-site-request-forgery%2F&amp;title=Hacking%20websites%3A%20cross%20site%20request%20forgery" width="120">
+                </iframe>
+               </div>
+              </li>
+              <li class="share-pinterest">
+               <div class="pinterest_button">
+                <a data-pin-config="beside" data-pin-do="buttonPin" href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Ftehgeektive.com%2F2013%2F12%2F03%2Fhacking-websites-cross-site-request-forgery%2F&amp;media=http%3A%2F%2F0.gravatar.com%2Favatar%2F08d4de666d0bdbe8465eb4737e7eae17%3Fs%3D96%26d%3Dwavatar%26r%3Dg&amp;description=Hacking%20websites%3A%20cross%20site%20request%20forgery">
+                 <img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png"/>
+                </a>
+               </div>
+              </li>
+              <li class="share-end">
+              </li>
+             </ul>
+            </div>
+           </div>
+          </div>
+          <div style="padding-left: 100px;">
+           <script type="text/javascript">
+            &lt;!--
+google_ad_client = "ca-pub-5620262597565502";
+/* TehGeektive AdSense */
+google_ad_slot = "3053966848";
+google_ad_width = 468;
+google_ad_height = 60;
+//--&gt;
+           </script>
+           <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+           </script>
+          </div>
+         </div>
+         <div class="fix">
+         </div>
+        </span>
+       </p>
+      </div>
+      <!-- /.post -->
+      <div class="post-bottom">
+       <div class="fl">
+        <span class="cat">
+         <a href="http://tehgeektive.com/category/geek/" rel="category tag">
+          geek
+         </a>
+         ,
+         <a href="http://tehgeektive.com/category/on-the-web/" rel="category tag">
+          on the web
+         </a>
+         ,
+         <a href="http://tehgeektive.com/category/tech/" rel="category tag">
+          tech
+         </a>
+        </span>
+       </div>
+       <div class="fr">
+        <span class="tags">
+         <a href="http://tehgeektive.com/tag/cross-site-request-forgery/" rel="tag">
+          cross site request forgery
+         </a>
+         ,
+         <a href="http://tehgeektive.com/tag/cross-site-scripting/" rel="tag">
+          cross site scripting
+         </a>
+         ,
+         <a href="http://tehgeektive.com/tag/csrf/" rel="tag">
+          CSRF
+         </a>
+         ,
+         <a href="http://tehgeektive.com/tag/hacking/" rel="tag">
+          hacking
+         </a>
+         ,
+         <a href="http://tehgeektive.com/tag/security/" rel="tag">
+          security
+         </a>
+         ,
+         <a href="http://tehgeektive.com/tag/sql-injection/" rel="tag">
+          sql injection
+         </a>
+        </span>
+       </div>
+       <div class="fix">
+       </div>
+      </div>
+     </div>
+     <!-- /.box -->
+     <div class="more_entries">
+      <div class="fl">
+       <a href="http://tehgeektive.com/2013/12/02/poop-transplant-really-scishow-explains-why/" rel="prev">
+        Poop transplant. Really? SciShow explains why!
+       </a>
+      </div>
+      <div class="fr">
+       <a href="http://tehgeektive.com/2013/12/04/no-logic-there-imperial-measurements/" rel="next">
+        No logic there: imperial measurements
+       </a>
+      </div>
+      <div class="fix">
+      </div>
+     </div>
+     <!-- You can start editing here. -->
+     <div id="comments">
+      <!-- If comments are open, but there are no comments. -->
+      <h3 class="nocomments">
+       No comments yet... Be the first to leave a reply!
+      </h3>
+     </div>
+     <!-- /#comments_wrap -->
+     <div id="respond">
+      <h3>
+       Leave a Reply
+      </h3>
+      <div class="cancel-comment-reply">
+       <small>
+        <a href="/2013/12/03/hacking-websites-cross-site-request-forgery/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+         Click here to cancel reply.
+        </a>
+       </small>
+      </div>
+      <!-- /.cancel-comment-reply -->
+      <form action="http://tehgeektive.com/wp-comments-post.php" id="commentform" method="post" onsubmit="if (url.value == 'Website (optional)') {url.value = '';}">
+       <div class="left">
+        <p>
+         <input class="txt" id="commentauthor" name="author" onblur="if (this.value == '') {this.value = 'Name (required)';}" onfocus="if (this.value == 'Name (required)') {this.value = '';}" tabindex="1" type="text" value="Name (required)"/>
+        </p>
+        <p>
+         <input class="txt" id="email" name="email" onblur="if (this.value == '') {this.value = 'Email (required)';}" onfocus="if (this.value == 'Email (required)') {this.value = '';}" tabindex="2" type="text" value="Email (required)"/>
+        </p>
+        <p>
+         <input class="txt" id="url" name="url" onblur="if (this.value == '') {this.value = 'Website (optional)';}" onfocus="if (this.value == 'Website (optional)') {this.value = '';}" tabindex="3" type="text" value="Website (optional)"/>
+        </p>
+       </div>
+       <div class="right">
+        <!--&lt;p&gt;&lt;strong&gt;XHTML:&lt;/strong&gt; You can use these tags: &lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; &lt;/p&gt;-->
+        <p>
+         <textarea cols="50" id="comment" name="comment" rows="10" tabindex="4">
+         </textarea>
+        </p>
+        <input id="submit" name="submit" tabindex="5" type="submit" value="Submit Comment"/>
+        <input name="comment_post_ID" type="hidden" value="3545"/>
+        <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="3545"/>
+        <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+        <p style="display: none;">
+         <input id="akismet_comment_nonce" name="akismet_comment_nonce" type="hidden" value="aa7d4b09a5"/>
+        </p>
+        <p class="comment-subscription-form">
+         <input id="subscribe_comments" name="subscribe_comments" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox" value="subscribe"/>
+         <label class="subscribe-label" for="subscribe_comments" id="subscribe-label">
+          Notify me of follow-up comments by email.
+         </label>
+        </p>
+        <p class="comment-subscription-form">
+         <input id="subscribe_blog" name="subscribe_blog" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox" value="subscribe"/>
+         <label class="subscribe-label" for="subscribe_blog" id="subscribe-blog-label">
+          Notify me of new posts by email.
+         </label>
+        </p>
+        <p style="display: none;">
+         <input id="ak_js" name="ak_js" type="hidden" value="67"/>
+        </p>
+       </div>
+      </form>
+      <!-- /#commentform -->
+      <div class="fix">
+      </div>
+     </div>
+     <!-- /#respond -->
+    </div>
+    <!-- /#main -->
+    <div class="col-right" id="sidebar">
+     <!-- Widgetized Sidebar -->
+     <div class="widget widget_text" id="text-4">
+      <h3>
+       Your Ad Here
+      </h3>
+      <div class="textwidget">
+       <script type="text/javascript">
+        &lt;!--
+google_ad_client = "ca-pub-5620262597565502";
+/* TGT Square */
+google_ad_slot = "2639920331";
+google_ad_width = 300;
+google_ad_height = 250;
+//--&gt;
+       </script>
+       <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+       </script>
+       <br/>
+       <br/>
+       <!-- &lt;SCRIPT charset="utf-8" type="text/javascript" src="http://ws.amazon.com/widgets/q?ServiceVersion=20070822&amp;MarketPlace=US&amp;ID=V20070822%2FUS%2Fteh000-20%2F8009%2Fc34dc14f-9a74-4bb7-b400-3d92cf6cd68b&amp;Operation=GetScriptTemplate"&gt; &lt;/SCRIPT&gt; &lt;NOSCRIPT&gt;&lt;A HREF="http://ws.amazon.com/widgets/q?ServiceVersion=20070822&amp;MarketPlace=US&amp;ID=V20070822%2FUS%2Fteh000-20%2F8009%2Fc34dc14f-9a74-4bb7-b400-3d92cf6cd68b&amp;Operation=NoScript"&gt;Amazon.com Widgets&lt;/A&gt;&lt;/NOSCRIPT&gt; -->
+      </div>
+     </div>
+     <div class="widget widget_text" id="text-8">
+      <h3>
+       TGT Store  BUY NOW portraits of yourself!
+      </h3>
+      <div class="textwidget">
+       Buy now a great portrait of yourself! Click to find out more!
+       <a href="http://tehgeektive.com/tgt-store/">
+        <img src="http://tehgeektive.com/wp-content/uploads/2014/11/portraits.jpg" width="300"/>
+       </a>
+      </div>
+     </div>
+     <div class="widget widget_text" id="text-9">
+      <h3>
+       Partners
+      </h3>
+      <div class="textwidget">
+       <div style="background:white;background-repeat:no-repeat; width:300px; height:51px; font-family:Arial;">
+        <div style="float:left; padding-left: 5px; letter spacing: -1 px; width: 150 px; padding top: 2px;margin-top:3px">
+         <p style="text-align:center;margin:0; font-size:12px; color:#97a9bf; z-indez:10; display:block;">
+          <a href="http://ro.easyhost.com/gazduire-website" style="text-decoration:none; color:#97a9bf; " target="_blank">
+           Web Hosting
+           <br/>
+           that simply works
+          </a>
+         </p>
+        </div>
+        <div style="float:left; margin-top:3px;padding-right:10px;padding-left: 3px">
+         <a href="http://ro.easyhost.com" target="_blank">
+          <img alt="Easyhost" src="http://ro.easyhost.com/images/banner_clients/easyhost_logo_for_light_bck.png" style="border-left: solid thin #97a9bf; padding-left:3px; margin-top: 10px;"/>
+         </a>
+         <div style="float: right;">
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="widget widget_text" id="text-3">
+      <h3>
+       Im on these networks   |    Subscribe
+      </h3>
+      <div class="textwidget">
+       <a href="https://plus.google.com/u/0/107636204139283411688/posts" target="_blank" title="Find me on Google+!">
+        <img height="48" src="http://tehgeektive.com/wp-content/uploads/2012/01/google-plus.jpg" width="48"/>
+       </a>
+       <a href="https://twitter.com/#!/manuelcheta" target="_blank" title="Find me on Twitter!">
+        <img height="48" src="http://tehgeektive.com/wp-content/uploads/2012/01/twitter.png" width="48"/>
+       </a>
+       <a href="http://www.linkedin.com/pub/cheta-manuel/25/532/8b6" in="" linked="" on="" target="_blank" title="Iam">
+        <img height="48" src="http://tehgeektive.com/wp-content/uploads/2012/01/linkedin.png" width="52"/>
+       </a>
+       <a href="http://feeds.feedburner.com/Tehgeektive" target="_blank" title="Get the goodies via RSS!">
+        <img height="52" src="http://tehgeektive.com/wp-content/uploads/2012/01/rss.png" width="48"/>
+       </a>
+       <a href="http://feedburner.google.com/fb/a/mailverify?uri=Tehgeektive&amp;loc=en_US" target="_blank" title="Posts via Email!">
+        <img height="48" src="http://tehgeektive.com/wp-content/uploads/2012/01/mail11.png" width="48"/>
+       </a>
+       <!--
+&lt;script src='http://cts.tradepub.com/cts/Data/jquery.min.rss.js'&gt;&lt;/script&gt;&lt;script src='http://cts.tradepub.com/cts/Data/html_validation_rss.js'&gt;&lt;/script&gt;&lt;link rel='stylesheet' href='http://cts.tradepub.com/cts/Data/style_rss.css' type='text/css'&gt;&lt;form name='f1' action='http://i.nl02.net/rssnews0001/' method='post' target='_blank'&gt;&lt;input type='hidden' name='_submit' value='0001'&gt;&lt;input type='hidden' name='brand' id='brand' value='tehgeektive'&gt;&lt;table width='285' cellpadding='0' cellspacing='0' border='0'&gt; &lt;tr valign='bottom'&gt;&lt;td width='15' height='15' style='font-size:1px;'&gt; &lt;img src='http://img.revresponse.com//rsssub_nw_999999.gif' width='15' height='15'&gt;&lt;/td&gt; &lt;td colspan='2' style='font-size:1px;background-image:url(http://img.revresponse.com//rsssub_n_999999.gif);repeat:repeat-x;'&gt;&lt;img src='http://img.revresponse.com/spacer.gif' width='1' height='1' border='0'&gt;&lt;/td&gt;&lt;td width='15' height='15' style='font-size:1px;'&gt;&lt;img src='http://img.revresponse.com//rsssub_ne_999999.gif' width='15' height='15' /&gt;&lt;/td&gt;&lt;/tr&gt; &lt;tr valign='top'&gt;&lt;td rowspan='2' width='15' style='background-image:url(http://img.revresponse.com//rsssub_w_999999.gif);repeat:repeat-y;font-size:8px;'&gt;&nbsp;&lt;/td&gt;&lt;td NOWRAP bgcolor='#ffffff' style='text-align:center;font-family:verdana,arial,helvetica,sans-serif;font-size:12px;color:#333333;font-weight:bold;'&gt;Sign-Up To My Daily Free Newsletter!&lt;/td&gt;&lt;td align='right'&gt;&lt;img src='http://img.revresponse.com//rsssub_emailicon.gif' width='29' height='23' /&gt;&lt;/td&gt; &lt;td rowspan='2' width='15' style='background-image:url(http://img.revresponse.com//rsssub_e_999999.gif);repeat:repeat-y;font-size:8px;'&gt;&nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr valign='top'&gt;&lt;td colspan='2' bgcolor='#ffffff'&gt; &lt;table cellpadding='0' cellspacing='0' border='0' width='100%' style='margin:7px 0 7px 0;'&gt;&lt;tr valign='top'&gt;&lt;td width='20' style='font-family:verdana,arial,helvetica;color:#666666;font-size:12px;font-weight:normal;text-align:right;padding-right:7px;'&gt;&lt;input type='checkbox' class='rssnsltr' name='opt_001' id='opt_001' value='Y' checked&gt;&lt;/td&gt;&lt;td style='font-family:verdana,arial,helvetica;color:#666666;font-size:12px;font-weight:normal;padding-top:2px;'&gt;TehGeekTive Blog&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt; &lt;table border='0' cellpadding='0' cellspacing='0'&gt; &lt;tr valign='middle'&gt; &lt;td style='padding:2px 5px;'&gt;&lt;input type='text' id='email' name='email' value='Your Email Address' onfocus=value=''&gt;&lt;/td&gt; &lt;td style='text-align:right;padding-left:5px;'&gt;&lt;input type='submit' value='Sign Up Now!' id='flex_button' style='background: transparent url(http://img.revresponse.com//rsssub_submit_999999.gif) no-repeat top right;'&gt;&lt;/td&gt; &lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr valign='top'&gt;&lt;td width='15' height='15' style='font-size:1px;'&gt;&lt;img src='http://img.revresponse.com//rsssub_sw_999999.gif' width='15' height='15' /&gt;&lt;/td&gt;&lt;td colspan='2' style='font-size:1px;background-image:url(http://img.revresponse.com//rsssub_s_999999.gif);repeat:repeat-x;font-size:8px;'&gt;&nbsp;&lt;/td&gt;&lt;td width='15' height='15' style='font-size:1px;'&gt;&lt;img src='http://img.revresponse.com//rsssub_se_999999.gif' width='15' height='15' /&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt; -->
+      </div>
+     </div>
+     <!-- TABS STARTS -->
+     <!-- TABS END -->
+     <!-- Widgetized Sidebar -->
+     <div class="widget widget_text" id="text-5">
+      <h3>
+       TehGeekTive pages
+      </h3>
+      <div class="textwidget">
+       <!-- Place this tag where you want the badge to render-->
+       <g:plus href="https://plus.google.com/u/0/b/105604641008169717654/" size="badge" width="100px;">
+       </g:plus>
+       <br/>
+       <div class="fb-like-box" data-header="false" data-height="160" data-href="https://www.facebook.com/pages/TehGeekTive/181319741955406" data-show-faces="true" data-stream="false" data-width="295" style="margin-left: -12px;">
+       </div>
+      </div>
+     </div>
+     <div class="widget widget_archive" id="archives-3">
+      <h3>
+       Archives
+      </h3>
+      <label class="screen-reader-text" for="archives-dropdown-3">
+       Archives
+      </label>
+      <select id="archives-dropdown-3" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+       <option value="">
+        Select Month
+       </option>
+       <option value="http://tehgeektive.com/2015/07/">
+        July 2015 (1)
+       </option>
+       <option value="http://tehgeektive.com/2015/06/">
+        June 2015 (1)
+       </option>
+       <option value="http://tehgeektive.com/2015/05/">
+        May 2015 (4)
+       </option>
+       <option value="http://tehgeektive.com/2015/04/">
+        April 2015 (9)
+       </option>
+       <option value="http://tehgeektive.com/2015/03/">
+        March 2015 (16)
+       </option>
+       <option value="http://tehgeektive.com/2015/02/">
+        February 2015 (23)
+       </option>
+       <option value="http://tehgeektive.com/2015/01/">
+        January 2015 (26)
+       </option>
+       <option value="http://tehgeektive.com/2014/12/">
+        December 2014 (26)
+       </option>
+       <option value="http://tehgeektive.com/2014/11/">
+        November 2014 (24)
+       </option>
+       <option value="http://tehgeektive.com/2014/10/">
+        October 2014 (57)
+       </option>
+       <option value="http://tehgeektive.com/2014/09/">
+        September 2014 (64)
+       </option>
+       <option value="http://tehgeektive.com/2014/08/">
+        August 2014 (75)
+       </option>
+       <option value="http://tehgeektive.com/2014/07/">
+        July 2014 (48)
+       </option>
+       <option value="http://tehgeektive.com/2014/06/">
+        June 2014 (98)
+       </option>
+       <option value="http://tehgeektive.com/2014/05/">
+        May 2014 (119)
+       </option>
+       <option value="http://tehgeektive.com/2014/04/">
+        April 2014 (60)
+       </option>
+       <option value="http://tehgeektive.com/2014/03/">
+        March 2014 (21)
+       </option>
+       <option value="http://tehgeektive.com/2014/02/">
+        February 2014 (26)
+       </option>
+       <option value="http://tehgeektive.com/2014/01/">
+        January 2014 (20)
+       </option>
+       <option value="http://tehgeektive.com/2013/12/">
+        December 2013 (18)
+       </option>
+       <option value="http://tehgeektive.com/2013/11/">
+        November 2013 (22)
+       </option>
+       <option value="http://tehgeektive.com/2013/10/">
+        October 2013 (13)
+       </option>
+       <option value="http://tehgeektive.com/2013/09/">
+        September 2013 (18)
+       </option>
+       <option value="http://tehgeektive.com/2013/08/">
+        August 2013 (11)
+       </option>
+       <option value="http://tehgeektive.com/2013/07/">
+        July 2013 (22)
+       </option>
+       <option value="http://tehgeektive.com/2013/06/">
+        June 2013 (32)
+       </option>
+       <option value="http://tehgeektive.com/2013/05/">
+        May 2013 (21)
+       </option>
+       <option value="http://tehgeektive.com/2013/04/">
+        April 2013 (16)
+       </option>
+       <option value="http://tehgeektive.com/2013/03/">
+        March 2013 (16)
+       </option>
+       <option value="http://tehgeektive.com/2013/02/">
+        February 2013 (24)
+       </option>
+       <option value="http://tehgeektive.com/2013/01/">
+        January 2013 (52)
+       </option>
+       <option value="http://tehgeektive.com/2012/12/">
+        December 2012 (37)
+       </option>
+       <option value="http://tehgeektive.com/2012/11/">
+        November 2012 (34)
+       </option>
+       <option value="http://tehgeektive.com/2012/10/">
+        October 2012 (33)
+       </option>
+       <option value="http://tehgeektive.com/2012/09/">
+        September 2012 (20)
+       </option>
+       <option value="http://tehgeektive.com/2012/08/">
+        August 2012 (20)
+       </option>
+       <option value="http://tehgeektive.com/2012/07/">
+        July 2012 (18)
+       </option>
+       <option value="http://tehgeektive.com/2012/06/">
+        June 2012 (19)
+       </option>
+       <option value="http://tehgeektive.com/2012/05/">
+        May 2012 (21)
+       </option>
+       <option value="http://tehgeektive.com/2012/04/">
+        April 2012 (37)
+       </option>
+       <option value="http://tehgeektive.com/2012/03/">
+        March 2012 (23)
+       </option>
+       <option value="http://tehgeektive.com/2012/02/">
+        February 2012 (14)
+       </option>
+       <option value="http://tehgeektive.com/2012/01/">
+        January 2012 (20)
+       </option>
+       <option value="http://tehgeektive.com/2011/12/">
+        December 2011 (27)
+       </option>
+       <option value="http://tehgeektive.com/2011/11/">
+        November 2011 (57)
+       </option>
+       <option value="http://tehgeektive.com/2011/10/">
+        October 2011 (26)
+       </option>
+      </select>
+     </div>
+     <div class="widget widget_links" id="linkcat-520">
+      <h3>
+       Help your self
+      </h3>
+      <ul class="xoxo blogroll">
+       <li>
+        <a href="http://tehgeektive.tradepub.com/">
+         Downloadable free stuff
+        </a>
+       </li>
+       <li>
+        <a href="http://reeija.ro">
+         Reeija Handbags
+        </a>
+       </li>
+       <li>
+        <a href="http://www.springmerchant.com/">
+         Spring Merchant
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="widget widget_links" id="linkcat-2057">
+      <h3>
+       Listed in
+      </h3>
+      <ul class="xoxo blogroll">
+       <li>
+        <a href="http://www.ontoplist.com/" title="Online Marketing at OnToplist.com">
+         Online Marketing at OnToplist.com
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <!-- /#sidebar -->
+   </div>
+   <!-- /#content -->
+   <!-- Footer Widget Area Starts -->
+   <div id="footer-widgets">
+    <div class="container col-full">
+     <div class="block">
+     </div>
+     <div class="block">
+     </div>
+     <div class="block last">
+     </div>
+     <div class="fix">
+     </div>
+    </div>
+   </div>
+   <!-- Footer Widget Area Ends -->
+   <div id="footer">
+    <div class="col-full">
+     <div class="col-left" id="copyright">
+      <p>
+        2015 TehGeekTive. All Rights Reserved.
+      </p>
+     </div>
+     <div class="col-right" id="credit">
+     </div>
+    </div>
+   </div>
+   <!-- footer Ends -->
+  </div>
+  <!-- /#container -->
+  <!-- Powered by WPtouch: 3.8.2 -->
+  <div style="display:none">
+   <div class="grofile-hash-map-08d4de666d0bdbe8465eb4737e7eae17">
+   </div>
+  </div>
+  <script type="text/javascript">
+   window.WPCOM_sharing_counts = {"http:\/\/tehgeektive.com\/2013\/12\/03\/hacking-websites-cross-site-request-forgery\/":3545};
+		window.WPCOM_jetpack = true;
+				window.WPCOM_site_ID = 28065676;
+  </script>
+  <script type="text/javascript">
+   (function() {
+			    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			    po.src = 'https://apis.google.com/js/plusone.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+			  })();
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+  </script>
+  <div id="fb-root">
+  </div>
+  <script>
+   (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&amp;appId=249643311490&amp;version=v2.3'; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <script type="text/javascript">
+   // Pinterest shared resources
+				var s = document.createElement("script");
+				s.type = "text/javascript";
+				s.async = true;
+				s.setAttribute('data-pin-hover', true);				s.src = window.location.protocol + "//assets.pinterest.com/js/pinit.js";
+				var x = document.getElementsByTagName("script")[0];
+				x.parentNode.insertBefore(s, x);
+				// if 'Pin it' button has 'counts' make container wider
+				jQuery(window).load( function(){ jQuery( 'li.share-pinterest a span:visible' ).closest( '.share-pinterest' ).width( '80px' ); } );
+  </script>
+  <script src="http://tehgeektive.com/wp-content/plugins/akismet/_inc/form.js?ver=3.1.3" type="text/javascript">
+  </script>
+  <script src="http://tehgeektive.com/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://tehgeektive.com/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/tehgeektive.com\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","sending":"Sending ..."};
+/* ]]&gt; */
+  </script>
+  <script src="http://tehgeektive.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.2.1" type="text/javascript">
+  </script>
+  <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201529" type="text/javascript">
+  </script>
+  <script src="http://s.gravatar.com/js/gprofiles.js?ver=2015Julaa" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]&gt; */
+  </script>
+  <script src="http://tehgeektive.com/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]&gt; */
+  </script>
+  <script src="http://tehgeektive.com/wp-content/plugins/jetpack/modules/sharedaddy/sharing.js?ver=3.6" type="text/javascript">
+  </script>
+  <script async="" defer="" src="http://stats.wp.com/e-201529.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.6',blog:'28065676',post:'3545',tz:'2',srv:'tehgeektive.com'} ]);
+	_stq.push([ 'clickTrackerInit', '28065676', '3545' ]);
+  </script>
+ </body>
+</html>

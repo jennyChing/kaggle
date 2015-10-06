@@ -1,0 +1,2902 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Understanding Android local data store APIs
+  </title>
+  <link href="http://purl.org/DC/elements/1.0/" rel="schema.DC"/>
+  <link href="//www.ibm.com/favicon.ico" rel="SHORTCUT ICON"/>
+  <meta content=" CopyrightIBM Corporation2010" name="DC.Rights"/>
+  <meta content="Android, storage,  XML, Facebook, Facebook Platform, Facebook API, C. Enrique Ortiz, Ortiz C. Enrique, sample, samples, example, examples, download, tttxca, tttosca" name="Keywords"/>
+  <meta content="2010-11-30" name="DC.Date" scheme="iso8601"/>
+  <meta content="v17 delivery:developerWorks" name="Source"/>
+  <meta content="Public" name="Security"/>
+  <meta content="The ability to store data locally on the mobile device is a critical function for mobile applications that are required to maintain essential information across application-executions or the lifetime of the application. As a developer, you constantly need to store information such as user preferences or application configurations. You must also decide if you need to tap internal or external storage, depending on characteristics, such as access visibility, or if you need to handle more complex, structured types of data. Follow along in this article to learn about Android data storage APIs, specifically the preferences, SQLite, and the internal and external memory APIs." name="Abstract"/>
+  <meta content="The ability to store data locally on the mobile device is a critical function for mobile applications that are required to maintain essential information across application-executions or the lifetime of the application. As a developer, you constantly need to store information such as user preferences or application configurations. You must also decide if you need to tap internal or external storage, depending on characteristics, such as access visibility, or if you need to handle more complex, structured types of data. Follow along in this article to learn about Android data storage APIs, specifically the preferences, SQLite, and the internal and external memory APIs." name="Description"/>
+  <meta content="2010-11-30" name="IBM.Effective" scheme="W3CDTF"/>
+  <meta content="developerWorks Content/Raleigh/IBM" name="Owner"/>
+  <meta content="en" name="DC.Language" scheme="rfc1766"/>
+  <meta content="SP001" name="IBM.SpecialPurpose"/>
+  <meta content="ZZ" name="IBM.Country"/>
+  <meta content="index,follow" name="Robots"/>
+  <meta content="CT316" name="DC.Type" scheme="IBM_ContentClassTaxonomy"/>
+  <meta content="TTC00" name="DC.Subject" scheme="IBM_SubjectTaxonomy"/>
+  <meta content="A" name="IBM.Industry" scheme="IBM_IndustryTaxonomy"/>
+  <meta content="3,7,46" name="dW.ContentArea"/>
+  <meta content="263,214,2,16,88,549" name="dW.Topic"/>
+  <meta content="SOFDCXMLZZ" name="IBM.WTMCategory" scheme="IBM_WTMCategory"/>
+  <!-- SITE MON : START (DO NOT DELETE) -->
+  <!-- developerWorks monitoring token -->
+  <!-- SITE MON : END (DO NOT DELETE) -->
+  <link href="http://www.ibm.com/developerworks/library/x-androidstorage/index.html" rel="canonical"/>
+  <!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+  <link href="//1.www.s81c.com/common/v17/css/www.css" rel="stylesheet" title="www" type="text/css"/>
+  <!--  Masthead/footer  -->
+  <link href="//dw1.s81c.com/developerworks/css/dw-mf/v17/dw-mfN2015-01.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-article-6.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-common-features.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-bluemix-regbar.css" media="screen,projection" rel="stylesheet" title="www" type="text/css"/>
+  <script src="//1.www.s81c.com/common/js/dojo/www.js" type="text/javascript">
+   //
+  </script>
+  <script src="//dw1.s81c.com/developerworks/js/v17/dw-www-v2.js" type="text/javascript">
+   //
+  </script>
+  <script type="text/javascript">
+   dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var lnkID="article-rbar-bmix-home-regbar";dojo.attr(dojo.query(".dw-regbar-btn")[0],"id",lnkID);var lnkHref=dojo.attr(dojo.byId(lnkID),"href")+"?lang="+dw_lang+"&amp;ca="+dw_source+"-_-bluemix-_-"+dw_content+"-_-regbar-article";dojo.attr(dojo.byId(lnkID),"href",lnkHref);dojo.attr(dojo.byId(lnkID),"onclick","trkOBL('"+lnkHref+"','"+lnkID+"'); return false;");var dwRegbarShow=dojo.animateProperty({node:"dw-regbar",duration:1000,delay:1000,properties:{opacity:{start:0,end:1},top:0}});var ibmTopShow=dojo.animateProperty({node:"ibm-top",duration:1000,delay:1000,properties:{marginTop:{start:0,end:42}}});dwRegbarShow.play();ibmTopShow.play()})
+  </script>
+  <script type="text/javascript">
+   //  ibmweb.config.set({ sbs: { enabled: false }});
+  </script>
+  <!-- Continuous Feedback Survey (jpp 04/06/15 -->
+  <script type="text/javascript">
+   ibmweb.config.set({
+    opinionlab: {
+    intercept: {
+    percent: 15,
+    start: "April 5 2015",
+    stop: "May 15 2015",
+    invitation: {
+    title: "Tell developerWorks what you think",
+    content: "We want your feedback to help us improve developerWorks. Please take a few minutes to complete our brief survey.",
+    yes_label: "Yes",
+    no_label: "No Thanks"
+    },
+    survey: {
+    type: "sg",
+    id: "s3/2048432/Tell-developerWorks-what-you-think",
+    width: 720,
+    height: 600
+    }
+    }
+    }
+    });
+  </script>
+  <script type="text/javascript">
+   dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_register="Sign up for a free Bluemix trial";var dw_connect="Connect with Bluemix developers";var dw_vp="Develop and deploy your next&lt;br/&gt;app on the IBM Bluemix&lt;br/&gt;cloud platform.";var dw_cta="Start your free trial";var dw_tile_alt="Develop and deploy your next app on the IBM Bluemix cloud platform. Start building for free.";var dw_videopr="It's never been easier&lt;br/&gt;to build and deploy your apps in the cloud.&lt;br/&gt;";var dw_videopr_cta="Start your free trial";var dw_campaign="bluemix";var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var bluDevComURL="https://developer.ibm.com/bluemix/";var bluLink="https://www.bluemix.net/";var lnkID;var lnkIDd;var lnkIDt;var bLinkEnd;var bLinkTemp;var idTrkr=[];var idCnt;var artTop=dojo.query("div.ibm-col-1-1")[0];var artChildren=dojo.query(artTop).children();var edgy=false;if(dojo.hasClass(artChildren[0],"ibm-inset"))edgy=true;if((artChildren[0].nodeName=="H2")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-inset")))edgy=true;if(dojo.hasClass(artChildren[0],"codesection"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"codesection")))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(artChildren[1].width&gt;=701))edgy=true;if(artChildren[1].width&gt;=701)edgy=true;if(dojo.hasClass(artChildren[0],"ibm-data-table"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-data-table")))edgy=true;if(!(edgy)){var sBarAB='&lt;div class="dw-article-sidebar dw-bluemix" id="dwc-exp-a"&gt;'+'&lt;img src="//dw1.s81c.com/developerworks/i/bluemix-graphic.png" height="64" width="64" alt=""/&gt;'+'&lt;p&gt;'+dw_vp+'&lt;/p&gt;'+'&lt;p class="ibm-button-link-alternate dw-button-green"&gt;'+'&lt;a id="tutc-sbar-bmix-home-btn-ABa" href="'+bluLink+'" class="dw-button-large"&gt;'+dw_cta+'&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;';dojo.place(sBarAB,artTop,"first")}dojo.forEach(dojo.query("#ibm-content-main a"),function(item,index){var dw_medium="article";var bLink=dojo.attr(item,"href");var linkClass=dojo.attr(item,"class");if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-sbar-")&gt;-1))dw_medium="sidebar";if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-vpromo-")&gt;-1))dw_medium="video-promotion";if(bLink&amp;&amp;(bLink.indexOf("//bluemix.net")&gt;-1))bLink=bLink.replace("//bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//ace.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//ace.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//console.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//console.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;((bLink.indexOf("//www.bluemix.net")&gt;-1)||(bLink.indexOf("//www.ng.bluemix.net")&gt;-1)||(bLink.indexOf("//hub.jazz.net")&gt;-1))){bLinkEnd="";bLink=bLink.split("?");if((bLink[1])&amp;&amp;(bLink[1].indexOf("repository=")!=-1)){var deployBtn=true;bLink[0]=bLink[0]+"?"+bLink[1];bLink[1]=null}if((bLink[1])&amp;&amp;(bLink[1].indexOf("/")!=-1))bLinkEnd=bLink[1].substring(bLink[1].indexOf("/"));if(dojo.attr(item,"id")==null){bLinkTemp=bLink[0]+bLinkEnd;if(bLinkTemp.indexOf("bluemix")!=-1){lnkIDd="bmix";if(bLinkTemp.indexOf("/#/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/#/store")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/catalog")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/docs")!=-1){lnkIDd=lnkIDd+"-docs"}else{lnkIDd=lnkIDd+"-home"}}else{if((bLinkTemp.indexOf("//hub.jazz.net/git")&gt;-1)||(bLinkTemp.indexOf("//hub.jazz.net/project")&gt;-1)){lnkIDd=deployBtn?"devops-deploy":"devops-code"}else{lnkIDd=bLinkTemp.substring(bLinkTemp.indexOf("hub.jazz.net/")+13);lnkIDd=lnkIDd==""?"devops-home":"devops-"+lnkIDd.split("/")[0]}}if(dojo.attr(dojo.query(item).parent()[0],"class").indexOf("ibm-button")!=-1){lnkIDt="btn"}else{lnkIDt="txt"}}bLink=bLink[0];if(bLink.indexOf("//hub.jazz.net")&gt;-1){if(!(deployBtn)&amp;&amp;((bLink.indexOf("//hub.jazz.net/git")&gt;-1)||(bLink.indexOf("//hub.jazz.net/project")&gt;-1))){bLink="https://login.jazz.net/psso/proxy/jazzregister?utm_source="+dw_source+"&amp;utm_medium="+dw_medium+"&amp;utm_content="+dw_content+"&amp;utm_campaign="+dw_campaign+"&amp;redirect_uri="+bLink}else{if(deployBtn){bLink=bLink+"&amp;cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}else{bLink=bLink+"?utm_source="+dw_source+"&amp;utm_campaign="+dw_campaign+"&amp;utm_content="+dw_content+"&amp;utm_medium="+dw_medium}}}else{if(bLink.indexOf("/#/")==-1){if(bLink.substring(bLink.length-7)=="/docs/#"){bLink=bLink.replace("/docs/#","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else if(bLink.substring(bLink.length-5)=="/docs"){bLink=bLink.replace("/docs","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else{bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}}else{bLink=bLink.substring(0,bLink.indexOf("#"))+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium+bLink.substring(bLink.indexOf("#")-1)}}if(bLinkEnd)bLink=bLink+bLinkEnd;if(linkClass.indexOf("bluemix-home")==-1){if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("/catalog")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net/")!=-1)){bLink=bLink.replace("//www.bluemix.net/","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net?")!=-1)){bLink=bLink.replace("//www.bluemix.net","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("solutions")!=-1)){bLinkTemp=bLink.substring(0,bLink.indexOf("?"));bLink=bLink.substring(bLink.indexOf("/#/")+3,bLink.length);bLink=bLinkTemp+bLink;bLinkTemp=bLink.substring(0,bLink.indexOf("solution="));bLink=bLink.substring(bLink.indexOf("/solution=")+10,bLink.length);bLink=bLinkTemp+bLink;bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("store")!=-1)){if(bLink.indexOf("&amp;cloudOEPaneId=store")!=-1){bLinkTemp=bLink.split("&amp;cloudOEPaneId=store");bLink=bLinkTemp[0]}bLinkTemp=bLink.substring(bLink.indexOf("serviceOfferingGuid=")+20,bLink.length);bLink=bLink.substring(0,bLink.indexOf(".net/")+5)+"catalog/"+bLinkTemp+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if(dojo.attr(item,"id")==null){lnkID="tutc-main-"+lnkIDd+"-"+lnkIDt;idCnt=0;dojo.forEach(idTrkr,function(item,index){if(item.indexOf(lnkID)!=-1){idCnt++}});if(idCnt&gt;0){lnkID=lnkID+"-"+idCnt}dojo.attr(item,"id",lnkID);idTrkr.push(lnkID)}else{lnkID=dojo.attr(item,"id")}dojo.attr(item,"href",bLink);dojo.attr(item,"onclick","trkOBL('"+bLink+"','"+lnkID+"'); return false;");}});var istndom=setInterval(function(){if(!!dojo.byId('ibm-social-tools')){var ibmsi=["print","email","digg","facebook","twitter","delicious","linkedin","stumble","googleplus"];dojo.forEach(ibmsi,function(item,index){var siHref=escape(dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"href"));var siID="ibmShare-B-"+item;siHref=siHref.replace(/%250A/g,"");siHref=siHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+siHref+"','"+siID+"');")});clearInterval(istndom)}},1000);var dwistndom=setInterval(function(){if(!!dojo.byId('dw-ibm-social-tools')){var dwibmsi=["facebook","twitter","linkedin","googleplus"];dojo.forEach(dwibmsi,function(item,index){var dwsiHref=escape(dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href"));var dwsiID="dwShare-B-"+item;dwsiHref=dwsiHref.replace(/%250A/g,"");dwsiHref=dwsiHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+dwsiHref+"','"+dwsiID+"');");dojo.removeAttr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"target");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href","javascript:void(0)")});clearInterval(dwistndom)}},1000);});
+  </script>
+  <!-- LEADSPACE_STYLES -->
+ </head>
+ <body id="ibm-com">
+  <div aria-labelledby="dw-regbar-vp" class="dw-home-band" id="dw-regbar" role="complementary">
+   <div class="ibm-columns">
+    <div class="ibm-col-6-6">
+     <span id="dw-regbar-bluemix">
+      IBM
+      <strong>
+       Bluemix
+      </strong>
+     </span>
+     <span id="dw-regbar-vp">
+      Develop in the cloud at the click of a button!
+     </span>
+     <p class="ibm-button-link-alternate dw-button-green">
+      <a class="dw-button-large dw-regbar-btn" href="https://developer.ibm.com/sso/bmregistration">
+       Start your free trial
+      </a>
+     </p>
+    </div>
+   </div>
+  </div>
+  <div class="ibm-landing-page" id="ibm-top">
+   <!-- MASTHEAD_BEGIN -->
+   <div id="ibm-masthead">
+    <!-- TOP ROW -->
+    <div id="dw-masthead-top-row">
+     <ul aria-label="Masthead navigation" id="ibm-mast-options-dw" role="toolbar">
+      <li id="dw-mast-top-4" role="presentation">
+       <a href="http://www.ibm.com/developerworks/" tabindex="0">
+        <img alt="dW" aria-label="dW" height="22" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-badge.png" width="43"/>
+       </a>
+      </li>
+      <li id="dw-mast-top-0" role="presentation">
+       <div id="dw-mast-signin">
+        <a class="dw-mf-noscript" href="#" id="dw-mf-signin-link" tabindex="2" title="Sign in requires JavaScript">
+         Sign in
+        </a>
+        <span class="dw-mf-signin-spacer">
+         |
+        </span>
+        <a class="dw-mf-noscript" href="#" id="dw-mf-reg-link" tabindex="3" title="Register requires JavaScript">
+         Register
+        </a>
+       </div>
+       <div class="dw-mf-hide" id="dw-mast-auth-link">
+        <a class="authenticated ibm-active" href="#" role="button" tabindex="2">
+        </a>
+        <ul class="dw-mf-hide" id="dw-mast-auth-menu">
+         <li aria-hidden="true" class="dw-mast-auth-menu-title">
+          developerWorks Community
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/profiles/html/myProfileView.do?lang=en" tabindex="3">
+           My profile
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/groups/service/html/mycommunities?lang=en" tabindex="4">
+           My communities
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/news/?lang=en" tabindex="5">
+           Settings
+          </a>
+         </li>
+         <li class="dw-mast-auth-menu-divider">
+          <hr/>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="#" id="dw-mast-signout-link" tabindex="6">
+           Sign out
+          </a>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li id="dw-mast-top-1">
+       <div>
+       </div>
+      </li>
+      <li id="dw-mast-top-3" role="presentation">
+       <a href="http://www.ibm.com" tabindex="1">
+        IBM
+       </a>
+      </li>
+     </ul>
+    </div>
+    <!-- BOTTOM ROW -->
+    <div aria-label="Site map" id="ibm-universal-nav-dw">
+     <ul id="ibm-unav-links-dw">
+      <li id="ibm-unav-home-dwlogo">
+       <a href="http://www.ibm.com/developerworks/">
+        <img alt="developerWorks" height="28" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-wordmark.png" width="225"/>
+       </a>
+      </li>
+     </ul>
+     <ul aria-label="Site map" id="ibm-menu-links-dw" role="toolbar">
+      <li id="dw-mast-nav-0" role="presentation">
+       <a href="http://www.ibm.com/developerworks/topics/" tabindex="0">
+        Technical topics
+       </a>
+      </li>
+      <li id="dw-mast-nav-1" role="presentation">
+       <a href="http://www.ibm.com/developerworks/downloads/" tabindex="0">
+        Evaluation software
+       </a>
+      </li>
+      <li id="dw-mast-nav-2" role="presentation">
+       <a href="http://www.ibm.com/developerworks/community/index.html" tabindex="0">
+        Community
+       </a>
+      </li>
+      <li id="dw-mast-nav-3" role="presentation">
+       <a href="http://www.ibm.com/developerworks/events/" tabindex="0">
+        Events
+       </a>
+      </li>
+     </ul>
+     <form action="//www.ibm.com/search/csass/search/" aria-label="IBM developerWorks Search" id="ibm-search-form" method="get" name="form1" role="search">
+      <p>
+       <label for="q">
+        <span class="ibm-access">
+         Search developerWorks
+        </span>
+       </label>
+       <input id="q" maxlength="100" name="q" type="text" value="Search developerWorks"/>
+       <input name="sn" type="hidden" value="dw"/>
+       <input name="lang" type="hidden" value="en"/>
+       <input name="cc" type="hidden" value="US"/>
+       <input name="en" type="hidden" value="utf"/>
+       <input name="hpp" type="hidden" value="20"/>
+       <input name="dws" type="hidden" value="dw"/>
+       <input class="ibm-btn-search" id="ibm-search" type="submit" value="Submit"/>
+      </p>
+     </form>
+    </div>
+   </div>
+   <div class="ibm-access" id="fdiv">
+   </div>
+   <!-- MASTHEAD_END -->
+   <!-- LAYOUT -->
+   <!-- LEADSPACE_BEGIN -->
+   <div id="ibm-leadspace-head">
+    <!-- LEADSPACE_BODY_BEGIN -->
+    <div id="ibm-leadspace-body">
+     <!-- Navigation_Trail_BEGIN -->
+     <ul id="ibm-navigation-trail">
+      <li>
+       <a href="http://www.ibm.com/developerworks/">
+        developerWorks
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/topics/">
+        Technical topics
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/xml/">
+        XML
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/xml/library/">
+        Technical library
+       </a>
+      </li>
+     </ul>
+     <!-- END_Navigation_Trail -->
+     <!-- Title_Subtitle -->
+     <h1>
+      Understanding Android local data store APIs
+     </h1>
+     <p>
+      <em>
+       <span>
+        Take advantage of preferences, SQLite, and the internal and external memory APIs
+       </span>
+      </em>
+     </p>
+    </div>
+    <!-- LEADSPACE_BODY_END -->
+    <!-- SUMMARY_BEGIN -->
+    <div class="dw-summary-columns" id="dw-summary-area">
+     <div class="ibm-col-6-4">
+      <p>
+       The ability to store data locally on the mobile device is a critical function for mobile applications that are required to maintain essential information across application-executions or the lifetime of the application. As a developer, you constantly need to store information such as user preferences or application configurations. You must also decide if you need to tap internal or external storage, depending on characteristics, such as access visibility, or if you need to handle more complex, structured types of data. Follow along in this article to learn about Android data storage APIs, specifically the preferences, SQLite, and the internal and external memory APIs.
+      </p>
+      <p class="ibm-no-print ibm-ind-link">
+       <a class="ibm-pdf-link" href="x-androidstorage-pdf.pdf">
+        PDF
+       </a>
+       (391 KB)
+       <span class="dw-summary-bar">
+        |
+       </span>
+       <span id="nCmts">
+       </span>
+      </p>
+      <div id="dw-social-tools-container">
+       <span class="dw-social-lead-in">
+        Share:
+       </span>
+      </div>
+     </div>
+     <div class="ibm-col-6-2 dw-toc-margin">
+      <p class="dw-summary-author">
+       <a class="ibm-popup-link" href="#authorN10031" onclick="ibmweb.overlay.show('authorN10031',this);return false;">
+        C. Enrique Ortiz
+       </a>
+       , Developer and author, About Mobility Weblog
+      </p>
+      <div class="ibm-common-overlay" id="authorN10031">
+       <div class="ibm-head">
+        <p>
+         <a class="ibm-common-overlay-close" href="#close">
+          Close [x]
+         </a>
+        </p>
+       </div>
+       <div class="ibm-body">
+        <div class="ibm-main">
+         <div class="ibm-title">
+          <!--this is where the h2 usually
+                                    goes-->
+         </div>
+         <div class="ibm-container ibm-alternate">
+          <div class="ibm-container-body">
+           <p>
+            <!--.-->
+            <a href="http://cenriqueortiz.com/">
+             C. Enrique Ortiz
+            </a>
+            is a long-time mobile technologist, developer and author. He blogs at the
+            <a href="http://mobilityweblog.com">
+             About Mobility
+            </a>
+            weblog and is the founder of the Austin chapter of MobileMonday.
+           </p>
+           <br/>
+           <br/>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="ibm-footer">
+        <!-- -->
+       </div>
+      </div>
+      <p class="dw-summary-date">
+       30 November 2010
+      </p>
+      <p>
+       Also available in
+       <a href="http://www.ibm.com/developerworks/cn/xml/x-androidstorage/">
+        Chinese
+       </a>
+       <a href="http://www.ibm.com/developerworks/jp/xml/library/x-androidstorage/">
+        Japanese
+       </a>
+       <a href="http://www.ibm.com/developerworks/vn/library/x-androidstorage/">
+        Vietnamese
+       </a>
+      </p>
+      <div aria-hidden="true" class="ibm-container" id="dw-toc">
+       <div class="ibm-container-body">
+        <ul class="ibm-twisty">
+         <li>
+          <a class="ibm-twisty-trigger" href="#toggle">
+           <img alt="-" src="//www.ibm.com/i/c.gif"/>
+          </a>
+          <span class="ibm-twisty-head">
+           Table of contents
+          </span>
+          <div class="ibm-twisty-body">
+           <ul class="ibm-link-list" style="font-size:0.8em">
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10067">
+              Prerequisites
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1007E">
+              The sample application
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1012F">
+              Storing application preferences
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N101DB">
+              Using SQLite databases
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N102D2">
+              Using the device's internal storage for private data
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10313">
+              Using the device's external storage for public data
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1037B">
+              Related methods
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1039C">
+              Conclusion
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#download">
+              Download
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#resources">
+              Resources
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#icomments">
+              Comments
+             </a>
+            </li>
+           </ul>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- SUMMARY_END -->
+   </div>
+   <!-- LEADSPACE_END -->
+   <div id="ibm-pcon">
+    <!-- BEGIN_IBM-CONTENT -->
+    <div id="ibm-content">
+     <!-- BEGIN_IBM-CONTENT-BODY -->
+     <div id="ibm-content-body">
+      <!-- BEGIN_IBM-CONTENT-MAIN -->
+      <div id="ibm-content-main">
+       <!-- 1_1_COLUMN_BEGIN -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <div class="dw-sidebar ibm-inset">
+          <h2 id="fua">
+           Frequently used acronyms
+          </h2>
+          <ul class="ibm-bullet-list">
+           <li>
+            ADT: Android Development Tools
+           </li>
+           <li>
+            API: Application program interface
+           </li>
+           <li>
+            IDE: Integrated development environment
+           </li>
+           <li>
+            JDK: Java Development Kit
+           </li>
+           <li>
+            JSON: JavaScript Object Notation
+           </li>
+           <li>
+            SDK: Software Development Kit
+           </li>
+           <li>
+            SQL: Structured Query Language
+           </li>
+           <li>
+            UI: User interface
+           </li>
+           <li>
+            XML: Extensible Markup Language
+           </li>
+          </ul>
+         </div>
+         <h2 id="N10067">
+          Prerequisites
+         </h2>
+         <p>
+          To follow along with this article, you need the following skills and tools:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           Basic knowledge of Java technology and how to use Eclipse (or your favorite IDE)
+          </li>
+          <li>
+           Java Development Kit (version 5 or 6 required)
+          </li>
+          <li>
+           Eclipse (version 3.4 or 3.5)
+          </li>
+          <li>
+           Android SDK and ADT plug-in
+          </li>
+         </ul>
+         <p>
+          For download and setup information, see
+          <a href="#resources">
+           Resources
+          </a>
+          at the end of this article.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1007E">
+          The sample application
+         </h2>
+         <p>
+          To highlight the local store aspects of Android application development, I cover a sample application that allows you to test the execution of various types of APIs. The
+          <a href="#download">
+           source code
+          </a>
+          is available for download. The application supports the actions in
+          <a href="#fig1">
+           Figure 1
+          </a>
+          .
+         </p>
+         <h5 id="fig1">
+          Figure 1. The use cases
+         </h5>
+         <img alt="Diagram of the use cases in the sample application" src="fig01.gif" width="258"/>
+         <p>
+          <a href="#fig1">
+           Figure 1
+          </a>
+          lists the following use cases:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           Manage and store preferences
+          </li>
+          <li>
+           Load information from application assets
+          </li>
+          <li>
+           Export information to internal memory, external memory, and the local database
+          </li>
+          <li>
+           Read information from internal memory and the local database
+          </li>
+          <li>
+           Clear stored information
+          </li>
+          <li>
+           See information on the screen
+          </li>
+         </ul>
+         <p>
+          You make use of the local store in the application throughout this article, as follows:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           Preferences are captured from the user, stored locally, and used throughout the application.
+          </li>
+          <li>
+           A picture of the user is retrieved from internal application assets, stored in local internal memory and external memory, and rendered on the screen.
+          </li>
+          <li>
+           A list of friends in JSON is retrieved from the application's assets. It is parsed and stored in local internal memory, external memory, and the relational database, and rendered on the screen.
+          </li>
+         </ul>
+         <p>
+          The sample application defines the classes in
+          <a href="#table1">
+           Table 1
+          </a>
+          .
+         </p>
+         <h5 id="table1">
+          Table 1. Sample application classes
+         </h5>
+         <table border="0" cellpadding="0" cellspacing="0" class="ibm-data-table" summary="Sample application classes">
+          <thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+           <tr>
+            <th>
+             Class
+            </th>
+            <th>
+             Description
+            </th>
+           </tr>
+          </thead>
+          <tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+           <tr>
+            <td>
+             <code>
+              MainActivity
+             </code>
+            </td>
+            <td>
+             The Main Activity; where most of the sample code resides
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <code>
+              Friend
+             </code>
+            </td>
+            <td>
+             Represents a Friend
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <code>
+              AppPreferenceActivity
+             </code>
+            </td>
+            <td>
+             Preferences Activity and screen
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <code>
+              DBHelper
+             </code>
+            </td>
+            <td>
+             A helper class for the management of the SQLite database
+            </td>
+           </tr>
+          </tbody>
+         </table>
+         <p>
+          The example application uses two types of data. The first one is the application preferences that are stored as name-value pairs. For preferences, define the following information:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           A
+           <em>
+            filename
+           </em>
+           , used to load and store the list of the friends' names
+          </li>
+          <li>
+           A
+           <em>
+            filename
+           </em>
+           , used to load and store a picture for the user
+          </li>
+          <li>
+           A
+           <em>
+            flag
+           </em>
+           , if set, indicates to automatically delete all stored data at application startup
+          </li>
+         </ul>
+         <p>
+          The second type of data is a friends list. The friends list is initially represented in a Facebook Graph API JSON format, which consists of an array of name and friend objects (see
+          <a href="#list1">
+           Listing 1
+          </a>
+          ).
+         </p>
+         <h5 id="list1">
+          Listing 1. The friends list (in Facebook Graph API JSON format)
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           {
+   "data": [
+      {
+         "name": "Edmund Troche",
+         "id": "500067699"
+      }
+   ]
+}
+          </pre>
+         </div>
+         <p>
+          The simple format above makes the
+          <code>
+           Friend
+          </code>
+          object and database
+    schema simple.
+          <a href="#list2">
+           Listing 2
+          </a>
+          shows the
+          <code>
+           Friend
+          </code>
+          class.
+         </p>
+         <h5 id="list2">
+          Listing 2.
+          <code>
+           Friend
+          </code>
+          class
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           package com.cenriqueortiz.tutorials.datastore;
+
+import android.graphics.Bitmap;
+
+/**
+ * Represents a Friend
+ */
+public class Friend {
+    public String id;
+    public String name;
+    public byte[] picture;
+    public Bitmap pictureBitmap;;
+}
+          </pre>
+         </div>
+         <p>
+          In addition to the ID and name, the sample application also keeps references to the friend's picture. While the sample application is not using those, you can easily extend the sample application to retrieve the picture from Facebook and show it in the main screen.
+         </p>
+         <p>
+          The database schema consists of a single table to store the Friend's information. It has three columns:
+         </p>
+         <ul class="ibm-bullet-list">
+          <li>
+           Unique ID or key
+          </li>
+          <li>
+           Facebook ID
+          </li>
+          <li>
+           The Friend's name
+          </li>
+         </ul>
+         <p>
+          <a href="#list3">
+           Listing 3
+          </a>
+          shows the SQL statement for the corresponding relational table declaration.
+         </p>
+         <h5 id="list3">
+          Listing 3. Friend database table
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           db.execSQL("create table " + TABLE_NAME + " (_id integer primary key autoincrement, " 
++ " fid text not null, name text not null) ");
+          </pre>
+         </div>
+         <p>
+          Based on this information, you can display the name on the main screen, and using the ID, you can retrieve additional details for the selected user. In the sample application, you just display the names. It is left to you to experiment with retrieving additional information. Note that you can easily change the code to go directly to Facebook.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1012F">
+          Storing application preferences
+         </h2>
+         <p>
+          This section covers the Preferences API and screens. The Android API provides a number of ways to deal with preferences. One way is to use
+          <code>
+           SharedPreferences
+          </code>
+          directly and use your own screen design and management of the preferences. The second approach is to use a
+          <code>
+           PreferenceActivity
+          </code>
+          . A
+          <code>
+           PreferenceActivity
+          </code>
+          automatically takes care of how the preferences are rendered on the screen (by default they  look like the system's preferences) and automatically stores or saves the preferences as the user interacts with each preference through the use of
+          <code>
+           SharedPreferences
+          </code>
+          .
+         </p>
+         <p>
+          To simplify the sample application, use a
+          <code>
+           PreferenceActivity
+          </code>
+          to manage the preferences and the preference screen (see
+          <a href="#fig2">
+           Figure
+    2
+          </a>
+          ). The preferences screen displays two sections: Assets and Auto Settings.
+    Under  Assets, you can enter filenames for both the Friends List and Picture options.
+    Under Auto Settings, you can select a check box to delete information at startup.
+         </p>
+         <h5 id="fig2">
+          Figure 2. The Preferences screen as implemented
+         </h5>
+         <img alt="Screen capture of the Preferences screen as implemented" src="fig02.jpg" width="580"/>
+         <p>
+          In
+          <a href="#fig2">
+           Figure 2
+          </a>
+          , the layout was defined using the declarative approach through XML (instead of programmatically); declarative XML is preferred as it keeps the source code clean and readable.
+          <a href="#list4">
+           Listing 4
+          </a>
+          shows the XML declaration for the Preferences UI.
+         </p>
+         <h5 id="list4">
+          Listing 4. The Preferences screen XML declaration
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           &lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/prefs_screen"
+        android:key="preferencescreen"
+    &gt;
+    &lt;PreferenceCategory android:title="Assets"&gt;
+        &lt;EditTextPreference 
+            android:key="@string/prefs_assetname_friendslist_key"
+            android:title="Friends List" 
+            android:summary="Please enter filename"
+            android:defaultValue="friends.txt"
+        /&gt;
+        &lt;EditTextPreference 
+            android:key="@string/prefs_assetname_picture_key"
+            android:title="Picture" 
+            android:summary="Please enter filename"
+            android:defaultValue="pict2.jpg"
+        /&gt;
+    &lt;/PreferenceCategory&gt;
+
+    &lt;PreferenceCategory android:title="Auto Settings"&gt;
+        &lt;CheckBoxPreference
+            android:key="@string/prefs_autodelete_key"
+            android:title="Delete at Startup" 
+            android:summary="Check to clear at startup"
+            android:defaultValue="false"
+        /&gt;
+    &lt;/PreferenceCategory&gt;
+&lt;/PreferenceScreen&gt;
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           PreferenceScreen
+          </code>
+          consists of two instances of
+          <code>
+           EditTextPreference
+          </code>
+          , 
+    a
+          <code>
+           CheckBoxPreference
+          </code>
+          , and the two category groups as defined by
+          <code>
+           PreferenceCategory
+          </code>
+          (one for
+          <code>
+           Asset
+          </code>
+          and the other for
+          <code>
+           Auto Settings
+          </code>
+          ).
+         </p>
+         <p>
+          In the sample application, the design calls for the Preference screen to be invoked
+    using a menu item. For this, use an Intent message to invoke the Preference Screen Activity called
+          <code>
+           AppPreferenceActivity
+          </code>
+          (see
+          <a href="#list5">
+           Listing 5
+          </a>
+          ). Note that I do not cover how Intent works in detail. See
+          <a href="#resources">
+           Resources
+          </a>
+          for more information on Intents.
+         </p>
+         <h5 id="list5">
+          Listing 5. The
+          <code>
+           AppPreferenceActivity
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /*
+ * AppPreferenceActivity is a basic PreferenceActivity
+ * C. Enrique Ortiz | http://CEnriqueOrtiz.com
+ */
+package com.cenriqueortiz.tutorials.datastore;
+
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+
+public class AppPreferenceActivity extends PreferenceActivity {
+
+    /**
+     * Default Constructor
+     */
+    public AppPreferenceActivity() {}
+
+   /** 
+    * Called when the activity is first created. 
+    *   Inflate the Preferences Screen XML declaration.
+    */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.prefs); // Inflate the XML declaration
+    }   
+
+}
+          </pre>
+         </div>
+         <p>
+          In the sample application, invoke the Intent  as in
+          <a href="#list6">
+           Listing 6
+          </a>
+          , from inside the Menu item handler.
+         </p>
+         <h5 id="list6">
+          Listing 6. Invoking the Preference activity using an Intent
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Invoked when a menu item has been selected
+ */
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+
+        // Case: Bring up the Preferences Screen
+        case R.id.menu_prefs: // Preferences
+            // Launch the Preference Activity
+            Intent i = new Intent(this, AppPreferenceActivity.class);
+            startActivity(i);
+            break;
+
+        case R.id.menu...:
+            :
+            break;
+
+    }
+    return true;
+}
+          </pre>
+         </div>
+         <p>
+          In addition, you must define all Intents in the AndroidManifest XML file as in
+          <a href="#list7">
+           Listing 7
+          </a>
+          .
+         </p>
+         <h5 id="list7">
+          Listing 7. Defining the Intent in AndroidManifest.xml
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           :
+
+&lt;application android:icon="@drawable/icon" android:label="@string/app_name"&gt;
+
+    :
+    :
+    
+    &lt;activity 
+        android:name="AppPreferenceActivity" 
+        android:label="Preferences"&gt;
+    &lt;/activity&gt;  
+
+     :
+
+&lt;/application&gt;
+          </pre>
+         </div>
+         <p>
+          Recall that
+          <code>
+           PreferenceActivity
+          </code>
+          uses
+          <code>
+           SharedPreferences
+          </code>
+          to automatically store the preferences as the user
+    interacts with the preferences screen. The application then uses these preferences
+    when it executes to perform its various tasks.
+          <a href="#list8">
+           Listing 8
+          </a>
+          shows
+    how to use
+          <code>
+           SharedPreferences
+          </code>
+          directly to load the stored
+    preferences; you can refer to the companion sample code on how the loaded preferences
+    are used throughout the sample code. In addition,
+          <a href="#list8">
+           Listing 8
+          </a>
+          also
+    shows how to store preferences directly with
+          <code>
+           SharedPreferences
+          </code>
+          using an
+          <code>
+           Editor
+          </code>
+          in case you prefer to manage the
+    preferences yourself (and not through
+          <code>
+           PrefenceActivity
+          </code>
+          ).
+         </p>
+         <p>
+          <a href="#list8">
+           Listing 8
+          </a>
+          shows how to use
+          <code>
+           SharedPreferences
+          </code>
+          to load the stored preferences and how to make changes to the stored preferences using an
+          <code>
+           Editor
+          </code>
+          .
+         </p>
+         <h5 id="list8">
+          Listing 8. Using
+          <code>
+           SharedPreferences
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /////////////////////////////////////////////////////////////
+// The following methods show how to use the SharedPreferences
+/////////////////////////////////////////////////////////////
+
+/**
+ * Retrieves the Auto delete preference
+ * @return the value of auto delete
+ */
+public boolean prefsGetAutoDelete() {
+    boolean v = false;
+    SharedPreferences sprefs = 
+       PreferenceManager.getDefaultSharedPreferences(appContext); 
+    String key = appContext.getString(R.string.prefs_autodelete_key);
+    try {
+        v = sprefs.getBoolean(key, false);
+    } catch (ClassCastException e) {
+    }
+    return v;
+}   
+
+/**
+ * Sets the auto delete preference
+ * @param v the value to set
+ */
+public void  prefsSetAutoDelete(boolean v) {
+    SharedPreferences sprefs = 
+    PreferenceManager.getDefaultSharedPreferences(appContext); 
+    Editor e = sprefs.edit();
+    String key = appContext.getString(R.string.prefs_autodelete_key);               
+    e.putBoolean(key, v);
+    e.commit();
+}
+          </pre>
+         </div>
+         <p>
+          Next, you will see how to use a database to store data.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N101DB">
+          Using SQLite databases
+         </h2>
+         <p>
+          Android provides support to local relational databases through SQLite.  The table (defined in the following listings) summarizes the important database classes used in the sample application.
+         </p>
+         <p>
+          For the sample application, a
+          <code>
+           DBHelper
+          </code>
+          class is used to
+    encapsulate some of the database operations (see
+          <a href="#list9">
+           Listing 9
+          </a>
+          ).
+         </p>
+         <h5 id="list9">
+          Listing 9. The
+          <code>
+           DBHelper
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           package com.cenriqueortiz.tutorials.datastore;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DBHelper extends SQLiteOpenHelper {
+          </pre>
+         </div>
+         <p>
+          A number of constants are defined for the database version, database name, and table
+    name (see
+          <a href="#list10">
+           Listing 10
+          </a>
+          ).
+         </p>
+         <h5 id="list10">
+          Listing 10. Initializing the
+          <code>
+           DBHelper
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           private SQLiteDatabase db;
+    private static final int DATABASE_VERSION = 1;
+    private static final String DB_NAME = "sample.db";
+    private static final String TABLE_NAME = "friends";
+
+    /**
+     * Constructor
+     * @param context the application context
+     */
+    public DBHelper(Context context) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
+        db = getWritableDatabase();
+    }
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           onCreate()
+          </code>
+          method is invoked when the database is ready to be created. In this method, the tables are created (see
+          <a href="#list11">
+           Listing 11
+          </a>
+          ).
+         </p>
+         <h5 id="list11">
+          Listing 11. Creating a database table
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * Called at the time to create the DB.
+     * The create DB statement
+     * @param the SQLite DB
+     */
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(
+                "create table " + TABLE_NAME + " (_id integer primary key autoincrement, 
+" + " fid text not null, name text not null) ");
+    }
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           insert()
+          </code>
+          method is invoked by
+          <code>
+           MainActivity
+          </code>
+          when exporting information to the database (see
+          <a href="#list12">
+           Listing 12
+          </a>
+          ).
+         </p>
+         <h5 id="list12">
+          Listing 12. Inserting a row
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * The Insert DB statement
+     * @param id the friends id to insert
+     * @param name the friend's name to insert
+     */
+    public void insert(String id, String name) {
+        db.execSQL("INSERT INTO friends('fid', 'name') values ('"
+                + id + "', '"
+                + name + "')");
+    }
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           deleteAll()
+          </code>
+          method is invoked by
+          <code>
+           MainActivity
+          </code>
+          when clearing the database. It deletes the table (see
+          <a href="#list13">
+           Listing 13
+          </a>
+          ).
+         </p>
+         <h5 id="list13">
+          Listing 13. Deleting the database table
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * Wipe out the DB
+     */
+    public void clearAll() {
+        db.delete(TABLE_NAME, null, null);
+    }
+          </pre>
+         </div>
+         <p>
+          Two
+          <code>
+           SELECT ALL
+          </code>
+          methods are provided:
+          <code>
+           cursorSelectAll()
+          </code>
+          , which returns a cursor, and
+          <code>
+           listSelectAll()
+          </code>
+          , which returns an
+          <code>
+           ArrayList
+          </code>
+          of
+          <code>
+           Friend
+          </code>
+          objects. These methods are invoked by
+          <code>
+           MainActivity
+          </code>
+          when loading information from the database (see
+          <a href="#list14">
+           Listing 14
+          </a>
+          ).
+         </p>
+         <h5 id="list14">
+          Listing 14. Running a
+          <code>
+           Select All
+          </code>
+          that returns an
+          <code>
+           ArrayList
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * Select All returns a cursor
+     * @return the cursor for the DB selection
+     */
+    public Cursor cursorSelectAll() {
+        Cursor cursor = this.db.query(
+                TABLE_NAME, // Table Name
+                new String[] { "fid", "name" }, // Columns to return
+                null,       // SQL WHERE
+                null,       // Selection Args
+                null,       // SQL GROUP BY 
+                null,       // SQL HAVING
+                "name");    // SQL ORDER BY
+        return cursor;
+    }
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           listSelectAll()
+          </code>
+          method returns the selected row inside an
+          <code>
+           ArrayList
+          </code>
+          container that is used by
+          <code>
+           MainActivity
+          </code>
+          to bind it to the
+          <code>
+           MainScreen ListView
+          </code>
+          (see
+          <a href="#list15">
+           Listing 15
+          </a>
+          ).
+         </p>
+         <h5 id="list15">
+          Listing 15. Running a
+          <code>
+           Select All
+          </code>
+          that returns a cursor
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * Select All that returns an ArrayList
+     * @return the ArrayList for the DB selection
+     */
+    public ArrayList&lt;Friend&gt; listSelectAll() {
+        ArrayList&lt;Friend&gt; list = new ArrayList&lt;Friend&gt;();
+        Cursor cursor = this.db.query(TABLE_NAME, new String[] { "fid", "name" }, 
+null, null, null, null, "name");
+        if (cursor.moveToFirst()) {
+            do {
+                Friend f = new Friend();
+                f.id = cursor.getString(0);
+                f.name = cursor.getString(1);
+                list.add(f);
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null &amp;&amp; !cursor.isClosed()) {
+            cursor.close();
+        }
+        return list;
+    }
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           onUpgrade()
+          </code>
+          method is invoked if a database version change is detected (see
+          <a href="#list16">
+           Listing 16
+          </a>
+          ).
+         </p>
+         <h5 id="list16">
+          Listing 16. Detecting if a database version changes
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+     * Invoked if a DB upgrade (version change) has been detected
+     */
+    @Override
+    /**
+     * Invoked if a DB upgrade (version change) has been detected
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase db, 
+       int oldVersion, int newVersion) {
+        // Here add any steps needed due to version upgrade
+        // for example, data format conversions, old tables 
+        // no longer needed, etc
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Throughout
+          <code>
+           MainActivity
+          </code>
+          ,
+          <code>
+           DBHelper
+          </code>
+          is used when you export information to the database, load information from the
+    database, and when you clear the database. The first thing is to instantiate the
+          <code>
+           DBHelper
+          </code>
+          when
+          <code>
+           MainActivity
+          </code>
+          is created. Other tasks performed at
+          <code>
+           onCreate()
+          </code>
+          include initializing the different screen views (see
+          <a href="#list17">
+           Listing 17
+          </a>
+          ).
+         </p>
+         <h5 id="list17">
+          Listing 17.
+          <code>
+           MainActivity onCreate()
+          </code>
+          initializing the database
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    appContext = this;
+    setContentView(R.layout.main);
+    dbHelper = new DBHelper(this);
+    listView = (ListView) findViewById(R.id.friendsview);
+    friendsArrayAdapter = new FriendsArrayAdapter(
+       this, R.layout.rowlayout, friends);
+    listView.setAdapter(friendsArrayAdapter);
+    :
+    :
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list18">
+           Listing 18
+          </a>
+          shows how to load the friends list from the assets
+    and how to parse and insert it into the database.
+         </p>
+         <h5 id="list18">
+          Listing 18.
+          <code>
+           MainActivity
+          </code>
+          inserting into the database
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           String fname = prefsGetFilename();
+if (fname != null &amp;&amp; fname.length() &gt; 0) {
+    buffer = getAsset(fname);
+    // Parse the JSON file
+    String friendslist = new String(buffer);
+    final JSONObject json = new JSONObject(friendslist);
+    JSONArray d = json.getJSONArray("data");
+    int l = d.length();
+    for (int i2=0; i2&lt;l; i2++) {
+        JSONObject o = d.getJSONObject(i2);
+        String n = o.getString("name");
+        String id = o.getString("id");
+        dbHelper.insert(id, n);
+    }
+    // Only the original owner thread can touch its views                           
+    MainActivity.this.runOnUiThread(new Runnable() {
+        public void run() {
+            friendsArrayAdapter.notifyDataSetChanged();
+        }
+    });         
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list19">
+           Listing 19
+          </a>
+          shows how to perform a
+          <code>
+           SELECT
+ALL
+          </code>
+          and how to bind the data to the main screen
+          <code>
+           ListView
+          </code>
+          .
+         </p>
+         <h5 id="list19">
+          Listing 19.
+          <code>
+           MainActivity
+          </code>
+          <code>
+           Select All
+          </code>
+          and binding the data to
+          <code>
+           ListView
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           final ArrayList&lt;Friend&gt; dbFriends = dbHelper.listSelectAll();
+if (dbFriends != null) {
+    // Only the original owner thread can touch its views                           
+    MainActivity.this.runOnUiThread(new Runnable() {
+        public void run() {
+            friendsArrayAdapter = 
+            new FriendsArrayAdapter(
+                MainActivity.this, R.layout.rowlayout, dbFriends);
+            listView.setAdapter(friendsArrayAdapter);
+            friendsArrayAdapter.notifyDataSetChanged();
+        }
+    });
+}
+          </pre>
+         </div>
+         <p>
+          Next, take a look at using the Internal Storage API with the example application.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N102D2">
+          Using the device's internal storage for private data
+         </h2>
+         <p>
+          With the data storage API, you can store data using the internal storage. The information can be private, and you have the option of letting other applications have read or write access to it. This section covers the API to store private data using
+          <code>
+           android.content.Context.openFileInput
+          </code>
+          ,
+          <code>
+           openFileOutput
+          </code>
+          , and
+          <code>
+           getCacheDir()
+          </code>
+          to cache data rather than store it persistently.
+         </p>
+         <p>
+          The snippet shown in
+          <a href="#list20">
+           Listing 20
+          </a>
+          shows how to read from the internal private store. What makes the storage private is the use of
+          <code>
+           openFileOutput()
+          </code>
+          with
+          <code>
+           MODE_PRIVATE
+          </code>
+          .
+         </p>
+         <h5 id="list20">
+          Listing 20. Reading from the local private store
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Writes content to internal storage making the content private to 
+ * the application. The method can be easily changed to take the MODE 
+ * as argument and let the caller dictate the visibility: 
+ * MODE_PRIVATE, MODE_WORLD_WRITEABLE, MODE_WORLD_READABLE, etc.
+ * 
+ * @param filename - the name of the file to create
+ * @param content - the content to write
+ */
+public void writeInternalStoragePrivate(
+        String filename, byte[] content) {
+    try {
+        //MODE_PRIVATE creates/replaces a file and makes 
+        //  it private to your application. Other modes:
+        //    MODE_WORLD_WRITEABLE
+        //    MODE_WORLD_READABLE
+        //    MODE_APPEND
+        FileOutputStream fos = 
+           openFileOutput(filename, Context.MODE_PRIVATE);
+        fos.write(content);
+        fos.close();
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+          </pre>
+         </div>
+         <p>
+          The snippet in
+          <a href="#list21">
+           Listing 21
+          </a>
+          shows how to read from the internal private store; see the use of
+          <code>
+           openFileInput()
+          </code>
+          .
+         </p>
+         <h5 id="list21">
+          Listing 21. Reading from the local private store
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Reads a file from internal storage
+ * @param filename the file to read from
+ * @return the file content
+ */
+public byte[] readInternalStoragePrivate(String filename) {
+    int len = 1024;
+    byte[] buffer = new byte[len];
+    try {
+        FileInputStream fis = openFileInput(filename);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int nrb = fis.read(buffer, 0, len); // read up to len bytes
+        while (nrb != -1) {
+            baos.write(buffer, 0, nrb);
+            nrb = fis.read(buffer, 0, len);
+        }
+        buffer = baos.toByteArray();
+        fis.close();
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return buffer;
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list22">
+           Listing 22
+          </a>
+          shows how to delete from the internal private store.
+         </p>
+         <h5 id="list22">
+          Listing 22. Deleting from the local private store
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Delete internal private file 
+ * @param filename - the filename to delete
+ */
+public void deleteInternalStoragePrivate(String filename) {
+    File file = getFileStreamPath(filename);
+    if (file != null) {
+        file.delete();
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Now you can see how to use external storage for public data.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10313">
+          Using the device's external storage for public data
+         </h2>
+         <p>
+          With the data storage API, you can store data using the external storage. The information can be private, and you have the option of letting other applications have read or write access to it. In this section, you code the API to store public data using a number of APIs including
+          <code>
+           getExternalStorageState()
+          </code>
+          ,
+          <code>
+           getExternalFilesDir()
+          </code>
+          ,
+          <code>
+           getExternalStorageDirectory()
+          </code>
+          , and
+          <code>
+           getExternalStoragePublicDirectory()
+          </code>
+          . You  use the following path for public data:
+          <code>
+           /Android/data/&lt;package_name&gt;/files/
+          </code>
+          .
+         </p>
+         <p>
+          Before using the external storage, you must see if it is available, and if it is
+    writable. The following two code snippets show helper methods to test for such
+    conditions.
+          <a href="#list23">
+           Listing 23
+          </a>
+          tests whether the external storage is available.
+         </p>
+         <h5 id="list23">
+          Listing 23. Testing if external storage is available
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Helper Method to Test if external Storage is Available
+ */
+public boolean isExternalStorageAvailable() {
+    boolean state = false;
+    String extStorageState = Environment.getExternalStorageState();
+    if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+        state = true;
+    }
+    return state;
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list24">
+           Listing 24
+          </a>
+          tests whether the external storage is read-only.
+         </p>
+         <h5 id="list24">
+          Listing 24. Testing if external storage is read-only
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Helper Method to Test if external Storage is read only
+ */
+public boolean isExternalStorageReadOnly() {
+    boolean state = false;
+    String extStorageState = Environment.getExternalStorageState();
+    if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+        state = true;
+    }
+    return state;
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list25">
+           Listing 25
+          </a>
+          shows how to write to external storage to store public data.
+         </p>
+         <h5 id="list25">
+          Listing 25. Writing to external memory
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Write to external public directory
+ * @param filename - the filename to write to
+ * @param content - the content to write 
+ */
+public void writeToExternalStoragePublic(String filename, byte[] content) {
+
+    // API Level 7 or lower, use getExternalStorageDirectory() 
+    //  to open a File that represents the root of the external 
+    // storage, but writing to root is not recommended, and instead 
+    // application should write to application-specific directory, as shown below.
+
+    String packageName = this.getPackageName();
+    String path = "/Android/data/" + packageName + "/files/";
+
+    if (isExternalStorageAvailable() &amp;&amp; 
+       !isExternalStorageReadOnly()) {
+        try {
+            File file = new File(path, filename);
+            file.mkdirs();
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(content);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list26">
+           Listing 26
+          </a>
+          shows how to read from external storage.
+         </p>
+         <h5 id="list26">
+          Listing 26. Reading from external memory
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Reads a file from internal storage
+ * @param filename - the filename to read from
+ * @return the file contents
+ */
+public byte[] readExternallStoragePublic(String filename) {
+    int len = 1024;
+    byte[] buffer = new byte[len];
+    String packageName = this.getPackageName();
+    String path = "/Android/data/" + packageName + "/files/";
+
+    if (!isExternalStorageReadOnly()) {     
+        try {
+            File file = new File(path, filename);            
+            FileInputStream fis = new FileInputStream(file);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int nrb = fis.read(buffer, 0, len); //read up to len bytes
+            while (nrb != -1) {
+                baos.write(buffer, 0, nrb);
+                nrb = fis.read(buffer, 0, len);
+            }
+            buffer = baos.toByteArray();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    return buffer;
+}
+          </pre>
+         </div>
+         <p>
+          The
+          <a href="#list27">
+           Listing 27
+          </a>
+          snippet shows how to delete a file from external memory.
+         </p>
+         <h5 id="list27">
+          Listing 27. Deleting a file from external memory
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Delete external public file 
+ * @param filename - the filename to write to
+ */
+void deleteExternalStoragePublicFile(String filename) {
+    String packageName = this.getPackageName();
+    String path = "/Android/data/" + packageName + "/files/"+filename;
+    File file = new File(path, filename);
+    if (file != null) {
+        file.delete();
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Working with external storage requires a special permission,
+          <code>
+           WRITE_EXTERNAL_STORAGE
+          </code>
+          , to be requested through the AndroidManifest.xml (see
+          <a href="#list28">
+           Listing 28
+          </a>
+          ).
+         </p>
+         <h5 id="list28">
+          Listing 28. The
+          <code>
+           WRITE_EXTERNAL_STORAGE
+          </code>
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           &lt;uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/&gt;
+          </pre>
+         </div>
+         <p>
+          The external storage API allows you to store files publicly by storing the files in predefined directories based on their types such as Pictures, Ringtones, and so on. This approach is not covered in this article, but you should become familiar with it. In addition, remember that files in the external storage can disappear at any time.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1037B">
+          Related methods
+         </h2>
+         <p>
+          If you have temporary files that do not need long-term persistence, you can store those files in a cache. Cache is a special memory useful for storing mid-sized or small  data (less than a megabyte), but you must be aware that contents of the cache can be purged at any time depending on how much memory is available.
+         </p>
+         <p>
+          <a href="#list29">
+           Listing 29
+          </a>
+          shows a helper method that returns the path to the cache in internal memory.
+         </p>
+         <h5 id="list29">
+          Listing 29. Retrieving the path to the internal memory cache
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Helper method to retrieve the absolute path to the application 
+ * specific internal cache directory on the file system. These files 
+ * will be ones that get deleted when the application is uninstalled or when 
+ * the device runs low on storage. There is no guarantee when these 
+ * files will be deleted.
+ * 
+ * Note: This uses a Level 8+ API.
+ * 
+ * @return the absolute path to the application specific cache 
+ * directory
+ */
+public String getInternalCacheDirectory() {
+    String cacheDirPath = null;
+    File cacheDir = getCacheDir();
+    if (cacheDir != null) {
+        cacheDirPath = cacheDir.getPath();
+    }
+    return cacheDirPath;        
+}
+          </pre>
+         </div>
+         <p>
+          <a href="#list30">
+           Listing 30
+          </a>
+          shows a helper method that returns the path to the cache in external memory.
+         </p>
+         <h5 id="list30">
+          Listing 30. Retrieving the path to the external memory cache
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           /**
+ * Helper method to retrieve the absolute path to the application 
+ * specific external cache directory on the file system. These files 
+ * will be ones that get deleted when the application is uninstalled or when 
+ * the device runs low on storage. There is no guarantee when these 
+ * files will be deleted.
+ * 
+ * Note: This uses a Level 8+ API.
+ * 
+ * @return the absolute path to the application specific cache 
+ * directory
+ */
+public String getExternalCacheDirectory() {
+    String extCacheDirPath = null;
+    File cacheDir = getExternalCacheDir();
+    if (cacheDir != null) {
+        extCacheDirPath = cacheDir.getPath();
+    }
+    return extCacheDirPath;     
+}
+          </pre>
+         </div>
+         <p>
+          Through the use of the example application, you should now have a good understanding of how to use the device's external storage for public data.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1039C">
+          Conclusion
+         </h2>
+         <p>
+          This article covered the Android storage APIs, from preferences to using SQLite and
+    internal and external memory. With the preferences API, you can have your application
+    collect and store simple preference information. Using the SQLite API, you can store
+    more complex data, and with the internal and external storage, you can store files
+    that are private to the application or publicly available to other applications.
+    Stored data that persists across sessions allows your application to work even when
+    disconnected from the network. You should now have the expertise to take advantage of all of these types of storage when you develop Android applications.
+         </p>
+         <!--CMA ID: true-->
+         <!--Site ID: 1-->
+         <!--XSLT stylesheet used to transform this file:
+        dw-document-html-7.0.xsl-->
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="download">
+          Download
+         </h2>
+         <table border="0" cellpadding="0" cellspacing="0" class="ibm-data-table dw-download-table">
+          <thead>
+           <tr>
+            <th scope="col">
+             Description
+            </th>
+            <th scope="col">
+             Name
+            </th>
+            <th scope="col">
+             Size
+            </th>
+           </tr>
+          </thead>
+          <tbody>
+           <tr>
+            <th class="ibm-table-row" scope="row">
+             Article source code
+            </th>
+            <td nowrap="nowrap">
+             <a href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=588001&amp;filename=android.storage.source.zip&amp;method=http&amp;locale=">
+              android.storage.source.zip
+             </a>
+            </td>
+            <td nowrap="nowrap">
+             38KB
+            </td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+       <!-- 1_1_COLUMN_END -->
+       <!-- SPLIT_COLUMNS_BEGIN -->
+       <div class="ibm-columns">
+        <!-- 6_4_COLUMN_BEGIN -->
+        <div class="ibm-col-6-4">
+         <h2 class="ibm-rule" id="resources">
+          Resources
+         </h2>
+         <h3 class="dw-resources-category-heading">
+          Learn
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://developers.facebook.com/docs/guides/mobile/">
+            Facebook mobile web page
+           </a>
+           : Learn how to incorporate Facebook into your own mobile application using the same APIs as those provided for all websites, formatted to fit on a mobile phone.
+          </li>
+          <li>
+           <a href="http://developers.facebook.com/setup/">
+            Create an Application - Facebook Developers
+           </a>
+           : Register your Facebook application.
+          </li>
+          <li>
+           <a href="http://developers.facebook.com/docs/authentication/permissions">
+            Extended permissions - Facebook Developers
+           </a>
+           : Request extended permissions if your application needs to access other parts of the user's profile that might be private, or if your application needs to publish content to Facebook on a user's behalf.
+          </li>
+          <li>
+           The official
+           <a href="http://developers.facebook.com/docs/">
+            Facebook developer documentation
+           </a>
+           : Explore the powerful APIs that enable you to create social experiences to drive growth and engagement on your website.
+          </li>
+          <li>
+           <a href="http://developers.facebook.com/docs/authentication">
+            Facebook Authentication
+           </a>
+           : Learn about authentication and authorization when using the Facebook platform to develop your applications.
+          </li>
+          <li>
+           The
+           <a href="http://developers.facebook.com/roadmap">
+            Facebook Developer Roadmap
+           </a>
+           : Use this roadmap to plan for changes that might require code modifications.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/edu/os-dw-os-eclipse-android.html">
+            Develop Android applications with Eclipse
+           </a>
+           (Frank Ableson, developerWorks, February 2008): The easiest way to develop Android applications is to use Eclipse. Learn all about this topic in this developerWorks tutorial.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/opensource/library/os-android-devel/">
+            Introduction to Android development
+           </a>
+           (Frank Ableson, developerWorks, May 2009): Get an introduction to the Android platform and learn how to code a basic Android application.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/opensource/library/os-android-networking/">
+            Networking with Android
+           </a>
+           (Frank Ableson, developerWorks, June 2009): Explore the networking capabilities of Android.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/xml/library/x-android/">
+            Working with XML on Android
+           </a>
+           (Michael Galpin, developerWorks, June 2009): Learn about the different options for working with XML on Android and how to use them to build your own Android applications.
+          </li>
+          <li>
+           <a href="http://www.linux-mag.com/id/7633">
+            Under the Hood of Native Web Apps for Android
+           </a>
+           : Learn about hybrid applications in Android.
+          </li>
+          <li>
+           <a href="http://manning.com/ableson2">
+            Unlocking Android
+           </a>
+           (Frank Ableson, Manning Publications, 2010): Cover all aspects of Android development in this book.
+          </li>
+          <li>
+           <a href="http://oreilly.com/catalog/9780596155445/">
+            Mobile Design and Development
+           </a>
+           (Brian Fling, O'Reilly Media, 2009): Read about practical guidelines, standards, techniques, and best practices for building mobile products in this book.
+          </li>
+          <li>
+           Read the
+           <a href="http://developer.android.com/guide/topics/data/data-storage.html">
+            Data Storage Dev Guide
+           </a>
+           : Choose the right solution to save persistent application data as noted on the official Android Developer website.
+          </li>
+          <li>
+           <a href="http://developer.android.com/reference/android/content/Intent.html">
+            Intents
+           </a>
+           : Learn about this abstract description of an operation to be performed from the Android Developer site.
+          </li>
+          <li>
+           <a href="http://developer.android.com/reference/packages.html">
+            Android SDK documentation
+           </a>
+           : Get the latest information in the Android API reference.
+          </li>
+          <li>
+           <a href="http://www.openhandsetalliance.com/">
+            The Open Handset Alliance
+           </a>
+           : Visit Android's sponsor.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/views/xml/libraryview.jsp?sort_by=&amp;show_abstract=true&amp;show_all=&amp;search_flag=&amp;contentarea_by=All+Zones&amp;search_by=C.+Enrique+Ortiz&amp;product_by=All++Products&amp;topic_by=All++Topics&amp;industry_by=All++Industries&amp;type_by=All++Types&amp;ibm-search=Search">
+            More articles by this author
+           </a>
+           (C. Enrique Ortiz, developerWorks, July 2004-current): Read articles about Android, mobile applications, web services, and other technologies.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/xml">
+            XML area on developerWorks
+           </a>
+           : Get 	the resources you need to advance your skills in the XML arena.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/mydeveloperworks">
+            My developerWorks
+           </a>
+           : Personalize your developerWorks experience.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/certify/certs/01001503.shtml">
+            IBM XML certification
+           </a>
+           : Find out how you can become an IBM-Certified Developer in XML and related technologies.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/views/xml/library.jsp">
+            XML technical library
+           </a>
+           : See the developerWorks XML Zone for a wide range of technical articles and tips, tutorials, standards, and IBM Redbooks.  Also, read more
+           <a href="http://www.ibm.com/developerworks/views/xml/libraryview.jsp?search_by=tip:">
+            XML tips
+           </a>
+           .
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/offers/techbriefings/">
+            developerWorks technical events and webcasts
+           </a>
+           : Stay current with technology in these sessions.
+          </li>
+          <li>
+           <a href="http://twitter.com/developerworks/">
+            developerWorks on Twitter
+           </a>
+           : Join today to follow developerWorks tweets.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/podcast/">
+            developerWorks podcasts
+           </a>
+           : Listen to interesting interviews and discussions for software developers.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/offers/lp/demos/">
+            developerWorks on-demand demos
+           </a>
+           : Watch demos ranging from product installation and setup for beginners to advanced functionality for experienced developers.
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Get products and technologies
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://github.com/facebook/facebook-android-sdk">
+            Facebook Android SDK
+           </a>
+           (Currently an Alpha release): Work with this library to integrate Facebook into your Android mobile application.
+          </li>
+          <li>
+           The
+           <a href="http://www.facebook.com/platform">
+            Facebook Platform
+           </a>
+           : Expand your ability to build social applications on Facebook and the web.
+          </li>
+          <li>
+           The
+           <a href="http://developers.facebook.com/docs/reference/rest/">
+            Facebook Old Rest API
+           </a>
+           (The previous version of the Graph API): Interact with the Facebook website programmatically through simple HTTP requests.
+          </li>
+          <li>
+           The
+           <a href="http://developers.facebook.com/docs/api">
+            Facebook Graph API
+           </a>
+           (The current version): Dig into this core Facebook Platform API.
+          </li>
+          <li>
+           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-10">
+            OAuth 2.0 Protocol specification
+           </a>
+           (July 2010): Work with OAuth authentication, supported by the Facebook Platform.
+          </li>
+          <li>
+           <a href="http://developer.android.com">
+            Android SDK
+           </a>
+           : Download the SDK, access the API reference, and get the latest news on Android from the official Android developers' site. Version 1.5 and later will work.
+          </li>
+          <li>
+           The
+           <a href="http://source.android.com/">
+            Android Open Source Project
+           </a>
+           : Find the open source information and source code you need to build an Android-compatible device.
+          </li>
+          <li>
+           <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">
+            JDK 6 Update 21
+           </a>
+           : Get the Java Platform, Standard Edition.
+          </li>
+          <li>
+           <a href="http://eclipse.org">
+            Eclipse
+           </a>
+           : Obtain the latest Eclipse IDE.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/downloads/">
+            IBM product evaluation versions
+           </a>
+           : Download or
+           <a href="http://www.ibm.com/developerworks/downloads/soasandbox/">
+            explore the online trials in the IBM SOA Sandbox
+           </a>
+           and get your hands on application development tools and middleware products from DB2, Lotus, Rational, Tivoli, and WebSphere.
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Discuss
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://www.ibm.com/developerworks/forums/dw_xforums.jsp">
+            XML zone discussion forums
+           </a>
+           : Participate in any of several XML-related discussions.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/blogs/">
+            developerWorks blogs
+           </a>
+           : Check out these blogs and get involved.
+          </li>
+         </ul>
+         <!-- INLINE_COMMENTS_BEGIN -->
+         <h2 class="ibm-alternate-rule ibm-no-print" id="icomments">
+          Comments
+         </h2>
+         <div class="ibm-no-print" id="dw-icomments-container">
+          <div id="threadShow">
+          </div>
+         </div>
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="signin_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              developerWorks: Sign in
+             </h2>
+             <div class="no-display" id="ibm-overlay-error-signin">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="sFormId" method="post" name="sForm" onsubmit="return false;">
+               <p>
+                <label for="ibmid">
+                 IBM ID:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="ibmid" name="ibm-id" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;d='+encodeURIComponent(location.protocol + '//' + location.hostname + location.pathname + '#icomments'); return false;">
+                  Need an IBM ID?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="/developerworks/dwwi/jsp/WSHelp.jsp?lang=en_US">
+                  Forgot your IBM ID?
+                 </a>
+                </span>
+               </p>
+               <p>
+                <label for="password">
+                 Password:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="password" name="password" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="password" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(dwsi.siInst.getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Den_US%26d%3D'+encodeURIComponent(location.href);})();">
+                  Forgot your password?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">
+                  Change your password
+                 </a>
+                </span>
+               </p>
+               <p class="dw-perm-box">
+                <span>
+                 <input id="perm" name="perm_name" type="checkbox"/>
+                 <label for="perm">
+                  Keep me signed in.
+                 </label>
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('signin_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <p>
+               The first time you sign into developerWorks, a profile is created for you.
+               <strong>
+                Information in your profile (your name, country/region, and company name) is displayed to the public and will accompany any content you post, unless you opt to hide your company name
+               </strong>
+               .  You may update your IBM account at any time.
+              </p>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- Display name OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="displayname_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              Choose your display name
+             </h2>
+             <br/>
+             <br/>
+             <div class="no-display" id="ibm-overlay-error-dname">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               The first time you sign in to developerWorks, a profile is created for you, so you need to choose a display name.  Your display name accompanies the content you post on developerWorks.
+              </p>
+              <p>
+               <strong>
+                Please choose a display name between 3-31 characters
+               </strong>
+               . Your display name must be unique in the developerWorks community and should not be your email address for privacy reasons.
+              </p>
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="dFormId" method="post" name="dForm" onsubmit="return false;">
+               <p>
+                <label for="displayname">
+                 Display name:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input id="displayname" name="displayname" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                </span>
+                <span class="ibm-form-note">
+                 (Must be between 3  31 characters.)
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('displayname_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- INLINE_COMMENTS_END -->
+        </div>
+        <!-- 6_4_COLUMN_END -->
+        <!-- 6_2_COLUMN_BEGIN -->
+        <div class="ibm-col-6-2">
+         <!-- Next_Steps -->
+         <!-- Dig_Deeper -->
+         <!-- DIG_DEEPER_START -->
+         <h2 class="ibm-rule">
+          Dig deeper into XML on developerWorks
+         </h2>
+         <ul class="ibm-link-list">
+          <li class="ibm-first">
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/">
+            Overview
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/newto/">
+            New to XML
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/library/">
+            Technical library (tutorials and more)
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="https://www.ibm.com/developerworks/community/forums/html/category?id=33333333-0000-0000-0000-000000000011">
+            Forums
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/find/downloads/">
+            Downloads and products
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/find/projects/">
+            Open source projects
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/standards/">
+            Standards
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/xml/find/events/">
+            Events
+           </a>
+          </li>
+         </ul>
+         <!-- DIG_DEEPER_END -->
+         <!-- Promotion_Module -->
+         <!-- PROMOTION_MODULE_START -->
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <ul class="ibm-portrait-module-list">
+          <li>
+           <img alt="" height="60" src="//dw1.s81c.com/developerworks/i/sm-f-bluemixdev60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://developer.ibm.com/bluemix/">
+             Bluemix Developers Community
+            </a>
+           </h3>
+           <p>
+            Get samples, articles, product docs, and community resources to help build, deploy, and manage your cloud apps.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-dwnewsletters60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://ibmdeveloperworks.mkt6741.com/dWdWWeeklyNewsletterSubscriptionPage/">
+             developerWorks Weekly Newsletter
+            </a>
+           </h3>
+           <p>
+            Keep up with the best and latest technical info to help you tackle your development challenges.
+           </p>
+          </li>
+          <!-- &lt;li&gt;&lt;img height="60" width="60" src="//www.ibm.com/developerworks/i/sm-f-dwlabs60.png" alt=""/&gt;
+&lt;h3&gt;&lt;a class="ibm-feature-link" href="http://www.ibm.com/developerworks/labs/?ca=dti-tiles-labs"&gt;developerWorks Labs&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Experiment with new directions in software development.&lt;/p&gt;&lt;/li&gt; -->
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-jazzhub2.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://hub.jazz.net/?utm_source=developerWorks&amp;utm_medium=ad&amp;utm_campaign=dW+tiny+ad">
+             DevOps Services
+            </a>
+           </h3>
+           <p>
+            Software development in the cloud.  Register today to create a project.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-evaluationsoftware60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://www.ibm.com/developerworks/downloads/?ca=dti-tiles-evaluate">
+             IBM evaluation software
+            </a>
+           </h3>
+           <p>
+            Evaluate IBM software and solutions, and transform challenges into opportunities.
+           </p>
+          </li>
+         </ul>
+         <!-- PROMOTION_MODULE_END -->
+        </div>
+        <!-- 6_2_COLUMN_END -->
+       </div>
+       <!-- SPLIT_COLUMNS_END -->
+       <!-- BOTTOM_BACK_TO_TOP -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+        </div>
+       </div>
+       <!-- Rating_Meta_BEGIN -->
+       <!--Rating_Meta_BEGIN-->
+       <div class="metavalue">
+        static.content.url=http://www.ibm.com/developerworks/js/artrating/
+       </div>
+       <div class="metavalue">
+        SITE_ID=1
+       </div>
+       <div class="metavalue">
+        Zone=XML, Open source, Industries
+       </div>
+       <div class="metavalue">
+        ArticleID=588001
+       </div>
+       <div class="metavalue">
+        ArticleTitle=Understanding Android local data store APIs
+       </div>
+       <div class="metavalue">
+        publish-date=11302010
+       </div>
+       <script language="javascript" type="text/javascript">
+        document.write('&lt;div class="metavalue"&gt;url='+location.href.replace(/&lt;/g,  '%3C')+'&lt;/div&gt;');
+       </script>
+       <!--Rating_Meta_END-->
+       <!-- Rating_Meta_END -->
+      </div>
+      <!-- END_IBM_CONTENT_MAIN -->
+     </div>
+     <!-- END_IBM_CONTENT_BODY -->
+    </div>
+    <!-- END_IBM_CONTENT -->
+   </div>
+   <!-- END_IBM_PCON -->
+   <!-- FOOTER_BEGIN -->
+   <div id="ibm-footer">
+    <!-- IBM footer container; disabled -->
+   </div>
+   <div aria-label="developerWorks Footer" id="ibm-footer-module-dwwrapper" role="contentinfo">
+    <div id="ibm-footer-module-dw">
+     <div class="dw-footer-columns">
+      <div class="dw-footer-col-6-1">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/" tabindex="0">
+          About
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/feedback" tabindex="0">
+          Help
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/contacts.html" tabindex="0">
+          Contact us
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/ideas" tabindex="0">
+          Submit content
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-2">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/feeds/" tabindex="0">
+          Feeds
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/newsletter/" tabindex="0">
+          Newsletters
+         </a>
+        </li>
+        <li>
+         <a class="ibm-twitter-link" href="http://twitter.com/developerWorks" tabindex="0" target="_blank">
+          Follow
+         </a>
+        </li>
+        <li>
+         <a class="ibm-facebook-link" href="http://www.facebook.com/developerworks" tabindex="0" target="_blank">
+          Like
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-3">
+       <ul>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/report/" tabindex="0">
+          Report abuse
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/use/" tabindex="0">
+          Terms of use
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/thirdparty/" tabindex="0">
+          Third party notice
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/privacy/" tabindex="0">
+          IBM privacy
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/accessibility/" tabindex="0">
+          IBM accessibility
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-4">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/ibm/university/academic/pub/page/academic_initiative" tabindex="0">
+          Faculty
+         </a>
+        </li>
+        <li>
+         <a href="http://asmarterplanet.com/studentsfor/" tabindex="0">
+          Students
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/isv/" tabindex="0">
+          Business Partners
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-5">
+       <ul>
+        <li class="dw-footer-lang-head">
+         Select a language:
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/" tabindex="0">
+          English
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/cn/" lang="zh" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/jp/" lang="ja" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ru/" lang="ru" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/br/" lang="pt" tabindex="0">
+          Portugus (Brasil)
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ssa/" lang="es" tabindex="0">
+          Espaol
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/vn/" lang="vi" tabindex="0">
+          Vit
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-6">
+       <img alt="IBM" height="46" src="//dw1.s81c.com/developerworks/i/mf/dwn-ibm-logo-v17.png" width="223"/>
+       <img alt="" class="dw-preload" height="1" src="//1.www.s81c.com/i/v17/icons/ibm_sprite_social_blue_ON.png" width="1"/>
+       <img alt="" class="dw-preload" height="1" src="//dw1.s81c.com/developerworks/i/mf/arrow-down-active.gif" width="1"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- FOOTER_END -->
+   <!-- END_IBM-TOP -->
+  </div>
+  <!-- SCRIPTS_INCLUDE_BEGIN -->
+  <script src="/developerworks/js/v17/dw-comments.js" type="text/javascript">
+   //
+  </script>
+  <script language="JavaScript" type="text/javascript">
+   dojo.ready(function(){
+		rBHash = typeof rBHash == "undefined" ? {} : rBHash;
+		rBHash['viperLang'] = 'en';
+		rBHash['urlLang'] = 'en';
+		rBHash['dwwi2Lang'] = 'en_US';
+		rBHash['appCode'] = 'dwmav';
+		rBHash['signoutUrl'] = (location.host.toLowerCase() === "www.ibm.com" || location.host.toLowerCase() === "developer.ibm.com") ? 'http://www.ibm.com/developerworks/' : ''; 
+		dwsi.siInst = new dwweb.dynnav.dwsi();
+		dwsi.siInst.initSI();		
+
+		// construct the comment widget
+		dwc &amp;&amp; new dwc.comments('threadShow','95%',5,'nCmts','icomments');
+		});
+  </script>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-41146412-3','auto');ga('require','linkid','linkid.js');var dcdate="2010-11-30";ga('set','dimension1',dcdate);var dw_canonical="http://www.ibm.com/developerworks/library/x-androidstorage/index.html";dw_canonical=dw_canonical.substring(dw_canonical.indexOf(".ibm.com")+8);ga('send','pageview',{'page':dw_canonical,'dimension1':dcdate});var trkOBL=function(url,id){id=id.split("-");if(id[0].indexOf("Share")&gt;-1){var cat="Share from toolbar";if(id[0]=="dwShare")cat="Share from summary";var act="Color toolbar";if(id[1]=="B")act="Gray toolbar";var label=id[2];var ab=0;ga('send','event',cat,act,label,ab,{'page':dw_canonical});if(id[0]=="dwShare"){url=unescape(url);if(label='twitter'&amp;&amp;url.indexOf("%2F%2Fwww.ibm.com%2Fdeveloperworks%2F")&gt;-1){var ohref=url.substring(url.indexOf("=http")+1,url.indexOf(".html")+5);ohref=unescape(ohref);var bitly=new ibmweb.bitly({url:ohref,onSuccess:function(){url=url.replace(/http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2F(.*)%20-%20/,this.shorturl+'%20-%20');window.open(url)}});bitly.shorten()}else{window.open(url)}}}else{var cat="Rich tutorial";if(id[0]=="tutc")cat="Classic tutorial";if(id[0]=="lpzone")cat="Zone landing";if(id[0]=="lptrial")cat="Trial landing";if(id[0]=="lpgen")cat="Generic landing";var act="Bluemix";if(id[2]=="devops")act="Devops";act=act+' '+id[3];if(id[4]){var label=id[4];if(label=="btn")label="button";if(label=="txt")label="text link";if(label=="bnr")label="banner";if(label=="tl")label="tile";if(label=="regbar")label="registration bar";if(label=="spop")label="scroll pop";if(label=="vp")label="video promotion"}var ab=0;if(id[5]){if(id[5]=="ABa")ab=1;if(id[5]=="ABb")ab=2;if(id[5]=="ABc")ab=3;if(id[5]=="ABd")ab=4;if(id[5]=="ABe")ab=5;if(id[5]=="ABf")ab=6;if(id[5]=="ABg")ab=7;if(id[5]=="ABh")ab=8}ga('send','event',cat,act,label,ab,{'page':dw_canonical,'hitCallback':function(){document.location=url}})}}
+  </script>
+  <script src="/developerworks/js/v17/dw-event-tagging.js" type="text/javascript">
+   //
+  </script>
+  <!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+  <script language="JavaScript">
+   var NTPT_PGEXTRA="ibmSkillLevel=3&amp;ibmCmaId=588001&amp;ibmContentAreas=xml,opensource,industry";
+  </script>
+  <!--END -->
+  <!-- SCRIPTS_INCLUDE_END -->
+  <div id="ibm-metrics">
+   <script src="//dw1.s81c.com/common/stats/stats.js" type="text/javascript">
+    //
+   </script>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html id="mozilla-blog" lang="en-US">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <!-- For Facebook -->
+  <meta content="Mozilla Add-ons Blog" property="og:site_name"/>
+  <meta content="Dropping support for binary components in extensions" property="og:title"/>
+  <meta content="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/" property="og:url"/>
+  <meta content="Update: this change has been pushed back to Firefox 41 rather than 40. Starting with Firefox 40 41, scheduled to be released in August this ..." property="og:description"/>
+  <meta content="https://blog.mozilla.org/addons/files/2012/03/addons.png" property="og:image"/>
+  <meta content="Dropping support for binary components in extensions | Mozilla Add-ons Blog" name="title"/>
+  <meta content="Update: this change has been pushed back to Firefox 41 rather than 40. Starting with Firefox 40 41, scheduled to be released in August this ..." name="description"/>
+  <meta content="General" name="Rating"/>
+  <!--[if IE]&gt;
+  &lt;meta name="MSSmartTagsPreventParsing" content="true"&gt;
+  &lt;meta http-equiv="imagetoolbar" content="no"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=Edge"&gt;
+  &lt;script src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/js/html5.js"&gt;&lt;/script&gt;
+  &lt;![endif]-->
+  <link href="#colophon" rel="copyright"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/img/favicon.ico" rel="shortcut icon" type="image/ico"/>
+  <link href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/style.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+  <link href="https://mozorg.cdn.mozilla.net/media/css/tabzilla-min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/css/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <!--[if lte IE 7]&gt;&lt;link rel="stylesheet" type="text/css" media="all" href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/css/ie7.css"&gt;&lt;![endif]-->
+  <link href="https://blog.mozilla.org/addons/feed/" rel="alternate" title="Mozilla Add-ons Blog RSS Feed" type="application/rss+xml"/>
+  <link href="https://blog.mozilla.org/addons/xmlrpc.php" rel="pingback"/>
+  <title>
+   Dropping support for binary components in extensions | Mozilla Add-ons Blog
+  </title>
+  <link href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/feed/" rel="alternate" title="Mozilla Add-ons Blog  Dropping support for binary components in extensions Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"https:\/\/blog.mozilla.org\/addons\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0" id="wp-syntax-css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/colors/sky/sky.css" id="sky-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-content/themes/OneMozilla/js/fc-checkcomment.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="https://blog.mozilla.org/addons/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="https://blog.mozilla.org/addons/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="https://blog.mozilla.org/addons/2015/05/01/may-2015-featured-add-ons/" rel="prev" title="May 2015 Featured Add-ons"/>
+  <link href="https://blog.mozilla.org/addons/2015/05/06/friend-of-amo-zitronella/" rel="next" title="Friend of AMO: Zitronella"/>
+  <link href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/" rel="canonical"/>
+  <link href="https://blog.mozilla.org/addons/?p=7462" rel="shortlink"/>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-36116321-4']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+  </script>
+  <style type="text/css">
+   #masthead { background-image: url(https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/files/2012/03/addons.png); }
+  </style>
+ </head>
+ <body class="single single-post postid-7462 single-format-standard sky">
+  <div id="page">
+   <div class="wrap">
+    <nav id="nav-access">
+     <ul role="navigation">
+      <li>
+       <a href="#content-main" tabindex="1">
+        Skip to main content
+       </a>
+      </li>
+      <li>
+       <a href="#content-sub" tabindex="2">
+        Skip to sidebar
+       </a>
+      </li>
+     </ul>
+    </nav>
+    <header class="image" id="masthead" role="banner">
+     <hgroup>
+      <h1 id="site-title">
+       <a href="https://blog.mozilla.org/addons/" rel="home" title="Go to the front page">
+        Mozilla Add-ons Blog
+       </a>
+      </h1>
+     </hgroup>
+     <a href="https://www.mozilla.org/" id="tabzilla">
+      Mozilla
+     </a>
+    </header>
+    <!-- #masthead -->
+    <main id="content">
+     <div class="main" id="content-main" role="main">
+      <article class="post-7462 post type-post status-publish format-standard hentry category-compatibility category-developers category-documentation tag-compatibility tag-developers tag-documentation tag-firefox-40 tag-firefox-41 tag-xpcom show-author show-comments" id="post-7462">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         Dropping support for binary components in extensions
+        </h1>
+        <address class="vcard">
+         <cite class="author fn">
+          <a class="url" href="https://blog.mozilla.org/addons/author/jvillalobosmozilla-com/" title="See all posts by Jorge Villalobos">
+           Jorge Villalobos
+           <img alt="" class="avatar avatar-24 photo" height="24" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=24&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=48&amp;r=g 2x" width="24"/>
+          </a>
+         </cite>
+        </address>
+        <p class="entry-comments">
+         <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/#comments" title="10 responses">
+          10
+         </a>
+        </p>
+        <p class="entry-posted">
+         <time class="published" datetime="2015-05-04T11:17:32-07:00" title="2015-05-04T11:17:32-07:00">
+          <a class="posted-month" href="https://blog.mozilla.org/addons/2015/05/" title="See all posts from May, 2015">
+           May
+          </a>
+          <span class="posted-date">
+           4
+          </span>
+          <a class="posted-year" href="https://blog.mozilla.org/addons/2015/" title="See all posts from 2015">
+           2015
+          </a>
+         </time>
+        </p>
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         <strong>
+          Update:
+         </strong>
+         this change has been pushed back to Firefox 41 rather than 40.
+        </p>
+        <p>
+         Starting with Firefox
+         <del>
+          40
+         </del>
+         41, scheduled to be
+         <a href="https://wiki.mozilla.org/RapidRelease/Calendar">
+          released in August
+         </a>
+         this year, binary XPCOM support for extensions will be dropped.
+        </p>
+        <p>
+         Binary XPCOM is an old and fairly unstable technology that a small number of add-on developers have used to integrate binary libraries into their add-ons, sometimes to tap into Firefox internals (hence the
+         <em>
+          unstable
+         </em>
+         part). Better technologies have become available to replace binary XPCOM and we have encouraged developers to switch to them. From the
+         <a href="https://groups.google.com/forum/#!topic/mozilla.dev.extensions/B3H3j6FRVms">
+          original post
+         </a>
+         :
+        </p>
+        <blockquote>
+         <p>
+          Extension authors that need to use native binaries are encouraged to do
+          <br/>
+          so using the addon SDK system/child_process pipe mechanism:
+          <br/>
+          <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/system_child_process" rel="nofollow" target="_blank">
+           https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/system_child_process
+          </a>
+         </p>
+         <p>
+          If this is not sufficient, JS-ctypes may be an alternative mechanism to
+          <br/>
+          use shared libraries, but this API is much more fragile and its easy to
+          <br/>
+          write unsafe code.
+         </p>
+        </blockquote>
+        <p>
+         Developers who rely on binary XPCOM should update their code as soon as possible to prevent compatibility issues. If you have any questions or comments about this move, please do so in the
+         <a href="https://groups.google.com/forum/#!topic/mozilla.dev.extensions/B3H3j6FRVms">
+          mozilla.dev.extensions
+         </a>
+         newsgroup.
+        </p>
+       </div>
+       <!-- .entry-content -->
+       <footer class="entry-meta">
+        <p class="meta">
+         <b>
+          Tags:
+         </b>
+         <a href="https://blog.mozilla.org/addons/tag/compatibility/" rel="tag">
+          compatibility
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/tag/developers/" rel="tag">
+          developers
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/tag/documentation/" rel="tag">
+          documentation
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/tag/firefox-40/" rel="tag">
+          firefox 40
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/tag/firefox-41/" rel="tag">
+          firefox 41
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/tag/xpcom/" rel="tag">
+          xpcom
+         </a>
+        </p>
+        <p class="meta">
+         <b>
+          Categories:
+         </b>
+         <a href="https://blog.mozilla.org/addons/category/compatibility/" rel="category tag">
+          compatibility
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/category/developers/" rel="category tag">
+          developers
+         </a>
+         ,
+         <a href="https://blog.mozilla.org/addons/category/documentation/" rel="category tag">
+          documentation
+         </a>
+        </p>
+       </footer>
+       <!-- .entry-meta -->
+      </article>
+      <!-- #post -->
+      <section id="comments">
+       <header class="comments-head">
+        <h2>
+         10 responses
+        </h2>
+       </header>
+       <ol class="hfeed av" id="comment-list">
+        <li class="comment even thread-even depth-1 hentry" id="comment-215774">
+         <h3 class="entry-title vcard">
+          <cite class="author fn">
+           Kohei Yoshino
+          </cite>
+          <span class="photo">
+           <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/f84bbc6968ecda0a64ab50d1060c320e?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/f84bbc6968ecda0a64ab50d1060c320e?s=96&amp;r=g 2x" width="48"/>
+          </span>
+          <span class="comment-meta">
+           wrote on
+           <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215774" rel="bookmark" title="Permanent link to this comment by Kohei Yoshino">
+            <time class="published" datetime="2015-05-04" title="2015-05-04">
+             May 4, 2015 at 6:08 pm
+            </time>
+           </a>
+           :
+          </span>
+         </h3>
+         <blockquote class="entry-content">
+          <p>
+           Japanese translation:
+           <a href="https://dev.mozilla.jp/2015/05/dropping-support-for-binary-components/" rel="nofollow">
+            https://dev.mozilla.jp/2015/05/dropping-support-for-binary-components/
+           </a>
+          </p>
+         </blockquote>
+         <p class="comment-util">
+         </p>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1 hentry" id="comment-215777">
+         <h3 class="entry-title vcard">
+          <cite class="author fn">
+           Mook
+          </cite>
+          <span class="photo">
+           <img alt="" class="avatar avatar-48 photo" height="48" src="https://2.gravatar.com/avatar/b56fd072e64912c20eef9d3d97498ce6?s=48&amp;r=g" srcset="https://2.gravatar.com/avatar/b56fd072e64912c20eef9d3d97498ce6?s=96&amp;r=g 2x" width="48"/>
+          </span>
+          <span class="comment-meta">
+           wrote on
+           <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215777" rel="bookmark" title="Permanent link to this comment by Mook">
+            <time class="published" datetime="2015-05-04" title="2015-05-04">
+             May 4, 2015 at 10:50 pm
+            </time>
+           </a>
+           :
+          </span>
+         </h3>
+         <blockquote class="entry-content">
+          <p>
+           Just wanted to mention that this post (and the last one, possibly others) are missing from planet.mozilla.org; it looks like its bug 1160609.  Probably want to make sure this propagates in the usual ways
+           <img alt=":)" class="wp-smiley" src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-includes/images/smilies/simple-smile.png" style="height: 1em; max-height: 1em;"/>
+          </p>
+         </blockquote>
+         <p class="comment-util">
+         </p>
+         <ol class="children">
+          <li class="comment byuser comment-author-jvillalobosmozilla-com bypostauthor even depth-2 hentry" id="comment-215790">
+           <h3 class="entry-title vcard">
+            <a class="url" href="http://xulforge.com" rel="nofollow external" title="http://xulforge.com">
+             <cite class="author fn">
+              Jorge Villalobos
+             </cite>
+             <span class="photo">
+              <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=96&amp;r=g 2x" width="48"/>
+             </span>
+            </a>
+            <span class="comment-meta">
+             wrote on
+             <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215790" rel="bookmark" title="Permanent link to this comment by Jorge Villalobos">
+              <time class="published" datetime="2015-05-05" title="2015-05-05">
+               May 5, 2015 at 1:59 pm
+              </time>
+             </a>
+             :
+            </span>
+           </h3>
+           <blockquote class="entry-content">
+            <p>
+             Oh, lame.
+            </p>
+           </blockquote>
+           <p class="comment-util">
+           </p>
+           <ol class="children">
+            <li class="comment odd alt depth-3 hentry" id="comment-215915">
+             <h3 class="entry-title vcard">
+              <cite class="author fn">
+               mhoye
+              </cite>
+              <span class="photo">
+               <img alt="" class="avatar avatar-48 photo" height="48" src="https://2.gravatar.com/avatar/84c91e272e53299e85953c84e7b4501a?s=48&amp;r=g" srcset="https://2.gravatar.com/avatar/84c91e272e53299e85953c84e7b4501a?s=96&amp;r=g 2x" width="48"/>
+              </span>
+              <span class="comment-meta">
+               wrote on
+               <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215915" rel="bookmark" title="Permanent link to this comment by mhoye">
+                <time class="published" datetime="2015-05-08" title="2015-05-08">
+                 May 8, 2015 at 7:03 am
+                </time>
+               </a>
+               :
+              </span>
+             </h3>
+             <blockquote class="entry-content">
+              <p>
+               Resolved now.
+              </p>
+             </blockquote>
+             <p class="comment-util">
+             </p>
+            </li>
+            <!-- #comment-## -->
+           </ol>
+           <!-- .children -->
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1 hentry" id="comment-215851">
+         <h3 class="entry-title vcard">
+          <cite class="author fn">
+           Avi
+          </cite>
+          <span class="photo">
+           <img alt="" class="avatar avatar-48 photo" height="48" src="https://1.gravatar.com/avatar/4d851a81cc0761ff930757cddd8b552d?s=48&amp;r=g" srcset="https://1.gravatar.com/avatar/4d851a81cc0761ff930757cddd8b552d?s=96&amp;r=g 2x" width="48"/>
+          </span>
+          <span class="comment-meta">
+           wrote on
+           <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215851" rel="bookmark" title="Permanent link to this comment by Avi">
+            <time class="published" datetime="2015-05-06" title="2015-05-06">
+             May 6, 2015 at 3:09 pm
+            </time>
+           </a>
+           :
+          </span>
+         </h3>
+         <blockquote class="entry-content">
+          <p>
+           Is
+           <a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/XPCOMUtils.jsm" rel="nofollow">
+            https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/XPCOMUtils.jsm
+           </a>
+           getting deprecated as well?
+          </p>
+         </blockquote>
+         <p class="comment-util">
+         </p>
+         <ol class="children">
+          <li class="comment byuser comment-author-jvillalobosmozilla-com bypostauthor odd alt depth-2 hentry" id="comment-215921">
+           <h3 class="entry-title vcard">
+            <a class="url" href="http://xulforge.com" rel="nofollow external" title="http://xulforge.com">
+             <cite class="author fn">
+              Jorge Villalobos
+             </cite>
+             <span class="photo">
+              <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=96&amp;r=g 2x" width="48"/>
+             </span>
+            </a>
+            <span class="comment-meta">
+             wrote on
+             <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215921" rel="bookmark" title="Permanent link to this comment by Jorge Villalobos">
+              <time class="published" datetime="2015-05-08" title="2015-05-08">
+               May 8, 2015 at 10:47 am
+              </time>
+             </a>
+             :
+            </span>
+           </h3>
+           <blockquote class="entry-content">
+            <p>
+             No. That JS module is mostly for non-binary XPCOM components, so itll continue to work.
+            </p>
+           </blockquote>
+           <p class="comment-util">
+           </p>
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-odd thread-alt depth-1 hentry" id="comment-215903">
+         <h3 class="entry-title vcard">
+          <a class="url" href="http://noitidart.github.io/" rel="nofollow external" title="http://noitidart.github.io/">
+           <cite class="author fn">
+            Noitidart
+           </cite>
+           <span class="photo">
+            <img alt="" class="avatar avatar-48 photo" height="48" src="https://1.gravatar.com/avatar/46b5428a878306d5af0a87fc7b2db499?s=48&amp;r=g" srcset="https://1.gravatar.com/avatar/46b5428a878306d5af0a87fc7b2db499?s=96&amp;r=g 2x" width="48"/>
+           </span>
+          </a>
+          <span class="comment-meta">
+           wrote on
+           <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215903" rel="bookmark" title="Permanent link to this comment by Noitidart">
+            <time class="published" datetime="2015-05-07" title="2015-05-07">
+             May 7, 2015 at 9:38 pm
+            </time>
+           </a>
+           :
+          </span>
+         </h3>
+         <blockquote class="entry-content">
+          <p>
+           How is jsctypes fragile?
+           <img alt=":(" class="wp-smiley" src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-includes/images/smilies/frownie.png" style="height: 1em; max-height: 1em;"/>
+           I dont like baby getting a bad rep 
+          </p>
+          <p>
+           Isnt system_child_process a js-ctype thing?
+          </p>
+         </blockquote>
+         <p class="comment-util">
+         </p>
+         <ol class="children">
+          <li class="comment byuser comment-author-jvillalobosmozilla-com bypostauthor odd alt depth-2 hentry" id="comment-215919">
+           <h3 class="entry-title vcard">
+            <a class="url" href="http://xulforge.com" rel="nofollow external" title="http://xulforge.com">
+             <cite class="author fn">
+              Jorge Villalobos
+             </cite>
+             <span class="photo">
+              <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=96&amp;r=g 2x" width="48"/>
+             </span>
+            </a>
+            <span class="comment-meta">
+             wrote on
+             <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-215919" rel="bookmark" title="Permanent link to this comment by Jorge Villalobos">
+              <time class="published" datetime="2015-05-08" title="2015-05-08">
+               May 8, 2015 at 10:16 am
+              </time>
+             </a>
+             :
+            </span>
+           </h3>
+           <blockquote class="entry-content">
+            <p>
+             Its fragile in that you can still do things incorrectly and cause instability, and potentially crashes. system_child_process is for running external processes, rather than tapping into native libraries.
+            </p>
+           </blockquote>
+           <p class="comment-util">
+           </p>
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1 hentry" id="comment-216081">
+         <h3 class="entry-title vcard">
+          <cite class="author fn">
+           Tito
+          </cite>
+          <span class="photo">
+           <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/fde5bbd48f3ee5eac6c025973391d0c1?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/fde5bbd48f3ee5eac6c025973391d0c1?s=96&amp;r=g 2x" width="48"/>
+          </span>
+          <span class="comment-meta">
+           wrote on
+           <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-216081" rel="bookmark" title="Permanent link to this comment by Tito">
+            <time class="published" datetime="2015-05-12" title="2015-05-12">
+             May 12, 2015 at 7:05 am
+            </time>
+           </a>
+           :
+          </span>
+         </h3>
+         <blockquote class="entry-content">
+          <p>
+           Will that affect Thunderbird as well, especially the components related to the address book?
+          </p>
+          <p>
+           Titto
+          </p>
+         </blockquote>
+         <p class="comment-util">
+         </p>
+         <ol class="children">
+          <li class="comment byuser comment-author-jvillalobosmozilla-com bypostauthor odd alt depth-2 hentry" id="comment-216145">
+           <h3 class="entry-title vcard">
+            <a class="url" href="http://xulforge.com" rel="nofollow external" title="http://xulforge.com">
+             <cite class="author fn">
+              Jorge Villalobos
+             </cite>
+             <span class="photo">
+              <img alt="" class="avatar avatar-48 photo" height="48" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=48&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=96&amp;r=g 2x" width="48"/>
+             </span>
+            </a>
+            <span class="comment-meta">
+             wrote on
+             <a href="https://blog.mozilla.org/addons/2015/05/04/dropping-support-for-binary-components/comment-page-1/#comment-216145" rel="bookmark" title="Permanent link to this comment by Jorge Villalobos">
+              <time class="published" datetime="2015-05-13" title="2015-05-13">
+               May 13, 2015 at 9:15 am
+              </time>
+             </a>
+             :
+            </span>
+           </h3>
+           <blockquote class="entry-content">
+            <p>
+             There was some discussion about not doing this for Thunderbird, but I havent seen a bug to make this change.
+            </p>
+           </blockquote>
+           <p class="comment-util">
+           </p>
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+      </section>
+     </div>
+     <!-- #content-main -->
+     <div class="sub sidebar widgets" id="content-sub" role="complementary">
+      <aside class="widget vcard author-bio">
+       <h3 class="widget-title">
+        About
+        <a class="url fn author" href="http://xulforge.com" rel="external me">
+         Jorge Villalobos
+         <span class="photo">
+          <img alt="" class="avatar avatar-68 photo" height="68" src="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=68&amp;r=g" srcset="https://0.gravatar.com/avatar/6d1966118f16e4b99a6e3ad07883be33?s=136&amp;r=g 2x" width="68"/>
+         </span>
+        </a>
+       </h3>
+       <p>
+        Jorge is the Add-ons Developer Relations Lead for Mozilla.
+       </p>
+       <p>
+        <a class="url go" href="https://blog.mozilla.org/addons/author/jvillalobosmozilla-com/">
+         More from Jorge
+        </a>
+       </p>
+      </aside>
+      <aside class="widget widget_text" id="text-456878582">
+       <h3 class="widget-title">
+        Looking for Add-ons?
+       </h3>
+       <div class="textwidget">
+        <p>
+         <strong>
+          <a href="https://addons.mozilla.org/">
+           Visit the gallery
+          </a>
+         </strong>
+        </p>
+       </div>
+      </aside>
+      <aside class="widget widget_categories" id="categories-254997392">
+       <h3 class="widget-title">
+        Categories
+       </h3>
+       <ul>
+        <li class="cat-item cat-item-7117">
+         <a href="https://blog.mozilla.org/addons/category/builder/">
+          builder
+         </a>
+        </li>
+        <li class="cat-item cat-item-388">
+         <a href="https://blog.mozilla.org/addons/category/compatibility/" title="Information about add-on compatibility">
+          compatibility
+         </a>
+        </li>
+        <li class="cat-item cat-item-6744">
+         <a href="https://blog.mozilla.org/addons/category/competition/">
+          contests
+         </a>
+        </li>
+        <li class="cat-item cat-item-44">
+         <a href="https://blog.mozilla.org/addons/category/developers/" title="Topics of interest to add-on developers">
+          developers
+         </a>
+        </li>
+        <li class="cat-item cat-item-295">
+         <a href="https://blog.mozilla.org/addons/category/documentation/" title="Documentation and tutorials for add-on developers">
+          documentation
+         </a>
+        </li>
+        <li class="cat-item cat-item-581">
+         <a href="https://blog.mozilla.org/addons/category/end-users/" title="Information of important to end users/consumers of add-ons">
+          end users
+         </a>
+        </li>
+        <li class="cat-item cat-item-39">
+         <a href="https://blog.mozilla.org/addons/category/events/" title="Information about upcoming add-on events">
+          events
+         </a>
+        </li>
+        <li class="cat-item cat-item-121">
+         <a href="https://blog.mozilla.org/addons/category/general/" title="General/uncategorized posts">
+          general
+         </a>
+        </li>
+        <li class="cat-item cat-item-588">
+         <a href="https://blog.mozilla.org/addons/category/jetpack/">
+          jetpack
+         </a>
+        </li>
+        <li class="cat-item cat-item-124">
+         <a href="https://blog.mozilla.org/addons/category/mobile/">
+          mobile
+         </a>
+        </li>
+        <li class="cat-item cat-item-574">
+         <a href="https://blog.mozilla.org/addons/category/policy/" title="New policies and discussion of draft policies for add-ons">
+          policy
+         </a>
+        </li>
+        <li class="cat-item cat-item-227">
+         <a href="https://blog.mozilla.org/addons/category/releases/" title="Information on releases of addons.mozilla.org">
+          releases
+         </a>
+        </li>
+        <li class="cat-item cat-item-7119">
+         <a href="https://blog.mozilla.org/addons/category/restartless/">
+          restartless
+         </a>
+        </li>
+        <li class="cat-item cat-item-742">
+         <a href="https://blog.mozilla.org/addons/category/sdk/">
+          sdk
+         </a>
+        </li>
+        <li class="cat-item cat-item-551">
+         <a href="https://blog.mozilla.org/addons/category/personas/">
+          themes
+         </a>
+        </li>
+       </ul>
+      </aside>
+     </div>
+     <!-- #content-sub -->
+    </main>
+    <!-- #content -->
+   </div>
+  </div>
+  <!-- /.wrap /#page -->
+  <footer id="site-info" role="contentinfo">
+   <div class="wrap">
+    <p id="foot-logo">
+     <a class="top" href="#page">
+      Return to top
+     </a>
+     <a class="logo" href="https://www.mozilla.org/" rel="external">
+      Mozilla
+     </a>
+    </p>
+    <p id="colophon">
+     Except where otherwise
+     <a href="https://www.mozilla.org/about/legal.html" rel="external">
+      noted
+     </a>
+     , content on this site is licensed under the
+     <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external license">
+      Creative Commons Attribution Share-Alike License v3.0
+     </a>
+     or any later version.
+    </p>
+    <nav id="nav-meta">
+     <ul role="navigation">
+      <li>
+       <a href="https://www.mozilla.org/contact/" rel="external">
+        Contact Us
+       </a>
+      </li>
+      <li>
+       <a href="https://www.mozilla.org/privacy/" rel="external">
+        Privacy Policy
+       </a>
+      </li>
+      <li>
+       <a href="https://www.mozilla.org/about/" rel="external">
+        Legal Notices
+       </a>
+      </li>
+      <li>
+       <a href="https://www.mozilla.org/legal/fraud-report/" rel="external">
+        Report Trademark Abuse
+       </a>
+      </li>
+      <li>
+       <a href="https://github.com/mozilla/One-Mozilla-blog/" rel="external">
+        Theme Code
+       </a>
+      </li>
+     </ul>
+    </nav>
+   </div>
+  </footer>
+  <script src="https://mozorg.cdn.mozilla.net/tabzilla/tabzilla.js">
+  </script>
+  <script src="https://ffp4g1ylyit3jdyti1hqcvtb-wpengine.netdna-ssl.com/addons/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+ </body>
+</html>

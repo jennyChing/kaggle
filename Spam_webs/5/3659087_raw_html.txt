@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-CA">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   The Optimal Cross Browser Testing Strategy    BrowseEmAll Web Dev Blog
+  </title>
+  <script type="text/javascript">
+   var jPM = {},
+		PLUGINS_PATH = "//www.browseemall.com/Content/plugins/",
+		SLIDER_REV_VERSION = "4.2";
+  </script>
+  <script src="//www.browseemall.com/Content/js/scripts.js" type="text/javascript">
+  </script>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-57x57.png" rel="apple-touch-icon" sizes="57x57"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-60x60.png" rel="apple-touch-icon" sizes="60x60"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-144x144.png" rel="apple-touch-icon" sizes="144x144"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152"/>
+  <link href="//browseemall.com/Content/img/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="//browseemall.com/Content/img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="//browseemall.com/Content/img/favicon-194x194.png" rel="icon" sizes="194x194" type="image/png"/>
+  <link href="//browseemall.com/Content/img/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+  <link href="//browseemall.com/Content/img/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+  <link href="//browseemall.com/Content/img/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+  <link href="//browseemall.com/Content/img/android-chrome-manifest.json" rel="manifest"/>
+  <meta content="#da532c" name="msapplication-TileColor"/>
+  <meta content="//browseemall.com/Content/img/mstile-144x144.png" name="msapplication-TileImage"/>
+  <meta content="#ffffff" name="theme-color"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="Position Fixed UG" name="author"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://www.browseemall.com/Blog/xmlrpc.php" rel="pingback"/>
+  <script>
+   (function(){document.documentElement.className='js'})();
+  </script>
+  <!-- Drip -->
+  <script type="text/javascript">
+   var _dcq = _dcq || [];
+	var _dcs = _dcs || {}; 
+	_dcs.account = '4157289';
+
+	(function() {
+	var dc = document.createElement('script');
+	dc.type = 'text/javascript'; dc.async = true; 
+	dc.src = '//tag.getdrip.com/4157289.js';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(dc, s);
+	})();
+  </script>
+  <script type="text/javascript">
+   var currentLeadGoal;
+		var currentLeadEvent;
+	
+		function AddNewsletter() {
+			var emailaddress = document.getElementById('email-field').value;
+			_dcq.push(["identify", { 
+			  email: emailaddress,
+			  tags: ["Newsletter"]
+			}]);	
+			var properties = {
+				id: emailaddress,
+				email: emailaddress,
+			};
+			_gs('identify', emailaddress, properties);
+			_gs('event', 'Newsletter');
+			document.getElementById('signup-newsletter').style.display = 'none';
+			document.getElementById('thank-you-signup').style.display = 'inline';
+		};
+		
+		function DisplayLeadMagnet(url, eventName, title, subtitle, button) {
+			$('#lead-magnet-title').text(title);
+			$('#lead-magnet-subtitle').text(subtitle);
+			$('#lead-magnet-button').text(button);
+			currentLeadGoal = url;
+			currentLeadEvent = eventName;
+			$('#lead-modal').modal('show');
+		}
+		
+		function DownloadLeadMagnet() {
+			var emailaddress = document.getElementById('lead-email').value;
+			emailaddress = $.trim(emailaddress);
+			if (emailaddress.length === 0) 
+			{
+				$('#downloademailerror').show();
+			}
+			else if (emailaddress.indexOf(".") == -1)
+			{
+				$('#downloademailerror').show();
+			}
+			else {
+				var properties = {
+					id: emailaddress,
+					email: emailaddress,
+				};
+				_gs('identify', emailaddress, properties);
+				_gs('event', currentLeadEvent);			
+
+				$('#lead-modal').modal('hide');		
+				
+				_dcq.push(["identify", { 
+				  email: emailaddress,
+				  tags: [currentLeadEvent]
+				}]);			
+								
+				document.location = 'http://www.browseemall.com/leads/' + currentLeadGoal;
+			}		
+		}
+  </script>
+  <link href="http://www.browseemall.com/Blog/index.php/2015/05/19/the-optimal-cross-browser-testing-strategy/feed/" rel="alternate" title="BrowseEmAll Web Dev Blog  The Optimal Cross Browser Testing Strategy Comments Feed" type="application/rss+xml"/>
+  <link href="http://www.browseemall.com/Blog/wp-content/plugins/click-to-tweet-by-todaymade/assets/css/styles.css?ver=4.1" id="tm_clicktotweet-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.browseemall.com/Blog/wp-content/plugins/contextual-related-posts/css/default-style.css?ver=4.1" id="crp_list_style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.browseemall.com/Blog/wp-content/plugins/tablepress/css/default.min.css?ver=1.5.1" id="tablepress-default-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.browseemall.com/Blog/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://www.browseemall.com/Blog/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://www.browseemall.com/Blog/index.php/2015/05/12/the-3-biggest-challenges-you-will-face-cross-browser-testing/" rel="prev" title="The 3 Biggest Challenges You Will Face Cross Browser Testing"/>
+  <link href="http://www.browseemall.com/Blog/index.php/2015/05/26/the-cross-browser-compatibility-testing-checklist/" rel="next" title="The Cross Browser Compatibility Testing Checklist"/>
+  <meta content="WordPress 4.1" name="generator"/>
+  <link href="http://www.browseemall.com/Blog/index.php/2015/05/19/the-optimal-cross-browser-testing-strategy/" rel="canonical"/>
+  <link href="http://www.browseemall.com/Blog/?p=389" rel="shortlink"/>
+  <style id="syntaxhighlighteranchor" type="text/css">
+  </style>
+  <link href="http://www.browseemall.com/Blog/wp-content/themes/browseemall/style.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <script>
+   !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+  arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+  d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+  insertBefore(d,q)}(window,document,'script','_gs');
+
+  _gs('GSN-920614-L');
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-29804831-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <div class="wrapper" id="navigation">
+   <div class="navbar-static-top">
+    <!--Header upper region-->
+    <div class="header-upper">
+     <div class="header-upper-inner container">
+      <div class="row">
+       <div class="col-xs-12">
+        <!--social media icons-->
+        <div class="social-media">
+         <a class="navigation" href="//www.browseemall.com/Support">
+          Support
+         </a>
+         <a class="navigation" href="//www.browseemall.com/Blog">
+          Blog
+         </a>
+         <a class="navigation" href="//www.browseemall.com/Resources">
+          Free Resources
+         </a>
+         <a href="https://twitter.com/BrowseEmAll">
+          <i class="fa fa-twitter-square">
+          </i>
+          <span class="sr-only">
+           Visit BrowseEmAll on Twitter
+          </span>
+         </a>
+         <a href="https://www.linkedin.com/company/browseemall">
+          <i class="fa fa-linkedin-square">
+          </i>
+          <span class="sr-only">
+           Visit BrowseEmAll on LinkedIn
+          </span>
+         </a>
+         <a href="http://www.facebook.com/BrowseEmAll">
+          <i class="fa fa-facebook-square">
+          </i>
+          <span class="sr-only">
+           Visit BrowseEmAll on Facebook
+          </span>
+         </a>
+         <a href="http://www.browseemall.com/Blog/?feed=rss2">
+          <i class="fa fa-rss-square">
+          </i>
+          <span class="sr-only">
+           Subscribe to our RSS feed
+          </span>
+         </a>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!--Header &amp; Branding region-->
+    <div class="header" data-toggle="clingify">
+     <div class="header-inner container">
+      <div class="navbar">
+       <div class="pull-left">
+        <!--branding/logo-->
+        <a class="navbar-brand" href="//www.browseemall.com/" title="Home">
+         <h1>
+          <img alt="BrowseEmAll Logo" src="//www.browseemall.com/Content/img/logo.png"/>
+          <span>
+           Browse
+          </span>
+          Em
+          <span>
+           All
+          </span>
+         </h1>
+        </a>
+        <div class="slogan">
+         Cross Browser Testing
+        </div>
+       </div>
+       <a class="search-form-tigger" data-target=".header-search" data-toggle="search-form" href="//www.browseemall.com/Try">
+        <i class="fa fa-download fa-flip-horizontal search-icon">
+        </i>
+        Try It
+       </a>
+       <a class="navbar-btn" data-direction="right" data-target=".navbar-collapse" data-toggle="jpanel-menu" href="#top">
+        <i class="fa fa-bars">
+        </i>
+        <span class="sr-only">
+         Mobile Navigation
+        </span>
+       </a>
+       <!--everything within this div is collapsed on mobile-->
+       <div class="navbar-collapse collapse">
+        <!--main navigation-->
+        <ul class="nav navbar-nav">
+         <li class="home-link">
+          <a href="//www.browseemall.com/">
+           <i class="fa fa-home">
+           </i>
+           <span class="hidden">
+            Home
+           </span>
+          </a>
+         </li>
+         <li class="features-link">
+          <a href="//www.browseemall.com/Tour">
+           Tour
+          </a>
+         </li>
+         <li class="pricing-link">
+          <a href="//www.browseemall.com/Buy">
+           Pricing
+          </a>
+         </li>
+        </ul>
+       </div>
+       <!--/.navbar-collapse -->
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div aria-hidden="true" class="modal fade" id="lead-modal" role="dialog" tabindex="-1">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h4 class="modal-title" id="lead-magnet-title" style="text-align:center;">
+      </h4>
+     </div>
+     <div class="modal-body">
+      <form action="login.htm" role="form">
+       <p id="lead-magnet-subtitle">
+       </p>
+       <div class="form-group">
+        <label class="sr-only" for="email-field">
+         Email
+        </label>
+        <input class="form-control email" id="lead-email" placeholder="Email" type="email"/>
+        <p id="downloademailerror" style="color:red;display:none;">
+         Please enter your email address
+        </p>
+       </div>
+       <button class="btn btn-primary" id="lead-magnet-button" onclick="DownloadLeadMagnet();" style="width:100%;" type="button">
+       </button>
+      </form>
+     </div>
+     <div class="modal-footer">
+      <small>
+       We'll never sell or share your email address! Read our
+       <a href="http://www.browseemall.com/Home/PrivacyPolicy">
+        Privacy Policy
+       </a>
+      </small>
+      <br/>
+     </div>
+    </div>
+    <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+  </div>
+  <div id="content">
+   <div class="container">
+    <h2 class="title-divider">
+     <span>
+      Blog
+     </span>
+     <small>
+      We love to talk!
+     </small>
+    </h2>
+    <div class="row">
+     <!--Blog Roll Content-->
+     <div class="col-md-9 blog-roll blog-list">
+      <!-- Blog post -->
+      <div class="row blog-post" id="post-389">
+       <div class="col-md-1 date-md">
+        <!-- Date desktop -->
+        <div class="date-wrapper">
+         <span class="date-m">
+          May
+         </span>
+         <span class="date-d">
+          Tue
+         </span>
+        </div>
+        <!-- Meta details desktop 
+            &lt;p class="text-muted"&gt; &lt;i class="fa fa-user"&gt;&lt;/i&gt;&lt;a href="the_author_link()"&gt;DHerken&lt;/a&gt;&lt;/p&gt;-->
+       </div>
+       <div class="col-md-11">
+        <div class="tags">
+         <a href="http://www.browseemall.com/Blog/index.php/category/crossbrowsertesting/" rel="category tag">
+          Cross Browser Testing
+         </a>
+        </div>
+        <h4 class="title media-heading">
+         <a href="http://www.browseemall.com/Blog/index.php/2015/05/19/the-optimal-cross-browser-testing-strategy/" rel="bookmark" title="Permanent Link to The Optimal Cross Browser Testing Strategy">
+          The Optimal Cross Browser Testing Strategy
+         </a>
+        </h4>
+        <!-- Meta details mobile -->
+        <ul class="list-inline meta text-muted">
+         <li>
+          <i class="fa fa-calendar">
+          </i>
+          5-19-2015
+         </li>
+         <!--&lt;li&gt;&lt;i class="fa fa-user"&gt;&lt;/i&gt; &lt;a href="the_author_link()"&gt;DHerken&lt;/a&gt;&lt;/li&gt;-->
+        </ul>
+        <div class="blog-content">
+         <div class="blog-media">
+          <img alt="strategy" class="img-responsive wp-post-image" height="487" src="http://www.browseemall.com/Blog/wp-content/uploads/2015/05/strategy.jpg" width="770"/>
+         </div>
+         <p>
+         </p>
+         <p>
+          Nearly everything works better if you have some kind of plan or strategy. This holds especially true for tasks with a lot of variables like cross browser testing. Below I would like to share our tested and proven cross browser testing strategy we have now used in well over 100 testing projects. Hopefully it will be usefully for some of our fellow developers and testers.
+         </p>
+         <h2>
+          Plan Ahead
+         </h2>
+         <p>
+          A good plan is often half of the solution to any problem. This is especially true for any type of software testing which rarely works that well if it is done as an afterthought long after the development is finished. So we always make sure to consider the following as soon as we start a new project:
+         </p>
+         <ul>
+          <li>
+           Know your audience and research in advance what browsers / devices / operating system they are using. Use real world data where ever possible.
+          </li>
+          <li>
+           Start testing as soon as you start developing. Encourage your team members to use different browsers and devices.
+          </li>
+          <li>
+           Develop against a reference list of browsers to avoid being bogged down with bug reports for obscure browsers.
+          </li>
+          <li>
+           Automate functional tests early onifpossible. This will also ease the burden of testing during the development phase
+          </li>
+         </ul>
+         <h2>
+          Verify The Technical Side
+         </h2>
+         <p>
+          Many
+          <a href="http://www.browseemall.com/Blog/index.php/2014/04/24/5-most-common-browser-compatibility-issues/">
+           common cross browser issues
+          </a>
+          can be fixed with a few simple technical checks. Even better there are tools available to test these sort of things automatically.
+         </p>
+         <ul>
+          <li>
+           Always, always use a
+           <a href="http://www.browseemall.com/Blog/index.php/2012/03/05/the-cross-browser-compatibility-guide-how-to-choose-the-right-doctype/">
+            proper DOCTYPE
+           </a>
+          </li>
+          <li>
+           Be aware of the
+           <a href="http://www.browseemall.com/Blog/index.php/2012/03/05/the-cross-browser-compatibility-guide-how-to-choose-the-right-doctype/">
+            X-UA-Compatibility meta
+           </a>
+           tag you are using
+          </li>
+          <li>
+           <a href="https://validator.w3.org/">
+            Validate
+           </a>
+           your HTML to find errors
+          </li>
+          <li>
+           <a href="https://jigsaw.w3.org/css-validator/">
+            Validate
+           </a>
+           your CSS to find problems
+          </li>
+         </ul>
+         <h2>
+          Test Intelligent
+         </h2>
+         <p>
+          Even after all the tools and automation you will still need to do a fair amount of work to get the cross browser testing done. But dont just jump into it,
+          <strong>
+           think prior totesting
+          </strong>
+          !
+         </p>
+         <ul>
+          <li>
+           Whenever possible create automated tests for functionality. Try
+           <a href="http://www.seleniumhq.org/">
+            Selenium
+           </a>
+           if you want to code or
+           <a href="http://www.browserstage.com">
+            BrowserStage
+           </a>
+           if you dont.
+          </li>
+          <li>
+           Dont do any final layout tests until the layout is final.
+          </li>
+          <li>
+           Make a full test run prior to fixing any bugs to minimize the retest effort.
+          </li>
+          <li>
+           Start testing with thebrowser set of highest usage and work your way down in iterations.
+          </li>
+         </ul>
+         <p>
+          I think this strategy is a good starting point to base any serious testing effort on. Anything you can add to this? Feel free to tell us in the comments below!
+         </p>
+         <p>
+          <em>
+           Photo by
+           <a href="https://www.flickr.com/photos/jakerust/16226019243">
+            GotCredit
+           </a>
+          </em>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="footer-dynamic-cta">
+       <div class="cta-wrapper">
+        <div class="left-column">
+         <img alt="Cross Browser Book Cover" src="//www.browseemall.com/Content/img/resources/cross-browser-book.png"/>
+        </div>
+        <div class="right-column">
+         <h3>
+          How to create cross browser compatible websites
+         </h3>
+         <p>
+          Learn how to design and develop websites that run on any browser and device!
+         </p>
+         <a alt="Get Free Book Now" class="cta" href="http://www.browseemall.com/CrossBrowserBook">
+          Get Free Book Now
+         </a>
+        </div>
+       </div>
+      </div>
+      <div id="recommend">
+       <div class="crp_related" id="crp_related">
+        <ul>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/01/27/5-steps-to-add-cross-browser-testing-to-your-development-cycle/">
+           <img alt="5 Steps to add cross-browser testing to your development cycle" class="crp_thumb crp_featured" height="150" src="http://www.browseemall.com/Blog/wp-content/uploads/2012/01/Cycle-150x150.jpg" title="5 Steps to add cross-browser testing to your development cycle" width="150"/>
+          </a>
+          <a class="crp_title" href="http://www.browseemall.com/Blog/index.php/2012/01/27/5-steps-to-add-cross-browser-testing-to-your-development-cycle/">
+           5 Steps to add cross-browser testing to your development
+          </a>
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/04/28/3-alternatives-to-browsershots-for-website-screenshots-2/">
+           <img alt="3 Alternatives To Browsershots For Website Screenshots" class="crp_thumb crp_featured" height="150" src="http://www.browseemall.com/Blog/wp-content/uploads/2014/04/browsershots-150x150.jpg" title="3 Alternatives To Browsershots For Website Screenshots" width="150"/>
+          </a>
+          <a class="crp_title" href="http://www.browseemall.com/Blog/index.php/2014/04/28/3-alternatives-to-browsershots-for-website-screenshots-2/">
+           3 Alternatives To Browsershots For Website Screenshots
+          </a>
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/03/05/the-cross-browser-compatibility-guide-how-to-choose-the-right-doctype/">
+           <img alt="The cross-browser compatibility guide  How to choose the right DOCTYPE" class="crp_thumb crp_featured" height="150" src="http://www.browseemall.com/Blog/wp-content/uploads/2012/03/Guide-150x150.jpg" title="The cross-browser compatibility guide  How to choose the right DOCTYPE" width="150"/>
+          </a>
+          <a class="crp_title" href="http://www.browseemall.com/Blog/index.php/2012/03/05/the-cross-browser-compatibility-guide-how-to-choose-the-right-doctype/">
+           The cross-browser compatibility guide  How to choose
+          </a>
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/07/11/4-steps-to-cross-browser-test-an-existing-website/">
+           <img alt="4 Steps to cross-browser test an existing website" class="crp_thumb crp_featured" height="150" src="http://www.browseemall.com/Blog/wp-content/uploads/2012/07/Steps-150x150.jpg" title="4 Steps to cross-browser test an existing website" width="150"/>
+          </a>
+          <a class="crp_title" href="http://www.browseemall.com/Blog/index.php/2012/07/11/4-steps-to-cross-browser-test-an-existing-website/">
+           4 Steps to cross-browser test an existing website
+          </a>
+         </li>
+        </ul>
+        <div style="clear:both">
+        </div>
+       </div>
+      </div>
+      <div class="comments" id="comments">
+       <h3>
+        No Comments
+       </h3>
+       <ul class="media-list">
+       </ul>
+       <div class="comment-respond" id="respond">
+        <h3 class="comment-reply-title" id="reply-title">
+         Leave a Reply
+         <small>
+          <a href="/Blog/index.php/2015/05/19/the-optimal-cross-browser-testing-strategy/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+           Cancel reply
+          </a>
+         </small>
+        </h3>
+        <form action="http://www.browseemall.com/Blog/wp-comments-post.php" class="comment-form" id="commentform" method="post">
+         <p class="comment-notes">
+          <span id="email-notes">
+           Your email address will not be published.
+          </span>
+         </p>
+         <div class="form-group">
+          <label class="sr-only" for="author">
+           Name
+          </label>
+          <input class="form-control" id="author" name="author" placeholder="Name" size="30" type="text" value=""/>
+         </div>
+         <div class="form-group">
+          <label class="sr-only" for="email">
+           Email
+          </label>
+          <input class="form-control" id="email" name="email" placeholder="Email" size="30" type="text" value=""/>
+         </div>
+         <div class="form-group">
+          <label class="sr-only" for="comment">
+           Comment
+          </label>
+          <textarea aria-required="true" class="form-control" id="comment" name="comment" placeholder="Comment" rows="8">
+          </textarea>
+         </div>
+         <p class="form-submit">
+          <input class="submit" id="submit" name="submit" type="submit" value="Post Comment"/>
+          <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="389"/>
+          <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+         </p>
+        </form>
+       </div>
+       <!-- #respond -->
+      </div>
+     </div>
+     <div class="col-md-3 sidebar sidebar-right">
+      <div class="inner">
+       <!-- @Element: Search form -->
+       <div class="block">
+        <form action="http://www.browseemall.com/Blog/" class="searchform" id="searchform" method="get" role="search">
+         <div class="input-group">
+          <label class="sr-only" for="search-field">
+           Search
+          </label>
+          <input class="form-control" id="search-field" name="s" placeholder="Search" type="text" value=""/>
+          <span class="input-group-btn">
+           <input class="btn btn-default" id="searchsubmit" type="submit" value="Go"/>
+          </span>
+         </div>
+        </form>
+       </div>
+       <div class="block">
+        <h4 class="title-divider">
+         <span>
+          Newsletter
+         </span>
+        </h4>
+        <form id="signup-newsletter" role="form">
+         <div class="input-group input-group-sm">
+          <label class="sr-only" for="email-field">
+           Email
+          </label>
+          <input class="form-control" id="email-field" placeholder="Email" type="text"/>
+          <span class="input-group-btn">
+           <button class="btn btn-primary" onclick="AddNewsletter();" type="button">
+            Go!
+           </button>
+          </span>
+         </div>
+        </form>
+        <span id="thank-you-signup" style="display:none;">
+         Thank you!
+        </span>
+       </div>
+       <!-- @Element: Tag cloud -->
+       <div class="block">
+        <h4 class="title-divider">
+         <span>
+          Categories
+         </span>
+        </h4>
+        <div class="tag-cloud">
+         <ul>
+          <li class="cat-item cat-item-16">
+           <a href="http://www.browseemall.com/Blog/index.php/category/browseemall/">
+            BrowseEmAll
+           </a>
+          </li>
+          <li class="cat-item cat-item-15">
+           <a href="http://www.browseemall.com/Blog/index.php/category/browsernews/">
+            Browsernews
+           </a>
+          </li>
+          <li class="cat-item cat-item-27">
+           <a href="http://www.browseemall.com/Blog/index.php/category/browsers/">
+            Browsers
+           </a>
+          </li>
+          <li class="cat-item cat-item-17">
+           <a href="http://www.browseemall.com/Blog/index.php/category/crossbrowsertesting/">
+            Cross Browser Testing
+           </a>
+          </li>
+          <li class="cat-item cat-item-18">
+           <a href="http://www.browseemall.com/Blog/index.php/category/webdevelopment/">
+            Web Development
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+       <!-- @Element: Archive -->
+       <div class="block">
+        <h4 class="title-divider">
+         <span>
+          Archive
+         </span>
+        </h4>
+        <ul>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2015/07/">
+           July 2015
+          </a>
+          (3)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2015/06/">
+           June 2015
+          </a>
+          (5)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2015/05/">
+           May 2015
+          </a>
+          (11)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2015/04/">
+           April 2015
+          </a>
+          (6)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2015/01/">
+           January 2015
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/09/">
+           September 2014
+          </a>
+          (3)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/08/">
+           August 2014
+          </a>
+          (4)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/07/">
+           July 2014
+          </a>
+          (4)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/06/">
+           June 2014
+          </a>
+          (5)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/05/">
+           May 2014
+          </a>
+          (3)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/04/">
+           April 2014
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/03/">
+           March 2014
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/02/">
+           February 2014
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2014/01/">
+           January 2014
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/09/">
+           September 2013
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/08/">
+           August 2013
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/06/">
+           June 2013
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/04/">
+           April 2013
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/02/">
+           February 2013
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2013/01/">
+           January 2013
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/11/">
+           November 2012
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/10/">
+           October 2012
+          </a>
+          (3)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/08/">
+           August 2012
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/07/">
+           July 2012
+          </a>
+          (2)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/06/">
+           June 2012
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/04/">
+           April 2012
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/03/">
+           March 2012
+          </a>
+          (5)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/02/">
+           February 2012
+          </a>
+          (1)
+         </li>
+         <li>
+          <a href="http://www.browseemall.com/Blog/index.php/2012/01/">
+           January 2012
+          </a>
+          (1)
+         </li>
+        </ul>
+       </div>
+       <!-- @Element: Subscrive button -->
+       <div class="block">
+        <a class="btn btn-warning" href="http://www.browseemall.com/Blog/?feed=rss2">
+         <i class="fa fa-rss">
+         </i>
+         Subscribe via RSS feed
+        </a>
+       </div>
+       <!-- Follow Widget -->
+       <div class="block">
+        <h4 class="title-divider">
+         <span>
+          Follow Us On
+         </span>
+        </h4>
+        <!--@todo: replace with real social media links -->
+        <ul class="list-unstyled social-media-branding">
+         <li>
+          <a class="social-link branding-twitter" href="https://twitter.com/BrowseEmAll">
+           <i class="fa fa-twitter-square fa-fw">
+           </i>
+           Twitter
+          </a>
+         </li>
+         <li>
+          <a class="social-link branding-facebook" href="http://www.facebook.com/BrowseEmAll">
+           <i class="fa fa-facebook-square fa-fw">
+           </i>
+           Facebook
+          </a>
+         </li>
+         <li>
+          <a class="social-link branding-google-plus" href="https://www.linkedin.com/company/browseemall">
+           <i class="fa fa-linkedin-square fa-fw">
+           </i>
+           LinkedIn
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!--.container-->
+  </div>
+  <!--#content-->
+  <footer id="footer">
+   <div class="container">
+    <div class="row">
+     <div class="col-md-6 col">
+      <div class="block contact-block">
+       <h3>
+        Contact Us
+       </h3>
+       <address>
+       </address>
+       <ul class="fa-ul">
+        <li>
+         <abbr title="Email">
+          <i class="fa fa-li fa-envelope">
+          </i>
+         </abbr>
+         <a href="mailto:support@browseemall.com">
+          support@browseemall.com
+         </a>
+        </li>
+        <li>
+         <abbr title="Address">
+          <i class="fa fa-li fa-home">
+          </i>
+         </abbr>
+         Baumgartnerstr. 21, 86161 Augsburg, Germany
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="col-md-6 col">
+      <div class="block">
+       <h3>
+        About Us
+       </h3>
+       <p>
+        Making web testing easier one step at a time! We create content, tools and solutions for better web development and testing!
+       </p>
+      </div>
+     </div>
+    </div>
+    <div class="row">
+     <div id="toplink">
+      <a class="top-link" href="#top" title="Back to top">
+       Back To Top
+       <i class="fa fa-chevron-up">
+       </i>
+      </a>
+     </div>
+     <div class="subfooter">
+      <div class="col-md-6">
+       <p>
+        Copyright 2015  Position Fixed UG
+       </p>
+      </div>
+      <div class="col-md-6">
+       <ul class="list-inline footer-menu">
+        <li>
+         <a href="//www.browseemall.com/Home/Contact">
+          Contact
+         </a>
+        </li>
+        <li>
+         <a href="//www.browseemall.com/Home/PrivacyPolicy">
+          Privacy Policy
+         </a>
+        </li>
+        <li>
+         <a href="//www.browseemall.com/Home/Imprint">
+          Imprint
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+  </footer>
+  <!-- END FOOTER -->
+  <script async="async" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-55409ae45c547f68" type="text/javascript">
+  </script>
+ </body>
+</html>

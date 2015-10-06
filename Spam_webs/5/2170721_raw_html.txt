@@ -1,0 +1,991 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
+ <head>
+  <meta content="text/html;charset=utf-8" http-equiv="content-type"/>
+  <meta content="no-cache" http-equiv="cache-control"/>
+  <meta content="no-cache" http-equiv="pragma"/>
+  <meta content="index, follow" name="robots"/>
+  <meta content="width=device-width, maximum-scale=1.0" name="viewport"/>
+  <meta content="nl" name="language"/>
+  <title>
+   Skoften.net - Gewoon lekkere babes.
+  </title>
+  <!-- jquery -->
+  <script src="//code.jquery.com/jquery-1.11.0.min.js">
+  </script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js">
+  </script>
+  <!-- less -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.4/less.min.js">
+  </script>
+  <!--  count -->
+  <script language="javascript" src="/js/jquery.countTo.js" type="text/javascript">
+  </script>
+  <!-- cookie -->
+  <script language="javascript" src="/js/jquery.cookie-1.4.1.min.js" type="text/javascript">
+  </script>
+  <!-- jquery form -->
+  <script language="javascript" src="/js/jquery.browser.min.js" type="text/javascript">
+  </script>
+  <script language="javascript" src="/js/jquery.form.js" type="text/javascript">
+  </script>
+  <!-- foundation -->
+  <link href="/js/foundation/css/normalize.css" rel="stylesheet"/>
+  <link href="/js/foundation/css/foundation.new.css" rel="stylesheet"/>
+  <script src="/js/foundation/js/vendor/modernizr.js">
+  </script>
+  <!-- facebook -->
+  <meta content="100002074514544" property="fb:admins"/>
+  <meta content="254549554567147" property="fb:app_id"/>
+  <!-- style site -->
+  <link href="http://www.skoften.net/includes/style" rel="stylesheet" type="text/css"/>
+  <!-- lazy load -->
+  <script src="/js/jquery.lazy.1.6.min.js" type="text/javascript">
+  </script>
+  <!-- site libs -->
+  <script language="javascript" src="/js/global.functions.js?v=4" type="text/javascript">
+  </script>
+  <!-- template functions -->
+  <link href="/fonts/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <!-- GA -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-750851-1']);
+  		_gaq.push(['_trackPageview']);
+		_gaq.push(['_setCampaignTrack', false]); 
+		_gaq.push(['_setCampaignCookieTimeout', 0]);
+		
+ 	 (function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  	})();
+  </script>
+  <!-- dfp -->
+  <!-- slick libs -->
+  <script src="/js/slick/slick.min.js" type="text/javascript">
+  </script>
+  <link href="/js/slick/slick.css" rel="stylesheet" type="text/css"/>
+  <!-- global functions -->
+  <script>
+   var logged_in = false;
+  </script>
+  <script>
+   var segments = new Array();
+		segments[0] = '';
+		segments[1] = '';
+		segments[2] = '';
+		segments[3] = '';
+		segments[4] = '';
+  </script>
+  <script>
+   var isMobile = false;
+  </script>
+  <style>
+   @media screen and (max-width:640px) {
+	  .entriesRow .leftColumn,
+	  .entryRow .leftColumn {
+		  width: 100%;
+	  }
+	}
+
+	@media screen and (min-width:740px) {
+
+	  .entriesRow .leftColumn,
+	  .entryRow .leftColumn {
+		  width: calc(100% - 400px);
+	  }
+
+	  .entriesRow .rightColumn,
+	  .entryRow .rightColumn { 
+		width: 400px; 
+	  }
+
+	}
+
+	@media screen and (min-width: 640px) and (max-width:740px) {
+
+	  .entriesRow .leftColumn,
+	  .entryRow .leftColumn {
+		  width: 66.666666%;
+	  }
+	}
+  </style>
+ </head>
+ <body>
+  <!-- modals -->
+  <div class="reveal-modal" data-reveal="" id="contactModal">
+  </div>
+  <div class="reveal-modal large" css-top="800" data-reveal="" id="imageModal">
+  </div>
+  <div class="reveal-modal large" data-reveal="" id="defaultModal">
+  </div>
+  <!-- site header container -->
+  <div class="siteHeader full-width" id="siteHeader">
+   <!-- header row -->
+   <div class="full-width headerRow" id="headerRow">
+    <div class="logoRow">
+     <h1 class="logo">
+      <a class="nohover" href="http://www.skoften.net">
+       <img alt="Skoften.net" src="http://www.skoften.net/images/logos/logov3.png" width="280"/>
+      </a>
+     </h1>
+    </div>
+   </div>
+   <!-- // header row -->
+   <!-- nav row -->
+   <div class="row navRow">
+    <div class="large-12 columns">
+     <!-- naigation bar -->
+     <nav class="top-bar navigationBar" data-topbar="">
+      <ul class="title-area">
+       <li class="name">
+        <span class="float-left show-for-small" style="width: 150px">
+         <form action="http://babes.skoften.net/zoekresultaten/" id="skoftenSearch" method="post">
+          <input name="search_in" type="hidden" value="title"/>
+          <input name="channel" type="hidden" value="babes"/>
+          <input name="site" type="hidden" value="skoften_net"/>
+          <input name="keywords" placeholder="Zoeken..." style="text-align: center; border: 0; margin:0; padding: 8px; float: left; margin-top: 8px; height: 30px; background: #535353; color: #f1f1f1 ;font-size: 0.9em" type="text"/>
+          <div class="hiddenFields">
+          </div>
+         </form>
+        </span>
+       </li>
+       <li class="toggle-topbar menu-icon">
+        <a href="#">
+         <span>
+          Menu
+         </span>
+        </a>
+       </li>
+      </ul>
+      <section class="top-bar-section">
+       <!-- left Nav Section medium up -->
+       <ul class="left hide-for-medium">
+        <li class="home">
+         <a href="http://www.skoften.net">
+          <i class="fa fa-home">
+          </i>
+          Home
+         </a>
+        </li>
+        <li class="videos">
+         <a href="http://www.skoften.net/videos">
+          <i class="fa fa-youtube-play">
+          </i>
+          Videos
+         </a>
+         <ul class="dropdown">
+          <li>
+           <a href="http://www.skoften.net/videos">
+            Videos
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/uploads">
+            Uploads
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="galleries has-dropdown">
+         <a href="#">
+          <i class="fa fa-camera">
+          </i>
+          Galleries
+         </a>
+         <ul class="dropdown">
+          <li>
+           <a href="http://www.skoften.net/galleries">
+            Alle galleries
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/galleries/search&amp;category=picdump">
+            Picdumps
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/galleries/search&amp;category=gifdump">
+            Gifdumps
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="games hide-for-small">
+         <a href="http://www.skoften.net/games">
+          <i class="fa fa-gamepad">
+          </i>
+          Games
+         </a>
+        </li>
+        <li class="reportages has-dropdown">
+         <a href="#">
+          <i class="fa fa-video-camera">
+          </i>
+          Reportages
+         </a>
+         <ul class="dropdown">
+          <li>
+           <a href="http://www.skoften.net/reportages">
+            Alle reportages
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/reportages">
+            <i class="fa fa-camera">
+            </i>
+            Fotoreportages
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/tags/tag/aftermovie">
+            <i class="fa fa-youtube-play">
+            </i>
+            Aftermovies
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="babes">
+         <a href="http://babes.skoften.net">
+          <i class="fa fa-female">
+          </i>
+          Babes
+         </a>
+        </li>
+       </ul>
+       <!-- left Nav Section medium down -->
+       <ul class="left show-for-medium hide-for-small">
+        <li class="home">
+         <a href="/">
+          <i class="fa fa-home">
+          </i>
+         </a>
+        </li>
+        <li class="videos">
+         <a href="http://www.skoften.net/videos">
+          <i class="fa fa-youtube-play">
+          </i>
+         </a>
+        </li>
+        <li class="galleries has-dropdown">
+         <a href="#">
+          <i class="fa fa-camera">
+          </i>
+         </a>
+         <ul class="dropdown">
+          <li>
+           <a href="http://www.skoften.net/galleries">
+            Alle galleries
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/galleries/search&amp;category=picdump">
+            Picdumps
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/galleries/search&amp;category=gifdump">
+            Gifdumps
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="games hide-for-small">
+         <a href="http://www.skoften.net/games">
+          <i class="fa fa-gamepad">
+          </i>
+         </a>
+        </li>
+        <li class="reportages has-dropdown">
+         <a href="#">
+          <i class="fa fa-video-camera">
+          </i>
+         </a>
+         <ul class="dropdown">
+          <li>
+           <a href="http://www.skoften.net/reportages">
+            Alle reportages
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/reportages">
+            <i class="fa fa-camera">
+            </i>
+            Fotoreportages
+           </a>
+          </li>
+          <li>
+           <a href="http://www.skoften.net/tags/tag/aftermovie">
+            <i class="fa fa-youtube-play">
+            </i>
+            Aftermovies
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="babes">
+         <a href="http://babes.skoften.net">
+          <i class="fa fa-female">
+          </i>
+         </a>
+        </li>
+       </ul>
+       <!-- right Nav Section -->
+       <ul class="right">
+        <li class="searchBar hide-for-small">
+         <form action="http://babes.skoften.net/zoekresultaten/" id="skoftenSearch" method="post">
+          <input name="search_in" type="hidden" value="title"/>
+          <input name="channel" type="hidden" value="babes"/>
+          <input name="site" type="hidden" value="skoften_net"/>
+          <input name="keywords" placeholder="Zoeken..." style="text-align: center; border: 0; margin:0; padding: 8px; padding-left: 15px; margin-top: 2px; height: 30px; background: #535353; color: #f1f1f1 ;font-size: 0.9em" type="text"/>
+          <div class="hiddenFields">
+          </div>
+         </form>
+        </li>
+        <li class="toggleLoginRow">
+         <a href="#">
+          <i class="fa fa-user">
+          </i>
+          Aanmelden
+         </a>
+        </li>
+       </ul>
+      </section>
+     </nav>
+     <!-- // navigation -->
+    </div>
+   </div>
+  </div>
+  <!-- // site header container -->
+  <div class="headerSpacer hidden" style="height: 190px">
+  </div>
+  <div class="row registerRow hidden">
+   <!-- login box -->
+   <div class="large-4 columns">
+    <!-- padding -->
+    <div class="bg-white padding-15">
+     <h2>
+      Bestaande gebruikers
+     </h2>
+     <div id="loginFormOutput">
+     </div>
+     <form action="http://babes.skoften.net/" id="loginForm" method="post">
+      <div class="hiddenFields">
+       <input name="ACT" type="hidden" value="269"/>
+       <input name="REAL_ACT" type="hidden" value="9"/>
+       <input name="RET" type="hidden" value="-2"/>
+       <input name="site_id" type="hidden" value="4"/>
+       <input name="csrf_token" type="hidden" value="667cc137647ea8ba300b4b1c57d2999b8bca6f27"/>
+      </div>
+      <p>
+       <input autocomplete="on" class="input_dark w100percent round_3" maxlength="32" name="username" placeholder="gebruikersnaam" size="25" type="text"/>
+      </p>
+      <p>
+       <input autocomplete="off" class="input_dark w100percent round_3" maxlength="32" name="password" placeholder="wachtwoord" size="25" type="password" value=""/>
+      </p>
+      Ingelogd blijven
+      <input checked="" class="checkbox" name="auto_login" type="checkbox" value="1"/>
+      <p>
+       <a class="togglePasswordForm" data-reveal-ajax="true" data-reveal-id="defaultModal" href="/ajax/password">
+        wachtwoord vergeten?
+       </a>
+      </p>
+      <input class="button float_right" name="submit" type="submit" value="Inloggen"/>
+     </form>
+     <!-- forgot password -->
+     <div class="hidden" id="forgotPasswordBox">
+      <form action="http://babes.skoften.net/" id="forgot_password_form" method="post">
+       <div class="hiddenFields">
+        <input name="ACT" type="hidden" value="392"/>
+        <input name="RET" type="hidden" value=""/>
+        <input name="params_id" type="hidden" value="PQxUYAdoUIQeNRyNKlvsgsNwv"/>
+        <input name="site_id" type="hidden" value="4"/>
+        <input name="csrf_token" type="hidden" value="667cc137647ea8ba300b4b1c57d2999b8bca6f27"/>
+       </div>
+       <input autocomplete="off" class="input_dark w100percent round_3" name="email" placeholder="e-mail adres invoeren" size="25" type="text"/>
+       <br/>
+       <input class="button float_right" type="submit" value="Versturen"/>
+       <div class="clear">
+       </div>
+      </form>
+     </div>
+     <!-- // forgot password -->
+    </div>
+    <!-- padding -->
+   </div>
+   <!-- // login box  column -->
+   <!-- register box -->
+   <div class="large-4 columns">
+    <!-- padding -->
+    <div class="bg-white padding-15">
+     <h2>
+      Nieuwe gebruikers
+     </h2>
+     <div id="quickRegOutput">
+     </div>
+     <form action="/?ACT=269&amp;REAL_ACT=345" id="quickRegForm" method="post">
+      <input name="return_url" type="hidden" value="/registration/incomplete"/>
+      <input name="welcome_url" type="hidden" value="/welcome"/>
+      <input name="fail_url" type="hidden" value="/registration/error"/>
+      <input name="required" type="hidden" value="username|email|email_confirm"/>
+      <input name="json" type="hidden" value="1"/>
+      <p>
+       <input autocomplete="off" class="input_dark w100percent round_3 preventFocus" name="username" placeholder="gewenste gebruikersnaam" type="text" value=""/>
+      </p>
+      <p>
+       <input autocomplete="off" class="input_dark w100percent round_3" name="email" placeholder="Je e-mail adres" type="text"/>
+      </p>
+      <p class="block">
+       <input autocomplete="off" class="input_dark w100percent round_3" name="email_confirm" onfocus="" placeholder="e-mail ter controle" type="text"/>
+      </p>
+      <p>
+       <input autocomplete="off" class="input_dark w100percent round_3" id="captcha" name="captcha" placeholder="Hoeveel is 50-10?" size="20" type="text" value=""/>
+      </p>
+      <p>
+       <input class="button float_right" style="margin-top: 10px" type="submit" value="Account aanmaken"/>
+      </p>
+      <div class="clear">
+      </div>
+     </form>
+    </div>
+    <!-- padding -->
+   </div>
+   <!-- // register box -->
+   <!-- social register -->
+   <div class="large-4 columns">
+    <!-- padding -->
+    <div class="bg-white padding-15">
+     <h2>
+      Via Facebook of Twitter
+     </h2>
+     <a class="button facebook" href="/?ACT=345&amp;return_url=SAME_PAGE&amp;authtype=facebook" id="facebook_url" rel="nofollow">
+      <i class="fa fa-facebook">
+      </i>
+      Facebook
+     </a>
+     <a class="button twitter" href="/?ACT=345&amp;return_url=SAME_PAGE&amp;authtype=twitter" id="twitter_url" rel="nofollow">
+      <i class="fa fa-twitter">
+      </i>
+      Twitter
+     </a>
+     <p class="extraInfo">
+      Let op: er zullen
+      <i>
+       geen
+      </i>
+      persoonsgegevens worden gebruikt. Ook zullen we geen posts maken naar Facebook of Twitter.
+     </p>
+    </div>
+    <!-- // padding -->
+   </div>
+   <!-- // social -->
+  </div>
+  <!-- categoryRow row -->
+  <div class="categoryRow full-width babes">
+   <div class="row siteWidth">
+    <div class="large-12 columns">
+     <ul class="button-group category-group babes">
+      <li>
+       <a class="button" href="/search&amp;category=gallery">
+        Galleries
+       </a>
+      </li>
+      <li>
+       <a class="button" href="/search&amp;category=video">
+        Videos
+       </a>
+      </li>
+      <li>
+       <a class="button" href="/search&amp;tags=erodump">
+        Erodump
+       </a>
+      </li>
+      <li>
+       <a class="button" href="http://www.livesex.nl">
+        Live sex
+       </a>
+      </li>
+      <li>
+       <a class="button" href="http://www.geilecontacten.nl">
+        Dating
+       </a>
+      </li>
+      <li>
+       <a class="button" href="http://www.bootycall.nl">
+        Bootycalls
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+  </div>
+  <!-- // categoryRow row -->
+  <!-- page row -->
+  <div class="row pageRow margin-top-20">
+   <!-- leaderboard -->
+   <div align="center" class="leaderboard margin-bottom-15">
+    <!--/* Revive Adserver Javascript Tag v3.0.3 */-->
+    <script type="text/javascript">
+     &lt;!--//&lt;![CDATA[
+			var m3_u = (location.protocol=='https:'?'https://fapmedia.com/revive/www/delivery/ajs.php':'http://fapmedia.com/revive/www/delivery/ajs.php');
+			var m3_r = Math.floor(Math.random()*99999999999);
+			if (!document.MAX_used) document.MAX_used = ',';
+			document.write ("&lt;scr"+"ipt type='text/javascript' src='"+m3_u);
+			document.write ("?campaignid=4&amp;what=width:728");
+			document.write ('&amp;cb=' + m3_r);
+			if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+			document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+			document.write ("&amp;loc=" + escape(window.location));
+			if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+			if (document.context) document.write ("&amp;context=" + escape(document.context));
+			if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+			document.write ("'&gt;&lt;\/scr"+"ipt&gt;");
+			//]]&gt;--&gt;
+    </script>
+    <noscript>
+     <a href="http://fapmedia.com/revive/www/delivery/ck.php?n=ab1f9d47&amp;cb=1436899962" target="_blank">
+      <img alt="" border="0" src="http://fapmedia.com/revive/www/delivery/avw.php?campaignid=4&amp;what=width:728&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=ab1f9d47"/>
+     </a>
+    </noscript>
+   </div>
+   <div class="large-12 columns">
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3 channelBlocks babesBlocks">
+     <li>
+      <a href="http://bit.ly/babe_post_leukemeiden" target="_blank">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/260515-5564643a9c680.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Boterbloempje zoekt een date
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/lesbians_in_love1">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/140715-55a5042ff1a4b.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-youtube-play">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Lesbians in love
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/sofia5">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/130715-55a3b91a9bf3e.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Sofia
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/lesbische_tieners">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/100715-559f6a801dd3a.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-youtube-play">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Lesbische tieners
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="http://bit.ly/xmissy-lilit" target="_blank">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/080715-559cfa0e1bc51.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Lilit
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/amateurs_40">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/050715-5599723a67a8a.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Amateurs (40)
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/echte_vriendinnen_10_deel_2">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/050715-55997521437be.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-youtube-play">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Echte vriendinnen (10 - deel 2)
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/frances">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/050715-5599706745e4a.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Frances
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="http://www.geilecontacten.nl/home?pi=skbabes" target="_blank">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/030715-55963effc2da0.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Zin in een geile sexdate?
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/echte_vriendinnen_10">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/020715-55950cde2ee0d.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-youtube-play">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Echte vriendinnen (10)
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="http://bit.ly/pizza-summer-is-here" target="_blank">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/010715-5593e6d520c70.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-youtube-play">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Summer is here
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <li>
+      <a href="/babe/inez2">
+       <div class="padding-10 bg-white">
+        <div class="thumbnaiLContainer">
+         <img src="http://content.skoften.net/thumbnails/babes/300615-55925d09b5cf9.jpg"/>
+         <div class="hoverLayer">
+         </div>
+        </div>
+        <h4>
+         <i class="fa fa-camera">
+         </i>
+        </h4>
+        <div class="overflow-hidden">
+         <h2>
+          Inez
+         </h2>
+        </div>
+       </div>
+      </a>
+     </li>
+     <div style="clear:both">
+     </div>
+     <div class="pagination-centered">
+      <ul class="pagination">
+       <li class="current">
+        <a class="page-1" href="http://babes.skoften.net">
+         1
+        </a>
+       </li>
+       <li>
+        <a class="page-2" href="http://babes.skoften.net/P12">
+         2
+        </a>
+       </li>
+       <li>
+        <a class="page-3" href="http://babes.skoften.net/P24">
+         3
+        </a>
+       </li>
+       <li>
+        <a class="page-4" href="http://babes.skoften.net/P36">
+         4
+        </a>
+       </li>
+       <li>
+        <a class="page-5" href="http://babes.skoften.net/P48">
+         5
+        </a>
+       </li>
+       <li class="arrow">
+        <a href="http://babes.skoften.net/P12">
+         Volgende pagina 
+        </a>
+       </li>
+       <li>
+        <a href="http://babes.skoften.net/P2136">
+         Laatste pagina
+        </a>
+       </li>
+      </ul>
+     </div>
+    </ul>
+   </div>
+  </div>
+  <!-- // page row -->
+  <!-- footer row -->
+  <div align="center" class="full-width footerRow" title="Klik om terug omhoog te scrollen!">
+   <div>
+    <i class="fa fa-arrow-up">
+    </i>
+   </div>
+  </div>
+  <div class="full-width footerSecondRow" style="">
+   <div class="row">
+    <div class="large-12 columns">
+     <div class="row">
+      <div class="medium-4 large-4 columns">
+       <h3>
+        <i class="fa fa-envelope">
+        </i>
+        Linktip &amp; contact
+       </h3>
+       <p>
+        Heb je een vraag, opmerking, klacht of gewoon een goede linktip? Stuur ons
+        <a data-reveal-ajax="/ajax/contact" data-reveal-id="contactModal" href="javascript:void(0)">
+         een mail
+        </a>
+        en we zullen zo spoedig mogelijk reageren.
+       </p>
+       <h3>
+        <i class="fa fa-share-alt">
+        </i>
+        Sociaal
+       </h3>
+       <p>
+        Volg Skoften ook op
+        <a class="facebook" href="http://www.facebook.com/skoften" target="_blank">
+         Facebook
+        </a>
+        en
+        <a class="twitter" href="http://www.twitter.com/skoften" target="_blank">
+         Twitter
+        </a>
+        !
+       </p>
+      </div>
+      <div class="medium-4 large-4 columns">
+       <h3 style="color: #30ad21">
+        <i class="fa fa-phone">
+        </i>
+        WhatsApp
+       </h3>
+       <p class="whatsApp">
+        Heb je een interessante video of foto waar we iets mee moeten doen? Voeg ons toe op WhatsApp: 06 28 28 69 21!
+       </p>
+       <h3>
+        <i class="fa fa-smile-o">
+        </i>
+        Vrienden
+       </h3>
+       <p class="friends">
+        <a href="http://www.fail.nl" target="_blank">
+         Fail.nl
+        </a>
+        <a href="http://www.trending.nl" target="_blank" title="Opmerkelijk. Boeiend. Trending">
+         Trending.nl
+        </a>
+        <a href="http://www.biertijd.com" target="_blank">
+         Biertijd
+        </a>
+        <a href="http://www.xmissy.nl" target="_blank">
+         xMissy
+        </a>
+       </p>
+      </div>
+      <div class="medium-4 large-4 columns">
+       <h3>
+        <i class="fa fa-envelope-o">
+        </i>
+        Nieuwsbrief
+       </h3>
+       <p>
+        Schrijf je in voor de wekelijkse nieuwsbrief, of notificatie per mail zodra er een nieuw topic geplaatst wordt.
+       </p>
+       <form action="http://babes.skoften.net/" class="mailinglistForm" id="mailinglistForm" method="post">
+        <div class="hiddenFields">
+         <input name="ACT" type="hidden" value="269"/>
+         <input name="REAL_ACT" type="hidden" value="3"/>
+         <input name="RET" type="hidden" value="http://babes.skoften.net"/>
+         <input name="list" type="hidden" value="week"/>
+         <input name="site_id" type="hidden" value="4"/>
+         <input name="csrf_token" type="hidden" value="667cc137647ea8ba300b4b1c57d2999b8bca6f27"/>
+        </div>
+        <div class="row">
+         <div class="columns large-9">
+          <input name="email" placeholder="Geldig e-mail adres" type="text"/>
+         </div>
+         <div class="columns large-3">
+          <button class="button width-fill" type="submit">
+           <i class="fa fa-arrow-right">
+           </i>
+          </button>
+         </div>
+        </div>
+        <div class="row">
+         <div class="large-12 colunns">
+          <div class="ajaxOutput margin-10">
+          </div>
+         </div>
+        </div>
+       </form>
+      </div>
+     </div>
+     <!-- // row -->
+    </div>
+    <!-- // column -->
+   </div>
+   <!-- // row -->
+  </div>
+  <!--// footer container -->
+  <!-- foundation -->
+  <script src="/js/foundation/js/foundation.min.js">
+  </script>
+  <script src="/js/foundation/js/foundation/foundation.equalizer.js">
+  </script>
+  <script src="/js/foundation/js/foundation/foundation.dropdown.js">
+  </script>
+  <script src="/js/foundation/js/foundation/foundation.reveal.js">
+  </script>
+  <script src="/js/foundation/js/foundation/confirm_with_reveal.js">
+  </script>
+  <script src="/js/foundation/js/foundation/foundation.topbar.js">
+  </script>
+  <script src="/js/foundation/js/foundation/foundation.tooltip.js">
+  </script>
+  <script type="text/javascript">
+   $(document).foundation();
+  
+  $(document).confirmWithReveal({
+  	title: "Weet je het zeker?",
+	body: "Iedere keer als je uitlogt slachten ze een schattig pluizig kuikentje...",
+	ok: "Ja, ik weet het zeker",
+	cancel: "Annuleren"
+  });
+  </script>
+  <!-- rpc lib -->
+  <script src="/themes/third_party/skomment/js/simplerpc.js">
+  </script>
+  <!-- skomment libs -->
+  <!-- plusmin libs -->
+  <script src="/js/jquery.inview.js">
+  </script>
+  <a class="cd-top" href="javascript:void(0)">
+   Top
+  </a>
+ </body>
+</html>

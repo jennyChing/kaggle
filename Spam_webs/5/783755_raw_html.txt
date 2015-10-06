@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Elfquest Avatar Maker
+  </title>
+  <link href="http://fonts.googleapis.com/css?family=Acme" rel="stylesheet" type="text/css"/>
+  <link href="style.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+  </script>
+  <meta content="http://www.elfquest.com/avatars/images/elfquestFB.jpg" property="og:image"/>
+  <meta content="Elfquest.com" property="og:site_name"/>
+  <meta content="article" property="og:type"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="161350459717" property="fb:app_id"/>
+  <meta content="http://www.elfquest.com/avatars/" property="og:url"/>
+  <meta content="Elfquest Avatar Maker" property="og:title"/>
+  <meta content="Create an avatar in the style of Wendy and Richard Pini's Elfquest saga" property="og:description"/>
+  <meta content="https://www.facebook.com/elfquest" property="article:publisher"/>
+  <meta content="avatars" property="article:tag"/>
+  <meta content="games" property="article:tag"/>
+  <meta content="elfquest" property="article:tag"/>
+  <meta content="wendy pini" property="article:tag"/>
+  <meta content="richard pini" property="article:tag"/>
+ </head>
+ <body>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-45092406-1', 'elfquest.com');
+ga('send', 'pageview');
+  </script>
+  <a href="http://elfquest.com">
+   <img src="images/eqlogo.png" style="position:relative;z-index:100"/>
+  </a>
+  <div id="leavesLeft">
+  </div>
+  <div id="leavesRight">
+  </div>
+  <div id="avatarcontainer">
+   <canvas height="394" id="avatar" width="300">
+   </canvas>
+   <!-- hidden, it's just a buffer for the image below -->
+   <img id="pngoutput" src="images/loading.gif"/>
+   <img id="pngoutput2" src="images/loading.gif" style="display:none;"/>
+  </div>
+  <div id="irisCanvasDiv">
+   <canvas height="50" id="irisesCanvas" width="399">
+   </canvas>
+  </div>
+  <div id="eyesCanvasDiv">
+   <canvas height="394" id="eyesCanvas" width="300">
+   </canvas>
+  </div>
+  <div id="controls">
+   <span class="Navs" id="randomNav" onclick="picker('random')">
+    <a href="javascript:void(0)">
+     <img src="images/random.png"/>
+    </a>
+   </span>
+   <span class="Navs" id="downloadNav">
+    <a href="javascript:void(0)">
+     <img id="dl" src="images/download.png"/>
+    </a>
+   </span>
+   <span class="Navs" id="shareNav">
+    <a href="http://elfquest.com" target="_blank">
+     <img src="images/readelfquest.png"/>
+    </a>
+   </span>
+   <span class="Navs" id="shareNav">
+    <a href="http://www.facebook.com/sharer/sharer.php?u=http://elfquest.com/avatars" id="facebooklink" target="_blank">
+     <img src="images/share.png"/>
+    </a>
+   </span>
+   <span class="Navs" id="shareNav">
+    <a href="https://twitter.com/share?url=http://elfquest.com/avatars&amp;text=An%20%23elfquest%20avatar%20maker!">
+     <img src="images/tweet.png"/>
+    </a>
+   </span>
+   <div id="menu" style="line-height:3em">
+    <span class="Navs" id="headsNav" onclick="nav('heads')">
+     <a href="javascript:void(0)">
+      Head
+     </a>
+    </span>
+    <span class="Navs" id="hairsNav" onclick="nav('hairs')">
+     <a href="javascript:void(0)">
+      Hair
+     </a>
+    </span>
+    <span class="Navs" id="eyesNav" onclick="nav('eyes')">
+     <a href="javascript:void(0)">
+      Eyes
+     </a>
+    </span>
+    <span class="Navs" id="nosesNav" onclick="nav('noses')">
+     <a href="javascript:void(0)">
+      Nose
+     </a>
+    </span>
+    <span class="Navs" id="lipsNav" onclick="nav('lips')">
+     <a href="javascript:void(0)">
+      Mouth
+     </a>
+    </span>
+    <span class="Navs" id="earsNav" onclick="nav('ears')">
+     <a href="javascript:void(0)">
+      Ears
+     </a>
+    </span>
+    <span class="Navs" id="fuzzNav" onclick="nav('fuzz')">
+     <a href="javascript:void(0)">
+      Brows &amp; Beard
+     </a>
+    </span>
+    <span class="Navs" id="backgroundsNav" onclick="nav('backgrounds')">
+     <a href="javascript:void(0)">
+      Backdrop
+     </a>
+    </span>
+   </div>
+   <div id="options-container">
+    <div class="options" id="instructions" style="display:inline-block;">
+     <p>
+      Tap or click the name of the feature you'd like to change. Right-click the image to
+      <span id="dl">
+       download it
+      </span>
+      , or drag it to your desktop.
+     </p>
+    </div>
+    <div class="options" id="heads">
+     <div id="heads-colors">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',0);">
+        <img class="option-image" src="swatches/pallid.png"/>
+       </a>
+       <br/>
+       Pallid
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',1);">
+        <img class="option-image" src="swatches/pale.png"/>
+       </a>
+       <br/>
+       Pale
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',2);">
+        <img class="option-image" src="swatches/ruddy.png"/>
+       </a>
+       <br/>
+       Ruddy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',3);">
+        <img class="option-image" src="swatches/fair-skin.png"/>
+       </a>
+       <br/>
+       Fair
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',4);">
+        <img class="option-image" src="swatches/tan.png"/>
+       </a>
+       <br/>
+       Tan
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',5);">
+        <img class="option-image" src="swatches/olive.png"/>
+       </a>
+       <br/>
+       Olive
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',6);">
+        <img class="option-image" src="swatches/bronze.png"/>
+       </a>
+       <br/>
+       Bronze
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',7);">
+        <img class="option-image" src="swatches/dark-skin.png"/>
+       </a>
+       <br/>
+       Dark
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('skinc',8);">
+        <img class="option-image" src="swatches/ebony.png"/>
+       </a>
+       <br/>
+       Ebony
+      </div>
+     </div>
+     <div id="heads-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',0);">
+        <img class="option-image" src="faces/icons/0.png"/>
+       </a>
+       <br/>
+       Smooth
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',1);">
+        <img class="option-image" src="faces/icons/1.png"/>
+       </a>
+       <br/>
+       Sharp
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',2);">
+        <img class="option-image" src="faces/icons/2.png"/>
+       </a>
+       <br/>
+       Square
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',3);">
+        <img class="option-image" src="faces/icons/3.png"/>
+       </a>
+       <br/>
+       Long
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',4);">
+        <img class="option-image" src="faces/icons/4.png"/>
+       </a>
+       <br/>
+       Pointed
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',5);">
+        <img class="option-image" src="faces/icons/5.png"/>
+       </a>
+       <br/>
+       Cheeky
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',6);">
+        <img class="option-image" src="faces/icons/6.png"/>
+       </a>
+       <br/>
+       Round
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',7);">
+        <img class="option-image" src="faces/icons/7.png"/>
+       </a>
+       <br/>
+       Youth
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('face',8);">
+        <img class="option-image" src="faces/icons/8.png"/>
+       </a>
+       <br/>
+       Bony
+      </div>
+     </div>
+    </div>
+    <!-- End of Heads -->
+    <div class="options" id="hairs">
+     <div id="hairs-colors">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',0);">
+        <img class="option-image" src="swatches/silver.png"/>
+       </a>
+       <br/>
+       Silver
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',1);">
+        <img class="option-image" src="swatches/gray.png"/>
+       </a>
+       <br/>
+       Gray
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',2);">
+        <img class="option-image" src="swatches/flaxen.png"/>
+       </a>
+       <br/>
+       Flaxen
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',3);">
+        <img class="option-image" src="swatches/blonde.png"/>
+       </a>
+       <br/>
+       Blonde
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',4);">
+        <img class="option-image" src="swatches/gold.png"/>
+       </a>
+       <br/>
+       Gold
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',5);">
+        <img class="option-image" src="swatches/fair.png"/>
+       </a>
+       <br/>
+       Fair
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',6);">
+        <img class="option-image" src="swatches/ginger.png"/>
+       </a>
+       <br/>
+       Light Red
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',7);">
+        <img class="option-image" src="swatches/red.png"/>
+       </a>
+       <br/>
+       Red
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',8);">
+        <img class="option-image" src="swatches/auburn.png"/>
+       </a>
+       <br/>
+       Auburn
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',9);">
+        <img class="option-image" src="swatches/brown.png"/>
+       </a>
+       <br/>
+       Brown
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',10);">
+        <img class="option-image" src="swatches/dark.png"/>
+       </a>
+       <br/>
+       Dark
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hairc',11);">
+        <img class="option-image" src="swatches/black.png"/>
+       </a>
+       <br/>
+       Black
+      </div>
+     </div>
+     <div id="hair-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',0);">
+        <img class="option-image" src="hair-tones/icons/0.png"/>
+       </a>
+       <br/>
+       Wavy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',1);">
+        <img class="option-image" src="hair-tones/icons/1.png"/>
+       </a>
+       <br/>
+       Tight Curls
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',2);">
+        <img class="option-image" src="hair-tones/icons/2.png"/>
+       </a>
+       <br/>
+       Cropped
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',3);">
+        <img class="option-image" src="hair-tones/icons/3.png"/>
+       </a>
+       <br/>
+       Feathered
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',4);">
+        <img class="option-image" src="hair-tones/icons/4.png"/>
+       </a>
+       <br/>
+       Curly
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',5);">
+        <img class="option-image" src="hair-tones/icons/5.png"/>
+       </a>
+       <br/>
+       Fringe
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',6);">
+        <img class="option-image" src="hair-tones/icons/6.png"/>
+       </a>
+       <br/>
+       Shaggy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',7);">
+        <img class="option-image" src="hair-tones/icons/7.png"/>
+       </a>
+       <br/>
+       Long
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',8);">
+        <img class="option-image" src="hair-tones/icons/8.png"/>
+       </a>
+       <br/>
+       Lank
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',9);">
+        <img class="option-image" src="hair-tones/icons/9.png"/>
+       </a>
+       <br/>
+       Center
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',10);">
+        <img class="option-image" src="hair-tones/icons/10.png"/>
+       </a>
+       <br/>
+       Tucked
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',11);">
+        <img class="option-image" src="hair-tones/icons/11.png"/>
+       </a>
+       <br/>
+       Short
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',12);">
+        <img class="option-image" src="hair-tones/icons/12.png"/>
+       </a>
+       <br/>
+       Swept
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',13);">
+        <img class="option-image" src="hair-tones/icons/13.png"/>
+       </a>
+       <br/>
+       Mop
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',14);">
+        <img class="option-image" src="hair-tones/icons/14.png"/>
+       </a>
+       <br/>
+       Spiky
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('hair',15);">
+        <img class="option-image" src="hair-tones/icons/15.png"/>
+       </a>
+       <br/>
+       Bouffant
+      </div>
+     </div>
+     <div id="hair-extras">
+      HAIR EXTRAS
+      <br/>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',0);">
+        <img class="option-image" src="hair-decorations/icons/0.png"/>
+       </a>
+       <br/>
+       None
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',1);">
+        <img class="option-image" src="hair-decorations/icons/1.png"/>
+       </a>
+       <br/>
+       Side Braids
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',2);">
+        <img class="option-image" src="hair-decorations/icons/2.png"/>
+       </a>
+       <br/>
+       Braids
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',3);">
+        <img class="option-image" src="hair-decorations/icons/3.png"/>
+       </a>
+       <br/>
+       Side Bunches
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',4);">
+        <img class="option-image" src="hair-decorations/icons/4.png"/>
+       </a>
+       <br/>
+       Danglies
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',5);">
+        <img class="option-image" src="hair-decorations/icons/5.png"/>
+       </a>
+       <br/>
+       Bunches
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('haird',6);">
+        <img class="option-image" src="hair-decorations/icons/6.png"/>
+       </a>
+       <br/>
+       Pigtails
+      </div>
+     </div>
+    </div>
+    <!-- End of Hair -->
+    <div class="options" id="eyes">
+     <div id="eyes-colors">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',0);">
+        <img class="option-image" src="swatches/silver.png"/>
+       </a>
+       <br/>
+       Silver
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',1);">
+        <img class="option-image" src="swatches/gray.png"/>
+       </a>
+       <br/>
+       Gray
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',2);">
+        <img class="option-image" src="swatches/paleblue.png"/>
+       </a>
+       <br/>
+       Pale
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',3);">
+        <img class="option-image" src="swatches/grayblue.png"/>
+       </a>
+       <br/>
+       Gray-blue
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',4);">
+        <img class="option-image" src="swatches/blue.png"/>
+       </a>
+       <br/>
+       Blue
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',5);">
+        <img class="option-image" src="swatches/lapis.png"/>
+       </a>
+       <br/>
+       Lapis
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',6);">
+        <img class="option-image" src="swatches/cornflower.png"/>
+       </a>
+       <br/>
+       Cornflower
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',7);">
+        <img class="option-image" src="swatches/violet.png"/>
+       </a>
+       <br/>
+       Violet
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',8);">
+        <img class="option-image" src="swatches/green.png"/>
+       </a>
+       <br/>
+       Green
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',9);">
+        <img class="option-image" src="swatches/hazel.png"/>
+       </a>
+       <br/>
+       Hazel
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',10);">
+        <img class="option-image" src="swatches/brown.png"/>
+       </a>
+       <br/>
+       Brown
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eyec',11);">
+        <img class="option-image" src="swatches/yellow.png"/>
+       </a>
+       <br/>
+       Yellow
+      </div>
+     </div>
+     <div id="eyes-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',0);">
+        <img class="option-image" src="eyes/icons/0.png"/>
+       </a>
+       <br/>
+       Narrow
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',1);">
+        <img class="option-image" src="eyes/icons/1.png"/>
+       </a>
+       <br/>
+       Slanted
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',2);">
+        <img class="option-image" src="eyes/icons/2.png"/>
+       </a>
+       <br/>
+       Hooded
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',3);">
+        <img class="option-image" src="eyes/icons/3.png"/>
+       </a>
+       <br/>
+       Almond
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',4);">
+        <img class="option-image" src="eyes/icons/4.png"/>
+       </a>
+       <br/>
+       Sinuous
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',5);">
+        <img class="option-image" src="eyes/icons/5.png"/>
+       </a>
+       <br/>
+       Petite
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',6);">
+        <img class="option-image" src="eyes/icons/6.png"/>
+       </a>
+       <br/>
+       Sleepy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',7);">
+        <img class="option-image" src="eyes/icons/7.png"/>
+       </a>
+       <br/>
+       Alert
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',8);">
+        <img class="option-image" src="eyes/icons/8.png"/>
+       </a>
+       <br/>
+       Catlike
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',9);">
+        <img class="option-image" src="eyes/icons/9.png"/>
+       </a>
+       <br/>
+       Monolid
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',10);">
+        <img class="option-image" src="eyes/icons/10.png"/>
+       </a>
+       <br/>
+       Surprised
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('eye',11);">
+        <img class="option-image" src="eyes/icons/11.png"/>
+       </a>
+       <br/>
+       Pensive
+      </div>
+      <p style="font-size:16px">
+       <input id="eyelashes-checkbox" onclick="picker('eyelashes');" type="checkbox"/>
+       Eyelashes  Fine adjustments:
+       <a href="javascript:void(0)" onclick="picker('eyesup');">
+        
+       </a>
+       <a href="javascript:void(0)" onclick="picker('eyesdown');">
+        
+       </a>
+      </p>
+     </div>
+    </div>
+    <!-- End of Eyes -->
+    <div class="options" id="noses">
+     <div id="noses-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',0);">
+        <img class="option-image" src="noses/icons/0.png"/>
+       </a>
+       <br/>
+       Small
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',1);">
+        <img class="option-image" src="noses/icons/1.png"/>
+       </a>
+       <br/>
+       Narrow
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',2);">
+        <img class="option-image" src="noses/icons/2.png"/>
+       </a>
+       <br/>
+       Straight
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',3);">
+        <img class="option-image" src="noses/icons/3.png"/>
+       </a>
+       <br/>
+       Plain
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',4);">
+        <img class="option-image" src="noses/icons/4.png"/>
+       </a>
+       <br/>
+       Roman
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',5);">
+        <img class="option-image" src="noses/icons/5.png"/>
+       </a>
+       <br/>
+       Flat
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',6);">
+        <img class="option-image" src="noses/icons/6.png"/>
+       </a>
+       <br/>
+       Pointed
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',7);">
+        <img class="option-image" src="noses/icons/7.png"/>
+       </a>
+       <br/>
+       Long
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',8);">
+        <img class="option-image" src="noses/icons/8.png"/>
+       </a>
+       <br/>
+       Snub
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',9);">
+        <img class="option-image" src="noses/icons/9.png"/>
+       </a>
+       <br/>
+       Manga
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',10);">
+        <img class="option-image" src="noses/icons/10.png"/>
+       </a>
+       <br/>
+       Wide
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',11);">
+        <img class="option-image" src="noses/icons/11.png"/>
+       </a>
+       <br/>
+       Downturn
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',12);">
+        <img class="option-image" src="noses/icons/12.png"/>
+       </a>
+       <br/>
+       Upturned
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',13);">
+        <img class="option-image" src="noses/icons/13.png"/>
+       </a>
+       <br/>
+       Rounded
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',14);">
+        <img class="option-image" src="noses/icons/14.png"/>
+       </a>
+       <br/>
+       Bumpy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('nose',15);">
+        <img class="option-image" src="noses/icons/15.png"/>
+       </a>
+       <br/>
+       Thin
+      </div>
+      <p style="font-size:16px">
+       Fine adjustments:
+       <a href="javascript:void(0)" onclick="picker('noseup');">
+        
+       </a>
+       <a href="javascript:void(0)" onclick="picker('nosedown');">
+        
+       </a>
+      </p>
+     </div>
+    </div>
+    <!-- End of Noses -->
+    <div class="options" id="lips">
+     <div id="lips-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',0);">
+        <img class="option-image" src="lips/icons/0.png"/>
+       </a>
+       <br/>
+       Beatific
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',1);">
+        <img class="option-image" src="lips/icons/1.png"/>
+       </a>
+       <br/>
+       Thin(f)
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',2);">
+        <img class="option-image" src="lips/icons/2.png"/>
+       </a>
+       <br/>
+       Frown
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',3);">
+        <img class="option-image" src="lips/icons/3.png"/>
+       </a>
+       <br/>
+       Grin
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',4);">
+        <img class="option-image" src="lips/icons/4.png"/>
+       </a>
+       <br/>
+       Smile
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',5);">
+        <img class="option-image" src="lips/icons/5.png"/>
+       </a>
+       <br/>
+       Overbite
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',6);">
+        <img class="option-image" src="lips/icons/6.png"/>
+       </a>
+       <br/>
+       Angry
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',7);">
+        <img class="option-image" src="lips/icons/7.png"/>
+       </a>
+       <br/>
+       Surprise
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',8);">
+        <img class="option-image" src="lips/icons/8.png"/>
+       </a>
+       <br/>
+       Pouty
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',9);">
+        <img class="option-image" src="lips/icons/9.png"/>
+       </a>
+       <br/>
+       Happy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',10);">
+        <img class="option-image" src="lips/icons/10.png"/>
+       </a>
+       <br/>
+       Small
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',11);">
+        <img class="option-image" src="lips/icons/11.png"/>
+       </a>
+       <br/>
+       Overbite frown
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',12);">
+        <img class="option-image" src="lips/icons/12.png"/>
+       </a>
+       <br/>
+       Puckered
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',13);">
+        <img class="option-image" src="lips/icons/13.png"/>
+       </a>
+       <br/>
+       Thin
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',14);">
+        <img class="option-image" src="lips/icons/14.png"/>
+       </a>
+       <br/>
+       Full
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('mouth',15);">
+        <img class="option-image" src="lips/icons/15.png"/>
+       </a>
+       <br/>
+       Laughing
+      </div>
+      <p style="font-size:16px">
+       <input id="fullerlips-checkbox" onclick="picker('fullerlips');" type="checkbox"/>
+       Fuller LipsFine adjustments:
+       <a href="javascript:void(0)" onclick="picker('mouthup');">
+        
+       </a>
+       <a href="javascript:void(0)" onclick="picker('mouthdown');">
+        
+       </a>
+      </p>
+     </div>
+    </div>
+    <!-- End of Lips -->
+    <div class="options" id="ears">
+     <div id="ears-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',0);">
+        <img class="option-image" src="ears/icons/0.png"/>
+       </a>
+       <br/>
+       Tapered
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',1);">
+        <img class="option-image" src="ears/icons/1.png"/>
+       </a>
+       <br/>
+       Small
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',6);">
+        <img class="option-image" src="ears/icons/6.png"/>
+       </a>
+       <br/>
+       Smaller
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',2);">
+        <img class="option-image" src="ears/icons/2.png"/>
+       </a>
+       <br/>
+       Bent
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',3);">
+        <img class="option-image" src="ears/icons/3.png"/>
+       </a>
+       <br/>
+       Wide
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',4);">
+        <img class="option-image" src="ears/icons/4.png"/>
+       </a>
+       <br/>
+       Backswept
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('ears',5);">
+        <img class="option-image" src="ears/icons/5.png"/>
+       </a>
+       <br/>
+       Back+Small
+      </div>
+     </div>
+    </div>
+    <!-- End of Ears -->
+    <div class="options" id="backgrounds">
+     <div id="backgrounds-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',0);">
+        <img class="option-image" src="swatches/black.png"/>
+       </a>
+       <br/>
+       Dark
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',1);">
+        <img class="option-image" src="swatches/gray.png"/>
+       </a>
+       <br/>
+       Neutral
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',4);">
+        <img class="option-image" src="swatches/green.png"/>
+       </a>
+       <br/>
+       Spring
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',5);">
+        <img class="option-image" src="swatches/yellow.png"/>
+       </a>
+       <br/>
+       Summer
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',3);">
+        <img class="option-image" src="swatches/ginger.png"/>
+       </a>
+       <br/>
+       Fall
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',8);">
+        <img class="option-image" src="swatches/violet.png"/>
+       </a>
+       <br/>
+       Harvest
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',6);">
+        <img class="option-image" src="swatches/evergreen.png"/>
+       </a>
+       <br/>
+       Evergreen
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('back',7);">
+        <img class="option-image" src="swatches/red-lips.png"/>
+       </a>
+       <br/>
+       Desert
+      </div>
+     </div>
+    </div>
+    <!-- End of Backgrounds -->
+    <div class="options" id="fuzz">
+     <div id="fuzz-colors">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('brows',0);">
+        <img class="option-image" src="brows/icons/0.png"/>
+       </a>
+       <br/>
+       Thin
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('brows',1);">
+        <img class="option-image" src="brows/icons/1.png"/>
+       </a>
+       <br/>
+       Arched
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('brows',2);">
+        <img class="option-image" src="brows/icons/2.png"/>
+       </a>
+       <br/>
+       Light
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('brows',3);">
+        <img class="option-image" src="brows/icons/3.png"/>
+       </a>
+       <br/>
+       Heavy
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('brows',4);">
+        <img class="option-image" src="brows/icons/3.png"/>
+       </a>
+       <br/>
+       Furrowed
+      </div>
+      <p>
+       Fine positioning:
+       <a href="javascript:void(0)" onclick="picker('browsup');">
+        
+       </a>
+       <a href="javascript:void(0)" onclick="picker('browsdown');">
+        
+       </a>
+      </p>
+     </div>
+     <div id="fuzzs-styles">
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',0);">
+        <img class="option-image" src="fur/icons/0.png"/>
+       </a>
+       <br/>
+       None
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',1);">
+        <img class="option-image" src="fur/icons/1.png"/>
+       </a>
+       <br/>
+       Patch
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',2);">
+        <img class="option-image" src="fur/icons/2.png"/>
+       </a>
+       <br/>
+       Chin
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',3);">
+        <img class="option-image" src="fur/icons/3.png"/>
+       </a>
+       <br/>
+       Sideburns
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',4);">
+        <img class="option-image" src="fur/icons/4.png"/>
+       </a>
+       <br/>
+       Full
+      </div>
+      <div class="option">
+       <a href="javascript:void(0)" onclick="picker('fur',5);">
+        <img class="option-image" src="fur/icons/5.png"/>
+       </a>
+       <br/>
+       Goatee
+      </div>
+     </div>
+    </div>
+    <!-- End of fuzz -->
+    <p style="font-size:16px">
+     <input checked="" id="inking-checkbox" onclick="picker('inking');" type="checkbox"/>
+     Darker Inks
+    </p>
+    <p>
+     <a href="http://elfquest.com">
+      <img src="images/readthecomic.png" style="width:100px"/>
+     </a>
+     <a href="http://www.darkhorse.com/Search/elfquest">
+      <img src="images/order.png" style="width:100px"/>
+     </a>
+    </p>
+    <p style="font-size:12px;">
+     <a href="http://elfquest.com/avatars-ink/" style="color:white;text-decoration:underline;">
+      Line-art only version
+     </a>
+    </p>
+   </div>
+   <div id="output">
+    Elfquest  Warp Graphics, Inc. Elfquest, its logos, characters, situations, all related indicia, and their distinctive likenesses are trademarks of Warp Graphics, Inc. All rights reserved
+   </div>
+  </div>
+  <script type="text/javascript">
+   // Image objects, declared globally
+			var bgTones;
+		
+		var headTones;
+		var headHighlights;
+		var headInk;		
+		var faceTones;
+		var faceHighlights; 
+		var faceBlush; 
+		var faceInk;		
+		var hairBackTones;
+		var hairBackHighlights;
+		var hairFrontTones;		
+		var hairFrontHighLights;
+		var hairBackInk;
+		var hairFrontInk;		
+		var hairExtrasBackTones;
+		var hairExtrasBackInk;
+		var hairExtrasFrontTones;
+		var hairExtrasFrontInk;		
+		var earsTones;
+		var earsHighLights;
+		var earsInk;		
+		var eyesTones;
+		var irisTones;
+		var eyesInk;
+		var eyesMask;
+		var eyesHighlight;
+		var eyesOverlay;			
+		var noseInk;
+		var mouthInk; 
+		var browsInk;
+		var furTones;
+		var furInk;		
+
+		var dyedIrisTones;
+		var dyedHairBackTones;	
+		var dyedHairFrontTones;		
+		var dyedHairInkBack;	
+		var dyedHairInkFront;
+		var dyedHairExtrasTonesBack;
+		var dyedHairExtrasTonesFront;
+		var dyedFurTones;
+		var dyedface;
+		var dyedEarsTones;
+		var dyedHeadTones;
+		var dyedHairBackHighlights;
+		var dyedEarsTonesHighlights;
+		var dyedHeadTonesHighlights;
+		
+		var eyesY = 0;
+		var mouthY = -2;
+		var noseY = 0;
+		var browsY = 0;
+		
+		var imagesLoaded = 0; // Keeps track of how many face part images are loaded, so we don't try and draw the avatar before they're all in
+		
+		// Skin tones			
+		var pallid 		= "#ffffff";
+		var pale 		= "#ffefd0";
+		var ruddy		= "#ffdfd7";
+		var light		= "#ffccaa";
+		var tan			= "#eea88f";
+		var olive		= "#d4b485";
+		var bronze		= "#ba8d6c";
+		var dark		= "#895f40";
+		var ebony		= "#4e2c1f";
+	
+		//  Positioning of irises within eyes
+		var eyeStyle = new Array();
+		eyeStyle[0] = new Array(0,2,55,2,0.9,1);
+		eyeStyle[1] = new Array(0,2,55,2,0.9,1);
+		eyeStyle[2] = new Array(0,2,58,2,0.9,1);
+		eyeStyle[3] = new Array(0,2,58,2,0.9,1);
+		eyeStyle[4] = new Array(0,2,58,2,0.9,1);
+		eyeStyle[5] = new Array(0,2,57,2,0.9,1);
+		eyeStyle[6] = new Array(0,2,55,3,0.9,1);
+		eyeStyle[7] = new Array(0,1,55,0,0.9,1);
+		eyeStyle[8] = new Array(0,0,52,0,0.9,1);
+		eyeStyle[9]= new Array(0,2,55,2,0.9,1);
+		eyeStyle[10] = new Array(2,1,60,-1,0.9,1);
+		eyeStyle[11] = new Array(0,0,55,1,0.9,1);
+
+
+		// Hair and Eye Colors
+		var silver = "#FFFFFF"; 	
+		var gray = "#cccccc"; 		
+		var slate = "#888888"; 		
+		var darkgray = "#555566";	
+		var black = "#111111";	
+		var pampas = "#ffFadd";		
+		var blonde = "#ffeaaa";	
+		var fairhaired = "#aa9977";		
+		var gold = "#ffba00";		
+		var yellow = "#e4df8a";		
+		var amber = "#ff8800";		
+		var brown = "#8c3b00";		
+		var darkbrown = "#542000";	
+		var auburn = "#a02900";		
+		var red = "#df4900";		
+		var ginger = "#ff7900";  			
+		var paleblue = "#bbdbff";	
+		var grayblue= "#6688ee"; 	
+		var cornflower = "#88aaff";	
+		var blue = "#2272ff";
+		var lapis = "#0000FF";		
+		var violet = "#0400a4";		
+		var hazel = "#ae9842";		
+		var green = "#88d228";		
+	
+	
+		var firstload = 1;
+	
+	
+    	nav = function(q) { //hides all the menu choices except q
+    		$('.options').hide();
+    		$('.Navs').removeClass("selected");
+    		$("#"+q).show();
+    		$("#"+q+"Nav").addClass("selected");
+    		}
+    	
+    	function loadImage(src, onload) { // function sets up an image object			
+			imageID = src.replace(/\//g,''); imageID = imageID.replace(/\./g,''); //give the image an ID derived from its URL		
+			var itExists = window["image" + imageID]; // if we've already loaded this image and stashed it in the document
+			if (itExists) {
+   				console.log("\t" + src + " is already loaded");
+   				isEverythingLoaded();
+   				return window["image" + imageID];				
+				}
+			else {
+				console.log('LOADING ' + src );				
+				}			
+				window["image" + imageID] = new Image();
+				window["image" + imageID].onload = onload;
+				window["image" + imageID].src = src;
+				return window["image" + imageID];	
+			}
+		
+
+		 
+	 function makeAvatarSavable() { // converts a canvas to a PNG
+      		var dataURL = avatar.toDataURL();
+			document.getElementById('pngoutput').src = dataURL;
+			document.getElementById('pngoutput2').src = dataURL;
+			
+			var cs = new CanvasSaver('saveAvatar.php')
+			cs.generateButton('save an image!', avatar, 'avatar');
+			}
+			
+		function CanvasSaver(url) { // Save canvas as an image (http://bit.ly/1brrNlM)
+	 
+			this.url = url;
+	 
+			this.savePNG = function(cnvs, fname) {
+				if(!cnvs || !url) return;
+				fname = fname || 'picture';
+		 
+				var data = cnvs.toDataURL("image/png");
+				data = data.substr(data.indexOf(',') + 1).toString();
+		 
+				var dataInput = document.createElement("input") ;
+				dataInput.setAttribute("name", 'imgdata') ;
+				dataInput.setAttribute("value", data);
+				dataInput.setAttribute("type", "hidden");
+		 
+				var nameInput = document.createElement("input") ;
+				nameInput.setAttribute("name", 'name') ;
+				nameInput.setAttribute("value", fname + '.png');
+		 
+				var myForm = document.createElement("form");
+				myForm.method = 'post';
+				myForm.action = url;
+				myForm.appendChild(dataInput);
+				myForm.appendChild(nameInput);
+		 
+				document.body.appendChild(myForm) ;
+				myForm.submit() ;
+				document.body.removeChild(myForm) ;
+			};
+	 
+			this.generateButton = function (label, cnvs, fname) {
+				var btn = document.getElementById('dl'), scope = this;
+				btn.style['class'] = 'canvassaver';
+				btn.addEventListener('click', function(){scope.savePNG(cnvs, fname);}, false);	 
+	
+				return btn;
+			};
+		}
+
+		function dyeImageWithColor(image, color, val) { // tints an image object with color
+			var buffer = document.createElement('canvas');
+			buffer.width = image.width;
+			buffer.height = image.height;
+			var bctx = buffer.getContext('2d');
+			if (val) bctx.globalAlpha = val;
+			if (color) bctx.fillStyle = color;
+			bctx.fillRect(0,0,buffer.width,buffer.height);
+			bctx.globalCompositeOperation = "destination-atop";
+			bctx.globalAlpha = 1;
+			bctx.drawImage(image,0,0);
+			return buffer;
+			}
+    
+		function imageMask (image,mask) { // masks an image object with another image object. Used to draw eyes
+			var buffer2 = document.createElement('canvas');
+			buffer2.width = mask.width;
+			buffer2.height = mask.height;
+			var bctx2 = buffer2.getContext('2d');
+			bctx2.drawImage(mask,0,0);
+			bctx2.globalCompositeOperation = "source-in"; 
+			bctx2.drawImage(image,65,200);
+			return buffer2;
+			}
+
+		
+    	picker = function(feature,style) { // Called by style picker, changes choice of face part to use
+			if (feature == "face") { face = style; }
+			if (feature == "hair") { hair = style; }
+			if (feature == "hairc") { hairc = style; }
+			if (feature == "haird") { haird = style; }
+			if (feature == "skinc") { skinc = style; }
+			if (feature == "eye") { eye = style; }
+			if (feature == "eyec") { eyec = style; }
+			if (feature == "nose") { nose = style; }
+			if (feature == "mouth") { mouth = style; }
+			if (feature == "brows") { brows = style; }
+			if (feature == "ears") { ears = style; }
+			if (feature == "fur") { fur = style; }
+			if (feature == "back") { back = style; }
+			if (feature == "eyelashes") {eyelashes = document.getElementById("eyelashes-checkbox").checked;}
+			if (feature == "fullerlips") {fullerlips = document.getElementById("fullerlips-checkbox").checked;}
+			if (feature == "random") {randomPick();}
+			if (feature == "eyesup") {eyesY--;}
+			if (feature == "eyesdown") {eyesY++;}
+			if (feature == "noseup") {noseY--;}
+			if (feature == "nosedown") {noseY++;}
+			if (feature == "mouthup") {mouthY--;}
+			if (feature == "mouthdown") {mouthY++;}
+			if (feature == "browsup") {browsY--;}
+			if (feature == "browsdown") {browsY++;}
+			if (feature == "inking") {inking = document.getElementById("inking-checkbox").checked;}
+			preloadImages(); // after user changes something, redraw the avatar
+    		}
+    	
+    	
+    		
+			function randomPick() {
+					face = Math.floor((Math.random()*8)+1);
+					hair = Math.floor((Math.random()*15)+1);
+					hairc = Math.floor((Math.random()*10)+1);
+					eye = Math.floor((Math.random()*11)+1);
+					eyec = Math.floor((Math.random()*10)+1);
+					nose = Math.floor((Math.random()*15)+1);
+					mouth = Math.floor((Math.random()*15)+1);
+					brows = Math.floor((Math.random()*4)+1);
+				 	ears = Math.floor((Math.random()*5)+1);
+					skinc = Math.floor((Math.random()*8)+1);
+					var fullerlips = 0; var eyelashes = 0; // gendering 
+						if (Math.floor((Math.random()*100)+1) &lt;=50) {fullerlips = 1;  eyelashes = 1;
+					 		document.getElementById("eyelashes-checkbox").checked=true;
+							document.getElementById("fullerlips-checkbox").checked=true;
+						} // random gender
+					}
+
+
+    	//Variables to deal with the HTML canvases
+		
+		var canvas = document.getElementById('avatar'); // The avatar
+		var ctx = canvas.getContext('2d');
+    	
+    	ctx.translate(300, 0); //Comment out these two lines to have it looking left
+    	ctx.scale(-1, 1);
+    	
+       	
+        var irisesCanvas = document.getElementById('irisesCanvas'); // A buffer for painting irises
+		var irisesCanvasctx = irisesCanvas.getContext('2d');
+
+		var eyesCanvas = document.getElementById('eyesCanvas'); // A buffer for painting eyes using the irises
+		var eyesCanvasContext = eyesCanvas.getContext('2d');
+		
+		
+    	// set up variables for face parts and randomize us an initial face		
+		var back = face = haird = skinc = eye = eyec = head = hairc = hair = nose = mouth = brows = ears = fur = 0;
+		var face = Math.floor((Math.random()*8)+1);
+		var hair = Math.floor((Math.random()*15)+1);
+		var hairc = Math.floor((Math.random()*10)+1);
+		var eye = Math.floor((Math.random()*11)+1);
+		var eyec = Math.floor((Math.random()*10)+1);
+		var nose = Math.floor((Math.random()*15)+1);
+		var mouth = Math.floor((Math.random()*15)+1);
+		var brows = Math.floor((Math.random()*4)+1);
+		var ears = Math.floor((Math.random()*5)+1);
+		var skinc = Math.floor((Math.random()*8)+1);
+	
+		var eyecolor; var skincolor; var haircolor; // these ones are used later     
+      
+      	var haircolorIntensity = .6; // opacity of the color tint, this includes the inking
+		var inking = 1; // when 1, the outline inking should remain black when the hair is tinted
+	
+        var fullerlips = 0; var eyelashes = 0; // gendering 
+        if (Math.floor((Math.random()*100)+1) &lt;=50) {fullerlips = 1;  eyelashes = 1;
+         document.getElementById("eyelashes-checkbox").checked=true;
+          document.getElementById("fullerlips-checkbox").checked=true;
+        } // random gender
+
+
+        function preloadImages() {
+ 				
+ 			//loading spinner
+			document.getElementById('pngoutput').src = 'images/loading.gif';
+
+ 			// Clear the canvases
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			irisesCanvasctx.clearRect(0, 0, canvas.width, canvas.height);
+			eyesCanvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        	/*		Draw from back to front:
+        			background image
+        			back of head
+        			background hair
+        			face
+        			eyes, nose, mouth and ears
+        			brows, facial hair and skin decorations/jewelry
+        			foreground hair
+        	*/
+        	
+			if (eyec == 0) {eyecolor = silver;} 
+			if (eyec == 1) {eyecolor = gray;}
+			if (eyec == 2) {eyecolor = paleblue;}
+			if (eyec == 3) {eyecolor = grayblue;}
+			if (eyec == 4) {eyecolor = blue;}
+			if (eyec == 5) {eyecolor = lapis;}	
+			if (eyec == 6) {eyecolor = cornflower;}
+			if (eyec == 7) {eyecolor = violet;}
+			if (eyec == 8) {eyecolor = green;}
+			if (eyec == 9) {eyecolor = hazel;}
+			if (eyec == 10) {eyecolor = brown;}
+			if (eyec == 11) {eyecolor = yellow;}
+			
+			if (hairc == 0) {haircolor = silver;}
+			if (hairc == 1) {haircolor = gray;}
+			if (hairc == 2) {haircolor = pampas;}
+			if (hairc == 3) {haircolor = blonde;}			
+			if (hairc == 4) {haircolor = yellow;}
+			if (hairc == 5) {haircolor = fairhaired;}
+			if (hairc == 6) {haircolor = ginger;}
+			if (hairc == 7) {haircolor = red;}
+			if (hairc == 8) {haircolor = auburn;}
+			if (hairc == 9) {haircolor = brown;}
+			if (hairc == 10) {haircolor = darkbrown;}
+			if (hairc == 11) {haircolor = black;}	
+	
+			if (skinc == 0) {skincolor = pallid;}
+			if (skinc == 1) {skincolor = pale;}			
+			if (skinc == 2) {skincolor = ruddy;}
+			if (skinc == 3) {skincolor = light;}
+			if (skinc == 4) {skincolor = tan;}
+			if (skinc == 5) {skincolor = olive;}
+			if (skinc == 6) {skincolor = bronze;}
+			if (skinc == 7) {skincolor = dark;}
+			if (skinc == 8) {skincolor = ebony;} 	
+		
+			//LOAD THE IMAGES
+			imagesLoaded=0;
+			
+
+			//background 
+				 bgTones = loadImage('backgrounds/' + back + '.png', isEverythingLoaded);
+			
+			//head parts
+				headTones = loadImage('heads/' + head  + '.png', isEverythingLoaded);
+				headHighlights = loadImage('heads/highlights/' + head + '.png', isEverythingLoaded);
+				headInk = loadImage('heads/ink/' + head + '.png', isEverythingLoaded);
+
+			//face shape parts
+				faceTones = loadImage('faces/' + face + '.png', isEverythingLoaded);			
+				faceHighlights= loadImage('faces/highlights/' + face + '.png', isEverythingLoaded);
+				faceBlush= loadImage('faces/highlights/blush.png', isEverythingLoaded);
+				faceInk = loadImage('faces/ink/' + face + '.png', isEverythingLoaded);
+			
+			//hair parts
+				 hairBackTones = loadImage('hair-tones/' + hair + '.png', isEverythingLoaded);
+				 hairBackHighlights = loadImage('hair-tones/highlights/'+hair+'.png', isEverythingLoaded);
+				 hairFrontTones = loadImage('hair-front/' + hair + '.png', isEverythingLoaded);			
+				 hairFrontHighLights = loadImage('hair-front/highlights/'+hair+'.png', isEverythingLoaded);
+				 hairBackInk = loadImage('hair-tones/ink/'+hair+'.png', isEverythingLoaded);
+				 hairFrontInk = loadImage('hair-front/ink/'+hair+'.png', isEverythingLoaded);
+			
+			//Hair decoration 		
+				 hairExtrasBackTones = loadImage('hair-decorations/'+haird+'.png', isEverythingLoaded);
+				 hairExtrasBackInk = loadImage('hair-decorations/ink/'+haird+'.png', isEverythingLoaded);
+				 hairExtrasFrontTones = loadImage('hair-decorations/front/'+haird+'.png', isEverythingLoaded);
+				 hairExtrasFrontInk = loadImage('hair-decorations/front/ink/'+haird+'.png', isEverythingLoaded);
+				 
+			//ear parts
+				 earsTones = loadImage('ears/' + ears  + '.png', isEverythingLoaded);
+				 earsHighLights = loadImage('ears/highlights/' + ears  + '.png', isEverythingLoaded);
+				 earsInk = loadImage('ears/ink/' + ears  + '.png', isEverythingLoaded);
+				
+			//eye parts
+				 eyesTones = loadImage('eyes/' + eye + '.png', isEverythingLoaded);
+				 irisTones = loadImage('eyes/iris-color.png', isEverythingLoaded);		
+				 eyesInk = loadImage('eyes/iris-line.png', isEverythingLoaded);
+				 eyesMask = loadImage("eyes/masks/" + eye + ".png", isEverythingLoaded);		
+				 eyesHighlight = loadImage('eyes/iris-highlight.png', isEverythingLoaded);
+				
+				if (eyelashes == 1) {
+					eyesOverlay = loadImage("eyes/lashes/" + eye + ".png", isEverythingLoaded);
+					} else {
+					eyesOverlay = loadImage("eyes/" + eye + ".png", isEverythingLoaded);
+					}
+				
+			//nose parts
+				 noseInk = loadImage('noses/' + nose + '.png', isEverythingLoaded);
+			
+			//mouth parts
+
+				if (fullerlips == 1) {
+					mouthInk =  loadImage('lips/full/' + mouth + '.png', isEverythingLoaded);
+					} else {
+					mouthInk =  loadImage('lips/' + mouth + '.png', isEverythingLoaded);
+					}
+			
+			//brows parts
+				 browsInk = loadImage('brows/' + brows + '.png', isEverythingLoaded);
+				
+			//facefur parts
+				 furTones = loadImage('fur/' + fur + '.png', isEverythingLoaded);
+				 furInk = loadImage('fur/ink/' + fur + '.png', isEverythingLoaded);		
+		
+			
+		}
+		
+		
+		function isEverythingLoaded() {	
+			imagesLoaded++;		
+			//document.getElementById('output').innerHTML = "waiting for " + 32 + " images, loaded " + imagesLoaded + " images";
+			
+			if(imagesLoaded == 32) { // don't draw anything until all the images are loaded!		
+					paintAvatar();
+				}
+			}
+		
+		function paintAvatar() {
+		
+				 dyedIrisTones = dyeImageWithColor(irisTones, eyecolor, .5);	
+				 dyedHairBackTones = dyeImageWithColor(hairBackTones, haircolor,haircolorIntensity);	
+				 dyedHairFrontTones = dyeImageWithColor(hairFrontTones, haircolor,haircolorIntensity);		
+				 dyedHairInkBack = dyeImageWithColor(hairBackInk, haircolor,haircolorIntensity-.1);	
+				 dyedHairInkFront = dyeImageWithColor(hairFrontInk, haircolor,haircolorIntensity-.1);
+				 dyedHairExtrasTonesBack = dyeImageWithColor(hairExtrasBackTones,haircolor,haircolorIntensity-.1);
+				 dyedHairExtrasTonesFront = dyeImageWithColor(hairExtrasFrontTones,haircolor,haircolorIntensity-.1);
+				 dyedFurTones = dyeImageWithColor(furTones, haircolor,haircolorIntensity-.1);
+				
+
+				dyedheadInk = dyeImageWithColor(headInk, skincolor,.3);
+				dyedhairExtrasBackInk = dyeImageWithColor(hairExtrasBackInk, haircolor,haircolorIntensity-.1);
+				dyedfaceInk = dyeImageWithColor(faceInk, skincolor,.3);
+				dyedearsInk = dyeImageWithColor(earsInk, skincolor,.3);
+				dyednoseInk = dyeImageWithColor(noseInk, skincolor,.3);
+				dyedmouthInk = dyeImageWithColor(mouthInk, skincolor,.3);
+				dyedbrowsInk = dyeImageWithColor(browsInk, haircolor,.3);
+				dyedfurInk = dyeImageWithColor(furInk, haircolor,haircolorIntensity-.1);
+				dyedhairExtrasFrontInk = dyeImageWithColor(hairExtrasFrontInk, skincolor,.5);
+
+				 dyedface = dyeImageWithColor(faceTones, skincolor,.5);
+				 dyedEarsTones = dyeImageWithColor(earsTones, skincolor,.5);
+				 dyedHeadTones = dyeImageWithColor(headTones, skincolor,.5);
+				 dyedHairBackHighlights = dyeImageWithColor(hairBackHighlights, "#ffcc77",1);
+				 dyedEarsTonesHighlights = dyeImageWithColor(earsHighLights, "#ffcc77",1);
+				 dyedHeadTonesHighlights = dyeImageWithColor(headHighlights, "#ffcc77",1);
+
+
+
+
+				//fetch the position and size of the irises to match each style of eye
+				leftx = eyeStyle[eye][0]; //position and size of the left eye
+				lefty =  eyeStyle[eye][1];
+				leftsize = eyeStyle[eye][4];		
+				rightx = eyeStyle[eye][2]; //position and size of the right eye
+				righty =  eyeStyle[eye][3];
+				rightsize = eyeStyle[eye][5];
+		
+				//draw the left iris onto the iris buffer canvas
+				irisesCanvasctx.drawImage(dyedIrisTones, leftx, lefty, dyedIrisTones.width*leftsize,dyedIrisTones.height*leftsize);				
+				irisesCanvasctx.drawImage(eyesInk, leftx, lefty, eyesInk.width*leftsize,eyesInk.height*leftsize);
+				irisesCanvasctx.drawImage(eyesHighlight, leftx, lefty, eyesHighlight.width*leftsize,eyesHighlight.height*leftsize);
+		
+				//draw the right iris onto the iris buffer canvas
+				irisesCanvasctx.drawImage(dyedIrisTones, rightx, righty, dyedIrisTones.width*rightsize,dyedIrisTones.height*rightsize);
+				irisesCanvasctx.drawImage(eyesInk,  rightx, righty, eyesInk.width*rightsize,eyesInk.height*rightsize);
+				irisesCanvasctx.drawImage(eyesHighlight, + rightx, righty, eyesHighlight.width*rightsize,eyesHighlight.height*rightsize);
+			
+				//apply mask of eye shape to irises, then overlay irises on the eyes, on the eyes buffer canvas
+				var maskeyesImage = imageMask(irisesCanvas,eyesMask);		
+				eyesCanvasContext.drawImage(eyesOverlay,0,0);
+				eyesCanvasContext.drawImage(maskeyesImage, 0, 0);
+			
+				//start drawing the head and face
+	
+
+					if (inking == 1) {	// DRAW WITH BLACK LINES
+					
+						ctx.drawImage(bgTones, 0, 0, 300,394); 							//background image
+					
+						ctx.drawImage(dyedHeadTones, 0, 0, 300,394);								//head				
+						ctx.drawImage(dyedHeadTonesHighlights, 0, 0, 300,394);					//head	highlights		
+						ctx.drawImage(headInk, 0, 0, 300,394);								//headInk	
+								
+						ctx.drawImage(dyedHairBackTones, 0,0, 300,394);							//hair at back
+						ctx.drawImage(dyedHairBackHighlights, 0,0, 300,394);				//hair at back highlights
+															
+						ctx.drawImage(hairBackInk, 0,0, 300,394);
+
+						ctx.drawImage(dyedHairExtrasTonesBack, 0,0, 300,394);					//hair decoration
+						ctx.drawImage(hairExtrasBackInk, 0,0, 300,394);						//hair decoration ink
+
+						ctx.drawImage(dyedface, 0, 0, 300,394);								//face
+						ctx.drawImage(faceBlush, 0, 0, 300,394);							//face blush
+						ctx.drawImage(faceHighlights, 0, 0, 300,394);							//face highlight
+						ctx.drawImage(faceInk, 0, 0, 300,394);								//face ink
+
+						ctx.drawImage(dyedEarsTones, 0, 0, 300,394);								//ears	
+						ctx.drawImage(dyedEarsTonesHighlights, 0, 0, 300,394);					//ear highlights
+						ctx.drawImage(earsInk, 0, 0, 300,394);								//ears ink
+
+						ctx.drawImage(eyesCanvas, 0, eyesY,300,394);							//the eyes, from the eyes buffer canvas				
+						ctx.drawImage(noseInk, 0, noseY, 300,394);							//nose
+						ctx.drawImage(mouthInk, -3, mouthY, 300,394);						//lips
+						ctx.drawImage(browsInk, 0, browsY, 300,394);						//eyebrows
+					
+						ctx.drawImage(dyedFurTones, 0, 0, 300,394);								//facefur
+						ctx.drawImage(furInk, 0, 0, 300,394);								//facefur ink
+
+						ctx.drawImage(dyedHairExtrasTonesFront, 0,0, 300,394);				//hair decoration front
+						ctx.drawImage(hairExtrasFrontInk, 0,0, 300,394);				//hair decoration front ink
+			
+						ctx.drawImage(dyedHairFrontTones, 0,0, 300,394);					//hair at front
+						ctx.drawImage(hairFrontHighLights, 0,0, 300,394);					//hair at front highlights
+											
+						ctx.drawImage(hairFrontInk, 0,0, 300,394);		//superimpose black inks on the front hair	
+						
+		
+					} else {  // DRAW IT WITH COLORED LINES
+					
+						ctx.drawImage(bgTones, 0, 0, 300,394); 							//background image
+					
+						ctx.drawImage(dyedHeadTones, 0, 0, 300,394);								//head				
+						ctx.drawImage(dyedHeadTonesHighlights, 0, 0, 300,394);					//head	highlights		
+						ctx.drawImage(dyedheadInk, 0, 0, 300,394);								//headInk	
+								
+						ctx.drawImage(dyedHairBackTones, 0,0, 300,394);							//hair at back
+						ctx.drawImage(dyedHairBackHighlights, 0,0, 300,394);				//hair at back highlights
+
+						ctx.drawImage(dyedHairInkBack, 0,0, 300,394);						//or tinted color inks
+
+						ctx.drawImage(dyedHairExtrasTonesBack, 0,0, 300,394);					//hair decoration
+						ctx.drawImage(dyedhairExtrasBackInk, 0,0, 300,394);						//hair decoration ink
+
+						ctx.drawImage(dyedface, 0, 0, 300,394);								//face
+						ctx.drawImage(faceBlush, 0, 0, 300,394);							//face blush
+						ctx.drawImage(faceHighlights, 0, 0, 300,394);							//face highlight
+						ctx.drawImage(dyedfaceInk, 0, 0, 300,394);								//face ink
+
+						ctx.drawImage(dyedEarsTones, 0, 0, 300,394);								//ears	
+						ctx.drawImage(dyedEarsTonesHighlights, 0, 0, 300,394);					//ear highlights
+						ctx.drawImage(dyedearsInk, 0, 0, 300,394);								//ears ink
+
+						ctx.drawImage(eyesCanvas, 0, eyesY,300,394);							//the eyes, from the eyes buffer canvas				
+						ctx.drawImage(dyednoseInk, 0, noseY, 300,394);							//nose
+						ctx.drawImage(dyedmouthInk, -3, mouthY, 300,394);						//lips
+						ctx.drawImage(dyedbrowsInk, 0, browsY, 300,394);						//eyebrows
+					
+						ctx.drawImage(dyedFurTones, 0, 0, 300,394);								//facefur
+						ctx.drawImage(dyedfurInk, 0, 0, 300,394);								//facefur ink
+
+						ctx.drawImage(dyedHairExtrasTonesFront, 0,0, 300,394);				//hair decoration front
+						ctx.drawImage(dyedhairExtrasFrontInk, 0,0, 300,394);				//hair decoration front ink
+			
+						ctx.drawImage(dyedHairFrontTones, 0,0, 300,394);					//hair at front
+						ctx.drawImage(hairFrontHighLights, 0,0, 300,394);					//hair at front highlights
+											
+				
+						ctx.drawImage(dyedHairInkFront, 0,0, 300,394);					//or tinted color inks
+		
+					}
+					
+					
+					makeAvatarSavable();	
+				} 
+		
+				
+				
+		preloadImages();
+  </script>
+ </body>
+</html>

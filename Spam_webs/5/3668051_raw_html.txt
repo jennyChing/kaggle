@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+<html lang="en-US">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport"/>
+  <title>
+   Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade | Ubuntu Geek
+  </title>
+  <link href="//gmpg.org/xfn/11" rel="profile"/>
+  <link href="//www.ubuntugeek.com/xmlrpc.php" rel="pingback"/>
+  <link href="//www.ubuntugeek.com/feed" rel="alternate" title="Ubuntu Geek  Feed" type="application/rss+xml"/>
+  <link href="//www.ubuntugeek.com/comments/feed" rel="alternate" title="Ubuntu Geek  Comments Feed" type="application/rss+xml"/>
+  <style media="screen" type="text/css">
+   form dl,dl.labels{margin:0em;font-size:100%;margin-top:0.5em}form dt,dl.labels dt{float:left;width:10em;margin-bottom:0.8em;color:#555;text-align:right;font-weight:normal;position:relative}form dd,dl.labels dd{margin-left:10.5em;margin-bottom:0.8em;font-size:100%;font-style:normal;padding-left:0.5em}form dd.submit,dl.labels dd.submit{margin-top:2em}
+  </style>
+  <link href="//www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/feed" rel="alternate" title="Ubuntu Geek  Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade Comments Feed" type="application/rss+xml"/>
+  <script data-cfasync="false" type="text/javascript">
+   //&lt;![CDATA[
+    _SHR_SETTINGS = {"endpoints":{"local_recs_url":"http:\/\/www.ubuntugeek.com\/wp-admin\/admin-ajax.php?action=shareaholic_permalink_related","share_counts_url":"http:\/\/www.ubuntugeek.com\/wp-admin\/admin-ajax.php?action=shareaholic_share_counts_api"}};
+
+    (function() {
+      var shr = document.createElement('script');
+      shr.setAttribute('data-cfasync', 'false');
+      shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+      shr.type = 'text/javascript'; shr.async = 'true';
+      
+      shr.onload = shr.onreadystatechange = function() {
+        var rs = this.readyState;
+        if (rs &amp;&amp; rs != 'complete' &amp;&amp; rs != 'loaded') return;
+        var site_id = '2f8351e9ac97b344e9b7b7930f323155';
+        try { Shareaholic.init(site_id); } catch (e) {}
+      };
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(shr, s);
+    })();
+  //]]&gt;
+  </script>
+  <meta content="Ubuntu Geek" name="shareaholic:site_name"/>
+  <meta content="en-US" name="shareaholic:language"/>
+  <meta content="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" name="shareaholic:url"/>
+  <meta content="desktop, disply not working ubuntu intrepid, fix for intrepid blank screen problem, fix for no sound issue ubuntu 8.10, no sound intrepid, nvidia display problem after ubuntu 8.10 upgrade, nvidia display setting ubuntu 8.10, ubuntu 8.10 blank screen problem, general" name="shareaholic:keywords"/>
+  <meta content="2008-10-31T13:26:36+00:00" name="shareaholic:article_published_time"/>
+  <meta content="2015-07-12T23:16:38+00:00" name="shareaholic:article_modified_time"/>
+  <meta content="true" name="shareaholic:shareable_page"/>
+  <meta content="ruchi" name="shareaholic:article_author_name"/>
+  <meta content="2f8351e9ac97b344e9b7b7930f323155" name="shareaholic:site_id"/>
+  <meta content="7.6.0.2" name="shareaholic:wp_version"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.ubuntugeek.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,img.emoji{display:inline!important;border:none!important;box-shadow:none!important;height:1em!important;width:1em!important;margin:0 .07em!important;vertical-align:-0.1em!important;background:none!important;padding:0!important;}
+  </style>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/google-custom-search/css/smoothness/jquery-ui.theme.min.css?ver=4.2.2" id="gsc_style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.google.com/cse/style/look/minimalist.css?ver=4.2.2" id="gsc_style_search_bar-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/google-custom-search/css/gsc.css?ver=4.2.2" id="gsc_style_search_bar_more-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css?ver=4.2.0" id="font-awesome-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/arconix-shortcodes/includes/css/arconix-shortcodes.min.css?ver=2.0.3" id="arconix-shortcodes-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/responsive-lightbox/assets/prettyphoto/css/prettyPhoto.css?ver=4.2.2" id="responsive-lightbox-prettyphoto-front-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/wp-email/email-css.css?ver=2.60" id="wp-email-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/themes/heatmap-adaptive/style.css?ver=20130606" id="style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/wordpress-popular-posts/style/wpp.css?ver=3.2.2" id="wordpress-popular-posts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/heatmap-adaptive-bfwp/css/heatmapthemebfwp.css" id="heatmapthemebfwp-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//www.ubuntugeek.com/wp-content/plugins/heatmap-adaptive-pro-plugin/colours/orange-crunch.css" id="orangecrunch-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script>
+   jQueryWP = jQuery;
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-content/plugins/google-custom-search/js/gsc.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="//www.google.com/jsapi?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-content/themes/heatmap-adaptive/js/small-menu.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="//www.ubuntugeek.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="//www.ubuntugeek.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="//www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" rel="canonical"/>
+  <link href="//www.ubuntugeek.com/?p=690" rel="shortlink"/>
+  <style>
+   a{color:#dd3333;}
+  </style>
+  <style>
+   #heatmapthemead-leaderboard,nav.main-navigation,nav.secondary-navigation,#heatmapthemead-branding-container,.heatmapthemead-layout-both-sidebars #heatmapthemead-main,.heatmapthemead-layout-primary-sidebar-content #heatmapthemead-main,.heatmapthemead-layout-content-secondary-sidebar #heatmapthemead-main,.heatmapthemead-layout-content #heatmapthemead-main{max-width:1225px;}
+  </style>
+  <style>
+   #heatmapthemead-header,#heatmapthemead-footer{max-width:1225px;}
+  </style>
+  <style>
+   h1,h2,h3,h4,h5,h6,#heatmapthemead-header-text p#site-title,#heatmapthemead-header-text p#site-description{font-family:Arial,Helvetica,sans-serif;}.heatmapthemead-menu{font-family:Arial,Helvetica,sans-serif;}body,button,input,select,textarea{font-family:Arial,Helvetica,sans-serif;}
+  </style>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+
+					var sampling_active = 0;
+					var sampling_rate   = 100;
+					var do_request = false;
+
+					if ( !sampling_active ) {
+						do_request = true;
+					} else {
+						var num = Math.floor(Math.random() * sampling_rate) + 1;
+						do_request = ( 1 === num );
+					}
+
+					if ( do_request ) {
+
+						// Create XMLHttpRequest object and set variables
+						var xhr = ( window.XMLHttpRequest )
+						  ? new XMLHttpRequest()
+						  : new ActiveXObject( "Microsoft.XMLHTTP" ),
+						url = 'http://www.ubuntugeek.com/wp-admin/admin-ajax.php',
+						params = 'action=update_views_ajax&amp;token=b77c37609c&amp;id=690';
+						// Set request method and target URL
+						xhr.open( "POST", url, true );
+						// Set request header
+						xhr.setRequestHeader( "Content-type", "application/x-www-form-urlencoded" );
+						// Hook into onreadystatechange
+						xhr.onreadystatechange = function() {
+							if ( 4 === xhr.readyState &amp;&amp; 200 === xhr.status ) {
+								if ( window.console &amp;&amp; window.console.log ) {
+									window.console.log( xhr.responseText );
+								}
+							}
+						};
+						// Send request
+						xhr.send( params );
+
+					}
+
+				//]]&gt;
+  </script>
+  <style type="text/css">
+   #site-title a,#site-description{color:#000000!important;}
+  </style>
+  <style media="screen" type="text/css">
+   .editComment,.editableComment,.textComment{display:inline;}.comment-childs{border:1px solid #999;margin:5px 2px 2px 4px;padding:4px 2px 2px 4px;background-color:white;}.chalt{background-color:#E2E2E2;}#newcomment{border:1px dashed #777;width:90%;}#newcommentsubmit{color:red;}.adminreplycomment{border:1px dashed #777;width:99%;margin:4px;padding:4px;}.mvccls{color:#999;}
+  </style>
+  <style>
+   li:hover&gt;a{transition:all 0.3s ease-in-out 0s;}blockquote{margin-top:10px;margin-bottom:10px;margin-left:50px;padding-left:15px;border-left:3px solid #800000;}
+  </style>
+ </head>
+ <body class="single single-post postid-690 single-format-standard heatmapthemead-layout-both-sidebars heatmapthemead-max-width-1225">
+  <div id="heatmapthemead-header-wipe">
+   <div id="heatmapthemead-header">
+    <div id="heatmapthemead-header-container">
+     <div id="heatmapthemead-header-branding">
+      <div id="heatmapthemead-branding-container">
+       <header id="branding" role="banner">
+        <div id="heatmapthemead-header-text">
+         <aside>
+          <p id="site-title">
+           <a href="http://www.ubuntugeek.com/" rel="home" title="Ubuntu Geek">
+            Ubuntu Geek
+           </a>
+          </p>
+          <p id="site-description">
+           Ubuntu Linux Tutorials,Howtos,Tips &amp; News | Ringtail,Unicorn,Vervet
+          </p>
+         </aside>
+        </div>
+       </header>
+      </div>
+     </div>
+     <div class="heatmapthemead-menu" id="heatmapthemead-primary-menu">
+      <nav class="site-navigation main-navigation" role="navigation">
+       <p class="primary-small-nav-text">
+        Home
+       </p>
+       <div class="menu-home-3-container">
+        <ul class="menu" id="menu-home-3">
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15331" id="menu-item-15331">
+          <a href="http://www.ubuntugeek.com/contact">
+           Contact
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15332" id="menu-item-15332">
+          <a href="http://www.ubuntugeek.com/forum" target="_blank">
+           Forum
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15333" id="menu-item-15333">
+          <a href="http://www.ubuntugeek.com/free-ubuntu-e-books">
+           Free Ubuntu E-Books
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15334" id="menu-item-15334">
+          <a href="http://www.ubuntugeek.com/top-posts">
+           Popular Posts
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15335" id="menu-item-15335">
+          <a href="http://www.ubuntugeek.com/search-3">
+           Search
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15336" id="menu-item-15336">
+          <a href="http://www.ubuntugeek.com/ubuntu-hosting">
+           Ubuntu Hosting
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15337" id="menu-item-15337">
+          <a href="http://www.ubuntugeek.com/about-2">
+           About
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15338" id="menu-item-15338">
+          <a href="http://www.ubuntugeek.com/subscribe">
+           RSS Feed
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15339" id="menu-item-15339">
+          <a href="http://www.ubuntugeek.com/sitemap">
+           Sitemap
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15340" id="menu-item-15340">
+          <a href="http://www.ubuntugeek.com/privacy-policy">
+           Privacy Policy
+          </a>
+         </li>
+        </ul>
+       </div>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="heatmapthemead-main-wipe">
+   <div id="heatmapthemead-main">
+    <div id="heatmapthemead-content">
+     <div class="site-content" id="heatmapthemead-the-content">
+      <div id="heatmapthemead-the-content-container" role="main">
+       <article class="post-690 post type-post status-publish format-standard hentry category-general tag-desktop tag-disply-not-working-ubuntu-intrepid tag-fix-for-intrepid-blank-screen-problem tag-fix-for-no-sound-issue-ubuntu-810 tag-no-sound-intrepid tag-nvidia-display-problem-after-ubuntu-810-upgrade tag-nvidia-display-setting-ubuntu-810 tag-ubuntu-810-blank-screen-problem" id="post-690">
+        <header class="entry-header">
+         <h1 class="entry-title">
+          <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" rel="bookmark" title="Permalink to Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade">
+           Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade
+          </a>
+         </h1>
+        </header>
+        <div class="heatmapthemead-header-entry-meta entry-meta">
+         <span class="heatmapthemead-post-details">
+          Posted on
+          <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" rel="bookmark" title="2:26 pm">
+           <time class="entry-date updated" datetime="2008-10-31T14:26:36+00:00">
+            October 31, 2008
+           </time>
+          </a>
+          <span class="byline">
+           by
+           <span class="author vcard">
+            <a class="url fn n" href="http://www.ubuntugeek.com/author/ubuntufix" rel="author" title="View all posts by ruchi">
+             ruchi
+            </a>
+           </span>
+          </span>
+         </span>
+         <span class="comments-link">
+          <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html#comments">
+           79 Comments
+          </a>
+         </span>
+        </div>
+        <div class="entry-content">
+         <p>
+         </p>
+         <h6>
+          <b>
+           Sponsored Link
+          </b>
+         </h6>
+         <div style="display:block;float:left;padding:5px;">
+          <script type="text/javascript">
+           google_ad_client = "ca-pub-3561711309083119";
+    google_ad_slot = "5550623370";
+    google_ad_width = 336;
+    google_ad_height = 280;
+          </script>
+          <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+          </script>
+         </div>
+         I have collected some common problems and solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade.I really thank for those users and ubuntu forum members who posted the solutions.I hope this will be useful for some users to fix their problems.
+         <br/>
+         <span id="more-690">
+         </span>
+         <br/>
+         <strong>
+          Problem 1
+         </strong>
+         <p>
+          upgrade to 8.10 -- can't enable Nvidia restricted drivers
+         </p>
+         <p>
+          Upgraded from 8.04.1 to 8.10 (x64). GF 7600GT. Athlon X2 64. Starts up using the unaccelerated drivers.
+          <br/>
+          Using Hardware Drivers' I try to enable the 177 driver, get error dialog:
+          <br/>
+          "Reconfiguring X.org video drivers is not possible: /etc/X11/xorg.conf if invalid"
+         </p>
+         <p>
+          -- tried deleting xorg.conf
+          <br/>
+          -- tried dpkg-reconfig xserver-xorg
+          <br/>
+          -- tried nvidia-xconfig
+         </p>
+         <p>
+          None of these work.
+         </p>
+         <p>
+          -- /var/log/Xorg.0.log doesn't show any syntax errors with any of these xorg.conf files.
+         </p>
+         <p>
+          Any ideas?
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          1) Open Synaptic Package Manager
+         </p>
+         <p>
+          2) Search nvidia
+         </p>
+         <p>
+          3) Installed all the 177 that are not yet installed (except those with the -dev suffix) or run this command to install drivers sudo apt-get install nvidia-
+         </p>
+         <p>
+          glx-177
+         </p>
+         <p>
+          4) Made sure nvidia-settins is installed as well
+         </p>
+         <p>
+          5) Restarted
+         </p>
+         <p>
+          6) Went to "Hardware Drivers"
+         </p>
+         <p>
+          7) Activated 177
+         </p>
+         <p>
+          Run the following command to set the nvidia card settings
+         </p>
+         <p>
+          gksudo nvidia-settings
+         </p>
+         <p>
+          <strong>
+           Problem 2
+          </strong>
+         </p>
+         <p>
+          nvidia-settings segmentation fault.In the nvidia-settings menu (System-&gt;Administration-&gt;NVIDIA X Server Settings), if I click "Save to X Configuration File" (in the "X Server Display Configurations" page), the window closes. This was not the behavior in Ubuntu 8.04. If I open the menu from the command line, then clicking "Save to X Configuration File" will print "Segmentation fault" before the window closes. This happens whether or not I use sudo when executing nvidia-settings.
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          I heard that the new X.Org was going to rely less on the xorg.conf file, but it still exits. I can still apply my desired changes by clicking "Apply", so I personally do not have any problems. I am wondering if the segfault is a bug.
+         </p>
+         <p>
+          I renamed my xorg.conf file to something radically different: xorg_conf_backup.txt Then, when I had nvidia-settings save to xorg file, it asked where it was. I just pointed it to the same location (/etc/X11/xorg.conf) and had it make a new one. That seemed to make it stick. It seems unhappy in having to deal with existing xorg files.
+         </p>
+         <p>
+          <strong>
+           Problem 3
+          </strong>
+         </p>
+         <p>
+          How to get 19201200 Resolution Dell 2405fwp Nvidia 6150se
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          It's an Dell 2405fwp with native resolution of 19201200.
+         </p>
+         <p>
+          But I finally got it working, with some trial and error:
+         </p>
+         <p>
+          [Dell Insipiron 531] how to get 19201200 [2405fpw] resolution working with onboard nvidia graphics [Nvidia 6150se] using vga out:
+         </p>
+         <p>
+          1. Isntall the restricted drivers System ---&gt; Hardware Drivers
+         </p>
+         <p>
+          2. Select the recommended drivers, install and reboot.
+         </p>
+         <p>
+          3. Backup the original /etc/X11/xorg.conf:
+         </p>
+         <p>
+          $ sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf.org
+         </p>
+         <p>
+          4. Edit /etc/X11/xorg.conf:
+         </p>
+         <p>
+          $ sudo nano /etc/X11/xorg.conf
+         </p>
+         <p>
+          5. look for the Section "Monitor"
+         </p>
+         <p>
+          add the following lines[DO NOT CHANGE ANYTHING ELSE]:
+         </p>
+         <p>
+          HorizSync 30-81
+          <br/>
+          VertRefresh 60
+         </p>
+         <p>
+          6. look for Section "Screen"
+         </p>
+         <p>
+          add the following lines[DO NOT CHANGE ANYTHING ELSE]:
+         </p>
+         <p>
+          SubSection "Display"
+          <br/>
+          Depth 24
+          <br/>
+          Modes "1920x1200_60
+          <br/>
+          EndSubSection
+         </p>
+         <p>
+          7. Then do:
+          <br/>
+          $ sudo nvidia-settings
+         </p>
+         <p>
+          then from X Server Display Configuration select the 19201200 resolution
+          <br/>
+          and 60hz
+         </p>
+         <p>
+          8. Saving the X configuration File [while nvidia-settings is still open]:
+         </p>
+         <p>
+          $ sudo rm /etc/X11/xorg.conf
+         </p>
+         <p>
+          save file as /etc/X11/xorg.conf
+         </p>
+         <p>
+          9. edit /etc/X11/xorg.conf if needed be repeat 5 &amp; 6
+         </p>
+         <p>
+          10. then Reboot and press the autosize button on the LCD
+         </p>
+         <p>
+          And here is a copy of my working xorg.conf file:
+         </p>
+         <p>
+          Code:
+          <br/>
+          Section "Monitor"
+          <br/>
+          Identifier "Configured Monitor"
+          <br/>
+          HorizSync 30-81
+          <br/>
+          VertRefresh 60
+          <br/>
+          EndSection
+         </p>
+         <p>
+          Section "Screen"
+          <br/>
+          Identifier "Default Screen"
+          <br/>
+          Monitor  "Configured Monitor"
+          <br/>
+          Device  "Configured Video Device"
+          <br/>
+          DefaultDepth 24
+          <br/>
+          SubSection "Display"
+          <br/>
+          Depth 24
+          <br/>
+          Modes "1920x1200_60
+          <br/>
+          EndSubSection
+          <br/>
+          EndSection
+         </p>
+         <p>
+          Section "Module"
+          <br/>
+          Load "glx"
+          <br/>
+          EndSection
+         </p>
+         <p>
+          Section "Device"
+          <br/>
+          Identifier "Configured Video Device"
+          <br/>
+          Driver "nvidia"
+          <br/>
+          Option "NoLogo" "True"
+          <br/>
+          EndSection
+         </p>
+         <p>
+          <strong>
+           Problem 4
+          </strong>
+         </p>
+         <p>
+          Ubuntu 8.10 My Graphics can't be enabled. nVidia Go 7400 graphics card
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          I got mine working by going to System-&gt;Administration-&gt;Hardware Drivers. However, the two options presented to me are the 173 and 177 drivers, so that might not help you. The 177 driver, which was also recommended, worked. After activating that driver, I edited the display setting with System-&gt;Administration-&gt;NVIDIA X Server Settings and then clicked Apply.
+         </p>
+         <p>
+          <strong>
+           Problem 5 (Intrepid blank screen problem)
+          </strong>
+         </p>
+         <p>
+          I wanted to install the Intrepid Ibex [8.10] upgrade. Today I started the Update Manager and let it upgrade to 8.10. Downloading the Binaries took 5-odd hours[I'm on a 384Kbps connection and the download size is just a mite less than 1GB].It took an hour to install and asked to reboot. This is where the troubles started. After rebooting, it went to the beige screen that precedes the splash screen and then to a black blank screen. I could move around the mouse and that was it.
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          Apparently the compiz [which is responsible for the visual effects] module has problems with older Intel graphics cards [on-board graphics module aboard my Intel 845 GVSR]. A suggested work around was to boot into recovery mode and remove the compiz module. Apparently the bus has been around for a couple of months now[Launchpad Bug #259385].
+         </p>
+         <p>
+          select root shell prompt and run the following commands
+         </p>
+         <p>
+          sudo apt-get remove compiz
+         </p>
+         <p>
+          sudo apt-get remove compiz-core
+         </p>
+         <p>
+          exit
+         </p>
+         <p>
+          resume
+         </p>
+         <p>
+          <strong>
+           Problem 6
+          </strong>
+         </p>
+         <p>
+          I just installed the new Ubuntu 8.10 and I have no sound.How to fix this problem
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+         </p>
+         <p>
+          I have fixed this problem by installing following package
+         </p>
+         <p>
+          sudo killall pulseaudio
+         </p>
+         <p>
+          sudo alsa force-reload
+         </p>
+         <p>
+          and then go to System&gt;Preferences&gt;Sound and change everything to ALSA
+         </p>
+         <p>
+          <strong>
+           Problem 7
+          </strong>
+         </p>
+         <p>
+          <strong>
+           Install Nvidia legacy GeForce 2 MX 400 in Ubuntu 8.10
+          </strong>
+         </p>
+         <p>
+          Downloaded the beta driver from nvidia
+          <a href="http://www.nvnews.net/vbulletin/showthread.php?t=122139" target="_blank">
+           here
+          </a>
+          the 96.43.09 legacy BETA
+         </p>
+         <p>
+          Downloaded from synaptic manager linux-headers-generic and linux-source-2.6.27
+         </p>
+         <p>
+          sudo apt-get install linux-headers-generic linux-source-2.6.27
+         </p>
+         <p>
+          Press CTRL + ALT F1
+         </p>
+         <p>
+          sudo /etc/init.d/gdm stop
+         </p>
+         <p>
+          sudo sh NVIDIA DRIVER that you downloaded from the url above
+         </p>
+         <p>
+          sudo /etc/init.d/gdm start
+         </p>
+         <p>
+          <strong>
+           Problem 8
+          </strong>
+         </p>
+         <p>
+          <strong>
+           Install NVIDIA XFX 8600 GT in Ubuntu 8.10
+          </strong>
+         </p>
+         <p>
+          My machine is MSI RS-480-IL2 motherboard, with NVIDIA XFX 8600 GT card.
+         </p>
+         <p>
+          This is the procedure I followed:
+         </p>
+         <p>
+          Just go to System -&gt; Adminitration-&gt; Hardware Drivers and enable NVIDIA 177 driver. It will download and install the driver.
+         </p>
+         <p>
+          Here there is a small hitch. Sometimes the download progress window stops at 0% only, it is bug, but the download takes place in the background and installs the driver. You need to be patient for about 5 minutes (256 KBPS download speed).
+         </p>
+         <p>
+          After that, just check under System -&gt; Administration for a new menu entry "NVIDIA Settings", if so, the driver is installed. If you select the menu item, it will say "Looks like NVIDIA driver is not being used, Update your Xorg.conf file, just run "nvidia-xconfig" from terminal as root".
+         </p>
+         <p>
+          Do that, and it will update your xorg.conf file, just restart X, using CTRL + ALT + BACKSPACE, it will logout you out and ask for login again. Just login and you have NVIDIA 3D fully working.
+         </p>
+         <p>
+          Try enabling 3D effects and enjoy !!! Ubuntu 8.10 really rocks, especially with 3D enabled.
+         </p>
+         <p>
+          For all the persons who were kind enough to reply and comment on earlier post, I would like to thank all of you.
+         </p>
+         <p>
+          Anyone facing problem with Ubuntu 8.04, I suggest upgrade to Ubuntu 8.10. It will solve many problems.
+          <br/>
+          If you have any other solutions for nvidia cards or any other issues after intrepid upgrade please share here
+         </p>
+         <p>
+         </p>
+         <center>
+          <h6>
+           <b>
+            Sponsored Link
+           </b>
+          </h6>
+         </center>
+         <center>
+          <script type="text/javascript">
+           google_ad_client = "ca-pub-3561711309083119";
+    google_ad_slot = "5550623370";
+    google_ad_width = 336;
+    google_ad_height = 280;
+          </script>
+          <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+          </script>
+         </center>
+         <h4>
+          Incoming search terms:
+         </h4>
+         <ul>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="reconfiguring x org video drivers is not possible: /etc/x11/xorg conf is invalid">
+            reconfiguring x org video drivers is not possible: /etc/x11/xorg conf is invalid
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="ubuntu nvidia problem">
+            ubuntu nvidia problem
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="ubuntu nvidia driver problem">
+            ubuntu nvidia driver problem
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="ubuntu nvidia resolution problem">
+            ubuntu nvidia resolution problem
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="you do not appear to be using the nvidia x driver please edit your x configuration file (just run `nvidia-xconfig` as root) and restart the x server">
+            you do not appear to be using the nvidia x driver please edit your x configuration file (just run `nvidia-xconfig` as root) and restart the x server
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="xserver linux problem after nvidia">
+            xserver linux problem after nvidia
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="nvidia x server ubuntu">
+            nvidia x server ubuntu
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="you do not appear to be using the nvidia x driver">
+            you do not appear to be using the nvidia x driver
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="nvidia ubuntu problems">
+            nvidia ubuntu problems
+           </a>
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" title="xorg conf is invalid">
+            xorg conf is invalid
+           </a>
+          </li>
+         </ul>
+         <div class="shareaholic-canvas" data-app="share_buttons" data-app-id="425266" data-link="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html" data-summary="" data-title="Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade">
+         </div>
+         <h4>
+          Related posts
+         </h4>
+         <ul class="st-related-posts">
+          <li>
+           <a href="http://www.ubuntugeek.com/zik-audio-player-based-on-gstreamer.html" title="Zik  Audio player based on gstreamer (November 9, 2010)">
+            Zik  Audio player based on gstreamer
+           </a>
+           (3)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/zero-install-injector-install-software-easily-and-without-root-privileges.html" title="Zero Install Injector  Install software easily and without root privileges (March 12, 2010)">
+            Zero Install Injector  Install software easily and without root privileges
+           </a>
+           (17)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/zenmap-cross-platform-nmap-security-scanner-gui.html" title="Zenmap  Cross platform Nmap Security Scanner GUI (March 10, 2014)">
+            Zenmap  Cross platform Nmap Security Scanner GUI
+           </a>
+           (0)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/zattoo-watch-online-tv-for-free.html" title="Zattoo  Watch Online TV for free (February 21, 2010)">
+            Zattoo  Watch Online TV for free
+           </a>
+           (18)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/youamp-yet-another-music-player-for-linux.html" title="YouAmp  Yet another music player for Linux (February 16, 2010)">
+            YouAmp  Yet another music player for Linux
+           </a>
+           (10)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/uberstudent-ubuntu-version-for-students-and-researchers.html" title="berStudent  Ubuntu version for Students and Researchers (January 24, 2010)">
+            berStudent  Ubuntu version for Students and Researchers
+           </a>
+           (18)
+          </li>
+          <li>
+           <a href="http://www.ubuntugeek.com/yarock-qt4-modern-music-player.html" title="Yarock  Qt4 Modern Music Player (November 20, 2013)">
+            Yarock  Qt4 Modern Music Player
+           </a>
+           (1)
+          </li>
+         </ul>
+        </div>
+        <div class="comments-area" id="comments">
+         <h2 id="comments-title">
+          79 thoughts on 
+          <span>
+           Common Problems and Solutions for Nvidia restricted drivers after Ubuntu 8.10 (Intrepid Ibex) Upgrade
+          </span>
+          
+         </h2>
+         <nav class="site-navigation comment-navigation" id="comment-nav-above" role="navigation">
+          <div class="nav-previous">
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-2#comments">
+             Older Comments
+           </a>
+          </div>
+          <div class="nav-next">
+          </div>
+         </nav>
+         <ol class="commentlist">
+          <li class="comment even thread-even depth-1" id="li-comment-6156">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-6156">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.clas.ufl.edu/users/forrest" rel="external nofollow">
+                 Forrest R. Stevens
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-6156">
+                <time datetime="2009-02-23T14:34:41+00:00">
+                 February 23, 2009 at 2:34 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Thanks for all the helpful information regarding this issue. Just wanted to add my experience for anyone searching for something similar. Fresh install of Intrepid, 8.10, on a brand new Dell XPS 1340 laptop dual booting with Vista, and with updates applied. I activated nVidia linux-restricted-modules (177) and then experienced the boot to a command prompt.
+              </p>
+              <p>
+               I booted to the recovery console and tried the fix X option which restored a default xorg.conf file. After doing an lspci discovered that the second of the two cards nVidia cards listsed is the 9400G, which for this laptop is the main display, and it was on bus 3:0:0.
+              </p>
+              <p>
+               So to restore the nvidia specific portions of the xorg.conf file and configure it to use the right card of the SLI setup I did this:
+              </p>
+              <p>
+               nvidia-xconfig
+              </p>
+              <p>
+                and added the 3:0:0 line to the Device section of the xorg.conf file:
+              </p>
+              <p>
+               Section Device
+               <br/>
+               Identifier Device0
+               <br/>
+               Driver nvidia
+               <br/>
+               VendorName NVIDIA Corporation
+               <br/>
+               BusID 3:0:0?
+               <br/>
+               EndSection
+              </p>
+              <p>
+               On the next boot everything came up fine and the nVidia drivers even went to the native 1200800
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,6156,1,'Forrest R. Stevens');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-6645">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-6645">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                greekkkkk
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-6645">
+                <time datetime="2009-03-16T22:21:47+00:00">
+                 March 16, 2009 at 10:21 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               grafics problem.Low grafics at ubuntu8.10
+               <br/>
+               You do not appear to be using the NVIDIA X driver. Please edit your X configuration file (just run `nvidia-xconfig` as root), and restart the X server. .My grafics card is EN7600GT.What shall i do???thnx in advance
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,6645,1,'greekkkkk');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-6712">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-6712">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Vince
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-6712">
+                <time datetime="2009-03-19T23:34:07+00:00">
+                 March 19, 2009 at 11:34 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Regarding solutions to the AMD64/NVidia problem
+              </p>
+              <p>
+               I have one,that really solves the problem (after appropriate downloads are made)
+              </p>
+              <p>
+               and, is seemingly surefire simple (I read and tried many of the solutions offered This one (only) worked with no real problems
+              </p>
+              <p>
+               1) install Ultramix
+               <br/>
+               2) select Enfironments
+               <br/>
+               3) select XFCE
+              </p>
+              <p>
+               Reboot into XFCE and download/install AMD64 NVIDIA drivers
+              </p>
+              <p>
+               Has worked EVERYTIME for me And I have been installing/re-installing as I have been testing Ubuntu tweaks and blow-ups. (I can, have the time, so it happens.)
+              </p>
+              <p>
+               Have a Stable system with two options (Ubuntu or XFCE) on TWO partitions (One with Ultamtix Extreme Which I used same trick to install the same non-working drivers.
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,6712,1,'Vince');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-6985">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-6985">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Bhavesh
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-6985">
+                <time datetime="2009-03-30T03:01:02+00:00">
+                 March 30, 2009 at 3:01 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               As per Install NVIDIA XFX 8600 GT in Ubuntu 8.10 (Problem 8):
+               <br/>
+               I follow those steps and i got solution. I was success to set resolution through NVIDIA.(1024x768_60).
+              </p>
+              <p>
+               I have one problem. When i restart laptop then older resolution found (like 600800).
+              </p>
+              <p>
+               Please give me solution. how to set resolution for all time?
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,6985,1,'Bhavesh');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-7000">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-7000">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Dano Fernandez
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-7000">
+                <time datetime="2009-03-30T22:05:19+00:00">
+                 March 30, 2009 at 10:05 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               I already bought an external CD drive and UBUNTU disk is ready. Could you tell me how to start UBUNTU
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,7000,1,'Dano Fernandez');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-7093">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-7093">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.mccaffertyaerospaceconcepts.com" rel="external nofollow">
+                 Adam
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-7093">
+                <time datetime="2009-04-04T10:59:59+00:00">
+                 April 4, 2009 at 10:59 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Hi, I am upgrading my Toshiba Tablet M200 to 8.10 Intrepid I have Nvidia graphics, but still cant get the tablet pen to interact with the interface and switching between portrait and landscape. Is their any way to access the accelerometer that is in it too?
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,7093,1,'Adam');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-7177">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-7177">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.twitter.com/slackattack" rel="external nofollow">
+                 Mathew Slack
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-7177">
+                <time datetime="2009-04-07T00:09:59+00:00">
+                 April 7, 2009 at 12:09 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Is there anyway to get a version of Ubuntu that supports Nvidia cards by default? That would be pretty impressive!
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,7177,1,'Mathew Slack');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-7184">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-7184">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.e51g.com" rel="external nofollow">
+                 bassam essa
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-7184">
+                <time datetime="2009-04-07T03:21:52+00:00">
+                 April 7, 2009 at 3:21 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               i upgrade from 8.04 to 8.10 my graphic card 7600gt not work
+               <img alt=":(" class="wp-smiley" src="//www.ubuntugeek.com/wp-includes/images/smilies/frownie.png" style="height: 1em; max-height: 1em;"/>
+               i try solve problem 8 , but i have same problem You do not appear to be using the NVIDIA X driver. Please edit your X configuration file (just run `nvidia-xconfig` as root), and restart the X server. 
+               <br/>
+               what i can do more?
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,7184,1,'bassam essa');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-8457">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-8457">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Chris
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-8457">
+                <time datetime="2009-05-05T00:40:20+00:00">
+                 May 5, 2009 at 12:40 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Im installing the UE 2.1 (with Ubuntu 8.10) from a live DVD. When I run the live DVD, I have to go to the hardware drivers and download the Nvidia ver. 177 and install it and then restart x (ctrl, alt, backspace). After I installed to my hard drive, everything went smooth until I was instructed to reboot. You know what happened. X wont start now. It says theres no modual nvidia. No nvidia driver. How can I fix this?
+               <br/>
+               Thanks,
+               <br/>
+               Chris
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,8457,1,'Chris');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-8575">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-8575">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Em
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-8575">
+                <time datetime="2009-05-07T03:47:54+00:00">
+                 May 7, 2009 at 3:47 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               i had that issue with kubuntu 8.10 and i think what workded for me was starting in safe and redo x server to default and install 177 through the program search/install program and reboot without starting x and it seemed to fix my issue.
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,8575,1,'Em');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-9331">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-9331">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Intrepid
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-9331">
+                <time datetime="2009-05-23T21:40:30+00:00">
+                 May 23, 2009 at 9:40 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               I was experiencing Problem 7. Your Solution works. However I did find that there were to scripts that could be downloaded from Nvidia (from the link you provided). I only had to run the first (smaller file size) one of them. I also noticed that while running the script that I downloaded from Nvidia, it mentioned that I did not have something and it needed to download it, which it did. The outcome was all positive, everything worked. I just needed to add the 1920 x 1200 resolution to my mode line in xorg.conf and then restart GDM once again. Many thinks for documenting your knowledge and keeping it real.
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,9331,1,'Intrepid');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-9598">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-9598">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Lama Chok
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-9598">
+                <time datetime="2009-06-01T19:14:18+00:00">
+                 June 1, 2009 at 7:14 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               i have acer 4530 model with nvidia 9100m graphics card. The problem is that i m new to linux and dont have much idea about it but i m eager to learn. I have ubuntu 8.10. I m experiencing graphics driver problem. i dont have internet connection. is there any web site where i can download the driver and install it (like we do in Windoes)
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,9598,1,'Lama Chok');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-9603">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-9603">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.e51g.com" rel="external nofollow">
+                 bassam essa
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-9603">
+                <time datetime="2009-06-01T22:35:16+00:00">
+                 June 1, 2009 at 10:35 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               i install kubuntu
+               <img alt=":)" class="wp-smiley" src="//www.ubuntugeek.com/wp-includes/images/smilies/simple-smile.png" style="height: 1em; max-height: 1em;"/>
+               it`s done and work
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,9603,1,'bassam essa');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-14230">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-14230">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.cornerofart.com" rel="external nofollow">
+                 Abdullah Alhourani
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-14230">
+                <time datetime="2009-10-13T07:15:27+00:00">
+                 October 13, 2009 at 7:15 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Im install the kubuntu but its not working, I need driver for nVidia 7600gt.
+               <br/>
+               Thanks.
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,14230,1,'Abdullah Alhourani');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-15289">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-15289">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Avin
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-15289">
+                <time datetime="2009-10-29T09:37:50+00:00">
+                 October 29, 2009 at 9:37 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Im using Ubuntu 9.04 and My Graphics card(Nvidia XFS 8600GT) not giving me full resolution and 3D effect. I dont have internet connection on Ubuntu. I use my Mobile to access Internet in Windows XP. So How to download offline driver for my graphics card with dependencies and Install it on Ubuntu 9.04.
+              </p>
+              <p>
+               Thanks
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,15289,1,'Avin');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-16047">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-16047">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Benny
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-16047">
+                <time datetime="2009-11-06T11:07:16+00:00">
+                 November 6, 2009 at 11:07 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               after i install my Nvidia Geforce fx 5500, and when im booting ubuntu 8.10, it stops at the 2nd bar. How can you help me
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,16047,1,'Benny');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-21067">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-21067">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                Agustin
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-21067">
+                <time datetime="2010-01-21T15:52:04+00:00">
+                 January 21, 2010 at 3:52 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               Thanks!!!
+              </p>
+              <p>
+               Great Help 
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,21067,1,'Agustin');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-27505">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-27505">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                golden
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-27505">
+                <time datetime="2010-04-12T22:08:07+00:00">
+                 April 12, 2010 at 10:08 pm
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               i have a problem with my nvidia geforce 8600M gs notebook i cant play games anymore
+               <br/>
+               when i install the driver i cant enter to the windows a blue screen appearsometime if it work and enter to the windows a black screen appear still 3 seconds and gone and notify that windows has been recovered from unexpact shutdown
+               <br/>
+               and nvdll.exe errorsomeone help me.
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,27505,1,'golden');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+          <li class="comment even thread-even depth-1" id="li-comment-89790">
+           <div class="heatmapthemead-comment-article">
+            <article class="comment" id="comment-89790">
+             <footer class="comment-meta">
+              <div class="reply">
+              </div>
+              <div class="comment-author vcard">
+               <span class="fn">
+                <a class="url" href="http://www.pokemoncraft.com" rel="external nofollow">
+                 Pokemon
+                </a>
+               </span>
+               on
+               <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-3#comment-89790">
+                <time datetime="2011-01-26T01:56:29+00:00">
+                 January 26, 2011 at 1:56 am
+                </time>
+               </a>
+               <span class="says">
+                said:
+               </span>
+              </div>
+             </footer>
+             <div class="comment-content">
+              <p>
+               can you update article or release new one for decent drivers and hardwares
+              </p>
+              <p class="thdrpy">
+               [
+               <a href="javascript:void(0)" onclick="movecfm(event,89790,1,'Pokemon');">
+                Reply
+               </a>
+               ]
+              </p>
+             </div>
+            </article>
+           </div>
+          </li>
+         </ol>
+         <nav class="site-navigation comment-navigation" id="comment-nav-below" role="navigation">
+          <div class="nav-previous">
+           <a href="http://www.ubuntugeek.com/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html/comment-page-2#comments">
+             Older Comments
+           </a>
+          </div>
+          <div class="nav-next">
+          </div>
+         </nav>
+         <div class="comment-respond" id="respond">
+          <h3 class="comment-reply-title" id="reply-title">
+           Leave a comment
+           <small>
+            <a href="/common-problems-and-solutions-for-nvidia-restricted-drivers-after-ubuntu-810-intrepid-ibex-upgrade.html#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+             Cancel reply
+            </a>
+           </small>
+          </h3>
+          <form action="//www.ubuntugeek.com/wp-comments-post.php" class="comment-form" id="commentform" method="post">
+           <p class="comment-notes">
+            <span id="email-notes">
+             Your email address will not be published.
+            </span>
+            Required fields are marked
+            <span class="required">
+             *
+            </span>
+           </p>
+           <p class="comment-form-author">
+            <label for="author">
+             Name
+             <span class="required">
+              *
+             </span>
+            </label>
+            <input aria-required="true" id="author" name="author" required="required" size="30" type="text" value=""/>
+           </p>
+           <p class="comment-form-email">
+            <label for="email">
+             Email
+             <span class="required">
+              *
+             </span>
+            </label>
+            <input aria-describedby="email-notes" aria-required="true" id="email" name="email" required="required" size="30" type="text" value=""/>
+           </p>
+           <p class="comment-form-url">
+            <label for="url">
+             Website
+            </label>
+            <input id="url" name="url" size="30" type="text" value=""/>
+           </p>
+           <p class="comment-form-comment">
+            <label for="comment">
+             Comment
+            </label>
+            <textarea aria-describedby="form-allowed-tags" aria-required="true" cols="45" id="comment" name="comment" required="required" rows="8">
+            </textarea>
+           </p>
+           <p class="form-submit">
+            <input class="submit" id="submit" name="submit" type="submit" value="Post Comment"/>
+            <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="690"/>
+            <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+           </p>
+           <p style="display: none;">
+            <input id="akismet_comment_nonce" name="akismet_comment_nonce" type="hidden" value="9cfb09adfb"/>
+           </p>
+           <p style="display: none;">
+            <input id="ak_js" name="ak_js" type="hidden" value="117"/>
+           </p>
+           <p>
+            <input id="comment_reply_ID" name="comment_reply_ID" type="hidden" value="0"/>
+            <input id="comment_reply_dp" name="comment_reply_dp" type="hidden" value="0"/>
+           </p>
+           <div id="cancel_reply" style="display:none;">
+            <a href="javascript:void(0)" onclick="movecfm(null,0,1,null);" style="color:red;">
+             Click to cancel reply
+            </a>
+           </div>
+           <script type="text/javascript">
+            /* &lt;![CDATA[ */
+var commentformid = "commentform";
+var USERINFO = false;
+var atreply = "none";
+/* ]]&gt; */
+           </script>
+           <script src="//www.ubuntugeek.com/wp-content/plugins/wordpress-thread-comment/wp-thread-comment.js.php?jsver=common" type="text/javascript">
+           </script>
+          </form>
+         </div>
+        </div>
+       </article>
+       <div id="heatmapthemead-post-navigation">
+        <nav class="site-navigation post-navigation" id="nav-below" role="navigation">
+         <div class="nav-previous">
+          <a href="http://www.ubuntugeek.com/upgrade-ubuntu-804-hardy-heron-to-ubuntu-810-intrepid-ibix.html" rel="prev">
+           <span class="meta-nav">
+            
+           </span>
+           Upgrade Ubuntu 8.04 (Hardy Heron) to Ubuntu 8.10 (Intrepid Ibix)
+          </a>
+         </div>
+         <div class="nav-next">
+          <a href="http://www.ubuntugeek.com/fix-for-linux-kernel-2627-regression-in-ubuntu-810-intrepid-ibex.html" rel="next">
+           Fix for Linux kernel 2.6.27 regression in Ubuntu 8.10 (Intrepid Ibex)
+           <span class="meta-nav">
+            
+           </span>
+          </a>
+         </div>
+        </nav>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="heatmapthemead-primary-sidebar">
+     <div id="heatmapthemead-primary-sidebar-container" role="complementary">
+      <div class="heatmapthemead-widget-position heatmapthemead-primary" id="heatmapthemead-widget-position-primary" role="complementary">
+       <aside class="widget widget_text" id="text-310769683">
+        <h4 class="widget-title">
+         Sponsored Link
+        </h4>
+        <div class="textwidget">
+         <ul>
+          <a href="http://www.a2hosting.com/1659-vps-224-custom.html" target="_blank">
+           <img alt="Cheap Web Hosting" border="0" src="//www.ubuntugeek.com/images/ubuntu1.png"/>
+          </a>
+         </ul>
+         <br/>
+         <script type="text/javascript">
+          &lt;!--
+google_ad_client = "ca-pub-3561711309083119";
+/* UGleft160x90 */
+google_ad_slot = "0800632016";
+google_ad_width = 160;
+google_ad_height = 90;
+//--&gt;
+         </script>
+         <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+         </script>
+        </div>
+       </aside>
+       <aside class="widget widget_categories" id="categories-310769689">
+        <h4 class="widget-title">
+         Categories
+        </h4>
+        <ul>
+         <li class="cat-item cat-item-3">
+          <a href="http://www.ubuntugeek.com/category/backup">
+           Backup
+          </a>
+         </li>
+         <li class="cat-item cat-item-6929">
+          <a href="http://www.ubuntugeek.com/category/free-books">
+           Free Books
+          </a>
+         </li>
+         <li class="cat-item cat-item-4">
+          <a href="http://www.ubuntugeek.com/category/general">
+           General
+          </a>
+         </li>
+         <li class="cat-item cat-item-5">
+          <a href="http://www.ubuntugeek.com/category/monitoring">
+           Monitoring
+          </a>
+         </li>
+         <li class="cat-item cat-item-6">
+          <a href="http://www.ubuntugeek.com/category/networking">
+           Networking
+          </a>
+         </li>
+         <li class="cat-item cat-item-2626">
+          <a href="http://www.ubuntugeek.com/category/news">
+           News
+          </a>
+         </li>
+         <li class="cat-item cat-item-7">
+          <a href="http://www.ubuntugeek.com/category/package-mgmt">
+           Package Mgmt
+          </a>
+         </li>
+         <li class="cat-item cat-item-8">
+          <a href="http://www.ubuntugeek.com/category/security">
+           Security
+          </a>
+         </li>
+         <li class="cat-item cat-item-9">
+          <a href="http://www.ubuntugeek.com/category/server">
+           Server
+          </a>
+         </li>
+        </ul>
+       </aside>
+       <aside class="widget widget_text" id="text-390956925">
+        <div class="textwidget">
+         <ul>
+          <a href="http://www.digitalocean.com/?utm_source=UnbuntuGeek&amp;utm_medium=BannerAd&amp;utm_campaign=UnbuntuGeekBannerAd" target="_blank">
+           <img alt="Deploy Ubuntu VPS server
+&gt; &gt; in 60 sec" border="0" src="//www.ubuntugeek.com/images/od.jpg"/>
+          </a>
+         </ul>
+         <br/>
+        </div>
+       </aside>
+       <aside class="widget widget_text" id="text-390956927">
+        <h4 class="widget-title">
+         Sponsored Link
+        </h4>
+        <div class="textwidget">
+         <script type="text/javascript">
+          &lt;!--
+google_ad_client = "ca-pub-3561711309083119";
+/* UG-Left1-160x90 */
+google_ad_slot = "7832127707";
+google_ad_width = 160;
+google_ad_height = 90;
+//--&gt;
+         </script>
+         <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+         </script>
+        </div>
+       </aside>
+       <aside class="widget widget_meta" id="meta-2">
+        <h4 class="widget-title">
+         Login/Register
+        </h4>
+        <ul>
+         <li>
+          <a href="http://www.ubuntugeek.com/wp-login.php">
+           Log in
+          </a>
+         </li>
+        </ul>
+       </aside>
+       <aside class="widget widget_archive" id="archives-2">
+        <h4 class="widget-title">
+         Archives
+        </h4>
+        <label class="screen-reader-text" for="archives-dropdown-2">
+         Archives
+        </label>
+        <select id="archives-dropdown-2" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+         <option value="">
+          Select Month
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/07">
+          July 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/06">
+          June 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/05">
+          May 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/04">
+          April 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/03">
+          March 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/02">
+          February 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2015/01">
+          January 2015
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/12">
+          December 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/11">
+          November 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/10">
+          October 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/09">
+          September 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/08">
+          August 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/07">
+          July 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/06">
+          June 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/05">
+          May 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/04">
+          April 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/03">
+          March 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/02">
+          February 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2014/01">
+          January 2014
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/12">
+          December 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/11">
+          November 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/10">
+          October 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/09">
+          September 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/08">
+          August 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/07">
+          July 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/06">
+          June 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/05">
+          May 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/04">
+          April 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/03">
+          March 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/02">
+          February 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2013/01">
+          January 2013
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/12">
+          December 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/11">
+          November 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/10">
+          October 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/09">
+          September 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/08">
+          August 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/07">
+          July 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/06">
+          June 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/05">
+          May 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/04">
+          April 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/03">
+          March 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/02">
+          February 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2012/01">
+          January 2012
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/12">
+          December 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/11">
+          November 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/10">
+          October 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/09">
+          September 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/08">
+          August 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/07">
+          July 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/06">
+          June 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/05">
+          May 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/04">
+          April 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/03">
+          March 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/02">
+          February 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2011/01">
+          January 2011
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/12">
+          December 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/11">
+          November 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/10">
+          October 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/09">
+          September 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/08">
+          August 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/07">
+          July 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/06">
+          June 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/05">
+          May 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/04">
+          April 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/03">
+          March 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/02">
+          February 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2010/01">
+          January 2010
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/12">
+          December 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/11">
+          November 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/10">
+          October 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/09">
+          September 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/08">
+          August 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/07">
+          July 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/06">
+          June 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/05">
+          May 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/04">
+          April 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/03">
+          March 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/02">
+          February 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2009/01">
+          January 2009
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/12">
+          December 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/11">
+          November 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/10">
+          October 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/09">
+          September 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/08">
+          August 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/07">
+          July 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/06">
+          June 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/05">
+          May 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/04">
+          April 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/03">
+          March 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/02">
+          February 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2008/01">
+          January 2008
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/12">
+          December 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/11">
+          November 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/10">
+          October 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/09">
+          September 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/08">
+          August 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/07">
+          July 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/06">
+          June 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/05">
+          May 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/04">
+          April 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/03">
+          March 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/02">
+          February 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2007/01">
+          January 2007
+         </option>
+         <option value="http://www.ubuntugeek.com/2006/12">
+          December 2006
+         </option>
+        </select>
+       </aside>
+      </div>
+     </div>
+    </div>
+    <div id="heatmapthemead-secondary-sidebar">
+     <div id="heatmapthemead-secondary-sidebar-container" role="complementary">
+      <div class="heatmapthemead-widget-position heatmapthemead-secondary widget-area" id="heatmapthemead-widget-position-secondary" role="complementary">
+       <aside class="widget widget_text" id="text-390956921">
+        <h4 class="widget-title">
+         RSS Feed
+        </h4>
+        <div class="textwidget">
+         <a href="http://feeds.feedburner.com/UbuntuGeek" target="_blank">
+          <img alt="subscribe to the ubuntu Geek RSS feed" border="0" src="//www.ubuntugeek.com/images/feed.png" title="Subscribe for Updates"/>
+         </a>
+         <br/>
+        </div>
+       </aside>
+       <aside class="widget widget_text" id="text-390956922">
+        <h4 class="widget-title">
+         UbuntuGeek on Twitter
+        </h4>
+        <div class="textwidget">
+         <ul>
+          <a href="http://twitter.com/ubuntugeek" target="_blank">
+           <img alt="Follow Us on Twitter" border="0" src="//www.ubuntugeek.com/images/twitter.png"/>
+          </a>
+         </ul>
+         <br/>
+        </div>
+       </aside>
+       <aside class="widget widget_text" id="text-390956926">
+        <h4 class="widget-title">
+         Sponsored Link
+        </h4>
+        <div class="textwidget">
+         <a href="http://www.digitalocean.com/?utm_source=UnbuntuGeek&amp;utm_medium=TextAd&amp;utm_campaign=UnbuntuGeekTextAd" target="_blank">
+          $5/Mo. Ubuntu SSD VPS
+         </a>
+         . Deploy an Ubuntu virtual server in 55 sec. 
+Sign up for free.
+         <br/>
+        </div>
+       </aside>
+       <aside class="widget widget_text" id="text-310774991">
+        <div class="textwidget">
+         <script type="text/javascript">
+          google_ad_client = "ca-pub-3561711309083119";
+    google_ad_slot = "4896508596";
+    google_ad_width = 300;
+    google_ad_height = 600;
+         </script>
+         <!-- Ubuntu300x600 -->
+         <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+         </script>
+        </div>
+       </aside>
+       <aside class="widget widget_paypal_donations" id="paypal_donations-2">
+        <h4 class="widget-title">
+         Support UbuntuGeek
+        </h4>
+        <!-- Begin PayPal Donations by https://www.tipsandtricks-hq.com/paypal-donations-widgets-plugin -->
+        <form action="//www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+         <div class="paypal-donations">
+          <input name="cmd" type="hidden" value="_donations"/>
+          <input name="bn" type="hidden" value="TipsandTricks_SP"/>
+          <input name="business" type="hidden" value="admin@debianadmin.com"/>
+          <input name="return" type="hidden" value="http://www.ubuntugeek.com"/>
+          <input name="item_name" type="hidden" value="Support UbuntuGeek"/>
+          <input name="amount" type="hidden" value="10"/>
+          <input name="rm" type="hidden" value="0"/>
+          <input name="currency_code" type="hidden" value="USD"/>
+          <input alt="PayPal - The safer, easier way to pay online." name="submit" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" type="image"/>
+         </div>
+        </form>
+        <!-- End PayPal Donations -->
+       </aside>
+       <aside class="widget widget_text" id="text-310774994">
+        <h4 class="widget-title">
+         Favourite Sites
+        </h4>
+        <div class="textwidget">
+         <a href="http://www.mydailytechtips.com" target="_blank">
+          My Daily Tech Tips
+         </a>
+         <br/>
+         <a href="http://www.debianadmin.com" target="_blank">
+          Debian Admin
+         </a>
+         <br/>
+         <a href="http://www.debianhelp.co.uk/" target="_blank">
+          DebianHelp
+         </a>
+         <br/>
+         <a href="http://www.tuxmachines.org" target="_blank">
+          Tuxmachines
+         </a>
+         <br/>
+         <a href="http://www.unixmen.com" target="_blank">
+          Unixmen
+         </a>
+         <br/>
+        </div>
+       </aside>
+      </div>
+      <!-- id="heatmapthemead-widget-position-secondary" -->
+     </div>
+     <!-- id="heatmapthemead-secondary-sidebar-container" -->
+    </div>
+    <!-- id="heatmapthemead-secondary-sidebar" -->
+   </div>
+   <!-- id="heatmapthemead-main" -->
+  </div>
+  <!-- id="heatmapthemead-main-wipe" -->
+  <!-- Footer -->
+  <div id="heatmapthemead-footer-wipe">
+   <div id="heatmapthemead-footer">
+    <div id="heatmapthemead-footer-container" role="complementary">
+     <div class="heatmapthemead-menu" id="heatmapthemead-credits">
+      Copyright  2015 Ubuntugeek -  Ubuntu Linux Howtos and Tutorials
+All Rights Reserved.
+     </div>
+    </div>
+    <!-- id="heatmapthemead-footer-container" -->
+   </div>
+   <!-- id="heatmapthemead-footer" -->
+  </div>
+  <!-- id="heatmapthemead-footer-wipe" -->
+  <!-- wp_footer() -->
+  <script language="javascript" type="text/javascript">
+   var kpg_cell="N";var kpg_nrci_image="http://www.ubuntugeek.com/wp-content/plugins/no-right-click-images-plugin/not.gif";var kpg_nrci_extra="N";var kpg_nrci_drag="Y";
+  </script>
+  <script language="javascript" src="//www.ubuntugeek.com/wp-content/plugins/no-right-click-images-plugin/no-right-click-images.js" type="text/javascript">
+  </script>
+  <!-- Start of StatCounter Code -->
+  <script>
+   &lt;!-- 
+        var sc_project=2122192; 
+        var sc_security="4ec5339a"; 
+      var sc_invisible=1;
+        var scJsHost = (("https:" == document.location.protocol) ?
+        "https://secure." : "http://www.");
+    //--&gt;
+document.write("&lt;sc"+"ript src='" +scJsHost +"statcounter.com/counter/counter.js'&gt;&lt;/"+"script&gt;");
+  </script>
+  <noscript>
+   <div class="statcounter">
+    <a href="http://statcounter.com/" title="web analytics">
+     <img alt="web analytics" class="statcounter" src="//c.statcounter.com/2122192/0/4ec5339a/1/"/>
+    </a>
+   </div>
+  </noscript>
+  <!-- End of StatCounter Code -->
+  <!-- Begin Vibrant Media IntelliTXT tag -->
+  <script src="//ubuntugeek.uk.intellitxt.com/intellitxt/front.asp?ipid=15871" type="text/javascript">
+  </script>
+  <!-- End Vibrant Media IntelliTXT tag -->
+  <script src="//www.ubuntugeek.com/wp-content/plugins/akismet/_inc/form.js?ver=3.1.3" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/core.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/button.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/position.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4" type="text/javascript">
+  </script>
+  <script src="//www.ubuntugeek.com/wp-content/plugins/responsive-lightbox/assets/prettyphoto/js/jquery.prettyPhoto.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var rlArgs = {"script":"prettyphoto","selector":"lightbox","custom_events":"","activeGalleries":"1","animationSpeed":"normal","slideshow":"1","slideshowDelay":"5000","slideshowAutoplay":"0","opacity":"0.75","showTitle":"0","allowResize":"1","allowExpand":"1","width":"1080","height":"720","separator":"\/","theme":"light_rounded","horizontalPadding":"20","hideFlash":"0","wmode":"opaque","videoAutoplay":"0","modal":"0","deeplinking":"0","overlayGallery":"1","keyboardShortcuts":"1","social":"0"};
+/* ]]&gt; */
+  </script>
+  <script src="//www.ubuntugeek.com/wp-content/plugins/responsive-lightbox/js/front.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var emailL10n = {"ajax_url":"http:\/\/www.ubuntugeek.com\/wp-admin\/admin-ajax.php","max_allowed":"5","text_error":"The Following Error Occurs:","text_name_invalid":"- Your Name is empty\/invalid","text_email_invalid":"- Your Email is empty\/invalid","text_remarks_invalid":"- Your Remarks is invalid","text_friend_names_empty":"- Friend Name(s) is empty","text_friend_name_invalid":"- Friend Name is empty\/invalid: ","text_max_friend_names_allowed":"- Maximum 5 Friend Names allowed","text_friend_emails_empty":"- Friend Email(s) is empty","text_friend_email_invalid":"- Friend Email is invalid: ","text_max_friend_emails_allowed":"- Maximum 5 Friend Emails allowed","text_friends_tally":"- Friend Name(s) count does not tally with Friend Email(s) count","text_image_verify_empty":"- Image Verification is empty"};
+/* ]]&gt; */
+  </script>
+  <script src="//www.ubuntugeek.com/wp-content/plugins/wp-email/email-js.js?ver=2.63" type="text/javascript">
+  </script>
+  <script>
+   var pltNewTabURLs = ["http:\/\/www.ubuntugeek.com\/forum"];(function(){(function(e){var t;t=e.jQueryWP||e.jQuery;return t(function(e){return typeof e.fn.on=="function"?e("body").on("click","a",function(t){var n;n=e(this);if(e.inArray(n.attr("href"),pltNewTabURLs)&gt;-1)return n.attr("target","_blank")}):typeof console!="undefined"&amp;&amp;console!==null?console.log("Page Links To: Some other code has overridden the WordPress copy of jQuery. This is bad. Because of this, Page Links To cannot open links in a new window."):void 0})})(window)}).call(this);
+  </script>
+  <!-- End of wp_footer() -->
+  <!-- Number of Queries:50   Seconds: 0.562-->
+  <!-- heatmapthemead_end_body hook -->
+  <!-- END BODY Scripts -->
+  <!-- end of heatmapthemead_end_body hook -->
+ </body>
+</html>
+<!-- End of render.php -->

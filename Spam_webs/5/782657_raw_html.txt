@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="qqxQUyWSeUfqZOencfEoRM9vrVk" name="alexaVerifyID"/>
+  <meta content="E8C9208AD2F47ED874ED18E35FC370CE" name="msvalidate.01"/>
+  <meta content="c567e5d7624a883b-609bf053fa02c58b-g01de0b1961de0feb-f" name="google-translate-customization"/>
+  <meta content="http://facebook.com/tecmint" property="article:publisher"/>
+  <meta content="http://facebook.com/ravisaive" property="article:author"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://www.tecmint.com/xmlrpc.php" rel="pingback"/>
+  <title>
+   10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories
+  </title>
+  <script>
+   document.documentElement.className = document.documentElement.className.replace("no-js","js");
+  </script>
+  <!-- All in One SEO Pack 2.2.7 by Michael Torbert of Semper Fi Web Design[696,829] -->
+  <link href="https://plus.google.com/u/0/107665449243972690526" rel="author"/>
+  <meta content='This article explains 10 useful "du" commands that helps you to find out disk usage of files and directories in Linux.' itemprop="description" name="description"/>
+  <meta content="find disk usage in linux,du command,linux commands" itemprop="keywords" name="keywords"/>
+  <link href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/" rel="canonical"/>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-33207530-1', { 'cookieDomain': 'tecmint.com','allowLinker': true } );
+			ga('require', 'linker');
+			ga('linker:autoLink', ['tecmint.com'] );
+			ga('send', 'pageview');
+  </script>
+  <script type="text/javascript">
+   function recordOutboundLink(link, category, action) {
+					ga('send', 'event', category, action);
+					if ( link.target == '_blank' ) return true;
+			setTimeout('document.location = "' + link.href + '"', 100);
+			return false;
+		}
+			/* use regular Javascript for this */
+			function getAttr(ele, attr) {
+				var result = (ele.getAttribute &amp;&amp; ele.getAttribute(attr)) || null;
+				if( !result ) {
+					var attrs = ele.attributes;
+					var length = attrs.length;
+					for(var i = 0; i &lt; length; i++)
+					if(attr[i].nodeName === attr) result = attr[i].nodeValue;
+				}
+				return result;
+			}
+			
+			function aiosp_addLoadEvent(func) {
+			  var oldonload = window.onload;
+			  if (typeof window.onload != 'function') {
+			    window.onload = func;
+			  } else {
+			    window.onload = function() {
+			      if (oldonload) {
+			        oldonload();
+			      }
+			      func();
+			    }
+			  }
+			}
+			
+			function aiosp_addEvent(element, evnt, funct){
+			  if (element.attachEvent)
+			   return element.attachEvent('on'+evnt, funct);
+			  else
+			   return element.addEventListener(evnt, funct, false);
+			}
+
+			aiosp_addLoadEvent(function () {
+				var links = document.getElementsByTagName('a');
+				for (var x=0; x &lt; links.length; x++) {
+					if (typeof links[x] == 'undefined') continue;
+					aiosp_addEvent( links[x], 'onclick', function () {
+						var mydomain = new RegExp(document.domain, 'i');
+						href = getAttr(this, 'href');
+						if (href &amp;&amp; href.toLowerCase().indexOf('http') === 0 &amp;&amp; !mydomain.test(href)) {
+							recordOutboundLink(this, 'Outbound Links', href);
+						}
+					});
+				}
+			});
+  </script>
+  <!-- /all in one seo pack -->
+  <link href="http://feeds.feedburner.com/tecmint" rel="alternate" title="Tecmint: Linux Howtos, Tutorials &amp; Guides  Feed" type="application/rss+xml"/>
+  <link href="http://www.tecmint.com/comments/feed/" rel="alternate" title="Tecmint: Linux Howtos, Tutorials &amp; Guides  Comments Feed" type="application/rss+xml"/>
+  <link href="//fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/feed/" rel="alternate" title="Tecmint: Linux Howtos, Tutorials &amp; Guides  10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories Comments Feed" type="application/rss+xml"/>
+  <link href="http://www.tecmint.com/wp-content/plugins/dreamgrow-scroll-triggered-box/css/style.css?ver=2.2.0" id="dgd-scrollbox-plugin-core-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/plugins/light/css/jquery.fancybox.css?ver=4.2.2" id="fancybox-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/themes/tecmint/style.css?ver=4.2.2" id="style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/themes/tecmint/responsive.css?ver=4.2.2" id="responsive-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/themes/tecmint/custom.css?ver=4.2.2" id="custom-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/themes/tecmint/fonts/font-awesome.min.css?ver=4.2.2" id="font-awesome-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?ver=4.3.0" id="fontawesome-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Montserrat%3A400&amp;ver=4.2.2" id="google-font-montserrat-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Roboto+Slab%3A400&amp;ver=4.2.2" id="google-font-roboto-slab-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.tecmint.com/wp-content/plugins/quickiebar/public/style/qb.css?ver=1.6.5" id="qb-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://www.tecmint.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var $DGD = {"ajaxurl":"http:\/\/www.tecmint.com\/wp-admin\/admin-ajax.php","nonce":"7a0ea91283","debug":"","permalink":"http:\/\/www.tecmint.com\/check-linux-disk-usage-of-files-and-directories\/","title":"10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories","thumbnail":"http:\/\/www.tecmint.com\/wp-content\/uploads\/2013\/01\/du-Command-to-checkdisk-Usage-of-files-Directories.jpg","scripthost":"http:\/\/www.tecmint.com\/wp-content\/plugins\/dreamgrow-scroll-triggered-box\/","scrollboxes":[{"trigger":{"action":"scroll","scroll":"40","delaytime":"0","element":""},"vpos":"bottom","hpos":"right","cookieLifetime":"1","hide_mobile":"1","receiver_email":"0","thankyou":"You are subscribed. Thank You!","submit_auto_close":"5","delay_auto_close":"0","theme":"clean_white","widget_enabled":"1","height":"auto","width":"300","jsCss":{"padding":"10","margin":"10","backgroundColor":"","boxShadow":"0px","borderColor":"","borderWidth":"0px","borderRadius":"0px","backgroundImageUrl":""},"closeImageUrl":"","transition":{"from":"b","effect":"fade","speed":"400"},"social":{"facebook":"","twitter":"","google":"","pinterest":"","stumbleupon":"","linkedin":""},"id":"dgd_scrollbox-11027","mode":"stb","voff":0,"hoff":0}]};
+/* ]]&gt; */
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/dreamgrow-scroll-triggered-box/js/script.js?ver=2.2.0" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var ajaxurl = "http:\/\/www.tecmint.com\/wp-admin\/admin-ajax.php";
+var QB_PUBLIC_GLOBALS = {"QB_PUBLIC_NONCE":"a5914d880b","USER_TYPE":"public"};
+/* ]]&gt; */
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/quickiebar/public/js/qb.js?ver=1.6.5" type="text/javascript">
+  </script>
+  <link href="http://www.tecmint.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://www.tecmint.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://www.tecmint.com/password-protect-grub-in-linux/" rel="prev" title="How to Protect GRUB with Password in RHEL / CentOS / Fedora Linux"/>
+  <link href="http://www.tecmint.com/fedora-18-installation-guide/" rel="next" title="Fedora 18 (Spherical Cow) Basic Installation Guide with Screenshots"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://www.tecmint.com/?p=2014" rel="shortlink"/>
+  <!-- Facebook Like Thumbnail (v0.3.4) -->
+  <meta content="http://www.tecmint.com/wp-content/uploads/2013/01/du-Command-to-checkdisk-Usage-of-files-Directories.jpg" property="og:image"/>
+  <!-- using featured thumbnail -->
+  <!-- Facebook Like Thumbnail (By Ashfame - https://github.com/ashfame/facebook-like-thumbnail) -->
+  <link href="/wp-content/themes/tecmint/images/favicon.ico" rel="shortcut icon"/>
+  <!--[if lt IE 9]&gt;
+&lt;script src="http://www.tecmint.com/wp-content/themes/tecmint/js/ie/html5.js"&gt;&lt;/script&gt;
+&lt;script src="http://www.tecmint.com/wp-content/themes/tecmint/js/ie/selectivizr.js"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <style type="text/css">
+   /* Dynamic CSS: For no styles in head, copy and put the css below in your custom.css or child theme's style.css, disable dynamic styles */
+body { font-family: "Roboto Condensed", Arial, sans-serif; }
+.boxed #wrapper, .container-inner { max-width: 1280px; }
+.sidebar .widget { padding-left: 20px; padding-right: 20px; padding-top: 20px; }
+
+.search-expand,
+#nav-topbar.nav-container { background-color: #23588c; }
+@media only screen and (min-width: 720px) {
+	#nav-topbar .nav ul { background-color: #23588c; }
+}			
+				
+
+#header { background-color: #075b88; }
+@media only screen and (min-width: 720px) {
+	#nav-header .nav ul { background-color: #075b88; }
+}			
+				
+
+#nav-header.nav-container { background-color: #2f6dab; }
+@media only screen and (min-width: 720px) {
+	#nav-header .nav ul { background-color: #2f6dab; }
+}			
+				
+#footer-bottom { background-color: #2f6dab; }
+.site-title a img { max-height: 90px; }
+img { -webkit-border-radius: 2px; border-radius: 2px; }
+  </style>
+  <link href="https://plus.google.com/107665449243972690526/posts" rel="author"/>
+  <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+  </script>
+  <script type="application/ld+json">
+   {
+   "@context": "http://schema.org",
+   "@type": "WebSite",
+   "url": "http://www.tecmint.com/",
+   "potentialAction": {
+     "@type": "SearchAction",
+     "target": "http://www.tecmint.com/?s={search_term}",
+     "query-input": "required name=search_term"
+   }
+}
+  </script>
+  <script type="text/javascript">
+   this.randomtip = function(){
+        var length = $("#tips li").length;
+        var ran = Math.floor(Math.random()*length) + 1;
+        $("#tips li:nth-child(" + ran + ")").show();
+};
+
+$(document).ready(function(){   
+        randomtip();
+});
+  </script>
+ </head>
+ <body class="single single-post postid-2014 single-format-standard col-2cl full-width topbar-enabled unknown">
+  <div id="wrapper">
+   <header id="header">
+    <nav class="nav-container group" id="nav-topbar">
+     <div class="nav-toggle">
+      <i class="fa fa-bars">
+      </i>
+     </div>
+     <div class="nav-text">
+      <!-- put your mobile menu text here -->
+     </div>
+     <div class="nav-wrap container">
+      <ul class="nav container-inner group" id="menu-home">
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-334" id="menu-item-334">
+        <a href="http://www.tecmint.com">
+         Home
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10774" id="menu-item-10774">
+        <a href="http://www.tecmint.com/who-we-are/" target="_blank">
+         About
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3912" id="menu-item-3912">
+        <a href="http://tecmint.tradepub.com/category/information-technology-servers-and-linux-server-os/806/" target="_blank">
+         Free Linux eBooks
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10439" id="menu-item-10439">
+        <a href="http://linuxsay.com" target="_blank" title="LinuxSay  A Discussion Forum for Linux Enthusiasts">
+         Ask a Question
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10440" id="menu-item-10440">
+        <a href="http://www.tecmint.com/donate-to-tecmint/" target="_blank">
+         Donate to TecMint
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10775" id="menu-item-10775">
+        <a href="http://www.tecmint.com/submit-articles/" target="_blank">
+         Join TecMint
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-11736" id="menu-item-11736">
+        <a href="http://www.tecmint.com/linux-training/" target="_blank">
+         Linux Training
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11907" id="menu-item-11907">
+        <a href="http://www.tecmint.com/subscribe-to-blog/" target="_blank" title="Subscribe to Daily Updates">
+         Subscribe
+        </a>
+       </li>
+       <li class="hosting menu-item menu-item-type-custom menu-item-object-custom menu-item-13338" id="menu-item-13338">
+        <a href="http://www.tecmint.com/hostgator-discount-coupon/" title="Hostgator Hosting 25% OFF">
+         Hosting 25% OFF
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14519" id="menu-item-14519">
+        <a href="http://www.tecmint.com/job-search/">
+         Job Search
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="container">
+      <div class="container-inner">
+       <div class="toggle-search">
+        <i class="fa fa-search">
+        </i>
+       </div>
+       <div class="search-expand">
+        <div class="search-expand-inner">
+         <form action="http://www.tecmint.com/search/" id="cse-search-box">
+          <div>
+           <input name="cx" type="hidden" value="partner-pub-2601749019656699:2173448976"/>
+           <input name="cof" type="hidden" value="FORID:10"/>
+           <input name="ie" type="hidden" value="UTF-8"/>
+           <input class="search" name="q" size="20" type="text"/>
+           <input name="sa" type="submit" value="Search"/>
+          </div>
+         </form>
+         <script src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en" type="text/javascript">
+         </script>
+        </div>
+       </div>
+      </div>
+      <!--/.container-inner-->
+     </div>
+     <!--/.container-->
+    </nav>
+    <!--/#nav-topbar-->
+    <div class="container group">
+     <div class="container-inner">
+      <div class="group pad">
+       <p class="site-title">
+        <a href="http://www.tecmint.com/" rel="home">
+         <img alt="Tecmint: Linux Howtos, Tutorials &amp; Guides" src="/wp-content/themes/tecmint/images/logo.png"/>
+        </a>
+       </p>
+       <div id="header-ads">
+        <div class="widget widget_text" id="text-17">
+         <div class="textwidget">
+          <!-- Top Banner Ads 728x90 -->
+          <ins class="adsbygoogle" data-ad-client="ca-pub-2601749019656699" data-ad-slot="8210224606" style="display:inline-block;width:728px;height:90px">
+          </ins>
+          <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+         </div>
+        </div>
+       </div>
+       <!--/#header-ads-->
+      </div>
+      <nav class="nav-container group" id="nav-header">
+       <div class="nav-toggle">
+        <i class="fa fa-bars">
+        </i>
+       </div>
+       <div class="nav-text">
+        <!-- put your mobile menu text here -->
+       </div>
+       <div class="nav-wrap container" style="float:left">
+        <ul class="nav container-inner group" id="menu-header">
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10770" id="menu-item-10770">
+          <a href="http://www.tecmint.com/best-linux-distributions/">
+           Linux Distros
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10771" id="menu-item-10771">
+          <a href="http://www.tecmint.com/category/interview-questions/">
+           Interview Questions
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10772" id="menu-item-10772">
+          <a href="http://www.tecmint.com/category/bash-shell/" title="Learn Linux Shell Scripting">
+           Shell Scripting
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-10773" id="menu-item-10773">
+          <a href="http://www.tecmint.com/category/linux-commands/">
+           Linux Commands
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10443" id="menu-item-10443">
+          <a href="http://www.tecmint.com/category/lfcs/">
+           LFCS Exam
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10444" id="menu-item-10444">
+          <a href="http://www.tecmint.com/category/lfce/">
+           LFCE Exam
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11906" id="menu-item-11906">
+          <a href="http://www.tecmint.com/category/rhcsa/">
+           RHCSA Exam
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-has-children menu-item-12399" id="menu-item-12399">
+          <a href="http://www.tecmint.com/#">
+           Guides
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12400" id="menu-item-12400">
+            <a href="http://www.tecmint.com/create-lvm-storage-in-linux/">
+             LVM Series
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12402" id="menu-item-12402">
+            <a href="http://www.tecmint.com/understanding-raid-setup-in-linux/">
+             RAID Series
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12403" id="menu-item-12403">
+            <a href="http://www.tecmint.com/install-and-configure-kvm-in-linux/">
+             KVM Series
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12401" id="menu-item-12401">
+            <a href="http://www.tecmint.com/create-centralized-secure-storage-using-iscsi-targetin-linux/">
+             iSCSI Series
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12406" id="menu-item-12406">
+            <a href="http://www.tecmint.com/install-zentyal-as-primary-domain-controller-and-integrate-windows-system/">
+             Zentyal Series
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14603" id="menu-item-14603">
+            <a href="http://www.tecmint.com/create-gui-applications-in-linux/">
+             Create GUI Apps
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </div>
+       <div class="google-translator">
+        <div id="google_translate_element">
+        </div>
+        <script type="text/javascript">
+         function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL, multilanguagePage: true, gaTrack: true, gaId: 'UA-33207530-1'}, 'google_translate_element');}
+&lt;/script&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+					&lt;/nav&gt;&lt;!--/#nav-header--&gt;
+								
+			&lt;/div&gt;&lt;!--/.container-inner--&gt;
+		&lt;/div&gt;&lt;!--/.container--&gt;
+		
+	&lt;/header&gt;&lt;!--/#header--&gt;
+	
+	&lt;div class="container" id="page"&gt;
+		&lt;div class="container-inner"&gt;			
+			&lt;div class="main"&gt;
+				&lt;div class="main-inner group"&gt;
+&lt;section class="content"&gt;
+	
+	&lt;div class="page-title pad group"&gt;
+
+			&lt;ul class="meta-single group"&gt;
+			&lt;li class="category"&gt;&lt;a href="http://www.tecmint.com/category/linux-commands/" rel="category tag"&gt;Linux Commands&lt;/a&gt;&lt;/li&gt;
+						&lt;li class="comments"&gt;&lt;a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/#comments"&gt;&lt;i class="fa fa-comments-o"&gt;&lt;/i&gt;12&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+		
+	
+&lt;/div&gt;&lt;!--/.page-title--&gt;	
+	&lt;div class="pad group"&gt;
+		
+					&lt;article class="post-2014 post type-post status-publish format-standard has-post-thumbnail hentry category-linux-commands tag-linux-commands-2"&gt;	
+				&lt;div class="post-inner group"&gt;
+					
+					&lt;h1 class="post-title"&gt;10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories&lt;/h1&gt;
+					&lt;p class="post-byline"&gt;by &lt;a href="http://www.tecmint.com/author/admin/" title="Posts by Ravi Saive" rel="author"&gt;Ravi Saive&lt;/a&gt;    &lt;!-- if the post updated datetime is not equal to the post datetime, show the updated datetime --&gt;
+            Last Updated: January 3, 2015    &lt;/p&gt;
+					
+															&lt;div class="clear"&gt;&lt;/div&gt;
+					
+&lt;!-- Above Post Ads 468x15 --&gt;
+&lt;div class="add-box"&gt;
+&lt;ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:15px"
+     data-ad-client="ca-pub-2601749019656699"
+     data-ad-slot="1986283779"&gt;&lt;/ins&gt;
+&lt;script&gt;
+(adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+       </div>
+       <div class="clear">
+       </div>
+       <div id="exam_announcement">
+        Download Your Free eBooks NOW -
+        <a href="http://www.tecmint.com/10-useful-free-linux-ebooks-for-newbies-and-administrators/" style="color:#dd3333;font-weight:400; font-size:16px;" target="_blank">
+         10 Free Linux eBooks for Administrators
+        </a>
+        |
+        <a href="http://www.tecmint.com/free-linux-shell-scripting-books/" style="color:#e54e7e;font-weight:400; font-size:16px;" target="_blank">
+         4 Free Shell Scripting eBooks
+        </a>
+       </div>
+       <div class="clear">
+       </div>
+       <div class="ads-inner-mobile">
+        <center>
+         <!-- Post Inner Mobile Ads -->
+         <ins class="adsbygoogle" data-ad-client="ca-pub-2601749019656699" data-ad-slot="9946480174" style="display:inline-block;width:300px;height:250px">
+         </ins>
+         <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+         </script>
+        </center>
+       </div>
+       <div class="clear">
+       </div>
+       <div class="entry share">
+        <div class="entry-inner">
+         <p>
+          The Linux 
+          <strong>
+           du
+          </strong>
+           (
+          <strong>
+           Disk Usage
+          </strong>
+          ) is a standard
+          <strong>
+           Unix/Linux
+          </strong>
+          command, used to check the information of disk usage of files and directories on a machine. The
+          <strong>
+           du
+          </strong>
+          command has many parameter options that can be used to get the results in many formats. The
+          <strong>
+           du
+          </strong>
+          command also displays the files and directory sizes in a recursively manner.
+         </p>
+         <div class="wp-caption aligncenter" id="attachment_2016" style="width: 310px">
+          <a href="http://www.tecmint.com/10-useful-du-disk-usage-commands-to-find-disk-usage-of-files-and-directories/12-useful-du-commands/" rel="attachment wp-att-2016">
+           <img alt="Check Disk Usage In Linux" class="size-medium wp-image-2016" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/01/12-Useful-du-commands-300x215.png" height="215" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="300"/>
+           <noscript>
+            <img alt="Check Disk Usage In Linux" class="size-medium wp-image-2016" height="215" src="http://www.tecmint.com/wp-content/uploads/2013/01/12-Useful-du-commands-300x215.png" width="300"/>
+           </noscript>
+          </a>
+          <p class="wp-caption-text">
+           Check Disk Usage of Files and Folders In Linux
+          </p>
+         </div>
+         <p>
+          This article explains
+          <strong>
+           10 useful du commands
+          </strong>
+          with their examples, that might helps you to find out the sizes of files and directories in Linux. The information provided in this article are taken from the man pages of
+          <strong>
+           du
+          </strong>
+          command.
+         </p>
+         <p>
+          <strong>
+           Read Also:
+          </strong>
+         </p>
+         <ol>
+          <li>
+           <a href="http://www.tecmint.com/how-to-check-disk-space-in-linux/" target="_blank">
+            12 df Command to Check Linux System Disk Space
+           </a>
+          </li>
+         </ol>
+         <p>
+          1. To find out the disk usage summary of a
+          <strong>
+           /home/tecmint
+          </strong>
+          directory tree and each of its sub directories. Enter the command as:
+         </p>
+         <pre>
+          [root@tecmint]# du  /home/tecmint
+
+40      /home/tecmint/downloads
+4       /home/tecmint/.mozilla/plugins
+4       /home/tecmint/.mozilla/extensions
+12      /home/tecmint/.mozilla
+12      /home/tecmint/.ssh
+689112  /home/tecmint/Ubuntu-12.10
+689360  /home/tecmint
+         </pre>
+         <p>
+          The output of the above command displays the number of disk blocks in the
+          <strong>
+           /home/tecmint
+          </strong>
+          directory along with its sub-directories.
+         </p>
+         <p>
+          2. Using 
+          <strong>
+           -h
+          </strong>
+           option with 
+          <strong>
+           du
+          </strong>
+           command provides results in 
+          <strong>
+           Human Readable Format
+          </strong>
+          . Means you can see sizes in
+          <strong>
+           Bytes
+          </strong>
+          ,
+          <strong>
+           Kilobyte
+          </strong>
+          s,
+          <strong>
+           Megabytes
+          </strong>
+          ,
+          <strong>
+           Gigabytes
+          </strong>
+          etc.
+         </p>
+         <pre>
+          [root@tecmint]# du -h /home/tecmint
+
+40K     /home/tecmint/downloads
+4.0K    /home/tecmint/.mozilla/plugins
+4.0K    /home/tecmint/.mozilla/extensions
+12K     /home/tecmint/.mozilla
+12K     /home/tecmint/.ssh
+673M    /home/tecmint/Ubuntu-12.10
+674M    /home/tecmint
+         </pre>
+         <p>
+          3. To get the summary of a grand total disk usage size of an directory use the option 
+          <strong>
+           -s
+          </strong>
+           as follows.
+         </p>
+         <pre>
+          [root@tecmint]# du -sh /home/tecmint
+
+674M    /home/tecmint
+         </pre>
+         <p>
+          4. Using 
+          <strong>
+           -a
+          </strong>
+           flag with 
+          <strong>
+           du
+          </strong>
+           command displays the disk usage of all the files and directories.
+         </p>
+         <pre>
+          [root@tecmint]# du -a /home/tecmint
+
+4       /home/tecmint/.bash_logout
+12      /home/tecmint/downloads/uploadprogress-1.0.3.1.tgz
+24      /home/tecmint/downloads/Phpfiles-org.tar.bz2
+40      /home/tecmint/downloads
+12      /home/tecmint/uploadprogress-1.0.3.1.tgz
+4       /home/tecmint/.mozilla/plugins
+4       /home/tecmint/.mozilla/extensions
+12      /home/tecmint/.mozilla
+4       /home/tecmint/.bashrc
+689108  /home/tecmint/Ubuntu-12.10/ubuntu-12.10-server-i386.iso
+689112  /home/tecmint/Ubuntu-12.10
+689360  /home/tecmint
+         </pre>
+         <p>
+          5. Using 
+          <strong>
+           -a
+          </strong>
+           flag along with 
+          <strong>
+           -h
+          </strong>
+           displays disk usage of all files and folders in human readeable format. The below output is more easy to understand as it shows the files in
+          <strong>
+           Kilobytes
+          </strong>
+          ,
+          <strong>
+           Megabytes
+          </strong>
+          etc.
+         </p>
+         <pre>
+          [root@tecmint]# du -ah /home/tecmint
+
+4.0K    /home/tecmint/.bash_logout
+12K     /home/tecmint/downloads/uploadprogress-1.0.3.1.tgz
+24K     /home/tecmint/downloads/Phpfiles-org.tar.bz2
+40K     /home/tecmint/downloads
+12K     /home/tecmint/uploadprogress-1.0.3.1.tgz
+4.0K    /home/tecmint/.mozilla/plugins
+4.0K    /home/tecmint/.mozilla/extensions
+12K     /home/tecmint/.mozilla
+4.0K    /home/tecmint/.bashrc
+673M    /home/tecmint/Ubuntu-12.10/ubuntu-12.10-server-i386.iso
+673M    /home/tecmint/Ubuntu-12.10
+674M    /home/tecmint
+         </pre>
+         <p>
+          6. Find out the disk usage of a directory tree with its subtress in
+          <strong>
+           Kilobyte
+          </strong>
+          blcoks. Use the 
+          <strong>
+           -k
+          </strong>
+           (displays size in
+          <strong>
+           1024
+          </strong>
+          bytes units).
+         </p>
+         <pre>
+          [root@tecmint]# du -k /home/tecmint
+40      /home/tecmint/downloads
+4       /home/tecmint/.mozilla/plugins
+4       /home/tecmint/.mozilla/extensions
+12      /home/tecmint/.mozilla
+12      /home/tecmint/.ssh
+689112  /home/tecmint/Ubuntu-12.10
+689360  /home/tecmint
+         </pre>
+         <p>
+          7. To get the summary of disk usage of directory tree along with its subtrees in
+          <strong>
+           Megabytes
+          </strong>
+          (
+          <strong>
+           MB
+          </strong>
+          ) only. Use the option 
+          <strong>
+           -mh
+          </strong>
+           as follows. The 
+          <strong>
+           -m
+          </strong>
+           flag counts the blocks in
+          <strong>
+           MB
+          </strong>
+          units and 
+          <strong>
+           -h
+          </strong>
+           stands for human readable format.
+         </p>
+         <pre>
+          [root@tecmint]# du -mh /home/tecmint
+
+40K     /home/tecmint/downloads
+4.0K    /home/tecmint/.mozilla/plugins
+4.0K    /home/tecmint/.mozilla/extensions
+12K     /home/tecmint/.mozilla
+12K     /home/tecmint/.ssh
+673M    /home/tecmint/Ubuntu-12.10
+674M    /home/tecmint
+         </pre>
+         <p>
+          8. The 
+          <strong>
+           -c
+          </strong>
+           flag provides a grand total usage disk space at the last line. If your directory taken
+          <strong>
+           674MB
+          </strong>
+          space, then the last last two line of the output would be.
+         </p>
+         <pre>
+          [root@tecmint]# du -ch /home/tecmint
+
+40K     /home/tecmint/downloads
+4.0K    /home/tecmint/.mozilla/plugins
+4.0K    /home/tecmint/.mozilla/extensions
+12K     /home/tecmint/.mozilla
+12K     /home/tecmint/.ssh
+673M    /home/tecmint/Ubuntu-12.10
+          <strong>
+           674M    /home/tecmint
+          </strong>
+          <strong>
+           674M    total
+          </strong>
+         </pre>
+         <p>
+          9. The below command calculates and displays the disk usage of all files and directories, but excludes the files that matches given pattern. The below command excludes the 
+          <strong>
+           .txt
+          </strong>
+           files while calculating the total size of diretory. So, this way you can exclude any file formats by using flag 
+          <strong>
+           -exclude
+          </strong>
+          . See the output there is no
+          <strong>
+           txt
+          </strong>
+          files entry.
+         </p>
+         <pre>
+          [root@tecmint]# du -ah --exclude="*.txt" /home/tecmint
+
+4.0K    /home/tecmint/.bash_logout
+12K     /home/tecmint/downloads/uploadprogress-1.0.3.1.tgz
+24K     /home/tecmint/downloads/Phpfiles-org.tar.bz2
+40K     /home/tecmint/downloads
+12K     /home/tecmint/uploadprogress-1.0.3.1.tgz
+4.0K    /home/tecmint/.bash_history
+4.0K    /home/tecmint/.bash_profile
+4.0K    /home/tecmint/.mozilla/plugins
+4.0K    /home/tecmint/.mozilla/extensions
+12K     /home/tecmint/.mozilla
+4.0K    /home/tecmint/.bashrc
+24K     /home/tecmint/Phpfiles-org.tar.bz2
+4.0K    /home/tecmint/geoipupdate.sh
+4.0K    /home/tecmint/.zshrc
+120K    /home/tecmint/goaccess-0.4.2.tar.gz.1
+673M    /home/tecmint/Ubuntu-12.10/ubuntu-12.10-server-i386.iso
+673M    /home/tecmint/Ubuntu-12.10
+674M    /home/tecmint
+         </pre>
+         <p>
+          10. Display the disk usage based on modification of time, use the flag 
+          <strong>
+           time
+          </strong>
+           as shown below.
+         </p>
+         <pre>
+          [root@tecmint]# du -ha --time /home/tecmint
+
+4.0K    2012-10-12 22:32        /home/tecmint/.bash_logout
+12K     2013-01-19 18:48        /home/tecmint/downloads/uploadprogress-1.0.3.1.tgz
+24K     2013-01-19 18:48        /home/tecmint/downloads/Phpfiles-org.tar.bz2
+40K     2013-01-19 18:48        /home/tecmint/downloads
+12K     2013-01-19 18:32        /home/tecmint/uploadprogress-1.0.3.1.tgz
+4.0K    2012-10-13 00:11        /home/tecmint/.bash_history
+4.0K    2012-10-12 22:32        /home/tecmint/.bash_profile
+0       2013-01-19 18:32        /home/tecmint/xyz.txt
+0       2013-01-19 18:32        /home/tecmint/abc.txt
+4.0K    2012-10-12 22:32        /home/tecmint/.mozilla/plugins
+4.0K    2012-10-12 22:32        /home/tecmint/.mozilla/extensions
+12K     2012-10-12 22:32        /home/tecmint/.mozilla
+4.0K    2012-10-12 22:32        /home/tecmint/.bashrc
+24K     2013-01-19 18:32        /home/tecmint/Phpfiles-org.tar.bz2
+4.0K    2013-01-19 18:32        /home/tecmint/geoipupdate.sh
+4.0K    2012-10-12 22:32        /home/tecmint/.zshrc
+120K    2013-01-19 18:32        /home/tecmint/goaccess-0.4.2.tar.gz.1
+673M    2013-01-19 18:51        /home/tecmint/Ubuntu-12.10/ubuntu-12.10-server-i386.iso
+673M    2013-01-19 18:51        /home/tecmint/Ubuntu-12.10
+674M    2013-01-19 18:52        /home/tecmint
+         </pre>
+         <p>
+          <strong>
+           Read Also :
+          </strong>
+         </p>
+         <ol>
+          <li>
+           <a href="http://www.tecmint.com/fdisk-commands-to-manage-linux-disk-partitions/" target="_blank">
+            10 fdisk Commands to Manage Linux Disk Partitions
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tecmint.com/how-to-check-disk-space-in-linux/" target="_blank">
+            12 Useful df Commands to Check Disk Space in Linux
+           </a>
+          </li>
+         </ol>
+        </div>
+        <div class="sharrre-container">
+         <span>
+          Share
+         </span>
+         <div data-text="10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories" data-title="Tweet" data-url="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/" id="twitter">
+         </div>
+         <div data-text="10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories" data-title="Like" data-url="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/" id="facebook">
+         </div>
+         <div data-text="10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories" data-title="+1" data-url="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/" id="googleplus">
+         </div>
+         <div data-text="10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories" data-title="Share It" data-url="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/" id="linkedin">
+         </div>
+         <div style="text-align:center;font-weight:600;padding-top:5px;">
+          <a href="#comments">
+           <i class="fa fa-comments-o">
+           </i>
+          </a>
+          <a class="comments-link" href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/#comments">
+           12
+           <span style="font-size:10px;color:#2776c6;margin-top:-8px;">
+            comments
+           </span>
+          </a>
+         </div>
+        </div>
+        <!--/.sharrre-container-->
+        <script type="text/javascript">
+         // Sharrre
+	jQuery(document).ready(function(){
+		jQuery('#twitter').sharrre({
+			share: {
+				twitter: true
+			},
+			template: '&lt;a class="box" href="#"&gt;&lt;div class="count" href="#"&gt;{total}&lt;/div&gt;&lt;div class="share"&gt;&lt;i class="fa fa-twitter"&gt;&lt;/i&gt;&lt;/div&gt;&lt;/a&gt;',
+			enableHover: false,
+			enableTracking: true,
+			buttons: { twitter: {via: 'tecmint'}},
+			click: function(api, options){
+				api.simulateClick();
+				api.openPopup('twitter');
+			}
+		});
+		jQuery('#facebook').sharrre({
+			share: {
+				facebook: true
+			},
+			template: '&lt;a class="box" href="#"&gt;&lt;div class="count" href="#"&gt;{total}&lt;/div&gt;&lt;div class="share"&gt;&lt;i class="fa fa-facebook-square"&gt;&lt;/i&gt;&lt;/div&gt;&lt;/a&gt;',
+			enableHover: false,
+			enableTracking: true,
+			click: function(api, options){
+				api.simulateClick();
+				api.openPopup('facebook');
+			}
+		});
+		jQuery('#googleplus').sharrre({
+			share: {
+				googlePlus: true
+			},
+			template: '&lt;a class="box" href="#"&gt;&lt;div class="count" href="#"&gt;{total}&lt;/div&gt;&lt;div class="share"&gt;&lt;i class="fa fa-google-plus-square"&gt;&lt;/i&gt;&lt;/div&gt;&lt;/a&gt;',
+			enableHover: false,
+			enableTracking: true,
+			urlCurl: 'http://www.tecmint.com/wp-content/themes/tecmint/js/sharrre.php',
+			click: function(api, options){
+				api.simulateClick();
+				api.openPopup('googlePlus');
+			}
+		});
+
+jQuery('#linkedin').sharrre({
+			share: {
+				linkedin: true
+			},
+			template: '&lt;a class="box" href="#" rel="nofollow"&gt;&lt;div class="count" href="#"&gt;{total}&lt;/div&gt;&lt;div class="share"&gt;&lt;i class="fa fa-linkedin"&gt;&lt;/i&gt;&lt;/div&gt;&lt;/a&gt;',
+			enableHover: false,
+			enableTracking: true,
+			buttons: {
+			linkedin: {
+				description: '10 Useful du (Disk Usage) Commands to Find Disk Usage of Files and Directories',media: 'http://www.tecmint.com/wp-content/uploads/2013/01/du-Command-to-checkdisk-Usage-of-files-Directories.jpg'				}
+			},
+			click: function(api, options){
+				api.simulateClick();
+				api.openPopup('linkedin');
+			}
+		});
+
+
+				
+				
+			// Scrollable sharrre bar, contributed by Erik Frye. Awesome!
+			var shareContainer = jQuery(".sharrre-container"),
+			header = jQuery('#header'),
+			postEntry = jQuery('.entry'),
+			$window = jQuery(window),
+			distanceFromTop = 20,
+			startSharePosition = shareContainer.offset(),
+			contentBottom = postEntry.offset().top + postEntry.outerHeight(),
+			topOfTemplate = header.offset().top;
+			getTopSpacing();
+
+			shareScroll = function(){
+				if($window.width() &gt; 719){	
+					var scrollTop = $window.scrollTop() + topOfTemplate,
+					stopLocation = contentBottom - (shareContainer.outerHeight() + topSpacing);
+					if(scrollTop &gt; stopLocation){
+						shareContainer.offset({top: contentBottom - shareContainer.outerHeight(),left: startSharePosition.left});
+					}
+					else if(scrollTop &gt;= postEntry.offset().top-topSpacing){
+						shareContainer.offset({top: scrollTop + topSpacing, left: startSharePosition.left});
+					}else if(scrollTop &lt; startSharePosition.top+(topSpacing-1)){
+						shareContainer.offset({top: startSharePosition.top,left:startSharePosition.left});
+					}
+				}
+			},
+
+			shareMove = function(){
+				startSharePosition = shareContainer.offset();
+				contentBottom = postEntry.offset().top + postEntry.outerHeight();
+				topOfTemplate = header.offset().top;
+				getTopSpacing();
+			};
+
+			/* As new images load the page content body gets longer. The bottom of the content area needs to be adjusted in case images are still loading. */
+			setTimeout(function() {
+				contentBottom = postEntry.offset().top + postEntry.outerHeight();
+			}, 2000);
+
+			if (window.addEventListener) {
+				window.addEventListener('scroll', shareScroll, false);
+				window.addEventListener('resize', shareMove, false);
+			} else if (window.attachEvent) {
+				window.attachEvent('onscroll', shareScroll);
+				window.attachEvent('onresize', shareMove);
+			}
+
+			function getTopSpacing(){
+				if($window.width() &gt; 1024)
+					topSpacing = distanceFromTop + jQuery('.nav-wrap').outerHeight();
+				else
+					topSpacing = distanceFromTop;
+			}
+				
+	});
+        </script>
+        <div class="clear">
+        </div>
+       </div>
+       <!--/.entry-->
+      </nav>
+     </div>
+     <!--/.post-inner-->
+     <!--/.post-->
+     <div class="clear">
+     </div>
+     <div class="clear">
+     </div>
+     <div class="ads-inner-mobile">
+      <center style="padding-top:30px;">
+       <!-- Post-Bottom-Inner-300x250 -->
+       <ins class="adsbygoogle" data-ad-client="ca-pub-2601749019656699" data-ad-slot="7807254572" style="display:inline-block;width:300px;height:250px">
+       </ins>
+       <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+       </script>
+      </center>
+     </div>
+     <div class="clear">
+     </div>
+     <div class="forum">
+      <p>
+       If you have any questions or problems regarding this article?
+       <a href="http://linuxsay.com" onclick="ga('send','event','Linuxsay Discussion Forum','linuxsay.com')" target="_blank">
+        JOIN THE DISCUSSION
+       </a>
+      </p>
+     </div>
+     <div class="clear">
+     </div>
+     <p class="post-tags">
+      <span>
+       Tags:
+      </span>
+      <a href="http://www.tecmint.com/tag/linux-commands-2/" rel="tag">
+       linux commands
+      </a>
+     </p>
+     <div class="author-bio">
+      <div class="bio-avatar">
+       <img alt="" class="avatar avatar-128 photo" data-lazy-src="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=128&amp;d=blank&amp;r=g" height="128" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=256&amp;d=blank&amp;r=g 2x" width="128"/>
+       <noscript>
+        <img alt="" class="avatar avatar-128 photo" height="128" src="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=128&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=256&amp;d=blank&amp;r=g 2x" width="128"/>
+       </noscript>
+      </div>
+      <p style="float:right; font-weight:600;">
+       <a class="author-link" href="http://www.tecmint.com/author/admin/" rel="author" target="_blank">
+        View all Posts
+       </a>
+      </p>
+      <p class="bio-name">
+       Ravi Saive
+      </p>
+      <p class="bio-desc">
+       Simple Word a Computer Geek and Linux Guru who loves to share tricks and tips on Internet. Most Of My Servers runs on Open Source Platform called Linux.
+      </p>
+      <div class="clear">
+      </div>
+     </div>
+     <div id="exam_announcement">
+      <span style="color:#F75D59;font-weight:400; font-size:18px;">
+       Receive Your Free Complimentary eBook NOW!
+      </span>
+      -
+      <span style="color:#2776c6;font-weight:600; font-size:18px; text-decoration:underline;">
+       <script type="text/javascript">
+        var total_images = 9;
+var random_number = Math.floor((Math.random()*total_images));
+var random_img = new Array();
+random_img[0] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_mach01/prgm.cgi"&gt;Introduction to Linux - A Hands on Guide&lt;/a&gt;';
+random_img[1] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_oreb01/prgm.cgi"&gt;Linux Kernel In A Nutshell - Configuration and Building&lt;/a&gt;';
+random_img[2] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_linu02/prgm.cgi"&gt;Beyond Linux From Scratch - Version 6.3&lt;/a&gt;';
+random_img[3] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_make184/prgm.cgi"&gt;Can You Run It On Linux? 10 Vital Apps You Will Want When You Switch&lt;/a&gt;';
+random_img[4] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_make180/prgm.cgi"&gt;4 Promising Linux Distros To Look Forward To In 2015&lt;/a&gt;';
+random_img[5] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_opeb01/prgm.cgi"&gt;Securing &amp; Optimizing Linux: The Hacking Solution (v.3.0)&lt;/a&gt;';
+random_img[6] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_infk03/prgm.cgi"&gt;Self-Service Linux: Mastering the Art of Problem Determination&lt;/a&gt;';
+random_img[7] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_infk10/prgm.cgi"&gt;Understanding the Linux Virtual Memory Manager&lt;/a&gt;';
+random_img[8] = '&lt;a target="_blank" rel="nofollow" href="http://tecmint.tradepub.com/free/w_ubub01/prgm.cgi"&gt;Ubuntu Documentation: Ubuntu Server Guide 2014&lt;/a&gt;';
+document.write(random_img[random_number]);
+       </script>
+      </span>
+     </div>
+     <div class="hr">
+     </div>
+     <div class="freebooks">
+      <center>
+       <h1 style="padding-bottom:15px;font-size:25px;">
+        Download Free Linux eBooks
+       </h1>
+      </center>
+      <div class="grid one-fourth">
+       <a href="http://tecmint.tradepub.com/free/w_advb01/prgm.cgi" onclick="ga('send','event','Advance-Bash-Scripting','tecmint.tradepub.com')" rel="nofollow" target="_blank">
+        <img alt="Advanced Bash-Scripting Guide" src="http://img.tradepub.com/free/w_advb01/images/w_advb01c4.gif" title="Advanced Bash-Scripting Guide"/>
+       </a>
+      </div>
+      <div class="grid one-fourth">
+       <a href="http://tecmint.tradepub.com/free/w_wile13/prgm.cgi" onclick="ga('send','event','Linux-Bible','tecmint.tradepub.com')" rel="nofollow" target="_blank">
+        <img alt="Linux Bible" src="http://img.tradepub.com/free/w_wile13/images/w_wile13c4.gif" title="Linux Bible"/>
+       </a>
+      </div>
+      <div class="grid one-fourth">
+       <a href="http://tecmint.tradepub.com/free/w_make07/prgm.cgi" onclick="ga('send','event','Linux-Newbies-Guide','tecmint.tradepub.com')" rel="nofollow" target="_blank">
+        <img alt="A Newbie's Getting Started Guide to Linux" src="http://img.tradepub.com/free/w_make07/images/w_make07c4.gif" title="A Newbie's Getting Started Guide to Linux"/>
+       </a>
+      </div>
+      <div class="grid one-fourth last">
+       <a href="http://tecmint.tradepub.com/free/w_wile11/prgm.cgi" onclick="ga('send','event','Ubuntu-Linux-Toolbox','tecmint.tradepub.com')" rel="nofollow" target="_blank">
+        <img alt="Ubuntu Linux Toolbox: 1000+ Commands" src="http://img.tradepub.com/free/w_wile11/images/w_wile11c4.gif" title="Ubuntu Linux Toolbox: 1000+ Commands"/>
+       </a>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+     <ul class="post-nav group">
+      <li class="next">
+       <a href="http://www.tecmint.com/fedora-18-installation-guide/" rel="next">
+        <i class="fa fa-chevron-right">
+        </i>
+        <strong>
+         Next story
+        </strong>
+        <span>
+         Fedora 18 (Spherical Cow) Basic Installation Guide with Screenshots
+        </span>
+       </a>
+      </li>
+      <li class="previous">
+       <a href="http://www.tecmint.com/password-protect-grub-in-linux/" rel="prev">
+        <i class="fa fa-chevron-left">
+        </i>
+        <strong>
+         Previous story
+        </strong>
+        <span>
+         How to Protect GRUB with Password in RHEL / CentOS / Fedora Linux
+        </span>
+       </a>
+      </li>
+     </ul>
+     <h4 class="heading">
+      <i class="fa fa-hand-o-right">
+      </i>
+      You may also like...
+     </h4>
+     <ul class="related-posts group">
+      <li class="related post-hover">
+       <article class="post-4393 post type-post status-publish format-standard has-post-thumbnail hentry category-linux-commands">
+        <div class="post-thumbnail">
+         <a href="http://www.tecmint.com/rename-multiple-files-in-linux/" title="Rename  A Command Line Tool For Renaming Multiple Files in Linux">
+          <img alt="Rename Multiple Files in Linux" class="attachment-thumb-medium wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/10/Rename-Multiple-Files-in-Linux-520x245.jpg" height="245" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="520"/>
+          <noscript>
+           <img alt="Rename Multiple Files in Linux" class="attachment-thumb-medium wp-post-image" height="245" src="http://www.tecmint.com/wp-content/uploads/2013/10/Rename-Multiple-Files-in-Linux-520x245.jpg" width="520"/>
+          </noscript>
+         </a>
+         <a class="post-comments" href="http://www.tecmint.com/rename-multiple-files-in-linux/#comments">
+          <span>
+           <i class="fa fa-comments-o">
+           </i>
+           33
+          </span>
+         </a>
+        </div>
+        <!--/.post-thumbnail-->
+        <div class="related-inner">
+         <h4 class="post-title">
+          <a href="http://www.tecmint.com/rename-multiple-files-in-linux/" rel="bookmark" title="Rename  A Command Line Tool For Renaming Multiple Files in Linux">
+           Rename  A Command Line Tool For Renaming Multiple Files in Linux
+          </a>
+         </h4>
+         <!--/.post-title-->
+         <div class="post-meta group">
+          <p class="post-date">
+           10 Oct, 2013
+          </p>
+         </div>
+         <!--/.post-meta-->
+        </div>
+        <!--/.related-inner-->
+       </article>
+      </li>
+      <!--/.related-->
+      <li class="related post-hover">
+       <article class="post-3046 post type-post status-publish format-standard has-post-thumbnail hentry category-linux-commands">
+        <div class="post-thumbnail">
+         <a href="http://www.tecmint.com/20-advanced-commands-for-middle-level-linux-users/" title="20 Advanced Commands for Middle Level Linux Users">
+          <img alt="Advance Commands for Linux Admin" class="attachment-thumb-medium wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/05/Advanced-Commands-For-Linux-Users-520x245.jpg" height="245" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="520"/>
+          <noscript>
+           <img alt="Advance Commands for Linux Admin" class="attachment-thumb-medium wp-post-image" height="245" src="http://www.tecmint.com/wp-content/uploads/2013/05/Advanced-Commands-For-Linux-Users-520x245.jpg" width="520"/>
+          </noscript>
+         </a>
+         <a class="post-comments" href="http://www.tecmint.com/20-advanced-commands-for-middle-level-linux-users/#comments">
+          <span>
+           <i class="fa fa-comments-o">
+           </i>
+           48
+          </span>
+         </a>
+        </div>
+        <!--/.post-thumbnail-->
+        <div class="related-inner">
+         <h4 class="post-title">
+          <a href="http://www.tecmint.com/20-advanced-commands-for-middle-level-linux-users/" rel="bookmark" title="20 Advanced Commands for Middle Level Linux Users">
+           20 Advanced Commands for Middle Level Linux Users
+          </a>
+         </h4>
+         <!--/.post-title-->
+         <div class="post-meta group">
+          <p class="post-date">
+           23 May, 2013
+          </p>
+         </div>
+         <!--/.post-meta-->
+        </div>
+        <!--/.related-inner-->
+       </article>
+      </li>
+      <!--/.related-->
+      <li class="related post-hover">
+       <article class="post-3437 post type-post status-publish format-standard has-post-thumbnail hentry category-bash-shell category-linux-commands">
+        <div class="post-thumbnail">
+         <a href="http://www.tecmint.com/understand-linux-shell-and-basic-shell-scripting-language-tips/" title="Understand Linux Shell and Basic Shell Scripting Language Tips  Part I">
+          <img alt="Learn Shell Scripting" class="attachment-thumb-medium wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/07/Learn-Shell-Scripting-Part-1-520x245.jpg" height="245" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="520"/>
+          <noscript>
+           <img alt="Learn Shell Scripting" class="attachment-thumb-medium wp-post-image" height="245" src="http://www.tecmint.com/wp-content/uploads/2013/07/Learn-Shell-Scripting-Part-1-520x245.jpg" width="520"/>
+          </noscript>
+         </a>
+         <a class="post-comments" href="http://www.tecmint.com/understand-linux-shell-and-basic-shell-scripting-language-tips/#comments">
+          <span>
+           <i class="fa fa-comments-o">
+           </i>
+           69
+          </span>
+         </a>
+        </div>
+        <!--/.post-thumbnail-->
+        <div class="related-inner">
+         <h4 class="post-title">
+          <a href="http://www.tecmint.com/understand-linux-shell-and-basic-shell-scripting-language-tips/" rel="bookmark" title="Understand Linux Shell and Basic Shell Scripting Language Tips  Part I">
+           Understand Linux Shell and Basic Shell Scripting Language Tips  Part I
+          </a>
+         </h4>
+         <!--/.post-title-->
+         <div class="post-meta group">
+          <p class="post-date">
+           12 Jul, 2013
+          </p>
+         </div>
+         <!--/.post-meta-->
+        </div>
+        <!--/.related-inner-->
+       </article>
+      </li>
+      <!--/.related-->
+     </ul>
+     <!--/.post-related-->
+     <section class="themeform" id="comments">
+      <h3 class="heading">
+       12 Responses
+      </h3>
+      <ul class="comment-tabs group">
+       <li class="active">
+        <a href="#commentlist-container">
+         <i class="fa fa-comments-o">
+         </i>
+         Comments
+         <span>
+          12
+         </span>
+        </a>
+       </li>
+       <li>
+        <a href="#pinglist-container">
+         <i class="fa fa-share">
+         </i>
+         Pingbacks
+         <span>
+          0
+         </span>
+        </a>
+       </li>
+      </ul>
+      <div class="comment-tab" id="commentlist-container">
+       <ol class="commentlist">
+        <li class="comment even thread-even depth-1" id="comment-550773">
+         <div class="comment-body" id="div-comment-550773">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/d87678d387fb9c348019319d17b23458?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/d87678d387fb9c348019319d17b23458?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/d87678d387fb9c348019319d17b23458?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/d87678d387fb9c348019319d17b23458?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            Shgy
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-550773">
+            April 24, 2015 at 11:23 am
+           </a>
+          </div>
+          <p>
+           Thanks.. Its really useful
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Shgy" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=550773#respond" onclick='return addComment.moveForm( "div-comment-550773", "550773", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-395897">
+         <div class="comment-body" id="div-comment-395897">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://2.gravatar.com/avatar/bf7c16015ea31826f78f00070924b007?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://2.gravatar.com/avatar/bf7c16015ea31826f78f00070924b007?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://2.gravatar.com/avatar/bf7c16015ea31826f78f00070924b007?s=96&amp;d=blank&amp;r=g" srcset="http://2.gravatar.com/avatar/bf7c16015ea31826f78f00070924b007?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            Akash
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-395897">
+            December 6, 2014 at 3:23 pm
+           </a>
+          </div>
+          <p>
+           thanks a ton :)
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Akash" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=395897#respond" onclick='return addComment.moveForm( "div-comment-395897", "395897", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="comment-222382">
+         <div class="comment-body" id="div-comment-222382">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/7a0469b48f91d011f944f0ed8b9413aa?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/7a0469b48f91d011f944f0ed8b9413aa?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/7a0469b48f91d011f944f0ed8b9413aa?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/7a0469b48f91d011f944f0ed8b9413aa?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            Koti
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-222382">
+            July 24, 2014 at 10:58 am
+           </a>
+          </div>
+          <p>
+           Helpful
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Koti" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=222382#respond" onclick='return addComment.moveForm( "div-comment-222382", "222382", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-166598">
+         <div class="comment-body" id="div-comment-166598">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/9b8a7e0f3c8f4f50b0a84cd1a0fb7a3b?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/9b8a7e0f3c8f4f50b0a84cd1a0fb7a3b?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/9b8a7e0f3c8f4f50b0a84cd1a0fb7a3b?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/9b8a7e0f3c8f4f50b0a84cd1a0fb7a3b?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            Manoj
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-166598">
+            May 20, 2014 at 12:01 am
+           </a>
+          </div>
+          <p>
+           Hi Ravi,
+          </p>
+          <p>
+           Can you please help me with a command which can provide the Disk I/O Limit.
+          </p>
+          <p>
+           Please Note that, i am asking for the Disk I/O limit not the current io rate given by iostat.
+          </p>
+          <p>
+           Regards,
+           <br/>
+           Manoj Rana
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Manoj" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=166598#respond" onclick='return addComment.moveForm( "div-comment-166598", "166598", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="comment-154048">
+         <div class="comment-body" id="div-comment-154048">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/a8bd610b8b52883a0a068a92e210e6f1?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/a8bd610b8b52883a0a068a92e210e6f1?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/a8bd610b8b52883a0a068a92e210e6f1?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/a8bd610b8b52883a0a068a92e210e6f1?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            <a class="url" href="http://financialjerk.com/" rel="external nofollow">
+             Finch
+            </a>
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-154048">
+            April 27, 2014 at 10:34 am
+           </a>
+          </div>
+          <p>
+           very handy. this helped me free up my disk space.
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Finch" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=154048#respond" onclick='return addComment.moveForm( "div-comment-154048", "154048", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="comment-151870">
+         <div class="comment-body" id="div-comment-151870">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/69f231e5f0c160527c6fa7bc9c2fdd54?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/69f231e5f0c160527c6fa7bc9c2fdd54?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/69f231e5f0c160527c6fa7bc9c2fdd54?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/69f231e5f0c160527c6fa7bc9c2fdd54?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            <a class="url" href="http://cheapwebhosting.lk" rel="external nofollow">
+             zamaan
+            </a>
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-151870">
+            April 22, 2014 at 1:44 pm
+           </a>
+          </div>
+          <p>
+           helpful tips. thank you.
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to zamaan" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=151870#respond" onclick='return addComment.moveForm( "div-comment-151870", "151870", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="comment-134839">
+         <div class="comment-body" id="div-comment-134839">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/49633bedb050fc0741ada12cdd0f4ead?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/49633bedb050fc0741ada12cdd0f4ead?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/49633bedb050fc0741ada12cdd0f4ead?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/49633bedb050fc0741ada12cdd0f4ead?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            Yolanda
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-134839">
+            March 12, 2014 at 7:23 pm
+           </a>
+          </div>
+          <p>
+           Thank you for this. It is very helpful to me! I appreciate you sharing your knowledge.
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Yolanda" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=134839#respond" onclick='return addComment.moveForm( "div-comment-134839", "134839", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1 parent" id="comment-118585">
+         <div class="comment-body" id="div-comment-118585">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/1ae1ae230b48643c31f2493acff0e2e4?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/1ae1ae230b48643c31f2493acff0e2e4?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/1ae1ae230b48643c31f2493acff0e2e4?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/1ae1ae230b48643c31f2493acff0e2e4?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            dt64
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-118585">
+            February 4, 2014 at 5:43 am
+           </a>
+          </div>
+          <p>
+           another nice option I found very handsome:
+          </p>
+          <p>
+           du -h max-depth=1
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to dt64" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=118585#respond" onclick='return addComment.moveForm( "div-comment-118585", "118585", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment even depth-2" id="comment-133261">
+           <div class="comment-body" id="div-comment-133261">
+            <div class="comment-author vcard">
+             <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/69cb06fb3df632b7acc34c73ecd37f46?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/69cb06fb3df632b7acc34c73ecd37f46?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+             <noscript>
+              <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/69cb06fb3df632b7acc34c73ecd37f46?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/69cb06fb3df632b7acc34c73ecd37f46?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+             </noscript>
+             <cite class="fn">
+              Rondinelli
+             </cite>
+             <span class="says">
+              says:
+             </span>
+            </div>
+            <div class="comment-meta commentmetadata">
+             <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-133261">
+              March 9, 2014 at 8:14 pm
+             </a>
+            </div>
+            <p>
+             yeah :)
+            </p>
+            <div class="reply">
+             <a aria-label="Reply to Rondinelli" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=133261#respond" onclick='return addComment.moveForm( "div-comment-133261", "133261", "respond", "2014" )'>
+              Reply
+             </a>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-even depth-1" id="comment-87610">
+         <div class="comment-body" id="div-comment-87610">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/6bdcda2d02ac08933d5b8984d432e1e7?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/6bdcda2d02ac08933d5b8984d432e1e7?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/6bdcda2d02ac08933d5b8984d432e1e7?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/6bdcda2d02ac08933d5b8984d432e1e7?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            luis
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-87610">
+            December 18, 2013 at 8:17 pm
+           </a>
+          </div>
+          <p>
+           thanks this is what i was looking for.
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to luis" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=87610#respond" onclick='return addComment.moveForm( "div-comment-87610", "87610", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-odd thread-alt depth-1 parent" id="comment-22667">
+         <div class="comment-body" id="div-comment-22667">
+          <div class="comment-author vcard">
+           <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/0e0e9e24dbbc45b788b93a9b22ef7a3c?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/0e0e9e24dbbc45b788b93a9b22ef7a3c?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           <noscript>
+            <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/0e0e9e24dbbc45b788b93a9b22ef7a3c?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/0e0e9e24dbbc45b788b93a9b22ef7a3c?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+           </noscript>
+           <cite class="fn">
+            <a class="url" href="http://www.itoctopus.com" rel="external nofollow">
+             Fadi El-Eter
+            </a>
+           </cite>
+           <span class="says">
+            says:
+           </span>
+          </div>
+          <div class="comment-meta commentmetadata">
+           <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-22667">
+            January 23, 2013 at 5:20 pm
+           </a>
+          </div>
+          <p>
+           Is there a way to only include certain types of files.
+          </p>
+          <p>
+           For example, something like:
+          </p>
+          <p>
+           du -ah include=*.php /home/tecmint
+          </p>
+          <p>
+           PS: Thats a very helpful post  thanks for sharing!
+          </p>
+          <div class="reply">
+           <a aria-label="Reply to Fadi El-Eter" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=22667#respond" onclick='return addComment.moveForm( "div-comment-22667", "22667", "respond", "2014" )'>
+            Reply
+           </a>
+          </div>
+         </div>
+         <ul class="children">
+          <li class="comment odd alt depth-2" id="comment-277481">
+           <div class="comment-body" id="div-comment-277481">
+            <div class="comment-author vcard">
+             <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://2.gravatar.com/avatar/5f4f53fa89969c75bd91c8e08ca4c664?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://2.gravatar.com/avatar/5f4f53fa89969c75bd91c8e08ca4c664?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+             <noscript>
+              <img alt="" class="avatar avatar-96 photo" height="96" src="http://2.gravatar.com/avatar/5f4f53fa89969c75bd91c8e08ca4c664?s=96&amp;d=blank&amp;r=g" srcset="http://2.gravatar.com/avatar/5f4f53fa89969c75bd91c8e08ca4c664?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+             </noscript>
+             <cite class="fn">
+              Nate
+             </cite>
+             <span class="says">
+              says:
+             </span>
+            </div>
+            <div class="comment-meta commentmetadata">
+             <a href="http://www.tecmint.com/check-linux-disk-usage-of-files-and-directories/comment-page-1/#comment-277481">
+              September 19, 2014 at 1:38 am
+             </a>
+            </div>
+            <p>
+             You can run any command that gives you results in linux/unix by piping it through a grep command.  So all you need to accomplish your task is something simple like du -ah | grep php.  It would not accomplish your task perfectly since you would get files with php in the name as well but you would dig up all the .php files.
+            </p>
+            <div class="reply">
+             <a aria-label="Reply to Nate" class="comment-reply-link" href="/check-linux-disk-usage-of-files-and-directories/?replytocom=277481#respond" onclick='return addComment.moveForm( "div-comment-277481", "277481", "respond", "2014" )'>
+              Reply
+             </a>
+            </div>
+           </div>
+          </li>
+          <!-- #comment-## -->
+         </ul>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!--/.commentlist-->
+      </div>
+      <div class="comment-respond" id="respond">
+       <h3 class="comment-reply-title" id="reply-title">
+        Leave a Reply
+        <small>
+         <a href="/check-linux-disk-usage-of-files-and-directories/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+          Cancel reply
+         </a>
+        </small>
+       </h3>
+       <form action="http://www.tecmint.com/wp-comments-post.php" class="comment-form" id="commentform" method="post">
+        <p class="comment-notes">
+         <span id="email-notes">
+          Your email address will not be published.
+         </span>
+         Required fields are marked
+         <span class="required">
+          *
+         </span>
+        </p>
+        <p class="comment-form-author">
+         <label for="author">
+          Name
+          <span class="required">
+           *
+          </span>
+         </label>
+         <input aria-required="true" id="author" name="author" required="required" size="30" type="text" value=""/>
+        </p>
+        <p class="comment-form-email">
+         <label for="email">
+          Email
+          <span class="required">
+           *
+          </span>
+         </label>
+         <input aria-describedby="email-notes" aria-required="true" id="email" name="email" required="required" size="30" type="text" value=""/>
+        </p>
+        <p class="comment-form-url">
+         <label for="url">
+          Website
+         </label>
+         <input id="url" name="url" size="30" type="text" value=""/>
+        </p>
+        <p class="comment-form-comment">
+         <label for="comment">
+          Comment
+         </label>
+         <textarea aria-describedby="form-allowed-tags" aria-required="true" cols="45" id="comment" name="comment" required="required" rows="8">
+         </textarea>
+        </p>
+        <p class="form-allowed-tags" id="form-allowed-tags">
+         You may use these
+         <abbr title="HyperText Markup Language">
+          HTML
+         </abbr>
+         tags and attributes:
+         <code>
+          &lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt;
+         </code>
+        </p>
+        <p class="form-submit">
+         <input class="submit" id="submit" name="submit" type="submit" value="Post Comment"/>
+         <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="2014"/>
+         <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+        </p>
+        <p style="display: none;">
+         <input id="akismet_comment_nonce" name="akismet_comment_nonce" type="hidden" value="d39c0c7fbe"/>
+        </p>
+        <p style="display: none;">
+         <input id="ak_js" name="ak_js" type="hidden" value="44"/>
+        </p>
+       </form>
+      </div>
+      <!-- #respond -->
+     </section>
+     <!--/#comments-->
+    </div>
+    <!--/.pad-->
+    <!--/.content-->
+    <div class="sidebar s1">
+     <a class="sidebar-toggle" title="Expand Sidebar">
+      <i class="fa icon-sidebar-toggle">
+      </i>
+     </a>
+     <div class="sidebar-content">
+      <div class="sidebar-top group">
+       <span style="color:#002873; font-weight:600; font-size:20px;">
+        I
+        <i class="fa fa-heart col-love-l">
+        </i>
+        TecMint :
+       </span>
+       <ul class="social-links">
+        <li>
+         <a class="social-tooltip" href="http://twitter.com/tecmint" rel="nofollow" target="Array" title="twitter">
+          <i class="fa fa-twitter" style="color: #33ccff;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://www.facebook.com/TecMint" rel="nofollow" target="Array" title="facebook">
+          <i class="fa fa-facebook" style="color: #3b5998;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://plus.google.com/101049688653487009744" rel="nofollow" target="Array" title="Google+">
+          <i class="fa fa-google-plus" style="color: #db4a39;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="http://feedly.com/i/subscription/feed/http://www.tecmint.com/feed/" rel="nofollow" target="Array" title="Feedly">
+          <i class="fa fa-rss" style="color: #87c040;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://www.youtube.com/channel/UCkiRkzdLvoGBtW_YArytJlQ" rel="nofollow" target="Array" title="Youtube">
+          <i class="fa fa fa-youtube-square" style="color: #c4302b;">
+          </i>
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="widget widget_text" id="text-21">
+       <div class="textwidget">
+        <center>
+         <!-- Sidebar Top Ad 300x250 -->
+         <ins class="adsbygoogle" data-ad-client="ca-pub-2601749019656699" data-ad-slot="7270921771" style="display:inline-block;width:300px;height:250px">
+         </ins>
+         <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+         </script>
+        </center>
+       </div>
+      </div>
+      <div class="widget widget_text" id="text-12">
+       <div class="textwidget">
+        <span style="float:right; text-decoration:underline">
+         <a href="http://www.tecmint.com/advertise/" onclick="ga('send','event','Advertise Here','www.tecmint.com')" target="_blank">
+          Advertise Here
+         </a>
+        </span>
+        <a href="https://www.atlantic.net/cloud-hosting/pricing/?utm_source=TM&amp;utm_medium=TM&amp;utm_term=TM&amp;utm_content=TM&amp;utm_campaign=TM" onclick="ga('send','event','Atlantic Cloud Hosting','www.atlantic.net')" rel="nofollow" target="_blank">
+         <img src="/wp-content/themes/tecmint/images/300x250-ROT.gif"/>
+        </a>
+       </div>
+      </div>
+      <div class="widget widget_text" id="text-3">
+       <div class="textwidget">
+        <div class="ads-sidebar-desktop">
+         <center>
+          <!-- SideBar2 Ads 300x600 -->
+          <ins class="adsbygoogle" data-ad-client="ca-pub-2601749019656699" data-ad-slot="9098920170" style="display:inline-block;width:300px;height:600px">
+          </ins>
+          <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+         </center>
+        </div>
+       </div>
+      </div>
+      <div class="widget widget_alx_tabs" id="alxtabs-2">
+       <ul class="alx-tabs-nav group tab-count-2">
+        <li class="alx-tab tab-popular">
+         <a href="#tab-popular" title="Popular Posts">
+          <i class="fa fa-star">
+          </i>
+          <span>
+           Popular Posts
+          </span>
+         </a>
+        </li>
+        <li class="alx-tab tab-comments">
+         <a href="#tab-comments" title="Recent Comments">
+          <i class="fa fa-comments-o">
+          </i>
+          <span>
+           Recent Comments
+          </span>
+         </a>
+        </li>
+       </ul>
+       <div class="alx-tabs-container">
+        <ul class="alx-tab group thumbs-enabled" id="tab-popular">
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/how-to-add-linux-host-to-nagios-monitoring-server/" title="How to Add Linux Host to Nagios Monitoring Server Using NRPE Plugin">
+            <img alt="Add Linux Host to Nagios Monitoring" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/11/Add-Linux-Host-to-Nagios-160x160.jpg" height="160" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Add Linux Host to Nagios Monitoring" class="attachment-thumb-small wp-post-image" height="160" src="http://www.tecmint.com/wp-content/uploads/2013/11/Add-Linux-Host-to-Nagios-160x160.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/how-to-add-linux-host-to-nagios-monitoring-server/" rel="bookmark" title="How to Add Linux Host to Nagios Monitoring Server Using NRPE Plugin">
+             How to Add Linux Host to Nagios Monitoring Server Using NRPE Plugin
+            </a>
+           </p>
+           <p class="tab-item-date">
+            8 Nov, 2013
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/install-nagios-in-linux/" title="Nagios 4.0.1 Released  Install on RHEL/CentOS 6.x/5.x and Fedora 19/18/17">
+            <img alt="Install Nagios in CentOS" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/10/Install-Nagios-in-CentOS-160x160.jpg" height="160" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Install Nagios in CentOS" class="attachment-thumb-small wp-post-image" height="160" src="http://www.tecmint.com/wp-content/uploads/2013/10/Install-Nagios-in-CentOS-160x160.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/install-nagios-in-linux/" rel="bookmark" title="Nagios 4.0.1 Released  Install on RHEL/CentOS 6.x/5.x and Fedora 19/18/17">
+             Nagios 4.0.1 Released  Install on RHEL/CentOS 6.x/5.x and Fedora 19/18/17
+            </a>
+           </p>
+           <p class="tab-item-date">
+            28 Oct, 2013
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/" title="Google Chrome 43 Released  Install on RHEL/CentOS 7/6 and Fedora 21-15">
+            <img alt="Install Google Chrome in CentOS" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2014/11/Install-Google-Chrome-in-CentOS-160x160.jpg" height="160" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Install Google Chrome in CentOS" class="attachment-thumb-small wp-post-image" height="160" src="http://www.tecmint.com/wp-content/uploads/2014/11/Install-Google-Chrome-in-CentOS-160x160.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/" rel="bookmark" title="Google Chrome 43 Released  Install on RHEL/CentOS 7/6 and Fedora 21-15">
+             Google Chrome 43 Released  Install on RHEL/CentOS 7/6 and Fedora 21-15
+            </a>
+           </p>
+           <p class="tab-item-date">
+            1 May, 2015
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/" title="Install Cacti (Network Monitoring) on RHEL/CentOS 7.x/6.x/5.x and Fedora 21-12">
+            <img alt="Install Cacti in Linux" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2012/09/Install-Cacti.jpg" height="120" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Install Cacti in Linux" class="attachment-thumb-small wp-post-image" height="120" src="http://www.tecmint.com/wp-content/uploads/2012/09/Install-Cacti.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/" rel="bookmark" title="Install Cacti (Network Monitoring) on RHEL/CentOS 7.x/6.x/5.x and Fedora 21-12">
+             Install Cacti (Network Monitoring) on RHEL/CentOS 7.x/6.x/5.x and Fedora 21-12
+            </a>
+           </p>
+           <p class="tab-item-date">
+            19 Mar, 2015
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/" title="Install Wine 1.6.2 Stable in RHEL/CentOS 7.0/6.x/5.x and Fedora 20-12">
+            <img alt="Install Wine in Linux" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2014/11/Install-Wine-in-Linux-160x160.jpg" height="160" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Install Wine in Linux" class="attachment-thumb-small wp-post-image" height="160" src="http://www.tecmint.com/wp-content/uploads/2014/11/Install-Wine-in-Linux-160x160.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/" rel="bookmark" title="Install Wine 1.6.2 Stable in RHEL/CentOS 7.0/6.x/5.x and Fedora 20-12">
+             Install Wine 1.6.2 Stable in RHEL/CentOS 7.0/6.x/5.x and Fedora 20-12
+            </a>
+           </p>
+           <p class="tab-item-date">
+            29 Nov, 2014
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-thumbnail">
+           <a href="http://www.tecmint.com/centos-6-4-installation-guide-with-screenshots/" title="CentOS 6.4 Step by Step Installation Guide with Screenshots">
+            <img alt="Boot CentOS 6.4 Installation Media" class="attachment-thumb-small wp-post-image" data-lazy-src="http://www.tecmint.com/wp-content/uploads/2013/03/cent-1.jpg" height="120" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" width="160"/>
+            <noscript>
+             <img alt="Boot CentOS 6.4 Installation Media" class="attachment-thumb-small wp-post-image" height="120" src="http://www.tecmint.com/wp-content/uploads/2013/03/cent-1.jpg" width="160"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <p class="tab-item-title">
+            <a href="http://www.tecmint.com/centos-6-4-installation-guide-with-screenshots/" rel="bookmark" title="CentOS 6.4 Step by Step Installation Guide with Screenshots">
+             CentOS 6.4 Step by Step Installation Guide with Screenshots
+            </a>
+           </p>
+           <p class="tab-item-date">
+            25 Mar, 2013
+           </p>
+          </div>
+         </li>
+        </ul>
+        <!--/.alx-tab-->
+        <ul class="alx-tab group avatars-enabled" id="tab-comments">
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/learn-java-programming-for-beginners/comment-page-1/#comment-624221">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://2.gravatar.com/avatar/53f4811f9d57375366e6d74a67c204e8?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://2.gravatar.com/avatar/53f4811f9d57375366e6d74a67c204e8?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://2.gravatar.com/avatar/53f4811f9d57375366e6d74a67c204e8?s=96&amp;d=blank&amp;r=g" srcset="http://2.gravatar.com/avatar/53f4811f9d57375366e6d74a67c204e8?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            Rajatkumar Zala says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/learn-java-programming-for-beginners/comment-page-1/#comment-624221">
+             Waiting for part 2.....
+            </a>
+           </div>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/configure-squid-server-in-linux/comment-page-1/#comment-624214">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/d9d14c5b51331864398e6288cb0c2091?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/d9d14c5b51331864398e6288cb0c2091?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/d9d14c5b51331864398e6288cb0c2091?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/d9d14c5b51331864398e6288cb0c2091?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            Gabriel Cnepa says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/configure-squid-server-in-linux/comment-page-1/#comment-624214">
+             @hardik,
+That is correct my friend. Thank you for pointing that out.
+@Ravi,
+Please...
+            </a>
+           </div>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/configure-squid-server-in-linux/comment-page-1/#comment-624185">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/0d30f122068edbad3ab438bbc5d39a87?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/0d30f122068edbad3ab438bbc5d39a87?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/0d30f122068edbad3ab438bbc5d39a87?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/0d30f122068edbad3ab438bbc5d39a87?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            hardik says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/configure-squid-server-in-linux/comment-page-1/#comment-624185">
+             Hey Gabrial,
+
+Awesome tutorial series. one thing i found,
+
+Maximum_object_size should be before...
+            </a>
+           </div>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624184">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://0.gravatar.com/avatar/0219ce3d8cbdd1fca0e195958bcd02e6?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://0.gravatar.com/avatar/0219ce3d8cbdd1fca0e195958bcd02e6?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://0.gravatar.com/avatar/0219ce3d8cbdd1fca0e195958bcd02e6?s=96&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/0219ce3d8cbdd1fca0e195958bcd02e6?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            Eduardo Hernacki says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624184">
+             Why are you using /etc/rc.local to startup the services? Seriously?
+            </a>
+           </div>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624176">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/7badddbc53297b2e8ed7011cf45df0c0?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            Ravi Saive says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624176">
+             @Udaya,
+Surely, in our upcoming articles, we will show how to set...
+            </a>
+           </div>
+          </div>
+         </li>
+         <li>
+          <div class="tab-item-avatar">
+           <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624168">
+            <img alt="" class="avatar avatar-96 photo" data-lazy-src="http://1.gravatar.com/avatar/d9e00b4340a764942f0f65868d323957?s=96&amp;d=blank&amp;r=g" height="96" src="http://www.tecmint.com/wp-content/plugins/lazy-load/images/1x1.trans.gif" srcset="http://1.gravatar.com/avatar/d9e00b4340a764942f0f65868d323957?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            <noscript>
+             <img alt="" class="avatar avatar-96 photo" height="96" src="http://1.gravatar.com/avatar/d9e00b4340a764942f0f65868d323957?s=96&amp;d=blank&amp;r=g" srcset="http://1.gravatar.com/avatar/d9e00b4340a764942f0f65868d323957?s=192&amp;d=blank&amp;r=g 2x" width="96"/>
+            </noscript>
+           </a>
+          </div>
+          <div class="tab-item-inner group">
+           <div class="tab-item-name">
+            pinkman says:
+           </div>
+           <div class="tab-item-comment">
+            <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/comment-page-1/#comment-624168">
+             will you do  Zabbix proxy configuration also  ??
+            </a>
+           </div>
+          </div>
+         </li>
+        </ul>
+        <!--/.alx-tab-->
+       </div>
+      </div>
+      <div class="widget widget_text" id="text-4">
+       <h3>
+        Download Free Linux eBooks
+       </h3>
+       <div class="textwidget">
+        <ol>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_makb09/prgm.cgi" rel="nofollow" target="_blank">
+           Complete Linux Command Line Cheat Sheet
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_free01/prgm.cgi" rel="nofollow" target="_blank">
+           The GNU/Linux Advanced Administration Guide
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_opeb01/prgm.cgi" rel="nofollow" target="_blank">
+           Securing &amp; Optimizing Linux Servers
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_infk12/prgm.cgi" rel="nofollow" target="_blank">
+           Linux Patch Management: Keeping Linux Up To Date
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_mach01/prgm.cgi" rel="nofollow" target="_blank">
+           Introduction to Linux  A Hands on Guide
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_infk10/prgm.cgi" rel="nofollow" target="_blank">
+           Understanding the Linux Virtual Memory Manager
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_wile13/prgm.cgi" rel="nofollow" target="_blank">
+           Linux Bible  Packed with Updates and Exercises
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_make07/prgm.cgi" rel="nofollow" target="_blank">
+           A Newbies Getting Started Guide to Linux
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_linu01/prgm.cgi" rel="nofollow" target="_blank">
+           Linux from Scratch  Create Your Own Linux OS
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_pack42/prgm.cgi" rel="nofollow" target="_blank">
+           Linux Shell Scripting Cookbook, Second Edition
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_opeb01/prgm.cgi" rel="nofollow" target="_blank">
+           Securing &amp; Optimizing Linux: The Hacking Solution
+          </a>
+         </li>
+         <li>
+          <a href="http://tecmint.tradepub.com/free/w_infk09/prgm.cgi" rel="nofollow" target="_blank">
+           User Mode Linux  Understanding and Administration
+          </a>
+         </li>
+        </ol>
+       </div>
+      </div>
+      <div class="widget widget_text" id="text-22">
+       <div class="textwidget">
+        <center>
+         <span style="font-size:17px; font-weight:600;">
+          <b style="color:red">
+           Download Your Free eBook Now
+          </b>
+         </span>
+         <a href="http://tecmint.tradepub.com/free/w_cybr01/prgm.cgi" onclick="ga('send','event','Online Penetration Testing','tecmint.tradepub.com')" rel="nofollow" target="_blank">
+          <img src="http://img.tradepub.com/free/w_cybr01/images/w_cybr01c4.gif"/>
+         </a>
+        </center>
+       </div>
+      </div>
+     </div>
+     <!--/.sidebar-content-->
+    </div>
+    <!--/.sidebar-->
+   </header>
+  </div>
+  <!--/.main-inner-->
+  <!--/.main-->
+  <!--/.container-inner-->
+  <!--/.container-->
+  <footer id="footer">
+   <section class="container" id="footer-ads">
+    <div class="container-inner">
+     <div class="widget widget_text" id="text-18">
+      <h3>
+       Join our TecMint Community and become an Author
+      </h3>
+      <div class="textwidget">
+       <style>
+        .authorlist { margin: 5px;padding: 5px;height: auto;width: auto; float: left; text-align: center;}	
+.authorlist img { display: inline;margin: 5px 10px;padding:2px; border: 5px solid #eee;border-radius: 50%;}
+.desc { font-size: 15px; font-weight: normal;padding: 10px; text-align: center;}
+       </style>
+       <div class="authorlist">
+        <a href="/author/admin" target="_blank">
+         <img alt="Ravi Saive" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/ravi.jpeg"/>
+        </a>
+        <div class="desc">
+         Ravi Saive
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/avishek" target="_blank">
+         <img alt="Avishek Kumar" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/avi.jpeg"/>
+        </a>
+        <div class="desc">
+         Avishek Kumar
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/gacanepa/" target="_blank">
+         <img alt="Gabriel Cnepa" src="http://1.gravatar.com/avatar/d9d14c5b51331864398e6288cb0c2091"/>
+        </a>
+        <div class="desc">
+         Gabriel Cnepa
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/cezarmatei" target="_blank">
+         <img alt="Matei Cezar" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/cezar.jpeg"/>
+        </a>
+        <div class="desc">
+         Matei Cezar
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/navin" target="_blank">
+         <img alt="Narad Shrestha" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/navin.jpeg"/>
+        </a>
+        <div class="desc">
+         Narad Shrestha
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/dos2009" target="_blank">
+         <img alt="Mohammad Dosoukey" src="http://www.tecmint.com/wp-content/themes/tecmint/images/mohammed.jpeg"/>
+        </a>
+        <div class="desc">
+         Mohammad Dosoukey
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/anusha" target="_blank">
+         <img alt="Anusha Saive" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/anu.jpeg"/>
+        </a>
+        <div class="desc">
+         Anusha Saive
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/babinlonston" target="_blank">
+         <img alt="Babin Lonston" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/bob.jpeg"/>
+        </a>
+        <div class="desc">
+         Babin Lonston
+        </div>
+       </div>
+       <div class="authorlist">
+        <a href="http://www.tecmint.com/author/hannyhelal" target="_blank">
+         <img alt="Hanny Helal" src="http://www.tecmint.com/wp-content/themes/TutsBlog/images/hany.jpeg"/>
+        </a>
+        <div class="desc">
+         Hanny Helal
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!--/.container-inner-->
+   </section>
+   <!--/.container-->
+   <section class="container" id="footer-widgets">
+    <div class="container-inner">
+     <div class="pad group">
+      <div class="footer-widget-1 grid one-third ">
+       <div class="widget widget_alx_posts" id="alxposts-3">
+        <h3>
+         Linux Monitoring Tools
+        </h3>
+        <ul class="alx-posts group ">
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/monitor-apache-web-server-load-and-page-statistics/" rel="bookmark" title="How to Monitor Apache Web Server Load and Page Statistics">
+             How to Monitor Apache Web Server Load and Page Statistics
+            </a>
+           </p>
+           <p class="post-item-date">
+            14 Jan, 2014
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/nethogs-monitor-per-process-network-bandwidth-usage-in-real-time/" rel="bookmark" title="NetHogs  Monitor Per Process Network Bandwidth Usage in Real Time">
+             NetHogs  Monitor Per Process Network Bandwidth Usage in Real Time
+            </a>
+           </p>
+           <p class="post-item-date">
+            11 Mar, 2013
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/install-and-configure-zabbix-monitoring-on-debian-centos-rhel/" rel="bookmark" title="Installing and Configuring Zabbix 2.4.5 on Debian 8 and RHEL/CentOS 7">
+             Installing and Configuring Zabbix 2.4.5 on Debian 8 and RHEL/CentOS 7
+            </a>
+           </p>
+           <p class="post-item-date">
+            14 Jul, 2015
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/install-sysstat-in-linux/" rel="bookmark" title="Sysstat  All-in-One System Performance and Usage Activity Monitoring Tool For Linux">
+             Sysstat  All-in-One System Performance and Usage Activity Monitoring Tool For Linux
+            </a>
+           </p>
+           <p class="post-item-date">
+            28 Aug, 2014
+           </p>
+          </div>
+         </li>
+        </ul>
+        <!--/.alx-posts-->
+       </div>
+      </div>
+      <div class="footer-widget-2 grid one-third ">
+       <div class="widget widget_alx_posts" id="alxposts-4">
+        <h3>
+         Linux Interview Questions
+        </h3>
+        <ul class="alx-posts group ">
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/10-interview-questions-and-answers-on-various-commands-in-linux/" rel="bookmark" title="10 Interview Questions and Answers on Various Commands in Linux">
+             10 Interview Questions and Answers on Various Commands in Linux
+            </a>
+           </p>
+           <p class="post-item-date">
+            22 Mar, 2014
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/useful-random-linux-interview-questions-and-answers/" rel="bookmark" title="10 Useful Random Linux Interview Questions and Answers">
+             10 Useful Random Linux Interview Questions and Answers
+            </a>
+           </p>
+           <p class="post-item-date">
+            22 Feb, 2014
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/linux-interview-questions-and-answers-for-linux-beginners/" rel="bookmark" title="10 Linux Interview Questions and Answers for Linux Beginners  Part 3">
+             10 Linux Interview Questions and Answers for Linux Beginners  Part 3
+            </a>
+           </p>
+           <p class="post-item-date">
+            7 Dec, 2013
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/mysql-advance-interview-questions/" rel="bookmark" title="11 Advance MySQL Database Interview Questions and Answers for Linux Users">
+             11 Advance MySQL Database Interview Questions and Answers for Linux Users
+            </a>
+           </p>
+           <p class="post-item-date">
+            17 Jun, 2014
+           </p>
+          </div>
+         </li>
+        </ul>
+        <!--/.alx-posts-->
+       </div>
+      </div>
+      <div class="footer-widget-3 grid one-third last">
+       <div class="widget widget_alx_posts" id="alxposts-5">
+        <h3>
+         Open Source Tools
+        </h3>
+        <ul class="alx-posts group ">
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/take-screenshots-in-linux-using-scrot/" rel="bookmark" title="Scrot: A Command Line Tool to Take Desktop/Server Screenshots Automatically in Linux">
+             Scrot: A Command Line Tool to Take Desktop/Server Screenshots Automatically in Linux
+            </a>
+           </p>
+           <p class="post-item-date">
+            30 Apr, 2014
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/pac-manager-a-remote-ssh-session-management-tool/" rel="bookmark" title="PAC Manager: A Remote SSH/FTP/Telnet Session Management Tool">
+             PAC Manager: A Remote SSH/FTP/Telnet Session Management Tool
+            </a>
+           </p>
+           <p class="post-item-date">
+            2 Nov, 2013
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/install-firefox-in-linux/" rel="bookmark" title="Firefox 39 Released  Install on RHEL/CentOS 7/6, Fedora 22-17, Ubuntu 15.04/14.10 and Linux Mint 17/16">
+             Firefox 39 Released  Install on RHEL/CentOS 7/6, Fedora 22-17, Ubuntu 15.04/14.10 and Linux Mint 17/16
+            </a>
+           </p>
+           <p class="post-item-date">
+            13 May, 2015
+           </p>
+          </div>
+         </li>
+         <li>
+          <div class="post-item-inner group">
+           <p class="post-item-title">
+            <a href="http://www.tecmint.com/install-openvpn-in-debian/" rel="bookmark" title="OpenVPN Server and Client Installation and Configuration on Debian 7">
+             OpenVPN Server and Client Installation and Configuration on Debian 7
+            </a>
+           </p>
+           <p class="post-item-date">
+            4 Apr, 2014
+           </p>
+          </div>
+         </li>
+        </ul>
+        <!--/.alx-posts-->
+       </div>
+      </div>
+     </div>
+     <!--/.pad-->
+    </div>
+    <!--/.container-inner-->
+   </section>
+   <!--/.container-->
+   <nav class="nav-container group" id="nav-footer">
+    <div class="nav-toggle">
+     <i class="fa fa-bars">
+     </i>
+    </div>
+    <div class="nav-text">
+     <!-- put your mobile menu text here -->
+    </div>
+    <div class="nav-wrap">
+     <ul class="nav container group" id="menu-footer">
+      <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10442" id="menu-item-10442">
+       <a href="http://www.tecmint.com/advertise/">
+        Advertise
+       </a>
+      </li>
+      <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10441" id="menu-item-10441">
+       <a href="http://www.tecmint.com/services/">
+        Linux Services
+       </a>
+      </li>
+      <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10435" id="menu-item-10435">
+       <a href="http://www.tecmint.com/copyright-policy/">
+        Copyright Policy
+       </a>
+      </li>
+      <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10436" id="menu-item-10436">
+       <a href="http://www.tecmint.com/privacy-policy/">
+        Privacy Policy
+       </a>
+      </li>
+      <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-10437" id="menu-item-10437">
+       <a href="http://www.tecmint.com/contact-us/">
+        Contact Us
+       </a>
+      </li>
+      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13339" id="menu-item-13339">
+       <a href="http://www.tecmint.com/career/">
+        Career
+       </a>
+      </li>
+     </ul>
+    </div>
+   </nav>
+   <!--/#nav-footer-->
+   <section class="container" id="footer-bottom">
+    <div class="container-inner">
+     <a href="#" id="back-to-top">
+      <i class="fa fa-angle-up">
+      </i>
+     </a>
+     <div class="pad group">
+      <div class="grid one-half">
+       <div id="copyright">
+        <p>
+         Tecmint: Linux Howtos, Tutorials &amp; Guides  2015. All Rights Reserved.
+        </p>
+        <p>
+         This work is licensed under a
+         <a href="http://creativecommons.org/licenses/by-nc/4.0/" rel="license">
+          <b style="color:#ccc;">
+           (cc) BY-NC
+          </b>
+         </a>
+        </p>
+        <p>
+         The material in this site cannot be republished either online or offline, without our permission.
+        </p>
+       </div>
+       <!--/#copyright-->
+      </div>
+      <div class="grid one-half last">
+       <ul class="social-links">
+        <li>
+         <a class="social-tooltip" href="http://twitter.com/tecmint" rel="nofollow" target="Array" title="twitter">
+          <i class="fa fa-twitter" style="color: #33ccff;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://www.facebook.com/TecMint" rel="nofollow" target="Array" title="facebook">
+          <i class="fa fa-facebook" style="color: #3b5998;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://plus.google.com/101049688653487009744" rel="nofollow" target="Array" title="Google+">
+          <i class="fa fa-google-plus" style="color: #db4a39;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="http://feedly.com/i/subscription/feed/http://www.tecmint.com/feed/" rel="nofollow" target="Array" title="Feedly">
+          <i class="fa fa-rss" style="color: #87c040;">
+          </i>
+         </a>
+        </li>
+        <li>
+         <a class="social-tooltip" href="https://www.youtube.com/channel/UCkiRkzdLvoGBtW_YArytJlQ" rel="nofollow" target="Array" title="Youtube">
+          <i class="fa fa fa-youtube-square" style="color: #c4302b;">
+          </i>
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <!--/.pad-->
+    </div>
+    <!--/.container-inner-->
+   </section>
+   <!--/.container-->
+  </footer>
+  <!--/#footer-->
+  <!--/#wrapper-->
+  <script src="http://www.tecmint.com/wp-content/plugins/akismet/_inc/form.js?ver=3.1.3" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/lazy-load/js/jquery.sonar.min.js?ver=0.5" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/lazy-load/js/lazy-load.js?ver=0.5" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/light/js/jquery.fancybox.pack.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/plugins/light/js/light.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/themes/tecmint/js/scripts.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-content/themes/tecmint/js/jquery.sharrre.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.tecmint.com/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <!--[if lt IE 9]&gt;
+&lt;script src="http://www.tecmint.com/wp-content/themes/tecmint/js/ie/respond.js"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <!--     ===== START Dreamgrow Scroll Triggered Box =====   -->
+  <div class="dgd_stb_box clean_white" id="dgd_scrollbox-11027">
+   <a class="dgd_stb_box_close dgd_stb_box_x" href="javascript:void(0);">
+   </a>
+   <h5>
+    Join Over 75000+ Linux Users
+   </h5>
+   <div id="social_sprite">
+    <ol>
+     <li>
+      <a href="https://www.facebook.com/TecMint" target="_blank">
+       <span class="soc_icon" id="soc_fbuk">
+       </span>
+       <span class="count">
+        51334
+       </span>
+      </a>
+     </li>
+     <li>
+      <a href="http://twitter.com/tecmint" target="_blank">
+       <span class="soc_icon" id="soc_twitter">
+       </span>
+       <span class="count">
+        2657
+       </span>
+      </a>
+     </li>
+     <li>
+      <a href="https://plus.google.com/101049688653487009744" target="_blank">
+       <span class="soc_icon" id="soc_gplus">
+       </span>
+       <span class="count">
+        16705
+       </span>
+      </a>
+     </li>
+    </ol>
+   </div>
+   <p>
+    Enter your email to get latest Linux Howto's
+   </p>
+   <form action="http://feedburner.google.com/fb/a/mailverify" class="stbContactForm" method="post" target="popupwindow">
+    <input name="uri" type="hidden" value="tecmint"/>
+    <input name="loc" type="hidden" value="en_US"/>
+    <input class="Text" name="email" type="text" value="Enter Your Email Address :)"/>
+    <input class="stb-submit" type="submit" value="Subscribe"/>
+   </form>
+   <p class="stbMsgArea">
+   </p>
+  </div>
+  <!--     ===== END OF Dreamgrow Scroll Triggered Box =====   -->
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript">
+  </script>
+  <div class="fixedBar">
+   <div class="boxfloat">
+    <ul id="tips">
+     <li>
+      <a href="http://www.tecmint.com/51-useful-lesser-known-commands-for-linux-users/">
+       51 Useful Lesser Known Commands for Linux Users
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/linux-server-hardening-security-tips/">
+       25 Hardening Security Tips for Linux Servers
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/60-commands-of-linux-a-guide-from-newbies-to-system-administrator/">
+       60 Commands of Linux : A Guide from Newbies to System Administrator
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/command-line-tools-to-monitor-linux-performance/">
+       20 Command Line Tools to Monitor Linux Performance
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/18-tar-command-examples-in-linux/">
+       18 Tar Command Examples in Linux
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/20-linux-yum-yellowdog-updater-modified-commands-for-package-mangement/">
+       20 Linux YUM (Yellowdog Updater, Modified) Commands
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/useful-basic-commands-of-apt-get-and-apt-cache-for-package-management/">
+       25 Useful Basic Commands of APT-GET and APT-CACHE
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/20-funny-commands-of-linux-or-linux-is-fun-in-terminal/">
+       20 Funny Commands of Linux or Linux is Fun in Terminal
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/35-practical-examples-of-linux-find-command/">
+       35 Practical Examples of Linux Find Command
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/sed-command-to-create-edit-and-manipulate-files-in-linux/">
+       Preparation for the LFCS (Linux Fundation Certified SysAdmin) Exam
+      </a>
+     </li>
+     <li>
+      <a href="http://www.tecmint.com/installing-network-services-and-configuring-services-at-system-boot/">
+       Preparation for the LFCE (Linux Fundation Certified Engineer) Exam
+      </a>
+     </li>
+    </ul>
+   </div>
+  </div>
+ </body>
+</html>

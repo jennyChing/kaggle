@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]&gt;&lt;html class="no-js iem7"&gt;&lt;![endif]-->
+<!--[if lt IE 9]&gt;&lt;html class="no-js lte-ie8"&gt;&lt;![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]&gt;&lt;!-->
+<html class="no-js" lang="en">
+ <!--&lt;![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   zsh-dwim: Transformations for the Find Command - Patshead.com Blog
+  </title>
+  <meta content="Pat Regan" name="author"/>
+  <meta content="Not long after I got zsh-dwim up and running, I went mining in my old Zsh and Bash history files looking for potential transformation candidates. I " name="description"/>
+  <!-- http://t.co/dKP3o1e -->
+  <meta content="True" name="HandheldFriendly"/>
+  <meta content="320" name="MobileOptimized"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="http://blog.patshead.com/2013/04/zsh-dwim-transformations-for-the-find-command.html" rel="canonical"/>
+  <link href="/microhead.gif" rel="icon"/>
+  <meta content="summary" property="twitter:card"/>
+  <meta content="patsheadcom" property="twitter:site"/>
+  <meta content="http://blog.patshead.com/2013/04/zsh-dwim-transformations-for-the-find-command.html" property="twitter:url"/>
+  <meta content="zsh-dwim: Transformations for the Find Command" property="twitter:title"/>
+  <meta content="Not long after I got zsh-dwim up and running, I went mining in my old Zsh and Bash history files looking for potential transformation candidates. I thought I already implemented them all, but I was " property="twitter:description"/>
+  <meta content="patsheadcom" property="twitter:creator"/>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+  <script src="/javascripts/modernizr-2.0.js">
+  </script>
+  <script src="/javascripts/ender.js">
+  </script>
+  <script src="/javascripts/octopress.js" type="text/javascript">
+  </script>
+  <link href="/js/galleria/themes/classic/galleria.classic.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
+  </script>
+  <script src="/js/galleria/galleria-1.2.9.min.js">
+  </script>
+  <script>
+   Galleria.loadTheme('/js/galleria/themes/classic/galleria.classic.min.js');
+  </script>
+  <style>
+   .images{height:480px}
+  </style>
+  <link href="/atom.xml" rel="alternate" title="Patshead.com Blog" type="application/atom+xml"/>
+ </head>
+ <body>
+  <header role="banner">
+   <hgroup>
+   </hgroup>
+  </header>
+  <!-- &lt;nav role="navigation"&gt;&lt;ul class="subscription" data-subscription="rss"&gt;
+  &lt;li&gt;&lt;a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS"&gt;RSS&lt;/a&gt;&lt;/li&gt;
+  
+&lt;/ul&gt;
+  
+&lt;form action="http://google.com/search" method="get"&gt;
+  &lt;fieldset role="search"&gt;
+    &lt;input type="hidden" name="q" value="site:blog.patshead.com" /&gt;
+    &lt;input class="search" type="text" name="q" results="0" placeholder="Search"/&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+  
+&lt;ul class="main-navigation"&gt;
+  &lt;li&gt;&lt;a href="/"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="/blog/archives"&gt;Archives&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/nav&gt; -->
+  <div id="main">
+   <div id="content">
+    <div>
+     <article class="hentry" role="article">
+      <header>
+       <h1 class="entry-title">
+        zsh-dwim: Transformations for the Find Command
+       </h1>
+       <p class="meta">
+        <time data-updated="true" datetime="2013-04-26T09:00:00-05:00" pubdate="">
+         Apr 26
+         <span>
+          th
+         </span>
+         , 2013
+        </time>
+        |
+        <a href="#disqus_thread">
+         Comments
+        </a>
+       </p>
+      </header>
+      <div class="entry-content">
+       <p>
+        Not long after I got
+        <a href="https://github.com/oknowton/zsh-dwim" title="zsh-dwim at gitHub">
+         zsh-dwim
+        </a>
+        up and running, I went mining in my old Zsh and Bash history files looking for potential transformation candidates.  I thought I already implemented them all, but I was doing some spring cleaning and came across some of my notes.  It turns out that I was wrong.  There were still quite a few ideas in there that I havent implemented yet.
+       </p>
+       <p>
+        One of the more interesting ideas in there was related to the
+        <code>
+         find
+        </code>
+        command.  Each time I write anything more complicated than the simplest
+        <code>
+         find
+        </code>
+        command line, I usually follow the same careful workflow:
+       </p>
+       <ul>
+        <li>
+         Run the command with no
+         <code>
+          -exec
+         </code>
+         option to make sure the correct files are chosen
+        </li>
+        <li>
+         Add the
+         <code>
+          -exec
+         </code>
+         option, but
+         <code>
+          echo
+         </code>
+         the commands first
+        </li>
+        <li>
+         Remove the
+         <code>
+          echo
+         </code>
+         , and run it one last time
+        </li>
+       </ul>
+       <div class="embed-video-container" id="wN3qpVo9cV4 ">
+        <iframe src="http://www.youtube.com/embed/wN3qpVo9cV4 ">
+        </iframe>
+       </div>
+       <p>
+        As you can see in the video, thats precisely what this transformation does.  If it isnt already there, hitting
+        <code>
+         control-u
+        </code>
+        will add the
+        <code>
+         -exec echo {} \;
+        </code>
+        to the command and put the cursor in front of the curly bracket.  If the
+        <code>
+         -exec
+        </code>
+        is already followed by an
+        <code>
+         echo
+        </code>
+        , then the
+        <code>
+         echo
+        </code>
+        is removed.
+       </p>
+       <p>
+        For good measure, one more press of
+        <code>
+         control-u
+        </code>
+        will convert the
+        <code>
+         -exec
+        </code>
+        to a
+        <code>
+         -print0 | xargs -0
+        </code>
+        .
+       </p>
+       <h2>
+        There is a tiny new feature in
+        <a href="https://github.com/oknowton/zsh-dwim" title="zsh-dwim at gitHub">
+         zsh-dwim
+        </a>
+       </h2>
+       <p>
+        I wanted to be able to automatically place the cursor directly before the curly bracket, but I didnt have an existing mechanism to do that.  The function that places the cursor after a successful transformation now sets the cursor position to the value of the
+        <code>
+         _dwim_cursor
+        </code>
+        variable, if it is defined.
+       </p>
+      </div>
+      <footer>
+       <p class="meta">
+        <span class="byline author vcard">
+         Posted by
+         <span class="fn">
+          <a href="mailto:thehead@patshead.com">
+           Pat Regan
+          </a>
+         </span>
+        </span>
+        <time data-updated="true" datetime="2013-04-26T09:00:00-05:00" pubdate="">
+         Apr 26
+         <span>
+          th
+         </span>
+         , 2013
+        </time>
+        <span class="categories">
+         <a class="category" href="/categories/shell/">
+          Shell
+         </a>
+        </span>
+       </p>
+       <div class="sharing">
+        <a alt="Share this on Twitter" href="http://twitter.com/intent/tweet?text=zsh-dwim%3A+Transformations+for+the+Find+Command&amp;url=http%3A%2F%2Fblog.patshead.com%2F2013%2F04%2Fzsh-dwim-transformations-for-the-find-command.html" target="_blank" title="Share this on Twitter">
+         <img src="/i/Twitter.png"/>
+        </a>
+        <a alt="Share this on Google+" href="https://plus.google.com/share?url=http%3A%2F%2Fblog.patshead.com%2F2013%2F04%2Fzsh-dwim-transformations-for-the-find-command.html" target="_blank" title="Share this on Google+">
+         <img src="/i/Google+.png"/>
+        </a>
+        <a href="https://www.stumbleupon.com/submit?url=http%3A%2F%2Fblog.patshead.com%2F2013%2F04%2Fzsh-dwim-transformations-for-the-find-command.html" target="_blank">
+         <img alt="Share this on StumbleUpon" src="/i/StumbleUpon.png" title="Share this on StumbleUpon"/>
+        </a>
+       </div>
+       <p class="meta">
+        <a class="basic-alignment left" href="/2013/04/why-do-i-run-ubuntu.html" title="Previous Post: Why Do I Run Ubuntu?">
+          Why Do I Run Ubuntu?
+        </a>
+        <a class="basic-alignment right" href="/2013/05/shstack-persistent-and-easy-to-use-stacks-shared-between-shell-sessions.html" title="Next Post: shstack: Persistent and Easy to Use Stacks Shared Between Shell Sessions">
+         shstack: Persistent and Easy to Use Stacks Shared Between Shell Sessions 
+        </a>
+       </p>
+       <p class="meta">
+       </p>
+       <h3>
+        Related Posts
+       </h3>
+       <ul class="posts">
+        <li class="related">
+         <a href="/2015/02/zsh-dwim-simple-chmod-and-chattr-transforms-are-too-simple.html?r=related">
+          zsh-dwim: Simple chmod and chattr Transforms Are Too Simple
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2014/09/zsh-dwim-now-with-faster-startup-times-modular-configuration-and-more.html?r=related">
+          zsh-dwim: Now With Faster Startup Times, Modular Configuration, and More
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2014/03/zsh-dwim-i-feel-like-a-genius-belatedly.html?r=related">
+          zsh-dwim:  I Feel Like a Genius, Belatedly
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2014/02/a-couple-of-zbell-dot-zsh-bug-fixes.html?r=related">
+          A Couple of zbell.zsh Bug Fixes
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2014/01/getting-notified-when-long-running-zsh-processes-complete.html?r=related">
+          Getting Notified When Long-Running Zsh Processes Complete
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/07/zsh-dwim-new-transformations-for-watch-modprobe-and-dpkg.html?r=related">
+          zsh-dwim: New Transformations for watch, modprobe, and dpkg
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/05/zsh-dwim-small-update-for-apt-and-dpkg.html?r=related">
+          zsh-dwim: Small Update For apt and dpkg
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/05/shstack-persistent-and-easy-to-use-stacks-shared-between-shell-sessions.html?r=related">
+          shstack: Persistent and Easy to Use Stacks Shared Between Shell Sessions
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/04/more-powerful-zsh-history-search-using-zaw.html?r=related">
+          More Powerful Zsh Incremental History Search Using Zaw
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/03/zsh-dwim-now-works-on-mac-os-x-and-freebsd.html?r=related">
+          zsh-dwim Now Works on Mac OS X and FreeBSD
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/02/upgrading-from-autojump-to-fasd.html?r=related">
+          Upgrading from Autojump to Fasd
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2013/01/zsh-dwim-most-recent-remote-file-completion.html?r=related">
+          zsh-dwim:  Most Recent Remote File Completion
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/12/a-small-update-to-zsh-dwim-rsync-and-dstat.html?r=related">
+          A Small Update to `zsh-dwim`: rsync and dstat
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/11/a-couple-of-useful-snippets-from-my-shell-config.html?r=related">
+          A Couple of Useful Snippets from My Shell Config
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/11/improving-the-behavior-of-the-cd-command-in-git-repositories.html?r=related">
+          Improving the Behavior of the cd Command in Git Repositories
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/11/automatically-expaning-zsh-global-aliases---simplified.html?r=related">
+          Automatically Expanding zsh Global Aliases - Simplified
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/10/shell-environment-upgrade-and-cleanup-part-2---migrating-from-oh-my-zsh-to-prezto.html?r=related">
+          Shell Environment Upgrade and Cleanup: Part 2 - Migrating from oh-my-zsh to Prezto
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/10/cleanup-of-zsh-dwim.html?r=related">
+          Cleanup of zsh-dwim
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/10/initial-release-of-zsh-dwim.html?r=related">
+          Initial Release of zsh-dwim
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/10/shell-environment-upgrade-and-cleanup-part-1-requirements-and-planning.html?r=related">
+          Shell Environment Upgrade and Cleanup: Part 1 - Requirements and Planning
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2012/01/using-and-customizing-zsh-syntax-highlighting-with-oh-my-zsh.html?r=related">
+          Using and Customizing zsh-syntax-highlighting With oh-my-zsh
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/07/automatically-expanding-zsh-global-aliases-as-you-type.html?r=related">
+          Automatically Expanding zsh Global Aliases As You Type
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/05/why-i-started-using-htop.html?r=related">
+          Why I Started Using htop
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/05/my-take-on-the-go-command.html?r=related">
+          My Take on "The Go Command"
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/04/improve-your-oh-my-zsh-startup-time-maybe.html?r=related">
+          Improve Your oh-my-zsh Startup Time (Maybe)
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/02/autojump---the-lazy-way-to-change-directories.html?r=related">
+          autojump - The Lazy Way to Change Directories
+         </a>
+        </li>
+        <li class="related">
+         <a href="/2011/02/why-i-finally-stuck-with-zsh.html?r=related">
+          Why I Finally Stuck With zsh
+         </a>
+        </li>
+       </ul>
+      </footer>
+     </article>
+     <section>
+      <h1>
+       Comments
+      </h1>
+      <div aria-live="polite" id="disqus_thread">
+       <noscript>
+        Please enable JavaScript to view the
+        <a href="http://disqus.com/?ref_noscript">
+         comments powered by Disqus.
+        </a>
+       </noscript>
+      </div>
+     </section>
+    </div>
+    <aside class="sidebar">
+     <section>
+      <ul id="recent_posts">
+       <li class="post">
+        <a alt="Home" href="http://blog.patshead.com">
+         <img src="/images/Home.png"/>
+        </a>
+        <a alt="Archives" href="http://blog.patshead.com/archives/">
+         <img src="/images/Calendar.png"/>
+        </a>
+        <a alt="E-Mail" href="mailto:thehead@patshead.com">
+         <img src="/images/Envelope.png"/>
+        </a>
+        <a alt="subscribe feed" href="http://blog.patshead.com/atom.xml">
+         <img src="/images/rss.png"/>
+        </a>
+       </li>
+      </ul>
+     </section>
+     <section>
+      <h1>
+       Popular Posts
+      </h1>
+      <ul>
+       <li>
+        <a href="http://blog.patshead.com/2013/09/linux-and-the-qnix-qx2710-monitor.html?r=popular">
+         QNIX QX2710 IPS LCD Monitors and Linux
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.patshead.com/2014/06/3d-printable-upgrades-for-the-makerfarm-prusa-i3.html?r=popular">
+         3D Printable Upgrades for the MakerFarm Prusa i3
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.patshead.com/2013/09/generating-new-more-secure-ssh-keys.html?r=popular">
+         Generating New, More Secure SSH Keys
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.patshead.com/2013/01/cocktail-arcade-cabinet-upgrade-part-3---the-conclusion.html?r=popular">
+         Cocktail Arcade Cabinet Upgrade: Part 3 - The Conclusion
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.patshead.com/2013/07/my-linux-workstation-build-2013.html?r=popular">
+         My Linux Workstation Build - 2013
+        </a>
+       </li>
+      </ul>
+     </section>
+     <section>
+      <h1>
+       Follow me:
+      </h1>
+      <ul>
+       <li>
+        <a href="http://twitter.com/intent/user?screen_name=patsheadcom" target="_blank">
+         <img height="16px" src="/i/16px/Twitter.png" width="16px"/>
+         on Twitter
+        </a>
+       </li>
+       <li>
+        <a href="https://plus.google.com/110443156499598175287?rel=author" target="_blank">
+         <img height="16px" src="/i/16px/Google+.png" width="16px"/>
+         on Google+
+        </a>
+       </li>
+       <li>
+        <a href="http://www.reddit.com/user/oknowton" target="_blank">
+         <img height="16px" src="/i/Reddit.png" width="16px"/>
+         on Reddit
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/oknowton" target="_blank">
+         <img height="16px" src="/i/GitHub.png" width="16px"/>
+         on Github
+        </a>
+       </li>
+       <li>
+        <a href="/atom.xml" target="_blank">
+         <img .="" height="16px" src="/i/RSS.png" width="16px"/>
+         on my RSS feed
+        </a>
+       </li>
+      </ul>
+     </section>
+     <section>
+      <h1>
+       GitHub Repos
+      </h1>
+      <ul id="gh_repos">
+       <li>
+        <a href="https://github.com/oknowton/3D-Printer-Models" title="3D Printer Models at GitHub">
+         3D-Printer-Models
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/oknowton/shstack" title="shell stack at GitHub">
+         shstack
+        </a>
+       </li>
+       <li>
+        <a href="https://gist.github.com/oknowton/8346801" title="zbell.zsh gist at GitHub">
+         zbell.zsh
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/oknowton/zsh-dwim" title="zsh-dwim at GitHub">
+         zsh-dwim
+        </a>
+       </li>
+      </ul>
+     </section>
+     <section>
+      <h1>
+       Recent Posts
+      </h1>
+      <ul id="recent_posts">
+       <li class="post">
+        <a href="/2015/07/should-i-still-buy-a-qnix-qx2710-in-2015.html?r=recent">
+         Would I Still Buy a QNIX QX2710 in 2015?
+        </a>
+       </li>
+       <li class="post">
+        <a href="/2015/06/my-first-year-of-3d-printing.html?r=recent">
+         My First Year of 3D Printing
+        </a>
+       </li>
+       <li class="post">
+        <a href="/2015/06/the-blu-studio-6-dot-0-lte-android-smartphone.html?r=recent">
+         The Blu Studio 6.0 LTE Android Smartphone
+        </a>
+       </li>
+       <li class="post">
+        <a href="/2015/05/the-e-3lue-mazer-ii-wireless-gaming-mouse.html?r=recent">
+         The E-Blue Mazer II Wireless Gaming Mouse
+        </a>
+       </li>
+       <li class="post">
+        <a href="/2015/04/a-3d-printed-cable-cover-for-my-monitor-stand.html?r=recent">
+         A 3D Printed Cable Cover For My Monitor Stand
+        </a>
+       </li>
+      </ul>
+     </section>
+     <section>
+      <h1>
+       Categories
+      </h1>
+      <ul id="category-list">
+       <li>
+        <a href="/categories/3d-printing/">
+         3D Printing (10)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/android/">
+         Android (14)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/arcade-cabinet-build/">
+         Arcade Cabinet Build (21)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/arcade-games/">
+         Arcade Games (18)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/blogging/">
+         Blogging (1)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/books/">
+         Books (7)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/cloud-storage/">
+         Cloud Storage (9)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/coffee/">
+         Coffee (22)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/computer-hardware/">
+         Computer Hardware (28)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/do-it-yourself-projects/">
+         Do It Yourself Projects (13)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/emacs/">
+         Emacs (5)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/gadgets/">
+         Gadgets (2)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/gaming/">
+         Gaming (6)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/humor/">
+         Humor (1)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/linux/">
+         Linux (26)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/security/">
+         Security (3)
+        </a>
+       </li>
+       <li>
+        <a href="/categories/shell/">
+         Shell (28)
+        </a>
+       </li>
+      </ul>
+     </section>
+    </aside>
+   </div>
+  </div>
+  <footer role="contentinfo">
+   <p>
+    Copyright  2015 - Pat Regan -
+    <span class="credit">
+     Powered by
+     <a href="http://octopress.org" rel="nofollow">
+      Octopress
+     </a>
+    </span>
+   </p>
+   <script>
+    if($('.images')[0]){$('.images').galleria({debug:false});}
+   </script>
+   <script type="text/javascript">
+    var _paq = _paq || [];
+  _paq.push(["setCookieDomain", "*.patshead.com"]);
+  _paq.push(["setDomains", ["*.patshead.com","*.blog.patshead.com","*.www.patshead.com"]]);
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+  var u=(("https:" == document.location.protocol) ? "https" : "http") + "://serverswarm.com/piwik/";
+  _paq.push(["setTrackerUrl", u+"piwik.php"]);
+  _paq.push(["setSiteId", "2"]);
+  var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+  g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+&lt;/script&gt;
+
+
+&lt;/footer&gt;
+  
+
+&lt;script type="text/javascript"&gt;
+      var disqus_shortname = 'patshead';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.patshead.com/2013/04/zsh-dwim-transformations-for-the-find-command.html';
+        var disqus_url = 'http://blog.patshead.com/2013/04/zsh-dwim-transformations-for-the-find-command.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+   </script>
+   <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+   </script>
+  </footer>
+ </body>
+</html>

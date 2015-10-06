@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<!--[if IE 7]&gt;
+&lt;html class="ie ie7" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if IE 8]&gt;
+&lt;html class="ie ie8" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if !(IE 7) &amp; !(IE 8)]&gt;&lt;!-->
+<html lang="en-US">
+ <!--&lt;![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <title>
+   Custom Paint in MDI Client | codexpert blog
+  </title>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://codexpert.ro/blog/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+&lt;script src="http://codexpert.ro/blog/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <!-- All in One SEO Pack 2.2.6.2 by Michael Torbert of Semper Fi Web Design[298,348] -->
+  <meta content="Discover how to paint in MDI client area of an MFC Application that is using Feature Pack classes." name="description"/>
+  <meta content="cmdiframewndex,mfc,mdi client,custom paint,feature pack,wm_paint,onerasemdiclientbackground,mdi application" name="keywords"/>
+  <link href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/" rel="canonical"/>
+  <!-- /all in one seo pack -->
+  <link href="http://codexpert.ro/blog/feed/" rel="alternate" title="codexpert blog  Feed" type="application/rss+xml"/>
+  <link href="http://codexpert.ro/blog/comments/feed/" rel="alternate" title="codexpert blog  Comments Feed" type="application/rss+xml"/>
+  <link href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/feed/" rel="alternate" title="codexpert blog  Custom Paint in MDI Client Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/codexpert.ro\/blog\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://codexpert.ro/blog/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=2.7.1" id="crayon-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://codexpert.ro/blog/wp-content/plugins/crayon-syntax-highlighter/themes/github/github.css?ver=2.7.1" id="crayon-theme-github-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://codexpert.ro/blog/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas.css?ver=2.7.1" id="crayon-font-consolas-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&amp;subset=latin,latin-ext" id="twentytwelve-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://codexpert.ro/blog/wp-content/themes/twentytwelve/style.css?ver=4.2.2" id="twentytwelve-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentytwelve-ie-css'  href='http://codexpert.ro/blog/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://codexpert.ro/blog/wp-content/plugins/jetpack/_inc/genericons/genericons/genericons.css?ver=3.1" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://codexpert.ro/blog/wp-content/plugins/jetpack/css/jetpack.css?ver=3.5.3" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://codexpert.ro/blog/wp-content/plugins/download-monitor/page-addon/styles.css?ver=4.2.2" id="wp_dlmp_styles-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://codexpert.ro/blog/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.7.1","is_admin":"0","ajaxurl":"http:\/\/codexpert.ro\/blog\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]&gt; */
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=2.7.1" type="text/javascript">
+  </script>
+  <link href="http://codexpert.ro/blog/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://codexpert.ro/blog/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://codexpert.ro/blog/2013/01/24/the-beginning-of-the-golden-ages/" rel="prev" title="The Beginning of The Golden Ages"/>
+  <link href="http://codexpert.ro/blog/2013/01/30/filesystem-header-in-visual-studio-2012/" rel="next" title="&lt;filesystem&gt; header in Visual Studio 2012"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://wp.me/p2Aq8Z-76" rel="shortlink"/>
+  <style type="text/css">
+   .download-info .download-button {
+		background-image: url(http://codexpert.ro/blog/wp-content/plugins/download-monitor/page-addon/downloadbutton.gif);
+	}
+	.download-info .more-button {
+		background-image: url(http://codexpert.ro/blog/wp-content/plugins/download-monitor/page-addon/morebutton.gif);
+	}
+  </style>
+  <link href="//jetpack.wordpress.com" rel="dns-prefetch"/>
+  <link href="//s0.wp.com" rel="dns-prefetch"/>
+  <link href="//s1.wp.com" rel="dns-prefetch"/>
+  <link href="//s2.wp.com" rel="dns-prefetch"/>
+  <link href="//public-api.wordpress.com" rel="dns-prefetch"/>
+  <link href="//0.gravatar.com" rel="dns-prefetch"/>
+  <link href="//1.gravatar.com" rel="dns-prefetch"/>
+  <link href="//2.gravatar.com" rel="dns-prefetch"/>
+  <link href="//i0.wp.com" rel="dns-prefetch"/>
+  <link href="//i1.wp.com" rel="dns-prefetch"/>
+  <link href="//i2.wp.com" rel="dns-prefetch"/>
+  <link href="//widgets.wp.com" rel="dns-prefetch"/>
+  <style id="twentytwelve-header-css" type="text/css">
+   .site-header h1 a,
+		.site-header h2 {
+			color: #444;
+		}
+  </style>
+  <style id="custom-css-css">
+   tt{background-color:#eee;font-family:Consolas, Monaco, Lucida Console, monospace;font-size:1em;padding:2px;border:1px solid #ddd}pre.console{background-color:#222;color:#ddd;font-family:Courier, Consolas, Monaco, Lucida Console, monospace;font-size:1em;padding:10px;line-height:100%}
+  </style>
+ </head>
+ <body class="single single-post postid-440 single-format-standard custom-font-enabled">
+  <div class="hfeed site" id="page">
+   <header class="site-header" id="masthead" role="banner">
+    <hgroup>
+     <h1 class="site-title">
+      <a href="http://codexpert.ro/blog/" rel="home" title="codexpert blog">
+       codexpert blog
+      </a>
+     </h1>
+     <h2 class="site-description">
+      I see native code
+     </h2>
+    </hgroup>
+    <nav class="main-navigation" id="site-navigation" role="navigation">
+     <button class="menu-toggle">
+      Menu
+     </button>
+     <a class="assistive-text" href="#content" title="Skip to content">
+      Skip to content
+     </a>
+     <div class="menu-main-container">
+      <ul class="nav-menu" id="menu-main">
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-33" id="menu-item-33">
+        <a href="http://codexpert.ro/blog">
+         Blog
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-31" id="menu-item-31">
+        <a href="http://codexpert.ro">
+         Site Home
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-32" id="menu-item-32">
+        <a href="http://codexpert.ro/forum">
+         Forum
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-36" id="menu-item-36">
+        <a href="http://codexpert.ro/articole.php">
+         Articles
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-35" id="menu-item-35">
+        <a href="http://codexpert.ro/resurse.php">
+         Resources
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-34" id="menu-item-34">
+        <a href="http://codexpert.ro/blog/despre-noi/">
+         About Us
+        </a>
+       </li>
+      </ul>
+     </div>
+    </nav>
+    <!-- #site-navigation -->
+   </header>
+   <!-- #masthead -->
+   <div class="wrapper" id="main">
+    <div class="site-content" id="primary">
+     <div id="content" role="main">
+      <article class="post-440 post type-post status-publish format-standard hentry category-mfc-libraries category-uncategorized tag-cmdiframewndex tag-custom-paint tag-feature-pack tag-mdi-client tag-mfc tag-wm_paint" id="post-440">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         Custom Paint in MDI Client
+        </h1>
+        <div class="comments-link">
+         <a href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/#comments">
+          2 Replies
+         </a>
+        </div>
+        <!-- .comments-link -->
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         In some
+         <strong>
+          MDI applications
+         </strong>
+         , would be nice to perform some custom painting the
+         <strong>
+          MDI Client area
+         </strong>
+         . For example we can fill the background with a brush or draw a logo image. One classic and well known method is to subclass the
+         <strong>
+          MDI Client
+         </strong>
+         window in our own class derived from
+         <strong>
+          CWnd
+         </strong>
+         MFC class. After subclassing, all we have to do is to handle
+         <strong>
+          WM_PAINT
+         </strong>
+         and/or
+         <strong>
+          WM_ERASEBKGND
+         </strong>
+         and perform our custom painting. There are tens of articles describing this method in detail, and you cand find some by clicking the links shown in the bottom of this article.
+        </p>
+        <p>
+         Thatworks great if the main frame class is derived from
+         <strong>
+          CMDIFrameWnd
+         </strong>
+         , but its no more possible if the main frame class is derived from
+         <strong>
+          CMDIFrameWndEx
+         </strong>
+         (shipped with
+         <strong>
+          Visual Studio 2008
+         </strong>
+         with
+         <strong>
+          FeaturePack
+         </strong>
+         and newer Visual Studio versions). Thats because
+         <strong>
+          CMDIFrameWndEx
+         </strong>
+         subclases the
+         <strong>
+          MDI Client
+         </strong>
+         window, itself (see
+         <strong>
+          CMDIFrameWndEx::m_wndClientArea
+         </strong>
+         of type
+         <strong>
+          CMDIClientAreaWnd
+         </strong>
+         ). MFC, adds the subclassed window in a permanent map and does not allow subclassing twice. One can say
+         <em>
+          well, just set
+          <strong>
+           CMDIFrameWndEx::m_bDoSubclass
+          </strong>
+          to FALSE before calling
+          <strong>
+           CMDIFrameWndEx::OnCreateClient
+          </strong>
+          ; next we can do subclassing as we wish
+         </em>
+         . That doesnt work either, because in many places the framework expects using exactly
+         <strong>
+          CMDIFrameWndEx::m_wndClientArea
+         </strong>
+         and nothing else.
+        </p>
+        <h1>
+         Searching fora solution
+        </h1>
+        <p>
+         In an olderdiscussion about a related subject,
+         <strong>
+          Joseph M. Newcomer
+         </strong>
+         proposed a simple trick: temporarily attachthe
+         <strong>
+          MDI Client
+         </strong>
+         window handle toyour own class, whenever its necessary to force repainting the
+         <strong>
+          MDI Client
+         </strong>
+         area.
+        </p>
+        <blockquote cite="http://msgroups.net/microsoft.public.vc.mfc/how-to-subclass-an-mfc-window/155919">
+         <p style="text-align: left;">
+          void CMyApp::RedrawClientArea()
+          <br/>
+          {
+          <br/>
+          CMySublcass w;
+          <br/>
+          w.Attach(m_wndClientArea.Detach());
+          <br/>
+          w-&gt;Invalidate();
+          <br/>
+          w-&gt;UpdateWindow();
+          <br/>
+          m_wndClientArea.Attach(w.Detach());
+          <br/>
+          }
+         </p>
+        </blockquote>
+        <p>
+         Next, just have to call
+         <strong>
+          CMyApp::RedrawClientArea
+         </strong>
+         in our MFC application, where necessary. Thats IMO very ingenious and should work but, as the author states himself, its
+         <em>
+          remarkably ugly.
+         </em>
+         So I spent some time trying other tricks, which included the hacking of application thread maps. None was useful.
+        </p>
+        <h1>
+         Therightsolution
+        </h1>
+        <p>
+         Finally, Ifoundthe bettersolution. It is incredible simple: just have to override
+         <strong>
+          CMDIFrameWndEx::OnEraseMDIClientBackground
+         </strong>
+         virtual function!
+         <br/>
+         Here is an example that fills the MDI Client area using a given brush.
+        </p>
+        <!-- Crayon Syntax Highlighter v2.7.1 -->
+        <div class="crayon-syntax crayon-theme-github crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" id="crayon-55a4262ec5313737307674" style=" margin-top: 12px; margin-bottom: 12px; font-size: 16px !important; line-height: 18px !important;">
+         <div class="crayon-toolbar" data-settings=" show" style="font-size: 16px !important;height: 24px !important; line-height: 24px !important;">
+          <span class="crayon-title">
+          </span>
+          <div class="crayon-tools" style="font-size: 16px !important;height: 24px !important; line-height: 24px !important;">
+           <div class="crayon-button crayon-nums-button" title="Toggle Line Numbers">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-plain-button" title="Toggle Plain Code">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-expand-button" title="Expand Code">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-copy-button" title="Copy">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <div class="crayon-button crayon-popup-button" title="Open Code In New Window">
+            <div class="crayon-button-icon">
+            </div>
+           </div>
+           <span class="crayon-language">
+            C++
+           </span>
+          </div>
+         </div>
+         <div class="crayon-info" style="min-height: 22.4px !important; line-height: 22.4px !important;">
+         </div>
+         <div class="crayon-plain-wrap">
+          <textarea class="crayon-plain print-no" data-settings="dblclick" readonly="" style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 16px !important; line-height: 18px !important;" wrap="soft">
+           BOOL CMainFrame::OnEraseMDIClientBackground(CDC* pDC)
+{
+   CRect rcClient;
+   GetClientRect(rcClient);
+
+   // paint MDI Client background 
+   CBrush* pOldBrush = pDC-&gt;SelectObject(&amp;m_brushMDIBack);
+   pDC-&gt;PatBlt(0, 0, rcClient.right, rcClient.bottom, PATCOPY);
+
+   // free GDI objects
+   pDC-&gt;SelectObject(pOldBrush);
+
+   return TRUE; // no further default processing
+}
+          </textarea>
+         </div>
+         <div class="crayon-main" style="">
+          <table class="crayon-table">
+           <tr class="crayon-row">
+            <td class="crayon-nums " data-settings="show">
+             <div class="crayon-nums-content" style="font-size: 16px !important; line-height: 18px !important;">
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-1">
+               1
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-2">
+               2
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-3">
+               3
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-4">
+               4
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-5">
+               5
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-6">
+               6
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-7">
+               7
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-8">
+               8
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-9">
+               9
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-10">
+               10
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-11">
+               11
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-12">
+               12
+              </div>
+              <div class="crayon-num" data-line="crayon-55a4262ec5313737307674-13">
+               13
+              </div>
+              <div class="crayon-num crayon-striped-num" data-line="crayon-55a4262ec5313737307674-14">
+               14
+              </div>
+             </div>
+            </td>
+            <td class="crayon-code">
+             <div class="crayon-pre" style="font-size: 16px !important; line-height: 18px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;">
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-1">
+               <span class="crayon-t">
+                BOOL
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                CMainFrame
+               </span>
+               <span class="crayon-o">
+                ::
+               </span>
+               <span class="crayon-e">
+                OnEraseMDIClientBackground
+               </span>
+               <span class="crayon-sy">
+                (
+               </span>
+               <span class="crayon-v">
+                CDC
+               </span>
+               <span class="crayon-o">
+                *
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                pDC
+               </span>
+               <span class="crayon-sy">
+                )
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-2">
+               <span class="crayon-sy">
+                {
+               </span>
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-3">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-e">
+                CRect
+               </span>
+               <span class="crayon-v">
+                rcClient
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-4">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-e">
+                GetClientRect
+               </span>
+               <span class="crayon-sy">
+                (
+               </span>
+               <span class="crayon-v">
+                rcClient
+               </span>
+               <span class="crayon-sy">
+                )
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-5">
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-6">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-c">
+                // paint MDI Client background
+               </span>
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-7">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                CBrush
+               </span>
+               <span class="crayon-o">
+                *
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                pOldBrush
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-o">
+                =
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                pDC
+               </span>
+               <span class="crayon-o">
+                -&gt;
+               </span>
+               <span class="crayon-e">
+                SelectObject
+               </span>
+               <span class="crayon-sy">
+                (
+               </span>
+               <span class="crayon-v">
+                &amp;m_brushMDIBack
+               </span>
+               <span class="crayon-sy">
+                )
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-8">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                pDC
+               </span>
+               <span class="crayon-o">
+                -&gt;
+               </span>
+               <span class="crayon-e">
+                PatBlt
+               </span>
+               <span class="crayon-sy">
+                (
+               </span>
+               <span class="crayon-cn">
+                0
+               </span>
+               <span class="crayon-sy">
+                ,
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-cn">
+                0
+               </span>
+               <span class="crayon-sy">
+                ,
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                rcClient
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-v">
+                right
+               </span>
+               <span class="crayon-sy">
+                ,
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                rcClient
+               </span>
+               <span class="crayon-sy">
+                .
+               </span>
+               <span class="crayon-v">
+                bottom
+               </span>
+               <span class="crayon-sy">
+                ,
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                PATCOPY
+               </span>
+               <span class="crayon-sy">
+                )
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-9">
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-10">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-c">
+                // free GDI objects
+               </span>
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-11">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-v">
+                pDC
+               </span>
+               <span class="crayon-o">
+                -&gt;
+               </span>
+               <span class="crayon-e">
+                SelectObject
+               </span>
+               <span class="crayon-sy">
+                (
+               </span>
+               <span class="crayon-v">
+                pOldBrush
+               </span>
+               <span class="crayon-sy">
+                )
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-12">
+              </div>
+              <div class="crayon-line" id="crayon-55a4262ec5313737307674-13">
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-st">
+                return
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-t">
+                TRUE
+               </span>
+               <span class="crayon-sy">
+                ;
+               </span>
+               <span class="crayon-h">
+               </span>
+               <span class="crayon-c">
+                // no further default processing
+               </span>
+              </div>
+              <div class="crayon-line crayon-striped-line" id="crayon-55a4262ec5313737307674-14">
+               <span class="crayon-sy">
+                }
+               </span>
+              </div>
+             </div>
+            </td>
+           </tr>
+          </table>
+         </div>
+        </div>
+        <!-- [Format Time: 0.0043 seconds] -->
+        <p>
+        </p>
+        <h1>
+         Demo project
+        </h1>
+        <p>
+         The demo project, attached here, is an MDI MFC application that paints in the
+         <strong>
+          MDI Client
+         </strong>
+         acustombackground and a logo image.
+        </p>
+        <div class="wp-caption alignnone" id="attachment_443" style="width: 643px">
+         <a href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/custom-paint-in-mdi-client-demo/" rel="attachment wp-att-443">
+          <img alt="Custom Paint in MDI Client - Demo" class="size-full wp-image-443" data-recalc-dims="1" src="http://i1.wp.com/codexpert.ro/blog/wp-content/uploads/2013/01/Custom-Paint-in-MDI-Client-Demo.jpg?resize=625%2C425"/>
+         </a>
+         <p class="wp-caption-text">
+          Custom Paint in MDI Client  Demo
+         </p>
+        </div>
+        <p>
+        </p>
+        <h1>
+         Resources
+        </h1>
+        <ul>
+         <li>
+          MSDN:
+          <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb983770(v=vs.100).aspx" target="_blank" title="CMDIFrameWndEx::OnEraseMDIClientBackground">
+           CMDIFrameWndEx::OnEraseMDIClientBackground
+          </a>
+         </li>
+        </ul>
+        <h1>
+         See also
+        </h1>
+        <ul>
+         <li>
+          Codeguru Forums:
+          <a href="http://forums.codeguru.com/showthread.php?319786" target="_blank" title="How to change the background of the MDI main frame?">
+           How to change the background of the MDI main frame?
+          </a>
+         </li>
+         <li>
+          Codexpert Forums (RO):
+          <a href="http://www.codexpert.ro/forum/viewtopic.php?f=30&amp;t=1808" target="_blank" title="Cum punem o imagine in zona MDI client?">
+           Cum punem o imagine in zona MDI client?
+          </a>
+         </li>
+         <li>
+          MSGROUPS.NET:
+          <a href="http://msgroups.net/microsoft.public.vc.mfc/how-to-subclass-an-mfc-window/155919" target="_blank" title="How to subclass an MFC window?">
+           How to subclass an MFC window?
+          </a>
+         </li>
+         <li>
+          MSDN Forums:
+          <a href="http://social.msdn.microsoft.com/Forums/en-US/vcmfcatl/thread/b4af48ca-3b41-4f21-a8bc-e7759e651fa6" target="_blank" title="Painting the mainframe client area">
+           Painting the mainframe client area
+          </a>
+         </li>
+         <li>
+          Silviu Marius Ardeleans blog:
+          <a href="http://silviuardelean.ro/2012/10/21/subclasswindow-method-issues-in-projects-base-on-mfc-feature-pack-2/" target="_blank" title="SubclassWindow() method issues in projects base on MFC Feature Pack">
+           SubclassWindow() method issues in projects base on MFC Feature Pack
+          </a>
+         </li>
+        </ul>
+        <h1>
+         Downloads
+        </h1>
+        <ul>
+         <li>
+          <a class="downloadlink" href="http://codexpert.ro/blog/wp-content/plugins/download-monitor/download.php?id=10" title="Version1 downloaded 546 times">
+           Custom Paint in MDI Client (546)
+          </a>
+           demo project
+         </li>
+        </ul>
+        <div class="sharedaddy sd-sharing-enabled">
+         <div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing">
+          <h3 class="sd-title">
+           Share this:
+          </h3>
+          <div class="sd-content">
+           <ul>
+            <li class="share-twitter">
+             <a class="share-twitter sd-button share-icon" data-shared="sharing-twitter-440" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=twitter" rel="nofollow" target="_blank" title="Click to share on Twitter">
+              <span>
+               Twitter
+              </span>
+             </a>
+            </li>
+            <li class="share-linkedin">
+             <a class="share-linkedin sd-button share-icon" data-shared="sharing-linkedin-440" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=linkedin" rel="nofollow" target="_blank" title="Click to share on LinkedIn">
+              <span>
+               LinkedIn
+              </span>
+             </a>
+            </li>
+            <li class="share-stumbleupon">
+             <a class="share-stumbleupon sd-button share-icon" data-shared="" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=stumbleupon" rel="nofollow" target="_blank" title="Click to share on StumbleUpon">
+              <span>
+               StumbleUpon
+              </span>
+             </a>
+            </li>
+            <li class="share-facebook">
+             <a class="share-facebook sd-button share-icon" data-shared="sharing-facebook-440" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=facebook" rel="nofollow" target="_blank" title="Share on Facebook">
+              <span>
+               Facebook
+              </span>
+             </a>
+            </li>
+            <li class="share-reddit">
+             <a class="share-reddit sd-button share-icon" data-shared="" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=reddit" rel="nofollow" target="_blank" title="Click to share on Reddit">
+              <span>
+               Reddit
+              </span>
+             </a>
+            </li>
+            <li>
+             <a class="sharing-anchor sd-button share-more" href="#">
+              <span>
+               More
+              </span>
+             </a>
+            </li>
+            <li class="share-end">
+            </li>
+           </ul>
+           <div class="sharing-hidden">
+            <div class="inner" style="display: none;">
+             <ul>
+              <li class="share-google-plus-1">
+               <a class="share-google-plus-1 sd-button share-icon" data-shared="sharing-google-440" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=google-plus-1" rel="nofollow" target="_blank" title="Click to share on Google+">
+                <span>
+                 Google
+                </span>
+               </a>
+              </li>
+              <li class="share-email">
+               <a class="share-email sd-button share-icon" data-shared="" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/?share=email" rel="nofollow" target="_blank" title="Click to email this to a friend">
+                <span>
+                 Email
+                </span>
+               </a>
+              </li>
+              <li class="share-end">
+              </li>
+              <li class="share-print">
+               <a class="share-print sd-button share-icon" data-shared="" href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/#print" rel="nofollow" target="_blank" title="Click to print">
+                <span>
+                 Print
+                </span>
+               </a>
+              </li>
+              <li class="share-end">
+              </li>
+             </ul>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded" data-name="like-post-frame-38232981-440-55a4262ed1aba" data-src="//widgets.wp.com/likes/#blog_id=38232981&amp;post_id=440&amp;origin=codexpert.ro&amp;obj_id=38232981-440-55a4262ed1aba" id="like-post-wrapper-38232981-440-55a4262ed1aba">
+         <h3 class="sd-title">
+          Like this:
+         </h3>
+         <div class="likes-widget-placeholder post-likes-widget-placeholder" style="height:55px">
+          <span class="button">
+           <span>
+            Like
+           </span>
+          </span>
+          <span class="loading">
+           Loading...
+          </span>
+         </div>
+         <span class="sd-text-color">
+         </span>
+         <a class="sd-link-color">
+         </a>
+        </div>
+       </div>
+       <!-- .entry-content -->
+       <footer class="entry-meta">
+        This entry was posted in
+        <a href="http://codexpert.ro/blog/category/libraries/mfc-libraries/" rel="category tag">
+         MFC
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/category/uncategorized/" rel="category tag">
+         Uncategorized
+        </a>
+        and tagged
+        <a href="http://codexpert.ro/blog/tag/cmdiframewndex/" rel="tag">
+         CMDIFrameWndEx
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/tag/custom-paint/" rel="tag">
+         custom paint
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/tag/feature-pack/" rel="tag">
+         Feature Pack
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/tag/mdi-client/" rel="tag">
+         MDI Client
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/tag/mfc/" rel="tag">
+         mfc
+        </a>
+        ,
+        <a href="http://codexpert.ro/blog/tag/wm_paint/" rel="tag">
+         WM_PAINT
+        </a>
+        on
+        <a href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/" rel="bookmark" title="13:20">
+         <time class="entry-date" datetime="2013-01-28T13:20:31+00:00">
+          2013.01.28
+         </time>
+        </a>
+        <span class="by-author">
+         by
+         <span class="author vcard">
+          <a class="url fn n" href="http://codexpert.ro/blog/author/ovidiu-cucu/" rel="author" title="View all posts by Ovidiu Cucu">
+           Ovidiu Cucu
+          </a>
+         </span>
+        </span>
+        .
+        <div class="author-info">
+         <div class="author-avatar">
+          <img alt="" class="avatar avatar-68 photo" height="68" src="http://2.gravatar.com/avatar/e1b0a6a87edb3be4bd212acfec5bdb7a?s=68&amp;d=mm&amp;r=pg" srcset="http://2.gravatar.com/avatar/e1b0a6a87edb3be4bd212acfec5bdb7a?s=136&amp;d=mm&amp;r=pg 2x" width="68"/>
+         </div>
+         <!-- .author-avatar -->
+         <div class="author-description">
+          <h2>
+           About Ovidiu Cucu
+          </h2>
+          <p>
+           Co-founder CODEXPERT  
+ Microsoft MVP VC++   
+ Follow me on Twitter:
+           <a href="https://twitter.com/ovidiucucu" title="Follow me on Twitter">
+            https://twitter.com/ovidiucucu
+           </a>
+           StumbleUpon list:
+           <a href="http://www.stumbleupon.com/lists/1333999629538446480" title="StumbleUpon list">
+            http://www.stumbleupon.com/lists/1333999629538446480
+           </a>
+           Visit
+           <a href="http://bit.ly/Jhn49t" title="Microsoft Virtual Academy">
+            Microsoft Virtual Academy
+           </a>
+          </p>
+          <div class="author-link">
+           <a href="http://codexpert.ro/blog/author/ovidiu-cucu/" rel="author">
+            View all posts by Ovidiu Cucu
+            <span class="meta-nav">
+             
+            </span>
+           </a>
+          </div>
+          <!-- .author-link	-->
+         </div>
+         <!-- .author-description -->
+        </div>
+        <!-- .author-info -->
+       </footer>
+       <!-- .entry-meta -->
+      </article>
+      <!-- #post -->
+      <nav class="nav-single">
+       <h3 class="assistive-text">
+        Post navigation
+       </h3>
+       <span class="nav-previous">
+        <a href="http://codexpert.ro/blog/2013/01/24/the-beginning-of-the-golden-ages/" rel="prev">
+         <span class="meta-nav">
+          
+         </span>
+         The Beginning of The Golden Ages
+        </a>
+       </span>
+       <span class="nav-next">
+        <a href="http://codexpert.ro/blog/2013/01/30/filesystem-header-in-visual-studio-2012/" rel="next">
+         &lt;filesystem&gt; header in Visual Studio 2012
+         <span class="meta-nav">
+          
+         </span>
+        </a>
+       </span>
+      </nav>
+      <!-- .nav-single -->
+      <div class="comments-area" id="comments">
+       <h2 class="comments-title">
+        2 thoughts on 
+        <span>
+         Custom Paint in MDI Client
+        </span>
+        
+       </h2>
+       <ol class="commentlist">
+        <li class="comment even thread-even depth-1" id="li-comment-14">
+         <article class="comment" id="comment-14">
+          <header class="comment-meta comment-author vcard">
+           <img alt="" class="avatar avatar-44 photo" height="44" src="http://1.gravatar.com/avatar/4df5ea61ae054e11a0ac369d189ee94a?s=44&amp;d=mm&amp;r=pg" srcset="http://1.gravatar.com/avatar/4df5ea61ae054e11a0ac369d189ee94a?s=88&amp;d=mm&amp;r=pg 2x" width="44"/>
+           <cite>
+            <b class="fn">
+             Flaviu
+            </b>
+           </cite>
+           <a href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/#comment-14">
+            <time datetime="2013-02-19T15:48:06+00:00">
+             2013.02.19 at 15:48
+            </time>
+           </a>
+          </header>
+          <!-- .comment-meta -->
+          <section class="comment-content comment">
+           <p>
+            The solution that you have presented here are elegant, but there are not possible in VC6, and here I mean on CMainFrame::OnEraseMDIClientBackground  I had tried with CMainFrame::OnEraseBackground, but did not function  there is a solution for VC6, or I should apply a temporary MDI client window ? Thank you.
+           </p>
+          </section>
+          <!-- .comment-content -->
+          <div class="reply">
+           <a aria-label="Reply to Flaviu" class="comment-reply-link" href="/blog/2013/01/28/custom-paint-in-mdi-client/?replytocom=14#respond" onclick='return addComment.moveForm( "comment-14", "14", "respond", "440" )'>
+            Reply
+           </a>
+           <span>
+            
+           </span>
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- #comment-## -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-15">
+         <article class="comment" id="comment-15">
+          <header class="comment-meta comment-author vcard">
+           <img alt="" class="avatar avatar-44 photo" height="44" src="http://1.gravatar.com/avatar/4df5ea61ae054e11a0ac369d189ee94a?s=44&amp;d=mm&amp;r=pg" srcset="http://1.gravatar.com/avatar/4df5ea61ae054e11a0ac369d189ee94a?s=88&amp;d=mm&amp;r=pg 2x" width="44"/>
+           <cite>
+            <b class="fn">
+             Flaviu
+            </b>
+           </cite>
+           <a href="http://codexpert.ro/blog/2013/01/28/custom-paint-in-mdi-client/#comment-15">
+            <time datetime="2013-02-20T15:03:12+00:00">
+             2013.02.20 at 15:03
+            </time>
+           </a>
+          </header>
+          <!-- .comment-meta -->
+          <section class="comment-content comment">
+           <p>
+            I found few solutions here:
+            <br/>
+            <a href="http://forums.codeguru.com/showthread.php?319786" rel="nofollow">
+             http://forums.codeguru.com/showthread.php?319786
+            </a>
+           </p>
+          </section>
+          <!-- .comment-content -->
+          <div class="reply">
+           <a aria-label="Reply to Flaviu" class="comment-reply-link" href="/blog/2013/01/28/custom-paint-in-mdi-client/?replytocom=15#respond" onclick='return addComment.moveForm( "comment-15", "15", "respond", "440" )'>
+            Reply
+           </a>
+           <span>
+            
+           </span>
+          </div>
+          <!-- .reply -->
+         </article>
+         <!-- #comment-## -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!-- .commentlist -->
+       <div class="comment-respond" id="respond">
+        <h3 class="comment-reply-title" id="reply-title">
+         Leave a Reply
+         <small>
+          <a href="/blog/2013/01/28/custom-paint-in-mdi-client/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+           Cancel reply
+          </a>
+         </small>
+        </h3>
+        <div class="comment-form" id="commentform">
+         <iframe allowtransparency="false" frameborder="0" id="jetpack_remote_comment" name="jetpack_remote_comment" scrolling="no" src="http://jetpack.wordpress.com/jetpack-comment/?blogid=38232981&amp;postid=440&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=mystery&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=a2ffeb42e29ecd233addc182a87a1ad17e4ecee4#parent=http%3A%2F%2Fcodexpert.ro%2Fblog%2F2013%2F01%2F28%2Fcustom-paint-in-mdi-client%2F" style="width:100%; height: 430px;border:0px;">
+         </iframe>
+        </div>
+       </div>
+       <input id="comment_parent" name="comment_parent" type="hidden" value=""/>
+      </div>
+      <!-- #comments .comments-area -->
+     </div>
+     <!-- #content -->
+    </div>
+    <!-- #primary -->
+    <div class="widget-area" id="secondary" role="complementary">
+     <aside class="widget widget_search" id="search-2">
+      <form action="http://codexpert.ro/blog/" class="searchform" id="searchform" method="get" role="search">
+       <div>
+        <label class="screen-reader-text" for="s">
+         Search for:
+        </label>
+        <input id="s" name="s" type="text" value=""/>
+        <input id="searchsubmit" type="submit" value="Search"/>
+       </div>
+      </form>
+     </aside>
+     <aside class="widget widget_recent_entries" id="recent-posts-2">
+      <h3 class="widget-title">
+       Recent Posts
+      </h3>
+      <ul>
+       <li>
+        <a href="http://codexpert.ro/blog/2015/07/12/mfc-support-for-directwrite-part-1/">
+         MFC Support for DirectWrite  Part 1
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/2015/07/03/easy-shadow-drawing-with-mfc/">
+         Easy Shadow Drawing with MFC
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/2015/06/13/easy-browse-for-folder-with-mfc/">
+         Easy Browse for Folder with MFC
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/2015/05/23/using-lambdas-in-mfc-applications-part-3-dealing-with-c-rest-sdk/">
+         Using Lambdas in MFC Applications  Part 3: Dealing with C++ REST SDK
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/2015/04/30/binary-literals-and-digit-separators/">
+         Binary literals and digit separators
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <aside class="widget widget_tag_cloud" id="tag_cloud-2">
+      <h3 class="widget-title">
+       Tags
+      </h3>
+      <div class="tagcloud">
+       <a class="tag-link-76" href="http://codexpert.ro/blog/tag/afxmessagebox/" style="font-size: 9.85294117647pt;" title="2 topics">
+        AfxMessageBox
+       </a>
+       <a class="tag-link-165" href="http://codexpert.ro/blog/tag/algorithm/" style="font-size: 9.85294117647pt;" title="2 topics">
+        algorithm
+       </a>
+       <a class="tag-link-25" href="http://codexpert.ro/blog/tag/atl-2/" style="font-size: 13.6617647059pt;" title="6 topics">
+        atl
+       </a>
+       <a class="tag-link-78" href="http://codexpert.ro/blog/tag/auto-close/" style="font-size: 9.85294117647pt;" title="2 topics">
+        auto-close
+       </a>
+       <a class="tag-link-16" href="http://codexpert.ro/blog/tag/cpp-2/" style="font-size: 19.3235294118pt;" title="24 topics">
+        c++
+       </a>
+       <a class="tag-link-48" href="http://codexpert.ro/blog/tag/c11/" style="font-size: 18.0882352941pt;" title="18 topics">
+        C++11
+       </a>
+       <a class="tag-link-147" href="http://codexpert.ro/blog/tag/c14/" style="font-size: 12.9411764706pt;" title="5 topics">
+        C++14
+       </a>
+       <a class="tag-link-105" href="http://codexpert.ro/blog/tag/cbt-hook/" style="font-size: 9.85294117647pt;" title="2 topics">
+        CBT Hook
+       </a>
+       <a class="tag-link-106" href="http://codexpert.ro/blog/tag/cfiledialog/" style="font-size: 12.1176470588pt;" title="4 topics">
+        CFileDialog
+       </a>
+       <a class="tag-link-61" href="http://codexpert.ro/blog/tag/codecs/" style="font-size: 11.0882352941pt;" title="3 topics">
+        codecs
+       </a>
+       <a class="tag-link-45" href="http://codexpert.ro/blog/tag/codexpert/" style="font-size: 8pt;" title="1 topic">
+        codexpert
+       </a>
+       <a class="tag-link-27" href="http://codexpert.ro/blog/tag/com-2/" style="font-size: 8pt;" title="1 topic">
+        com
+       </a>
+       <a class="tag-link-127" href="http://codexpert.ro/blog/tag/concurrency/" style="font-size: 12.1176470588pt;" title="4 topics">
+        concurrency
+       </a>
+       <a class="tag-link-100" href="http://codexpert.ro/blog/tag/cscrollview/" style="font-size: 9.85294117647pt;" title="2 topics">
+        CScrollView
+       </a>
+       <a class="tag-link-181" href="http://codexpert.ro/blog/tag/direct2d/" style="font-size: 12.1176470588pt;" title="4 topics">
+        Direct2D
+       </a>
+       <a class="tag-link-51" href="http://codexpert.ro/blog/tag/functions/" style="font-size: 9.85294117647pt;" title="2 topics">
+        functions
+       </a>
+       <a class="tag-link-101" href="http://codexpert.ro/blog/tag/image-viewer/" style="font-size: 9.85294117647pt;" title="2 topics">
+        image viewer
+       </a>
+       <a class="tag-link-125" href="http://codexpert.ro/blog/tag/listview/" style="font-size: 13.6617647059pt;" title="6 topics">
+        listview
+       </a>
+       <a class="tag-link-182" href="http://codexpert.ro/blog/tag/literals/" style="font-size: 9.85294117647pt;" title="2 topics">
+        literals
+       </a>
+       <a class="tag-link-68" href="http://codexpert.ro/blog/tag/mdi-application/" style="font-size: 9.85294117647pt;" title="2 topics">
+        MDI application
+       </a>
+       <a class="tag-link-26" href="http://codexpert.ro/blog/tag/mfc/" style="font-size: 22pt;" title="45 topics">
+        mfc
+       </a>
+       <a class="tag-link-90" href="http://codexpert.ro/blog/tag/multi-select-menu/" style="font-size: 9.85294117647pt;" title="2 topics">
+        multi-select menu
+       </a>
+       <a class="tag-link-89" href="http://codexpert.ro/blog/tag/multiple-selection-menu/" style="font-size: 9.85294117647pt;" title="2 topics">
+        multiple selection menu
+       </a>
+       <a class="tag-link-130" href="http://codexpert.ro/blog/tag/mutex/" style="font-size: 11.0882352941pt;" title="3 topics">
+        mutex
+       </a>
+       <a class="tag-link-39" href="http://codexpert.ro/blog/tag/native-2/" style="font-size: 8pt;" title="1 topic">
+        native
+       </a>
+       <a class="tag-link-57" href="http://codexpert.ro/blog/tag/opensource/" style="font-size: 9.85294117647pt;" title="2 topics">
+        opensource
+       </a>
+       <a class="tag-link-103" href="http://codexpert.ro/blog/tag/overlay-drawing/" style="font-size: 9.85294117647pt;" title="2 topics">
+        overlay drawing
+       </a>
+       <a class="tag-link-128" href="http://codexpert.ro/blog/tag/parallel/" style="font-size: 9.85294117647pt;" title="2 topics">
+        parallel
+       </a>
+       <a class="tag-link-142" href="http://codexpert.ro/blog/tag/processes/" style="font-size: 12.9411764706pt;" title="5 topics">
+        Processes
+       </a>
+       <a class="tag-link-183" href="http://codexpert.ro/blog/tag/standard/" style="font-size: 9.85294117647pt;" title="2 topics">
+        standard
+       </a>
+       <a class="tag-link-28" href="http://codexpert.ro/blog/tag/stl-2/" style="font-size: 14.1764705882pt;" title="7 topics">
+        stl
+       </a>
+       <a class="tag-link-126" href="http://codexpert.ro/blog/tag/threads/" style="font-size: 12.1176470588pt;" title="4 topics">
+        threads
+       </a>
+       <a class="tag-link-54" href="http://codexpert.ro/blog/tag/vc/" style="font-size: 11.0882352941pt;" title="3 topics">
+        VC++
+       </a>
+       <a class="tag-link-33" href="http://codexpert.ro/blog/tag/vista/" style="font-size: 9.85294117647pt;" title="2 topics">
+        vista
+       </a>
+       <a class="tag-link-112" href="http://codexpert.ro/blog/tag/visual-c/" style="font-size: 12.9411764706pt;" title="5 topics">
+        Visual C++
+       </a>
+       <a class="tag-link-113" href="http://codexpert.ro/blog/tag/visual-studio/" style="font-size: 12.1176470588pt;" title="4 topics">
+        Visual Studio
+       </a>
+       <a class="tag-link-22" href="http://codexpert.ro/blog/tag/vs2008/" style="font-size: 8pt;" title="1 topic">
+        vs2008
+       </a>
+       <a class="tag-link-23" href="http://codexpert.ro/blog/tag/vs2010/" style="font-size: 8pt;" title="1 topic">
+        vs2010
+       </a>
+       <a class="tag-link-24" href="http://codexpert.ro/blog/tag/vs2012/" style="font-size: 8pt;" title="1 topic">
+        vs2012
+       </a>
+       <a class="tag-link-43" href="http://codexpert.ro/blog/tag/wic/" style="font-size: 15.6176470588pt;" title="10 topics">
+        WIC
+       </a>
+       <a class="tag-link-64" href="http://codexpert.ro/blog/tag/wic-codecs/" style="font-size: 11.0882352941pt;" title="3 topics">
+        wic codecs
+       </a>
+       <a class="tag-link-31" href="http://codexpert.ro/blog/tag/windows/" style="font-size: 9.85294117647pt;" title="2 topics">
+        windows
+       </a>
+       <a class="tag-link-141" href="http://codexpert.ro/blog/tag/windows-api/" style="font-size: 16.3382352941pt;" title="12 topics">
+        Windows API
+       </a>
+       <a class="tag-link-63" href="http://codexpert.ro/blog/tag/windows-imaging-component/" style="font-size: 13.6617647059pt;" title="6 topics">
+        windows imaging component
+       </a>
+       <a class="tag-link-157" href="http://codexpert.ro/blog/tag/wmi/" style="font-size: 11.0882352941pt;" title="3 topics">
+        WMI
+       </a>
+      </div>
+     </aside>
+     <aside class="widget widget_categories" id="categories-2">
+      <h3 class="widget-title">
+       Categories
+      </h3>
+      <label class="screen-reader-text" for="cat">
+       Categories
+      </label>
+      <select class="postform" id="cat" name="cat">
+       <option value="-1">
+        Select Category
+       </option>
+       <option class="level-0" value="11">
+        Anunturi
+       </option>
+       <option class="level-0" value="12">
+        ATL
+       </option>
+       <option class="level-0" value="9">
+        C++
+       </option>
+       <option class="level-0" value="13">
+        COM
+       </option>
+       <option class="level-0" value="44">
+        Comunitate
+       </option>
+       <option class="level-0" value="181">
+        Direct2D
+       </option>
+       <option class="level-0" value="108">
+        LogExpert Browser
+       </option>
+       <option class="level-0" value="42">
+        MFC
+       </option>
+       <option class="level-0" value="7">
+        Native
+       </option>
+       <option class="level-0" value="55">
+        open-source
+       </option>
+       <option class="level-0" value="10">
+        STL
+       </option>
+       <option class="level-0" value="56">
+        tarlib
+       </option>
+       <option class="level-0" value="14">
+        Tools
+       </option>
+       <option class="level-0" value="1">
+        Uncategorized
+       </option>
+       <option class="level-0" value="15">
+        Visual Studio
+       </option>
+       <option class="level-0" value="43">
+        WIC
+       </option>
+       <option class="level-0" value="141">
+        Windows API
+       </option>
+       <option class="level-0" value="175">
+        Windows System
+       </option>
+       <option class="level-0" value="161">
+        WMI
+       </option>
+      </select>
+      <script type="text/javascript">
+       /* &lt;![CDATA[ */
+(function() {
+	var dropdown = document.getElementById( "cat" );
+	function onCatChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value &gt; 0 ) {
+			location.href = "http://codexpert.ro/blog/?cat=" + dropdown.options[ dropdown.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onCatChange;
+})();
+/* ]]&gt; */
+      </script>
+     </aside>
+     <aside class="widget widget_archive" id="archives-2">
+      <h3 class="widget-title">
+       Archives
+      </h3>
+      <label class="screen-reader-text" for="archives-dropdown-2">
+       Archives
+      </label>
+      <select id="archives-dropdown-2" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
+       <option value="">
+        Select Month
+       </option>
+       <option value="http://codexpert.ro/blog/2015/07/">
+        July 2015
+       </option>
+       <option value="http://codexpert.ro/blog/2015/06/">
+        June 2015
+       </option>
+       <option value="http://codexpert.ro/blog/2015/05/">
+        May 2015
+       </option>
+       <option value="http://codexpert.ro/blog/2015/04/">
+        April 2015
+       </option>
+       <option value="http://codexpert.ro/blog/2015/01/">
+        January 2015
+       </option>
+       <option value="http://codexpert.ro/blog/2014/12/">
+        December 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/10/">
+        October 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/05/">
+        May 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/04/">
+        April 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/03/">
+        March 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/02/">
+        February 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2014/01/">
+        January 2014
+       </option>
+       <option value="http://codexpert.ro/blog/2013/12/">
+        December 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/11/">
+        November 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/10/">
+        October 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/08/">
+        August 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/05/">
+        May 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/04/">
+        April 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/03/">
+        March 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/02/">
+        February 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2013/01/">
+        January 2013
+       </option>
+       <option value="http://codexpert.ro/blog/2012/12/">
+        December 2012
+       </option>
+       <option value="http://codexpert.ro/blog/2012/09/">
+        September 2012
+       </option>
+       <option value="http://codexpert.ro/blog/2012/08/">
+        August 2012
+       </option>
+       <option value="http://codexpert.ro/blog/2012/07/">
+        July 2012
+       </option>
+      </select>
+     </aside>
+     <aside class="widget widget_links" id="linkcat-104">
+      <h3 class="widget-title">
+       IT Weblogs &amp; Forums
+      </h3>
+      <ul class="xoxo blogroll">
+       <li>
+        <a href="http://forums.codeguru.com/" target="_blank" title="The number one developer site">
+         Codeguru
+        </a>
+       </li>
+       <li>
+        <a href="http://www.drdobbs.com/blogs" target="_blank" title="The world of software development">
+         Dr.Dobb's Blogs
+        </a>
+       </li>
+       <li>
+        <a href="https://marcoarena.wordpress.com/" target="_blank">
+         Growing up (Marco Arena's blog)
+        </a>
+       </li>
+       <li>
+        <a href="http://www.nuonsoft.com/blog/" rel="friend" target="_blank" title="Marc Gregoires Blog">
+         Marc Gregoires Blog
+        </a>
+       </li>
+       <li>
+        <a href="http://mariusbancila.ro/blog/" target="_blank" title="C++, .NET, Windows programming &amp; others">
+         Marius Bancila's Blog
+        </a>
+       </li>
+       <li>
+        <a href="http://meetingcpp.com/" target="_blank" title="A independent C++ Conference, and the attempt to establish a european network for C++. ">
+         Meeting C++
+        </a>
+       </li>
+       <li>
+        <a href="https://isocpp.org/blog" target="_blank" title="Standard C++ blog">
+         Standard C++ (isocpp.org)
+        </a>
+       </li>
+       <li>
+        <a href="http://blogs.msdn.com/b/oldnewthing/" target="_blank">
+         The Old New Thing
+        </a>
+       </li>
+       <li>
+        <a href="http://blogs.msdn.com/b/vcblog/" target="_blank" title="Visual C++ Team Blog">
+         Visual C++ Team Blog
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <aside class="widget widget_meta" id="meta-2">
+      <h3 class="widget-title">
+       Meta
+      </h3>
+      <ul>
+       <li>
+        <a href="http://codexpert.ro/blog/wp-login.php">
+         Log in
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/feed/">
+         Entries
+         <abbr title="Really Simple Syndication">
+          RSS
+         </abbr>
+        </a>
+       </li>
+       <li>
+        <a href="http://codexpert.ro/blog/comments/feed/">
+         Comments
+         <abbr title="Really Simple Syndication">
+          RSS
+         </abbr>
+        </a>
+       </li>
+       <li>
+        <a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">
+         WordPress.org
+        </a>
+       </li>
+      </ul>
+     </aside>
+    </div>
+    <!-- #secondary -->
+   </div>
+   <!-- #main .wrapper -->
+   <footer id="colophon" role="contentinfo">
+    <div class="site-info">
+     <a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">
+      Proudly powered by WordPress
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <a href="www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=562357" rel="tag" style="display:none; text-align:center; font-size:x-small; ">
+   CodeProject
+  </a>
+  <div style="display:none">
+   <div class="grofile-hash-map-e1b0a6a87edb3be4bd212acfec5bdb7a">
+   </div>
+   <div class="grofile-hash-map-4df5ea61ae054e11a0ac369d189ee94a">
+   </div>
+  </div>
+  <script type="text/javascript">
+   window.WPCOM_sharing_counts = {"http:\/\/codexpert.ro\/blog\/2013\/01\/28\/custom-paint-in-mdi-client\/":440};
+		window.WPCOM_jetpack = true;
+				window.WPCOM_site_ID = 38232981;
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-linkedin' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-google-plus-1' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomgoogle-plus-1', 'menubar=1,resizable=1,width=480,height=550' );
+				return false;
+			});
+		});
+  </script>
+  <div id="sharing_email" style="display: none;">
+   <form action="/blog/2013/01/28/custom-paint-in-mdi-client/" method="post">
+    <label for="target_email">
+     Send to Email Address
+    </label>
+    <input id="target_email" name="target_email" type="email" value=""/>
+    <label for="source_name">
+     Your Name
+    </label>
+    <input id="source_name" name="source_name" type="text" value=""/>
+    <label for="source_email">
+     Your Email Address
+    </label>
+    <input id="source_email" name="source_email" type="email" value=""/>
+    <input autocomplete="off" class="input" id="jetpack-source_f_name" name="source_f_name" size="25" type="text" value=""/>
+    <script>
+     document.getElementById('jetpack-source_f_name').value = '';
+    </script>
+    <img alt="loading" class="loading" height="16" src="http://codexpert.ro/blog/wp-content/plugins/jetpack/modules/sharedaddy/images/loading.gif" style="float: right; display: none" width="16"/>
+    <input class="sharing_send" type="submit" value="Send Email"/>
+    <a class="sharing_cancel" href="#cancel" rel="nofollow">
+     Cancel
+    </a>
+    <div class="errors errors-1" style="display: none;">
+     Post was not sent - check your email addresses!
+    </div>
+    <div class="errors errors-2" style="display: none;">
+     Email check failed, please try again
+    </div>
+    <div class="errors errors-3" style="display: none;">
+     Sorry, your blog cannot share posts by email.
+    </div>
+   </form>
+  </div>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/akismet/_inc/form.js?ver=3.1.1" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/modules/photon/photon.js?ver=20130122" type="text/javascript">
+  </script>
+  <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201529" type="text/javascript">
+  </script>
+  <script src="http://s.gravatar.com/js/gprofiles.js?ver=2015Julaa" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]&gt; */
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/themes/twentytwelve/js/navigation.js?ver=20140711" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/_inc/postmessage.js?ver=3.5.3" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/_inc/jquery.jetpack-resize.js?ver=3.5.3" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/_inc/jquery.inview.js?ver=3.5.3" type="text/javascript">
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/modules/likes/queuehandler.js?ver=3.5.3" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]&gt; */
+  </script>
+  <script src="http://codexpert.ro/blog/wp-content/plugins/jetpack/modules/sharedaddy/sharing.js?ver=3.5.3" type="text/javascript">
+  </script>
+  <iframe id="likes-master" name="likes-master" scrolling="no" src="http://widgets.wp.com/likes/master.html?ver=20141028#ver=20141028&amp;mp6=1" style="display:none;">
+  </iframe>
+  <div id="likes-other-gravatars">
+   <div class="likes-text">
+    <span>
+     %d
+    </span>
+    bloggers like this:
+   </div>
+   <ul class="wpl-avatars sd-like-gravatars">
+   </ul>
+  </div>
+  <!--[if IE]&gt;
+		&lt;script type="text/javascript"&gt;
+		if ( 0 === window.location.hash.indexOf( '#comment-' ) ) {
+			// window.location.reload() doesn't respect the Hash in IE
+			window.location.hash = window.location.hash;
+		}
+		&lt;/script&gt;
+		&lt;![endif]-->
+  <script type="text/javascript">
+   var comm_par_el = document.getElementById( 'comment_parent' ),
+			    comm_par = (comm_par_el &amp;&amp; comm_par_el.value) ? comm_par_el.value : '',
+			    frame = document.getElementById( 'jetpack_remote_comment' ),
+			    tellFrameNewParent;
+
+			tellFrameNewParent = function() {
+				if ( comm_par ) {
+					frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=38232981&amp;postid=440&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=mystery&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=a2ffeb42e29ecd233addc182a87a1ad17e4ecee4#parent=http%3A%2F%2Fcodexpert.ro%2Fblog%2F2013%2F01%2F28%2Fcustom-paint-in-mdi-client%2F" + '&amp;replytocom=' + parseInt( comm_par, 10 ).toString();
+				} else {
+					frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=38232981&amp;postid=440&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=mystery&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=a2ffeb42e29ecd233addc182a87a1ad17e4ecee4#parent=http%3A%2F%2Fcodexpert.ro%2Fblog%2F2013%2F01%2F28%2Fcustom-paint-in-mdi-client%2F";
+				}
+			};
+
+	
+			if ( 'undefined' !== typeof addComment ) {
+				addComment._Jetpack_moveForm = addComment.moveForm;
+
+				addComment.moveForm = function( commId, parentId, respondId, postId ) {
+					var returnValue = addComment._Jetpack_moveForm( commId, parentId, respondId, postId ), cancelClick, cancel;
+
+					if ( false === returnValue ) {
+						cancel = document.getElementById( 'cancel-comment-reply-link' );
+						cancelClick = cancel.onclick;
+						cancel.onclick = function() {
+							var cancelReturn = cancelClick.call( this );
+							if ( false !== cancelReturn ) {
+								return cancelReturn;
+							}
+
+							if ( !comm_par ) {
+								return cancelReturn;
+							}
+
+							comm_par = 0;
+
+							tellFrameNewParent();
+
+							return cancelReturn;
+						};
+					}
+
+					if ( comm_par == parentId ) {
+						return returnValue;
+					}
+
+					comm_par = parentId;
+
+					tellFrameNewParent();
+
+					return returnValue;
+				};
+			}
+
+	
+			if ( window.postMessage ) {
+				if ( document.addEventListener ) {
+					window.addEventListener( 'message', function( event ) {
+						if ( "http:\/\/jetpack.wordpress.com" !== event.origin ) {
+							return;
+						}
+
+						jQuery( frame ).height( event.data );
+					} );
+				} else if ( document.attachEvent ) {
+					window.attachEvent( 'message', function( event ) {
+						if ( "http:\/\/jetpack.wordpress.com" !== event.origin ) {
+							return;
+						}
+
+						jQuery( frame ).height( event.data );
+					} );
+				}
+			}
+  </script>
+  <script async="" defer="" src="http://stats.wp.com/e-201529.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.5.3',blog:'38232981',post:'440',tz:'3',srv:'codexpert.ro'} ]);
+	_stq.push([ 'clickTrackerInit', '38232981', '440' ]);
+  </script>
+ </body>
+</html>

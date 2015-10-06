@@ -1,0 +1,1563 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <base href="http://www.jimdunlop.com/"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   Dunlop Manufacturing :: Electronics ::  :: Zakk Wylde Signature Cry Baby Wah Wah
+  </title>
+  <link href="css/reset.css" rel="stylesheet" type="text/css"/>
+  <link href="css/global.css" rel="stylesheet" type="text/css"/>
+  <link href="css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="js/fancybox/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css"/>
+  <script src="js/jquery.tools.min.js">
+  </script>
+  <script src="js/jquery.jplayer.min.js">
+  </script>
+  <script src="js/main.js" type="text/javascript">
+  </script>
+  <script src="js/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript">
+  </script>
+  <script src="http://w.sharethis.com/button/buttons.js" type="text/javascript">
+  </script>
+  <!--&lt;script type="text/javascript"&gt;stLight.options({publisher:'05caac32-4a00-4413-a312-7c0fe1b3b46f'});&lt;/script&gt;-->
+  <script type="text/javascript">
+   var SIMILAR_CAROUSEL_ITEMS = 6;
+var similar_carousel;
+var play_icon_timeout;
+var cur_sound_file;
+var cur_sound_title;
+var carousel_idx = 18;
+
+$(document).ready(function(){
+    
+    $('.scrollable').scrollable({easing:'swing',speed:600});
+    similar_carousel = $('#similar-product-carousel').data('scrollable');
+    video_carousel = $('#video-carousel').data('scrollable');
+    sound_carousel = $('#sound-carousel').data('scrollable');
+    artist_carousel = $('#artist-carousel').data('scrollable');
+
+    similar_carousel.seekTo(carousel_idx, 0);
+    if(carousel_idx = 0)
+        $('#carousel-left-btn').css('opacity',0.3);
+
+    $('#product-related-container').height($('#product-media-items').height());
+
+    $('#product-detail-menu li').click(function(){
+        var section = $(this).html().replace(/[^A-Za-z0-9]/g, '');
+        if(section == 'RelatedItems'){
+            $('#product-related-container').show();
+            $('#product-details-container,#product-media-items').hide();
+        } else {
+            $('#product-related-container').hide();
+            $('#product-details-container,#product-media-items').show();
+            $('.product-detail-section:visible').hide();
+            $('#product-' + section).fadeIn();
+        }
+            $('#product-detail-menu li').removeClass('product-detail-menu-active');
+        $(this).addClass('product-detail-menu-active');
+    });
+
+    $('.product-news .more').click(function(){
+        $(this).prev('span').hide();
+        $(this).hide();
+        $(this).next('span').show();
+    });
+
+    $('.product-news .less').click(function(){
+        $(this).parent().prev('span').prev('span').show();
+        $(this).parent().prev('span').show();
+        $(this).parent().hide();
+    });
+
+    $('.product-faq-question').click(function(){ $(this).next('div').toggle(); });
+
+    $(".pdf-iframe").fancybox({
+            'overlayOpacity':0.85,
+            'overlayColor':'#000000',
+            'width':900,
+            'height':600,
+            'hideOnContentClick':false,
+            'hideOnOverlayClick':true,
+            'type':'iframe'
+    });
+
+
+    $(".video a").fancybox(
+        {
+            'overlayOpacity':0.85,
+            'overlayColor':'#000000',
+            'autoDimmensions':true,
+            'hideOnContentClick':false,
+            'hideOnOverlayClick':true
+        }
+    );
+
+    //Remove some alt image thumb borders for style reasons
+    var imgs = $('.alt-images .info img');
+    var rows = parseInt(imgs.length / 3) + (imgs.length % 3 &gt; 0 ? 1 : 0);
+    if(imgs.length &gt; 1){
+        $(imgs).each(function(i,img){
+            var row = parseInt(i / 3) + 1;
+            //No left border for first item in row
+            if(i % 3 == 0)
+                $(img).css('border-left','none');
+            //No top border after first row
+            if(i &gt; 2)
+                $(img).css('border-top','none');
+            //No right border 
+                $(img).css('border-right','none');
+        });
+    }
+
+    $("#main-image").fancybox(
+        {
+            'overlayOpacity':0.85,
+            'overlayColor':'#000000',
+            'hideOnContentClick':false,
+            'hideOnOverlayClick':true
+        }
+    );
+
+// {{{ Sounds
+$('.sound').mouseenter(function(){
+if(sound_is_playing &amp;&amp; cur_sound_file == $(this).attr('title'))
+    return;
+$(this).attr('src','images/sounds/sound_sample_play.gif');
+});
+
+$('.sound').mouseleave( function() {
+if(sound_is_playing &amp;&amp; cur_sound_file == $(this).attr('title'))
+    return;
+$(this).attr('src','images/sounds/sound_sample_off.gif');
+});
+
+$("#jquery_jplayer").jPlayer({
+nativeSupport: true, oggSupport: false, customCssIds: false,
+ready: function () {
+}
+});
+
+$('#sounds-pages span').click(function(){ sound_carousel.seekTo( (parseInt(this.innerHTML) - 1) * 3) });
+$('#videos-pages span').click(function(){ video_carousel.seekTo( (parseInt(this.innerHTML) - 1) * 3) });
+$('#artists-pages span').click(function(){ artist_carousel.seekTo( (parseInt(this.innerHTML) - 1) * 3) });
+
+// }}}
+
+    });
+
+function showProductTitle(img, title){
+var pos = $(img).offset();
+var h = $(img).height();
+var w = $(img).width();
+if($('#slider-product-title').length == 0)
+        $('&lt;div id="slider-product-title"&gt;&lt;/div&gt;').appendTo('body');
+
+    $('#slider-product-title').css({top:pos.top+119,left:pos.left-16}).html(title);
+}
+
+function hideProductTitle(img){
+    $('#slider-product-title').html('');
+}
+
+function playVideo(url){
+}
+
+var sound_is_playing = false;
+
+function playSound(imgTarget){
+
+    if(sound_is_playing){
+        $('#jquery_jplayer').jPlayer('setFile', 'sounds/' + cur_sound_file).jPlayer('pause');
+        $('.sound').attr('src','images/sounds/sound_sample_off.gif');
+        sound_is_playing = false;
+
+        if($(imgTarget).attr('title') == cur_sound_file)
+            return;
+    }
+
+    cur_sound_file = $(imgTarget).attr('title');
+
+    if(!sound_is_playing){
+        $('#jquery_jplayer').jPlayer('setFile', 'sounds/' + cur_sound_file).jPlayer('play');
+        $(imgTarget).attr('src','images/sounds/sound_sample_pause.gif');
+        sound_is_playing = true;
+    }else{
+        $('#jquery_jplayer').jPlayer('setFile', 'sounds/' + cur_sound_file).jPlayer('pause');
+        $(imgTarget).attr('src','images/sounds/sound_sample_play.gif');
+        sound_is_playing = false;
+    }
+}
+
+function moveCarousel(moveNumItems){
+
+        
+    if(moveNumItems &lt; 0 &amp;&amp; similar_carousel.getIndex() &lt; 6)
+        similar_carousel.seekTo(0);
+    else
+        similar_carousel.move(moveNumItems);
+
+    if(similar_carousel.getIndex() == 0)
+        $('#carousel-left-btn').css('opacity',0.3);
+
+    if(similar_carousel.getIndex()+6  &gt;= similar_carousel.getSize())
+        $('#carousel-right-btn').css('opacity',0.3);
+    
+    if(moveNumItems &gt; 0)
+        $('#carousel-left-btn').css('opacity',1.0);
+    if(moveNumItems &lt; 0)
+        $('#carousel-right-btn').css('opacity',1.0);
+
+
+}
+
+function showAltImages(){
+}
+  </script>
+ </head>
+ <body style="background:url(images/categories/backgrounds/ECKQB-WYLDE_PIP_BG_faf8df.jpg) no-repeat top center #faf8df">
+  <div id="wrapper">
+   <div id="main-wrap">
+    <div id="main">
+     <div id="header">
+      <ul id="nav-menu">
+       <li id="nav-logo">
+        <a href="">
+         <img src="images/nav-logo.gif"/>
+        </a>
+       </li>
+       <a href="/products">
+        <li id="nav-products" onmouseover="showSubNav()" style="background-image:url(images/nav-products-ovr.gif)">
+        </li>
+       </a>
+       <li id="nav-artists">
+        <a href="artists">
+         <img onmouseout="this.src='images/nav-artists.gif'" onmouseover="this.src='images/nav-artists-ovr.gif'" src="images/nav-artists.gif"/>
+        </a>
+       </li>
+       <li id="nav-media">
+        <a href="media">
+         <img onmouseout="this.src='images/nav-media.gif'" onmouseover="this.src='images/nav-media-ovr.gif'" src="images/nav-media.gif"/>
+        </a>
+       </li>
+       <li id="nav-blog">
+        <a href="blog">
+         <img onmouseout="this.src='images/nav-blog.gif'" onmouseover="this.src='images/nav-blog-ovr.gif'" src="images/nav-blog.gif"/>
+        </a>
+       </li>
+       <li id="nav-store">
+        <a href="http://shop.jimdunlop.com/ecommerce" target="new">
+         <img onmouseout="this.src='images/nav-store.gif'" onmouseover="this.src='images/nav-store-ovr.gif'" src="images/nav-store.gif"/>
+        </a>
+       </li>
+       <li id="nav-search">
+        <div id="nav-search-input">
+         <form action="search" method="get">
+          <input class="nav-search-field" id="" name="q" onblur="if (this.value == '') {this.value = 'Search';}" onfocus="if(this.value == 'Search') {this.value = '';}" type="text" value="Search"/>
+          <input class="img" src="images/footer-newsletter-btn.gif" type="image"/>
+         </form>
+        </div>
+       </li>
+      </ul>
+     </div>
+     <div id="content-area">
+      <!--- ***** *****--->
+      <div class="nav-sub-menu" id="nav-sub-menu">
+       <div class="section">
+        <a href="/products/new">
+         <h2>
+          New For 2015
+         </h2>
+        </a>
+        <a href="/product/CBM95-Crybaby-Mini">
+         Cry Baby Mini
+        </a>
+        <br/>
+        <a href="/product/jhf3-band-of-gypsys">
+         Band Of Gypsys Fuzz Face
+        </a>
+        <br/>
+        <a href="/product/mxr-bass-distortion">
+         MXR Bass Distortion
+        </a>
+        <br/>
+        <a href="/product/iso-brick">
+         MXR Iso-Brick
+        </a>
+        <br/>
+        <a href="/product/sub-machine-octave-fuzz">
+         MXR Sub Machine
+        </a>
+        <br/>
+        <a href="/products/accessories/straps#jacquard-straps">
+         Jacquard Straps
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#primetone">
+         Primetone Picks
+        </a>
+        <br/>
+        <a href="/product/herco-66-light">
+         Herco 66 Picks
+        </a>
+        <br/>
+        <a href="/product/marcus-miller-super-bright">
+         Marcus Miller Bass Strings
+        </a>
+        <br/>
+        <a href="/product/super-bright-nickel-guitar">
+         Super Bright Guitar Strings
+        </a>
+        <br/>
+       </div>
+       <div class="section">
+        <a href="/products/electronics">
+         <h2>
+          Electronics
+         </h2>
+        </a>
+        <a href="/products/electronics/mxr">
+         MXR
+        </a>
+        <br/>
+        <a href="/products/electronics/cry-baby">
+         Cry Baby
+        </a>
+        <br/>
+        <a href="/products/electronics/way-huge-electronics">
+         Way Huge Electronics
+        </a>
+        <br/>
+        <a href="/products/electronics/dunlop-electronics">
+         Dunlop Electronics
+        </a>
+        <br/>
+        <a href="/products/electronics/custom-audio-electronics">
+         Custom Audio Electronics
+        </a>
+        <br/>
+       </div>
+       <div class="section">
+        <a href="/products/guitar-picks">
+         <h2>
+          Guitar Picks
+         </h2>
+        </a>
+        <a href="/products/guitar-picks#brand-picks">
+         Brand Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#fingerpicks thumbpicks">
+         Fingerpicks &amp; Thumbpicks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#max grip">
+         Max Grip
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#premium-picks">
+         Premium Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#stubby-picks">
+         Stubby Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#tortex-picks">
+         Tortex Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#jazz-picks">
+         Jazz Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#ultex-picks">
+         Ultex Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#specialty-picks">
+         Specialty Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#nylon-picks">
+         Nylon Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#signature-picks">
+         Signature Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#celluloid">
+         Celluloid
+        </a>
+        <br/>
+        <a href="/custom-picks">
+         Custom Print Picks
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#pick-tins">
+         Pick Tins
+        </a>
+        <br/>
+        <a href="/products/guitar-picks#primetone">
+         Primetone
+        </a>
+        <br/>
+       </div>
+       <div class="section">
+        <a href="/products/accessories">
+         <h2>
+          Accessories
+         </h2>
+        </a>
+        <a href="/products/accessories/capos">
+         Capos
+        </a>
+        <br/>
+        <a href="/products/accessories/slides">
+         Slides
+        </a>
+        <br/>
+        <a href="/products/accessories/straps">
+         Straps
+        </a>
+        <br/>
+        <a href="/products/accessories/formula-65">
+         Formula 65
+        </a>
+        <br/>
+        <a href="/products/accessories/straplok">
+         Straplok
+        </a>
+        <br/>
+        <a href="/products/accessories/stringwinders">
+         Stringwinders
+        </a>
+        <br/>
+        <!--a href="/products/accessories/herco"&gt;Herco&lt;/a&gt;&lt;br /-->
+        <a href="/products/accessories/apparel">
+         Apparel
+        </a>
+        <br/>
+        <a href="/products/accessories/dunlop-accessories">
+         Dunlop Accessories
+        </a>
+        <br/>
+       </div>
+       <div class="section" style="border:none; margin-right:0px">
+        <a href="/category/strings">
+         <h2>
+          Strings
+         </h2>
+        </a>
+        <a href="/products/strings#electric-guitar">
+         Electric Guitar
+        </a>
+        <br/>
+        <a href="/products/strings#acoustic-guitar">
+         Acoustic Guitar
+        </a>
+        <br/>
+        <a href="/products/strings#electric-bass">
+         Electric Bass
+        </a>
+        <br/>
+        <a href="/products/strings#americana">
+         Americana
+        </a>
+        <br/>
+        <a href="/products/strings#icon-series">
+         Icon Series
+        </a>
+        <br/>
+        <a href="/products/strings#ukulele">
+         Ukulele
+        </a>
+        <br/>
+       </div>
+       <br clear="all"/>
+      </div>
+      <div id="product-main-image-space">
+       <div id="product-image-large">
+        <img class="product-image-large-center" src="images/products/ZakkWyldeSignatureWah-11.png"/>
+       </div>
+       <div id="product-main-points">
+        <div style="height:250px">
+         <p>
+         </p>
+         <h1>
+          Zakk Wylde Signature Cry Baby Wah Wah
+         </h1>
+         <p class="product-id">
+          ZW45
+         </p>
+         <div style="height:160px;overflow:auto">
+          <ul id="product-points">
+           <li>
+            Built to Zakk Wylde's specs
+           </li>
+           <li>
+            Specially voiced to deliver thick and cutting tone
+           </li>
+           <li>
+            Heavy-duty raw-metal casting
+           </li>
+          </ul>
+         </div>
+        </div>
+        <div id="buy-share-like">
+         <div id="buy">
+          <a href="http://store.jimdunlop.com/p/zw45-zakk-wylde-wah" target="new">
+          </a>
+         </div>
+         <div class="st_sharethis_custom" id="share">
+          <span displaytext="ShareThis">
+          </span>
+         </div>
+         <div style="width:70px;float:left">
+          <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.jimdunlop.com%2Fproduct%2Fzw45-zakk-wylde-signature-wah&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;colorscheme=dark&amp;height=21" style="border:none; overflow:hidden; width:100px; height:21px;">
+          </iframe>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!--- ***** *****--->
+      <!--- ***** *****--->
+      <div style="float:left;width:975px;background:#FFF">
+       <div id="carousel-left-btn">
+        <img height="28" onclick="moveCarousel(-SIMILAR_CAROUSEL_ITEMS)" src="images/product-carousel-left.gif" width="15"/>
+       </div>
+       <div class="scrollable" id="similar-product-carousel">
+        <div class="items">
+         <div class="item">
+          <a href="product/535q-cry-baby-multi-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'535Q Cry Baby Multi-Wah')" src="images/products/535QCryBabyregMultiWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/95q-cry-baby-wah-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'95Q Cry Baby Wah Wah')" src="images/products/95QCryBabyregWahWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/bg95-buddy-guy-signature-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Buddy Guy Signature Cry Baby Wah Wah')" src="images/products/BuddyGuySignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/clyde-mccoy-cry-baby">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Clyde McCoy Cry Baby Wah Wah')" src="images/products/ClydeMcCoyCryBabyWahWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/CBM95-Crybaby-Mini">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Cry Baby Mini Wah')" src="images/products/CryBabyMiniWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/Cry-Baby">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Cry Baby Wah Wah')" src="images/products/CryBaby-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/db01-dimebag-signature-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Dimebag Signature Cry Baby Wah Wah')" src="images/products/DimebagSignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/EVH-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Eddie Van Halen Signature Wah')" src="images/products/EddieVanHalenSignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/gcb95f-cry-baby-classic">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'GCB95F Cry Baby Classic Wah Wah')" src="images/products/GCB95FCryBabyregClassic-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/gcb80-high-gain-volume">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'High Gain Volume Pedal')" src="images/products/HighGaintradeVolumePedal-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/jc95-jerry-cantrell-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Jerry Cantrell Signature Cry Baby Wah Wah')" src="images/products/JerryCantrellWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/jh1d-jimi-hendrix-signature-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Jimi Hendrix Signature Wah')" src="images/products/JimiHendrixtradeSignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/hendrix-70-crybaby">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Jimi Hendrix 70th Anniversary Tribute Series Cry Baby Wah Wah')" src="images/products/JimiHendrix70thAnniversaryTributeSeriesCryBaby-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/JB95-Bonamassa-Cry-Baby">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Joe Bonamassa Signature Cry Baby Wah Wah')" src="images/products/JoeBonamassaSignatureCryBaby-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/kh95-kirk-hammett-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Kirk Hammett Signature Cry Baby Wah Wah')" src="images/products/KirkHammettWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/sc95-slash-crybaby-classic">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Slash Cry Baby Classic Wah Wah')" src="images/products/SlashCryBabyClassic-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/sw95-slash-signature-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Slash Signature Cry Baby Wah Wah')" src="images/products/SlashSignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/zw45-zakk-wylde-signature-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Zakk Wylde Signature Cry Baby Wah Wah')" src="images/products/ZakkWyldeSignatureWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/dcr1fc-cry-baby-rack-foot-controller">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Cry Baby Rack Foot Controller')" src="images/products/CryBabyregRackFootController-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/dcr2sr-cry-baby-rack-module">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Cry Baby Rack Module')" src="images/products/CryBabyregRackModule-3.5.jpg" width="129"/>
+          </a>
+         </div>
+         <div class="item">
+          <a href="product/105q-cry-baby-bass-wah">
+           <img height="129" onmouseout="hideProductTitle()" onmouseover="showProductTitle(this,'Cry Baby 105Q Bass Wah')" src="images/products/CryBabyBassWah-3.5.jpg" width="129"/>
+          </a>
+         </div>
+        </div>
+       </div>
+       <div id="carousel-right-btn">
+        <img height="28" onclick="moveCarousel(SIMILAR_CAROUSEL_ITEMS)" src="images/product-carousel-right.gif" width="15"/>
+       </div>
+      </div>
+      <!--- ***** *****--->
+      <!--- ***** *****--->
+      <div id="product-details-area" style="clear:both">
+       <ul id="product-detail-menu">
+        <li class="product-detail-menu-active left">
+         About
+        </li>
+        <li>
+         Reviews
+        </li>
+        <li>
+         F.A.Q.'s
+        </li>
+        <li>
+         Related Items
+        </li>
+        <li>
+         Manual
+        </li>
+       </ul>
+       <div id="product-related-container">
+        <ul class="product-row">
+         <li class="left-cell">
+          <a href="product/m169-carbon-copy-analog-delay">
+           <img height="195" src="images/products/CarbonCopyregAnalogDelay-5.5.png" width="190"/>
+           <p>
+            Carbon Copy Analog Delay
+           </p>
+          </a>
+         </li>
+         <li class="left-cell">
+          <a href="product/evh117-flanger">
+           <img height="195" src="images/products/EVH117Flanger-5.5.png" width="190"/>
+           <p>
+            EVH117 Flanger
+           </p>
+          </a>
+         </li>
+         <li class="left-cell">
+          <a href="product/jd4s-rotovibe-">
+           <img height="195" src="images/products/Rotovibereg-5.5.png" width="190"/>
+           <p>
+            Rotovibe
+           </p>
+          </a>
+         </li>
+         <li class="left-cell">
+          <a href="product/zw38-black-label-chorus">
+           <img height="195" src="images/products/ZW38BlackLabelChorus-5.5.png" width="190"/>
+           <p>
+            ZW38 Black Label Chorus
+           </p>
+          </a>
+         </li>
+        </ul>
+        <div id="product-row-bottom-hr">
+        </div>
+       </div>
+       <div id="product-details-container">
+        <div class="product-detail-section" id="product-About">
+         <p class="product-about-title">
+          Zakk Wylde Signature Cry Baby Wah Wah Info
+         </p>
+         <p class="product-copy">
+          Modern Cry Baby Master Zakk Wylde and Dunlop have joined forces to deliver the toughest, meanest wah pedal on the planet. Built from the ground up with great tone and rugged durability in mind, this pedal can stand up to the crushing stomp of metal's reigning king of lead guitar. The Wylde Wah features a heavy-duty raw-metal casing and road worthy components to withstand years of ass-kicking abuse. With guts that have been finely tuned to Zakk's specs, this wah is specially voiced to deliver an extra thick and cutting tone.
+          <br/>
+          <br/>
+          Power: Dunlop ECB003 AC Adapter or Single 9-volt battery
+         </p>
+         <div id="in-the-news" style="">
+          <p class="in-the-news-title">
+           Zakk Wylde Signature Cry Baby Wah Wah in the News
+          </p>
+          <div class="product-news">
+           <span class="title">
+            iGuitar Reviews the ZW95
+           </span>
+           <br/>
+           <div class="news-more">
+            <a href="http://www.jimdunlop.com/blog/?p=3927" target="new">
+             MORE
+            </a>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="product-detail-section" id="product-Reviews" style="display:none">
+         <p class="product-about-title">
+          Accolades
+         </p>
+         <div class="product-accolades">
+          <img src="/images/accolades/accolade-guitar-world-GOLD.jpg" title="Guiltar World GOLD Award"/>
+         </div>
+         <p class="product-about-title-reviews">
+          The Zakk Wylde Signature Cry Baby Wah Wah Reviews
+         </p>
+         <div class="product-review">
+          <span class="title">
+           Guitar World reviews the Zakk Wylde Signature Wah
+          </span>
+          <br/>
+          <span class="content">
+           "...made each note cry with a deep and evil-sounding moan..."
+          </span>
+          <br/>
+          <br/>
+          <a class="pdf-link" href="files/reviews/ZW45_GuitarWorld_review.pdf">
+           <img src="images/pdf.png"/>
+           Download PDF
+          </a>
+          <a class="pdf-link pdf-iframe" href="http://docs.google.com/gview?url=http://www.jimdunlop.com/files/reviews/ZW45_GuitarWorld_review.pdf&amp;embedded=true">
+           <img src="images/view.png"/>
+           View PDF
+          </a>
+         </div>
+         <div class="product-review">
+          <span class="title">
+           Guitar Buyer reviews the Zakk Wylde Signature Wah
+          </span>
+          <br/>
+          <span class="content">
+           "A straight-forward wah for all things rock."
+          </span>
+          <br/>
+          <br/>
+          <a class="pdf-link" href="files/reviews/ZW45_GuitarBuyer_review.pdf">
+           <img src="images/pdf.png"/>
+           Download PDF
+          </a>
+          <a class="pdf-link pdf-iframe" href="http://docs.google.com/gview?url=http://www.jimdunlop.com/files/reviews/ZW45_GuitarBuyer_review.pdf&amp;embedded=true">
+           <img src="images/view.png"/>
+           View PDF
+          </a>
+         </div>
+         <div class="product-review">
+          <span class="title">
+           iGuitar reviews the Zakk Wylde Signature Wah
+          </span>
+          <br/>
+          <span class="content">
+           Four very well made, professional quality pedals whether youre trying to sound like Zakk Wylde or not!
+          </span>
+          <br/>
+          <br/>
+          <a class="pdf-link" href="files/reviews/ZWReviews.pdf">
+           <img src="images/pdf.png"/>
+           Download PDF
+          </a>
+          <a class="pdf-link pdf-iframe" href="http://docs.google.com/gview?url=http://www.jimdunlop.com/files/reviews/ZWReviews.pdf&amp;embedded=true">
+           <img src="images/view.png"/>
+           View PDF
+          </a>
+         </div>
+        </div>
+        <div class="product-detail-section" id="product-FAQs" style="display:none">
+         <p class="product-about-title">
+          The Zakk Wylde Signature Cry Baby Wah Wah FAQs
+         </p>
+         <div class="product-faq-question">
+          Q: What are the differences between the different Wah pedals?
+         </div>
+         <div class="product-faq-answer">
+          A: To understand the differences between the different wah wah pedals, it's important to understand how the wah works. The wah wah pedal selects a portion of your sound, filters it and then accentuates it. The rest of the sound is reduced. Technicians refer to this concept as the bandpass filter.
+          <br/>
+          <br/>
+          When you move the rocker up and down, the rocker turns the potentiometer. The potentiometer accentuates a tiny portion of the sound within the range that has been selected. When you put the toe down, your higher frequencies are accentuated. When you put the heel down, your lower frequencies are accentuated. When the rocker is moved up and down, you move between the lower and higher frequencies within the range you have selected.
+          <br/>
+          <br/>
+          GCB95 Crybaby Wah Wah
+          <br/>
+          When people talk about wah pedals, theyre talking about the Crybaby. This is the one that created some of the most timeless sound in rock.
+          <br/>
+          <br/>
+          GCB95F Crybaby Classic Wah Wah
+          <br/>
+          The GCB-95F comes loaded with the legendary Fasel inductor, which instantly gives you the sound of the classic 60s wahs that are considered the holy grail of wah tone.
+          <br/>
+          <br/>
+          535Q Crybaby Multi-Wah
+          <br/>
+          The 535Q is the answer to every guitar player's wah dream. This pedal allows you to select from 6 different frequency range selections, ranging from the high of the Original Crybaby to the low of the Bass Crybaby, and comes loaded with the legendary Fasel inductor.
+          <br/>
+          <br/>
+          95Q Crybaby Wah Wah
+          <br/>
+          Weve taken the original Crybaby and added three of our most popular upgrades: the famous Q control; Volume boost for up to 15dB of added gain; and our auto return function that automatically engages the effect when you place your foot on the pedal.
+          <br/>
+          <br/>
+          ZW-45 Zakk Wylde Signature Wah
+          <br/>
+          With guts that that have been finely tuned to Zakks specs, this wah is specially voiced to deliver extra thick and cutting tones and comes loaded with the legendary Fasel inductor.
+          <br/>
+          <br/>
+          DB01 Dimebag Signature Wah
+          <br/>
+          This might be the most flexible and powerful wah pedal ever. The DB-01 has an extended sweep range with a fine tune knob, 6-way range selector, kick in volume boost, LED indicator and loaded with the legendary Fasel inductor.
+          <br/>
+          <br/>
+          105Q Crybaby Bass Wah
+          <br/>
+          The 105Q selects a frequency range on the lower end to modify the bass tones that are played with the bass guitar.
+          <br/>
+          <br/>
+          GCB-80 High Gain Volume Pedal
+          <br/>
+          The GCB-80 is the gold standard of volume controllers. Quiet operation and heavy-duty construction combined with a 1 million cycle taper potentiometer give a player the most delicate control ever.
+          <br/>
+          <br/>
+          EW95V Mister Crybaby Super Volume Wah
+          <br/>
+          This wah has both a wah mode, with a wah similar to the Original Crybaby and a boost mode, which offers a 16dB adjustable boost.
+          <br/>
+          <br/>
+          JH1D Jimi Hendrix Wah Wah (Formerly JH-1 and JH-1B)
+          <br/>
+          The JH-1 is an altered GCB95. Legend has it that before Jimi used his Crybaby pedal, he would have his tech alter it so that the frequency range selected would be at a slightly lower-pitch. This pedal has a fatter, more open sound than the GCB95.
+         </div>
+         <div class="product-faq-question">
+          Q: Why do I hear radio stations through my wah pedal?
+         </div>
+         <div class="product-faq-answer">
+          A: This is a common occurrence because the inductor in the Wah pedal acts as an antenna. When you are in an area with a lot of radio frequency, the pedal can and will pick up radio stations. It is not very easy to troubleshoot and fix, because it differs so greatly due to the different signals and the varying surroundings. What may work in one region might not work in another.
+          <br/>
+          <br/>
+          The first step in troubleshooting is to find out where in your rig the signal is coming from.
+          <br/>
+          <br/>
+          -First check to see if it is coming in through the AC Adapter. Use the effect with a battery and see if it is coming in through the wall. If it is, discontinue the use of the AC Adapter. If this doesn't work, then...
+          <br/>
+          <br/>
+          -Second, check to see if it is coming in through the guitar. Turn the volume of the guitar down to zero and see if you still get the radio signal. If yes, you might want to try putting a .0068-microfarad capacitor on the input jack between the tip and the shaft. (The capacitor can be a ceramic or polyester type and voltage rating of any size works.) This will also kill the high end of your sound. If this doesn't work, then...
+          <br/>
+          <br/>
+          -Third, check the inductor. If you have a metal inductor, you can purchase a shield from us and place it over the inductor with a ground wire that is placed under one of the screws on the PC Board. This acts as both an AC Hum and RF shield. (It is part number ECB99 - and lists for $12.00) If this doesn't work then...
+          <br/>
+          <br/>
+          -Fourth, open up the pedal and unsolder the black wire from the pot. Slide some Ferrite beads onto the wire and re-solder it. The size, number and shape of the beads depends upon the signal that you are getting, and we have not found any rhyme or reason as to which beads work with which signals. If this doesn't work then...
+          <br/>
+          <br/>
+          -Fifth, wrap the entire wire harness in Mumetal foil, which comes in a tape format, and hope that that works, because after that who knows!
+          <br/>
+          <br/>
+          Getting radio stations on your wah pedal is unfortunately the nature of the beast and has been since its inception. In some areas it is worse than others. It is especially bad in the Great Lakes region because the lakes act as large antennas sending out the radio signals to all areas - and all wah pedals.
+         </div>
+         <div class="product-faq-question">
+          Q: Does my pedal have a Fasel conductor?
+         </div>
+         <div class="product-faq-answer">
+          A: The following pedals have a Red Fasel inductor: GCB95, GCB95F, 535Q, 95Q, DCR2SR, BG95, SW95, DB01, and the ZW45. The MC404 has both the Yellow and Red Fasel conductors.
+         </div>
+         <div class="product-faq-question">
+          Q: Can I replace the potentiometer with a different pot for a different sound?
+         </div>
+         <div class="product-faq-answer">
+          A: The circuitry is designed for 100k pots, so using a pot of any other value will reduce the frequency range. Will this make your wah sound different? Sure. Is that kind of difference desirable? Probably not.
+         </div>
+         <div class="product-faq-question">
+          Q: How do I replace the potentiometer?
+         </div>
+         <div class="product-faq-answer">
+          A: The instructions for replacing the potentiometer are as follows:
+          <br/>
+          1. Remove the bottom plate of the pedal.
+          <br/>
+          2. Loosen the screw holding the cable clamp.
+          <br/>
+          3. Rotate cable clamp and disengage rack from gear.
+          <br/>
+          4. Remove wires for the old pot.
+          <br/>
+          5. Connect wires to ECB24B as show. (NO PHOTO)
+          <br/>
+          6. Remove old pot with  open-end wrench.
+          <br/>
+          7. Depress toe of pedal to make contact with switch.
+          <br/>
+          8. Rotate new pot gear counter-clockwise to stop.
+          <br/>
+          9. Install new pot in cradle and tighten.
+          <br/>
+          10. Engage rack gear and pot gear, back off one tooth from stop.
+          <br/>
+          11. Rotate cable clamp into rack holding position.
+          <br/>
+          12. Tighten screw.
+          <br/>
+          13. Replace bottom plate.
+         </div>
+         <div class="product-faq-question">
+          Q: The potentiometer in my pedal is making a scratching sound.  Is that because it is dirty?
+         </div>
+         <div class="product-faq-answer">
+          A: Our potentiometers are sealed to keep dirt, grime, and grease out of the pot. The scratching you are hearing is due to wear and not due to dirt in the pot. If you have a scratchy pot, you will need to replace it. If you have an ECB24 (the pot with the silver, round head), you may want to replace it with an ECB2424B (rectangular pot). We have been using the ECB24B regularly now for more than 10 years, and have found that it lasts at least twice as long as the ECB24 and sounds exactly the same. If your pot is scratchy, we recommend replacing it with the ECB24B potentiometer.
+         </div>
+         <div class="product-faq-question">
+          Q: How do I stop my pedal from squeaking (mechanical)?
+         </div>
+         <div class="product-faq-answer">
+          A: Over a period of time, the grease put on the pot can wear off (or become rubbed off through tinkering), and this can cause a mechanical squeaking noise to occur. Another cause of this problem can be that the flat spring in the rear of the pedal needs lubrication or loosening. We recommend using a generic grease to remedy these problems. Apply a small amount on the pot teeth, and for the flat spring, try putting some on the knurled pin (which drives horizontally through the pedal) where it is overlapped by the flat spring. Be sure never to use WD-40 or similar products, as these products tend to attract dust and do not last as long as grease.
+         </div>
+         <div class="product-faq-question">
+          Q: How do I know which AC adapter I need for my pedal?
+         </div>
+         <div class="product-faq-answer">
+          A: There are two different AC adapters used on our wah pedals: the ECB-02 and the ECB-03. If your pedal has a female AC jack, it requires the ECB-02 (a 3.5mm plug); if the AC jack has a pin in the center of it, it requires the ECB-03 (a 5.5/2.1mm coax plug). Any versions of our wah pedals that support AC adapters require the following power parameters: anything greater than 20ma, 9volt. The ECB-02 is positive tip polarity, and the ECB-03 is positive outside polarity.
+         </div>
+         <div class="product-faq-question">
+          Q: My Crybaby is acting like a volume pedal and not WAHing. Whats wrong?
+         </div>
+         <div class="product-faq-answer">
+          A: This typically occurs when the inductor (also known as the coil) on the pc-board becomes defective. Usually this is from dropping the pedal or trying to do a modification to the pedal and the drill goes a little too far. The inductor can be found near the center of the pc-board and is the largest component on the board (except for the input and output jack on later revisions). You can determine if the inductor is bad by measuring the resistance across the 33Kohm resistor (orange/orange/gold); if you measure 100 ohm or higher, the inductor is definitely open (i.e. bad). For you tech types, the inductor is in parallel with this resistor - thus the reasoning behind measuring the resistor.
+         </div>
+         <div class="product-faq-question">
+          Q: What spare parts are available?
+         </div>
+         <div class="product-faq-answer">
+          A: We sell every part that comprises our current revision GCB-95 pedals, down to the transistors, grommets, etc. For older pedals, we still have many parts available, but older pc-boards are no longer stocked and are difficult to obtain. To check which parts are available and how much they cost, visit our Parts Pages. If you have further questions, please email us at customerservice@jimdunlop.com.
+         </div>
+         <div class="product-faq-question">
+          Q: Can I power my pedal with a different voltage?
+         </div>
+         <div class="product-faq-answer">
+          A: All Dunlop/MXR pedals should only be powered with the recommended voltage.
+         </div>
+         <div class="product-faq-question">
+          Q: Does my pedal have a true bypass?
+         </div>
+         <div class="product-faq-answer">
+          A: Please refer to our 'True Bypass' article on our Dunlop Blog for an up-to-date list of our pedals which contain true bypass.
+         </div>
+         <div class="product-faq-question">
+          Q: My pedal works in bypass, but there is no signal when its turned on.
+         </div>
+         <div class="product-faq-answer">
+          A: Check to ensure that your adapter or battery have the correct voltage and/or polarity. Ensure that both cables are plugged into the correct input/output jacks.
+         </div>
+         <div class="product-faq-question">
+          Q: Why is there a volume drop/boost when I turn on my pedal?
+         </div>
+         <div class="product-faq-answer">
+          A: There is a possible impedance mismatch with other pedals in your effects loop. Isolate and remove the pedal from the loop to see if this still occurs.
+         </div>
+         <div class="product-faq-question">
+          Q: Can you repair my vintage pedal?
+         </div>
+         <div class="product-faq-answer">
+          A: It depends on which pedal and how it has failed. Please contact our Technical Support Department as this is a case by case matter.
+         </div>
+         <div class="product-faq-question">
+          Q: Can I adjust the internal trim pots?
+         </div>
+         <div class="product-faq-answer">
+          A: Not unless it is stated in the User Manual.
+         </div>
+         <div class="product-faq-question">
+          Q: Can I purchase an empty pedal housing?
+         </div>
+         <div class="product-faq-answer">
+          A: Unfortunately, we do not sell our raw pedal housings.
+         </div>
+         <div class="product-faq-question">
+          Q: My pedal may not be working correctly. What should I do?
+         </div>
+         <div class="product-faq-answer">
+          A: First, check the brands FAQ page (MXR, Way Huge, etc.) to see if the issue has already been addressed there.
+         </div>
+         <div class="product-faq-question">
+          Q: How can I purchase Dunlop products?
+         </div>
+         <div class="product-faq-answer">
+          A: We always prefer that players purchase Dunlop products at your local music store. However, if your store does not stock the item and is not willing to special order the item for you, you can order directly from us. You will find that you can purchase our products at a better price from your local music store, online music retailer, or mail order companies. We do not discount our prices, as we do not want to compete with your local music store. To order from us, just visit http://shop.jimdunlop.com/ecommerce/ or call us at 707-745-2722 and ask for the sales department. We are open Monday through Friday 8:00am - 5:00pm Pacific Standard Time. We accept VISA and MasterCard over the phone. You can also fax your order to us at 707-745-2658 and include a listing of the items you wish to order along with your Name, Address, Contact Phone Number and Credit Card Information. There is a $6.25 minimum shipping and handling fee on all orders. All orders are shipped U.P.S. ground service, unless you indicate otherwise.
+         </div>
+        </div>
+        <div class="product-detail-section" id="product-RelatedItems" style="display:none">
+         <p class="product-about-title">
+          The Zakk Wylde Signature Cry Baby Wah Wah Related Items
+         </p>
+        </div>
+        <div class="product-detail-section" id="product-Manual" style="display:none">
+         <p class="product-about-title">
+          The Zakk Wylde Signature Cry Baby Wah Wah Manual
+         </p>
+         <p class="product-copy product-manual-copy">
+          <a class="pdf-link" href="files/manuals/ZW45_man_WEB.pdf">
+           <img align="bottom" src="images/pdf.png"/>
+           Download PDF
+          </a>
+          <br/>
+          <a class="pdf-link pdf-iframe iframe" href="http://docs.google.com/gview?url=http://www.jimdunlop.com/files/manuals/ZW45_man_WEB.pdf&amp;embedded=true">
+           <img src="images/view.png"/>
+           View PDF
+          </a>
+         </p>
+        </div>
+       </div>
+       <div id="product-media-items">
+        <p class="product-media-break-title">
+         Zakk Wylde Signature Cry Baby Wah Wah Videos
+        </p>
+        <div class="product-media-area">
+         <div class="product-media-carousel-pages" id="videos-pages" style="">
+          Page
+          <img height="12" onclick="video_carousel.move(-3)" src="images/pagination-left.gif" width="11"/>
+          <span>
+           1
+          </span>
+          <span>
+           2
+          </span>
+          <img height="12" onclick="video_carousel.move(3)" src="images/pagination-right.gif" width="11"/>
+         </div>
+         <div class="scrollable product-media-carousel" id="video-carousel">
+          <div class="items">
+           <div class="video">
+            <a href="#video_864">
+             <img alt="Zakk Wylde Signature Cry Baby" height="105" src="http://img.youtube.com/vi/2mVohobg2Hs/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Zakk Wylde Signature Cry Baby
+           </div>
+           <div class="video">
+            <a href="#video_757">
+             <img alt="Zakk Wylde Signature Series" height="105" src="http://img.youtube.com/vi/oS0FFpolLpA/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Zakk Wylde Signature Series
+           </div>
+           <div class="video">
+            <a href="#video_645">
+             <img alt="Cry Baby Documentary Part 1" height="105" src="http://img.youtube.com/vi/nJmY_av_69E/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Cry Baby Documentary Part 1
+           </div>
+           <div class="video">
+            <a href="#video_661">
+             <img alt="Cry Baby Documentary Part 2" height="105" src="http://img.youtube.com/vi/h0HC3SqAEOc/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Cry Baby Documentary Part 2
+           </div>
+           <div class="video">
+            <a href="#video_677">
+             <img alt="Cry Baby Documentary Part 3" height="105" src="http://img.youtube.com/vi/ha1JlNh74Ek/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Cry Baby Documentary Part 3
+           </div>
+           <div class="video">
+            <a href="#video_694">
+             <img alt="Cry Baby Documentary Part 4" height="105" src="http://img.youtube.com/vi/7L4jJdFW6GI/0.jpg" style="border:1px solid #CCC" title=""/>
+            </a>
+            <br/>
+            Cry Baby Documentary Part 4
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="product-media-break">
+         <p class="product-media-break-title">
+          Zakk Wylde Signature Cry Baby Wah Wah Sounds
+         </p>
+         <div class="product-media-area">
+          <div class="product-media-carousel-pages" id="sounds-pages" style="display:none">
+           Page
+           <img height="12" onclick="sound_carousel.move(-3)" src="images/pagination-left.gif" width="11"/>
+           <span>
+            1
+           </span>
+           <img height="12" onclick="sound_carousel.move(3)" src="images/pagination-right.gif" width="11"/>
+          </div>
+          <div class="scrollable product-media-carousel" id="sound-carousel">
+           <div class="items">
+            <div>
+             <img alt="Bullseye Paul/ Plexi" class="sound" height="105" onclick="playSound(this)" src="images/sounds/sound_sample_off.gif" style="border:1px solid #CCC" title="ZakkWyldeWah.mp3" width="183"/>
+             <br/>
+             Bullseye Paul/ Plexi
+            </div>
+            <div>
+             <img alt="Midnight Blue Strat/ Plexi" class="sound" height="105" onclick="playSound(this)" src="images/sounds/sound_sample_off.gif" style="border:1px solid #CCC" title="MidnightBlues_DanHagen.mp3" width="183"/>
+             <br/>
+             Midnight Blue Strat/ Plexi
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div id="sound-info-container">
+         <span id="sound-info">
+         </span>
+         <img align="top" id="sound-control" src="images/play-small.png" style="margin-top:-5px"/>
+        </div>
+        <div id="jquery_jplayer">
+        </div>
+        <div class="product-media-break" style="">
+         <p class="product-media-break-title">
+          Zakk Wylde Signature Cry Baby Wah Wah  Artists
+         </p>
+         <div class="product-media-area">
+          <div class="product-media-carousel-pages" id="artists-pages" style="display:none">
+           Page
+           <img height="12" onclick="artist_carousel.move(-3)" src="images/pagination-left.gif" width="11"/>
+           <span>
+            1
+           </span>
+           <img height="12" onclick="artist_carousel.move(3)" src="images/pagination-right.gif" width="11"/>
+          </div>
+          <div class="scrollable product-media-carousel" id="artist-carousel">
+           <div class="items">
+            <div>
+             <a href="artist/dan-hagen">
+              <img alt="Dan Hagen" height="105" src="images/artists/ARTIST_DANHAGEN_SM.jpg" width="183"/>
+             </a>
+             <p>
+              Dan Hagen
+             </p>
+            </div>
+            <div>
+             <a href="artist/zakk-wylde">
+              <img alt="Zakk Wylde / Black Label Society" height="105" src="images/artists/ARTIST_ZAKKWYLDE_SM.jpg" width="183"/>
+             </a>
+             <p>
+              Zakk Wylde / Black Label Society
+             </p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div style="display:none">
+         <div class="video_container" id="video_864" style="width:640px;height:360px">
+          <object height="360" width="640">
+           <param name="movie" value="http://www.youtube.com/v/2mVohobg2Hs?version=3&amp;hl=en_US">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="360" src="http://www.youtube.com/v/2mVohobg2Hs?version=3&amp;hl=en_US" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+         <div class="video_container" id="video_757" style="width:640px;height:390px">
+          <object height="390" width="640">
+           <param name="movie" value="http://www.youtube.com/v/oS0FFpolLpA?version=3&amp;hl=en_US">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="390" src="http://www.youtube.com/v/oS0FFpolLpA?version=3&amp;hl=en_US" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+         <div class="video_container" id="video_645" style="width:640px;height:390px">
+          <object height="390" width="640">
+           <param name="movie" value="http://www.youtube.com/v/nJmY_av_69E?fs=1&amp;hl=en_US&amp;hd=1">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="390" src="http://www.youtube.com/v/nJmY_av_69E?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+         <div class="video_container" id="video_661" style="width:640px;height:390px">
+          <object height="390" width="640">
+           <param name="movie" value="http://www.youtube.com/v/h0HC3SqAEOc?fs=1&amp;hl=en_US&amp;hd=1">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="390" src="http://www.youtube.com/v/h0HC3SqAEOc?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+         <div class="video_container" id="video_677" style="width:640px;height:390px">
+          <object height="390" width="640">
+           <param name="movie" value="http://www.youtube.com/v/ha1JlNh74Ek?fs=1&amp;hl=en_US&amp;hd=1">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="390" src="http://www.youtube.com/v/ha1JlNh74Ek?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+         <div class="video_container" id="video_694" style="width:640px;height:390px">
+          <object height="390" width="640">
+           <param name="movie" value="http://www.youtube.com/v/7L4jJdFW6GI?fs=1&amp;hl=en_US&amp;hd=1">
+           </param>
+           <param name="allowFullScreen" value="true">
+           </param>
+           <param name="allowscriptaccess" value="always">
+           </param>
+           <embed allowfullscreen="true" allowscriptaccess="always" height="390" src="http://www.youtube.com/v/7L4jJdFW6GI?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" width="640">
+           </embed>
+          </object>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- Alternate Product Images -->
+     </div>
+     <div id="NotAvailable">
+      This is product is not currently available at the Dunlop Online Store, perhaps one of our dealers is carrying it.
+      <br/>
+      Visit our
+      <a href="http://shop.jimdunlop.com/ecommerce/DealerSearch.aspx" target="new">
+       dealer search
+      </a>
+     </div>
+     <div id="footer">
+      <ul id="footer-menu">
+       <li>
+         2015 Dunlop Manufacturing, Inc.
+       </li>
+       <li class="footer-pipe">
+        |
+       </li>
+       <li>
+        <a href="about-us">
+         About Us
+        </a>
+       </li>
+       <li class="footer-pipe">
+        |
+       </li>
+       <li>
+        <a href="media/catalog">
+         Catalog
+        </a>
+       </li>
+       <li class="footer-pipe">
+        |
+       </li>
+       <li>
+        <a href="contact">
+         Contact
+        </a>
+       </li>
+       <li class="footer-pipe">
+        |
+       </li>
+       <!--
+                	&lt;li&gt;&lt;a href="dealer-locator"&gt;Dealer Locator&lt;/a&gt;&lt;/li&gt;
+                    &lt;li class="footer-pipe"&gt;|&lt;/li&gt;
+                	&lt;li&gt;&lt;a href="support"&gt;Support&lt;/a&gt;&lt;/li&gt;
+                    &lt;li class="footer-pipe"&gt;|&lt;/li&gt;
+                	&lt;li&gt;&lt;a href="careers"&gt;Careers&lt;/a&gt;&lt;/li&gt;
+                    &lt;li class="footer-pipe"&gt;|&lt;/li&gt;
+-->
+       <li>
+        <a href="legal">
+         Legal
+        </a>
+       </li>
+       <li class="footer-pipe">
+        |
+       </li>
+       <li>
+        <a href="https://cloud.crm.powerobjects.net/powerwebformv3/powerwebform.aspx?t=S9AmIDyHxcyeoZsibglThFsFZn0LSrqXLx%2Fh%2BAQrGTiVP5WAxerFDbd6IK96kwuHBtu04DLPy8GFbmh4Rk2YgEQkMdOuz9DLwqfgrnEJIFYF7Vs86795mQQZET1SdPzE21wQW1pwigY%2B78zXugqfS13aEE4Dl8AMdHtDVqKiNSI%3D&amp;formId=powf_B31E3209FCEEE2118A0094DE805A2B74" target="new">
+         Register Products
+        </a>
+       </li>
+      </ul>
+      <div id="footer-social">
+       <ul id="footer-social-menu">
+        <li>
+         <a href="http://www.jimdunlop.com/blog/?feed=rss2">
+          <img src="images/footer-rss.gif"/>
+         </a>
+        </li>
+        <li>
+         <a href="http://www.facebook.com/dunlopmanufacturing">
+          <img src="images/footer-fb.gif"/>
+         </a>
+        </li>
+        <li>
+         <a href="http://www.myspace.com/jimdunlopusa">
+          <img src="images/footer-myspace.gif"/>
+         </a>
+        </li>
+        <li>
+         <a href="http://twitter.com/jimdunlopusa">
+          <img src="images/footer-twitter.gif"/>
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div id="footer-newsletter-signup" style="width:250px">
+       <!--
+                    &lt;form name="subscribe" action="http://app.streamsend.com/public/7KIl/Xb7/subscribe" method="post" style="margin:0px" target="new"&gt;
+                	&lt;p&gt;Newsletter Sign Up&lt;/p&gt;
+                    &lt;div id="newsletter-input"&gt;
+                        &lt;input 
+                        type="text"
+                        name="person[email_address]"
+                        id="sign_up_email_address"
+                        onblur="if (this.value == '') {this.value = 'email address';}"
+                        onfocus="if(this.value == 'email address') {this.value = '';}"
+                        value="email address"
+                        class="footer-newsletter-field" id="" name=""/&gt;
+                        &lt;input class="img" type="image" src="images/footer-newsletter-btn.gif" /&gt;
+                    &lt;/div&gt;
+                    &lt;/form&gt;
+-->
+       <!-- Begin MailChimp Signup Form -->
+       <script type="text/javascript">
+        // delete this script tag and use a "div.mce_inline_error{ XXX !important}" selector
+// or fill this in and it will be inlined when errors are generated
+var mc_custom_error_style = '';
+       </script>
+       <div id="mc_embed_signup">
+        <form action="http://jimdunlop.us2.list-manage1.com/subscribe/post?u=331fdcd1fa30d353303a8e41e&amp;id=87ba5e3144" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" target="_blank">
+         <div class="mc-field-group">
+          <p>
+           Newsletter Signup
+          </p>
+          <div id="newsletter-input">
+           <input class="required email" id="mce-EMAIL" name="EMAIL" type="text" value=""/>
+           <input class="newsletter-input-img" id="mc-embedded-subscribe" name="subscribe" src="images/footer-newsletter-btn.gif" type="image" value="Subscribe"/>
+          </div>
+          <div id="mce-responses" style="clear:both;padding-top:5px">
+           <div class="response" id="mce-error-response" style="display:none">
+           </div>
+           <div class="response" id="mce-success-response" style="display:none">
+           </div>
+          </div>
+         </div>
+        </form>
+       </div>
+       <script type="text/javascript">
+        var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='MMERGE3';ftypes[3]='text';fnames[4]='MMERGE4';ftypes[4]='text';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState &amp;&amp; script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+head.appendChild(script);
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = 'margin: 1em 0 0 0; padding: 1em 0.5em 0.5em 0.5em; background: ERROR_BGCOLOR none repeat scroll 0% 0%; font-weight: bold; float: left; z-index: 1; width: 80%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: ERROR_COLOR;';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = '.mce_inline_error {' + err_style + '}';
+} else {
+  style.appendChild(document.createTextNode('.mce_inline_error {' + err_style + '}'));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks&gt;40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      //var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      options = { url: 'http://jimdunlop.us2.list-manage.com/subscribe/post-json?u=331fdcd1fa30d353303a8e41e&amp;id=87ba5e3144&amp;c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                    	if ( fields[0].value=='MM' &amp;&amp; fields[1].value=='DD' &amp;&amp; fields[2].value=='YYYY' ){
+                                    		this.value = '';
+									    } else if ( fields[0].value=='' &amp;&amp; fields[1].value=='' &amp;&amp; fields[2].value=='' ){
+                                    		this.value = '';
+									    } else {
+	                                        this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+	                                    }
+                                    });
+                            });
+                        return true;
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+    	});
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '&lt;div id="'+err_id+'" style="'+err_style+'"&gt; '+msg+'&lt;/div&gt;';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+       </script>
+       <!--End mc_embed_signup-->
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-20108538-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+&lt;/script&gt;
+&lt;img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/984592451/?value=0&amp;guid=ON&amp;script=0"/&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+  </script>
+ </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>
+   CA_3D_1
+  </title>
+  <style type="text/css">
+   BODY { background-color:#666666; margin:0px; font: 12px courier new, courier, monospace; color:#000000;}
+	.textbox { width:320; font: 12px courier new, courier, monospace; color:#000000; background-color:#9F9B99; padding:20px; border:1px solid black;}
+	.textbox A , A { color:#000000; }
+  </style>
+ </head>
+ <body>
+  <br/>
+  <br/>
+  <br/>
+  <div align="center">
+   <applet archive="CA_3D_1.jar" code="CA_3D_1" height="400" width="400">
+   </applet>
+   <br/>
+   made with
+   <a href="http://www.proce55ing.net" target="_blank">
+    proce55ing
+   </a>
+   <br/>
+   <br/>
+   <br/>
+   <div align="left" class="textbox">
+    <pre>
+     // CA_3D_1
+// 2D Cellular automaton in a 3D space
+// 3 lamps hover around randomly
+// mouse changes the camera angle, click to reinitialize the CA
+//
+int ROWS=30;
+int COLS=30;
+int BOXSIZE=6;
+int map[][]=new int[ROWS*COLS][2];
+int id[]={0,1,0};
+int rule=513;
+float camY=0;
+float aX,aY;
+boolean running=true;
+Light lamps[]=new Light[3];
+
+void setup() {
+  size(400,400);
+  background(0,0,0);
+  fill(#FFFFFF);
+  lights();
+  g.lightR[0] = 0.1f;
+  g.lightG[0] = 0.1f;
+  g.lightB[0] = 0.1f;
+
+  g.lightKind[1] = DIFFUSE;
+  g.lightR[1] = 1f;
+  g.lightG[1] = 0f;
+  g.lightB[1] = 0f;
+
+  g.lightKind[2] = DIFFUSE;
+  g.lightR[2] = 1.0f;
+  g.lightG[2] = 1.0f;
+  g.lightB[2] = 0.0f;
+
+  g.lightKind[3] = DIFFUSE;
+  g.lightR[3] = 1.0f;
+  g.lightG[3] = 0.5f;
+  g.lightB[3] = 0.0f;
+  
+  for(int i=0;i&lt;3;i++) {
+    lamps[i]=new Light(i+1);
+  }
+
+  aX=aY=0;
+  noStroke();
+  initCA();
+}
+
+void loop() {
+beginCamera(); 
+  perspective(60.0, (float) width / (float) height, 1.0, 1000.0); 
+    translate(0.0, 0.0, -200); 
+    rotateX(-aX*0.01); 
+    rotateY(-aY*0.01); 
+  endCamera(); 
+
+  for(int i=0;i&lt;3;i++) {
+    lamps[i].run();
+  }
+
+
+   aY+=(mouseX-aY)*0.2;
+   aX+=(mouseY-aX)*0.2;
+  if (mousePressed) { initCA(); }
+
+  if(running) runCA();
+
+  fill(#FFFFFF);
+  for(int i=0; i&lt;COLS;i++) {
+    for(int j=0; j&lt;ROWS;j++) {
+      push();
+      translate(i*BOXSIZE-COLS*BOXSIZE/2, j*BOXSIZE-ROWS*BOXSIZE/2,0);
+      if (map[i+j*COLS][0]==1) box(BOXSIZE);
+      pop();
+    }
+  }
+
+}
+
+void initCA () {
+  for (int i=0; i&lt;(COLS*ROWS); i++) {
+    if (random(10)&gt;5) map[i][0]=1;
+    else map[i][0]=0;
+  }
+  running=true;
+}
+
+void runCA()
+{
+  for(int t=0;t&lt;2;t++) {
+    // For each cell in the grid
+    for(int i=0; i&lt;COLS; i++) {
+      for(int j=0; j&lt;ROWS; j++) {
+
+        // Wrap around offsets
+        int right=(i+1) % COLS;
+        int bottom=(j+1) % ROWS;
+        int left=i-1; if (left==-1) left=COLS-1;
+        int top=j-1; if (top==-1) top=ROWS-1;
+
+        // Calculate the sum of 9 neighbors
+        int sum=0;
+        sum+=map[left+j*COLS][0]; // left middle
+        sum+=map[left+top*COLS][0]; // left top
+        sum+=map[left+bottom*COLS][0]; // left bottom
+        sum+=map[right+j*COLS][0]; // right middle
+        sum+=map[right+top*COLS][0]; // right top
+        sum+=map[right+bottom*COLS][0]; // right bottom
+        sum+=map[i+j*COLS][0]; // middle middle
+        sum+=map[i+top*COLS][0]; // middle top
+        sum+=map[i+bottom*COLS][0]; // middle bottom
+
+        // Update the copy of the map
+        if ((rule &amp; (1&lt;&lt;sum)) &gt;0) map[i+j*COLS][1]=1;
+        else map[i+j*COLS][1]=0;
+
+      }
+    }
+
+    // Transfer copy to map
+    for (int i=0; i&lt;(COLS*ROWS); i++) {
+      map[i][0]=map[i][1];
+
+    }
+
+  }
+  int xsum=0;
+  for (int i=0; i&lt;(COLS*ROWS); i++) {
+    xsum+=map[i][0];
+  }
+  id[2]=id[1];
+  id[1]=id[0];
+  id[0]=xsum;
+
+  if ( (id[0]==0) || (id[1]&gt;=COLS*ROWS)) initCA();
+  if ((id[0]==id[1]) &amp;&amp; (id[1]==id[2])) {  running=false; }
+
+}
+
+
+
+
+
+class Light {
+  float f1,f2,f3,f4,f5,f6; // sine waves frequencies
+  float p1,p2,p3,p4,p5,p6; // sine waves phases
+  float t; // clock
+  int lightID;
+
+  Light(int id) {
+    lightID=id;
+    f1=random(0.5)+0.1;
+    f2=random(0.5)+0.1;
+    f3=random(0.5)+0.1;
+    f4=random(0.5)+0.1;
+    f5=random(0.5)+0.1;
+    f6=random(0.5)+0.1;
+    p1=random(PI);  
+    p2=random(PI);
+    p3=random(PI);    
+    p4=random(PI);
+    p5=random(PI);
+    p6=random(PI);
+  }
+
+  void run() {
+    g.lightX[lightID]=sin(f1*t+p1)*sin(f2*t+p2)*100.0f;
+    g.lightY[lightID]=sin(f3*t+p3)*sin(f4*t+p4)*100.0f;
+    g.lightZ[lightID]=sin(f5*t+p5)*sin(f6*t+p6)*100.0f+150;
+    t+=0.1;
+  }
+
+
+
+}
+    </pre>
+   </div>
+  </div>
+ </body>
+</html>

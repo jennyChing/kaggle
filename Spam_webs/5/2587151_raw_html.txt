@@ -1,0 +1,526 @@
+<html>
+ <head>
+  <title>
+   MobileXoom : Contact Us
+  </title>
+  <meta content="Please contact us for customer support or product inquiries." name="description"/>
+  <meta content="build free responsive website, how to make a mobile website, how to make a mobile site" name="keywords"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="en" http-equiv="content-language"/>
+  <meta content="7f04404f60a98cc7ba06f4fc09a37022" name="p:domain_verify"/>
+  <meta content="index, follow" name="robots"/>
+  <meta content="index,follow" name="googlebot"/>
+  <!--&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;-->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/style-old.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/320.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/600.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/900.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/980.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.inspiritysoft.com/site/assets/css/responsivemobilemenu.css" rel="stylesheet" type="text/css"/>
+  <script src="http://www.inspiritysoft.com/site/assets/js/jquery1-9.js" type="text/javascript">
+  </script>
+  <script src="http://www.inspiritysoft.com/site/assets/js/mobilemenu.js" type="text/javascript">
+  </script>
+  <script src="http://www.inspiritysoft.com/site/assets/js/responsivemobilemenu.js" type="text/javascript">
+  </script>
+  <script src="http://www.inspiritysoft.com/site/assets/js/jquery.cookie.js" type="text/javascript">
+  </script>
+  <script src="http://www.inspiritysoft.com/site/assets/js/custom.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   $(document).ready(function() {
+	
+$("ul#topnav li").hover(function() { //Hover over event on list item
+	$(this).css({ 'background' : '#1376c9'}); //Add background color + image on hovered list item
+	$(this).find("span").show(); //Show the subnav
+} , function() { //on hover out...
+	$(this).css({ 'background' : 'none'}); //Ditch the background
+	$(this).find("span").hide(); //Hide the subnav
+});
+	
+});
+  </script>
+  <!--        &lt;link rel="stylesheet" href="http://www.inspiritysoft.com/site/assets/css/style.css" type="text/css" media="screen" /&gt;-->
+  <!--&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"&gt;&lt;/script&gt;-->
+  <script src="http://www.inspiritysoft.com/site/assets/js/jquery-1.7.2.min.js" type="text/javascript">
+  </script>
+  <script charset="utf-8" type="text/javascript">
+   function validateEmail(elementValue){  
+                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                return emailPattern.test(elementValue);  
+            }  
+     
+     
+            function cleanContactForm(){
+
+                document.getElementById('name').value = "";
+                document.getElementById('email').value = "";
+                document.getElementById('subject').value = "";
+                document.getElementById('norobot').value = "";
+                document.getElementById('message').value = "";
+            
+            }
+        
+            function showLoading(){
+
+                document.getElementById('loading').style.display = "block";
+            
+            }
+        
+            function hideLoading(){
+
+                document.getElementById('loading').style.display = "none";
+            
+            }     
+    
+    
+    
+            function sendMessage()    
+            {
+                showLoading();
+                              
+                var name_val = document.getElementById('name').value;
+        
+                if(name_val == '') {alert('Must Fill Name');  hideLoading(); return false;}
+        
+        
+                var email_val = document.getElementById('email').value;
+        
+                if(email_val == '') 
+                {
+                    alert('Must Fill Email');
+                    hideLoading();
+                    return false;
+                }
+                else
+                {
+                    if (!validateEmail(email_val))
+                    {
+                        alert('Invalid E-mail Address! Please re-enter.');
+                        hideLoading();
+                        return false;
+                    }
+                }
+        
+                var subject_val = document.getElementById('subject').value;        
+                var msg_val = document.getElementById('message').value;
+                var norobot_val = document.getElementById('norobot').value;
+        
+                if(subject_val == 0) {alert('Must Fill Subject');  hideLoading(); return false;}
+               
+                if(msg_val == '') {alert('Must Fill Message');  hideLoading(); return false;}
+
+                if(norobot_val == '') {alert('Must Fill Captcha');  hideLoading(); return false;}
+
+
+                $.ajax({
+                    url : 'http://www.inspiritysoft.com/site/ajax-contact-process.php',              
+                    type : 'GET',
+                    data : {name:name_val,email:email_val,subject:subject_val,message:msg_val,norobot:norobot_val},
+                    success:function(responseText){
+                                     
+                        hideLoading();
+                 
+                        $('#cap-img').attr('src','http://www.inspiritysoft.com/inspApps/profmgr/captcha.php?abc=1501971057');
+                                
+                        if(responseText == "&lt;div class='success'&gt;Your message has been sent.&lt;/div&gt;&lt;br/&gt;"){ 
+                           
+                            cleanContactForm();
+                           
+                        }
+
+                        $('#msg_container').html(responseText);
+                                                                   
+                    },
+                    error:function(){alert("Error Occured ");}
+                });
+               
+                return false;
+            }
+    
+            function validateContactForm(){
+        
+                              
+                var name_val = document.getElementById('name').value;
+        
+                if(name_val == '') {alert('Must Fill Name');  hideLoading(); return false;}
+        
+        
+                var email_val = document.getElementById('email').value;
+        
+                if(email_val == '') 
+                {
+                    alert('Must Fill Email');
+                    return false;
+                }
+                else
+                {
+                    if (!validateEmail(email_val))
+                    {
+                        alert('Invalid E-mail Address! Please re-enter.');
+                        
+                        return false;
+                    }
+                }
+        
+                var subject_val = document.getElementById('subject').value;        
+                var msg_val = document.getElementById('message').value;
+                var norobot_val = document.getElementById('norobot').value;
+        
+                if(subject_val == 0) {alert('Must Fill Subject');  hideLoading(); return false;}
+               
+                if(msg_val == '') {alert('Must Fill Message');  hideLoading(); return false;}
+
+                if(norobot_val == '') {alert('Must Fill Captcha');  hideLoading(); return false;}
+        
+                return true;
+            }
+  </script>
+ </head>
+ <body>
+  <script src="http://www.inspiritysoft.com/site/assets/js/custom.js" type="text/javascript">
+  </script>
+  <div class="header">
+   <div class="header-inner">
+    <!--Start Header Mid-->
+    <div class="header-bg">
+     <div class="header-top">
+      <!--Start Top Nav-->
+      <div class="navtop-inner">
+       <div class="navtop">
+        <div class="nav-top">
+         <a href="http://www.inspiritysoft.com/sign-in">
+          Sign in
+         </a>
+        </div>
+        <div class="nav-topdash">
+         |
+        </div>
+        <div class="nav-top">
+         <a href="http://www.inspiritysoft.com/register">
+          Register
+         </a>
+        </div>
+       </div>
+      </div>
+      <!--End Top Nav-->
+      <!--Start Logo-->
+      <div class="logo">
+       <a href="http://www.inspiritysoft.com">
+        <img alt="Inspiritysoft-logo" border="0" src="http://www.inspiritysoft.com/site/assets/images/logo.png" title="Inspiritysoft"/>
+       </a>
+      </div>
+      <!--End Logo-->
+      <!--Start Navigation-->
+      <div class="main-navigation">
+       <div class="container-nav">
+        <ul id="topnav">
+         <li>
+          <a href="http://www.inspiritysoft.com">
+           Home
+          </a>
+         </li>
+         <li>
+          <a href="http://www.inspiritysoft.com/packages">
+           Packages
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Resources
+          </a>
+          <span>
+           <a href="http://www.inspiritysoft.com/reseller">
+            Partner and Reseller
+           </a>
+           |
+           <a href="http://www.inspiritysoft.com/docs/general-faq">
+            General FAQ
+           </a>
+           |
+           <a href="http://www.inspiritysoft.com/docs/technical-faq">
+            Technical FAQ
+           </a>
+          </span>
+         </li>
+         <li>
+          <a href="http://www.inspiritysoft.com/blog">
+           Blog
+          </a>
+         </li>
+         <li>
+          <a href="http://www.inspiritysoft.com/contact-us">
+           Contact Us
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <!--End Navigation-->
+      <!--Start Responsive Navigation-->
+      <div class="navigation">
+       <div class="rmm">
+        <ul>
+         <li>
+          <a href="http://www.inspiritysoft.com">
+           Home
+          </a>
+         </li>
+         <li>
+          <a href="http://www.inspiritysoft.com/packages">
+           Packages
+          </a>
+         </li>
+         <!--                            &lt;li&gt;&lt;a href='#gallery'&gt;Resources&lt;/a&gt;&lt;/li&gt;-->
+         <li>
+          <a href="http://www.inspiritysoft.com/blog">
+           Blog
+          </a>
+         </li>
+         <li>
+          <a href="http://www.inspiritysoft.com/contact-us">
+           Contact Us
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <!--End Responsive Navigation-->
+     </div>
+    </div>
+    <!--End Header Mid-->
+   </div>
+  </div>
+  <div class="wrapper">
+   <div class="content_area">
+    <h3>
+     Contact Us
+    </h3>
+    <div class="spacer">
+    </div>
+    <p>
+     Please contact us for customer support or product inquiries.
+    </p>
+    <!--    &lt;fieldset style="margin:20px 0px 0px 0px"&gt;
+      &lt;legend style="color:#000;font-size: 14px"&gt;
+      &lt;h2&gt;&lt;i&gt;Address:&lt;/i&gt;&lt;/h2&gt;
+      &lt;/legend&gt;
+      &lt;div style="padding: 0px"&gt;
+        &lt;p&gt;Enterprise Development Center&lt;/p&gt;
+        &lt;p&gt;211 Warren Street&lt;/p&gt;
+        &lt;p&gt;Newark, New Jersey 07103.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/fieldset&gt;-->
+    <div class="spacer">
+    </div>
+    <div id="content-wapper">
+     <div class="w-990">
+      <div class="float-wrapper">
+       <fieldset style="padding: 20px 4px 7px 24px;margin:10px 10px 35px 0px">
+        <legend style="color:#000;font-size: 14px">
+         <h4>
+          Contact Info Through Form
+         </h4>
+        </legend>
+        <div class="contct-fom-main">
+         <form action="" enctype="multipart/form-data" id="contact-form" method="post" name="contact-form">
+          <p class="form-internal">
+           Your Name
+           <span class="red">
+            *
+           </span>
+          </p>
+          <div class="form-internal">
+           <input class="input" id="name" name="name" size="40" type="text" value=""/>
+          </div>
+          <p class="form-internal">
+           Your Email
+           <span class="red">
+            *
+           </span>
+          </p>
+          <div class="form-internal">
+           <input class="input" id="email" name="email" size="40" type="text" value=""/>
+          </div>
+          <p class="form-internal">
+           Subject
+           <span class="red">
+            *
+           </span>
+          </p>
+          <div class="form-internal">
+           <input class="input" id="subject" name="subject" size="40" type="text" value=""/>
+          </div>
+          <p class="form-internal">
+           Your Message
+           <span class="red">
+            *
+           </span>
+          </p>
+          <div class="form-internal">
+           <textarea class="texfield" cols="40" id="message" name="message" rows="10">
+           </textarea>
+          </div>
+          <div class="spacer">
+          </div>
+          <div class="form-internal" id="captcha-img">
+           <img id="cap-img" src=""/>
+           <script>
+            $('#cap-img').attr('src','http://www.inspiritysoft.com/inspApps/profmgr/captcha.php?abc=718906381');
+           </script>
+          </div>
+          <div class="spacer">
+          </div>
+          <div class="form-internal">
+           <input class="input" id="norobot" name="norobot" type="text"/>
+          </div>
+          <div class="spacer">
+          </div>
+          <div class="form-internal">
+           <p class="form-internal">
+            Upload file
+           </p>
+           <input class="input" name="doc" size="25" type="file"/>
+          </div>
+          <div class="form-internal">
+           <div class="spacer">
+           </div>
+           <!--&lt;input class="textbutton" name="send" onclick="return sendMessage();" value="Send" type="button" /&gt;-->
+           <input class="textbutton" name="send" onclick="return validateContactForm();" type="submit" value="Send"/>
+           <input class="textbutton" name="Reset" type="reset" value="Reset"/>
+          </div>
+          <span id="loading" style="padding:0px 0px 0px 0px;display:none">
+           <img height="20px" src="http://www.inspiritysoft.com/site/assets/images/loading_blue.gif" width="20px"/>
+          </span>
+         </form>
+        </div>
+       </fieldset>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="footer-wapper">
+   <div class="main-footer">
+    <div class="footer-bottomline">
+    </div>
+    <div class="footer-inner">
+     <!--Start Comapny-->
+     <div class="footer-company">
+      <div class="footer-heading">
+       company
+      </div>
+      <div id="list2">
+       <ul class="list2">
+        <!--      &lt;li&gt;&lt;a href="#"&gt;About Us&lt;/a&gt;&lt;/li&gt;-->
+        <li>
+         <a href="http://www.inspiritysoft.com/contact-us">
+          Contact Us
+         </a>
+        </li>
+        <li>
+         <a href="http://www.inspiritysoft.com/terms-of-use">
+          Terms &amp; Conditions
+         </a>
+        </li>
+        <li>
+         <a href="http://www.inspiritysoft.com/privacy-policy">
+          Privacy Policy
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="clr">
+      </div>
+     </div>
+     <!--End Comapny-->
+     <!--Start connect with us-->
+     <div class="footer-connect">
+      <div class="footer-headingsecond">
+       connect with us
+      </div>
+      <div class="connect-icon">
+       <a href="https://www.facebook.com/inspiritysoft">
+        <img alt="facebook-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/facebook-icon.png" title="Facebook"/>
+       </a>
+      </div>
+      <div class="connect-icon">
+       <a href="https://twitter.com/inspiritysoft">
+        <img alt="twitter-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/twitter-icon.png" title="Twitter"/>
+       </a>
+      </div>
+      <!--&lt;div class="connect-icon"&gt;&lt;a href="#"&gt;&lt;img src="http://www.inspiritysoft.com/site/assets/images/pinterest-icon.png" border="0" alt="pinterest-icon-icon" title="Pinterest"&gt;&lt;/a&gt;&lt;/div&gt;-->
+      <div class="connect-icon">
+       <a href="https://www.linkedin.com/company/inspirity">
+        <img alt="linkedin-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/linkedin-icon.png" title="Linkedin"/>
+       </a>
+      </div>
+      <!--&lt;div class="connect-icon"&gt;&lt;a href="#"&gt;&lt;img src="http://www.inspiritysoft.com/site/assets/images/rss-icon.png" border="0" alt="rss-icon" title="Rss Feed"&gt;&lt;/a&gt;&lt;/div&gt;-->
+     </div>
+     <!--End connect with us-->
+     <!--Start we accept-->
+     <div class="footer-accept">
+      <div class="footer-headingsecond">
+       we accept
+      </div>
+      <br/>
+      <div class="accept-icon">
+       <img alt="facebook-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/visa-icon.png"/>
+      </div>
+      <div class="accept-icon">
+       <img alt="twitter-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/mastercard-icon.png"/>
+      </div>
+      <div class="accept-icon">
+       <img alt="pinterest-icon-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/discover-icon.png"/>
+      </div>
+      <div class="accept-icon">
+       <img alt="linkedin-icon" border="0" src="http://www.inspiritysoft.com/site/assets/images/americanexpressr-icon.png"/>
+      </div>
+      <div class="authorize-icon">
+       <!--    &lt;img src="http://www.inspiritysoft.com/site/assets/images/authorize-icon.png" border="0" alt="authorize-icon" title="Authorize"&gt;-->
+       <div class="AuthorizeNetSeal" style="display: inline-block">
+        <script language="javascript" type="text/javascript">
+         var ANS_customer_id="afb25af5-5e4e-43ee-ae3a-fc93d3463958";
+        </script>
+        <script language="javascript" src="//verify.authorize.net/anetseal/seal.js" type="text/javascript">
+        </script>
+        <a href="http://www.authorize.net/" id="AuthorizeNetText" rel="nofollow" style="color:#FFF;" target="_blank">
+         Online Payment Service
+        </a>
+       </div>
+      </div>
+     </div>
+     <!--End we accept-->
+     <!--Start Newsletter-->
+     <!--&lt;div class="footer-newsletter"&gt;
+        &lt;div class="footer-heading"&gt;Newsletter&lt;/div&gt;&lt;br&gt;
+        &lt;input type=text name=field-name-here class="newsletter-input" onclick=this.value=''; onfocus=this.select() onblur=this.value=!this.value'Enter Your Email Address...'this.value; value='Enter Your Email Address...' /&gt;
+        
+        &lt;input name="" type="image" class="newsletter-btn"img src="http://www.inspiritysoft.com/site/assets/images/btn-subscribe.png" border="0"&gt;
+        
+        &lt;/div&gt;-->
+     <!--End Newsletter-->
+     <div class="copyrite">
+      Copyright  2014 Inspirity, Inc. | All Rights Reserved
+     </div>
+     <div class="clr">
+     </div>
+    </div>
+   </div>
+   <script type="text/javascript">
+    var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-20741849-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+   </script>
+  </div>
+ </body>
+</html>

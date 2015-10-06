@@ -1,0 +1,789 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]&gt;&lt;html class="ie ie6 lte9 lte8 lte7"&gt;&lt;![endif]-->
+<!--[if IE 7]&gt;&lt;html class="ie ie7 lte9 lte8 lte7"&gt;&lt;![endif]-->
+<!--[if IE 8]&gt;&lt;html class="ie ie8 lte9 lte8"&gt;&lt;![endif]-->
+<!--[if IE 9]&gt;&lt;html class="ie ie9 lte9"&gt;&lt;![endif]-->
+<!--[if !IE]&gt;&lt;!-->
+<html class="not-ie">
+ <!--&lt;![endif]-->
+ <head>
+  <link href="/myicon.ico" rel="shortcut icon"/>
+  <title>
+   How the GMAT Algorithm Works - Knewton
+  </title>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="http://www.knewton.com/wp-content/themes/knewton-v5/style.php" rel="stylesheet"/>
+  <link href="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/fancybox/jquery.fancybox.css" rel="stylesheet"/>
+  <!-- 		&lt;link rel="stylesheet" href="assets/css/build/style.min.css" /&gt; -->
+  <!--[if lt IE 9]&gt;&lt;script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/html5shiv.js"&gt;&lt;/script&gt;&lt;script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/respond.js"&gt;&lt;/script&gt;&lt;![endif]-->
+  <script src="https://use.typekit.net/bxq1adt.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   try{Typekit.load();}catch(e){}
+  </script>
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v2.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="How the GMAT Algorithm Works - Knewton" property="og:title"/>
+  <meta content="David Kuntz is Vice President, Research at Knewton, where he builds the CATs for its online GMAT course. Part 1 | Part 2 | Part 3 Ive received a number of inquiries from the community about the GMAT algorithm, so I thought it best to reply in article form. Here are some frequently asked questions about computer-adaptive tests (CATs). 1. Whats an algorithm? An algorithm, generally, is a usually efficient set of well-defined steps that... Read more" property="og:description"/>
+  <meta content="Knewton" property="og:site_name"/>
+  <meta content="algorithm" property="article:tag"/>
+  <meta content="computer adaptive test" property="article:tag"/>
+  <meta content="GMAT" property="article:tag"/>
+  <meta content="Test Prep" property="article:tag"/>
+  <meta content="Test Prep" property="article:section"/>
+  <meta content="2010-01-21T09:40:50+00:00" property="article:published_time"/>
+  <meta content="2014-07-30T12:54:10+00:00" property="article:modified_time"/>
+  <meta content="2014-07-30T12:54:10+00:00" property="og:updated_time"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.knewton.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="https://www.knewton.com/wp-content/plugins/jquery-colorbox/themes/theme3/colorbox.css?ver=4.6" id="colorbox-theme3-css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://www.knewton.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" id="wp-pagenavi-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C900%2C300italic%2C400italic%2C700italic" id="twentyfourteen-lato-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.knewton.com/wp-content/themes/twentyfourteen/genericons/genericons.css?ver=3.0.3" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.knewton.com/wp-content/themes/knewton-v5/style.css?ver=4.2.2" id="twentyfourteen-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;&lt;link rel='stylesheet' id='twentyfourteen-ie-css'  href='http://www.knewton.com/wp-content/themes/twentyfourteen/css/ie.css?ver=20131205' type='text/css' media='all' /&gt;&lt;![endif]-->
+  <link href="http://www.knewton.com/wp-content/plugins/sailthru-wordpress-plugin/css/widget.subscribe.css?ver=4.2.2" id="sailthru-subscribe-widget-styles-css" media="all" rel="stylesheet" type="text/css"/>
+  <!-- This site uses the Google Analytics by Yoast plugin v5.4.2 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-5585757-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+  </script>
+  <!-- / Google Analytics by Yoast -->
+  <script src="http://www.knewton.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script>
+   jQueryWP = jQuery;
+  </script>
+  <script src="http://www.knewton.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/jquery.smartresize.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/modernizr.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/global.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/bootstrap.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/cycle2.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/velocity.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/velocity.ui.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/hoverintent.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/slick.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/fancybox/jquery.fancybox.pack.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/js/plugins/fancybox/helpers/jquery.fancybox-media.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var jQueryColorboxSettingsArray = {"jQueryColorboxVersion":"4.6","colorboxInline":"false","colorboxIframe":"false","colorboxGroupId":"","colorboxTitle":"","colorboxWidth":"false","colorboxHeight":"false","colorboxMaxWidth":"false","colorboxMaxHeight":"false","colorboxSlideshow":"true","colorboxSlideshowAuto":"true","colorboxScalePhotos":"true","colorboxPreloading":"true","colorboxOverlayClose":"true","colorboxLoop":"true","colorboxEscKey":"true","colorboxArrowKey":"true","colorboxScrolling":"true","colorboxOpacity":"0.75","colorboxTransition":"elastic","colorboxSpeed":"350","colorboxSlideshowSpeed":"3000","colorboxClose":"close","colorboxNext":"next","colorboxPrevious":"previous","colorboxSlideshowStart":"start slideshow","colorboxSlideshowStop":"stop slideshow","colorboxCurrent":"{current} of {total} images","colorboxXhrError":"This content failed to load.","colorboxImgError":"This image failed to load.","colorboxImageMaxWidth":"640px","colorboxImageMaxHeight":"70%","colorboxImageHeight":"false","colorboxImageWidth":"false","colorboxLinkHeight":"60%","colorboxLinkWidth":"60%","colorboxInitialHeight":"100","colorboxInitialWidth":"300","autoColorboxJavaScript":"","autoHideFlash":"true","autoColorbox":"true","autoColorboxGalleries":"","addZoomOverlay":"","useGoogleJQuery":"","colorboxAddClassToLinks":""};
+/* ]]&gt; */
+  </script>
+  <script src="https://www.knewton.com/wp-content/plugins/jquery-colorbox/js/jquery.colorbox-min.js?ver=1.3.21" type="text/javascript">
+  </script>
+  <script src="https://www.knewton.com/wp-content/plugins/jquery-colorbox/js/jquery-colorbox-wrapper-min.js?ver=4.6" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/plugins/sailthru-wordpress-plugin/js/widget.subscribe.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <link href="http://www.knewton.com/?p=1817" rel="shortlink"/>
+  <!-- BEGIN Sailthru Horizon Meta Information -->
+  <meta content="2010-01-21 09:40:50" name="sailthru.date"/>
+  <meta content="How the GMAT Algorithm Works" name="sailthru.title"/>
+  <meta content="algorithm, computer adaptive test, GMAT, Test Prep" name="sailthru.tags"/>
+  <meta content="David Kuntz" name="sailthru.author"/>
+  <meta content='David Kuntz is Vice President, Research at Knewton, where he builds the CATs for its online GMAT course. Part 1 | Part 2 | Part 3 Ive received a number of inquiries from the community about the GMAT algorithm, so I thought it best to reply in article form. Here are some frequently asked questions about computer-adaptive tests (CATs). 1. Whats an algorithm? An algorithm, generally, is a usually efficient set of well-defined steps that... &lt;a href="http://www.knewton.com/blog/test-prep/gmat-algorithm-faq/"&gt;Read more&lt;/a&gt;' name="sailthru.description"/>
+  <!-- END Sailthru Horizon Meta Information -->
+  <script type="text/javascript">
+   var ajaxurl = "http://www.knewton.com/wp-admin/admin-ajax.php"
+  </script>
+ </head>
+ <body>
+  <div class="single single-post postid-1817 single-format-standard pagename-how-the-gmat-algorithm-works group-blog masthead-fixed footer-widgets singular" id="content">
+   <header class="group" id="header">
+    <div class="header-wrap">
+     <div class="inner header-inner group">
+      <h1 class="header-logo">
+       <a class="header-logo-link" href="/">
+        <img class="header-logo-img" src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/images/logo.png"/>
+       </a>
+      </h1>
+      <div class="header-cta-wrap fr">
+       <a class="border-btn btn small header-cta color-btn bg-turq1" href="http://learn.knewton.com/entry" target="_blank">
+        Build with Knewton
+       </a>
+       <button class="border-btn btn small nav-toggle collapsed icon-menu" data-target="#main-nav" data-toggle="collapse">
+       </button>
+      </div>
+      <div id="main-nav-wrap">
+       <nav class="nav-collapse collapse pr" id="main-nav">
+        <ul class="group">
+         <li class="first-menu-item menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-66633" id="menu-item-66633">
+          <a href="http://www.knewton.com/overview/">
+           Introduction
+          </a>
+          <div class="sub-menu-wrap depth-0">
+           <div class="sub-menu-inner">
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66646" id="menu-item-66646">
+              <a href="http://www.knewton.com/overview/resources/">
+               Resources
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66635" id="menu-item-66635">
+              <a href="http://www.knewton.com/overview/results/">
+               Results
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-66631" id="menu-item-66631">
+              <a href="http://www.knewton.com/privacy/">
+               Privacy
+              </a>
+              <div class="sub-menu-wrap depth-1" style="display:none;">
+               <div class="sub-menu-inner">
+                <ul class="sub-menu">
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66707" id="menu-item-66707">
+                  <a href="http://www.knewton.com/privacy-policy/">
+                   Online Privacy Policy
+                  </a>
+                 </li>
+                </ul>
+               </div>
+              </div>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-66690" id="menu-item-66690">
+              <a href="http://www.knewton.com/infographics/">
+               Infographics
+              </a>
+              <div class="sub-menu-wrap depth-1" style="display:none;">
+               <div class="sub-menu-inner">
+                <ul class="sub-menu">
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66691" id="menu-item-66691">
+                  <a href="http://www.knewton.com/?page_id=22253">
+                   College Readiness
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66692" id="menu-item-66692">
+                  <a href="http://www.knewton.com/?page_id=21031">
+                   Flipped Classroom
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66693" id="menu-item-66693">
+                  <a href="http://www.knewton.com/gamification-education/">
+                   Gamification
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66694" id="menu-item-66694">
+                  <a href="http://www.knewton.com/?page_id=17569">
+                   Blended Learning
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66695" id="menu-item-66695">
+                  <a href="http://www.knewton.com/?page_id=20383">
+                   The State of Digital Education
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66696" id="menu-item-66696">
+                  <a href="http://www.knewton.com/stem-education/">
+                   STEM Education
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66697" id="menu-item-66697">
+                  <a href="http://www.knewton.com/?page_id=61501">
+                   Breaking the Prison Cycle Through Education
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66698" id="menu-item-66698">
+                  <a href="http://www.knewton.com/?page_id=65642">
+                   The Future of Lifelong Learning
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66699" id="menu-item-66699">
+                  <a href="http://www.knewton.com/teacher-time-management-infographic/">
+                   Teacher Time Management
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66700" id="menu-item-66700">
+                  <a href="http://www.knewton.com/education-in-brazil-infographic/">
+                   Education in Brazil &amp; A Growing Middle Class
+                  </a>
+                 </li>
+                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66701" id="menu-item-66701">
+                  <a href="http://www.knewton.com/?page_id=65638">
+                   Differentiated Instruction and Adaptive Learning
+                  </a>
+                 </li>
+                </ul>
+               </div>
+              </div>
+             </li>
+            </ul>
+           </div>
+          </div>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-66642" id="menu-item-66642">
+          <a href="http://www.knewton.com/enterprise/">
+           Enterprise
+          </a>
+          <div class="sub-menu-wrap depth-0">
+           <div class="sub-menu-inner">
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66641" id="menu-item-66641">
+              <a href="http://www.knewton.com/enterprise/technology/">
+               Technology
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66640" id="menu-item-66640">
+              <a href="http://www.knewton.com/customers/">
+               Partners
+              </a>
+             </li>
+            </ul>
+           </div>
+          </div>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66632" id="menu-item-66632">
+          <a href="http://www.knewton.com/individuals/">
+           Individuals
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-66636" id="menu-item-66636">
+          <a href="http://www.knewton.com/company/">
+           Company
+          </a>
+          <div class="sub-menu-wrap depth-0">
+           <div class="sub-menu-inner">
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-post_type_archive menu-item-object-press-release menu-item-66645" id="menu-item-66645">
+              <a href="http://www.knewton.com/press-releases/">
+               Press
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66638" id="menu-item-66638">
+              <a href="http://www.knewton.com/executive-team/">
+               Executive Team
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66637" id="menu-item-66637">
+              <a href="http://www.knewton.com/company/careers/">
+               Careers
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66639" id="menu-item-66639">
+              <a href="http://www.knewton.com/company/contact/">
+               Contact
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-66643" id="menu-item-66643">
+              <a href="http://www.knewton.com/blog/">
+               Blog
+              </a>
+             </li>
+             <li class="last-menu-item menu-item menu-item-type-post_type menu-item-object-page menu-item-66883" id="menu-item-66883">
+              <a href="http://www.knewton.com/knewton-investors/">
+               Investors
+              </a>
+             </li>
+            </ul>
+           </div>
+          </div>
+         </li>
+        </ul>
+       </nav>
+      </div>
+     </div>
+    </div>
+   </header>
+   <!-- header -->
+   <div class="ajax-fade" id="switcheroo">
+    <div class="masthead content-block">
+     <div class="inner">
+      <h1 class="masthead-title">
+       The Knewton Blog
+      </h1>
+     </div>
+    </div>
+    <div id="blog-wrap">
+     <div class="content-block border-top2">
+      <div class="inner">
+       <div class="row-fluid span-right">
+        <div class="span4 resources-sidebar mb4">
+         <a class="btn med bg-turq1 color-btn block mb3" href="javascript:void(0);" id="newsletter-signup">
+          Subscribe to Newsletter
+         </a>
+         <div class="mb4" id="newsletter-form">
+          <p class="mb2">
+           Our monthly newsletter features edtech and product updates, with a healthy dose of fun Knerd news.
+          </p>
+          <script charset="utf-8" src="//js.hubspot.com/forms/current.js">
+          </script>
+          <script>
+           hbspt.forms.create({
+			portalId: '214594',
+			formId: 'b8d09a7a-10c4-4311-aaa3-a605298c5594',
+			submitButtonClass: 'btn color-btn bg-turq1 button-primary',
+			pageId: 'blog-sidebar',
+			scrollToFirstError: false,
+			formInstanceId: 'sidebar',
+			onFormReady: function(form, ctx) {
+				var $ = jQuery;
+
+				$('input[type="email"]', form).removeClass('hs-input').attr('id', 'email');
+				$('label', form).hide();
+		    	$(form).removeClass('hs-form').removeClass('stacked').css('display', 'inline-block');
+		    	$(form).parent().css('display', 'inline-block');
+		    	$('div', form).css('display', 'inline-block');
+		    	$('input[type="email"]', form).attr('placeholder', 'Email address');
+			}
+		});
+
+		jQuery(document).ready(function($){
+			$('#newsletter-signup').click(function() {
+				$(this).hide();
+				$('#newsletter-form').show();
+			});
+		});
+          </script>
+         </div>
+         <form action="http://www.knewton.com" class="mb4 resources-sidebar pr" id="searchform" method="get">
+          <input class="form-control resources-sidebar-search" id="s" name="s" placeholder="Search the blog" type="text"/>
+          <button class="fa-search resources-sidebar-submit" type="submit">
+          </button>
+         </form>
+         <div class="sidebar-somed beta mb4">
+          <div class="table table-mob">
+           <a class="sidebar-somed-icon table-cell fa-twitter" href="https://twitter.com/knewton">
+           </a>
+           <a class="sidebar-somed-icon table-cell fa-linkedin" href="https://www.linkedin.com/company/248400?trk=vsrp_companies_res_pri_act&amp;trkInfo=VSRPsearchId%3A110699211428520679506%2CVSRPtargetId%3A248400%2CVSRPcmpt%3Aprimary">
+           </a>
+           <a class="sidebar-somed-icon table-cell fa-google-plus" href="https://plus.google.com/+knewton">
+           </a>
+           <a class="sidebar-somed-icon table-cell fa-facebook" href="https://www.facebook.com/Knewton">
+           </a>
+          </div>
+         </div>
+         <ul class="mb4 zeta museo-sans-500 black-links" id="category-list">
+          <li class="category-list-li">
+           <a href="/blog/adaptive-learning/">
+            Adaptive Learning
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/ceo-jose-ferreira/">
+            CEO Jose Ferreira
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/ed-tech/">
+            Ed Tech
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/ed-tech-101/">
+            Ed Tech 101
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/education-infographics/">
+            Education Infographics
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/education-videos/">
+            Education Videos
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/knerds/">
+            Knerds
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/student-resources/">
+            Student Resources
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/teacher-feature/">
+            Teacher Feature
+           </a>
+          </li>
+          <li class="category-list-li">
+           <a href="/blog/teacher-tools/">
+            Teacher Tools
+           </a>
+          </li>
+          <li class="category-list-li external">
+           <a href="/platform/resources/">
+            Resources
+           </a>
+          </li>
+          <li class="category-list-li external">
+           <a href="http://events.knewton.com">
+            Events
+           </a>
+          </li>
+         </ul>
+        </div>
+        <div class="span8">
+         <article class="post-preview row-fluid border-bottom1 span-right">
+          <div class="">
+           <header class="post-preview-header">
+            <h2 class="post-preview-h2">
+             How the GMAT Algorithm Works
+            </h2>
+            <p class="post-preview-meta">
+             Posted in
+             <a href="http://www.knewton.com/blog/test-prep/" rel="category tag">
+              Test Prep
+             </a>
+             on
+             <a href="http://www.knewton.com/blog/2010/01/21/">
+              January 21, 2010
+             </a>
+             by
+             <a href="http://www.knewton.com/blog/author/kuntz/" rel="author" title="Posts by David Kuntz">
+              David Kuntz
+             </a>
+            </p>
+           </header>
+           <div class="post-preview-excerpt post-single-content">
+            <p>
+             <em>
+              David Kuntz is Vice President, Research at Knewton, where he builds the CATs for its online
+              <a href="www.knewton.com/stage/gmat/">
+               GMAT course
+              </a>
+             </em>
+             .
+            </p>
+            <h3>
+             Part 1 |
+             <a class="alt" href="/blog/2010/02/04/gmat-algorithm-faq-part-2/">
+              Part 2
+             </a>
+             |
+             <a class="alt" href="/blog/gmat/gmat-tips/2010/02/11/gmat-algorithm-faq-part-3/">
+              Part 3
+             </a>
+            </h3>
+            <p>
+             Ive received a number of inquiries from the community about the GMAT algorithm, so I thought it best to reply in article form. Here are some frequently asked questions about computer-adaptive tests (CATs).
+            </p>
+            <h3>
+             1. Whats an algorithm?
+            </h3>
+            <p>
+             An algorithm, generally, is a usually efficient set of well-defined steps that are followed to solve some pre-defined problem. In the case of a CAT algorithm, the problem is to reliably and efficiently estimate a students ability in a reasonable amount of time. Some CAT algorithms seek to solve this problem by selecting one question at a time, each subsequent question selected based on all of the students prior responses. Other algorithms look only at the most recently-answered question. Still others evaluate responses to specific groups of questions.
+            </p>
+            <p>
+             CAT algorithms also vary with regard to the explicit criteria they use to select the next question (or sets of questions) to administer. Some try to minimize total measurement error. Others try to maximize the precision and accuracy of measurement for each question administered. Still others try to select questions that will most refine the current ability estimate. As a consequence, CAT algorithms can vary greatly from one to another, depending on the specific implementation of the algorithm, and the intent of the algorithm developers.
+            </p>
+            <h3>
+             2. Why does the GMAT use an algorithm when the linear LSAT seems to be a pretty decent gauge of proficiency?
+            </h3>
+            <p>
+             One of the common goals in using a CAT algorithm is to reduce the number of questions a student needs to answer in order to establish, to a specified level of reliability, an estimate of the students ability. CATs are often more efficient than linear tests, and so fewer questions are needed to reach a desired level of reliability. The LSAT needs over 100 items to reach that level, while the GMAT needs fewer than 80 to reach a comparable level.
+            </p>
+            <h3>
+             3. Is the entire GMAT adaptive?
+            </h3>
+            <p>
+             Almost all large-scale standardized tests contain some number of experimental or pretest questions that are administered to the student but do not count toward the students final score. This is simply a way for the test makers to gather data on the questions, in order to determine how difficult they are and how well they distinguish between students at different ability levels. They also use the data collected to identify bad questions, so that they can eliminate or fix them before they count.
+            </p>
+            <p>
+             Some tests, like the LSAT, include all of the pretest questions in a single section. Others, like the GMAT, intermingle the pretest questions with the operational ones. Which section is the pretest section, and which questions are the pretest questions, is usually a well-guarded secret. It is generally bad strategy to spend time trying to guess whether a given question is operational or not. The price of guessing incorrectly is just too high.
+            </p>
+            <h3>
+             4. How does the GMAT select which questions I get?
+            </h3>
+            <p>
+             CATs like the GMAT have a blueprint  a set of specifications (difficulty, question type, content area, etc.) that define which questions you see. At the same time, each question has certain statistical characteristics that the algorithm uses, based on your response, to estimate your quantitative or verbal ability. The algorithm looks at your performance on the questions you have already answered and the characteristics of each question remaining in the pool and then selects for you the question that simultaneously best satisfies the blueprint and provides the most statistical information it can, to generate the best estimate of your ability.
+            </p>
+            <p>
+             Check out
+             <a href="/blog/2010/02/04/gmat-algorithm-faq-part-2/" target="_blank">
+              part 2
+             </a>
+             and
+             <a href="/blog/2010/02/11/gmat-algorithm-faq-part-3/" target="_blank">
+              part 3
+             </a>
+             to get all your questions answered.
+            </p>
+           </div>
+          </div>
+         </article>
+        </div>
+        <!-- span8 -->
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- content -->
+  <footer class="footer" id="footer">
+   <div class="inner">
+    <div class="row-fluid">
+     <div class="row-fluid span9 row-4-2-1">
+      <div class="span3">
+       <ul>
+        <li>
+         Introduction
+        </li>
+        <li>
+         <a href="/overview/">
+          Overview
+         </a>
+        </li>
+        <li>
+         <a href="/overview/resources/">
+          Resources
+         </a>
+        </li>
+        <li>
+         <a href="/overview/results/">
+          Results
+         </a>
+        </li>
+        <li>
+         <a href="/privacy-policy/">
+          Privacy Policy
+         </a>
+        </li>
+        <li>
+         <a href="/terms-of-service/">
+          Terms of Service
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="span3">
+       <ul>
+        <li>
+         Organizations
+        </li>
+        <li class="hilite">
+         <a class="build-with-knewton" href="http://learn.knewton.com/entry" target="_blank">
+          Build with Knewton
+         </a>
+        </li>
+        <li>
+         <a href="/enterprise/">
+          Enterprise
+         </a>
+        </li>
+        <li>
+         <a href="/enterprise/technology/">
+          Technology
+         </a>
+        </li>
+        <li>
+         <a href="/customers/">
+          Partners
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="span3">
+       <ul>
+        <li>
+         Individuals
+        </li>
+        <li class="hilite">
+         <a href="https://beta.knewton.com" target="_blank">
+          Try Knewton Beta
+         </a>
+        </li>
+        <li>
+         <a href="/individuals/">
+          Knewton-Powered Products
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="span3">
+       <ul>
+        <li>
+         Company
+        </li>
+        <li>
+         <a href="/company/">
+          About
+         </a>
+        </li>
+        <li>
+         <a href="/company/press/">
+          Press
+         </a>
+        </li>
+        <li>
+         <a href="/executive-team/">
+          Executive Team
+         </a>
+        </li>
+        <li>
+         <a href="/company/careers/">
+          Careers
+         </a>
+        </li>
+        <li>
+         <a href="/company/contact/">
+          Contact
+         </a>
+        </li>
+        <li>
+         <a href="/blog/">
+          Blog
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="row-fluid span3 footer-col5">
+      <ul class="footer-col5-ul">
+       <li>
+        Popular
+       </li>
+       <li>
+        <a href="https://knewton.wistia.com/medias/opa0z9u7fm?media_0_0%5BautoPlay%5D=false&amp;media_0_0%5BcontrolsVisibleOnLoad%5D=false&amp;theme=tab&amp;version=v1&amp;videoOptions%5BautoPlay%5D=true&amp;videoOptions%5BvideoHeight%5D=360&amp;videoOptions%5BvideoWidth%5D=640&amp;videoOptions%5BvolumeControl%5D=true" target="_blank">
+         Introduction to Knewton
+        </a>
+       </li>
+       <li>
+        <a href="http://learn.knewton.com/technical-white-paper" target="_blank">
+         Technical White Paper
+        </a>
+       </li>
+       <li>
+        <a href="/tech/blog/">
+         N Choose K Tech Blog
+        </a>
+       </li>
+       <!-- &lt;li&gt;&lt;a href="/differentiated-instruction-adaptive-learning/"&gt;Differentiated Instruction&lt;/a&gt;&lt;/li&gt; -->
+       <!-- &lt;li&gt;&lt;a href="/infographics/"&gt;Infographics&lt;/a&gt;&lt;/li&gt; -->
+      </ul>
+      <div class="footer-somed">
+       <a class="footer-somed-icon fa-twitter" href="https://twitter.com/knewton">
+       </a>
+       <a class="footer-somed-icon fa-linkedin" href="https://www.linkedin.com/company/248400?trk=vsrp_companies_res_pri_act&amp;trkInfo=VSRPsearchId%3A110699211428520679506%2CVSRPtargetId%3A248400%2CVSRPcmpt%3Aprimary">
+       </a>
+       <a class="footer-somed-icon fa-google-plus" href="https://plus.google.com/+knewton">
+       </a>
+       <a class="footer-somed-icon fa-facebook" href="https://www.facebook.com/Knewton">
+       </a>
+      </div>
+     </div>
+    </div>
+    <!-- columns -->
+    <a class="footer-logo-link">
+     <img class="img-responsive" src="http://www.knewton.com/wp-content/themes/knewton-v5/assets/images/logo-white.png"/>
+    </a>
+   </div>
+   <!-- inner -->
+  </footer>
+  <script type="text/javascript">
+   // &lt;![CDATA[
+        var disqus_shortname = 'knewtonblog';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i &lt; nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]&gt;
+  </script>
+  <!-- Sailthru Horizon Sync -->
+  <script src="//ak.sail-horizon.com/horizon/v1.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   jQuery(function() { 
+  if (window.Sailthru) {
+           Sailthru.setup({
+              domain:'horizon.knewton.com'
+         });
+  }
+});
+  </script>
+  <script src="http://www.knewton.com/wp-includes/js/masonry.min.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-includes/js/jquery/jquery.masonry.min.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://www.knewton.com/wp-content/themes/twentyfourteen/js/functions.js?ver=20140616" type="text/javascript">
+  </script>
+  <script async="" src="//fast.wistia.net/labs/fresh-url/v1.js">
+   &lt;/script&gt;&lt;script src="//fast.wistia.com/static/integrations-hubspot-v1.js" async&gt;
+  </script>
+  <!-- Start of Async HubSpot Analytics Code -->
+  <script type="text/javascript">
+   (function(d,s,i,r) {
+        if (d.getElementById(i)){return;}
+        var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+        n.id=i;n.src='//js.hubspot.com/analytics/'+(Math.ceil(new Date()/r)*r)+'/214594.js';
+        e.parentNode.insertBefore(n, e);
+    })(document,"script","hs-analytics",300000);
+  </script>
+  <!-- End of Async HubSpot Analytics Code -->
+  <div style="display:none;">
+   <!-- Google Code for Remarketing Tag -->
+   <script type="text/javascript">
+    /* &lt;![CDATA[ */
+		var google_conversion_id = 1040196869;
+		var google_custom_params = window.google_tag_params;
+		var google_remarketing_only = true;
+		/* ]]&gt; */
+   </script>
+   <script src="//www.googleadservices.com/pagead/conversion.js" type="text/javascript">
+   </script>
+   <noscript>
+    <div style="display:inline;">
+     <img alt="" height="1" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1040196869/?value=0&amp;guid=ON&amp;script=0" style="border-style:none;" width="1"/>
+    </div>
+   </noscript>
+  </div>
+ </body>
+</html>

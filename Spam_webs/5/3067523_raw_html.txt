@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html class="Public NoJs LoggedOut Sidebar Responsive" dir="LTR" id="XenForo" lang="en-US" xmlns:fb="http://www.facebook.com/2008/fbml">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <base href="https://www.howtoforge.com"/>
+  <script>
+   var _b=document.getElementsByTagName('base')[0],_bH="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1";if(_b&amp;&amp;_b.href!=_bH)_b.href=_bH;
+  </script>
+  <title>
+   iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)
+  </title>
+  <meta content="anti-spam/virus,debian,email" name="keywords"/>
+  <meta content="iRedMail: Mail Server With LDAP, Postfix, RoundCube/SquirrelMail,Dovecot, ClamAV, SpamAssassin, Amavisd, DKIM, SPF On Debian 5 (Lenny) iRedMail ... " name="description"/>
+  <meta content="iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)" name="og:title"/>
+  <meta content="iRedMail: Mail Server With LDAP, Postfix, RoundCube/SquirrelMail,Dovecot, ClamAV, SpamAssassin, Amavisd, DKIM, SPF On Debian 5 (Lenny) iRedMail ... " name="og:description"/>
+  <meta content="Howtoforge" name="og:site_name"/>
+  <meta content="article" name="og:type"/>
+  <meta content="https://www.howtoforge.com/images/teaser/debian.gif" property="og:image"/>
+  <meta content="summary" name="twitter:card"/>
+  <meta content="howtoforgecom" name="twitter:site"/>
+  <meta content="howtoforgecom" name="twitter:creator"/>
+  <meta content="iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)" name="twitter:title"/>
+  <meta content="iRedMail: Mail Server With LDAP, Postfix, RoundCube/SquirrelMail,Dovecot, ClamAV, SpamAssassin, Amavisd, DKIM, SPF On Debian 5 (Lenny) iRedMail ... " name="twitter:description"/>
+  <link href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" hreflang="en" rel="alternate"/>
+  <link href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1-p2" rel="next"/>
+  <link href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" rel="canonical"/>
+ </head>
+ <body>
+  <noscript>
+   <style>
+    .JsOnly,.jsOnly{display:none!important}
+   </style>
+  </noscript>
+  <link href="/community/styles/executive/xenfocus/icons/css/font-awesome.min.css" rel="stylesheet"/>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css"/>
+  <link href="/community/css.php?css=xenforo,form,public&amp;style=3&amp;dir=LTR&amp;d=1420029973" rel="stylesheet"/>
+  <link href="/community/css.php?css=bb_code,bbm_buttons,facebook,google,login_bar,node_category,node_forum,node_list,profile_post_list_simple,sidebar_share_page,twitter,wf_default&amp;style=3&amp;dir=LTR&amp;d=1420029973" rel="stylesheet"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+  </script>
+  <script>
+   if(!window.jQuery){document.write('&lt;scr'+'ipt type="text/javascript" src="/js/jquery/jquery-1.11.3.min.js"&gt;&lt;\/scr'+'ipt&gt;');}
+  </script>
+  <script src="/community/js/xenforo/xenforo.js?_v=303ae0ca">
+  </script>
+  <script src="/community/js/bbm/zloader.js?_v=303ae0ca">
+  </script>
+  <script src="/js/jquery.cookiesdirective.js" type="text/javascript">
+  </script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+  <script src="/js/fancybox/jquery.mousewheel-3.0.4.pack.js" type="text/javascript">
+  </script>
+  <script src="/js/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript">
+  </script>
+  <link href="/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/themes/howtoforge/templates/style.css" rel="stylesheet"/>
+  <link href="/feed.rss" rel="alternate" title="RSS-Feed fr Howtoforge" type="application/rss+xml"/>
+  <script src="/js/tinymce_4.1.7/tinymce.min.js">
+  </script>
+  <script src="https://partner.googleadservices.com/gampad/google_service.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   GS_googleAddAdSenseService("ca-pub-3043223216276099");GS_googleEnableAllServices();
+  </script>
+  <script language="JavaScript">
+   GA_googleAddAttr("Category","Anti-spam/virus");GA_googleAddAttr("Category","Debian");GA_googleAddAttr("Category","Email");
+  </script>
+  <script type="text/javascript">
+   GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_leaderboard_a_728x90");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_rectangle_a_300x250");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_rectangle_b_300x250");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_halfpage_a_300x600");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_leaderboard_b_728x90");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_halfpage_b_300x600");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_a_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_b_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_c_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_d_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_sidebar_top");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_content_middle");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_bottom");
+  </script>
+  <script type="text/javascript">
+   GA_googleFetchAds();
+  </script>
+  <div id="loginBar">
+   <div class="pageWidth">
+    <div class="pageContent">
+     <h3 id="loginBarHandle">
+      <label for="LoginControl">
+       <a class="concealed noOutline" href="/community/login/">
+        Log in or Sign up
+       </a>
+      </label>
+     </h3>
+     <span class="helper">
+     </span>
+    </div>
+   </div>
+  </div>
+  <header>
+   <div id="header">
+    <div id="logoBlock">
+     <div class="pageWidth">
+      <div class="pageContent">
+       <div id="logo">
+        <a href="/">
+         <span>
+         </span>
+         <img alt="Howtoforge" src="/images/howtoforge_logo_trans.gif" style="margin-left:20px;"/>
+        </a>
+       </div>
+       <span class="helper">
+       </span>
+       <div class="langSwitch">
+        <b>
+         <img alt="HowtoForge - Linux Tutorials in English" src="/images/gb.png"/>
+         English
+        </b>
+        |
+        <a href="https://www.howtoforge.de/" title="HowtoForge.de - Linux Tutorials auf Deutsch">
+         <img alt="HowtoForge.de - Linux Tutorials auf Deutsch" src="/images/de.png"/>
+         Deutsch
+        </a>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="pageWidth withSearch" id="navigation">
+     <div class="pageContent">
+      <nav>
+       <div class="navTabs">
+        <ul class="publicTabs">
+         <li class="navTab forums selected">
+          <a class="navLink" href="/">
+           Tutorials
+          </a>
+          <div class="tabLinks forumsTabLinks">
+           <ul class="secondaryContent blockLinksList">
+            <li>
+             <a href="/search/">
+              Tutorial search
+             </a>
+            </li>
+           </ul>
+          </div>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/tutorials/">
+           Tags
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/community/">
+           Forums
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/contribute/">
+           Contribute
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/subscription/">
+           Subscribe
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="http://www.ispconfig.org">
+           ISPConfig
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="http://www.lxer.com">
+           News
+          </a>
+         </li>
+        </ul>
+       </div>
+       <span class="helper">
+       </span>
+      </nav>
+     </div>
+    </div>
+    <div class="pageWidth" id="searchBar">
+     <span id="QuickSearchPlaceholder" title=" Search...">
+      Search
+     </span>
+     <fieldset id="QuickSearch">
+      <form action="/" class="formPopup" method="post">
+       <div class="primaryControls">
+        <input class="textCtrl" id="QuickSearchQuery" name="q" placeholder="Search..." results="0" title="Enter your search and hit enter..." type="search" value=""/>
+       </div>
+       <input name="_xfToken" type="hidden" value=""/>
+      </form>
+     </fieldset>
+    </div>
+   </div>
+  </header>
+  <div class="forum_list" id="content">
+   <div class="pageWidth">
+    <div class="pageContent">
+     <div class="mainContainer">
+      <div class="mainContent">
+       <div class="breadBoxTop">
+        <nav>
+         <fieldset class="breadcrumb">
+          <span class="crumbs">
+           <span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/" itemprop="url" rel="up">
+             <span itemprop="title">
+              Tutorials
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+             </span>
+            </span>
+           </span>
+           <span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" itemprop="url" rel="up">
+             <span itemprop="title">
+              iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+              &gt;
+             </span>
+            </span>
+           </span>
+          </span>
+         </fieldset>
+        </nav>
+       </div>
+       <div id="htfContentPage">
+        <div class="contributeEdit" style="float:right; width:450px; max-width:100%;">
+         <div id="tocContainer">
+          <h3>
+           On this page
+          </h3>
+          <ol class="toc">
+           <li>
+            <a href="#iredmail-mail-server-with-ldap-postfix-roundcube-dovecot-clamav-spamassassin-amavisd-on-debian-lenny-">
+             iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd On Debian (Lenny) 5.0.1
+            </a>
+            <ol>
+             <li>
+              <a href="#-requirements">
+               1 Requirements
+              </a>
+             </li>
+             <li>
+              <a href="#-preliminary-note">
+               2 Preliminary Note
+              </a>
+             </li>
+             <li>
+              <a href="#-setting-hostname">
+               4 Setting hostname
+              </a>
+             </li>
+             <li>
+              <a href="#-start-iredmail-installation">
+               5 Start iRedMail Installation
+              </a>
+             </li>
+            </ol>
+           </li>
+          </ol>
+         </div>
+        </div>
+        <h2 id="iredmail-mail-server-with-ldap-postfix-roundcube-dovecot-clamav-spamassassin-amavisd-on-debian-lenny-">
+         iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd On Debian (Lenny) 5.0.1
+        </h2>
+        <p>
+         Last edited 03/31/2011
+         <br/>
+        </p>
+        <p>
+         iRedMail is a shell script that lets you quickly deploy a full-featured mail solution in less than 2 minutes. Since iRedMail 0.5, it supports Debian 5.0.1 (it supports both i386 and x86_64). Its object is to make a Linux mail server installation and configuration simple and easy to use. iRedMail supports both OpenLDAP and MySQL as backends for storing virtual domains and users.This tutorial shows how to use OpenLDAP as the backend.
+        </p>
+        <div style="width:336px;float:left; margin: 10px 15px 10px 0px;background-color:white;">
+         <script type="text/javascript">
+          GA_googleFillSlot('howtoforge_com_article_rectangle_a_300x250');
+         </script>
+        </div>
+        <p>
+         Now iRedmail provides two webmail program, RoundCube and SquirrelMail, and both support the MySQL and OpenLDAP backends and can change the password.
+        </p>
+        <ul>
+         <li>
+          Main components used in this solution:
+          <a href="http://code.google.com/p/iredmail/wiki/Main_Components" mce_real_href="http://code.google.com/p/iredmail/wiki/Main_Components" target="_blank">
+           http://code.google.com/p/iredmail/wiki/Main_Components
+          </a>
+         </li>
+         <li>
+          Discussion forum:
+          <a href="http://www.iredmail.org/forum/" mce_real_href="http://www.iredmail.org/forum/" target="_blank">
+           http://www.iredmail.org/forum/
+          </a>
+         </li>
+         <li>
+          Project home page:
+          <a href="http://code.google.com/p/iredmail/" mce_real_href="http://code.google.com/p/iredmail/" target="_blank">
+           http://code.google.com/p/iredmail/
+          </a>
+         </li>
+        </ul>
+        <p>
+        </p>
+        <h3 id="-requirements">
+         1 Requirements
+        </h3>
+        <p>
+         It is strongly recommended that you use the 'netinst' version to install a minimal Debian system, and then deploy mail service via iRedMail solution. e.g.:
+        </p>
+        <p>
+         To install such a system you will need the following:
+        </p>
+        <ul>
+         <li>
+          debian-501-amd64-netinst.iso or debian-501-i386-netinst.iso ,
+          <a href="http://www.debian.org/CD/http-ftp/" mce_real_href="http://www.debian.org/CD/http-ftp/" target="_blank">
+           download Debian CD/DVD images via HTTP/FTP
+          </a>
+         </li>
+         <li>
+          Internet connection.
+         </li>
+        </ul>
+        <p>
+        </p>
+        <h3 id="-preliminary-note">
+         2 Preliminary Note
+        </h3>
+        <p>
+         In this tutorial we use:
+        </p>
+        <ul>
+         <li>
+          Hostname
+          <span class="system">
+           mail.example.com
+          </span>
+         </li>
+         <li>
+          IP address
+          <span class="system">
+           192.168.1.10
+          </span>
+         </li>
+         <li>
+          LDAP suffix (root dn)
+          <span class="system">
+           dc=example,dc=com
+          </span>
+         </li>
+         <li>
+          The first virtual domain:
+          <span class="system">
+           example.com
+          </span>
+         </li>
+        </ul>
+        <p>
+        </p>
+        <br/>
+        <h3 id="-setting-hostname">
+         4 Setting hostname
+        </h3>
+        <p>
+         In Debian (Lenny), hostname is set in these two files:
+        </p>
+        <p>
+         *
+         <span class="system">
+          /etc/hostname
+         </span>
+         : hostname setting
+         <br/>
+         *
+         <span class="system">
+          /etc/hosts
+         </span>
+         : hostname &lt;=&gt; IP address mapping
+        </p>
+        <p>
+         Map this hostname to '127.0.0.1' (Warning: List the FQDN hostname as first item.)
+        </p>
+        <p class="command">
+         # vi /etc/hosts
+        </p>
+        <table align="center" bgcolor="#cccccc" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0" class="" width="90%">
+         <tbody>
+          <tr>
+           <td class="">
+            <pre>
+             #127.0.0.1       localhost
+#127.0.1.1      mail.example.com        mail
+127.0.0.1   mail.example.com mail localhost localhost.localdomain
+            </pre>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+        <p class="command">
+         # vi /etc/hostname
+        </p>
+        <table align="center" bgcolor="#cccccc" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0" class="" width="90%">
+         <tbody>
+          <tr>
+           <td class="">
+            <pre>
+             mail
+            </pre>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+        <p>
+         Verify the FQDN hostname:
+        </p>
+        <p class="command">
+         # hostname --fqdn
+        </p>
+        <p class="system">
+         mail.example.com
+        </p>
+        <div style="width:336px;float:left; margin: 10px 15px 10px 0px;background-color:white;">
+         <script type="text/javascript">
+          GA_googleFillSlot('howtoforge_com_article_rectangle_b_300x250');
+         </script>
+        </div>
+        <br/>
+        <h3 id="-start-iredmail-installation">
+         5 Start iRedMail Installation
+        </h3>
+        <p>
+         Switch to root user, we must execute further commands as root user without sudo.
+        </p>
+        <p class="command">
+         $ sudo su -
+        </p>
+        <p>
+         Download the new version of iRedMail:
+        </p>
+        <p class="command">
+         # wget http://iredmail.googlecode.com/files/iRedMail-0.7.0.tar.bz2
+         <br/>
+         # tar jxvf iRedMail-0.7.0.tar.bz2
+        </p>
+        <br/>
+        <br/>
+        <p>
+         Start the iRedMail installer:
+        </p>
+        <p class="command">
+         # cd iRedMail-0.7.0
+         <br/>
+         # bash iRedMail.sh
+        </p>
+        <p>
+         Welcome page:
+        </p>
+        <p>
+         <a class="fancybox" href="https://www.howtoforge.com/images/iredmail_debian_lenny/big/iredmail_01.png" id="img-iredmail_01">
+          <img height="253" mce_real_src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_01.png" src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_01.png" width="550"/>
+         </a>
+        </p>
+        <p>
+         All emails should be stored in this directory:
+        </p>
+        <p>
+         <a class="fancybox" href="https://www.howtoforge.com/images/iredmail_debian_lenny/big/iredmail_02.png" id="img-iredmail_02">
+          <img height="257" mce_real_src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_02.png" src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_02.png" width="549"/>
+         </a>
+        </p>
+        <p>
+         iRedMail supports both OpenLDAP and MySQL as backends to store virtual domains and users. OpenLDAP is recommended.
+        </p>
+        <p>
+         <a class="fancybox" href="https://www.howtoforge.com/images/iredmail_debian_lenny/big/iredmail_03.png" id="img-iredmail_03">
+          <img height="253" mce_real_src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_03.png" src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_03.png" width="550"/>
+         </a>
+        </p>
+        <p>
+         LDAP suffix, normally it's your domain name, such as:
+         <span class="system">
+          dc=example,dc=com
+         </span>
+         <br/>
+         iRedMail will put all virtual domains/users in 'o=domains,dc=example,dc=com', it's called 'LDAP base dn':
+         <span class="system">
+          o=domains,dc=example,dc=com
+         </span>
+         .
+        </p>
+        <p>
+         <a class="fancybox" href="https://www.howtoforge.com/images/iredmail_debian_lenny/big/iredmail_04.png" id="img-iredmail_04">
+          <img height="255" mce_real_src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_04.png" src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_04.png" width="550"/>
+         </a>
+        </p>
+        <p>
+         Set a password for the LDAP server admin. The admin account is defined in
+         <span class="system">
+          /etc/ldap/slapd.conf
+         </span>
+         , normaily it's:
+         <span class="system">
+          cn=Manager,dc=example,dc=com
+         </span>
+         .
+        </p>
+        <p>
+         <a class="fancybox" href="https://www.howtoforge.com/images/iredmail_debian_lenny/big/iredmail_05.png" id="img-iredmail_05">
+          <img height="254" mce_real_src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_05.png" src="https://www.howtoforge.com/images/iredmail_debian_lenny/iredmail_05.png" width="550"/>
+         </a>
+        </p>
+        <nav>
+         <div id="articlePrevNextContainer">
+          <div id="articlePrevLink">
+          </div>
+          <div id="articleNextLink">
+           <a href="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1-p2">
+            Next &gt;&gt;
+           </a>
+          </div>
+         </div>
+        </nav>
+        <div style="height:30px; margin-top:20px;">
+         <p style="text-align:right;">
+          <img src="/images/pdficon_small.png"/>
+          <a href="/subscription/">
+           view as pdf
+          </a>
+          |
+          <img src="/images/print.gif"/>
+          <a href="/subscription/">
+           print
+          </a>
+         </p>
+        </div>
+        <div style="height:30px; margin-top:20px;">
+         <div style="float:left;">
+          <b>
+           Share this page:
+          </b>
+         </div>
+         <div style="float:left; margin-left:10px;">
+          <a class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="http://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" data-via="howtoforgecom" href="https://twitter.com/share">
+           Tweet
+          </a>
+         </div>
+         <div style="float:left; margin-left:20px;">
+          <fb:like action="recommend" colorscheme="light" font="trebuchet ms" href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" layout="button_count">
+          </fb:like>
+         </div>
+         <div style="float:left; margin-left:50px;">
+          <div class="g-plusone" data-count="true" data-href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" data-size="medium">
+          </div>
+         </div>
+        </div>
+       </div>
+       <div id="htfContentPagePaging">
+        <h2>
+         Sub pages
+        </h2>
+        <nav>
+         <ul>
+          <li>
+           <a href="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1">
+            <b>
+             iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)
+            </b>
+           </a>
+          </li>
+          <li>
+           <a href="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1-p2">
+            iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1) - Page 2
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+       <div id="htfContentPageComment">
+        <a name="comments">
+        </a>
+        <h2>
+         5 Comment(s)
+        </h2>
+        <div id="commentform">
+         <div class="commentContainerHead" style="font-size:18px;">
+          Add comment
+         </div>
+         <div class="commentContainer">
+          <form action="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1/#comments" method="post">
+           <input id="reply-to-comment" name="reply_to" type="hidden" value="0"/>
+           <div id="commentFormDetail">
+            <div style="width:48%; float:left; margin-right:3%">
+             <label for="commentname">
+              Name *
+             </label>
+             <input id="commentname" name="commentname" value=""/>
+            </div>
+            <div style="width:48%;float:left;">
+             <label for="commentname">
+              Email *
+             </label>
+             <input id="commentemail" name="commentemail" value=""/>
+            </div>
+            <div style="clear:both;">
+            </div>
+           </div>
+           <textarea id="commentedit" name="commentedit" style="width:auto;">
+           </textarea>
+           <div>
+            <div style="float:left;">
+             <div class="g-recaptcha" data-sitekey="6LdX9fUSAAAAALWwVoPdeXScMSketz4npF-0QcQ1">
+             </div>
+             <script src="https://www.google.com/recaptcha/api.js?hl=en" type="text/javascript">
+             </script>
+            </div>
+            <div style="margin-top:10px;margin-bottom:10px;">
+             <input class="button primary" name="submit" style="float:right;" type="submit" value="Submit comment"/>
+            </div>
+            <div style="clear:both;">
+            </div>
+           </div>
+           <script>
+            tinymce.init({selector:"textarea#commentedit",theme:"modern",height:100,apply_source_formatting:true,remove_linebreaks:false,menubar:false,plugins:["link"],content_css:"https://www.howtoforge.com/themes/howtoforge/css/custom.css",toolbar:"undo redo | bold italic link",});
+           </script>
+          </form>
+         </div>
+        </div>
+        <h3>
+         Comments
+        </h3>
+        <div class="commentContainerHead commentLevel0">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          szabi
+          <b>
+           at:
+          </b>
+          <i>
+           2009-06-07 11:20:33
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="4346" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel0" id="comment4346">
+         <p>
+         </p>
+         <p>
+          hello
+         </p>
+         <p>
+          i create a server with this help: it's ok but the awtstats do not want to enter
+         </p>
+         <p>
+          the user is postmaster@... no?
+         </p>
+         <p>
+          the error is:
+          <br/>
+         </p>
+         <p>
+          Forbidden
+         </p>
+         <p>
+          You don't have permission to access /awstats/ on this server.
+         </p>
+         <p>
+          someone help?
+         </p>
+         <p>
+          tnx
+         </p>
+         <p>
+          bye
+          <br/>
+         </p>
+        </div>
+        <div class="commentContainerHead commentLevel1">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          Zhang Huangbin
+          <b>
+           at:
+          </b>
+          <i>
+           2009-06-08 04:32:45
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="4347" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel1" id="comment4347">
+         <p>
+          You can access: https://your_server/awstats/awstats.pl and https://your_server/awstats/awstats.pl?config=mail
+         </p>
+        </div>
+        <div class="commentContainerHead commentLevel0">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          Happy Bruno
+          <b>
+           at:
+          </b>
+          <i>
+           2009-10-29 09:07:44
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="4348" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel0" id="comment4348">
+         <p>
+         </p>
+         <p>
+          Erstmal danke fr die super Arbeit ;)
+         </p>
+         <p>
+          Mir ist allerdings noch aufgefallen das das Paket bzip2 bentigt wird:
+         </p>
+         <p>
+          # apt-get install bzip2
+         </p>
+         <p>
+          Warum?, siehe:
+          <br/>
+          # wget http://iredmail.googlecode.com/files/iRedMail-0.5.0-rc1.tar.bz2
+          <br/>
+          # tar jxvf iRedMail-0.5.0-rc1.tar.bz2
+         </p>
+         <p>
+          ps. bzip2 ist bei der minimal Installation von Debian nicht enthalten.
+         </p>
+         <p>
+          Gru
+         </p>
+         <p>
+          Happy Bruno
+         </p>
+        </div>
+        <div class="commentContainerHead commentLevel1">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          Marcel
+          <b>
+           at:
+          </b>
+          <i>
+           2011-01-28 08:22:34
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="4350" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel1" id="comment4350">
+         <p>
+         </p>
+         <p>
+          Heho wollte nur noch schnell sagen wenn du die datei tar enpackst dann brauchst du kein bzip ;-)
+         </p>
+         <p>
+          das tar macht das automatisch mit!
+         </p>
+         <p>
+         </p>
+         <p>
+          lg marcel
+          <br/>
+         </p>
+        </div>
+        <div class="commentContainerHead commentLevel0">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          <b>
+           at:
+          </b>
+          <i>
+           2009-12-17 15:32:47
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="4349" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel0" id="comment4349">
+         <p>
+          I have installed IredMail but i am missing: qshape
+         </p>
+         <p>
+          Is it not a part of the iRedmail package?
+         </p>
+         <p>
+          thanks
+         </p>
+        </div>
+       </div>
+       <div class="breadBoxBottom">
+        <nav>
+         <fieldset class="breadcrumb">
+          <span class="crumbs">
+           <span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/" itemprop="url" rel="up">
+             <span itemprop="title">
+              Tutorials
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+             </span>
+            </span>
+           </span>
+           <span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" itemprop="url" rel="up">
+             <span itemprop="title">
+              iRedMail: Mail Server With LDAP, Postfix, RoundCube, Dovecot, ClamAV, SpamAssassin, Amavisd (Debian 5.0.1)
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+              &gt;
+             </span>
+            </span>
+           </span>
+          </span>
+         </fieldset>
+        </nav>
+       </div>
+       <script>
+        $(document).on('click','a.reply-to',function(e){e.preventDefault();var self=$(this);var cid=self.attr('data-comment');console.log(cid);if(!cid)return this;$('#commentform').insertAfter('#comment'+cid);$('#reply-to-comment').val(cid);var textareaId='commentedit';tinyMCE.get(textareaId).remove();tinyMCE.execCommand("mceAddEditor",false,textareaId);tinyMCE.activeEditor.focus();});
+       </script>
+       <div style="margin-top:10px;margin-bottom:10px;text-align:center;">
+        <center>
+         <script type="text/javascript">
+          GA_googleFillSlot("howtoforge_com_article_leaderboard_b_728x90");
+         </script>
+        </center>
+       </div>
+       <form action="/community/login/login?redirect=/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" class="xenForm eAuth" id="login" method="post" style="display:none">
+        <ul id="eAuthUnit">
+         <li>
+          <a class="fbLogin" href="/community/register/facebook?reg=1" tabindex="110">
+           <span>
+            Log in with Facebook
+           </span>
+          </a>
+         </li>
+         <li>
+          <a class="twitterLogin" href="/community/register/twitter?reg=1" tabindex="110">
+           <span>
+            Log in with Twitter
+           </span>
+          </a>
+         </li>
+         <li>
+          <span class="googleLogin GoogleLogin JsOnly" data-client-id="198773272284-b6tfk0c28bje81p774prrcrkq9jb3o44.apps.googleusercontent.com" data-redirect-url="/community/register/google?code=__CODE__&amp;csrf=hVMXbW_3rnrmq4Em" tabindex="110">
+           <span>
+            Log in with Google
+           </span>
+          </span>
+         </li>
+        </ul>
+        <div class="ctrlWrapper">
+         <dl class="ctrlUnit">
+          <dt>
+           <label for="LoginControl">
+            Your name or email address:
+           </label>
+          </dt>
+          <dd>
+           <input class="textCtrl" id="LoginControl" name="login" tabindex="101" type="text"/>
+          </dd>
+         </dl>
+         <dl class="ctrlUnit">
+          <dt>
+           <label for="ctrl_password">
+            Do you already have an account?
+           </label>
+          </dt>
+          <dd>
+           <ul>
+            <li>
+             <label for="ctrl_not_registered">
+              <input id="ctrl_not_registered" name="register" tabindex="105" type="radio" value="1"/>
+              No, create an account now.
+             </label>
+            </li>
+            <li>
+             <label for="ctrl_registered">
+              <input checked="checked" class="Disabler" id="ctrl_registered" name="register" tabindex="105" type="radio" value="0"/>
+              Yes, my password is:
+             </label>
+            </li>
+            <li id="ctrl_registered_Disabler">
+             <input class="textCtrl" id="ctrl_password" name="password" tabindex="102" type="password"/>
+             <div class="lostPassword">
+              <a href="/community/lost-password/" tabindex="106">
+               Forgot your password?
+              </a>
+             </div>
+            </li>
+           </ul>
+          </dd>
+         </dl>
+         <dl class="ctrlUnit submitUnit">
+          <dt>
+          </dt>
+          <dd>
+           <input class="button primary" data-loginphrase="Log in" data-signupphrase="Sign up" tabindex="104" type="submit" value="Log in"/>
+           <label class="rememberPassword" for="ctrl_remember">
+            <input id="ctrl_remember" name="remember" tabindex="103" type="checkbox" value="1"/>
+            Stay logged in
+           </label>
+          </dd>
+         </dl>
+        </div>
+        <input name="cookie_check" type="hidden" value="1"/>
+        <input name="redirect" type="hidden" value="/community/"/>
+        <input name="_xfToken" type="hidden" value=""/>
+       </form>
+      </div>
+     </div>
+     <aside>
+      <div class="sidebar">
+       <div class="section loginButton">
+        <div class="secondaryContent">
+         <label for="LoginControl" id="SignupButton">
+          <a class="inner" href="/community/login/">
+           Sign up now!
+          </a>
+         </label>
+        </div>
+       </div>
+       <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-2">
+        <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+         <div class="section infoBlock sharePage">
+          <div class="secondaryContent socialMediaIcon">
+           <a href="https://twitter.com/howtoforgecom" target="_blank">
+            <img src="/images/socialmedia/64x64/twitter.png"/>
+           </a>
+           <a href="https://www.facebook.com/howtoforge" target="_blank">
+            <img src="/images/socialmedia/64x64/facebook.png"/>
+           </a>
+           <a href="https://plus.google.com/+howtoforge/posts" target="_blank">
+            <img src="/images/socialmedia/64x64/googleplus.png"/>
+           </a>
+           <a href="https://www.howtoforge.com/feed" target="_blank">
+            <img src="/images/socialmedia/64x64/rss.png"/>
+           </a>
+          </div>
+         </div>
+        </div>
+        <div class="section widget-group-no-name widget-container">
+         <div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-3">
+          <h3>
+           Tutorial Info
+          </h3>
+          <div class="pairsJustified">
+           <dl class="discussionCount">
+            <dt>
+             Author:
+            </dt>
+            <dd>
+             eddiechen
+            </dd>
+           </dl>
+           <dl class="discussionCount">
+            <dt>
+             Last updated:
+            </dt>
+            <dd>
+             Mar 31, 2011
+            </dd>
+           </dl>
+           <dl class="discussionCount">
+            <dt>
+             Tags:
+            </dt>
+            <dd>
+             <a href="/tutorials/anti-spam%2Fvirus/" rel="tag">
+              anti-spam/virus
+             </a>
+             ,
+             <a href="/tutorials/debian/" rel="tag">
+              debian
+             </a>
+             ,
+             <a href="/tutorials/email/" rel="tag">
+              email
+             </a>
+            </dd>
+           </dl>
+          </div>
+         </div>
+        </div>
+        <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+         <div class="section infoBlock sharePage">
+          <div class="secondaryContent">
+           <h3>
+            Share This Page
+           </h3>
+           <div class="tweet shareControl">
+            <a class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="http://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" data-via="howtoforgecom" href="https://twitter.com/share">
+             Tweet
+            </a>
+           </div>
+           <div class="facebookLike shareControl">
+            <fb:like action="recommend" colorscheme="light" font="trebuchet ms" href="http://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" layout="button_count">
+            </fb:like>
+           </div>
+           <div class="plusone shareControl">
+            <div class="g-plusone" data-count="true" data-href="https://www.howtoforge.com/iredmail-mail-server-with-ldap-postfix-roundcube-squirrelmail-dovecot-clamav-spamassassin-amavisd-debian-5.0.1" data-size="medium">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <script type="text/javascript">
+         google_ad_client="ca-pub-3043223216276099";google_ad_slot="6709042890";google_ad_width=300;google_ad_height=600;
+        </script>
+        <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+        </script>
+       </div>
+      </div>
+     </aside>
+    </div>
+   </div>
+  </div>
+  <footer>
+   <div class="footer">
+    <div class="pageWidth">
+     <div class="pageContent">
+      <div class="skin_branding">
+       <a href="http://www.xenfocus.com" rel="nofollow">
+        Xenforo skin
+       </a>
+       <span>
+        by
+        <a href="http://www.xenfocus.com" rel="nofollow">
+         Xenfocus
+        </a>
+       </span>
+      </div>
+      <ul class="footerLinks">
+       <li>
+        <a href="/community/misc/contact">
+         Contact
+        </a>
+       </li>
+       <li>
+        <a href="/community/help/">
+         Help
+        </a>
+       </li>
+       <li>
+        <a href="/imprint/">
+         Imprint
+        </a>
+       </li>
+       <li>
+        <a class="homeLink" href="/">
+         Tutorials
+        </a>
+       </li>
+       <li>
+        <a class="topLink" href="#navigation">
+         Top
+        </a>
+       </li>
+       <li>
+        <a class="globalFeed" href="/feed" rel="alternate" target="_blank" title="RSS-Feed for Howtoforge">
+         RSS-Feed
+        </a>
+       </li>
+      </ul>
+      <span class="helper">
+      </span>
+     </div>
+    </div>
+   </div>
+   <div class="footerLegal">
+    <div class="pageWidth">
+     <div class="pageContent">
+      <ul id="legal">
+       <li>
+        <a href="/community/help/terms">
+         Terms
+        </a>
+       </li>
+      </ul>
+      <div id="copyright">
+       <a class="concealed" href="https://www.howtoforge.com">
+        Howtoforge
+        <span>
+          projektfarm GmbH.
+        </span>
+       </a>
+      </div>
+      <span class="helper">
+      </span>
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script type="text/javascript">
+   $(document).ready(function(){$.cookiesDirective({privacyPolicyUri:'/community/help/terms',explicitConsent:false,position:'bottom',cookieScripts:'Google Analytics, Google Adsense ',backgroundColor:'#52B54A',linkColor:'#ffffff'});});
+  </script>
+  <script>
+   jQuery.extend(true,XenForo,{visitor:{user_id:0},serverTimeInfo:{now:1409831907,today:1409781600,todayDow:4},_lightBoxUniversal:"0",_enableOverlays:"1",_animationSpeedMultiplier:"1",_overlayConfig:{top:"10%",speed:200,closeSpeed:100,mask:{color:"rgb(0, 0, 0)",opacity:"0.6",loadSpeed:200,closeSpeed:100}},_ignoredUsers:[],_loadedScripts:{"node_list":true,"node_category":true,"node_forum":true,"sidebar_share_page":true,"wf_default":true,"bbm_buttons":true,"login_bar":true,"twitter":true},_cookieConfig:{path:"/",domain:"",prefix:"xf_"},_csrfToken:"",_csrfRefreshUrl:"/community/login/csrf-token-refresh",_jsVersion:"303ae0ca"});jQuery.extend(XenForo.phrases,{cancel:"Cancel",a_moment_ago:"A moment ago",one_minute_ago:"1 minute ago",x_minutes_ago:"%minutes% minutes ago",today_at_x:"Today at %time%",yesterday_at_x:"Yesterday at %time%",day_x_at_time_y:"%day% at %time%",day0:"Sunday",day1:"Monday",day2:"Tuesday",day3:"Wednesday",day4:"Thursday",day5:"Friday",day6:"Saturday",_months:"January,February,March,April,May,June,July,August,September,October,November,December",_daysShort:"Sun,Mon,Tue,Wed,Thu,Fri,Sat",following_error_occurred:"The following error occurred",server_did_not_respond_in_time_try_again:"The server did not respond in time. Please try again.",logging_in:"Logging in",click_image_show_full_size_version:"Click this image to show the full-size version.",show_hidden_content_by_x:"Show hidden content by {names}"});XenForo.Facebook.appId="";XenForo.Facebook.forceInit=true;$(document).ready(function(){$("a.fancybox").fancybox();});
+  </script>
+  <script async="" id="_fancybar_js" src="//cdn.fancybar.net/ac/fancybar.js?zoneid=1502&amp;serve=C6ADVKE&amp;placement=howtoforge" type="text/javascript">
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-2155872-1','auto');ga('send','pageview');
+  </script>
+ </body>
+</html>

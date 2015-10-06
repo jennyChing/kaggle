@@ -1,0 +1,2815 @@
+<html lang="en">
+ <head>
+  <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript">
+  </script>
+  <script src="/javascript/jquery.bgiframe.js" type="text/javascript">
+  </script>
+  <link href="http://www.openleft.com/upload/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/stylesheets/soapblox.css" rel="stylesheet" type="text/css"/>
+  <link href="/stylesheets/comments.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.openleft.com/rss/rss2.xml" rel="alternate" title="Open Left" type="application/rss+xml"/>
+  <title>
+   Open Left:: Race Boating: Swift Boat Backer Funds Racist Mail
+  </title>
+  <script src="/javascript/prototype.js" type="text/javascript">
+  </script>
+  <script>
+   //-- SoapBlox JavaScript
+//-- 7/30/2007 (C)
+
+var baseUrl = '/';
+//-- SoapBlox JavaScript
+//-- 7/30/2007 (C)
+
+	var req;
+	var which;
+	var debug = false;
+	var commentId = "";
+	var diaryId = "";
+	var previewTitle = "";
+	var previewText = "";
+	var postingComment = false;
+	var canPost = false;
+	var previewingComment = false;
+	var hasError = false;
+	var buttonState;
+	
+	function hover(id, imageLoc) {
+		// alert(imageLoc);
+		document.images[id].src = imageLoc;
+	}
+
+	// makes a comment appear when someone clicks "post a comment" or "reply"
+	// id - the commentId (0 if "root"), dId - diaryId
+	function makeCommentAppear(id, dId) {
+
+		var tempTitle = "";
+		var tempText = "";
+	
+		// if this isn't empty, we were trying to perviously post a comment
+		// therefore, we need to clean out all the html in the previous spot
+		// so we don't create "nodeLists" for postCommentTextArea and Title
+		if (commentId != "") {
+			// get the current "postcommenter" element
+			var oldElem = document.getElementById('postcomment' + commentId);
+	
+			if (oldElem) {
+				// this will store whatever we might have had before
+				if (document.forms['rateForm'].elements['postCommentTitle']) {
+					tempTitle = document.forms['rateForm'].elements['postCommentTitle'].value;
+				}	
+				if (document.forms['rateForm'].elements['postCommentTextArea']) {
+					tempText = document.forms['rateForm'].elements['postCommentTextArea'].value;
+				}
+			
+				// clear out the old HTML, so we don't create nodeLists
+				oldElem.innerHTML = "";
+			}
+		}
+	
+		hideArea("post");
+
+		// store the values globally for what we're currently looking at
+	    commentId = id;
+	    diaryId = dId;
+	    
+	    var elementName = 'postcomment' + id;
+	    
+	    // make sure the element is hidden
+		Element.hide(elementName);
+
+		// set the data in it		
+	    document.getElementById(elementName).innerHTML = document.getElementById("contentHolder").innerHTML;
+		document.forms['rateForm'].elements['postCommentTitle'].value = tempTitle;
+		document.forms['rateForm'].elements['postCommentTextArea'].value = tempText;
+	
+		// make it slide down, take half a second, scaleFrom 3 to avoid "stutter" in IE
+		Effect.SlideDown(elementName, { duration: 0.5, scaleFrom: 3});
+		window.setTimeout("document.forms['rateForm'].elements['postCommentTitle'].focus()", 501);
+		
+	    postingComment = true;
+	    // since we're starting a new preview cycle, we're going to need
+	    // to use the slide down effect.  This ensures that
+	    previewingComment = false;
+
+	    var objDiv = document.getElementById(elementName);
+		objDiv.scrollTop = objDiv.scrollHeight;
+	}
+
+	// what we do when someone hits cancel
+	function cancelPost() {
+
+		var cTextElem = document.forms['rateForm'].elements['postCommentTextArea'];
+		var cTitleElem = document.forms['rateForm'].elements['postCommentTitle'];
+		
+		if ((cTextElem &amp;&amp; cTextElem.value != "")
+				|| (cTitleElem &amp;&amp; cTitleElem.value != ""))
+		{
+			// if the don't want to cancel--stop.
+			if (!confirm("Cancel this comment?")) {
+				return;
+			}
+		}
+
+		hideArea("cancel");
+		// we no longer clear this out so in makeCommentAppear we can see if we have to clean
+		// out some hidden HTML
+		//commentId = "";
+		diaryId = "";
+		previewText = "";
+		previewTitle = "";
+		cTextElem.value = "";
+		cTitleElem.value = "";
+		previewingComment = false;	
+		postingComment = false;
+	}
+	
+	// this is the safari default button hack, where we use onfocus to determine what mode we're in
+	function setButtonState(theValue) {
+		buttonState = theValue;
+	}
+
+	// it's how we post a comment!
+	function submitForm(theForm) {
+	
+		// alert(buttonState + " " + previewingComment);
+	
+		// stop the "enter in the subject" bug
+		if (buttonState == "post" &amp;&amp; !previewingComment
+		 		|| buttonState == "post" &amp;&amp; previewingComment &amp;&amp; !canPost) {
+			previewComment(theForm);
+			return false;
+		}
+		
+
+		var theForm = document.forms['rateForm'];	
+		theForm.action = baseUrl + "postComment.do";
+		theForm.elements['replyParentCommentId'].value = commentId;
+
+		if (commentId == 0) {
+			theForm.elements['diaryId'].value = diaryId;	
+		}
+		else {
+			theForm.elements['commentId'].value = commentId;	
+
+		}
+		
+		theForm.elements['replyDiaryId'].value = diaryId;	
+		theForm.elements['submitType'].value = "post";	
+		
+		// alert("yo" + theForm.elements['submitType']);
+		theForm.method = "POST";
+		theForm.submit();
+	}
+
+	// trims a string
+	function trim(str) {     
+		if(!str || typeof str != 'string') {
+			return null;     
+		}
+			
+		return str.replace(/^[\s]+/,'').replace(/[\s]+$/,'').replace(/[\s]{2,}/,' '); 
+		
+	}
+
+	function previewComment(theForm) {
+	
+		// if (tinyMCE) {
+			// tinyMCE.triggerSave();
+		// }
+		
+		// alert(baseUrl);
+
+		var url = baseUrl + "ajaxPreviewComment.do";
+		var errorDiv = "errorcomment" + commentId;
+		
+		// hide any error we might have
+		if (hasError) {
+			Element.hide(errorDiv);
+		}
+			
+		var cTitleElem = document.forms['rateForm'].elements["postCommentTitle"];
+		var cTextElem =  document.forms['rateForm'].elements["postCommentTextArea"];
+	
+		
+		previewTitle = cTitleElem.value;
+		previewText = cTextElem.value;
+	
+	    // trim it so we remove the white sapces
+	    previewTitle = trim(previewTitle);
+
+	    // if we have nothing, set the error
+	    if (previewTitle == null || previewTitle == "") {
+			Effect.Appear(errorDiv, { duration: 0.5 });
+			disallowPost();
+			hasError = true;
+	    	return;
+	    }
+
+	    // if we get this far we don't have an error!
+	    hasError = false;
+	    
+	    // apparently using "escape" funcation messes with utf-8 so we just explicity
+	    // replace newlines with their url-encoding equavilent.
+	    previewText = escape(previewText); 
+	    
+	    previewText = previewText.replace(/\%u201C/ig, "%22");
+	    previewText = previewText.replace(/\%u201D/ig, "%22");
+  	    previewText = previewText.replace(/\%u2018/ig, "%27");
+  	    previewText = previewText.replace(/\%u2019/ig, "%27");  	    
+  	    previewText = previewText.replace(/\%u2013/ig, "-");  
+  	    previewText = previewText.replace(/\%u2014/ig, "-");    	      	    
+  	    previewText = previewText.replace(/\%u2026/ig, "...");    	
+  	    previewText = previewText.replace(/\+/g, "%2B");
+	    
+	    //previewText.replace(/\n/g, "%0a");
+//	    previewText = previewText.replace(/\+/g, "%2b");
+  // 	    previewText = previewText.replace(/\%/g, "%25");
+//   	    alert(previewText);
+	    
+		// add the previewText to the URL querystring    
+		// have to URL encode it for it to work correctly
+	    var params = "t=" + previewText;
+	
+		// do the fun ajax!    
+	    retrieveURL(url, "PREVIEW", commentId, params);
+	}
+
+	function hideArea(theType) {
+		var elementName = 'postcomment' + commentId;
+		var previewName = 'previewcomment' + commentId;
+	
+		// always hide the error div		
+		if (hasError) {
+			var errorDiv = "errorcomment" + commentId;
+			Element.hide(errorDiv);
+			hasError = false;
+		}
+		
+	    if (postingComment) {	
+	        // we must hide the current stored commentId
+	        // if we are canceling, we do it pretty
+	        if (theType == "cancel") {
+				Element.hide(previewName);        
+		        Effect.SlideUp(elementName, { duration: 0.5 });
+		    }
+		    else {
+		    	// otherwise we are posting another comment
+		    	// so do it REAL quick
+				Element.hide(previewName);	    	
+				document.getElementById(elementName).innerHTML = "";
+			}
+	    }
+	}
+
+	function figureOut(theForm) {
+// 		alert(buttonState);
+		
+		if (buttonState == 'preview') {
+			previewComment(theForm);
+		}
+		else if (buttonState == 'cancel') {
+			cancelPost();
+		}
+		else if (buttonState == 'post') {
+			submitForm(theForm);
+		}
+	}
+
+	// this checks the comments for when someone types, and if it's different than what's being preview we
+	// turn off the post button
+	function checkComment() {
+
+		var tTitle = "";
+		var tText = "";
+		
+		if (document.forms['rateForm'].elements['postCommentTitle']) {
+			tTitle = document.forms['rateForm'].elements['postCommentTitle'].value;
+		}
+		
+		if (document.forms['rateForm'].elements['postCommentTextArea']) {
+			tText = document.forms['rateForm'].elements['postCommentTextArea'].value;
+		}
+	    
+	   
+ //    		alert(tTitle + " " + previewTitle + " : " + tText + " " + previewText);
+	    if (canPost &amp;&amp; (tText != previewText || tTitle != previewTitle)) {
+	    	disallowPost();
+	   	}
+	}
+
+	function disallowPost() {
+	    canPost = false;
+	    document.getElementById("postbutton" + commentId).disabled = true;
+	}
+
+	function allowPost() {
+	    canPost = true;
+	    var elem = document.getElementById("postbutton" + commentId);
+	    
+	    elem.disabled = false;
+	    
+	    // alert(previewingComment);
+	    
+	    if (!previewingComment) {
+			window.setTimeout("document.getElementById('postbutton' + commentId).focus()", 501);
+	    }
+	    else {
+		    try {
+		    	 document.getElementById('postbutton' + commentId).focus();
+		   	} catch (e) {
+		   		alert(e);
+		   	}
+	    }
+		
+//		alert(elem);
+//	    document.getElementById("postbutton" + commentId).focus();
+	//    alert(document.getElementById("postbutton" + commentId).focus);
+	}
+
+  function retrieveURL(url, type, id, params) {
+    which = id;
+    if (window.XMLHttpRequest) { // Non-IE browsers
+        req = new XMLHttpRequest();
+
+      
+        // pretty sure this adds a listener, which handles communication
+        // listeners apparently don't like parameters, either
+        if ("RATE" == type) {
+            req.onreadystatechange = processRateStateChange;          
+        }
+        else if ("RECOMMEND" == type) {
+            req.onreadystatechange = processRecommendStateChange;          
+        } 
+        else if ("PREVIEW" == type) {
+			req.onreadystatechange = processPreviewComment;                  
+        }      
+        else {
+            req.onreadystatechange = processStateChange;
+        }
+
+        try {
+            req.open("POST", url, true);
+	   		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+			req.setRequestHeader("Content-length", params.length);
+			req.setRequestHeader("Connection", "close");            	    	
+            req.send(params);
+        } catch (e) {
+            alert(e);
+        }
+    } 
+    else if (window.ActiveXObject) { // IE
+        req = new ActiveXObject("Microsoft.XMLHTTP");
+		
+        if (req) {
+            if ("RATE" == type) {
+                req.onreadystatechange = processRateStateChange;          
+            }
+            else if ("RECOMMEND" == type) {
+                req.onreadystatechange = processRecommendStateChange;          
+            }       
+            else if ("PREVIEW" == type) {
+				req.onreadystatechange = processPreviewComment;                  
+	   		}   
+            else {
+                req.onreadystatechange = processStateChange;
+            }
+        
+            req.open("POST", url, true);
+	   		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			req.setRequestHeader("Content-length", params.length);
+			//req.setRequestHeader("Connection", "close");            	    	
+            req.send(params);
+        }
+    }
+  }
+  
+
+  // listener
+  function processStateChange() {
+    
+    if (req.readyState == 4) { // Complete
+      if (req.status == 200) { // OK response
+        document.getElementById("theTable").innerHTML = req.responseText;
+
+      } else {
+
+        alert("Problem: " + req.statusText);
+
+      }
+
+    }
+  }
+  
+  
+  
+	function processPreviewComment() {
+
+		if (req.readyState == 4) { // Complete
+			if (req.status == 200) { // OK response
+				var postCommentDiv = document.getElementById("postcomment" + commentId);
+				var previewCommentDiv = document.getElementById("previewcomment" + commentId);
+				
+			  	// make it visible
+			    // document.getElementById("previewComment").style.display = "block";
+			    
+				previewText = req.responseText;
+				
+				var commentError = false;
+				
+				if (previewText.indexOf("@@@ERROR@@@") != -1) {
+					previewText = "&lt;div class='soapbloxError'&gt;" + previewText.substring(11, previewText.length) + "&lt;/div&gt;";						
+					commentError = true;
+				}
+    
+		        // set values in the preview area
+			    document.getElementById("previewTitle" + commentId).innerHTML = previewTitle;
+			    document.getElementById("previewCommentText" + commentId).innerHTML = previewText;
+			    
+			    // alert(previewingComment); 
+    
+    			// if we're not already previewing a comment we slide down
+    			if (!previewingComment) {
+					Effect.SlideDown("previewcomment" + commentId, { duration: 0.5, scaleFrom: 3});
+					//window.setTimeout("postButton.focus()", 501);
+				}
+				// otherwise, we just update the text
+				else {
+					Element.show("previewcomment" + commentId);
+				}
+			
+				if (commentError) {
+					disallowPost();
+				}					
+				else {
+					allowPost();
+				}
+				
+				previewingComment = true;
+			}
+			else {
+				alert("Problem: " + req.statusText);
+			}
+		}	
+	}
+  
+    function processRateStateChange() {
+        //alert(loadName);
+        //alert(document.getElementById(loadName));
+
+        if (req.readyState == 4) { // Complete
+        
+            var loadName = "rateLoad" + which; 
+            // alert("elem: " + document.getElementById(loadName));
+            var elem = document.getElementById(loadName);
+           
+
+            if (req.status == 200) { // OK response
+                elem.innerHTML = "&lt;i&gt;Complete!&lt;/i&gt;";
+                if (debug) {
+                    alert(document.getElementById("rating" + which));
+                    alert(req.responseText);
+                }
+
+				// alert(req.responseText);
+
+        		var xmlDoc = req.responseXML;
+        		var theWholeThing = "";
+        		
+        		var rateType = xmlDoc.getElementsByTagName("rateType")[0].childNodes[0].nodeValue;
+        		var scoreType = xmlDoc.getElementsByTagName("scoreType")[0].childNodes[0].nodeValue;
+				var average = xmlDoc.getElementsByTagName("averageScore")[0].childNodes[0].nodeValue;
+				var viewRatingLink = xmlDoc.getElementsByTagName("viewRatingLink")[0].childNodes[0].nodeValue;
+        			        		
+        		//alert(rateType);
+        		
+        		if (rateType == "THUMBS" || rateType == "STARS") {
+				//	if (average == "false") {
+					// loop through the ratings   
+					
+						     		
+	        			for (i = 0; i &lt; xmlDoc.getElementsByTagName("rating").length; i++) {
+	        			
+	        				var theString = "";
+	        			
+		        			var theRating = xmlDoc.getElementsByTagName("rating")[i];
+		        			var commentId = theRating.getElementsByTagName("commentId")[0].childNodes[0].nodeValue;
+							var ratingName = theRating.getElementsByTagName("ratingName")[0].childNodes[0].nodeValue;
+							// var viewRatingLink = theRating.getElementsByTagName("viewRatingLink")[0].childNodes[0].nodeValue;
+		        			var ratingValueId = theRating.getElementsByTagName("ratingValueId")[0].childNodes[0].nodeValue;
+		        			var loc = theRating.getElementsByTagName("image-src")[0].childNodes[0].nodeValue;
+		        			var mouseover = theRating.getElementsByTagName("image-mouseover")[0].childNodes[0].nodeValue;
+		        			var mouseout = theRating.getElementsByTagName("image-mouseout")[0].childNodes[0].nodeValue;
+		        			var count = theRating.getElementsByTagName("count")[0].childNodes[0].nodeValue;
+		        			var theId = "rv" + commentId + "-" + ratingValueId;
+		        			
+		        			if (rateType == "THUMBS") {
+		        			
+//		        				if (average == "false") {
+		        					theString = "&lt;a href='javascript:void(0)' onclick='rateThumb(\"" + commentId + "\", \"" + ratingValueId + "\")'&gt;";
+		        				
+		        					if ("RATING_NAME" == scoreType) {
+		    	    					theString += ratingName;
+			        				}
+			        				else {
+		 
+										theString += "&lt;img border='0' name='" + theId + "' src='" + loc + "' onmouseover='hover(\"" +theId + "\", \"" + mouseover + "\")'  onmouseout='hover(\"" +theId + "\", \"" + mouseout + "\")'&gt;";		        				
+		        					}
+		        					theString += "&lt;/a&gt;";
+		        					
+		        					if (average == "false") {
+		        						 theString += " - " + count;
+									}
+		        			//	}
+		        			//	else {
+		        			//		theString = "(" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + ")";
+		        			//	}
+		        			}
+		        			else { // STARS
+		        				theString = "&lt;a href='javascript:void(0)' onclick='rateThumb(\"" + commentId + "\", \"" + ratingValueId + "\")'&gt;&lt;img border='0' name='star" + commentId + "-" + i + "' src='" + loc + "' onmouseover='starHover(\"" + mouseover + "\", \"" + commentId + "\", \"" + i + "\")'  onmouseout='starHover(\"" + mouseout + "\", \"" + commentId + "\", \"" + i + "\")'&gt;&lt;/a&gt; ";
+		        			}
+		        			
+		        			/*
+		        			var theImage = document.images[theId]; 
+		        			theImage.src = loc;
+		        			
+							theImage.onmouseout= (function (a, b) {
+		      					return function () {
+		      						document.images[a].src = b;
+								};
+		    				})(theId, mouseout);
+								// hover(theId, mouseout); 
+								//alert(e);
+		        				//alert("mout-src: " + loc + "\nId: " + theId + "\nmouseover: " + mouseover + "\n:mouseout: " + mouseout);
+		        				//document.images[theId].src = mouseout;
+		        			
+		        			
+							theImage.onmouseover= (function (a, b) {
+		      					return function () {
+		      						document.images[a].src = b;
+								};
+		    				})(theId, mouseover); */
+		    				
+		    				if (i &lt; xmlDoc.getElementsByTagName("rating").length - 1) {
+		    					theString = theString + "&nbsp;";
+//		    					alert("Your mom");
+		    				}
+		    				
+		    				theWholeThing += theString;
+		        		}
+	        	//	}
+	        	//	else {
+	        	//		alert(xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue);
+	        	//		v
+	        	//		theWholeThing = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+	        	//	}
+	        	
+	        		if (average == "true") {
+	        			theWholeThing = "(&lt;a href=\"" + viewRatingLink+ "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;) " + theWholeThing;
+	        		}
+	        		
+	        	} // End thumbs and stars
+	        	else if ("RADIO" == rateType || "DROP_DOWN" == rateType) {
+	        		var score = "";
+	        		
+	        	//	alert("bob!");
+
+					if (scoreType == "IMAGE") {
+						if (average == "false") {
+							var scoreNode = xmlDoc.getElementsByTagName("score")[0];
+							for (i = 0; i &lt; scoreNode.getElementsByTagName("oneScore").length; i++) {
+								score += "&lt;img border='0' src='" + scoreNode.getElementsByTagName("path")[i].childNodes[0].nodeValue + "'&gt; - " +  scoreNode.getElementsByTagName("count")[i].childNodes[0].nodeValue + " ";
+							}
+						}
+						else {
+							score = "(&lt;a href=\"" + viewRatingLink + "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;)";						
+	//						score = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+							//alert("score: " + score);						
+						}
+					}
+					else {
+						score = "(&lt;a href=\"" + viewRatingLink + "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;)";
+						// alert("score: " + score);
+					} 
+					
+					theWholeThing = score;
+	        	}
+	        	/*
+	        	var score = "";
+
+				if (scoreType == "IMAGE") {
+					var scoreNode = xmlDoc.getElementsByTagName("score")[0];
+					for (i = 0; i &lt; scoreNode.getElementsByTagName("oneScore").length; i++) {
+						score += "&lt;img border='0' src='" + scoreNode.getElementsByTagName("path")[i].childNodes[0].nodeValue + "'&gt; - " +  scoreNode.getElementsByTagName("count")[i].childNodes[0].nodeValue + " ";
+					}
+				}
+				else {
+					score = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+				} */
+        		        		
+        		document.getElementById("rating" + which).innerHTML = theWholeThing;
+            } 
+            else 
+            {
+                elem.innerHTML = "&lt;b&gt;Error!&lt;/b&gt;";            
+            }
+            
+            Effect.Fade(loadName);
+        }
+    } 
+    
+    function starHover(fileLoc, commentId, theIndex) {
+    	for (var i = 0; i &lt;= theIndex; i++) {
+    		var theStar = "star" + commentId + "-" + i;
+    		document.images[theStar].src = fileLoc;
+    	}
+    }
+    
+    function thumbHover(fileLoc, commentId, theIndex) {
+   		var theStar = "star" + commentId + "-" + theIndex;
+		document.images[theStar].src = fileLoc;
+
+    }    
+  
+    function processRecommendStateChange() {
+        // alert("elem: " + document.getElementById(loadName));
+        var elem = document.getElementById("recommendLoad");
+        var recommender = document.getElementById("recommender");
+    
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                elem.innerHTML = "&lt;i&gt;Complete!&lt;/i&gt;";            
+                recommender.innerHTML = req.responseText;                
+            }
+            else {
+                elem.innerHTML = "&lt;b&gt;Error!&lt;/b&gt;";  
+            }
+            
+            recommender.disabled = false;
+        }
+        
+        Effect.Fade("recommendLoad");        
+    }
+    
+	function rateThumb(theCommentId, ratingValueId) {
+
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + ratingValueId;
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + ratingValueId  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }
+     
+
+    function rate(theCommentId) {
+        var selectName = "select" + theCommentId;
+        var selector = document.rateForm.elements[selectName];
+        var rateValue = selector.options[selector.selectedIndex].value;
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + rateValue;
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + rateValue  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }
+    
+    function radioRate(theCommentId) {
+        var selectName = "select" + theCommentId;
+        var selector = document.rateForm.elements[selectName];
+        var rateValue = "";
+        
+        for (var i = 0; i &lt; selector.length; i++) {
+        	if (selector[i].checked) {
+        		rateValue = selector[i].value;
+        		break;
+        	}
+        }
+        
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + rateValue + "&amp;type=radio";
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + rateValue  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }    
+    
+    function recommend(diaryId) {
+
+        var url = baseUrl + "ajaxRecommend.do";
+        var params = "id=" + diaryId;
+        
+        if (debug) {
+            alert("diaryId: " + diaryId);        
+            alert("url: " + url);        
+        }
+        
+        var recommender = document.getElementById("recommender");
+        recommender.disabled = true;
+        
+        var elem = document.getElementById("recommendLoad");
+        Element.show(elem);
+        elem.innerHTML = "&lt;br /&gt;&lt;i&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RECOMMEND", diaryId, params);        
+    }
+    
+	function toggleEditor(id) {
+		var elm = document.getElementById(id);
+
+		if (tinyMCE.getInstanceById(id) == null)
+			tinyMCE.execCommand('mceAddControl', false, id);
+		else
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	} 
+	
+	function turnOnEditor(id) {
+		if (tinyMCE.getInstanceById(id) == null)
+			tinyMCE.execCommand('mceAddControl', false, id);	
+	}
+	
+	function turnOffEditor(id) {
+		if (id == "postCommentTextArea" &amp;&amp; !tinyMCE.getInstanceById(id)) {
+			id = "commentText";		
+		}
+		
+		// alert(id);
+
+		if (tinyMCE.getInstanceById(id) != null)
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	}	
+	
+	function setDiaryButtons(id) {
+		var selectedValue = id.options[id.selectedIndex].value;	
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			disableDiaryButtons(true);
+		}
+		else {		
+			disableDiaryButtons(false);		
+		}
+	}
+	
+	
+	function disableDiaryButtons(theValue) {
+		document.getElementById("bold1").disabled = theValue;
+		document.getElementById("italic1").disabled = theValue;
+		document.getElementById("quote1").disabled = theValue;
+		document.getElementById("bold2").disabled = theValue;
+		document.getElementById("italic2").disabled = theValue;
+		document.getElementById("quote2").disabled = theValue;	
+	}	
+	
+	function setCommentButtons(id) {
+		var selectedValue = id.options[id.selectedIndex].value;	
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			disableCommentButtons(true);
+		}
+		else {		
+			disableCommentButtons(false);		
+		}
+	}	
+	
+	function disableCommentButtons(theValue) {
+		document.getElementById("bold1").disabled = theValue;
+		document.getElementById("italic1").disabled = theValue;
+		document.getElementById("quote1").disabled = theValue;
+	}	
+
+	
+	function toggleDiaryEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		// alert(selectedValue);		
+		
+		setDiaryButtons(id);
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("editMainText");
+			turnOnEditor("editExtendedText");	
+		}
+		else {
+			turnOffEditor("editMainText");
+			turnOffEditor("editExtendedText");			
+
+		}
+	}   
+	
+	function toggleCommentEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		
+		setCommentButtons(id);	
+		
+		// alert(selectedValue);
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("postCommentTextArea");
+		}
+		else {
+		    // alert("before turn off");
+			turnOffEditor("postCommentTextArea");
+		}
+	} 
+	
+	function toggleQuickHitEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("quickHitText");
+		}
+		else {
+			turnOffEditor("quickHitText");
+		}
+	} 		
+
+	function addTags(textAreaId, startTag, endTag, content) {
+		
+		var textArea;
+		
+		if (document.forms['rateForm']) {
+			textArea = document.forms['rateForm'].elements[textAreaId];
+		}
+		else {
+			textArea = document.getElementById(textAreaId);
+		}
+		
+		if (typeof textArea.selectionStart != "undefined") {
+			textArea.focus();
+			var selStart = textArea.selectionStart;
+			var selEnd = textArea.selectionEnd;
+			var selText = textArea.value.substring(selStart, selEnd);
+			var scrlTop = textArea.scrollTop;
+			var scrlDown = textArea.value.length &lt;= selStart;
+			if (selText.indexOf(startTag) === 0 &amp;&amp; endTag == selText.substring(selText.length - endTag.length, selText.length)) {
+				textArea.value = textArea.value.substring(0, selStart) + selText.substring(startTag.length, selText.length - endTag.length) 
+					+ textArea.value.substring(selEnd, textArea.value.length);
+				textArea.selectionStart = selStart;
+				textArea.selectionEnd = selEnd - (startTag.length + endTag.length);
+				textArea.scrollTop = scrlTop;
+			} else {		
+				textArea.value = textArea.value.substring(0, selStart) + startTag + (content ? content : selText)
+					+ endTag + textArea.value.substring(selEnd, textArea.value.length);
+				textArea.selectionStart = selStart;
+				textArea.selectionEnd = selStart + startTag.length + (content ? content.length : selText.length) + endTag.length;
+				textArea.scrollTop = (scrlDown ? 10000000 : scrlTop);
+			}
+		} else if (document.selection) {
+			var range = document.selection.createRange();
+			if (range.parentElement() != textArea) {
+				var textRange = textArea.createTextRange();
+				textRange.moveStart('character', textArea.value.length);
+				textRange.collapse();
+				textRange.select();
+				range = document.selection.createRange();
+			}
+			textArea.focus();
+			if (range.text.indexOf(startTag) === 0 &amp;&amp; endTag == range.text.substring(range.text.length - endTag.length, range.text.length)) {
+				range.text = range.text.substring(startTag.length, range.text.length - endTag.length);
+			} else {
+				range.text = startTag + (content ? content : range.text) + endTag;
+			}
+		} else {
+			textArea.focus();
+			textArea.value = startTag + (content ? content : "") + endTag;
+			if (typeof textArea.scrollTop != "undefined") {
+				textArea.scrollTop = 10000000;
+			}
+		}
+	}
+	
+	
+	function addBoldTags(textAreaId) {
+		addTags(textAreaId, "&lt;b&gt;", "&lt;/b&gt;");
+		return false;
+	}
+	
+	function addItalicTags(textAreaId) {
+		addTags(textAreaId, "&lt;i&gt;", "&lt;/i&gt;");
+		return false;
+	}
+	
+	function addQuoteTags(textAreaId) {
+		addTags(textAreaId, "&lt;blockquote&gt;", "&lt;/blockquote&gt;");
+		return false;
+	}
+  </script>
+  <script src="/javascript/modules/qhcomments/qhcomments.js" type="text/javascript">
+  </script>
+  <script language="javascript" src="/javascript/effects.js" type="text/javascript">
+  </script>
+  <script language="Javascript">
+   &lt;!--
+var axel = Math.random() + "";
+var ord = axel * 1000000000000000000;
+//--&gt;
+  </script>
+  <script src="/javascript/modules/qhcomments/qhcomments.js" type="text/javascript">
+  </script>
+  <link href="/stylesheets/socialbuttons.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+        _gaq.push(['_setDomainName', 'none']);
+        _gaq.push(['_setAllowLinker', true]);
+        
+        _gaq.push(['t1._setAccount', 'UA-24612334-1']);
+        _gaq.push(['t1._trackPageview']);
+        
+        
+        _gaq.push(['t2._setAccount', 'UA-24079896-15']);
+        _gaq.push(['t2._trackPageview']);
+        
+
+        function track_ga(name, action, url) {
+        
+            _gaq.push(['t1._trackSocial', name, action, url]);
+        
+        
+            _gaq.push(['t2._trackSocial', name, action, url]);
+        
+        }
+  </script>
+ </head>
+ <body>
+  <div id="fb-root">
+  </div>
+  <script>
+   (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <center>
+   <div class="mainLayout">
+    <link href="http://www.openleft.com/upload/logo.jpg" rel="image_src"/>
+    <div id="adblock" style="padding:15px 0px;">
+     <script language="JavaScript" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vj?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;pv=">
+     </script>
+     <noscript>
+      <iframe frameborder="0" height="90" marginheight="0" marginwidth="0" noresize="" scrolling="No" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vh?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;pv=" width="728">
+       <a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/cc?z=csm">
+        <img border="0" height="90" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vc?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;abr=$imginiframe&amp;pv=" width="728"/>
+       </a>
+      </iframe>
+     </noscript>
+    </div>
+    <div id="header">
+     <h1 id="pageTitle">
+      <a href="http://www.openleft.com">
+       Open Left
+      </a>
+     </h1>
+     <ul id="mainMenu">
+      <li>
+       <a href="http://www.openleft.com">
+        Home
+       </a>
+      </li>
+      <li>
+       <a href="http://www.openleft.com/showDiary.do?diaryId=21">
+        About &amp; Contact
+       </a>
+      </li>
+      <li>
+       <a href="http://www.openleft.com/showDiary.do?diaryId=18852" target="_blank">
+        HTML cheat sheet
+       </a>
+      </li>
+      <li>
+       <a href="/rss/rss2.xml">
+        RSS Feed
+       </a>
+      </li>
+      <li>
+       <a href="http://www.feedburner.com/fb/a/emailverifySubmit?feedId=1023104&amp;loc=en_US">
+        Subscribe for Email Updates
+       </a>
+      </li>
+     </ul>
+    </div>
+    <table class="mainTable">
+     <tr>
+      <td class="MAIN_BODY" valign="top">
+       <link href="http://openleft.com/upload/css/splashpage.css" rel="stylesheet" type="text/css"/>
+       <script language="Javascript" src="http://openleft.com/upload/js/splashpage.js" type="text/javascript">
+        &lt;/script&gt;
+                                    
+                                
+                                 
+
+
+
+
+
+
+
+             
+
+    
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table cellpadding="0" cellspacing="0" class="social_buttons"&gt;
+    &lt;tr valign="top"&gt;
+        
+
+            
+        &lt;td class="fb btn"&gt;
+            &lt;iframe src="//www.facebook.com/plugins/like.php?locale=en_US&amp;href=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+&amp;send=false&amp;layout=button_count&amp;width=48&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:48px; height:21px;"
+                    allowTransparency="true"&gt;&lt;/iframe&gt;
+            &lt;/td&gt;
+            
+
+        
+        &lt;td class="btn twitter"&gt;
+            &lt;iframe allowtransparency="true" frameborder="0" scrolling="no"
+                    src="//platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+&amp;scount=none&amp;counturl=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+"
+                    style="width:60px; height:20px;"&gt;&lt;/iframe&gt;
+            
+            
+        &lt;/td&gt;
+
+        
+        &lt;td class="btn google"&gt;
+            &lt;g:plusone size="medium"
+                       href="http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+" count="false"&gt;&lt;/g:plusone&gt;
+        &lt;/td&gt;
+
+        
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+    
+        
+    
+
+
+
+
+
+
+
+
+
+  &lt;script language="Javascript"&gt;
+    document.cookie = "login_dest="+location.href+"; path=/";
+       </script>
+       <table width="100%">
+        <tr>
+         <td>
+          <h1 class="diaryTitle">
+           <a class="diaryTitle" href="/diary/9293/ ">
+            Race Boating: Swift Boat Backer Funds Racist Mail
+           </a>
+          </h1>
+          <h2 class="author">
+           by:
+           <a href="/user/GlennWSmith">
+            GlennWSmith
+           </a>
+          </h2>
+          <h3 class="diaryTimestamp">
+           <i>
+            Wed Oct 22, 2008 at 11:41
+           </i>
+          </h3>
+          <br/>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <script language="Javascript" src="http://openleft.com/upload/js/sharelinks.js" type="text/javascript">
+          </script>
+          <script language="Javascript" type="text/javascript">
+           show_socialmedia_links('Race Boating: Swift Boat Backer Funds Racist Mail', 'http://openleft.com/showDiary.do?diaryId=9293', true);
+          </script>
+          Swift Boat funder Robert Perry, a top national Republican donor, is funding overtly racist attack mail this cycle. It's not Swift Boating. It's Race Boating.
+          <p>
+           A group called "Empower Texans," chaired by Tim Dunn of Midland, an associate of Republican Texas House Speaker Tom Craddick, attacked Democratic state House candidate Joel Redmond of Pasadena with a direct mail piece featuring fuzzy images of black and Hispanic lawmakers (plus Barack Obama), several black birds resembling crows, and a picture of the white Redmund. The tag line: "Birds of a feather flock together."
+          </p>
+          <p>
+           Anyone with any racial sensitivity gets the meaning of the mailer: Redmond has betrayed whites by befriending people of color. He can't be trusted.
+          </p>
+          <p>
+           <img src="http://farm4.static.flickr.com/3227/2964659162_559d0f837b.jpg?v=0"/>
+          </p>
+          <p>
+           This is happening in the Houston area, down the road from Tom DeLay. George Bush's hometown. While an African-American, Barack Obama, is the Democratic nominee for president.
+          </p>
+          <p>
+           Today's Race Boaters aren't like the Swift Boaters. They ARE the Swift Boaters. Bob Perry. Tom DeLay. Tom Craddick. The same people whose 2002 campaign funding scheme led to
+           <a href="http://www.statesman.com/news/content/region/legislature/stories/10/22/1022tab.html">
+            Tuesday's guilty plea from the Texas Association of Business,
+           </a>
+           another organization with close ties to the Race Boaters. That plea came from the same investigation that led to the indictment against DeLay.
+          </p>
+         </td>
+        </tr>
+        <tr>
+         <td class="theFlip">
+          <a href="/userDiary.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?personId=2033">
+           GlennWSmith
+          </a>
+          ::
+          <a href="/showDiary.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?diaryId=9293">
+           Race Boating: Swift Boat Backer Funds Racist Mail
+          </a>
+         </td>
+        </tr>
+        <tr>
+         <td>
+         </td>
+        </tr>
+       </table>
+       <div align="center" style="padding:20px 0px;">
+        <script language="JavaScript" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vj?z=csm&amp;dim=616028&amp;kw=&amp;click=">
+         &lt;/script&gt;&lt;noscript&gt;&lt;iframe width="300" height="250" noresize scrolling=No frameborder=0 marginheight=0 marginwidth=0 src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vh?z=csm&amp;dim=616028&amp;kw=&amp;click="&gt;&lt;a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/cc?z=csm"&gt;&lt;img src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vc?z=csm&amp;dim=616028&amp;kw=&amp;click=&amp;abr=$imginiframe" width="300" height="250" border="0"&gt;&lt;/a&gt;&lt;/iframe&gt;&lt;/noscript&gt;
+&lt;br/&gt;
+&lt;a href="http://csmads.com"&gt;&lt;img src="http://www.openleft.com/upload/csmads300x40.gif" border&gt;&lt;/a&gt;
+&lt;/div&gt;
+
+
+
+
+
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Tags: 
+                         
+                            &lt;a href="/tag/2008 Election" rel="tag"&gt;2008 Election&lt;/a&gt;,
+                          
+                            &lt;a href="/tag/racism" rel="tag"&gt;racism&lt;/a&gt;,
+                          
+                            &lt;a href="/tag/Robert Perry" rel="tag"&gt;Robert Perry&lt;/a&gt;,
+                          
+                            &lt;a href="/tag/Swift Boating" rel="tag"&gt;Swift Boating&lt;/a&gt;,
+                                          
+            (&lt;a href="/allTags.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD"&gt;All Tags&lt;/a&gt;)
+         &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td valign="bottom"&gt;
+                    &lt;a target="_new" href='showDiary.do?diaryId=9293&amp;view=print'&gt;
+                        Print Friendly View
+                    &lt;/a&gt;  
+                    &lt;a target="_new" href='showDiary.do?diaryId=9293&amp;view=print'&gt;&lt;img src="/images/printer-icon.GIF" border="0" /&gt;&lt;/a&gt;       
+                    
+                    &lt;a href="/sendAsEmail.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?diaryId=9293"&gt;Send As Email&lt;/a&gt;
+                    
+                    &lt;a href="/sendAsEmail.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?diaryId=9293"&gt;&lt;img src="/images/email-icon.GIF" border="0" /&gt;&lt;/a&gt;
+
+        &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table cellpadding="0" cellspacing="0" class="social_buttons"&gt;
+    &lt;tr valign="top"&gt;
+        
+
+            
+        &lt;td class="fb btn"&gt;
+            &lt;iframe src="//www.facebook.com/plugins/like.php?locale=en_US&amp;href=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+&amp;send=false&amp;layout=button_count&amp;width=48&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:48px; height:21px;"
+                    allowTransparency="true"&gt;&lt;/iframe&gt;
+            &lt;/td&gt;
+            
+
+        
+        &lt;td class="btn twitter"&gt;
+            &lt;iframe allowtransparency="true" frameborder="0" scrolling="no"
+                    src="//platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+&amp;scount=none&amp;counturl=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+"
+                    style="width:60px; height:20px;"&gt;&lt;/iframe&gt;
+            
+            
+        &lt;/td&gt;
+
+        
+        &lt;td class="btn google"&gt;
+            &lt;g:plusone size="medium"
+                       href="http%3A%2F%2Fwww.openleft.com%2Fdiary%2F9293%2F+" count="false"&gt;&lt;/g:plusone&gt;
+        &lt;/td&gt;
+
+        
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+
+&lt;br/&gt;
+
+
+
+
+    
+
+
+
+
+		 
+&lt;div class="titleBar"&gt;
+	&lt;a href="/diary/9293/ "&gt;
+        Race Boating: Swift Boat Backer Funds Racist Mail
+	&lt;/a&gt;
+
+	
+		
+		
+		
+            
+			
+    			|	
+	            &lt;b&gt;5&lt;/b&gt; comments 
+
+                                
+			
+
+            
+				
+		 
+	 
+&lt;/div&gt;
+
+    
+            
+    
+
+
+
+
+
+
+
+    
+        
+            
+
+                   &lt;form name="rateForm" onSubmit="figureOut(this.form); return false;"&gt;
+                    &lt;div id="previewcomment0" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle0"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText0"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input tabindex="1" onfocus="setButtonState('post')" type="submit" value="Post" id="postbutton0" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                     &lt;div class="soapbloxError" id="errorcomment0" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                    
+                    &lt;a name="p0"&gt;&lt;/a&gt;                              
+                    &lt;div&gt;&lt;div id="postcomment0"&gt;&lt;/div&gt;&lt;/div&gt;
+                    
+                        
+                        
+                                                        
+                                                                                    
+                        
+                        
+                    
+
+
+
+
+
+    
+    
+    
+        
+            
+                
+                
+            
+                        
+                    
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+                &lt;a name='p119515'&gt;&lt;/a&gt;          
+                &lt;div class="commentLevel0"&gt;
+                    &lt;div class="commentBar"&gt;&lt;/div&gt;
+                    &lt;div&gt;
+                         
+
+                        &lt;a name='119515'&gt;&lt;/a&gt; 
+                                
+                        &lt;b&gt;
+                             
+                            
+                            wow that&#39;s subtle
+                        &lt;/b&gt; 
+                                
+                        
+                        
+                            
+                            
+                            	
+                            		
+                            	
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+
+	&lt;span id="rating119515"&gt;
+ (&lt;a href="/viewRating.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?rateCommentId=119515"&gt;4.00 / 1&lt;/a&gt;)
+        
+	&lt;/span&gt;        
+
+
+
+
+                            
+                         
+                        
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                            what are Redmond's chances and is there a link to contribute?&lt;br /&gt;
+                            
+                            &lt;hr width="50%" align="left" /&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;i&gt;by: &lt;a href="/user/tremayne"&gt;tremayne&lt;/a&gt;
+                            @ 
+                            &lt;a href="/showComment.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?commentId=119515"&gt;Wed Oct 22, 2008 at 11:10:01 AM CDT&lt;/a&gt;
+                         &lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;!-- RATINGS --&gt;
+                    &lt;div&gt;
+                        
+                                            
+                               
+                        
+                         &lt;!-- do reply link --&gt; 
+                        
+                        &lt;span id="rateLoad119515"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="commentLevel1" id="previewcomment119515" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle119515"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText119515"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input type="submit" value="Post" id="postbutton119515" onfocus="setButtonState('post')" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="errorcomment" id="errorcomment119515" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                               
+
+                &lt;div id="postcomment119515"&gt;
+                &lt;/div&gt;
+        
+        
+
+        
+        
+        &lt;!-- END MINIMAL COMMENT MODE --&gt;
+
+        
+        
+            
+                
+                
+                    
+                                    
+                       
+                                
+                
+            
+
+
+
+
+
+    
+    
+    
+        
+            
+                
+                
+            
+                        
+                    
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+                &lt;a name='p119518'&gt;&lt;/a&gt;          
+                &lt;div class="commentLevel1"&gt;
+                    &lt;div class="commentBar"&gt;&lt;/div&gt;
+                    &lt;div&gt;
+                         
+
+                        &lt;a name='119518'&gt;&lt;/a&gt; 
+                                
+                        &lt;b&gt;
+                             
+                            
+                            Here&#39;s the donate page
+                        &lt;/b&gt; 
+                                
+                        
+                        
+                            
+                            
+                            	
+                            		
+                            	
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+
+	&lt;span id="rating119518"&gt;
+ (&lt;a href="/viewRating.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?rateCommentId=119518"&gt;4.00 / 1&lt;/a&gt;)
+        
+	&lt;/span&gt;        
+
+
+
+
+                            
+                         
+                        
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                            Thanks for asking. Redmond's chances are good. Here's the donate.&lt;p&gt;&lt;a href="http://www.joelredmond.com/donate.html"&gt;http://www.joelredmond.com/don...&lt;/a&gt;&lt;br /&gt;
+                            
+                            &lt;hr width="50%" align="left" /&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;i&gt;by: &lt;a href="/user/GlennWSmith"&gt;GlennWSmith&lt;/a&gt;
+                            @ 
+                            &lt;a href="/showComment.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?commentId=119518"&gt;Wed Oct 22, 2008 at 11:35:17 AM CDT&lt;/a&gt;
+                         &lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;!-- RATINGS --&gt;
+                    &lt;div&gt;
+                        
+                        
+                        [
+                            
+                                &lt;a href="#119515"&gt;Parent&lt;/a&gt;
+                            
+                            
+                                   
+                            ]
+                         &lt;!-- do reply link --&gt; 
+                        
+                        &lt;span id="rateLoad119518"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="commentLevel2" id="previewcomment119518" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle119518"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText119518"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input type="submit" value="Post" id="postbutton119518" onfocus="setButtonState('post')" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="errorcomment" id="errorcomment119518" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                               
+
+                &lt;div id="postcomment119518"&gt;
+                &lt;/div&gt;
+        
+        
+
+        
+        
+        &lt;!-- END MINIMAL COMMENT MODE --&gt;
+
+        
+        
+        
+    
+
+
+    
+
+        
+        
+    
+
+
+    
+        
+            
+                
+                
+            
+                        
+                    
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+                &lt;a name='p119522'&gt;&lt;/a&gt;          
+                &lt;div class="commentLevel0"&gt;
+                    &lt;div class="commentBar"&gt;&lt;/div&gt;
+                    &lt;div&gt;
+                         
+
+                        &lt;a name='119522'&gt;&lt;/a&gt; 
+                                
+                        &lt;b&gt;
+                             
+                            
+                            A Naive Question
+                        &lt;/b&gt; 
+                                
+                        
+                        
+                            
+                            
+                            	
+                            		
+                            	
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+
+	&lt;span id="rating119522"&gt;
+ (&lt;a href="/viewRating.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?rateCommentId=119522"&gt;4.00 / 1&lt;/a&gt;)
+        
+	&lt;/span&gt;        
+
+
+
+
+                            
+                         
+                        
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                            Are all Republicans raciest or just most? &nbsp;&lt;p&gt;There are two die hard Republicans in our family and they clearly are racist. &nbsp;The also are very inwardly frighten people. &nbsp; And, yes they own guns.&lt;p&gt;With one if you bring up politics he leaves the table. &nbsp;The other one used the family e-mail list to send out his propaganda. &nbsp;Families are funny and I ain't blood. &nbsp;After the third e-mail I blasted him and sent my reply to everyone on the list. &nbsp;I got lots of private e-mails from family members thanking me. &nbsp;I also got lots of e-mails from his hater friends.&lt;p&gt;&lt;br /&gt;
+                            
+                            &lt;hr width="50%" align="left" /&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;i&gt;by: &lt;a href="/user/steve katz"&gt;steve katz&lt;/a&gt;
+                            @ 
+                            &lt;a href="/showComment.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?commentId=119522"&gt;Wed Oct 22, 2008 at 11:48:17 AM CDT&lt;/a&gt;
+                         &lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;!-- RATINGS --&gt;
+                    &lt;div&gt;
+                        
+                                            
+                               
+                        
+                         &lt;!-- do reply link --&gt; 
+                        
+                        &lt;span id="rateLoad119522"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="commentLevel1" id="previewcomment119522" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle119522"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText119522"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input type="submit" value="Post" id="postbutton119522" onfocus="setButtonState('post')" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="errorcomment" id="errorcomment119522" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                               
+
+                &lt;div id="postcomment119522"&gt;
+                &lt;/div&gt;
+        
+        
+
+        
+        
+        &lt;!-- END MINIMAL COMMENT MODE --&gt;
+
+        
+        
+            
+                
+                
+                    
+                                    
+                       
+                                
+                
+            
+
+
+
+
+
+    
+    
+    
+        
+            
+                
+                
+            
+                        
+                    
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+                &lt;a name='p119525'&gt;&lt;/a&gt;          
+                &lt;div class="commentLevel1"&gt;
+                    &lt;div class="commentBar"&gt;&lt;/div&gt;
+                    &lt;div&gt;
+                         
+
+                        &lt;a name='119525'&gt;&lt;/a&gt; 
+                                
+                        &lt;b&gt;
+                             
+                            
+                            No, not all
+                        &lt;/b&gt; 
+                                
+                        
+                        
+                            
+                            
+                            	
+                            		
+                            	
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+
+	&lt;span id="rating119525"&gt;
+ (&lt;a href="/viewRating.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?rateCommentId=119525"&gt;4.00 / 1&lt;/a&gt;)
+        
+	&lt;/span&gt;        
+
+
+
+
+                            
+                         
+                        
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                            It's true that in the South, post-Civil Rights and Voting Rights acts, racism fueled the rise of the Republican party. I count as racist someone who acts on their bigotry, not someone who still carries the worm. Many have overcome it. Some never had it.&lt;p&gt;Mail like this is aimed at overt racists. It's really GOTV mail, not persuasion mail.&lt;br /&gt;
+                            
+                            &lt;hr width="50%" align="left" /&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;i&gt;by: &lt;a href="/user/GlennWSmith"&gt;GlennWSmith&lt;/a&gt;
+                            @ 
+                            &lt;a href="/showComment.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?commentId=119525"&gt;Wed Oct 22, 2008 at 12:11:03 PM CDT&lt;/a&gt;
+                         &lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;!-- RATINGS --&gt;
+                    &lt;div&gt;
+                        
+                        
+                        [
+                            
+                                &lt;a href="#119522"&gt;Parent&lt;/a&gt;
+                            
+                            
+                                   
+                            ]
+                         &lt;!-- do reply link --&gt; 
+                        
+                        &lt;span id="rateLoad119525"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="commentLevel2" id="previewcomment119525" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle119525"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText119525"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input type="submit" value="Post" id="postbutton119525" onfocus="setButtonState('post')" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="errorcomment" id="errorcomment119525" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                               
+
+                &lt;div id="postcomment119525"&gt;
+                &lt;/div&gt;
+        
+        
+
+        
+        
+        &lt;!-- END MINIMAL COMMENT MODE --&gt;
+
+        
+        
+        
+    
+
+
+    
+
+        
+        
+    
+
+
+    
+        
+            
+                
+                
+            
+                        
+                    
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+                &lt;a name='p119527'&gt;&lt;/a&gt;          
+                &lt;div class="commentLevel0"&gt;
+                    &lt;div class="commentBar"&gt;&lt;/div&gt;
+                    &lt;div&gt;
+                         
+
+                        &lt;a name='119527'&gt;&lt;/a&gt; 
+                                
+                        &lt;b&gt;
+                             
+                            
+                            I&#39;d been hoping
+                        &lt;/b&gt; 
+                                
+                        
+                        
+                            
+                            
+                            	
+                            		
+                            	
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+
+	&lt;span id="rating119527"&gt;
+ (&lt;a href="/viewRating.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?rateCommentId=119527"&gt;0.00 / 0&lt;/a&gt;)
+        
+	&lt;/span&gt;        
+
+
+
+
+                            
+                         
+                        
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                            I'd been looking for a silver lining in the terrible collapse of home values and the dramatic effects of the crisis on the housing industry, frankly hoping to see Bob Perry go bankrupt like so many other builders and developers. But I guess I have to keep waiting.&lt;br /&gt;
+                            
+                            &lt;hr width="50%" align="left" /&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;i&gt;by: &lt;a href="/user/Woody"&gt;Woody&lt;/a&gt;
+                            @ 
+                            &lt;a href="/showComment.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD?commentId=119527"&gt;Wed Oct 22, 2008 at 12:31:43 PM CDT&lt;/a&gt;
+                         &lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;!-- RATINGS --&gt;
+                    &lt;div&gt;
+                        
+                                            
+                               
+                        
+                         &lt;!-- do reply link --&gt; 
+                        
+                        &lt;span id="rateLoad119527"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="commentLevel1" id="previewcomment119527" style="display: none;"&gt;
+                        &lt;div class="commentBar"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentTitle" id="previewTitle119527"&gt;&lt;/div&gt;
+                        &lt;div class="ajaxPreviewCommentText" id="previewCommentText119527"&gt;&lt;/div&gt;
+                        &lt;hr align="left" width="50%"&gt;
+                        &lt;div class="ajaxPreviewCommentAuthor"&gt;by: you @ soon&lt;/div&gt;
+                        &lt;div class="ajaxPreviewPostBar"&gt;&lt;p&gt;&lt;b&gt;To post this comment click here: &lt;input type="submit" value="Post" id="postbutton119527" onfocus="setButtonState('post')" onclick="setButtonState('post')"&gt;&lt;/b&gt;
+                        &lt;p&gt;Otherwise click cancel.&lt;/p&gt;
+                        &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="errorcomment" id="errorcomment119527" style="display: none;"&gt;&lt;li&gt;You must enter a subject for your comment&lt;/li&gt;&lt;/div&gt;                               
+
+                &lt;div id="postcomment119527"&gt;
+                &lt;/div&gt;
+        
+        
+
+        
+        
+        &lt;!-- END MINIMAL COMMENT MODE --&gt;
+
+        
+        
+        
+    
+
+
+    
+
+                    &lt;input type="hidden" name="commentId" /&gt;
+                    &lt;input type="hidden" name="replyParentCommentId" /&gt;                                                
+                    &lt;input type="hidden" name="submitType" /&gt;                        
+                    &lt;input type="hidden" name="replyDiaryId" /&gt;                                                
+                    &lt;input type="hidden" name="diaryId" /&gt; 
+                &lt;/form&gt;
+
+            
+        
+    
+
+
+
+
+    
+    
+        
+            
+                
+
+
+
+
+		 
+&lt;div class="titleBar"&gt;
+	&lt;a href="/diary/9293/ "&gt;
+        Race Boating: Swift Boat Backer Funds Racist Mail
+	&lt;/a&gt;
+
+	
+		
+		
+		
+            
+			
+    			|	
+	            &lt;b&gt;5&lt;/b&gt; comments 
+
+                                
+			
+
+            
+				
+		 
+	 
+&lt;/div&gt;
+
+            
+        
+    
+
+
+                                
+                                    
+                                
+                            &lt;/td&gt;
+                        
+                    
+
+                        
+                        
+                            &lt;td valign="top" class="RIGHT_SIDE"&gt;
+                                
+                                    
+                                        &lt;span class="rightii"&gt;&lt;a href="http://www.openleft.com/"&gt;&lt;b&gt;USER MENU&lt;/b&gt;&lt;/a&gt;&lt;/span&gt;
+
+
+
+
+
+
+
+
+
+
+
+&lt;div style="border-bottom: 1px dashed #EFE0E2;" class="smallText"&gt;
+                            
+&lt;table width="100%"&gt;
+	&lt;tr&gt;
+		&lt;td class="objectContent"&gt;
+
+ 
+				
+	
+			
+
+
+			
+&lt;ul class="sidebarlist"&gt;
+
+				
+				&lt;p&gt;&lt;b&gt;New here?&lt;/b&gt;&lt;br/&gt;
+&lt;a href="/join.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD"&gt;Make a New Account&lt;/a&gt;&lt;/p&gt;
+				
+&lt;p&gt;&lt;b&gt;Have an account? Log in!&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+				&lt;form name="logonForm" method="post" action="/logonSubmit.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD"&gt;	
+                    
+					Username: &lt;br /&gt;
+					&lt;input type="text" name="username" value=""&gt;&lt;br /&gt;
+					Password: &lt;br /&gt;
+					&lt;input type="password" name="password" value=""&gt;&lt;br /&gt;
+					&lt;input type="submit" value="Submit"&gt;
+				&lt;/form&gt;&lt;/p&gt;
+				&lt;p&gt;
+				&lt;a href="/emailPassword.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD"&gt;Forget your username or password?&lt;/a&gt;&lt;/p&gt;
+				
+			
+
+
+&lt;/ul&gt;
+
+&lt;p&gt;
+
+&lt;ul class="sidebarlist"&gt;
+&lt;li&gt;&lt;a href="https://secure.openleft.com/page/contribute/openleft"&gt;Support This Site&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://web.blogads.com/adspotsfolder/ba_adspotsfolder_revision_create_shortcut?persistent_uid=1c93ae3a2228fcc1b397b5795366e38f"&gt;Advertise Here&lt;/a&gt;&lt;/li&gt;
+&lt;!--&lt;li&gt;&lt;a href="#"&gt;Make Us Your Homepage&lt;/a&gt;&lt;/li&gt;--&gt;
+
+				
+
+			
+&lt;/ul&gt;&lt;/p&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+                                    
+                                        
+
+&lt;span class="rightii"&gt;&lt;i&gt;Open Left Campaigns&lt;/i&gt;&lt;/span&gt;
+&lt;p&gt;
+            &lt;ul class="sidebarlist smallText"&gt;
+             
+              &lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.actblue.com/page/bd2010"&gt;Better Democrats 2010&lt;/a&gt; &lt;/li&gt;
+
+ &lt;li style="padding-bottom:10px;"&gt; &lt;a href="http://www.openleft.com/tag.do?tag=Living+Liberally"&gt;Living Liberally&lt;/a&gt;&lt;/li&gt;
+              &lt;li style="padding-bottom:10px;"&gt; &lt;a href="http://www.openleft.com/tag.do?tag=net+neutrality"&gt;Net Neutrality&lt;/a&gt;&lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+               &lt;a href="http://www.openleft.com/tag.do?tag=The%20Progressive%20Revolution"&gt;The Progressive Revolution&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;
+               &lt;a href="http://www.openleft.com/tag/No%20On%201%20Maine"&gt;Protect Maine Equality&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag/whip%20count"&gt;Public Option Whip Count&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag/whip%20count"&gt;Senate Forecast 2010&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://therealspecter2010.com/real"&gt;Arlen Specter&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.actblue.com/page/olbd"&gt;Better Democrats 2008&lt;/a&gt; &lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag.do?tag=BlogPAC"&gt;BlogPac&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.actblue.com/page/bluemajority"&gt;Blue Majority&lt;/a&gt; &lt;/li&gt;
+
+
+              &lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://openleft.com/tag.do?tag=Bush+Dogs"&gt;Bush Dogs&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag.do?tag=Buy%20America"&gt;Buy America&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://openleft.com/tag.do?tag=MD-04"&gt;Donna Edwards for Congress&lt;/a&gt; &lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://openleft.com/tag.do?tag=MD-04"&gt;Get FISA Right&lt;/a&gt; &lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://www.openleft.com/tag.do?tag=House%20forecast"&gt;House Forecast 2008&lt;/a&gt; &lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag.do?tag=legislation%20project"&gt;Legislation Project&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;
+ &lt;a href="http://www.openleft.com/tag.do?tag=nomination+at+a+glance"&gt;Nomination At A Glance&lt;/a&gt;&lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;&lt;a href="http://www.openleft.com/tag.do?tag=residual+forces"&gt;No Residual Forces in Iraq&lt;/a&gt;&lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+ &lt;a href="http://www.openleft.com/tag.do?tag=personal%20paid%20media"&gt;Personal Paid Media&lt;/a&gt;&lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://www.openleft.com/tag.do?tag=Presidential%20Forecast"&gt;Presidential Forecast 2008&lt;/a&gt; &lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;
+ &lt;a href="http://www.openleft.com/tag.do?tag=Responsible%20plan"&gt;Responsible Plan to End the War&lt;/a&gt;&lt;/li&gt;
+              
+
+&lt;li style="padding-bottom:10px;"&gt;
+ &lt;a href="http://www.openleft.com/tag.do?tag=SEO"&gt;Searching for John McCain&lt;/a&gt;&lt;/li&gt;
+
+&lt;li style="padding-bottom:10px;"&gt;
+                &lt;a href="http://www.openleft.com/tag/Senate%202008"&gt;Senate Forecast 2008&lt;/a&gt; &lt;/li&gt;
+
+
+&lt;li style="padding-bottom:10px;"&gt;
+ &lt;a href="http://www.openleft.com/tag.do?tag=Use%20it%202008"&gt;Use It Or Lose It 2008&lt;/a&gt;&lt;/li&gt;
+
+            &lt;/ul&gt;
+            &lt;/div&gt;
+&lt;/div&gt;
+
+                                    
+                                        &lt;script language=JavaScript src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vj?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;pv="&gt;
+        </script>
+        <noscript>
+         <iframe frameborder="0" height="600" marginheight="0" marginwidth="0" noresize="" scrolling="No" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vh?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;pv=" width="160">
+          <a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/cc?z=csm">
+           <img border="0" height="600" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vc?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;abr=$imginiframe&amp;pv=" width="160"/>
+          </a>
+         </iframe>
+        </noscript>
+        <!-- search.jsp -->
+        <form action="/search.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD" method="post" name="searchForm">
+         <div class="smallText" style="border-bottom: 1px dashed #EFE0E2; border-top: 1px dashed #EFE0E2; padding-top:8px;">
+          <span class="rightii">
+           SEARCH
+          </span>
+          <p>
+           <select name="searchTypeId" style="width:70px;">
+            <option value="2">
+             Diaries
+            </option>
+            <option value="1">
+             Comments
+            </option>
+           </select>
+           <input name="searchWords" size="10" type="text"/>
+           <input type="submit" value="Search"/>
+          </p>
+          <p>
+           <a href="/search.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD">
+            Advanced Search
+           </a>
+          </p>
+         </div>
+        </form>
+       </div>
+      </td>
+      <td class="LEFT_SIDE" valign="top">
+       <div class="rightcol">
+        <div style="border-bottom: 1px dashed rgb(239, 224, 226);">
+         <span class="rightii">
+          <a href="http://www.openleft.com/viewQuickHits.do">
+           <b>
+            QUICK HITS
+           </b>
+          </a>
+          <a href="/quickHits.do?feed=rss">
+           <img border="0" height="12" src="/images/feed-icon.jpg;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD" width="12"/>
+          </a>
+         </span>
+         <ul class="sidebarlist smallText">
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17239">
+            Where are you going? What links have you got? Whats next? What's left?
+           </a>
+           (HousesofProgress) 48 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17238">
+            Nicholas Kristof: Mr. Mubarak's goons carrying wooden clubs with nails embedded in them
+           </a>
+           (HousesofProgress) 6 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17237">
+            Forget "Red" or "Blue" Virginia, How About "Brown" Virginia?
+           </a>
+           (lowkell) 3 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17236">
+            Amy Goodman interviews Noam Chomsky: Egypt now.
+           </a>
+           (HousesofProgress) 1 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17235">
+            An old man in tears of pride, chanting "Egyptians finally have worth &amp; dignity."" #Tahrir
+           </a>
+           (HousesofProgress) 0 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17234">
+            Mubarek's net worth estimated at $4070 billion
+           </a>
+           (jeffweinberg) 7 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17233">
+            How the Senate resolution on Egyptian democracy died.
+           </a>
+           (Emocrat) 10 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17232">
+            Kristoff tweets about the round-up of journalists Human rights workers
+           </a>
+           (HousesofProgress) 1 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17231">
+            tSenator Patrick Leahy: We Will Cut Off Aid If Mubarak Does Not Step Down
+           </a>
+           (HousesofProgress) 9 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17230">
+            The Daily Show with Kristen Schaal skewers the GOP's exclusion of only "rapish.".
+           </a>
+           (LibWingofLibWing) 3 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17229">
+            Wallace Shawn: Are You Smarter Than Thomas Jefferson?
+           </a>
+           (Paul Rosenberg) 6 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17228">
+            Gallup Helps Explain Egyptian/Tunisia Uprisings
+           </a>
+           (david mizner) 2 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17227">
+            Shell makes $2,208,480 (1.6m) an hour, [Clue on gas prices]
+           </a>
+           (HousesofProgress) 5 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17226">
+            Food costs at record levels, likely to go higher
+           </a>
+           (doubledown) 3 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17225">
+            More Teachers Being Replaced By Technology
+           </a>
+           (jeffbinnc) 9 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17224">
+            Speek to Tweet
+           </a>
+           (Mark Matson) 0 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17223">
+            Virginia Moves to Extend Autism Benefits to Families
+           </a>
+           (lowkell) 1 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17222">
+            Howard Dean shellacks Newt Gingerich on immigration
+           </a>
+           (Jonathan Smucker) 1 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17221">
+            Aljazeera English has NOT been taken offline...
+           </a>
+           (Paul Rosenberg) 6 comment(s)
+          </li>
+          <li style="padding-bottom: 10px;">
+           <a href="/viewQuickHits.do#17220">
+            Israeli Politics In Lockstep with McCarthyism
+           </a>
+           (shergald) 3 comment(s)
+          </li>
+          <li>
+           (
+           <a href="/viewQuickHits.do;jsessionid=9A82E7269ED107090D5A5877DFDBBFDD">
+            view all recent
+           </a>
+           )
+          </li>
+         </ul>
+         <br/>
+        </div>
+       </div>
+       <img src="http://openleft.com/upload/DFA%20button.JPG"/>
+       <span class="rightii">
+        STATE BLOGS
+       </span>
+       <ul class="sidebarlist">
+        <a href="http://www.leftinalabama.com/" title="">
+         Alabama
+        </a>
+        <br/>
+        <a href="http://www.divasblueoasis.com/" title="">
+         Alaska
+        </a>
+        <br/>
+        <a href="http://www.aznetroots.com/" title="">
+         Arizona
+        </a>
+        <br/>
+        <a href="http://bluearkansasblog.com/" title="">
+         Arkansas
+        </a>
+        <br/>
+        <a href="http://www.calitics.com/" title="">
+         California
+        </a>
+        <br/>
+        <a href="http://www.squarestate.net/" title="">
+         Colorado
+        </a>
+        <br/>
+        <a href="http://www.myleftnutmeg.com/" title="">
+         Connecticut
+        </a>
+        <br/>
+        <a href="http://www.delawareliberal.net/" title="">
+         Delaware
+        </a>
+        <br/>
+        <a href="http://www.flapolitics.com/" title="">
+         Florida
+        </a>
+        <br/>
+        <a href="http://www.tondeestavern.com/" title="">
+         Georgia
+        </a>
+        <br/>
+        <a href="http://www.43rdstateblues.com/" title="">
+         Idaho
+        </a>
+        <br/>
+        <a href="http://www.prairiestateblue.com/" title="">
+         Illinois
+        </a>
+        <br/>
+        <a href="http://www.blueindiana.net/" title="">
+         Indiana
+        </a>
+        <br/>
+        <a href="http://www.bleedingheartland.com/" title="">
+         Iowa
+        </a>
+        <br/>
+        <a href="http://forwardkansas.com/" title="">
+         Kansas
+        </a>
+        <br/>
+        <a href="http://www.kansasfreepress.com/" title="">
+         Kansas
+        </a>
+        <br/>
+        <a href="http://www.dailykingfish.com/" title="">
+         Louisiana
+        </a>
+        <br/>
+        <a href="http://www.dirigoblue.com/" title="">
+         Maine
+        </a>
+        <br/>
+        <a href="http://www.freestatepolitics.us/" title="">
+         Maryland
+        </a>
+        <br/>
+        <a href="http://www.bluemassgroup.com" title="">
+         Massachusetts
+        </a>
+        <br/>
+        <a href="http://www.michiganliberal.com" title="ML">
+         Michigan
+        </a>
+        <br/>
+        <a href="http://www.mnprogressiveproject.com/" title="">
+         Minnesota
+        </a>
+        <br/>
+        <a href="http://blog.showmeprogress.com/" title="">
+         Missouri
+        </a>
+        <br/>
+        <a href="http://www.firedupmissouri.com/" title="">
+         Missouri
+        </a>
+        <br/>
+        <a href="http://www.leftinthewest.com/" title="">
+         Montana
+        </a>
+        <br/>
+        <a href="http://www.newnebraska.net/" title="">
+         Nebraska
+        </a>
+        <br/>
+        <a href="http://nenetroots.com/" title="">
+         Nebraska
+        </a>
+        <br/>
+        <a href="http://www.bluehampshire.com" title="">
+         New Hampshire
+        </a>
+        <br/>
+        <a href="http://www.bluejersey.com" title="">
+         New Jersey
+        </a>
+        <br/>
+        <a href="http://www.nmfbihop.com/" title="">
+         New Mexico
+        </a>
+        <br/>
+        <a href="http://www.dailygotham.com/" title="">
+         New York
+        </a>
+        <br/>
+        <a href="http://www.thealbanyproject.com/" title="">
+         New York
+        </a>
+        <br/>
+        <a href="http://www.bluenc.com/" title="">
+         North Carolina
+        </a>
+        <br/>
+        <a href="http://www.northdecoder.com/" title="">
+         North Dakota
+        </a>
+        <br/>
+        <a href="http://www.buckeyestateblog.com/" title="">
+         Ohio
+        </a>
+        <br/>
+        <a href="http://www.ohiodailyblog.com/" title="">
+         Ohio
+        </a>
+        <br/>
+        <a href="http://www.blueoklahoma.org/" title="">
+         Oklahoma
+        </a>
+        <br/>
+        <a href="http://www.loadedorygun.net/" title="">
+         Oregon
+        </a>
+        <br/>
+        <a href="http://www.pennsylvaniaprogressive.com/" title="">
+         Pennsylvania
+        </a>
+        <br/>
+        <a href="http://www.rifuture.org/" title="">
+         Rhode Island
+        </a>
+        <br/>
+        <a href="http://www.indigojournal.com/" title="">
+         South Carolina
+        </a>
+        <br/>
+        <a href="http://www.tennviews.com/" title="">
+         Tennessee
+        </a>
+        <br/>
+        <a href="http://www.burntorangereport.com/" title="">
+         Texas
+        </a>
+        <br/>
+        <a href="http://www.texaskaos.com/" title="">
+         Texas
+        </a>
+        <br/>
+        <a href="http://www.wasatchwatcher.com/" title="">
+         Utah
+        </a>
+        <br/>
+        <a href="http://www.greenmountaindaily.com/" title="">
+         Vermont
+        </a>
+        <br/>
+        <a href="http://www.bluecommonwealth.com/" title="">
+         Virginia
+        </a>
+        <br/>
+        <a href="http://www.washblog.com/" title="">
+         Washington
+        </a>
+        <br/>
+        <a href="http://www.wvablue.com/" title="">
+         West Virginia
+        </a>
+        <br/>
+        <a href="http://www.uppitywis.org/" title="">
+         Wisconsin
+        </a>
+       </ul>
+      </td>
+     </tr>
+    </table>
+    <div align="center" class="footer">
+     <p style="clear:both">
+      <a href="/">
+       Home
+      </a>
+      |
+      <a href="/rss/rss2.xml">
+       RSS/XML Feed
+      </a>
+      |
+      <a href="http://www.openleft.com/join.do">
+       Register
+      </a>
+      |
+      <a href="/showDiary.do?diaryId=21">
+       Contact
+      </a>
+     </p>
+     <div style="float:left">
+       OpenLeft 2007-2010, Powered by
+      <a href="http://www.soapblox.net">
+       SoapBlox
+      </a>
+     </div>
+     <!-- Site Meter -->
+     <script src="
+http://s38.sitemeter.com/js/counter.js?site=s38photar" type="text/javascript">
+     </script>
+     <noscript>
+      <a href="http://s38.sitemeter.com/stats.asp?site=s38photar" target="_top">
+       <img alt="Site
+Meter" border="0" src="http://s38.sitemeter.com/meter.asp?site=s38photar"/>
+      </a>
+     </noscript>
+     <!-- Copyright (c)2006 Site Meter -->
+     <div style="float:right; padding-top:34px;">
+      <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+      </script>
+      <script type="text/javascript">
+       _uacct = "UA-2203653-1";
+urchinTracker();
+      </script>
+     </div>
+    </div>
+    <!-- Contenture.com Micropayments -->
+    <script type="text/javascript">
+     var ctrdomain = location.protocol == "https:" ? "https://secure." : "http://t.";
+document.write(unescape("%3Cscript src='" + ctrdomain + "contenture.com/t.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <a href="http://contenture.com/" title="micropayments microtransactions freemium">
+     <script type="text/javascript">
+      if( typeof( _ctr ) != "object" ) {
+    var ctr_blocked = 1;
+    var _ctr={init:function(){},is_user:function(){return false;},is_authorized:function(){return false;},priority_content:function(){},filter:function(){},hide_ads:function(){}};
+  }
+  &lt;!-- All customizations MUST go between this line and the "init" line below. --&gt;
+  
+  _ctr.init( '34249', 'cdb1' );
+     </script>
+    </a>
+    <!-- End Contenture -->
+    <table width="100%">
+     <tr>
+      <td align="right">
+       <!-- Start of StatCounter Code -->
+       <script language="javascript" type="text/javascript">
+        var sc_project=1767529; 
+var sc_invisible=1; 
+var sc_partition=16; 
+var sc_security="859e170d";
+       </script>
+       <script language="javascript" src="http://www.statcounter.com/counter/counter.js" type="text/javascript">
+       </script>
+       <noscript>
+        <a href="http://www.statcounter.com/" target="_blank">
+         <img alt="free hit counter javascript" border="0" src="http://c17.statcounter.com/counter.php?sc_project=1767529&amp;java=0&amp;security=859e170d&amp;invisible=1"/>
+        </a>
+       </noscript>
+       <!-- End of StatCounter Code -->
+       Powered by:
+       <a href="http://www.soapblox.net">
+        SoapBlox
+       </a>
+      </td>
+     </tr>
+    </table>
+   </div>
+  </center>
+  <div id="socialPopup" style="display: none; z-index: 1000;">
+   <table cellpadding="5" cellspacing="0">
+    <tr valign="top">
+     <td>
+      <a class="more_delicious" href="javascript:void(0);" onclick="javascript:more_delicious();">
+      </a>
+     </td>
+     <td>
+      <a class="more_reddit" href="javascript:void(0)" onclick="javascript:more_reddit();">
+      </a>
+     </td>
+    </tr>
+    <tr valign="top">
+     <td>
+      <a class="more_digg" href="javascript:void(0);" onclick="javascript:more_digg();">
+      </a>
+     </td>
+     <td>
+      <a class="more_furl" href="javascript:void(0);" onclick="javascript:more_furl();">
+      </a>
+     </td>
+    </tr>
+    <tr valign="top">
+     <td colspan="2">
+      <a class="more_stumbleupon" href="javascript:void(0);" onclick="javascript:more_stumbleupon();">
+      </a>
+     </td>
+    </tr>
+   </table>
+  </div>
+  <script src="http://connect.facebook.net/en_US/all.js#appId=272790849411337&amp;xfbml=1" type="text/javascript">
+  </script>
+  <script src="http://platform.linkedin.com/in.js" type="text/javascript">
+  </script>
+  <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+  </script>
+  <script src="/javascript/ga_social_tracking.js" type="text/javascript">
+  </script>
+  <script>
+   var local_url;
+
+    jQuery(document).ready(function () {
+        jQuery(".google iframe").width('62px');
+        
+        _ga.trackSocial(null, 't1');
+        
+        
+        _ga.trackSocial(null, 't2');
+        
+
+
+        if (/chrome/.test(navigator.userAgent.toLowerCase())) {
+            jQuery('iframe').each(function() {
+                var url = jQuery(this).attr("src");
+                var result = url.search(/youtube/i);
+                if (result != -1) {
+                    result = url.indexOf('wmode=');
+                    if (result == -1) {
+                        result = url.indexOf('?');
+                        if (result != -1) {
+                            jQuery(this).attr("src", url + "&amp;wmode=transparent");
+                        } else {
+                            jQuery(this).attr("src", url + "?wmode=transparent");
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    function showSocialPopup(t, event, url) {
+        local_url = url;
+        t.after(jQuery("#socialPopup"));
+        jQuery("#socialPopup").show();
+        if (jQuery.browser.msie) {
+            jQuery("#socialPopup").css("right", "-62px");
+            jQuery("#socialPopup").bgiframe();
+        }
+        event.cancelBubble = true;
+        if (event.stopPropagation) event.stopPropagation();
+        return false;
+    }
+
+    jQuery(document).click(
+            function () {
+                jQuery("#socialPopup").hide();
+            }
+    );
+
+    function more_delicious() {
+        track_ga('delicious', 'share', encodeURIComponent(local_url));
+        window.open('http://www.delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url=' + encodeURIComponent(local_url) + '&amp;title=' + encodeURIComponent(document.title), 'delicious', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_reddit() {
+        track_ga('reddit', 'share', encodeURIComponent(local_url));
+        window.open('http://ru.reddit.com/submit?url=' + encodeURIComponent(local_url), 'reddit', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_digg() {
+        track_ga('digg', 'share', encodeURIComponent(local_url));
+        window.open('http://digg.com/submit?url=' + encodeURIComponent(local_url), 'digg', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_furl() {
+        track_ga('furl', 'share', encodeURIComponent(local_url));
+        window.open('http://www.furl.net/storeIt.jsp?u=' + encodeURIComponent(local_url), 'furl', 'toolbar=no');
+        return false;
+    }
+
+    function more_stumbleupon() {
+        window.open('http://www.stumbleupon.com/submit?url=' + encodeURIComponent(local_url), 'stumbleupon', 'toolbar=no');
+        return false;
+    }
+  </script>
+ </body>
+</html>

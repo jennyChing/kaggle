@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en" prefix="fb: http://www.facebook.com/2008/fbml, og: http://ogp.me/ns#">
+ <head>
+  <title>
+   Scientific Bug Hunting in the Cloud: An Unexpected CEO AdventureStephen Wolfram Blog
+  </title>
+  <meta charset="utf-8"/>
+  <meta content="To help perfect the Wolfram Cloud, Stephen Wolfram jumped in to debug a speed issue. Wolfram Language proved vital for analyzing, visualizing, and organizing the related data." name="Description"/>
+  <script src="/common/javascript/jquery/core/1.7.1/jquery.js" type="text/javascript">
+  </script>
+  <script src="/wp-content/themes/sw-v2/sw.js" type="text/javascript">
+  </script>
+  <link href="/wp-content/themes/sw-v2/style.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/common/templates/www.stephenwolfram.com/css/main-styles.css" rel="stylesheet"/>
+  <link href="http://blog.stephenwolfram.com/feed/" rel="alternate" title="Stephen Wolfram Blog RSS Feed" type="application/rss+xml"/>
+  <link href="http://blog.stephenwolfram.com/feed/atom/" rel="alternate" title="Stephen Wolfram Blog Atom Feed" type="application/atom+xml"/>
+  <link href="http://blog.stephenwolfram.com/xmlrpc.php" rel="pingback"/>
+  <script src="http://wac.36F4.edgecastcdn.net/0036F4/small/blogsw/js/menu.js" type="text/javascript">
+  </script>
+  <link href="/common/javascript/jquery/ui/1.10.2/themes/base/jquery.ui.all.css" rel="stylesheet"/>
+  <link href="/common/javascript/jquery/plugins/colorbox/colorbox.css" rel="stylesheet"/>
+  <script src="/common/javascript/jquery/ui/1.10.2/ui/jquery.ui.core.js">
+   &lt;/script&gt;
+&lt;script src="/common/javascript/jquery/ui/1.10.2/ui/jquery.ui.widget.js"&gt;
+  </script>
+  <script src="/common/javascript/jquery/ui/1.10.2/ui/jquery.ui.mouse.js">
+  </script>
+  <script src="/common/javascript/jquery/ui/1.10.2/ui/jquery.ui.slider.js">
+  </script>
+  <script src="/common/javascript/jquery/plugins/colorbox/jquery.colorbox.js">
+  </script>
+  <link href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/feed/" rel="alternate" title="Stephen Wolfram Blog  Scientific Bug Hunting in the Cloud: An Unexpected CEO Adventure Comments Feed" type="application/rss+xml"/>
+  <script src="http://blog.stephenwolfram.com/wp-includes/js/comment-reply.js?ver=3.4.2" type="text/javascript">
+  </script>
+  <script src="http://blog.stephenwolfram.com/wp-content/plugins/wolfram-cdf-plugin/cdfplugin.js?ver=2.0" type="text/javascript">
+  </script>
+  <link href="http://blog.stephenwolfram.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://blog.stephenwolfram.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://blog.stephenwolfram.com/2015/03/frontiers-of-computational-thinking-a-sxsw-report/" rel="prev" title="Frontiers of Computational Thinking: A SXSW Report"/>
+  <link href="http://blog.stephenwolfram.com/2015/04/instant-apps-for-the-apple-watch-with-the-wolfram-language/" rel="next" title="Instant Apps for the Apple Watch with the Wolfram Language"/>
+  <link href="http://blog.stephenwolfram.com/?p=9634" rel="shortlink"/>
+  <link href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/" rel="canonical"/>
+  <!-- WP-SWFObject 2.3 by unijimpe -->
+  <script src="/wp-content/plugins/wp-swfobject/2.0/swfobject.js" type="text/javascript">
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+     ga('create', 'UA-33987538-1', 'blog.stephenwolfram.com');
+     ga('send', 'pageview');
+  </script>
+ </head>
+ <body id="blog">
+  <div id="wrapper">
+   <header id="header">
+    <div id="logo">
+     <a href="/">
+      Stephen Wolfram
+     </a>
+    </div>
+    <nav id="nav">
+     <ul>
+      <li class="about">
+       <a href="http://www.stephenwolfram.com/about/">
+        ABOUT
+       </a>
+      </li>
+      <li class="blog">
+       <a href="http://blog.stephenwolfram.com">
+        BLOG
+       </a>
+      </li>
+      <li class="publications">
+       <a href="http://www.stephenwolfram.com/publications/">
+        PUBLICATIONS
+       </a>
+      </li>
+      <li class="media">
+       <a href="http://www.stephenwolfram.com/media/">
+        MEDIA
+       </a>
+      </li>
+      <li class="scrapbook">
+       <a href="http://www.stephenwolfram.com/scrapbook/page1/">
+        SCRAPBOOK
+       </a>
+      </li>
+      <li class="contact">
+       <a href="http://www.stephenwolfram.com/contact/">
+        CONTACT
+       </a>
+      </li>
+     </ul>
+    </nav>
+    <noscript>
+     <div id="noscript">
+      This page requires that JavaScript be enabled in your browser.
+      <a href="http://www.wolfram.com/javascript.html">
+       Learn how 
+      </a>
+     </div>
+    </noscript>
+   </header>
+   <div id="content">
+    <script type="text/javascript">
+     $(document).ready(function() {
+$("#join-small").addClass('join-small-js');
+$("#exit-button").addClass('exit-button-js');
+$("#respond").addClass('respond-js');
+});
+    </script>
+    <h1 class="blog-post-title">
+     Scientific Bug Hunting in the Cloud: An Unexpected CEO Adventure
+    </h1>
+    <time class="date" datetime="2015-04-16">
+     April 16, 2015
+    </time>
+    <div class="post_content">
+     <h2>
+      The Wolfram Cloud Needs to Be Perfect
+     </h2>
+     <p>
+      The
+      <a href="http://www.wolfram.com/cloud/">
+       Wolfram Cloud
+      </a>
+      is coming out of beta soon (yay!), and right now Im spending much of my time working to make it as good as possible (and, by the way, its getting to be really great!). Mostly I concentrate on defining high-level function and strategy. But I like to understand things at every level, and as a CEO, ones ultimately responsible for everything. And at the beginning of March I found myself diving deep into something I never expected
+     </p>
+     <p>
+      Heres the story. As a serious production system that lots of people will use to do things like run businesses, the Wolfram Cloud should be as fast as possible. Our metrics were saying that typical speeds were good, but subjectively when I used it something felt wrong. Sometimes it was plenty fast, but sometimes it seemed way too slow.
+     </p>
+     <p>
+      Weve got excellent software engineers, but months were going by, and things didnt seem to be changing. Meanwhile, wed just released the
+      <a href="http://blog.stephenwolfram.com/2015/03/the-wolfram-data-drop-is-live">
+       Wolfram Data Drop
+      </a>
+      . So I thought, why dont I just run some tests myself, maybe collecting data in our nice new Wolfram Data Drop?
+     </p>
+     <p>
+      A great thing about the
+      <a href="http://www.wolfram.com/language/">
+       Wolfram Language
+      </a>
+      is how friendly it is for busy people: even if you only have time to dash off
+      <a href="http://blog.wolfram.com/2014/09/18/introducing-tweet-a-program/">
+       a few lines of code
+      </a>
+      , you can get real things done. And in this case, I only had to run three lines of code to find a problem.
+     </p>
+     <p>
+      First, I
+      <a href="http://reference.wolfram.com/language/guide/CreatingAnInstantAPI.html">
+       deployed a web API
+      </a>
+      for a trivial Wolfram Language program to the Wolfram Cloud:
+     </p>
+     <p>
+      <img alt="In[1]:= CloudDeploy[APIFunction[{}, 1 &amp;]]" class="alignnone size-full wp-image-9652" height="61" src="http://blog.stephenwolfram.com/data/uploads/2015/04/cloud-bug-hunting-in1.png" title="In[1]:= CloudDeploy[APIFunction[{}, 1 &amp;]]" width="587"/>
+      <span id="more-9634">
+      </span>
+     </p>
+     <p>
+      Then I called the API 50 times, measuring how long each call took (
+      <a href="http://reference.wolfram.com/language/tutorial/UsingPreviousResults.html">
+       %
+      </a>
+      here stands for the previous result):
+     </p>
+     <p>
+      <img alt="In[2]:= Table[First[AbsoluteTiming[URLExecute[%]]], {50}]" class="alignnone size-full wp-image-9654" height="149" src="http://blog.stephenwolfram.com/data/uploads/2015/04/cloud-bug-hunting-in2.png" title="In[2]:= Table[First[AbsoluteTiming[URLExecute[%]]], {50}]" width="620"/>
+     </p>
+     <p>
+      Then I plotted the sequence of times for the calls:
+     </p>
+     <p>
+      <img alt="In[3]:= ListLinePlot[%]" class="alignnone size-full wp-image-9656" height="252" src="http://blog.stephenwolfram.com/data/uploads/2015/04/cloud-bug-hunting-in3.png" title="In[3]:= ListLinePlot[%]" width="620"/>
+     </p>
+     <p>
+      And immediately there seemed to be something crazy going on. Sometimes the time for each call was
+      <a href="http://www.wolframalpha.com/input/?i=220 ms">
+       220 ms
+      </a>
+      or so, but often it was
+      <a href="http://www.wolframalpha.com/input/?i=900 ms">
+       900 ms
+      </a>
+      , or even twice that long. And the craziest thing was that the times seemed to be quantized!
+     </p>
+     <p>
+      I made a histogram:
+     </p>
+     <p>
+      <img alt="In[4]:= Histogram[%%, 40]" class="alignnone size-full wp-image-9658" height="251" src="http://blog.stephenwolfram.com/data/uploads/2015/04/cloud-bug-hunting-in4.png" title="In[4]:= Histogram[%%, 40]" width="563"/>
+     </p>
+     <p>
+      And sure enough, there were a few fast calls on the left, then a second peak of slow calls, and a third outcropping of very slow calls. It was weird!
+     </p>
+     <p>
+      I wondered whether the times were always like this. So I set up a periodic
+      <a href="http://reference.wolfram.com/language/guide/BackgroundAndScheduledTasks.html">
+       scheduled task
+      </a>
+      to do a burst of API calls every few minutes, and put their times in the Wolfram Data Drop. I left this running overnight and when I came back the next morning, this is what I saw:
+     </p>
+     <p>
+      <img alt="Graph of API calls, showing strange, large-scale structure" class="alignnone size-full wp-image-9660" height="219" src="http://blog.stephenwolfram.com/data/uploads/2015/04/api-calls-cloud-bug-hunting.png" title="Graph of API calls, showing strange, large-scale structure" width="528"/>
+     </p>
+     <p>
+      Even weirder! Why the large-scale structure? I could imagine that, for example, a particular node in the cluster might gradually slow down (not that it should), but why would it then slowly recover?
+     </p>
+     <p>
+      My first thought was that perhaps I was seeing network issues, given that I was calling the API on a test cloud server more than 1000 miles away. So I looked at ping times. But apart from a couple of weird spikes (hey, its the internet!), the times were very stable.
+     </p>
+     <p>
+      <img alt="Ping times" class="alignnone size-full wp-image-9662" height="217" src="http://blog.stephenwolfram.com/data/uploads/2015/04/ping-times-cloud-bug-hunting.png" title="Ping times" width="506"/>
+     </p>
+     <p>
+     </p>
+     <h2>
+      Somethings Wrong inside the Servers
+     </h2>
+     <p>
+      OK, so it must be something on the servers themselves. Theres a lot of new technology in the Wolfram Cloud, but most of it is pure Wolfram Language code, which is easy to test. But theres also generic modern server infrastructure below the Wolfram Language layer. Much of this is fundamentally the same as what
+      <a href="http://www.wolframalpha.com/">
+       Wolfram|Alpha
+      </a>
+      has successfully used for
+      <a href="http://blog.stephenwolfram.com/2009/05/wolframalpha-is-launching-made-possible-by-mathematica/">
+       half a dozen years
+      </a>
+      to serve billions of results, and what
+      <a href="http://www.wolfram.com/products/webmathematica/">
+       web
+       <em>
+        Mathematica
+       </em>
+      </a>
+      started using even nearly a decade earlier. But being a more demanding computational system, the Wolfram Cloud is set up slightly differently.
+     </p>
+     <p>
+      And my first suspicion was that this different setup might be causing something to go wrong inside the webserver layer. Eventually I hope well have pure Wolfram Language infrastructure all the way down, but for now were using a webserver system called Tomcat thats based on Java. And at first I thought that perhaps the slowdowns might be Java garbage collection. Profiling showed that there were indeed some stop the world garbage-collection events triggered by Tomcat, but they were rare, and were taking only milliseconds, not hundreds of milliseconds. So they werent the explanation.
+     </p>
+     <p>
+      By now, though, I was hooked on finding out what the problem was. I hadnt been this deep in the trenches of system debugging for a very long time. It felt a lot like doing experimental science. And as in experimental science, its always important to simplify what ones studying. So I cut out most of the network by operating cloud to cloud: calling the API from within the same cluster. Then I cut out the load balancer, that dispatches requests to particular nodes in a cluster, by locking my requests to a single node (which, by the way, external users cant do unless they have a
+      <a href="http://www.wolfram.com/private-cloud/">
+       Private Cloud
+      </a>
+      ). But the slowdowns stayed.
+     </p>
+     <p>
+      So then I started collecting more-detailed data. My first step was to make the API return the absolute times when it started and finished executing Wolfram Language code, and compare those to absolute times in the wrapper code that called the API. Heres what I saw:
+     </p>
+     <p>
+      <img alt="The blue line shows the API-call times from before the Wolfram Language code was run; the gold line, after." class="alignnone size-full wp-image-9664" height="218" src="http://blog.stephenwolfram.com/data/uploads/2015/04/api-call-times-around-wolfram-language-code-cloud-bug-hunting.png" title="The blue line shows the API-call times from before the Wolfram Language code was run; the gold line, after." width="511"/>
+     </p>
+     <p>
+      The blue line shows times before the Wolfram Language code is run; the gold line after. I collected this data in a period when the system as a whole was behaving pretty badly. And what I saw was lots of dramatic slowdowns in the before timesand just a few quantized slowdowns in the after times.
+     </p>
+     <p>
+      Once again, this was pretty weird. It didnt seem like the slowdowns were specifically associated with either before or after. Instead, it looked more as if something was
+      <a href="http://www.wolframscience.com/nksonline/section-7.3">
+       randomly hitting the system
+      </a>
+      from the outside.
+     </p>
+     <p>
+      One confusing feature was that each node of the cluster contained (in this case) 8 cores, with each core running a different instance of the
+      <a href="http://www.wolfram.com/engine/">
+       Wolfram Engine
+      </a>
+      . The Wolfram Engine is nice and stable, so each of these instances was running for hours to days between restarts. But I wondered if perhaps some instances might be developing problems along the way. So I instrumented the API to look at
+      <a href="http://reference.wolfram.com/language/ref/$ProcessID.html">
+       process IDs
+      </a>
+      and
+      <a href="http://reference.wolfram.com/language/ref/TimeUsed.html">
+       process times
+      </a>
+      , and then for example plotted total process time against components of the API call time:
+     </p>
+     <p>
+      <img alt="Total process time plotted against components of the API call time" class="alignnone size-full wp-image-9666" height="212" src="http://blog.stephenwolfram.com/data/uploads/2015/04/total-process-times-and-api-call-component-times-cloud-bug-hunting.png" title="Total process time plotted against components of the API call time" width="516"/>
+     </p>
+     <p>
+      And indeed there seemed to be some tendency for younger processes to run API calls faster, but (particularly noting the suppressed zero on the
+      <em>
+       x
+      </em>
+      axis) the effect wasnt dramatic.
+     </p>
+     <p>
+     </p>
+     <h2>
+      Whats Eating the CPU?
+     </h2>
+     <p>
+      I started to wonder about other Wolfram Cloud services running on the same machine. It didnt seem to make sense that these would lead to the kind of quantized slowdowns we were seeing, but in the interest of simplifying the system I wanted to get rid of them. At first we isolated a node on the production cluster. And then I got my very own
+      <a href="http://www.wolfram.com/private-cloud/">
+       Wolfram Private Cloud
+      </a>
+      set up. Still the slowdowns were there. Though, confusingly, at different times and on different machines, their characteristics seemed to be somewhat different.
+     </p>
+     <p>
+      On the Private Cloud I could just log in to the raw Linux system and start looking around. The first thing I did was to
+      <a href="http://reference.wolfram.com/language/guide/DirectControlOfExternalProcesses.html">
+       read the results
+      </a>
+      from the top and ps axl Unix utilities into the Wolfram Language so I could analyze them. And one thing that was immediately obvious was that lots of system time was being used: the Linux kernel was keeping very busy with something. And in fact, it seemed like the slowdowns might not be coming from user code at all; they might be coming from something happening in the kernel of the operating system.
+     </p>
+     <p>
+      So that made me want to trace system calls. I hadnt done anything like this for nearly 25 years, and my experience in the past had been that one could get lots of data, but it was hard to interpret. Now, though, I had the Wolfram Language.
+     </p>
+     <p>
+      Running the Linux strace utility while doing a few seconds of API calls gave 28,221,878 lines of output. But it took just a couple of lines of Wolfram Language code to knit together start and end times of particular system calls, and to start generating histograms of system-call durations. Doing this for just a few system calls gave me this:
+     </p>
+     <p>
+      <img alt="System-call durations--note the clustering..." class="alignnone size-full wp-image-9668" height="214" src="http://blog.stephenwolfram.com/data/uploads/2015/04/system-call-durations-cloud-bug-hunting.png" title="System-call durations--note the clustering..." width="528"/>
+     </p>
+     <p>
+      Interestingly, this showed evidence of discrete peaks. And when I looked at the system calls in these peaks they all seemed to be futex callspart of the Linux thread synchronization system. So then I picked out only futex calls, and, sure enough, saw sharp timing peaksat 250 ms, 500 ms and 1s:
+     </p>
+     <p>
+      <img alt="System-call durations for just the futex calls--showing sharp timing peaks" class="alignnone size-full wp-image-9670" height="138" src="http://blog.stephenwolfram.com/data/uploads/2015/04/futex-system-call-durations-cloud-bug-hunting.png" title="System-call durations for just the futex calls--showing sharp timing peaks" width="620"/>
+     </p>
+     <p>
+      But were these really a problem? Futex calls are essentially just sleeps; they dont burn processor time. And actually its pretty normal to see calls like this that are waiting for I/O to complete and so on. So to me the most interesting observation was actually that there werent other system calls that were taking hundreds of milliseconds.
+     </p>
+     <p>
+     </p>
+     <h2>
+      The OS Is Freezing!
+     </h2>
+     <p>
+      So what was going on? I started looking at what was happening on different cores of each node. Now, Tomcat and other parts of our infrastructure stack are all nicely multithreaded. Yet it seemed that whatever was causing the slowdown was freezing all the cores, even though they were running different threads. And the only thing that could do that is the operating system kernel.
+     </p>
+     <p>
+      But what would make a Linux kernel freeze like that? I wondered about the scheduler. I couldnt really see why our situation would lead to craziness in a scheduler. But we looked at the scheduler anyway, and tried changing a bunch of settings. No effect.
+     </p>
+     <p>
+      Then I had a more bizarre thought. The instances of the Wolfram Cloud I was using were running in virtual machines. What if the slowdown came from outside The Matrix? I asked for a version of the Wolfram Cloud running on bare metal, with no VM. But before that was configured, I found a utility to measure the steal time taken by the VM itselfand it was negligible.
+     </p>
+     <p>
+      By this point, Id been spending an hour or two each day for several days on all of this. And it was time for me to leave for an intense trip to
+      <a href="http://blog.stephenwolfram.com/2015/03/frontiers-of-computational-thinking-a-sxsw-report/">
+       SXSW
+      </a>
+      . Still, people in our cloud-software engineering team were revved up, and I left the problem in their capable hands.
+     </p>
+     <p>
+      By the time my flight arrived there was already another interesting piece of data. Wed divided each API call into 15 substeps. Then one of our physics-PhD engineers had compared the probability for a slowdown in a particular substep (on the left) to the median time spent in that substep (on the right):
+     </p>
+     <p>
+      <img alt="Bars on the left show the probability for a slowdown in particular substeps; bars on the right show the median time spent in each of those substeps" class="alignnone size-full wp-image-9672" height="278" src="http://blog.stephenwolfram.com/data/uploads/2015/04/slowdown-probabilities-and-median-time-spent-cloud-bug-hunting.png" title="Bars on the left show the probability for a slowdown in particular substeps; bars on the right show the median time spent in each of those substeps" width="496"/>
+     </p>
+     <p>
+      With one exception (which had a known cause), there was a good correlation. It really looked as if the Linux kernel (and everything running under it) was being hit by something at completely random times, causing a slowdown event if it happened to coincide with the running of some part of an API call.
+     </p>
+     <p>
+      So then the hunt was on for what could be doing this. The next suspicious thing noticed was a large amount of I/O activity. In the configuration we were testing, the Wolfram Cloud was using the NFS network file system to access files. We tried tuning NFS, changing parameters, going to asynchronous mode, using UDP instead of TCP, changing the NFS server I/O scheduler, etc. Nothing made a difference. We tried using a completely different distributed file system called Ceph. Same problem. Then we tried using local disk storage. Finally this seemed to have an effectremoving most, but not all, of the slowdown.
+     </p>
+     <p>
+      We took this as a clue, and started investigating more about I/O. One experiment involved editing a huge notebook on a node, while running lots of API calls to the same node:
+     </p>
+     <p>
+      <img alt="Graph of system time, user time, and API time spent editing a huge notebook--with quite a jump while the notebook was being edited and continually saved" class="alignnone size-full wp-image-9674" height="209" src="http://blog.stephenwolfram.com/data/uploads/2015/04/system-time-user-time-api-time-cloud-bug-hunting.png" title="Graph of system time, user time, and API time spent editing a huge notebook--with quite a jump while the notebook was being edited and continually saved" width="604"/>
+      <br/>
+      The result was interesting. During the period when the notebook was being edited (and continually saved), the API times suddenly jumped from around 100 ms to 500 ms. But why would simple file operations have such an effect on all 8 cores of the node?
+     </p>
+     <p>
+     </p>
+     <h2>
+      The Culprit Is Found
+     </h2>
+     <p>
+      We started investigating more, and soon discovered that what seemed like simple file operations werentand we quickly figured out why. You see, perhaps five years before, early in the development of the Wolfram Cloud, we wanted to experiment with file versioning. And as a proof of concept, someone had inserted a simple versioning system named RCS.
+     </p>
+     <p>
+      Plenty of software systems out there in the world still use RCS, even though it hasnt been substantially updated in nearly 30 years and by now there are much better approaches (like the ones we use for infinite undo in notebooks). But somehow the RCS proof of concept had never been replaced in our Wolfram Cloud codebaseand it was still running on every file!
+     </p>
+     <p>
+      One feature of RCS is that when a file is modified even a tiny bit, lots of data (even several times the size of the file itself) ends up getting written to disk. We hadnt been sure how much I/O activity to expect in general. But it was clear that RCS was making it needlessly more intense.
+     </p>
+     <p>
+      Could I/O activity really hang up the whole Linux kernel? Maybe theres some mysterious global lock. Maybe the disk subsystem freezes because it doesnt flush filled buffers quickly enough. Maybe the kernel is busy remapping pages to try to make bigger chunks of memory available. But whatever might be going on, the obvious thing was just to try taking out RCS, and seeing what happened.
+     </p>
+     <p>
+      And so we did that, and lo and behold, the horrible slowdowns immediately went away!
+     </p>
+     <p>
+      So, after a week of intense debugging, we had a solution to our problem. And repeating my original experiment, everything now ran cleanly, with API times completely dominated by network transmission to the test cluster:
+     </p>
+     <p>
+      <img alt="Clean run times! Compare this to the In[3] image above." class="alignnone size-full wp-image-9676" height="226" src="http://blog.stephenwolfram.com/data/uploads/2015/04/final-run-times-cloud-bug-hunting.png" title="Clean run times! Compare this to the In[3] image above." width="508"/>
+     </p>
+     <p>
+     </p>
+     <h2>
+      The Wolfram Language and the Cloud
+     </h2>
+     <p>
+      What did I learn from all this? First, it reinforced my impression that the cloud is the most difficulteven hostiledevelopment and debugging environment that Ive seen in all my years in software. But second, it made me realize how valuable the Wolfram Language is as a kind of metasystem, for analyzing, visualizing and organizing whats going on inside complex infrastructure like the cloud.
+     </p>
+     <p>
+      When it comes to debugging, I myself have been rather spoiled for yearsbecause I do essentially all my programming in the Wolfram Language, where debugging is particularly easy, and its rare for a bug to take me more than a few minutes to find. Why is debugging so easy in the Wolfram Language? I think, first and foremost, its because the code
+      <a href="http://www.wolfram.com/language/tweet-a-program/">
+       tends to be short
+      </a>
+      and readable. One also typically writes it in notebooks, where one can test out, and document, each piece of a program as one builds it up. Also critical is that the Wolfram Language is symbolic, so one can always pull out any piece of a program, and it will run on its own.
+     </p>
+     <p>
+      Debugging at lower levels of the software stack is a very different experience. Its much more like
+      <a href="http://blog.stephenwolfram.com/2011/04/computation-and-the-future-of-biomedicine/">
+       medical diagnosis
+      </a>
+      , where ones also dealing with a complex multicomponent system, and trying to figure out whats going on from a few measurements or experiments. (I guess our versioning problem might be the analog of some horrible defect in DNA replication.)
+     </p>
+     <p>
+      My whole adventure in the cloud also very much emphasizes the value were adding with the Wolfram Cloud. Because part of what the Wolfram Cloud is all about is insulating people from the messy issues of cloud infrastructure, and letting them instead
+      <a href="http://www.wolfram.com/universal-deployment-system/">
+       implement and deploy
+      </a>
+      whatever they want directly in the Wolfram Language.
+     </p>
+     <p>
+      Of course, to make that possible, we ourselves have needed to build all the automated infrastructure. And now, thanks to this little adventure in scientific debugging, were one step closer to finishing that. And indeed, as of today, the Wolfram Cloud has its APIs consistently running without any mysterious quantized slowdownsand is rapidly approaching the point when it can move out of beta and into full production.
+     </p>
+     <p>
+      <script src="/common/javascript/jquery/plugins/scrolldepth/jquery.scrolldepth.min.js">
+      </script>
+     </p>
+    </div>
+    <div class="post_foot single">
+     <div class="category">
+      <p>
+       Posted in:
+       <a href="/category/data-science" title="View all posts in Data Science">
+        Data Science
+       </a>
+       ,
+       <a href="/category/software-design" title="View all posts in Software Design">
+        Software Design
+       </a>
+      </p>
+     </div>
+     <div class="post_footer_left">
+      <p>
+       <a class="comments-link" href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/#comments" title="Comment on Scientific Bug Hunting in the Cloud: An Unexpected CEO Adventure">
+        3 Comments
+       </a>
+      </p>
+     </div>
+     <div class="social">
+      <div class="socialIcons">
+       <a class="facebook icon" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fblog.stephenwolfram.com%2F2015%2F04%2Fscientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure%2F&amp;t=Scientific+Bug+Hunting+in+the+Cloud%3A+An+Unexpected+CEO+Adventure" target="blank" title="Share on Facebook">
+       </a>
+       <a class="twitter icon" href="http://twitter.com/home?status=Currently%20reading%20http%3A%2F%2Fblog.stephenwolfram.com%2F2015%2F04%2Fscientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure%2F" target="_blank" title="Share on Twitter">
+       </a>
+       <a class="reddit icon" href="http://www.reddit.com/submit?url=http%3A%2F%2Fblog.stephenwolfram.com%2F2015%2F04%2Fscientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure%2F&amp;title=Scientific+Bug+Hunting+in+the+Cloud%3A+An+Unexpected+CEO+Adventure" target="_blank" title="Share on Reddit">
+       </a>
+       <a class="linkedin icon" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fblog.stephenwolfram.com%2F2015%2F04%2Fscientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure%2F&amp;title=Scientific+Bug+Hunting+in+the+Cloud%3A+An+Unexpected+CEO+Adventure" target="_blank" title="Share on Linkedin">
+       </a>
+       <a class="more-post" href="http://www.addthis.com/bookmark.php?pub=L4DJFTEHPAW2JE1G&amp;url=http%3A%2F%2Fblog.stephenwolfram.com%2F2015%2F04%2Fscientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure%2F&amp;title=Scientific+Bug+Hunting+in+the+Cloud%3A+An+Unexpected+CEO+Adventure" target="_blank" title="Bookmark using any bookmark manager">
+        More
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="singlenav" id="footer_more_posts">
+     <p class="entry_bottom_heading first">
+      RELATED POSTS
+     </p>
+     <div class="footer_post_wrapper">
+      <div class="footer_thumbnail">
+       <a href="http://blog.stephenwolfram.com/2015/03/the-wolfram-data-drop-is-live/">
+        <img alt="" src="http://blog.stephenwolfram.com/data/uploads/2015/03/the-wolfram-data-drop-is-live.png"/>
+       </a>
+      </div>
+      <div class="footer_post">
+       <p>
+        <a href="http://blog.stephenwolfram.com/2015/03/the-wolfram-data-drop-is-live/">
+         The Wolfram Data Drop Is Live!
+        </a>
+       </p>
+       <p>
+        March 4, 2015
+       </p>
+      </div>
+     </div>
+     <div class="footer_post_wrapper">
+      <div class="footer_thumbnail">
+       <a href="http://blog.stephenwolfram.com/2013/11/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">
+        <img alt="" src="http://blog.stephenwolfram.com/data/uploads/2014/05/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi.png"/>
+       </a>
+      </div>
+      <div class="footer_post">
+       <p>
+        <a href="http://blog.stephenwolfram.com/2013/11/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">
+         Putting the Wolfram Language (and
+         <i>
+          Mathematica
+         </i>
+         ) on Every Raspberry Pi
+        </a>
+       </p>
+       <p>
+        November 21, 2013
+       </p>
+      </div>
+     </div>
+     <div class="footer_post_wrapper">
+      <div class="footer_thumbnail">
+       <a href="http://blog.stephenwolfram.com/2013/04/data-science-of-the-facebook-world/">
+        <img alt="" src="http://blog.stephenwolfram.com/data/uploads/2014/05/data-science-of-the-facebook-world.png"/>
+       </a>
+      </div>
+      <div class="footer_post">
+       <p>
+        <a href="http://blog.stephenwolfram.com/2013/04/data-science-of-the-facebook-world/">
+         Data Science of the Facebook World
+        </a>
+       </p>
+       <p>
+        April 24, 2013
+       </p>
+      </div>
+     </div>
+     <p class="entry_bottom_heading ">
+      NEXT POST
+     </p>
+     <div class="footer_post_wrapper">
+      <div class="footer_thumbnail">
+       <a href="http://blog.stephenwolfram.com/2015/04/instant-apps-for-the-apple-watch-with-the-wolfram-language/">
+        <img alt="" src="http://blog.stephenwolfram.com/data/uploads/2015/04/instant-apps-for-the-apple-watch-with-the-wolfram-language.png"/>
+       </a>
+      </div>
+      <div class="footer_post">
+       <p>
+        <a href="http://blog.stephenwolfram.com/2015/04/instant-apps-for-the-apple-watch-with-the-wolfram-language/" rel="next">
+         Instant Apps for the Apple Watch with the Wolfram Language
+        </a>
+       </p>
+       <p>
+        April 28, 2015
+       </p>
+      </div>
+     </div>
+     <p class="entry_bottom_heading">
+      PREVIOUS POST
+     </p>
+     <div class="footer_post_wrapper">
+      <div class="footer_thumbnail">
+       <a href="http://blog.stephenwolfram.com/2015/03/frontiers-of-computational-thinking-a-sxsw-report/">
+        <img alt="" src="http://blog.stephenwolfram.com/data/uploads/2015/03/frontiers-of-computational-thinking-a-sxsw-report.png"/>
+       </a>
+      </div>
+      <div class="footer_post">
+       <p>
+        <a href="http://blog.stephenwolfram.com/2015/03/frontiers-of-computational-thinking-a-sxsw-report/" rel="prev">
+         Frontiers of Computational Thinking: A SXSW Report
+        </a>
+       </p>
+       <p>
+        March 23, 2015
+       </p>
+      </div>
+     </div>
+     <div style="clear: both;">
+      <!-- -->
+     </div>
+    </div>
+    <div style="clear: both;">
+     <!-- -->
+    </div>
+    <div id="comments_wrapper">
+     <span id="comments">
+     </span>
+     <div id="respond">
+      <h3 class="comments-heading">
+       <div class="cancel-comment-reply">
+        <a href="/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+         cancel [x]
+        </a>
+       </div>
+      </h3>
+      <div id="join-small">
+       <div class="input-fields">
+        <div class="inner">
+         <input id="fakeComment" type="text"/>
+         <label class="placeholder show" for="fakeComment">
+          Join the discussion
+         </label>
+         <img alt="" id="join-button" src="/wp-content/themes/sw-v2/images/join-button.png"/>
+        </div>
+       </div>
+      </div>
+      <form action="http://blog.stephenwolfram.com/wp-comments-post.php" id="commentform" method="post">
+       <div id="join-big">
+        <div id="exit-button">
+         <div id="exit-image">
+         </div>
+         <div style="clear: both;">
+         </div>
+        </div>
+        <div id="comment-area">
+         <div>
+          <textarea id="comment" name="comment" tabindex="1">
+          </textarea>
+         </div>
+        </div>
+        <p>
+         <span id="commentError" style="color: red; margin: 0; padding: 0 0 15px 0; display:none">
+          Please enter your comment (at least 5 characters).
+         </span>
+        </p>
+        <div class="level">
+         <div class="half-length">
+          <label for="author">
+           Name (required)
+          </label>
+         </div>
+         <div class="half-length ">
+          <div class="pad-left">
+           <label for="email">
+            Email (will not be published; required)
+           </label>
+          </div>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div>
+         <div class="half-length">
+          <input aria-required="true" id="author" name="author" size="22" tabindex="2" type="text" value=""/>
+          <p>
+           <span id="nameError" style="color:red; display:none">
+            Please enter your name.
+           </span>
+          </p>
+         </div>
+         <div class="half-length ">
+          <div class="pad-left">
+           <input aria-required="true" id="email" name="email" size="22" tabindex="3" type="text" value=""/>
+          </div>
+          <p>
+           <span id="emailError" style="margin-left: 10px; color:red; display:none">
+            Pleaseenteravalidemailaddress.
+           </span>
+          </p>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="level">
+         <div class="half-length">
+          <label for="url">
+           Website
+          </label>
+         </div>
+         <div style="clear:both;">
+         </div>
+         <div class="half-length">
+          <input id="url" name="url" size="22" tabindex="4" type="text" value=""/>
+         </div>
+         <div style="clear:both;">
+         </div>
+         <p>
+          <input class="button" id="submit" name="submit" onclick="return checkCommentFields()" tabindex="5" type="submit" value="Submit comment "/>
+         </p>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="post_separator_no_margin">
+        </div>
+       </div>
+       <h3 id="comments-heading">
+        <span class="num-comments">
+         <span>
+          3
+         </span>
+        </span>
+        comments
+        <span id="show-all-comments">
+         . Show all 
+        </span>
+       </h3>
+       <div id="comment-section">
+        <div class="navigation">
+         <div class="alignleft">
+         </div>
+         <div class="alignright">
+         </div>
+        </div>
+        <ol class="commentlist">
+         <li class="comment even thread-even depth-1" id="li-comment-1371529">
+          <table cellpadding="0" cellspacing="0" class="balloon" id="comment-1371529" width="100%">
+           <tr>
+            <td class="uleft">
+            </td>
+            <td class="umid" colspan="2">
+            </td>
+            <td class="uright">
+            </td>
+           </tr>
+           <tr>
+            <td class="mid" colspan="4">
+             <p>
+              Awesome work!  Just the other day I was using the Wolfram Cloud and I was pleasantly surprised how much faster it seemed to be running.
+             </p>
+            </td>
+           </tr>
+           <tr>
+            <td class="lleft">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+            <td class="comment-author vcard">
+             <div>
+              Daniel Bigham
+             </div>
+            </td>
+            <td class="comment-meta commentmetadata" width="100%">
+             <div>
+              <a class="comment-permlink" href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/comment-page-1/#comment-1371529">
+               April 16, 2015 at 9:50 pm
+              </a>
+              <a class="comment-reply-link" href="/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/?replytocom=1371529#respond" onclick='return addComment.moveForm("comment-1371529", "1371529", "respond", "9634")'>
+              </a>
+             </div>
+            </td>
+            <td class="lright">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+           </tr>
+          </table>
+         </li>
+         <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1372027">
+          <table cellpadding="0" cellspacing="0" class="balloon" id="comment-1372027" width="100%">
+           <tr>
+            <td class="uleft">
+            </td>
+            <td class="umid" colspan="2">
+            </td>
+            <td class="uright">
+            </td>
+           </tr>
+           <tr>
+            <td class="mid" colspan="4">
+             <p>
+              The short answer is that RCS installed during development was screwing everything up!  This is funny and classic.
+             </p>
+            </td>
+           </tr>
+           <tr>
+            <td class="lleft">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+            <td class="comment-author vcard">
+             <div>
+              <a class="url" href="http://www.PageKicker.com" rel="external nofollow">
+               Fred Z
+              </a>
+             </div>
+            </td>
+            <td class="comment-meta commentmetadata" width="100%">
+             <div>
+              <a class="comment-permlink" href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/comment-page-1/#comment-1372027">
+               April 17, 2015 at 10:20 am
+              </a>
+              <a class="comment-reply-link" href="/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/?replytocom=1372027#respond" onclick='return addComment.moveForm("comment-1372027", "1372027", "respond", "9634")'>
+              </a>
+             </div>
+            </td>
+            <td class="lright">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+           </tr>
+          </table>
+         </li>
+         <li class="comment even thread-even depth-1" id="li-comment-1372140">
+          <table cellpadding="0" cellspacing="0" class="balloon" id="comment-1372140" width="100%">
+           <tr>
+            <td class="uleft">
+            </td>
+            <td class="umid" colspan="2">
+            </td>
+            <td class="uright">
+            </td>
+           </tr>
+           <tr>
+            <td class="mid" colspan="4">
+             <p>
+              This is a clear indication on how the von Neumann architecture of computers and the Linux monolithic kernel are screwing all of us. To begin with, file versioning should be built-in feature of the OS. Secondly, as Ted Nelson put it, we have to get rid of the filesystem tyranny. Wolfram should give priority to develop a version running on bare metal, as said. At that point they may consider developing a Mathematica suitable hardware architecture altogether. Last but not least  the whole multithreading scheme sucks. Go for functional programming, people! Its math on computers, so go for it. Its harder, but this thing is mainly for smart people. We can take care later of those who want to calculate the volume of their apple pie using mathematicas image processing power
+             </p>
+            </td>
+           </tr>
+           <tr>
+            <td class="lleft">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+            <td class="comment-author vcard">
+             <div>
+              <a class="url" href="http://www.lambdawaves.com" rel="external nofollow">
+               Alex Stere
+              </a>
+             </div>
+            </td>
+            <td class="comment-meta commentmetadata" width="100%">
+             <div>
+              <a class="comment-permlink" href="http://blog.stephenwolfram.com/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/comment-page-1/#comment-1372140">
+               April 17, 2015 at 2:11 pm
+              </a>
+              <a class="comment-reply-link" href="/2015/04/scientific-bug-hunting-in-the-cloud-an-unexpected-ceo-adventure/?replytocom=1372140#respond" onclick='return addComment.moveForm("comment-1372140", "1372140", "respond", "9634")'>
+              </a>
+             </div>
+            </td>
+            <td class="lright">
+             <div>
+              <!-- -->
+             </div>
+            </td>
+           </tr>
+          </table>
+         </li>
+        </ol>
+        <span id="hide-comments">
+         Hide comments 
+        </span>
+        <div class="navigation">
+         <div class="alignleft">
+         </div>
+         <div class="alignright">
+         </div>
+        </div>
+       </div>
+       <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="9634"/>
+       <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+      </form>
+     </div>
+     <!-- respond -->
+    </div>
+    <!-- wrapper -->
+    <script type="text/javascript">
+     function checkCommentFields()
+{
+
+    if($(".socialLoggedIn").is(":visible"))
+        return true;
+
+
+    var ret = true;
+    if($("#author").val().trim().length &lt; 2)
+    {
+        $("#nameError").fadeIn();
+        ret = false;
+    }
+    else
+    {
+        $("#nameError").fadeOut();
+    }
+
+    if(!validEmail($("#email").val().trim()))
+    {
+        $("#emailError").fadeIn();
+        ret = false;
+    }
+    else
+    {
+        $("#emailError").fadeOut();
+    }
+
+    if($("#comment").val().trim().length &lt; 5)
+    {
+        $("#commentError").fadeIn();
+        ret = false;
+    }
+    else
+    {
+        $("#commentError").fadeOut();
+    }
+
+    return ret;
+}
+
+$(document).ready(function(){
+    $('.comment-author a').attr("target", "_blank");
+    if(window.location.href.indexOf("comment-page-1") &gt; -1) {
+        $('#comment-section').removeClass('hide');
+    }
+
+    $("#author").keyup(function() {
+        if($("#nameError").is(":visible") &amp;&amp; $("#author").val().trim().length &gt;= 2)
+            $("#nameError").fadeOut();
+    });
+
+    $("#email").keyup(function() {
+        if($("#emailError").is(":visible") &amp;&amp; validEmail($("#email").val().trim()))
+            $("#emailError").fadeOut();
+    });
+
+    $("#comment").keyup(function() {
+        if($("#commentError").is(":visible") &amp;&amp; $("#comment").val().trim().length &gt;= 5)
+            $("#commentError").fadeOut();
+    });
+});
+
+
+
+function validEmail(email)
+{
+    signPos = email.indexOf("@");
+    dotPos = email.lastIndexOf(".");
+
+    if (email.length &lt; 6 || signPos == -1 || dotPos == -1 || (dotPos &lt; signPos) || (dotPos - signPos == 1) || dotPos == email.length-1 )
+    {
+        return false;
+    }
+
+    return true;
+}
+    </script>
+    <footer id="footer">
+      Stephen Wolfram, LLC |
+     <a href="/terms">
+      Terms
+     </a>
+    </footer>
+   </div>
+   <div id="sidebar">
+    <form action="http://blog.stephenwolfram.com/" class="headerSearchBox" id="search" method="get">
+     <input class="searchboxsub" id="query_1" name="s" placeholder="Search Blog" type="text" value=""/>
+     <input class="headerSearchSubmit" title="Search" type="submit" value=""/>
+    </form>
+    <a href="http://www.stephenwolfram.com">
+     <img alt="" src="/wp-content/themes/sw-v2/images/stephen-wolfram-sidebar.jpg" title=""/>
+    </a>
+    <div class="sidebar-social">
+     <a class="big-social-icon rss" href="/feed/" title="RSS">
+     </a>
+     <a class="big-social-icon facebook" href="http://www.facebook.com/pages/Stephen-Wolfram/188916357807416" target="_blank" title="Facebook">
+     </a>
+     <a class="big-social-icon twitter" href="http://twitter.com/#!/stephen_wolfram" target="_blank" title="Twitter">
+     </a>
+     <a class="big-social-icon linkedin" href="http://www.linkedin.com/in/stephenwolfram" target="_blank" title="LinkedIn">
+     </a>
+    </div>
+    <div class="sidebar-image-caption">
+     <p>
+      Founder &amp; CEO of
+      <a href="http://www.wolfram.com/">
+       Wolfram Research
+      </a>
+     </p>
+     <p>
+      Creator of
+      <a href="http://www.wolfram.com/mathematica/">
+       <em>
+        Mathematica
+       </em>
+      </a>
+      ,
+      <a href="http://www.wolframalpha.com/">
+       Wolfram|Alpha
+      </a>
+     </p>
+     <p>
+      &amp; the
+      <a href="http://www.wolfram.com/language/">
+       Wolfram Language
+      </a>
+     </p>
+     <p>
+      Author of
+      <a href="http://www.wolframscience.com/">
+       <em>
+        A New Kind of Science
+       </em>
+      </a>
+     </p>
+    </div>
+    <div class="sidebar-pod">
+     <p class="sidebar-heading">
+      Recent Posts
+     </p>
+     <div class="sidebar-inner">
+      <div id="postContainer">
+       loading...
+      </div>
+     </div>
+     <a class="more-recent-posts" href="" id="loadMore">
+      More 
+     </a>
+     <span class="total94" id="total_posts">
+     </span>
+    </div>
+    <div class="sidebar-pod">
+     <p class="sidebar-heading">
+      Popular Categories
+     </p>
+     <div class="categories-list-row sidebar-inner">
+      <ul class="categories-list">
+       <li>
+        <a href="/category/artificial-intelligence">
+         Artificial Intelligence
+        </a>
+       </li>
+       <li>
+        <a href="/category/big-picture">
+         Big Picture
+        </a>
+       </li>
+       <li>
+        <a href="/category/companies-and-business">
+         Companies and Business
+        </a>
+       </li>
+       <li>
+        <a href="/category/computational-science">
+         Computational Science
+        </a>
+       </li>
+       <li>
+        <a href="/category/data-science">
+         Data Science
+        </a>
+       </li>
+       <li>
+        <a href="/category/education">
+         Education
+        </a>
+       </li>
+       <li>
+        <a href="/category/future-perspectives">
+         Future Perspectives
+        </a>
+       </li>
+       <li>
+        <a href="/category/historical-perspectives">
+         Historical Perspectives
+        </a>
+       </li>
+       <li>
+        <a href="/category/life-and-times">
+         Life and Times
+        </a>
+       </li>
+       <li>
+        <a href="/category/life-science">
+         Life Science
+        </a>
+       </li>
+      </ul>
+      <ul class="categories-list">
+       <li>
+        <a href="/category/mathematica">
+         <em>
+          Mathematica
+         </em>
+        </a>
+       </li>
+       <li>
+        <a href="/category/mathematics">
+         Mathematics
+        </a>
+       </li>
+       <li>
+        <a href="/category/new-kind-of-science">
+         New Kind of Science
+        </a>
+       </li>
+       <li>
+        <a href="/category/new-technology">
+         New Technology
+        </a>
+       </li>
+       <li>
+        <a href="/category/personal-analytics">
+         Personal Analytics
+        </a>
+       </li>
+       <li>
+        <a href="/category/physical-science">
+         Physical Science
+        </a>
+       </li>
+       <li>
+        <a href="/category/software-design">
+         Software Design
+        </a>
+       </li>
+       <li>
+        <a href="/category/wolfram-alpha">
+         Wolfram|Alpha
+        </a>
+       </li>
+       <li>
+        <a href="/category/wolfram-language">
+         Wolfram Language
+        </a>
+       </li>
+       <li>
+        <a href="/category/other">
+         Other
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="sidebar-pod">
+     <p class="sidebar-heading">
+      Archive
+     </p>
+     <div class="sidebar-archive sidebar-inner">
+      <ul>
+       <li class="first">
+        <a href="http://blog.stephenwolfram.com/2015/">
+         2015
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2014/">
+         2014
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2013/">
+         2013
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2012/">
+         2012
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2011/">
+         2011
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2010/">
+         2010
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2009/">
+         2009
+        </a>
+       </li>
+       <li class="first">
+        <a href="http://blog.stephenwolfram.com/2008/">
+         2008
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2007/">
+         2007
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2006/">
+         2006
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2004/">
+         2004
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.stephenwolfram.com/2003/">
+         2003
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- end of "outerWrap" -->
+ </body>
+</html>

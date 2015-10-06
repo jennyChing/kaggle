@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html class="Public NoJs LoggedOut Sidebar Responsive" dir="LTR" id="XenForo" lang="en-US" xmlns:fb="http://www.facebook.com/2008/fbml">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <base href="https://www.howtoforge.com"/>
+  <script>
+   var _b=document.getElementsByTagName('base')[0],_bH="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server";if(_b&amp;&amp;_b.href!=_bH)_b.href=_bH;
+  </script>
+  <title>
+   VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+  </title>
+  <meta content="virtualization,ubuntu,virtualbox" name="keywords"/>
+  <meta content="VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 ServerThis guide explains how you can run virtual machines w... " name="description"/>
+  <meta content="VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server" name="og:title"/>
+  <meta content="VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 ServerThis guide explains how you can run virtual machines w... " name="og:description"/>
+  <meta content="Howtoforge" name="og:site_name"/>
+  <meta content="article" name="og:type"/>
+  <meta content="https://www.howtoforge.com/images/teaser/ubuntu.gif" property="og:image"/>
+  <meta content="summary" name="twitter:card"/>
+  <meta content="howtoforgecom" name="twitter:site"/>
+  <meta content="howtoforgecom" name="twitter:creator"/>
+  <meta content="VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server" name="twitter:title"/>
+  <meta content="VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 ServerThis guide explains how you can run virtual machines w... " name="twitter:description"/>
+  <link href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" hreflang="en" rel="alternate"/>
+  <link href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server-p2" rel="next"/>
+  <link href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" rel="canonical"/>
+ </head>
+ <body>
+  <noscript>
+   <style>
+    .JsOnly,.jsOnly{display:none!important}
+   </style>
+  </noscript>
+  <link href="/community/styles/executive/xenfocus/icons/css/font-awesome.min.css" rel="stylesheet"/>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css"/>
+  <link href="/community/css.php?css=xenforo,form,public&amp;style=3&amp;dir=LTR&amp;d=1420029973" rel="stylesheet"/>
+  <link href="/community/css.php?css=bb_code,bbm_buttons,facebook,google,login_bar,node_category,node_forum,node_list,profile_post_list_simple,sidebar_share_page,twitter,wf_default&amp;style=3&amp;dir=LTR&amp;d=1420029973" rel="stylesheet"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+  </script>
+  <script>
+   if(!window.jQuery){document.write('&lt;scr'+'ipt type="text/javascript" src="/js/jquery/jquery-1.11.3.min.js"&gt;&lt;\/scr'+'ipt&gt;');}
+  </script>
+  <script src="/community/js/xenforo/xenforo.js?_v=303ae0ca">
+  </script>
+  <script src="/community/js/bbm/zloader.js?_v=303ae0ca">
+  </script>
+  <script src="/js/jquery.cookiesdirective.js" type="text/javascript">
+  </script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+  <script src="/js/fancybox/jquery.mousewheel-3.0.4.pack.js" type="text/javascript">
+  </script>
+  <script src="/js/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript">
+  </script>
+  <link href="/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="/themes/howtoforge/templates/style.css" rel="stylesheet"/>
+  <link href="/feed.rss" rel="alternate" title="RSS-Feed fr Howtoforge" type="application/rss+xml"/>
+  <script src="/js/tinymce_4.1.7/tinymce.min.js">
+  </script>
+  <script src="https://partner.googleadservices.com/gampad/google_service.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   GS_googleAddAdSenseService("ca-pub-3043223216276099");GS_googleEnableAllServices();
+  </script>
+  <script language="JavaScript">
+   GA_googleAddAttr("Category","Virtualization");GA_googleAddAttr("Category","Ubuntu");GA_googleAddAttr("Category","Virtualbox");
+  </script>
+  <script type="text/javascript">
+   GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_leaderboard_a_728x90");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_rectangle_a_300x250");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_rectangle_b_300x250");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_halfpage_a_300x600");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_leaderboard_b_728x90");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_article_halfpage_b_300x600");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_a_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_b_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_c_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_textlink_d_600x50");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_sidebar_top");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_content_middle");GA_googleAddSlot("ca-pub-3043223216276099","howtoforge_com_list_bottom");
+  </script>
+  <script type="text/javascript">
+   GA_googleFetchAds();
+  </script>
+  <div id="loginBar">
+   <div class="pageWidth">
+    <div class="pageContent">
+     <h3 id="loginBarHandle">
+      <label for="LoginControl">
+       <a class="concealed noOutline" href="/community/login/">
+        Log in or Sign up
+       </a>
+      </label>
+     </h3>
+     <span class="helper">
+     </span>
+    </div>
+   </div>
+  </div>
+  <header>
+   <div id="header">
+    <div id="logoBlock">
+     <div class="pageWidth">
+      <div class="pageContent">
+       <div id="logo">
+        <a href="/">
+         <span>
+         </span>
+         <img alt="Howtoforge" src="/images/howtoforge_logo_trans.gif" style="margin-left:20px;"/>
+        </a>
+       </div>
+       <span class="helper">
+       </span>
+       <div class="langSwitch">
+        <b>
+         <img alt="HowtoForge - Linux Tutorials in English" src="/images/gb.png"/>
+         English
+        </b>
+        |
+        <a href="https://www.howtoforge.de/" title="HowtoForge.de - Linux Tutorials auf Deutsch">
+         <img alt="HowtoForge.de - Linux Tutorials auf Deutsch" src="/images/de.png"/>
+         Deutsch
+        </a>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="pageWidth withSearch" id="navigation">
+     <div class="pageContent">
+      <nav>
+       <div class="navTabs">
+        <ul class="publicTabs">
+         <li class="navTab forums selected">
+          <a class="navLink" href="/">
+           Tutorials
+          </a>
+          <div class="tabLinks forumsTabLinks">
+           <ul class="secondaryContent blockLinksList">
+            <li>
+             <a href="/search/">
+              Tutorial search
+             </a>
+            </li>
+           </ul>
+          </div>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/tutorials/">
+           Tags
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/community/">
+           Forums
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/contribute/">
+           Contribute
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="/subscription/">
+           Subscribe
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="http://www.ispconfig.org">
+           ISPConfig
+          </a>
+         </li>
+         <li class="navTab forums PopupClosed">
+          <a class="navLink" href="http://www.lxer.com">
+           News
+          </a>
+         </li>
+        </ul>
+       </div>
+       <span class="helper">
+       </span>
+      </nav>
+     </div>
+    </div>
+    <div class="pageWidth" id="searchBar">
+     <span id="QuickSearchPlaceholder" title=" Search...">
+      Search
+     </span>
+     <fieldset id="QuickSearch">
+      <form action="/" class="formPopup" method="post">
+       <div class="primaryControls">
+        <input class="textCtrl" id="QuickSearchQuery" name="q" placeholder="Search..." results="0" title="Enter your search and hit enter..." type="search" value=""/>
+       </div>
+       <input name="_xfToken" type="hidden" value=""/>
+      </form>
+     </fieldset>
+    </div>
+   </div>
+  </header>
+  <div class="forum_list" id="content">
+   <div class="pageWidth">
+    <div class="pageContent">
+     <div class="mainContainer">
+      <div class="mainContent">
+       <div class="breadBoxTop">
+        <nav>
+         <fieldset class="breadcrumb">
+          <span class="crumbs">
+           <span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/" itemprop="url" rel="up">
+             <span itemprop="title">
+              Tutorials
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+             </span>
+            </span>
+           </span>
+           <span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" itemprop="url" rel="up">
+             <span itemprop="title">
+              VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+              &gt;
+             </span>
+            </span>
+           </span>
+          </span>
+         </fieldset>
+        </nav>
+       </div>
+       <div id="htfContentPage">
+        <div class="contributeEdit" style="float:right; width:450px; max-width:100%;">
+         <div id="tocContainer">
+          <h3>
+           On this page
+          </h3>
+          <ol class="toc">
+           <li>
+            <a href="#vboxheadless-running-virtual-machines-with-virtualbox-on-a-headless-ubuntu-server">
+             VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+            </a>
+            <ol>
+             <li>
+              <a href="#-preliminary-note">
+               1 Preliminary Note
+              </a>
+             </li>
+             <li>
+              <a href="#-installing-virtualbox">
+               2 Installing VirtualBox
+              </a>
+             </li>
+             <li>
+              <a href="#-using-virtualbox-on-the-command-line">
+               3 Using VirtualBox On The Command Line
+              </a>
+              <ol>
+               <li>
+                <a href="#-creating-a-vm">
+                 3.1 Creating A VM
+                </a>
+               </li>
+               <li>
+                <a href="#-importing-an-existing-vm">
+                 3.2 Importing An Existing VM
+                </a>
+               </li>
+               <li>
+                <a href="#-starting-a-vm-with-vboxheadless">
+                 3.3 Starting A VM With VBoxHeadless
+                </a>
+               </li>
+              </ol>
+             </li>
+            </ol>
+           </li>
+          </ol>
+         </div>
+        </div>
+        <h2 id="vboxheadless-running-virtual-machines-with-virtualbox-on-a-headless-ubuntu-server">
+         VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+        </h2>
+        <p>
+         Version 1.0
+         <br/>
+         Author: Falko Timme
+         <br/>
+         <a href="http://twitter.com/howtoforgecom" mce_real_href="http://twitter.com/howtoforgecom" target="_blank">
+         </a>
+         <a class="fancybox" href="https://www.howtoforge.com/images/socialmedia/big/twitter.png" id="img-twitter">
+          <img alt="" border="0" height="16px" mce_real_src="https://www.howtoforge.com/images/socialmedia/twitter.png" src="https://www.howtoforge.com/images/socialmedia/twitter.png" width="16px"/>
+         </a>
+         <a href="http://twitter.com/howtoforgecom" mce_real_href="http://twitter.com/howtoforgecom" target="_blank">
+          Follow me on Twitter
+         </a>
+         <br/>
+         Last edited 01/25/2010
+        </p>
+        <div style="width:336px;float:left; margin: 10px 15px 10px 0px;background-color:white;">
+         <script type="text/javascript">
+          GA_googleFillSlot('howtoforge_com_article_rectangle_a_300x250');
+         </script>
+        </div>
+        <p>
+         This guide explains how you can run virtual machines with
+         <a href="http://www.virtualbox.org/" mce_real_href="http://www.virtualbox.org/" target="_blank">
+          Sun VirtualBox 3.1
+         </a>
+         on a headless Ubuntu 9.10 server. Normally you use the VirtualBox GUI to manage your virtual machines, but a server does not have a desktop environment. Fortunately, VirtualBox comes with a tool called VBoxHeadless that allows you to connect to the virtual machines over a remote desktop connection, so there's no need for the VirtualBox GUI.
+        </p>
+        <p>
+         I do not issue any guarantee that this will work for you!
+        </p>
+        <p>
+        </p>
+        <h3 id="-preliminary-note">
+         1 Preliminary Note
+        </h3>
+        <p>
+         I have tested this on an Ubuntu 9.10 server (host system) with the IP address
+         <span class="system">
+          192.168.0.100
+         </span>
+         where I'm logged in as a normal user (user name
+         <span class="system">
+          administrator
+         </span>
+         in this example) instead of as
+         <span class="system">
+          root
+         </span>
+         .
+        </p>
+        <p>
+        </p>
+        <h3 id="-installing-virtualbox">
+         2 Installing VirtualBox
+        </h3>
+        <p>
+         To install VirtualBox 3.1 on our Ubuntu 9.10 server, we open
+         <span class="system">
+          /etc/apt/sources.list
+         </span>
+         ...
+        </p>
+        <p class="command">
+         sudo vi /etc/apt/sources.list
+        </p>
+        <p>
+         ... and add the following line to it:
+        </p>
+        <table align="center" bgcolor="#cccccc" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0" class="" width="90%">
+         <tbody>
+          <tr>
+           <td class="">
+            <pre>
+             [...]
+deb http://download.virtualbox.org/virtualbox/debian karmic non-free
+            </pre>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+        <p>
+         Then we download Sun's public key...
+        </p>
+        <p class="command">
+         wget -q http://download.virtualbox.org/virtualbox/debian/sun_vbox.asc -O- | sudo apt-key add -
+        </p>
+        <p>
+         ... and update our package database:
+        </p>
+        <p class="command">
+         sudo aptitude update
+        </p>
+        <p>
+         Afterwards, we install VirtualBox 3.1 as follows:
+        </p>
+        <p class="command">
+         sudo aptitude install linux-headers-$(uname -r) build-essential virtualbox-3.1 dkms
+        </p>
+        <p>
+         (The
+         <span class="system">
+          dkms
+         </span>
+         package ensures that the VirtualBox host kernel modules are properly updated if the Linux kernel version changes.)
+        </p>
+        <p>
+         <span class="system">
+          Creating group 'vboxusers'
+          <br/>
+          Users of VirtualBox must be members of that group. Host network interfaces will be assigned to that group.
+         </span>
+         <span class="highlight">
+          &lt;-- Ok
+         </span>
+        </p>
+        <p>
+         <span class="system">
+          Should the vboxdrv kernel module be compiled now?
+         </span>
+         <span class="highlight">
+          &lt;-- Yes
+         </span>
+        </p>
+        <p>
+         Now we must add the user that will run VirtualBox (
+         <span class="system">
+          administrator
+         </span>
+         in this example) to the
+         <span class="system">
+          vboxusers
+         </span>
+         group:
+        </p>
+        <p class="command">
+         sudo adduser administrator vboxusers
+        </p>
+        <p>
+         VirtualBox is now installed and ready to be used.
+        </p>
+        <p>
+        </p>
+        <h3 id="-using-virtualbox-on-the-command-line">
+         3 Using VirtualBox On The Command Line
+        </h3>
+        <h4 id="-creating-a-vm">
+         3.1 Creating A VM
+        </h4>
+        <p>
+         To create a VM on the command line, we can use the
+         <span class="system">
+          VBoxManage
+         </span>
+         command. See
+        </p>
+        <p class="command">
+         VBoxManage --help
+        </p>
+        <p>
+         for a list of available switches and (highly recommended!) take a look at
+         <a href="http://www.virtualbox.org/manual/UserManual.html#vboxmanage" mce_real_href="http://www.virtualbox.org/manual/UserManual.html#vboxmanage" target="_blank">
+          http://www.virtualbox.org/manual/UserManual.html#vboxmanage
+         </a>
+         .
+        </p>
+        <p>
+         I will now create an Ubuntu 9.10 Server VM with 256MB memory and a 10GB hard drive from the Ubuntu 9.10 Server iso image (which I have stored in
+         <span class="system">
+          /home/ubuntu-9.10-server-amd64.iso
+         </span>
+         ):
+        </p>
+        <p class="command">
+         VBoxManage createvm --name "Ubuntu 9.10 Server" --register
+         <br/>
+         VBoxManage modifyvm "Ubuntu 9.10 Server" --memory 256 --acpi on --boot1 dvd --nic1 bridged --bridgeadapter1 eth0
+         <br/>
+         VBoxManage createhd --filename Ubuntu_9_10_Server.vdi --size 10000 --register
+         <br/>
+         VBoxManage storagectl "Ubuntu 9.10 Server" --name "IDE Controller" --add ide
+         <br/>
+         VBoxManage storageattach "Ubuntu 9.10 Server" --storagectl "IDE Controller" --port 0 --device 0 --type hdd --medium Ubuntu_9_10_Server.vdi
+         <br/>
+         VBoxManage storageattach "Ubuntu 9.10 Server" --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium /home/ubuntu-9.10-server-amd64.iso
+        </p>
+        <div style="width:336px;float:left; margin: 10px 15px 10px 0px;background-color:white;">
+         <script type="text/javascript">
+          GA_googleFillSlot('howtoforge_com_article_rectangle_b_300x250');
+         </script>
+        </div>
+        <p>
+        </p>
+        <h4 id="-importing-an-existing-vm">
+         3.2 Importing An Existing VM
+        </h4>
+        <p>
+         Let's assume you have a VM called
+         <span class="system">
+          examplevm
+         </span>
+         that you want to reuse on this host. On the old host, you should have a directory
+         <span class="system">
+          Machines/examplevm
+         </span>
+         in the VirtualBox directory;
+         <span class="system">
+          Machines/examplevm
+         </span>
+         should contain the
+         <span class="system">
+          examplevm.xml
+         </span>
+         file. Copy the
+         <span class="system">
+          examplevm
+         </span>
+         directory (including the
+         <span class="system">
+          examplevm.xml
+         </span>
+         file) to your new
+         <span class="system">
+          Machines
+         </span>
+         directory (if your user name is administrator, this is
+         <span class="system">
+          /home/administrator/.VirtualBox/Machines
+         </span>
+         - the result should be
+         <span class="system">
+          /home/administrator/.VirtualBox/Machines/examplevm/examplevm.xml
+         </span>
+         ).
+        </p>
+        <p>
+         In addition to that copy the
+         <span class="system">
+          examplevm.vdi
+         </span>
+         file from the old
+         <span class="system">
+          VDI
+         </span>
+         directory to the new one (e.g.
+         <span class="system">
+          /home/administrator/.VirtualBox/VDI/examplevm.vdi
+         </span>
+         ).
+        </p>
+        <p>
+         Afterwards, you must register the imported VM:
+        </p>
+        <p class="command">
+         VBoxManage registervm Machines/examplevm/examplevm.xml
+        </p>
+        <p>
+        </p>
+        <h4 id="-starting-a-vm-with-vboxheadless">
+         3.3 Starting A VM With VBoxHeadless
+        </h4>
+        <p>
+         Regardless of if you create a new VM or import and old one, you can start it with the command:
+        </p>
+        <p class="command">
+         VBoxHeadless --startvm "Ubuntu 9.10 Server"
+        </p>
+        <p>
+         (Replace
+         <span class="system">
+          Ubuntu 9.10 Server
+         </span>
+         with the name of your VM.)
+        </p>
+        <p>
+         <span class="system">
+          VBoxHeadless
+         </span>
+         will start the VM and a VRDP (
+         <span class="system">
+          VirtualBox Remote Desktop Protocol
+         </span>
+         ) server which allows you to see the VM's output remotely on another machine.
+        </p>
+        <p>
+         To stop a VM, run
+        </p>
+        <p class="command">
+         VBoxManage controlvm "Ubuntu 9.10 Server" poweroff
+        </p>
+        <p>
+         To pause a VM, run
+        </p>
+        <p class="command">
+         VBoxManage controlvm "Ubuntu 9.10 Server" pause
+        </p>
+        <p>
+         To reset a VM, run
+        </p>
+        <p class="command">
+         VBoxManage controlvm "Ubuntu 9.10 Server" reset
+        </p>
+        <p>
+         To learn more about
+         <span class="system">
+          VBoxHeadless
+         </span>
+         , take a look at
+        </p>
+        <p class="command">
+         VBoxHeadless --help
+        </p>
+        <p>
+         and at
+         <a href="http://www.virtualbox.org/manual/UserManual.html#id2515738" mce_real_href="http://www.virtualbox.org/manual/UserManual.html#id2515738" target="_blank">
+          http://www.virtualbox.org/manual/UserManual.html#id2515738
+         </a>
+         .
+        </p>
+        <nav>
+         <div id="articlePrevNextContainer">
+          <div id="articlePrevLink">
+          </div>
+          <div id="articleNextLink">
+           <a href="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server-p2">
+            Next &gt;&gt;
+           </a>
+          </div>
+         </div>
+        </nav>
+        <div style="height:30px; margin-top:20px;">
+         <p style="text-align:right;">
+          <img src="/images/pdficon_small.png"/>
+          <a href="/subscription/">
+           view as pdf
+          </a>
+          |
+          <img src="/images/print.gif"/>
+          <a href="/subscription/">
+           print
+          </a>
+         </p>
+        </div>
+        <div style="height:30px; margin-top:20px;">
+         <div style="float:left;">
+          <b>
+           Share this page:
+          </b>
+         </div>
+         <div style="float:left; margin-left:10px;">
+          <a class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="http://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" data-via="howtoforgecom" href="https://twitter.com/share">
+           Tweet
+          </a>
+         </div>
+         <div style="float:left; margin-left:20px;">
+          <fb:like action="recommend" colorscheme="light" font="trebuchet ms" href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" layout="button_count">
+          </fb:like>
+         </div>
+         <div style="float:left; margin-left:50px;">
+          <div class="g-plusone" data-count="true" data-href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" data-size="medium">
+          </div>
+         </div>
+        </div>
+       </div>
+       <div id="htfContentPagePaging">
+        <h2>
+         Sub pages
+        </h2>
+        <nav>
+         <ul>
+          <li>
+           <a href="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server">
+            <b>
+             VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+            </b>
+           </a>
+          </li>
+          <li>
+           <a href="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server-p2">
+            VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server - Page 2
+           </a>
+          </li>
+         </ul>
+        </nav>
+       </div>
+       <div id="htfContentPageComment">
+        <a name="comments">
+        </a>
+        <h2>
+         2 Comment(s)
+        </h2>
+        <div id="commentform">
+         <div class="commentContainerHead" style="font-size:18px;">
+          Add comment
+         </div>
+         <div class="commentContainer">
+          <form action="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server/#comments" method="post">
+           <input id="reply-to-comment" name="reply_to" type="hidden" value="0"/>
+           <div id="commentFormDetail">
+            <div style="width:48%; float:left; margin-right:3%">
+             <label for="commentname">
+              Name *
+             </label>
+             <input id="commentname" name="commentname" value=""/>
+            </div>
+            <div style="width:48%;float:left;">
+             <label for="commentname">
+              Email *
+             </label>
+             <input id="commentemail" name="commentemail" value=""/>
+            </div>
+            <div style="clear:both;">
+            </div>
+           </div>
+           <textarea id="commentedit" name="commentedit" style="width:auto;">
+           </textarea>
+           <div>
+            <div style="float:left;">
+             <div class="g-recaptcha" data-sitekey="6LdX9fUSAAAAALWwVoPdeXScMSketz4npF-0QcQ1">
+             </div>
+             <script src="https://www.google.com/recaptcha/api.js?hl=en" type="text/javascript">
+             </script>
+            </div>
+            <div style="margin-top:10px;margin-bottom:10px;">
+             <input class="button primary" name="submit" style="float:right;" type="submit" value="Submit comment"/>
+            </div>
+            <div style="clear:both;">
+            </div>
+           </div>
+           <script>
+            tinymce.init({selector:"textarea#commentedit",theme:"modern",height:100,apply_source_formatting:true,remove_linebreaks:false,menubar:false,plugins:["link"],content_css:"https://www.howtoforge.com/themes/howtoforge/css/custom.css",toolbar:"undo redo | bold italic link",});
+           </script>
+          </form>
+         </div>
+        </div>
+        <h3>
+         Comments
+        </h3>
+        <div class="commentContainerHead commentLevel0">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          amldc
+          <b>
+           at:
+          </b>
+          <i>
+           2010-02-06 22:58:18
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="5087" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel0" id="comment5087">
+         <p>
+         </p>
+         <p>
+          I can't install virtualbox 3.1 with karmic repository but it's fine with jauny one (on Ubuntu 9.10 64bit):
+         </p>
+         <pre>
+          deb http://download.virtualbox.org/virtualbox/debian jaunty non-free
+         </pre>
+        </div>
+        <div class="commentContainerHead commentLevel0">
+         <div class="floatLeft">
+          <b>
+           From:
+          </b>
+          Anonymous
+          <b>
+           at:
+          </b>
+          <i>
+           2010-02-03 01:03:47
+          </i>
+         </div>
+         <div class="floatRight">
+          <a class="reply-to" data-comment="5088" href="#">
+           Reply
+          </a>
+         </div>
+         <div class="clearBoth">
+         </div>
+        </div>
+        <div class="commentContainer commentLevel0" id="comment5088">
+         <p>
+         </p>
+         <p>
+          <br/>
+          I recommend a little bit change, from the line:
+          <br/>
+          <br/>
+          "...In addition to that copy the examplevm.vdi file from the old VDI directory to the new one (e.g. /home/administrator/.VirtualBox/VDI/examplevm.vdi)..."
+         </p>
+         <p>
+          To something like:
+          <br/>
+          <br/>
+          "You can copy the virtual hard disk (.vdi file) by using: VBoxManage clonevdi [source] [dest]"
+          <br/>
+          <br/>
+          As explained in:
+          <br/>
+          <br/>
+          + http://sendderek.wordpress.com/2007/11/18/how-to-properly-backup-a-virtualbox-machine-vdi/
+          <br/>
+          + http://ubuntuforums.org/archive/index.php/t-553326.html
+          <br/>
+          <br/>
+          Just for less headache for you :)
+          <br/>
+          <br/>
+          <br/>
+         </p>
+        </div>
+       </div>
+       <div class="breadBoxBottom">
+        <nav>
+         <fieldset class="breadcrumb">
+          <span class="crumbs">
+           <span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/" itemprop="url" rel="up">
+             <span itemprop="title">
+              Tutorials
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+             </span>
+            </span>
+           </span>
+           <span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="crumb" href="/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" itemprop="url" rel="up">
+             <span itemprop="title">
+              VBoxHeadless - Running Virtual Machines With VirtualBox 3.1 On A Headless Ubuntu 9.10 Server
+             </span>
+            </a>
+            <span class="arrow">
+             <span>
+              &gt;
+             </span>
+            </span>
+           </span>
+          </span>
+         </fieldset>
+        </nav>
+       </div>
+       <script>
+        $(document).on('click','a.reply-to',function(e){e.preventDefault();var self=$(this);var cid=self.attr('data-comment');console.log(cid);if(!cid)return this;$('#commentform').insertAfter('#comment'+cid);$('#reply-to-comment').val(cid);var textareaId='commentedit';tinyMCE.get(textareaId).remove();tinyMCE.execCommand("mceAddEditor",false,textareaId);tinyMCE.activeEditor.focus();});
+       </script>
+       <div style="margin-top:10px;margin-bottom:10px;text-align:center;">
+        <center>
+         <script type="text/javascript">
+          GA_googleFillSlot("howtoforge_com_article_leaderboard_b_728x90");
+         </script>
+        </center>
+       </div>
+       <form action="/community/login/login?redirect=/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" class="xenForm eAuth" id="login" method="post" style="display:none">
+        <ul id="eAuthUnit">
+         <li>
+          <a class="fbLogin" href="/community/register/facebook?reg=1" tabindex="110">
+           <span>
+            Log in with Facebook
+           </span>
+          </a>
+         </li>
+         <li>
+          <a class="twitterLogin" href="/community/register/twitter?reg=1" tabindex="110">
+           <span>
+            Log in with Twitter
+           </span>
+          </a>
+         </li>
+         <li>
+          <span class="googleLogin GoogleLogin JsOnly" data-client-id="198773272284-b6tfk0c28bje81p774prrcrkq9jb3o44.apps.googleusercontent.com" data-redirect-url="/community/register/google?code=__CODE__&amp;csrf=hVMXbW_3rnrmq4Em" tabindex="110">
+           <span>
+            Log in with Google
+           </span>
+          </span>
+         </li>
+        </ul>
+        <div class="ctrlWrapper">
+         <dl class="ctrlUnit">
+          <dt>
+           <label for="LoginControl">
+            Your name or email address:
+           </label>
+          </dt>
+          <dd>
+           <input class="textCtrl" id="LoginControl" name="login" tabindex="101" type="text"/>
+          </dd>
+         </dl>
+         <dl class="ctrlUnit">
+          <dt>
+           <label for="ctrl_password">
+            Do you already have an account?
+           </label>
+          </dt>
+          <dd>
+           <ul>
+            <li>
+             <label for="ctrl_not_registered">
+              <input id="ctrl_not_registered" name="register" tabindex="105" type="radio" value="1"/>
+              No, create an account now.
+             </label>
+            </li>
+            <li>
+             <label for="ctrl_registered">
+              <input checked="checked" class="Disabler" id="ctrl_registered" name="register" tabindex="105" type="radio" value="0"/>
+              Yes, my password is:
+             </label>
+            </li>
+            <li id="ctrl_registered_Disabler">
+             <input class="textCtrl" id="ctrl_password" name="password" tabindex="102" type="password"/>
+             <div class="lostPassword">
+              <a href="/community/lost-password/" tabindex="106">
+               Forgot your password?
+              </a>
+             </div>
+            </li>
+           </ul>
+          </dd>
+         </dl>
+         <dl class="ctrlUnit submitUnit">
+          <dt>
+          </dt>
+          <dd>
+           <input class="button primary" data-loginphrase="Log in" data-signupphrase="Sign up" tabindex="104" type="submit" value="Log in"/>
+           <label class="rememberPassword" for="ctrl_remember">
+            <input id="ctrl_remember" name="remember" tabindex="103" type="checkbox" value="1"/>
+            Stay logged in
+           </label>
+          </dd>
+         </dl>
+        </div>
+        <input name="cookie_check" type="hidden" value="1"/>
+        <input name="redirect" type="hidden" value="/community/"/>
+        <input name="_xfToken" type="hidden" value=""/>
+       </form>
+      </div>
+     </div>
+     <aside>
+      <div class="sidebar">
+       <div class="section loginButton">
+        <div class="secondaryContent">
+         <label for="LoginControl" id="SignupButton">
+          <a class="inner" href="/community/login/">
+           Sign up now!
+          </a>
+         </label>
+        </div>
+       </div>
+       <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-2">
+        <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+         <div class="section infoBlock sharePage">
+          <div class="secondaryContent socialMediaIcon">
+           <a href="https://twitter.com/howtoforgecom" target="_blank">
+            <img src="/images/socialmedia/64x64/twitter.png"/>
+           </a>
+           <a href="https://www.facebook.com/howtoforge" target="_blank">
+            <img src="/images/socialmedia/64x64/facebook.png"/>
+           </a>
+           <a href="https://plus.google.com/+howtoforge/posts" target="_blank">
+            <img src="/images/socialmedia/64x64/googleplus.png"/>
+           </a>
+           <a href="https://www.howtoforge.com/feed" target="_blank">
+            <img src="/images/socialmedia/64x64/rss.png"/>
+           </a>
+          </div>
+         </div>
+        </div>
+        <div class="section widget-group-no-name widget-container">
+         <div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-3">
+          <h3>
+           Tutorial Info
+          </h3>
+          <div class="pairsJustified">
+           <dl class="discussionCount">
+            <dt>
+             Author:
+            </dt>
+            <dd>
+             falko
+            </dd>
+           </dl>
+           <dl class="discussionCount">
+            <dt>
+             Last updated:
+            </dt>
+            <dd>
+             Jun 02, 2010
+            </dd>
+           </dl>
+           <dl class="discussionCount">
+            <dt>
+             Tags:
+            </dt>
+            <dd>
+             <a href="/tutorials/virtualization/" rel="tag">
+              virtualization
+             </a>
+             ,
+             <a href="/tutorials/ubuntu/" rel="tag">
+              ubuntu
+             </a>
+             ,
+             <a href="/tutorials/virtualbox/" rel="tag">
+              virtualbox
+             </a>
+            </dd>
+           </dl>
+          </div>
+         </div>
+        </div>
+        <div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+         <div class="section infoBlock sharePage">
+          <div class="secondaryContent">
+           <h3>
+            Share This Page
+           </h3>
+           <div class="tweet shareControl">
+            <a class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="http://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" data-via="howtoforgecom" href="https://twitter.com/share">
+             Tweet
+            </a>
+           </div>
+           <div class="facebookLike shareControl">
+            <fb:like action="recommend" colorscheme="light" font="trebuchet ms" href="http://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" layout="button_count">
+            </fb:like>
+           </div>
+           <div class="plusone shareControl">
+            <div class="g-plusone" data-count="true" data-href="https://www.howtoforge.com/vboxheadless-running-virtual-machines-with-virtualbox-3.1-on-a-headless-ubuntu-9.10-server" data-size="medium">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <script type="text/javascript">
+         google_ad_client="ca-pub-3043223216276099";google_ad_slot="6709042890";google_ad_width=300;google_ad_height=600;
+        </script>
+        <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+        </script>
+       </div>
+      </div>
+     </aside>
+    </div>
+   </div>
+  </div>
+  <footer>
+   <div class="footer">
+    <div class="pageWidth">
+     <div class="pageContent">
+      <div class="skin_branding">
+       <a href="http://www.xenfocus.com" rel="nofollow">
+        Xenforo skin
+       </a>
+       <span>
+        by
+        <a href="http://www.xenfocus.com" rel="nofollow">
+         Xenfocus
+        </a>
+       </span>
+      </div>
+      <ul class="footerLinks">
+       <li>
+        <a href="/community/misc/contact">
+         Contact
+        </a>
+       </li>
+       <li>
+        <a href="/community/help/">
+         Help
+        </a>
+       </li>
+       <li>
+        <a href="/imprint/">
+         Imprint
+        </a>
+       </li>
+       <li>
+        <a class="homeLink" href="/">
+         Tutorials
+        </a>
+       </li>
+       <li>
+        <a class="topLink" href="#navigation">
+         Top
+        </a>
+       </li>
+       <li>
+        <a class="globalFeed" href="/feed" rel="alternate" target="_blank" title="RSS-Feed for Howtoforge">
+         RSS-Feed
+        </a>
+       </li>
+      </ul>
+      <span class="helper">
+      </span>
+     </div>
+    </div>
+   </div>
+   <div class="footerLegal">
+    <div class="pageWidth">
+     <div class="pageContent">
+      <ul id="legal">
+       <li>
+        <a href="/community/help/terms">
+         Terms
+        </a>
+       </li>
+      </ul>
+      <div id="copyright">
+       <a class="concealed" href="https://www.howtoforge.com">
+        Howtoforge
+        <span>
+          projektfarm GmbH.
+        </span>
+       </a>
+      </div>
+      <span class="helper">
+      </span>
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script type="text/javascript">
+   $(document).ready(function(){$.cookiesDirective({privacyPolicyUri:'/community/help/terms',explicitConsent:false,position:'bottom',cookieScripts:'Google Analytics, Google Adsense ',backgroundColor:'#52B54A',linkColor:'#ffffff'});});
+  </script>
+  <script>
+   jQuery.extend(true,XenForo,{visitor:{user_id:0},serverTimeInfo:{now:1409831907,today:1409781600,todayDow:4},_lightBoxUniversal:"0",_enableOverlays:"1",_animationSpeedMultiplier:"1",_overlayConfig:{top:"10%",speed:200,closeSpeed:100,mask:{color:"rgb(0, 0, 0)",opacity:"0.6",loadSpeed:200,closeSpeed:100}},_ignoredUsers:[],_loadedScripts:{"node_list":true,"node_category":true,"node_forum":true,"sidebar_share_page":true,"wf_default":true,"bbm_buttons":true,"login_bar":true,"twitter":true},_cookieConfig:{path:"/",domain:"",prefix:"xf_"},_csrfToken:"",_csrfRefreshUrl:"/community/login/csrf-token-refresh",_jsVersion:"303ae0ca"});jQuery.extend(XenForo.phrases,{cancel:"Cancel",a_moment_ago:"A moment ago",one_minute_ago:"1 minute ago",x_minutes_ago:"%minutes% minutes ago",today_at_x:"Today at %time%",yesterday_at_x:"Yesterday at %time%",day_x_at_time_y:"%day% at %time%",day0:"Sunday",day1:"Monday",day2:"Tuesday",day3:"Wednesday",day4:"Thursday",day5:"Friday",day6:"Saturday",_months:"January,February,March,April,May,June,July,August,September,October,November,December",_daysShort:"Sun,Mon,Tue,Wed,Thu,Fri,Sat",following_error_occurred:"The following error occurred",server_did_not_respond_in_time_try_again:"The server did not respond in time. Please try again.",logging_in:"Logging in",click_image_show_full_size_version:"Click this image to show the full-size version.",show_hidden_content_by_x:"Show hidden content by {names}"});XenForo.Facebook.appId="";XenForo.Facebook.forceInit=true;$(document).ready(function(){$("a.fancybox").fancybox();});
+  </script>
+  <script async="" id="_fancybar_js" src="//cdn.fancybar.net/ac/fancybar.js?zoneid=1502&amp;serve=C6ADVKE&amp;placement=howtoforge" type="text/javascript">
+  </script>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-2155872-1','auto');ga('send','pageview');
+  </script>
+ </body>
+</html>

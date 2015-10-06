@@ -1,0 +1,841 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <!-- HEAD -->
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <meta content=" description. " name="description"/>
+  <meta content=" keywords " name="keywords"/>
+  <meta content="noindex,nofollow" name="robots"/>
+  <link href="style-int.css" media="screen" rel="stylesheet" type="text/css"/>
+  <!-- JQUERY AND PLUGINS SCRIPTS  -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js" type="text/javascript">
+  </script>
+  <link href="superfish.css" media="screen" rel="stylesheet" type="text/css"/>
+  <script src="js/superfish.js" type="text/javascript">
+  </script>
+  <script src="js/jquery.hoverIntent.minified.js" type="text/javascript">
+  </script>
+  <script src="js/start.js" type="text/javascript">
+  </script>
+  <!--[if IE 7]&gt;
+&lt;link rel="stylesheet" type="text/css" href="styleIE7.css" media="screen" /&gt;
+&lt;![endif]-->
+  <!--[if lte IE 6]&gt;
+&lt;link rel="stylesheet" type="text/css" href="styleIE6.css" media="screen" /&gt;
+&lt;script src="js/ie6/warning.js"&gt;&lt;/script&gt;&lt;script&gt;window.onload=function(){e("js/ie6/")}&lt;/script&gt;
+&lt;![endif]-->
+  <title>
+   One Systems - Impedance Calculator
+  </title>
+  <script type="text/javascript">
+   &lt;!--
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i&lt;a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+//--&gt;
+  </script>
+  <script type="text/javascript">
+   function blurCalculate() {
+
+		clearLabels();
+
+		var inputOV = $("#textOV").val();
+		if (isNaN(inputOV)) {
+			$("#LabelError").html("Enter a number for OV");
+			return;
+		}
+		if (inputOV == "") {
+		    $("#LabelError").html("Enter a number for OV");
+			return;
+		}
+
+
+var inputPT = $("#textPT").val();
+
+if (isNaN(inputPT)) {
+
+    $("#LabelError").html("Enter a number for PT");
+
+    return;
+
+}
+
+if (inputPT == "") {
+    $("#LabelError").html("Enter a number for PT");
+    return;
+
+}
+
+var inputLZ = $("#textLZ").val();
+if (isNaN(inputLZ)) {
+    $("#LabelError").html("Enter a number for LZ");
+    return;
+}
+if (inputLZ == "") {
+    $("#LabelError").html("Enter a number for LZ");
+    return;
+}
+
+var inputIl = $("#selectIl").val();
+if (isNaN(inputIl)) {
+    $("#LabelError").html("Select a value for Il");
+    return;
+}
+if (inputIl == "") {
+
+    $("#LabelError").html("Select a value for Il");
+    return;
+}
+
+var inputLp = $("#textLp").val();
+if (isNaN(inputLp)) {
+    $("#LabelError").html("Enter a number for Lp");
+    return;
+}
+if (inputLp == "") {
+    $("#LabelError").html("Enter a number for Lp");
+    return;
+}
+
+var inputWl = $("#textWl").val();
+if (isNaN(inputWl)) {
+    $("#LabelError").html("Enter a number for Wl");
+    return;
+}
+if (inputWl == "") {
+    $("#LabelError").html("Enter a number for Wl");
+
+    return;
+}
+
+
+var inputWG = $("#textWG").val();
+if (isNaN(inputWG)) {
+    $("#LabelError").html("Enter a number for WG");
+    return;
+}
+if (inputWG == "") {
+    $("#LabelError").html("Enter a number for WG");
+    return;
+}
+
+var comment = "";
+
+//        TI= (OV^2)/PT                              calculates transformer nominal impedance
+var inputTI = inputOV * inputOV / inputPT;
+inputTI = Math.round(inputTI * 1000) / 1000;
+$("#labelTI").html(inputTI);
+
+//WR=10^((WG-10)/10)                  calculates wire resistance from AWG per 1000 ft.
+var inputWR  = Math.pow(10, (inputWG - 10)/10)
+inputWR = Math.round(inputWR * 1000) / 1000;
+$("#labelWR").html(inputWR);
+//W= ((WR/1000)*Wl)*2                calculates total wire resistance
+var inputW = ((inputWR / 1000) * inputWl) * 2;
+inputW = Math.round(inputW * 1000) / 1000;
+$("#labelW").html(inputW);
+//Rt= W+TI                                      calculates total resistance (wire plus xfrmr impedance)
+var inputRt = inputW + inputTI;
+inputRt = Math.round(inputRt * 1000) / 1000;
+$("#labelRt").html(inputRt);
+//AP=(OV^2)/Rt                               actual power (applied voltage squared and total R)
+var inputAP = inputOV * inputOV / inputRt;
+inputAP = Math.round(inputAP * 1000) / 1000;
+$("#labelAP").html(inputAP);
+//Ia=OV/Rt                                        actual current draw high Z
+var inputIa = inputOV / inputRt;
+inputIa = Math.round(inputIa * 1000) / 1000;
+$("#labelIa").html(inputIa);
+//RT=LZ+W                                      calculates total low Z resistance
+var inputRT = (1 * inputLZ) + inputW;
+inputRT = Math.round(inputRT * 1000) / 1000;
+$("#labelRT").html(inputRT);
+//Vlz=(SQRT(Lp*RT))                    calculates low Z voltage
+var inputVlz = Math.sqrt(inputLp * inputRT);
+inputVlz = Math.round(inputVlz * 1000) / 1000;
+$("#labelVlz").html(inputVlz);
+//I2=Vlz/RT                                       actual current draw low Z
+var inputI2 = inputVlz / inputRT;
+inputI2 = Math.round(inputI2 * 1000) / 1000;
+$("#labelI2").html(inputI2);
+
+
+
+//PL1=(Ia^2)*W                               power loss across wire
+var inputPL1 = inputIa * inputIa * inputW;
+inputPL1 = Math.round(inputPL1 * 1000) / 1000;
+$("#labelPL1").html(inputPL1);
+//PL2=(Ia^2)*TI                               power at transformer input
+var inputPL2 = inputIa * inputIa * inputTI;
+inputPL2 = Math.round(inputPL2 * 1000) / 1000;
+$("#labelPL2").html(inputPL2);
+//PS=(10^(-I1/10))*PL2                    power at speakers (Hi Z)
+var inputPS = Math.pow(10, (-1 * inputIl / 10)) * inputPL2;
+inputPS = Math.round(inputPS * 1000) / 1000;
+$("#labelPS").html(inputPS);
+//Vt=Ia*TI                                        Voltage across transformer input
+var inputVt = inputIa * inputTI;
+inputVt = Math.round(inputVt * 1000) / 1000;
+$("#labelVt").html(inputVt);
+
+//SPL1=10*(LOG10(PS/PT))           SPL drop in dB
+var dividePSPT = inputPS / inputPT;
+var inputSPL1 = 10 * Math.log(dividePSPT)/Math.LN10;
+inputSPL1 = Math.round(inputSPL1 * 1000) / 1000;
+$("#labelSPL1").html(inputSPL1); 
+
+
+
+//OUTPUTS (Low Z) 
+
+//PL3=(I2^2)*W                              power loss across wire lo z
+var inputPL3 = inputI2 * inputI2 * inputW;
+inputPL3 = Math.round(inputPL3 * 1000) / 1000;
+$("#labelPL3").html(inputPL3);
+//PL4=(I2^2)*LZ                              power delivered to speaker
+var inputPL4 = inputI2 * inputI2 * inputLZ;
+inputPL4 = Math.round(inputPL4 * 1000) / 1000;
+$("#labelPL4").html(inputPL4);
+
+//SPL2=10*(LOG10(PL4/Lp))         SPL drop in dB
+var inputSPL2 = 10 * Math.log(inputPL4 / inputLp) / Math.LN10;
+inputSPL2 = Math.round(inputSPL2 * 1000) / 1000;
+$("#labelSPL2").html(inputSPL2); 
+
+  
+
+	}
+
+	function startup() {
+		clearLabels();
+		$("#ButtonCalculate").click(blurCalculate);
+	}
+
+	function clearLabels() {
+		$("#LabelCalculated1").html("");
+		$("#LabelCalculated2").html("");
+		$("#LabelCalculated3").html(""); 
+
+	}
+
+	$(document).ready(startup);
+  </script>
+ </head>
+ <!-- end head -->
+ <!-- BODY -->
+ <body>
+  <!-- HEADER -->
+  <div id="header">
+   <div class="container">
+    <div class="logoCont">
+     <a href="#">
+      <img alt="One Systems" height="220" src="images/logo.png" title="One Systems" width="129"/>
+     </a>
+     <p>
+      Call
+      <br/>
+      +1.615.823.1655
+     </p>
+     <p>
+      Call Toll Free
+      <br/>
+      in North America
+      <br/>
+      +1.866.846.1284
+     </p>
+    </div>
+   </div>
+  </div>
+  <!-- MAIN -->
+  <div id="main">
+   <div class="container">
+    <div id="int-main">
+     <div class="breadcrumbs">
+      <a href="index.php">
+       Home
+      </a>
+      
+      <a href="#">
+       Documentation
+      </a>
+      
+      <a href="#">
+       High/Low Impedance Calculator
+      </a>
+     </div>
+     <h2>
+      <img alt="Impedance Calculator" height="92" src="images/hdr-calc.gif" width="789"/>
+     </h2>
+     <p>
+      The decision to use low impedance, 4 ohm or 8 ohm loudspeakers, or a high impedance (often called Constant Voltage or 70Volt) system is not a straight forward matter in system designs that use large format loudspeakers or are distributed over a substantial distance.
+     </p>
+     <p>
+      One Systems offers both low impedance designs and high impedance designs for direct weather installations and indoor applications. The calculator in this article was designed to provide the information necessary to help system designers choose the best solution for a particular application or venue.
+     </p>
+     <p>
+      The calculator requires simple input parameters and will generate outputs for both low impedance and high impedance situations. The basic intent of this program is to calculate the performance trade-off associated with both low impedance and high impedance designs for a particular situation.
+     </p>
+     <p>
+      There are often performance trade offs associated with transformer insertion loss, bandwidth limitations and line losses. Of course the low Z speaker can sometimes suffer from extreme line losses, particularly when the resistance of the line becomes an appreciable percentage of the nominal impedance of the low Z speaker. In order to make a good comparison between low impedance loudspeaker systems and high impedance, or transformer based loudspeakers several user inputs are required.
+     </p>
+     <p>
+      NOTE: It is frequently the case that smaller diameter wire is used when high impedance speakers are specified. Entering various gauges of wire can often show that there is no substitute for copper. (SAY IT AGAIN, THERE IS NO SUBSTITUTE FOR COPPER, THE LARGER THE WIRE, THE BETTER THE SYSTEM PERFORMANCE!) That is, large diameter wire is always preferable if there is adequate budget, regardless of whether the design is low impedance or high impedance
+     </p>
+     <p>
+      The calculator below will allow you to vary any of the input parameters to see how a low Z system will compare with a high Z system. The last result will allow you to see the SPL loss in each system type.
+     </p>
+     <h3>
+      Calculator Inputs
+     </h3>
+     <p>
+      <br/>
+      Enter the required data in the INPUTS section below.
+     </p>
+     <div>
+      INPUTS
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        1. Input the high impedance maximum rms operating voltage, either 70.7 volts or 100 volts (OP).
+       </strong>
+       <input id="textOV" style="width:100px" type="text"/>
+      </div>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        2. Enter the value of the power tap that will be used for the high impedance loudspeaker (PT)
+       </strong>
+       <input id="textPT" style="width:100px" type="text"/>
+      </div>
+      <p>
+       The power tap values are as follows for One Systems high impedance loudspeakers:
+      </p>
+      <p>
+       <em>
+        Transformer
+       </em>
+       <em>
+        Tap Values (Watts)
+       </em>
+       <br/>
+       50 Watt50, 25, 12.5
+       <br/>
+       150 Watt150, 75, 37
+       <br/>
+       600 Watt600, 300, 150
+      </p>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        3. Enter the impedance of the low impedance loudspeaker, typically either 4 ohms or 8 ohms. (LZ)
+       </strong>
+       <input id="textLZ" style="width:100px" type="text"/>
+      </div>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        4. Enter the transformer wattage rating of the transformer (NOT THE POWER TAP) (IL).
+       </strong>
+       <select id="selectIl">
+        <option value=".5">
+         600 watt autoformer
+        </option>
+        <option value=".64">
+         150 watt transformer
+        </option>
+        <option value=".9">
+         50 watt transformer
+        </option>
+       </select>
+      </div>
+     </div>
+     <div>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        5. Enter the desired input power for low impedance loudspeaker. (Lp)
+       </strong>
+       <input id="textLp" style="width:100px" type="text"/>
+      </div>
+      <p>
+       You can enter any power you wish. A good place to begin is to enter the same power level as the high Z speaker. One thing to remember is that the high Z speaker really limits you to the power rating of the transformer, where the low Z speaker power can be increase to near the power rating of the speaker enclosure itself. As an example, you could begin with 150 watts for the high impedance loudspeaker and also use 150 watts for the low impedance loudspeaker. Once this result is analyzed you can easily increase the power input to the low impedance speaker and compare new results to the high impedance case. Remember, you do NOT need to use the same input power for the low impedance design as the high impedance design. (but remember that you may need more amplifier channels when you start increasing power levels with this parameter)
+      </p>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        6. Enter the distance from the amplifier to the loudspeaker in feet (Wl)
+       </strong>
+       <input id="textWl" style="width:100px" type="text"/>
+      </div>
+      <p>
+       The program automatically calculates the return distance so it is not necessary to enter the distance to the loudspeaker and back again. Simply enter the distance from the amplifier to the loudspeaker.
+      </p>
+      <p>
+       <strong>
+        NOTE: If the distance is in meters multiply the metric distance (m) by 3.28 and enter in feet.
+       </strong>
+      </p>
+     </div>
+     <div>
+      <div class="bkgd-inputs">
+       <strong>
+        7. Enter the AWG wire size. (WG)
+       </strong>
+       <input id="textWG" style="width:100px" type="text"/>
+      </div>
+      <p>
+       This is a fun parameter to play with. Change the wire size and watch the final SPL and associated line losses vary. (At the moment the program only deals with AWG and feet, not metric units). As noted above, BIG wire is always better then smaller wire. The lower the dc resistance of the wire, the higher the system performance, regardless of whether the design is high impedance or low impedance.
+      </p>
+      <p>
+       <strong>
+        NOTE: See Appendix 2 for approximate conversions of AWG wire sizes to metric wire sizes.
+       </strong>
+      </p>
+     </div>
+     <div>
+      <input id="ButtonCalculate" type="submit" value="Calculate"/>
+      <label id="LabelError" style="color:Red">
+      </label>
+     </div>
+     <div>
+      <span style="display:inline-block;width:100px; vertical-align:top">
+      </span>
+      <hr noshade="noshade"/>
+      <h3>
+       <br/>
+       Calculator Outputs
+       <br/>
+       <br/>
+      </h3>
+     </div>
+     <div id="output-hidden">
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelTI">
+        </label>
+       </span>
+       TI= (OV^2)/PT                              calculates transformer nominal impedance
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelWR">
+        </label>
+       </span>
+       WR=10^((WG-10)/10)                  calculates wire resistance from AWG per 1000 ft.
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelW">
+        </label>
+       </span>
+       W= ((WR/1000)*Wl)*2                calculates total wire resistance
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelRt">
+        </label>
+       </span>
+       Rt= W+TI                                      calculates total resistance (wire plus xfrmr impedance)
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelAP">
+        </label>
+       </span>
+       AP=(OV^2)/Rt                               actual power (applied voltage squared and total R)
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelIa">
+        </label>
+       </span>
+       Ia=OV/Rt                                        actual current draw high Z
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelRT">
+        </label>
+       </span>
+       RT=LZ+W                                      calculates total low Z resistance
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelVlz">
+        </label>
+       </span>
+       Vlz=(SQRT(Lp*RT))                    calculates low Z voltage
+      </div>
+      <div>
+       <span style="display:inline-block;width:100px; vertical-align:top">
+        <label id="labelI2">
+        </label>
+       </span>
+       I2=Vlz/RT                                       actual current draw low Z
+      </div>
+      <div>
+      </div>
+     </div>
+     <div>
+      <span style="display:inline-block;width:100px; vertical-align:top">
+      </span>
+      <br/>
+      <strong>
+       High Impedance Outputs
+      </strong>
+      <br/>
+      <br/>
+     </div>
+     <div>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelPL1">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       1. Power loss across the wire. This output displays the losses associated with power dissipation in the wire. It can be easily seen that when the wire gauge is varied the power losses change. Obviously, this parameter also varies with the current drawn from the amplifier and the distance to the loudspeaker.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelPL2">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       2. Power at the transformer input. This output can be compared to the original input parameter of Desired Tap Value in watts. A simple comparison illustrates the losses associated with the system wiring and gives the designer a good feel for the actual power delivered to the loudspeaker input terminal.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelPS">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       3. Power at the speakers. This is different from the power delivered to the input of the enclosure. Now the transformer insertion loss must be taken into account. The losses in the transformer further reduce the available power to the actual transducers in the loudspeaker enclosure. This is the real value that should be compared to the Desired Tap Value to look at all system losses.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelVt">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       4. Voltage across the transformer input. This simply shows the voltage drop associated with the losses in the wire. So a 70.7 Vrms output, for example, can be seen to drop to some new value.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelSPL1">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       5. SPL drop. This value shows the sound pressure level drop from the desired input power to available power to the transducers. This parameter is a good measure of what to expect in terms of output degradation.
+      </span>
+     </div>
+     <div>
+     </div>
+     <div>
+      <br/>
+      <strong>
+       Low Impedance Outputs
+      </strong>
+      <br/>
+      <br/>
+     </div>
+     <div>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelPL3">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       1. Power loss across the wire. This output should be compared to the Power loss across the wire for the high impedance design. In most cases the power loss will be higher with the low impedance design. However, the final determination of which configuration (high impedance or low impedance) should not be made on this parameter alone.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelPL4">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       2. Power delivered the loudspeaker. Because there is no transformer in the low impedance design, insertion losses to not reduce the system performance, so this parameter should be compared to the high impedance output Power at the speakers. Comparing these two outputs offers an excellent feel for which design offers a better alternative.
+      </span>
+     </div>
+     <div class="output-spacing">
+      <span class="outputs">
+       <label id="labelSPL2">
+       </label>
+      </span>
+      <span class="output-flt-rt">
+       3. SPL drop. This value should be compared to the same value associated with the high impedance design.
+      </span>
+     </div>
+     <p>
+      <strong>
+       QUICK ANALYSIS:
+      </strong>
+      <br/>
+      What we mainly care about in this analysis is the power applied to the loudspeaker transducers themselves. Does the high impedance design or low impedance design maximize the power to the loudspeaker?
+      <br/>
+      <br/>
+      Also, consider the number of loudspeakers that need to be wired to a single channel of an amplifier output.(The high impedance design may still offer a more desirable alternative even if the power to the individual speaker is less if more loudspeakers are required on an amplifier channel then the low impedance design will permit)
+     </p>
+     <h3>
+      <br/>
+      Appendix 1
+      <br/>
+     </h3>
+     <p>
+      <br/>
+      Transformers work by increasing the impedance presented to the amplifier. This then allows the amplifier output voltage to be increased, and the current decreased. The decrease in current reduces the power loss in the wiring (I^2*R losses). The impedance of each power tap is listed below. This is important because of the 600 watt transformer.
+     </p>
+     <table border="0" cellpadding="0" cellspacing="5" width="437">
+      <tr>
+       <td width="105">
+        <strong>
+         Power Tap
+        </strong>
+       </td>
+       <td width="167">
+        <strong>
+         Impedance (70.7Vrms)
+        </strong>
+       </td>
+       <td width="165">
+        <strong>
+         Impedance (100Vrms)
+        </strong>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        12.5 Watts
+       </td>
+       <td>
+        399.8 ohms
+       </td>
+       <td>
+        799.7 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        25 Watts
+       </td>
+       <td>
+        199.9 ohms
+       </td>
+       <td>
+        399.8 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        37.5 Watts
+       </td>
+       <td>
+        133.2 ohms
+       </td>
+       <td>
+        266.6 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        75 Watts
+       </td>
+       <td>
+        66.6 ohms
+       </td>
+       <td>
+        133.3 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        150 Watts
+       </td>
+       <td>
+        33.3 ohms
+       </td>
+       <td>
+        66.6 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        300 Watts
+       </td>
+       <td>
+        16.6 ohms
+       </td>
+       <td>
+        33.3 ohms
+       </td>
+      </tr>
+      <tr>
+       <td>
+        600 Watts
+       </td>
+       <td>
+        8.3 ohms
+       </td>
+       <td>
+        16.6 ohms
+       </td>
+      </tr>
+     </table>
+     <p>
+      <br/>
+      Inspection of the table shown above illustrates the limitation of high impedance designs when power levels become large. At a desired power tap of 600 watts a 70.7 Vrms transformer presents an 8.3 ohm impedance to the amplifier. Under these conditions it makes no sense to connect the transformer to an 8 ohm loudspeaker/transducer load. There would be no advantage and the transformer insertion loss would produce a reduced SPL! Using the 600 watt tap with a 70.7Vrms transformer makes only slightly more sense when the transformer is connected to a 4 ohm loudspeaker/transducer load. The impedance presented to the amplifier goes up from 4 ohms to 8 ohms but it is likely that the transformer insertion loss will outweigh any advantage.
+     </p>
+     <p>
+      Using the 600 watt tap with a 100Vrms transformer makes more sense, particularly if the loudspeaker/transducer load is a 4 ohm nominal impedance. The transformer impedance, from the table above, is 16.6 ohms and this can offer advantages over long cable runs.
+     </p>
+     <p>
+      Power taps from 300 watts and below certainly offer advantages but the calculator can easily analyze the tradeoffs between the high impedance designs and low impedance designs when all other parameters are factored in.
+     </p>
+     <h3>
+      <br/>
+      Appendix 2
+      <br/>
+      <br/>
+     </h3>
+     <table border="0" cellpadding="0" cellspacing="5" width="370">
+      <tr>
+       <td width="58">
+        <strong>
+         AWG
+        </strong>
+       </td>
+       <td width="97">
+        <strong>
+         Area (mm^2)
+        </strong>
+       </td>
+       <td width="195">
+        <strong>
+         Approximate Metric Equivalent
+        </strong>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        10
+       </td>
+       <td>
+        5.26
+       </td>
+       <td>
+        6
+       </td>
+      </tr>
+      <tr>
+       <td>
+        12
+       </td>
+       <td>
+        3.31
+       </td>
+       <td>
+        4
+       </td>
+      </tr>
+      <tr>
+       <td>
+        14
+       </td>
+       <td>
+        2.08
+       </td>
+       <td>
+        2.5
+       </td>
+      </tr>
+      <tr>
+       <td>
+        16
+       </td>
+       <td>
+        1.31
+       </td>
+       <td>
+        1.5
+       </td>
+      </tr>
+      <tr>
+       <td>
+        18
+       </td>
+       <td>
+        0.823
+       </td>
+       <td>
+        0.75
+       </td>
+      </tr>
+      <tr>
+       <td>
+        20
+       </td>
+       <td>
+        0.519
+       </td>
+       <td>
+        0.5
+       </td>
+      </tr>
+      <tr>
+       <td>
+        22
+       </td>
+       <td>
+        0.324
+       </td>
+       <td>
+        0.34
+       </td>
+      </tr>
+     </table>
+     <p>
+     </p>
+    </div>
+   </div>
+  </div>
+  <!-- FOOTER -->
+  <div id="footer">
+   <div class="container">
+    ONE SYSTEMS, Inc.  |  2000 Glen Echo Dr., Ste. 210  |  Nashville, TN 37215  |  Phone: 615-823-1655  |  Toll Free: 866-846-1284  |  Fax: 615-261-1429  |
+    <a href="mailto:info@onesystems.com">
+     info@onesystems.com
+    </a>
+   </div>
+  </div>
+  <script type="text/javascript">
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   try {
+var pageTracker = _gat._getTracker("UA-586332-67");
+pageTracker._trackPageview();
+} catch(err) {}
+  </script>
+  <script language="javascript" type="text/javascript">
+   llactid=23260
+  </script>
+  <script language="javascript" src="http://t6.trackalyzer.com/trackalyze.js" type="text/javascript">
+  </script>
+  <!-- end container -->
+ </body>
+ <!-- end body -->
+</html>

@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html class="no-js" itemscope="" itemtype="http://schema.org/WebSite" lang="en-US" prefix="og: http://ogp.me/ns#">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://blog.wl0.org/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+	&lt;script src="http://blog.wl0.org/wp-content/themes/twentyfifteen/js/html5.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <script>
+   (function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);
+  </script>
+  <title>
+   Further Thoughts on MySQL Upgrades | Simon J Mudd's Blog
+  </title>
+  <!-- All in One SEO Pack 2.2.6.2 by Michael Torbert of Semper Fi Web Design[574,642] -->
+  <link href="https://plus.google.com/+SimonMuddProfile" rel="author"/>
+  <meta content="I have been upgrading more MySQL database instances recently and have found a few more potential gotchas, which if you are not careful, can potentially be" itemprop="description" name="description"/>
+  <meta content="5.0,5.1,advanced,enterprise,hints,mysql,rpm,upgrade,databases" itemprop="keywords" name="keywords"/>
+  <link href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/" rel="canonical"/>
+  <meta content="Further Thoughts on MySQL Upgrades | Simon J Mudd's Blog" property="og:title"/>
+  <meta content="article" property="og:type"/>
+  <meta content="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/" property="og:url"/>
+  <meta content="http://blog.wl0.org/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" property="og:image"/>
+  <meta content="Simon J Mudd's Blog" property="og:site_name"/>
+  <meta content="I have been upgrading more MySQL database instances recently and have found a few more potential gotchas, which if you are not careful, can potentially be rather nasty. These are not documented explicitly by MySQL, so it may be handy for you to know if you have not come across this type of thing before. Most of the issues are those related to upgrading MySQL instances which are replicated, either the master servers or the slaves. Some seem specific to the rpm packages I am using (MySQL enterprise or MySQL advanced rpms), though others are not. Take care upgrading a 5.0 master when you have 5.1 slaves It is not a good idea to run a mixed major version of mysql in a replicated environment so why would I be doing this? If you work in a replicated environment and have several slaves then it is recommended that you upgrade the slaves first. I work with quite a few slaves so the process of upgrading them all takes longer than you would think. Quite a long time in fact, while different" property="og:description"/>
+  <meta content="summary" name="twitter:card"/>
+  <meta content="I have been upgrading more MySQL database instances recently and have found a few more potential gotchas, which if you are not careful, can potentially be rather nasty. These are not documented explicitly by MySQL, so it may be handy for you to know if you have not come across this type of thing before. Most of the issues are those related to upgrading MySQL instances which are replicated, either the master servers or the slaves. Some seem specific to the rpm packages I am using (MySQL enterprise or MySQL advanced rpms), though others are not. Take care upgrading a 5.0 master when you have 5.1 slaves It is not a good idea to run a mixed major version of mysql in a replicated environment so why would I be doing this? If you work in a replicated environment and have several slaves then it is recommended that you upgrade the slaves first. I work with quite a few slaves so the process of upgrading them all takes longer than you would think. Quite a long time in fact, while different" name="twitter:description"/>
+  <meta content="http://blog.wl0.org/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" itemprop="image"/>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-7120736-1']);
+		  _gaq.push(['_trackPageview']);
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+  </script>
+  <!-- /all in one seo pack -->
+  <link href="http://blog.wl0.org/feed/" rel="alternate" title="Simon J Mudd's Blog  Feed" type="application/rss+xml"/>
+  <link href="http://blog.wl0.org/comments/feed/" rel="alternate" title="Simon J Mudd's Blog  Comments Feed" type="application/rss+xml"/>
+  <link href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/feed/" rel="alternate" title="Simon J Mudd's Blog  Further Thoughts on MySQL Upgrades Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/blog.wl0.org\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://blog.wl0.org/wp-content/plugins/jetpack/modules/theme-tools/compat/twentyfifteen.css?ver=3.5.3" id="twentyfifteen-jetpack-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.wl0.org/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=2.7.1" id="crayon-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.wl0.org/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0" id="wp-syntax-css-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Noto+Sans%3A400italic%2C700italic%2C400%2C700%7CNoto+Serif%3A400italic%2C700italic%2C400%2C700%7CInconsolata%3A400%2C700&amp;subset=latin%2Clatin-ext" id="twentyfifteen-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.wl0.org/wp-content/plugins/jetpack/_inc/genericons/genericons/genericons.css?ver=3.1" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://blog.wl0.org/wp-content/themes/twentyfifteen/style.css?ver=4.2.2" id="twentyfifteen-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <style id="twentyfifteen-style-inline-css" type="text/css">
+   /* Color Scheme */
+
+	/* Background Color */
+	body {
+		background-color: #ffe5d1;
+	}
+
+	/* Sidebar Background Color */
+	body:before,
+	.site-header {
+		background-color: #e53b51;
+	}
+
+	/* Box Background Color */
+	.post-navigation,
+	.pagination,
+	.secondary,
+	.site-footer,
+	.hentry,
+	.page-header,
+	.page-content,
+	.comments-area,
+	.widecolumn {
+		background-color: #ffffff;
+	}
+
+	/* Box Background Color */
+	button,
+	input[type="button"],
+	input[type="reset"],
+	input[type="submit"],
+	.pagination .prev,
+	.pagination .next,
+	.widget_calendar tbody a,
+	.widget_calendar tbody a:hover,
+	.widget_calendar tbody a:focus,
+	.page-links a,
+	.page-links a:hover,
+	.page-links a:focus,
+	.sticky-post {
+		color: #ffffff;
+	}
+
+	/* Main Text Color */
+	button,
+	input[type="button"],
+	input[type="reset"],
+	input[type="submit"],
+	.pagination .prev,
+	.pagination .next,
+	.widget_calendar tbody a,
+	.page-links a,
+	.sticky-post {
+		background-color: #352712;
+	}
+
+	/* Main Text Color */
+	body,
+	blockquote cite,
+	blockquote small,
+	a,
+	.dropdown-toggle:after,
+	.image-navigation a:hover,
+	.image-navigation a:focus,
+	.comment-navigation a:hover,
+	.comment-navigation a:focus,
+	.widget-title,
+	.entry-footer a:hover,
+	.entry-footer a:focus,
+	.comment-metadata a:hover,
+	.comment-metadata a:focus,
+	.pingback .edit-link a:hover,
+	.pingback .edit-link a:focus,
+	.comment-list .reply a:hover,
+	.comment-list .reply a:focus,
+	.site-info a:hover,
+	.site-info a:focus {
+		color: #352712;
+	}
+
+	/* Main Text Color */
+	.entry-content a,
+	.entry-summary a,
+	.page-content a,
+	.comment-content a,
+	.pingback .comment-body &gt; a,
+	.author-description a,
+	.taxonomy-description a,
+	.textwidget a,
+	.entry-footer a:hover,
+	.comment-metadata a:hover,
+	.pingback .edit-link a:hover,
+	.comment-list .reply a:hover,
+	.site-info a:hover {
+		border-color: #352712;
+	}
+
+	/* Secondary Text Color */
+	button:hover,
+	button:focus,
+	input[type="button"]:hover,
+	input[type="button"]:focus,
+	input[type="reset"]:hover,
+	input[type="reset"]:focus,
+	input[type="submit"]:hover,
+	input[type="submit"]:focus,
+	.pagination .prev:hover,
+	.pagination .prev:focus,
+	.pagination .next:hover,
+	.pagination .next:focus,
+	.widget_calendar tbody a:hover,
+	.widget_calendar tbody a:focus,
+	.page-links a:hover,
+	.page-links a:focus {
+		background-color: #352712; /* Fallback for IE7 and IE8 */
+		background-color: rgba( 53, 39, 18, 0.7);
+	}
+
+	/* Secondary Text Color */
+	blockquote,
+	a:hover,
+	a:focus,
+	.main-navigation .menu-item-description,
+	.post-navigation .meta-nav,
+	.post-navigation a:hover .post-title,
+	.post-navigation a:focus .post-title,
+	.image-navigation,
+	.image-navigation a,
+	.comment-navigation,
+	.comment-navigation a,
+	.widget,
+	.author-heading,
+	.entry-footer,
+	.entry-footer a,
+	.taxonomy-description,
+	.page-links &gt; .page-links-title,
+	.entry-caption,
+	.comment-author,
+	.comment-metadata,
+	.comment-metadata a,
+	.pingback .edit-link,
+	.pingback .edit-link a,
+	.post-password-form label,
+	.comment-form label,
+	.comment-notes,
+	.comment-awaiting-moderation,
+	.logged-in-as,
+	.form-allowed-tags,
+	.no-comments,
+	.site-info,
+	.site-info a,
+	.wp-caption-text,
+	.gallery-caption,
+	.comment-list .reply a,
+	.widecolumn label,
+	.widecolumn .mu_register label {
+		color: #352712; /* Fallback for IE7 and IE8 */
+		color: rgba( 53, 39, 18, 0.7);
+	}
+
+	/* Secondary Text Color */
+	blockquote,
+	.logged-in-as a:hover,
+	.comment-author a:hover {
+		border-color: #352712; /* Fallback for IE7 and IE8 */
+		border-color: rgba( 53, 39, 18, 0.7);
+	}
+
+	/* Border Color */
+	hr,
+	.dropdown-toggle:hover,
+	.dropdown-toggle:focus {
+		background-color: #352712; /* Fallback for IE7 and IE8 */
+		background-color: rgba( 53, 39, 18, 0.1);
+	}
+
+	/* Border Color */
+	pre,
+	abbr[title],
+	table,
+	th,
+	td,
+	input,
+	textarea,
+	.main-navigation ul,
+	.main-navigation li,
+	.post-navigation,
+	.post-navigation div + div,
+	.pagination,
+	.comment-navigation,
+	.widget li,
+	.widget_categories .children,
+	.widget_nav_menu .sub-menu,
+	.widget_pages .children,
+	.site-header,
+	.site-footer,
+	.hentry + .hentry,
+	.author-info,
+	.entry-content .page-links a,
+	.page-links &gt; span,
+	.page-header,
+	.comments-area,
+	.comment-list + .comment-respond,
+	.comment-list article,
+	.comment-list .pingback,
+	.comment-list .trackback,
+	.comment-list .reply a,
+	.no-comments {
+		border-color: #352712; /* Fallback for IE7 and IE8 */
+		border-color: rgba( 53, 39, 18, 0.1);
+	}
+
+	/* Border Focus Color */
+	a:focus,
+	button:focus,
+	input:focus {
+		outline-color: #352712; /* Fallback for IE7 and IE8 */
+		outline-color: rgba( 53, 39, 18, 0.3);
+	}
+
+	input:focus,
+	textarea:focus {
+		border-color: #352712; /* Fallback for IE7 and IE8 */
+		border-color: rgba( 53, 39, 18, 0.3);
+	}
+
+	/* Sidebar Link Color */
+	.secondary-toggle:before {
+		color: #ffffff;
+	}
+
+	.site-title a,
+	.site-description {
+		color: #ffffff;
+	}
+
+	/* Sidebar Text Color */
+	.site-title a:hover,
+	.site-title a:focus {
+		color: rgba( 255, 255, 255, 0.7);
+	}
+
+	/* Sidebar Border Color */
+	.secondary-toggle {
+		border-color: #ffffff; /* Fallback for IE7 and IE8 */
+		border-color: rgba( 255, 255, 255, 0.1);
+	}
+
+	/* Sidebar Border Focus Color */
+	.secondary-toggle:hover,
+	.secondary-toggle:focus {
+		border-color: #ffffff; /* Fallback for IE7 and IE8 */
+		border-color: rgba( 255, 255, 255, 0.3);
+	}
+
+	.site-title a {
+		outline-color: #ffffff; /* Fallback for IE7 and IE8 */
+		outline-color: rgba( 255, 255, 255, 0.3);
+	}
+
+	/* Meta Background Color */
+	.entry-footer {
+		background-color: #f1f1f1;
+	}
+
+	@media screen and (min-width: 38.75em) {
+		/* Main Text Color */
+		.page-header {
+			border-color: #352712;
+		}
+	}
+
+	@media screen and (min-width: 59.6875em) {
+		/* Make sure its transparent on desktop */
+		.site-header,
+		.secondary {
+			background-color: transparent;
+		}
+
+		/* Sidebar Background Color */
+		.widget button,
+		.widget input[type="button"],
+		.widget input[type="reset"],
+		.widget input[type="submit"],
+		.widget_calendar tbody a,
+		.widget_calendar tbody a:hover,
+		.widget_calendar tbody a:focus {
+			color: #e53b51;
+		}
+
+		/* Sidebar Link Color */
+		.secondary a,
+		.dropdown-toggle:after,
+		.widget-title,
+		.widget blockquote cite,
+		.widget blockquote small {
+			color: #ffffff;
+		}
+
+		.widget button,
+		.widget input[type="button"],
+		.widget input[type="reset"],
+		.widget input[type="submit"],
+		.widget_calendar tbody a {
+			background-color: #ffffff;
+		}
+
+		.textwidget a {
+			border-color: #ffffff;
+		}
+
+		/* Sidebar Text Color */
+		.secondary a:hover,
+		.secondary a:focus,
+		.main-navigation .menu-item-description,
+		.widget,
+		.widget blockquote,
+		.widget .wp-caption-text,
+		.widget .gallery-caption {
+			color: rgba( 255, 255, 255, 0.7);
+		}
+
+		.widget button:hover,
+		.widget button:focus,
+		.widget input[type="button"]:hover,
+		.widget input[type="button"]:focus,
+		.widget input[type="reset"]:hover,
+		.widget input[type="reset"]:focus,
+		.widget input[type="submit"]:hover,
+		.widget input[type="submit"]:focus,
+		.widget_calendar tbody a:hover,
+		.widget_calendar tbody a:focus {
+			background-color: rgba( 255, 255, 255, 0.7);
+		}
+
+		.widget blockquote {
+			border-color: rgba( 255, 255, 255, 0.7);
+		}
+
+		/* Sidebar Border Color */
+		.main-navigation ul,
+		.main-navigation li,
+		.widget input,
+		.widget textarea,
+		.widget table,
+		.widget th,
+		.widget td,
+		.widget pre,
+		.widget li,
+		.widget_categories .children,
+		.widget_nav_menu .sub-menu,
+		.widget_pages .children,
+		.widget abbr[title] {
+			border-color: rgba( 255, 255, 255, 0.1);
+		}
+
+		.dropdown-toggle:hover,
+		.dropdown-toggle:focus,
+		.widget hr {
+			background-color: rgba( 255, 255, 255, 0.1);
+		}
+
+		.widget input:focus,
+		.widget textarea:focus {
+			border-color: rgba( 255, 255, 255, 0.3);
+		}
+
+		.sidebar a:focus,
+		.dropdown-toggle:focus {
+			outline-color: rgba( 255, 255, 255, 0.3);
+		}
+	}
+
+		/* Custom Header Background Color */
+		body:before,
+		.site-header {
+			background-color: #dd9933;
+		}
+
+		@media screen and (min-width: 59.6875em) {
+			.site-header,
+			.secondary {
+				background-color: transparent;
+			}
+
+			.widget button,
+			.widget input[type="button"],
+			.widget input[type="reset"],
+			.widget input[type="submit"],
+			.widget_calendar tbody a,
+			.widget_calendar tbody a:hover,
+			.widget_calendar tbody a:focus {
+				color: #dd9933;
+			}
+		}
+  </style>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentyfifteen-ie-css'  href='http://blog.wl0.org/wp-content/themes/twentyfifteen/css/ie.css?ver=20141010' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <!--[if lt IE 8]&gt;
+&lt;link rel='stylesheet' id='twentyfifteen-ie7-css'  href='http://blog.wl0.org/wp-content/themes/twentyfifteen/css/ie7.css?ver=20141010' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://blog.wl0.org/wp-content/plugins/jetpack/css/jetpack.css?ver=3.5.3" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://blog.wl0.org/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://blog.wl0.org/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.7.1","is_admin":"0","ajaxurl":"http:\/\/blog.wl0.org\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.wl0.org/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=2.7.1" type="text/javascript">
+  </script>
+  <script src="http://blog.wl0.org/wp-content/plugins/google-analyticator/external-tracking.min.js?ver=6.4.9" type="text/javascript">
+  </script>
+  <link href="http://blog.wl0.org/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://blog.wl0.org/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://blog.wl0.org/2010/01/please-tells-the-canadians-and-others-to-learn-about-iban-numbers/" rel="prev" title="Please tells the Canadians (and others) to learn about IBAN numbers"/>
+  <link href="http://blog.wl0.org/2010/03/the-innodb_plugin-a-pleasant-surprise/" rel="next" title="The innodb_plugin  a pleasant surprise!"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://wp.me/pqgdr-3v" rel="shortlink"/>
+  <link href="http://blog.wl0.org/wp-content/plugins/category-specific-rss-feed-menu/wp_cat_rss_style.css" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+   ol.footnotes li {list-style-type:decimal;}
+						ol.footnotes{font-size:0.8em; color:#666666;}
+  </style>
+  <link href="//jetpack.wordpress.com" rel="dns-prefetch"/>
+  <link href="//s0.wp.com" rel="dns-prefetch"/>
+  <link href="//s1.wp.com" rel="dns-prefetch"/>
+  <link href="//s2.wp.com" rel="dns-prefetch"/>
+  <link href="//public-api.wordpress.com" rel="dns-prefetch"/>
+  <link href="//0.gravatar.com" rel="dns-prefetch"/>
+  <link href="//1.gravatar.com" rel="dns-prefetch"/>
+  <link href="//2.gravatar.com" rel="dns-prefetch"/>
+  <link href="//widgets.wp.com" rel="dns-prefetch"/>
+  <style id="twentyfifteen-header-css" type="text/css">
+   .site-header {
+			background: url(http://blog.wl0.org/wp-content/uploads/2015/01/P1010651.jpg) no-repeat 50% 50%;
+			-webkit-background-size: cover;
+			-moz-background-size:    cover;
+			-o-background-size:      cover;
+			background-size:         cover;
+		}
+
+		@media screen and (min-width: 59.6875em) {
+			body:before {
+				background: url(http://blog.wl0.org/wp-content/uploads/2015/01/P1010651.jpg) no-repeat 100% 50%;
+				-webkit-background-size: cover;
+				-moz-background-size:    cover;
+				-o-background-size:      cover;
+				background-size:         cover;
+				border-right: 0;
+			}
+
+			.site-header {
+				background: transparent;
+			}
+		}
+  </style>
+  <!-- Google Analytics Tracking by Google Analyticator 6.4.9: http://www.videousermanuals.com/google-analyticator/ -->
+  <script type="text/javascript">
+   var analyticsFileTypes = [''];
+    var analyticsSnippet = 'enabled';
+    var analyticsEventTracking = 'enabled';
+  </script>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  
+	_gaq.push(['_setAccount', 'UA-7120736-1']);
+    _gaq.push(['_addDevId', 'i9k95']); // Google Analyticator App ID with Google
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+  </script>
+ </head>
+ <body class="single single-post postid-217 single-format-standard">
+  <div class="hfeed site" id="page">
+   <a class="skip-link screen-reader-text" href="#content">
+    Skip to content
+   </a>
+   <div class="sidebar" id="sidebar">
+    <header class="site-header" id="masthead" role="banner">
+     <div class="site-branding">
+      <p class="site-title">
+       <a href="http://blog.wl0.org/" rel="home">
+        Simon J Mudd's Blog
+       </a>
+      </p>
+      <p class="site-description">
+       Random thoughts on different topics
+      </p>
+      <button class="secondary-toggle">
+       Menu and widgets
+      </button>
+     </div>
+     <!-- .site-branding -->
+    </header>
+    <!-- .site-header -->
+    <div class="secondary" id="secondary">
+     <div class="widget-area" id="widget-area" role="complementary">
+      <aside class="widget widget_categories" id="categories-4">
+       <h2 class="widget-title">
+        Categories
+       </h2>
+       <ul>
+        <li class="cat-item cat-item-3">
+         <a href="http://blog.wl0.org/category/databases/" title="Commets related to databases.">
+          Databases
+         </a>
+         <ul class="children">
+          <li class="cat-item cat-item-353">
+           <a href="http://blog.wl0.org/category/databases/mmug/">
+            MMUG
+           </a>
+          </li>
+          <li class="cat-item cat-item-354">
+           <a href="http://blog.wl0.org/category/databases/replication-databases/">
+            Replication
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="cat-item cat-item-115">
+         <a href="http://blog.wl0.org/category/ipv6/" title="Thoughts related to IPv6">
+          IPv6
+         </a>
+        </li>
+        <li class="cat-item cat-item-1">
+         <a href="http://blog.wl0.org/category/other_things/">
+          Other Things
+         </a>
+        </li>
+        <li class="cat-item cat-item-4">
+         <a href="http://blog.wl0.org/category/postfix/" title="Comments related to Postfix MTA http://www.postfix.wl0.org">
+          Postfix
+         </a>
+        </li>
+        <li class="cat-item cat-item-6">
+         <a href="http://blog.wl0.org/category/voip/" title="Description of voice over ip things.">
+          VoIP
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_archive" id="archives-4">
+       <h2 class="widget-title">
+        Archives
+       </h2>
+       <ul>
+        <li>
+         <a href="http://blog.wl0.org/2015/06/">
+          June 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2015/05/">
+          May 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2015/01/">
+          January 2015
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/12/">
+          December 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/11/">
+          November 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/10/">
+          October 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/09/">
+          September 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/08/">
+          August 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/07/">
+          July 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/06/">
+          June 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/05/">
+          May 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/04/">
+          April 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/03/">
+          March 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2014/02/">
+          February 2014
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/12/">
+          December 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/11/">
+          November 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/09/">
+          September 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/08/">
+          August 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/06/">
+          June 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/05/">
+          May 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/04/">
+          April 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2013/01/">
+          January 2013
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/12/">
+          December 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/10/">
+          October 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/09/">
+          September 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/04/">
+          April 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/03/">
+          March 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/02/">
+          February 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2012/01/">
+          January 2012
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/11/">
+          November 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/09/">
+          September 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/07/">
+          July 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/06/">
+          June 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/05/">
+          May 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/03/">
+          March 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2011/02/">
+          February 2011
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/11/">
+          November 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/10/">
+          October 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/09/">
+          September 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/08/">
+          August 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/07/">
+          July 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/06/">
+          June 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/05/">
+          May 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/03/">
+          March 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2010/01/">
+          January 2010
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/12/">
+          December 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/11/">
+          November 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/09/">
+          September 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/08/">
+          August 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/07/">
+          July 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/06/">
+          June 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/05/">
+          May 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/03/">
+          March 2009
+         </a>
+        </li>
+        <li>
+         <a href="http://blog.wl0.org/2009/01/">
+          January 2009
+         </a>
+        </li>
+       </ul>
+      </aside>
+     </div>
+     <!-- .widget-area -->
+    </div>
+    <!-- .secondary -->
+   </div>
+   <!-- .sidebar -->
+   <div class="site-content" id="content">
+    <div class="content-area" id="primary">
+     <main class="site-main" id="main" role="main">
+      <article class="post-217 post type-post status-publish format-standard hentry category-databases tag-5-0 tag-5-1 tag-advanced tag-enterprise tag-hints tag-mysql tag-rpm tag-upgrade" id="post-217">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         Further Thoughts on MySQL Upgrades
+        </h1>
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         I have been upgrading more MySQL database instances recently and have found a few more potential
+         <em>
+          gotchas,
+         </em>
+         which if you are not careful, can potentially be rather nasty. These are not documented explicitly by MySQL, so it may be handy for you to know if you have not come across this type of thing before.
+        </p>
+        <p>
+         Most of the issues are those related to upgrading MySQL instances which are replicated, either the master servers or the slaves. Some seem specific to the rpm packages I am using (MySQL enterprise or MySQL advanced rpms), though others are not.
+        </p>
+        <h2>
+         Take care upgrading a 5.0 master when you have 5.1 slaves
+        </h2>
+        <p>
+         It is not a good idea to run a mixed major version of mysql in a replicated environment so why would I be doing this? If you work in a replicated environment and have several slaves then it is recommended that you upgrade the slaves first. I work with quite a few slaves so the process of upgrading them all takes longer than you would think. Quite a long time in fact, while different systems are tested and upgraded. Along came a newer version of 5.0 and I thought of upgrading the master which had been giving a few issues, and one of them was resolved in the lastest 5.0.89. At least
+         <span style="text-decoration: underline;">
+          when using rpm packages
+         </span>
+         , the package upgrade uses /usr/bin/mysql_install_db rpm user=mysql as part of the package upgrade procedure. This ensures that the mysql db is up to date but also writes to the binlog if one is configured. running on a master normally this would be the case. Of course these are 5.0 install commands and they are not really understood by the slaves which try to interpret them too. End result. Broken replication and you need to skip several transactions. If you have several slaves this can be rather painful.
+        </p>
+        <p>
+         Note: this is the cause of replicating the
+         <span style="text-decoration: underline;">
+          mysql
+         </span>
+         database which I do as it is a good, quick and clean way to distribute GRANT information on to all slaves. As far as I know MySQL does not discourage this though perhaps many sites do not replicate their MySQL database.
+        </p>
+        <p>
+         If you upgrade a master server from 5.o to 5.1 by running
+         <em>
+          mysql_upgrade
+         </em>
+         after upgrading the binaries you may have a similar issue as the
+         <em>
+          mysql_upgrade
+         </em>
+         script determines that some new columns or tables are needed on the master and so adds them. Again this gets written to the binlog which is good for point in time recovery on the server itself, but again bad from a replication point of view if the slave does not run the same version of MySQL.
+        </p>
+        <p>
+         In fact the binlog has these 2 uses: (a) writing changes for point in time recovery, and (b) writing the changes for replication to slaves. Once could argue that for (a) the changes should not be written to the binlog but I think that is wrong if you have to recover just after an upgrade. So I would suggest that the
+         <em>
+          upgrade changes
+         </em>
+         should probably flagged specially in the binlog, allowing the slave to probably ignore them in the normal situation but also be able to recognise them, allowing you to stop the slave and perform the same binary upgrade, and then continue the upgrade with the new binaries exactly in the way this had been executed on the master. This behaviour should be controlled by a runtime flag which can be dynamically configured.
+        </p>
+        <h2>
+         RPM Installs/Upgrades always start the server
+        </h2>
+        <p>
+         rpm(8) is good but some of the design decisions in the MySQL rpms are questionable. One of these is that the current MySQL rpms are designed to always start when either doing a fresh install or doing an upgrade. Currently its not good practice to do rpm -Uvh MySQL-server-advanced-gplrpm (5.1 rpm) if you are running a MySQL-server-enterprise-gplrpm (5.0 rpm) so normally I stop MySQL, remove the enterprise rpm and install the advanced rpm. That starts the server and the slave on a box which is not completely stable. Solution is to add slave-skip-start to /etc/my.cnf but that should not be necessary as immediately after running mysql_upgrade you need to remove the value again.
+        </p>
+        <p>
+         Also during the upgrade process it is a good thing to avoid external client access so sometimes I also set the bind-address to 127.0.0.1 during the period of the upgrade. That may not keep clients away if they are running on the local server but helps in many cases.
+        </p>
+        <h2>
+         Conclusions
+        </h2>
+        <p>
+         All this leads me to a simple conclusion: if you can, upgrade one box the slow way and then clone the other slaves from that. Cloning is simple and requires no thought so is a good idea.
+        </p>
+        <p>
+         The other conclusion based on the first one is that if you can:
+         <strong>
+          build a new master
+         </strong>
+         . That is clone a slave to make a new master. This will be the new master. Configure it to write its own binlogs and then you can move the existing slaves underneath the new one. Once all slaves are underneath the new master (left as the only slave of the original master) then you can simply point clients to the new master instead of the old one. That keeps down time to a minimum and avoids many problems.
+        </p>
+        <p>
+         As far as I know none of the comments I have made above are in the current 5.1 upgrade documentation. I have opened quite a few tickets requesting the documentation be improved and I guess that will happen slowly. For many people the points I have mentioned may seem irrelevant for their situation but for me they have caused a few problems. If you do not need to worry, then you can skip the documentation, otherwise if this were documented then you would be saved a few tears when least expecting problems.
+        </p>
+       </div>
+       <!-- .entry-content -->
+       <div class="author-info">
+        <h2 class="author-heading">
+         Published by
+        </h2>
+        <div class="author-avatar">
+         <img alt="" class="avatar avatar-56 photo" height="56" src="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=56&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=112&amp;d=blank&amp;r=g 2x" width="56"/>
+        </div>
+        <!-- .author-avatar -->
+        <div class="author-description">
+         <h3 class="author-title">
+          Simon J Mudd
+         </h3>
+         <p class="author-bio">
+          Born in England, I now live in Spain. I spent a few years living in the Netherlands.
+
+I've worked in banking (financial markets) both in IT and as a broker, but IT has always had a stronger influence. Now working at booking.com as a Database Administrator.
+
+Other interests include photography, ham radio (not active lately).
+
+Married and with two children, living happily in Madrid.
+          <a class="author-link" href="http://blog.wl0.org/author/sjmudd/" rel="author">
+           View all posts by Simon J Mudd
+          </a>
+         </p>
+         <!-- .author-bio -->
+        </div>
+        <!-- .author-description -->
+       </div>
+       <!-- .author-info -->
+       <footer class="entry-footer">
+        <span class="posted-on">
+         <span class="screen-reader-text">
+          Posted on
+         </span>
+         <a href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/" rel="bookmark">
+          <time class="entry-date published updated" datetime="2010-01-30T00:25:48+00:00">
+           30/01/2010
+          </time>
+         </a>
+        </span>
+        <span class="byline">
+         <span class="author vcard">
+          <span class="screen-reader-text">
+           Author
+          </span>
+          <a class="url fn n" href="http://blog.wl0.org/author/sjmudd/">
+           Simon J Mudd
+          </a>
+         </span>
+        </span>
+        <span class="cat-links">
+         <span class="screen-reader-text">
+          Categories
+         </span>
+         <a href="http://blog.wl0.org/category/databases/" rel="category tag">
+          Databases
+         </a>
+        </span>
+        <span class="tags-links">
+         <span class="screen-reader-text">
+          Tags
+         </span>
+         <a href="http://blog.wl0.org/tag/5-0/" rel="tag">
+          5.0
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/5-1/" rel="tag">
+          5.1
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/advanced/" rel="tag">
+          advanced
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/enterprise/" rel="tag">
+          enterprise
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/hints/" rel="tag">
+          hints
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/mysql/" rel="tag">
+          mysql
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/rpm/" rel="tag">
+          rpm
+         </a>
+         ,
+         <a href="http://blog.wl0.org/tag/upgrade/" rel="tag">
+          upgrade
+         </a>
+        </span>
+       </footer>
+       <!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="comments-area" id="comments">
+       <h2 class="comments-title">
+        4 thoughts on Further Thoughts on MySQL Upgrades
+       </h2>
+       <ol class="comment-list">
+        <li class="pingback even thread-even depth-1" id="comment-1668">
+         <div class="comment-body">
+          Pingback:
+          <a class="url" href="http://www.pythian.com/news/8255/log-buffer-177-a-carnival-of-the-vanities-for-dbas/" rel="external nofollow">
+           Log Buffer #177: a Carnival of the Vanities for DBAs | The Pythian Blog
+          </a>
+         </div>
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-sjmudd bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-1804">
+         <article class="comment-body" id="div-comment-1804">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-56 photo" height="56" src="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=56&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=112&amp;d=blank&amp;r=g 2x" width="56"/>
+            <b class="fn">
+             <a class="url" href="http://blog.wl0.org" rel="external nofollow">
+              Simon J Mudd
+             </a>
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/comment-page-1/#comment-1804">
+             <time datetime="2010-03-06T16:27:18+00:00">
+              06/03/2010 at 16:27
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            After writing this article I got caught out precisely by the problems I had mentioned. In order to avoid writing 5.0 to 5.1 upgrade information to the binlogs, I had disabled them during the upgrade procedure. However, I had forgotten that the master (that had just been upgraded to 5.1 from 5.0) was also a slave and had forgotten to disable starting the slave thread. As such the replication thread started (collecting changes from the upstream master) and they were NOT written to the binlog and thus never reached the downstream slaves. I had to rebuild 30 slaves because of this mistake. Costly!
+           </p>
+           <p>
+            So below is my current check list of what to do when upgrading a master which is itself a slave, especially if the upgrade is a major version change.
+           </p>
+           <p>
+            <strong>
+             Intermediate Master server upgrade procedure
+            </strong>
+           </p>
+           <p>
+            In the situation below the upstream master was running 5.0, the server being upgraded was being upgraded frmo 5.0 to 5.1, and the downstream slaves were already running 5.1.
+           </p>
+           <p>
+            <strong>
+             Problems
+            </strong>
+           </p>
+           <p>
+            I replicate the mysql database to ensure grants are replicated.
+            <br/>
+            When using rpms you can only have one a single MySQL rpm installed at once.
+            <br/>
+            When performing an install or upgrade the MySQL rpm tries to reinitialise the
+            <code>
+             /var/lib/mysql
+            </code>
+            based db.
+           </p>
+           <p>
+            The intermediate master has its binlogs enabled so these commands get written to the binlog and therefore picked up by any downstream slave. If its already running the upgraded version of mysql these replication commands will fail.
+           </p>
+           <p>
+            <strong>
+             Part
+            </strong>
+            of the 5.0 to 5.1 upgrade process involves running the script
+            <code>
+             mysql_upgrade
+            </code>
+            which checks all tables and updates those that need updating, though some may need to be done by hand. (These are mainly Innodb tables and
+            <code>
+             ALTER TABLE xxxxx ENGINE = InnoDB;
+            </code>
+            is sufficient.  The script also makes changes to the
+            <code>
+             mysql
+            </code>
+            database, as this is necessary for the major version upgrade. As we replicate the
+            <code>
+             mysql
+            </code>
+            database these changes would also get written to the binlog.
+           </p>
+           <p>
+            So to avoid these
+            <em>
+             local upgrade
+            </em>
+            statements being written to the binlog you must temporarily disable this on the master.
+           </p>
+           <p>
+            This can be done by commenting out the following entries which on the intermediate master are likely to be set.
+            <br/>
+            <code>
+             <br/>
+             log-bin=../log/binlog
+             <br/>
+             log-slave-updates
+             <br/>
+            </code>
+           </p>
+           <p>
+            Additionally to prevent any clients connecting to the server during the upgrade process it is convenient to disable access to the server. This can be done by *enabling* the following option:
+           </p>
+           <p>
+            <code>
+             <br/>
+             bind-address = 127.0.0.1
+             <br/>
+            </code>
+           </p>
+           <p>
+            Finally which is what I forgot, the intermediate master is itself a slave. To avoid the replication threads starting and processing changes from the upstream master which would NOT be written to the binlog during the upgrade, you must ensure the slave threads
+            <strong>
+             DO NOT START
+            </strong>
+            . This is done with:
+           </p>
+           <p>
+            <code>
+             <br/>
+             skip-slave-start
+             <br/>
+            </code>
+           </p>
+           <p>
+            So to actually do the upgrade perform the following steps:
+           </p>
+           <p>
+            * Note: This does not take into account any procedures that may be needed if you have stored procedures or triggers configured on the server. If you have these please consult the MySQL documentation and update this page accordingly.
+            <br/>
+            * Adjust
+            <code>
+             /etc/my.cnf
+            </code>
+            as indicated above.
+            <br/>
+            * Stop MySQL with
+            <code>
+             /etc/init.d/mysql stop
+            </code>
+            <br/>
+            * Remove the 5.0 rpms with rpm -e XXX
+            <br/>
+            * Adjust for configuration for differences between 5.0 and 5.1 which currently means changing the line
+            <code>
+             log-slow-queries = ../log/slowlog
+            </code>
+            to
+            <code>
+             slow_query_log_file = ../log/slowlog
+            </code>
+            and adding the line
+            <code>
+             slow_query_log = ON
+            </code>
+            . The 5.1 server will start even if you dont make this change.
+            <br/>
+            * Install the 5.1 rpms with rpm -ivh 
+            <br/>
+            * Check that the server has started and that the replication threads are
+            <strong>
+             NOT
+            </strong>
+            running.
+            <br/>
+            * Run
+            <code>
+             mysql_upgrade --skip-write-binlog
+            </code>
+            to perform the basic upgrade. Check the output, which is probably in
+            <code>
+             /var/log/mysqld.log
+            </code>
+            .
+            <br/>
+            * For those tables that
+            <code>
+             mysql_upgrade
+            </code>
+            could not upgrade, probably InnoDB tables, do
+            <code>
+             ALTER TABLE xxxxx ENGINE=InnoDB;
+            </code>
+            <br/>
+            * Your server should now be upgraded and the binlog should be untouched.
+            <br/>
+            * Stop the server
+            <code>
+             /etc/init.d/mysql stop
+            </code>
+            <br/>
+            * Restore the servers original configuration by:
+            <br/>
+            ** Adding back
+            <code>
+             log-bin=../log/binlog
+            </code>
+            <br/>
+            ** Adding back
+            <code>
+             log-slave-updates
+            </code>
+            if necessary
+            <br/>
+            ** Removing
+            <code>
+             bind-address = 127.0.0.1
+            </code>
+            <br/>
+            ** Removing
+            <code>
+             skip-slave-start
+            </code>
+            <br/>
+            * Restart the server with
+            <code>
+             /etc/init.d/mysql start
+            </code>
+            and check it starts and replicates normally.
+           </p>
+           <p>
+            This is a relatively slow process, and while not difficult, is rather time consuming.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+           <a aria-label="Reply to Simon J Mudd" class="comment-reply-link" href="/2010/01/further-thoughts-on-mysql-upgrades/?replytocom=1804#respond" onclick='return addComment.moveForm( "div-comment-1804", "1804", "respond", "217" )'>
+            Reply
+           </a>
+          </div>
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment even thread-even depth-1" id="comment-15971">
+         <article class="comment-body" id="div-comment-15971">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-56 photo" height="56" src="http://0.gravatar.com/avatar/f83cb8db1e07bd3490ed28f6788ea917?s=56&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/f83cb8db1e07bd3490ed28f6788ea917?s=112&amp;d=blank&amp;r=g 2x" width="56"/>
+            <b class="fn">
+             <a class="url" href="http://revasolutions.com" rel="external nofollow">
+              Saranya
+             </a>
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/comment-page-1/#comment-15971">
+             <time datetime="2013-03-07T21:53:13+00:00">
+              07/03/2013 at 21:53
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Do you think there is a need to run mysql_upgrade though we are using rpms to upgrade mysql from 5.1 to 5.5?
+            <br/>
+            I see  If you install MySQL from RPM packages on Linux, you must install the server and client RPMs. mysql_upgrade is included in the server RPM but requires the client RPM because the latter includes mysqlcheck. 
+           </p>
+           <p>
+            So, do u still think mysql_upgrade, innodb alter are the actions that are needed ? Please reply ASAP.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+           <a aria-label="Reply to Saranya" class="comment-reply-link" href="/2010/01/further-thoughts-on-mysql-upgrades/?replytocom=15971#respond" onclick='return addComment.moveForm( "div-comment-15971", "15971", "respond", "217" )'>
+            Reply
+           </a>
+          </div>
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-sjmudd bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-16373">
+         <article class="comment-body" id="div-comment-16373">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <img alt="" class="avatar avatar-56 photo" height="56" src="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=56&amp;d=blank&amp;r=g" srcset="http://0.gravatar.com/avatar/fdef5eebd84bc5e63739f5910fe2a1d2?s=112&amp;d=blank&amp;r=g 2x" width="56"/>
+            <b class="fn">
+             <a class="url" href="http://blog.wl0.org" rel="external nofollow">
+              Simon J Mudd
+             </a>
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://blog.wl0.org/2010/01/further-thoughts-on-mysql-upgrades/comment-page-1/#comment-16373">
+             <time datetime="2013-04-02T23:16:44+00:00">
+              02/04/2013 at 23:16
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Yes, you do need to run mysql_upgrade when upgading from 5.1 rpms to 5.5 rpms. There are differences between the 2 versions and mysql_upgrade will check those and fix any issues. That said if you are running MySQL 5.1 now Id look to upgrade to 5.5 only as a stepping stone to MySQL 5.6 which is now GA, as this will give you a lot more features, better performance under load and probably make life generally a lot better.
+           </p>
+           <p>
+            Note: when upgrading and using rpms you normally need to upgrade both client and server packages at the same time. This can be an inconvenience, but is due to the way the rpms are packaged for MySQL and its not intended that multiple versions can be installed/running at the same time.
+           </p>
+          </div>
+          <!-- .comment-content -->
+          <div class="reply">
+           <a aria-label="Reply to Simon J Mudd" class="comment-reply-link" href="/2010/01/further-thoughts-on-mysql-upgrades/?replytocom=16373#respond" onclick='return addComment.moveForm( "div-comment-16373", "16373", "respond", "217" )'>
+            Reply
+           </a>
+          </div>
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!-- .comment-list -->
+       <div class="comment-respond" id="respond">
+        <h3 class="comment-reply-title" id="reply-title">
+         Leave a Reply
+         <small>
+          <a href="/2010/01/further-thoughts-on-mysql-upgrades/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+           Cancel reply
+          </a>
+         </small>
+        </h3>
+        <div class="comment-form" id="commentform">
+         <iframe allowtransparency="false" frameborder="0" id="jetpack_remote_comment" name="jetpack_remote_comment" scrolling="no" src="http://jetpack.wordpress.com/jetpack-comment/?blogid=6258865&amp;postid=217&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=blank&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=9da6de62238b476f5c67c81074639a71474b8e76#parent=http%3A%2F%2Fblog.wl0.org%2F2010%2F01%2Ffurther-thoughts-on-mysql-upgrades%2F" style="width:100%; height: 430px;border:0px;">
+         </iframe>
+        </div>
+       </div>
+       <input id="comment_parent" name="comment_parent" type="hidden" value=""/>
+      </div>
+      <!-- .comments-area -->
+      <nav class="navigation post-navigation" role="navigation">
+       <h2 class="screen-reader-text">
+        Post navigation
+       </h2>
+       <div class="nav-links">
+        <div class="nav-previous">
+         <a href="http://blog.wl0.org/2010/01/please-tells-the-canadians-and-others-to-learn-about-iban-numbers/" rel="prev">
+          <span aria-hidden="true" class="meta-nav">
+           Previous
+          </span>
+          <span class="screen-reader-text">
+           Previous post:
+          </span>
+          <span class="post-title">
+           Please tells the Canadians (and others) to learn about IBAN numbers
+          </span>
+         </a>
+        </div>
+        <div class="nav-next">
+         <a href="http://blog.wl0.org/2010/03/the-innodb_plugin-a-pleasant-surprise/" rel="next">
+          <span aria-hidden="true" class="meta-nav">
+           Next
+          </span>
+          <span class="screen-reader-text">
+           Next post:
+          </span>
+          <span class="post-title">
+           The innodb_plugin  a pleasant surprise!
+          </span>
+         </a>
+        </div>
+       </div>
+      </nav>
+     </main>
+     <!-- .site-main -->
+    </div>
+    <!-- .content-area -->
+   </div>
+   <!-- .site-content -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div class="site-info">
+     <a href="https://wordpress.org/">
+      Proudly powered by WordPress
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- .site-footer -->
+  </div>
+  <!-- .site -->
+  <div style="display:none">
+   <div class="grofile-hash-map-fdef5eebd84bc5e63739f5910fe2a1d2">
+   </div>
+   <div class="grofile-hash-map-fdef5eebd84bc5e63739f5910fe2a1d2">
+   </div>
+   <div class="grofile-hash-map-f83cb8db1e07bd3490ed28f6788ea917">
+   </div>
+  </div>
+  <script src="http://blog.wl0.org/wp-content/plugins/akismet/_inc/form.js?ver=3.1.1" type="text/javascript">
+  </script>
+  <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201529" type="text/javascript">
+  </script>
+  <script src="http://s.gravatar.com/js/gprofiles.js?ver=2015Julaa" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.wl0.org/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://blog.wl0.org/wp-content/themes/twentyfifteen/js/skip-link-focus-fix.js?ver=20141010" type="text/javascript">
+  </script>
+  <script src="http://blog.wl0.org/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var screenReaderText = {"expand":"&lt;span class=\"screen-reader-text\"&gt;expand child menu&lt;\/span&gt;","collapse":"&lt;span class=\"screen-reader-text\"&gt;collapse child menu&lt;\/span&gt;"};
+/* ]]&gt; */
+  </script>
+  <script src="http://blog.wl0.org/wp-content/themes/twentyfifteen/js/functions.js?ver=20150330" type="text/javascript">
+  </script>
+  <!--[if IE]&gt;
+		&lt;script type="text/javascript"&gt;
+		if ( 0 === window.location.hash.indexOf( '#comment-' ) ) {
+			// window.location.reload() doesn't respect the Hash in IE
+			window.location.hash = window.location.hash;
+		}
+		&lt;/script&gt;
+		&lt;![endif]-->
+  <script type="text/javascript">
+   var comm_par_el = document.getElementById( 'comment_parent' ),
+			    comm_par = (comm_par_el &amp;&amp; comm_par_el.value) ? comm_par_el.value : '',
+			    frame = document.getElementById( 'jetpack_remote_comment' ),
+			    tellFrameNewParent;
+
+			tellFrameNewParent = function() {
+				if ( comm_par ) {
+					frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=6258865&amp;postid=217&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=blank&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=9da6de62238b476f5c67c81074639a71474b8e76#parent=http%3A%2F%2Fblog.wl0.org%2F2010%2F01%2Ffurther-thoughts-on-mysql-upgrades%2F" + '&amp;replytocom=' + parseInt( comm_par, 10 ).toString();
+				} else {
+					frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=6258865&amp;postid=217&amp;comment_registration=0&amp;require_name_email=1&amp;stc_enabled=1&amp;stb_enabled=1&amp;show_avatars=1&amp;avatar_default=blank&amp;greeting=Leave+a+Reply&amp;greeting_reply=Leave+a+Reply+to+%25s&amp;color_scheme=light&amp;lang=en-US&amp;jetpack_version=3.5.3&amp;sig=9da6de62238b476f5c67c81074639a71474b8e76#parent=http%3A%2F%2Fblog.wl0.org%2F2010%2F01%2Ffurther-thoughts-on-mysql-upgrades%2F";
+				}
+			};
+
+	
+			if ( 'undefined' !== typeof addComment ) {
+				addComment._Jetpack_moveForm = addComment.moveForm;
+
+				addComment.moveForm = function( commId, parentId, respondId, postId ) {
+					var returnValue = addComment._Jetpack_moveForm( commId, parentId, respondId, postId ), cancelClick, cancel;
+
+					if ( false === returnValue ) {
+						cancel = document.getElementById( 'cancel-comment-reply-link' );
+						cancelClick = cancel.onclick;
+						cancel.onclick = function() {
+							var cancelReturn = cancelClick.call( this );
+							if ( false !== cancelReturn ) {
+								return cancelReturn;
+							}
+
+							if ( !comm_par ) {
+								return cancelReturn;
+							}
+
+							comm_par = 0;
+
+							tellFrameNewParent();
+
+							return cancelReturn;
+						};
+					}
+
+					if ( comm_par == parentId ) {
+						return returnValue;
+					}
+
+					comm_par = parentId;
+
+					tellFrameNewParent();
+
+					return returnValue;
+				};
+			}
+
+	
+			if ( window.postMessage ) {
+				if ( document.addEventListener ) {
+					window.addEventListener( 'message', function( event ) {
+						if ( "http:\/\/jetpack.wordpress.com" !== event.origin ) {
+							return;
+						}
+
+						jQuery( frame ).height( event.data );
+					} );
+				} else if ( document.attachEvent ) {
+					window.attachEvent( 'message', function( event ) {
+						if ( "http:\/\/jetpack.wordpress.com" !== event.origin ) {
+							return;
+						}
+
+						jQuery( frame ).height( event.data );
+					} );
+				}
+			}
+  </script>
+  <script async="" defer="" src="http://stats.wp.com/e-201529.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.5.3',blog:'6258865',post:'217',tz:'2',srv:'blog.wl0.org'} ]);
+	_stq.push([ 'clickTrackerInit', '6258865', '217' ]);
+  </script>
+ </body>
+</html>

@@ -1,0 +1,890 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="index,follow" name="robots"/>
+  <meta content="Take a look on the net and you'll see endless pages of AJAX Frameworks:libraries which promise to do all the trivial and dirty AJAX work for you, leaving you free tocode without actually understanding how the application you're writing really works.So lets pull back the smoke and mirrors and see what AJAX is and why it's just a simple evolution of client/server tricks Javascript programmers have been doingsince the web was born." name="description"/>
+  <meta content="ajax, tutorial, beginner" name="keywords"/>
+  <title>
+   AJAX for n00bs
+  </title>
+  <!-- Set up a script tag for php to pass variables in -->
+  <script type="text/javascript">
+   var _articleAge=3127.4836226852
+var _showAds=15
+  </script>
+  <!-- Load StyleSheets -->
+  <link href="http://www.hunlock.com/templates/common_v1.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://www.hunlock.com/templates/print_v1.css" media="print" rel="stylesheet" type="text/css"/>
+  <!-- Load common javascript -->
+  <script src="http://www.hunlock.com/common.js" type="text/javascript">
+  </script>
+  <!-- Let IE understand &lt;q&gt; tags -->
+  <!--[if lte IE 7]&gt;
+      &lt;style type="text/css"&gt;
+        q        { behavior: url(http://www.hunlock.com/IEquotes.htc); }
+      &lt;/style&gt;
+    &lt;![endif]-->
+  <!-- Link to our RSS feed -->
+  <link href="http://www.hunlock.com/feed.php" rel="alternate" title="RSS" type="application/rss+xml"/>
+  <!-- Local CSS file, just in case -->
+  <style type="text/css">
+   .adBar {}
+  </style>
+ </head>
+ <body class="body">
+  <div class="header noprint" id="header">
+   <a href="http://www.hunlock.com/">
+    <div class="button">
+     BLOG
+    </div>
+   </a>
+   <a href="http://www.hunlock.com/archives.php">
+    <div class="button">
+     ARCHIVES
+    </div>
+   </a>
+   <div class="clock" id="clock">
+   </div>
+  </div>
+  <table cellpadding="0" cellspacing="0" style="table-layout: fixed; min-width: 1000px" width="100%">
+   <tr>
+    <td class="artWidth">
+    </td>
+    <td>
+    </td>
+   </tr>
+   <tr>
+    <td valign="top">
+     <div class="artBlock noprint" style="background: url(http://www.hunlock.com/images/fading_purple_down.gif) repeat-x;">
+      <div class="headBlock">
+       The Javascript Reference Series
+      </div>
+      <div class="infoBar">
+       A free, printable, reference resource.
+      </div>
+      <br/>
+      <center>
+       <table width="95%">
+        <tr>
+         <td align="left" valign="top">
+          <li>
+           <a href="http://www.hunlock.com/blogs/Essential_Javascript_--_A_Javascript_Tutorial">
+            Essential Javascript -- A Javascript Tutorial
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/The_Complete_Javascript_Number_Reference">
+            Javascript Numbers
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/The_Complete_Javascript_Strings_Reference">
+            Javascript Strings
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/Mastering_Javascript_Arrays">
+            Javascript Arrays
+           </a>
+          </li>
+         </td>
+         <td align="left" valign="top">
+          <li>
+           <a href="http://www.hunlock.com/blogs/Functional_Javascript">
+            Javascript Functions
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/Mastering_JSON_(_JavaScript_Object_Notation_)">
+            JSON (Javascript Objects)
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/Javascript_Dates-The_Complete_Reference">
+            Javascript Dates
+           </a>
+          </li>
+          <li>
+           <a href="http://www.hunlock.com/blogs/AJAX_for_n00bs">
+            AJAX For Noobs
+           </a>
+          </li>
+         </td>
+        </tr>
+       </table>
+      </center>
+     </div>
+     <div class="article">
+      <h1>
+       AJAX for n00bs
+      </h1>
+      <div class="infoBar">
+       Filed: Thu, Dec 21 2006 under Programming|| Tags: ajax tutorial beginner
+      </div>
+      <p>
+       Take a look on the net and you'll see endless pages of
+       <a class="out" href="http://www.google.com/search?q=ajax+framework">
+        AJAX Frameworks
+       </a>
+       :
+libraries which promise to do all the trivial and dirty AJAX work for you, leaving you free to
+code without actually understanding how the application you're writing really works.
+So lets pull back the smoke and mirrors and see what AJAX is and why it's just a 
+simple evolution of client/server tricks Javascript programmers have been doing
+since the web was born.
+      </p>
+      <p>
+       Simply put, AJAX is a method for your javascript programs to talk to your server
+and send and request data.  There's nothing particularly new about this.   Javascript
+programmers have been communicating with the server in the background ever-since
+the FRAME tag became available.  So we'll begin learning about AJAX by learning
+how things were done before AJAX became buzzworthy. The first thing to do is to set 
+up an iframe somewhere on the page.   The IFRAME will call a page on the server 
+called http://www.hunlock.com/examples/notajax.html.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       &lt;IFRAME src="http://www.hunlock.com/examples/notajax.html" name="serverData" 
+width=200 height=50 style='background-color: #DDDDDD'&gt;&lt;/iframe&gt;
+      </pre>
+      Here is the complete source of notajax.html:
+      <pre class="code" onclick="selectNode(this)">
+       &lt;div ID='feedback'&gt;Hello World!&lt;/div&gt;
+      </pre>
+      <p>
+       And here is the iframe, complete with the the notajax.html page loaded.
+Note that it's visible just for the purposes of this example.  If we were actually using
+this method to transfer data on a production website, we'd make the iframe invisible 
+and 1 pixel in size.
+      </p>
+      <p>
+       <iframe height="50" name="serverData" src="http://www.hunlock.com/examples/notajax.html" style="background-color: #DDDDDD" width="200">
+       </iframe>
+       <br clear="all"/>
+      </p>
+      <p>
+       What we want to do now is access the data in the iframe and act on it so here's
+a little javascript snippet to do just that.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       function test() {
+   iframeData=serverData.document.getElementById('feedback');
+   alert(iframeData.innerHTML);
+}
+      </pre>
+      <p>
+       Now click
+       <a href="javascript:test()">
+        on this link
+       </a>
+       and see what happens.
+       <script type="text/javascript">
+        function test() {
+   iframeData=serverData.document.getElementById('feedback');
+   alert(iframeData.innerHTML);
+}
+       </script>
+      </p>
+      <p>
+       What you have just seen is a web page which, after it was loaded, communicated with 
+the server, asked for some specific data, recieved that data, and was able to
+act on what it received.   And it did it all without AJAX.  For that matter, it did it
+all without needing a server side script either.
+      </p>
+      <p>
+       There's precious little difference between using an IFRAME to communicate with the server
+and using an AJAX call.   Indeed, AJAX is actually a bit more complex but the trade-off is that
+you get a little more feedback on the progress off the call, that is you have a better chance
+of catching when something goes wrong.
+      </p>
+      <p>
+       AJAX is an acronym which stands for Asyncronous Javascript And XML.   It is horribly misleading
+because you can make syncronous calls if you want and very few people actually use 
+the XML part.   Ain't technobabble wonderful?  If you'd like the history of how AJAX became
+part of the net check out this
+       <a href="http://nitinpai.wordpress.com/2006/12/25/the-birth-of-ajax-an-amazing-story/">
+        really nice article
+       </a>
+       .
+      </p>
+      <p>
+       Coding wise, AJAX calls begin and end with the XMLHttpRequest object.  Once you master this object,
+you have mastered AJAX.   XMLHttpRequest is built into most modern browsers.  Internet Explorer uses 
+an activeX object which is set up a little differently but once set up, behaves exactly the same way 
+as XMLHttpRequest.  So lets start by setting up the object.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       function ajaxRequest() {
+   var AJAX = null;                                 // Initialize the AJAX variable.
+   if (window.XMLHttpRequest) {                     // Does this browser have an XMLHttpRequest object?
+      AJAX=new XMLHttpRequest();                    // Yes -- initialize it.
+   } else {                                         // No, try to initialize it IE style
+      AJAX=new ActiveXObject("Microsoft.XMLHTTP");  //  Wheee, ActiveX, how do we format c: again?
+   }                                                // End setup Ajax.
+   if (AJAX==null) {                                // If we couldn't initialize Ajax...
+      alert("Your browser doesn't support AJAX.");  // Sorry msg.						
+      return false                                  // Return false, couldn't set up ajax
+   }
+}
+      </pre>
+      <p>
+       This code snippit merely defines a variable called AJAX and assigns an XMLHttpRequest object
+to it (or Microsoft's activeX version).  If you noticed we used the "new" keyword when we
+set up AJAX, you noticed XMLHttpRequest is an object and that means it has methods and properties.
+Lets take a look at the methods that makes XMLHttpRequest tick.
+      </p>
+      <div style="font-family: verdana; font-size: 12px">
+       <ul>
+        <li>
+         AJAX.abort() -- abort the current request
+        </li>
+        <li>
+         AJAX.getAllResponseHeaders() -- returns as a string all current headers in use.
+        </li>
+        <li>
+         AJAX.getResponseHeader("headerLabel") -- returns value of the requested header.
+        </li>
+        <li>
+         AJAX.open("method", "URL"[, asyncFlag[, "userName"[, "password"]]]) -- set up a call.
+        </li>
+        <li>
+         AJAX.send(content) -- Transmit data
+        </li>
+        <li>
+         AJAX.setRequestHeader("label", "value") -- Create or change a header.
+        </li>
+       </ul>
+      </div>
+      <p>
+       In addition to the above methods, XMLHttpRequest has the following properties.
+      </p>
+      <div style="font-family: verdana; font-size: 12px">
+       <ul>
+        <li>
+         AJAX.onreadystatechange	-- event handler
+        </li>
+        <li>
+         AJAX.readyState -- the status of the request
+         <ul>
+          <li>
+           0 = uninitialized
+          </li>
+          <li>
+           1 = loading
+          </li>
+          <li>
+           2 = loaded
+          </li>
+          <li>
+           3 = interactive
+          </li>
+          <li>
+           4 = complete
+          </li>
+         </ul>
+        </li>
+        <li>
+         AJAX.responseText -- String value of the returned data
+        </li>
+        <li>
+         AJAX.responseXML -- DOM-compatible XML value of returned data
+        </li>
+        <li>
+         AJAX.status --	Numeric status code returned by server. Example: 404 for "Not Found"
+        </li>
+        <li>
+         AJAX.statusText	-- The text value of the server status. Example: "Not Found"
+        </li>
+       </ul>
+      </div>
+      <p>
+       The Header methods are mostly used when you want to send data to the server as
+a POST method (IE a bunch of form data that you don't want to show up in the server logs
+--like credit card data and such).  This article will be using the GET method to
+transfer data to the server since it's simpler to explain.  The items we'll be using in this 
+tutorial are open,send,onreadystatechange,readystate,responseText,status, and statusText.
+      </p>
+      <p>
+       Now that we have our AJAX variable declared and associated with the XMLHttpRequest object
+it's time to set up our first call.  It may seem counter-intuitive but we begin
+not by sending the data to the server but by telling javascript what to do with it when
+we get data back from the server.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       AJAX.onreadystatechange = function() {                      // When the browser has the request info..
+   if (AJAX.readyState==4 || AJAX.readyState=="complete") { //  see if the complete flag is set.
+      callback(AJAX.responseText, AJAX.status);             // Pass the response to our processing function
+   }                                                        // End Ajax readystate check.
+}                                                           // End Event Handler.
+      </pre>
+      <p>
+       What this snippet does is to set up an event handler.  When our AJAX request is
+complete and we've received data back from the server, this code will pass the data
+and the page status to a function called callback.  The hard part is wrapping your head
+around the idea that your browser is going to be off doing other stuff then suddenly,
+out of the blue the browser is going to get the data back from the server and run the
+callback function.   It's not a horribly difficult concept to understand or use, but
+it is a little different in that your code didn't call callback, the browser will
+make the call only after it's received data back from the server.
+      </p>
+      <p>
+       We'll have to write the callback function
+elsewhere in the code.  There's nothing fancy here, we'll have it do the same thing
+our iframe example did.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       function callback(serverData, serverStatus) {
+   alert(serverData);
+}
+      </pre>
+      <p>
+       For the sake of simplicity we're ignoring the page status in our code.  However
+as you develop real-world applications you'll want to check the status codes and
+make sure you actually got back a good response from the server (200).
+      </p>
+      <p>
+       So lets recap what we've done so far.  We've set up a variable called AJAX which
+is an XMLHttpRequest object.   We've then set up an onreadystatechange event that
+checks to see if the ajax object has finished receiving data and if so to call
+a function we've created called callback which will then just throw up the received
+data in an alert box.
+      </p>
+      <p>
+       Now we're going to actually set up and make the calls to the server.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       var url='http://somedomain.com/getdata.php?doc=sometext.txt'; // This is the URL we will call.
+AJAX.open("GET", url, true);                                  // Open the url this object was set-up with.
+AJAX.send(null);                                              // Send the request.
+      </pre>
+      <p>
+       AJAX.open does the bulk of the work here.   The first parameter we set as
+"GET", this passes all our data back to the server in the URL.   A "POST" method
+is also available but is more complex to set up so we're not covering it in 
+this tutorial ( See
+       <a href="http://www.hunlock.com/blogs/AJAX_POST-It_Notes">
+        http://www.hunlock.com/blogs/AJAX_POST-It_Notes
+       </a>
+       for a tutorial using POST. ) The second parameter is the url we will be calling
+and since we're using a GET method we added doc=sometext.txt to the url as the
+data we'll be passing.  The third parameter (true) says we're going to make
+this request
+       <i>
+        asynchronously
+       </i>
+       which means we're going to call the url
+and then go off and do other stuff without waiting for a response from the 
+server.   When the data gets back from the server the browser will call
+our callback function for us and we can process the data then.
+      </p>
+      <p>
+       If you pass false as the third parameter the browser will wait for the data
+to get back from the server before it does anything else.  This requires a 
+different programming structure from what we've done in this tutorial.  Feel
+free to experiment with it, but realize that most likely this tutorial will 
+break if you change this to false.
+      </p>
+      <p>
+       If your server requires you to log in you can add a fourth and fifth parameter
+to AJAX.open, representing your user name and password as such: AJAX.open("GET", url, true, 'johndoe','1234').
+1234?  Who the heck uses 1234 as their password?   For that matter who embeds their password in a web page?
+If you're going to pass a password back, it's best to prompt the user to enter the password then pass the user's
+entry rather than hard coding it.
+      </p>
+      <p>
+       Finally we send the request with AJAX.send(null).   We're sending null (or nothing) because all of the
+data is in the URL because we're using GET.   If you were doing a post, null would be a variable or string
+containing the data you're passing back as a post.
+      </p>
+      <p>
+       Now here is the completed function, all put together in one spot.
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       function callback(serverData, serverStatus) {       // Called automatically when we get data back from server
+   alert(serverData);                               // Display an alert box with the recieved data
+}
+
+function ajaxRequest() {
+   var AJAX = null;                                 // Initialize the AJAX variable.
+   if (window.XMLHttpRequest) {                     // Does this browser have an XMLHttpRequest object?
+      AJAX=new XMLHttpRequest();                    // Yes -- initialize it.
+   } else {                                         // No, try to initialize it IE style
+      AJAX=new ActiveXObject("Microsoft.XMLHTTP");  //  Wheee, ActiveX, how do we format c: again?
+   }                                                // End setup Ajax.
+   if (AJAX==null) {                                // If we couldn't initialize Ajax...
+      alert("Your browser doesn't support AJAX.");  // Sorry msg.						
+      return false                                  // Return false, couldn't set up ajax
+   }
+   AJAX.onreadystatechange = function() {                      // When the browser has the request info..
+      if (AJAX.readyState==4 || AJAX.readyState=="complete") { //  see if the complete flag is set.
+         callback(AJAX.responseText, AJAX.status);             // Pass the response to our processing function
+      }                                                        // End Ajax readystate check.
+   }
+   var url='http://somedomain.com/getdata.php?doc=sometext.txt'; // This is the URL we will call.
+   AJAX.open("GET", url, true);                                  // Open the url this object was set-up with.
+   AJAX.send(null);                                              // Send the request.
+}
+      </pre>
+      <p>
+       Just for kicks, I modified ajaxRequest so that instead of 
+calling some fictional, example URL, it calls http://www.hunlock.com/examples/noajax.html by changing the
+line which reads...
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       var url='http://somedomain.com/getdata.php?doc=sometext.txt'; // This is the URL we will call.
+to   
+   var url='http://www.hunlock.com/examples/notajax.html';     // This is the URL we will call.
+      </pre>
+      <p>
+       Now click
+       <a href="javascript:ajaxRequest()">
+        on this link
+       </a>
+       and see what happens.   Pretty much
+exactly the same thing as our original no-ajax result save that the division tags are visible here.
+      </p>
+      <p>
+       So AJAX isn't this big, spooky, complex technology after all!  It's just a more complicated way
+to get data back from the server without using IFRAMES!  Hooray!
+      </p>
+      <p>
+       Javascript, of course, is only one-half of the equation.  For AJAX to work to its full potential
+you need a server side program to process the requests and send back some data.
+While the server side program is worthy of its own tutorial, it's simple enough
+to include a small section of code here.  Here's what http://somedomain.com/getdata.php would
+look like on the server.
+       <script type="text/javascript">
+        function callback(serverData, serverStatus) {       // Called automatically when we get data back from server
+   alert(serverData);                               // Display an alert box with the recieved data
+}
+
+function ajaxRequest() {
+   var AJAX = null;                                 // Initialize the AJAX variable.
+   if (window.XMLHttpRequest) {                     // Does this browser have an XMLHttpRequest object?
+      AJAX=new XMLHttpRequest();                    // Yes -- initialize it.
+   } else {                                         // No, try to initialize it IE style
+      AJAX=new ActiveXObject("Microsoft.XMLHTTP");  //  Wheee, ActiveX, how do we format c: again?
+   }                                                // End setup Ajax.
+   if (AJAX==null) {                                // If we couldn't initialize Ajax...
+      alert("Your browser doesn't support AJAX.");  // Sorry msg.						
+      return false                                  // Return false, couldn't set up ajax
+   }
+   AJAX.onreadystatechange = function() {                      // When the browser has the request info..
+      if (AJAX.readyState==4 || AJAX.readyState=="complete") { //  see if the complete flag is set.
+         callback(AJAX.responseText, AJAX.status);             // Pass the response to our processing function
+      }                                                        // End Ajax readystate check.
+   }
+   var url='http://www.hunlock.com/examples/notajax.html';     // This is the URL we will call.
+   AJAX.open("GET", url, true);                                // Open the url this object was set-up with.
+   AJAX.send(null);                                            // Send the request.
+}
+       </script>
+      </p>
+      <pre class="code" onclick="selectNode(this)">
+       &lt;?php
+   header("Cache-Control: no-cache, must-revalidate");     // Must do cache-control headers
+   header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");       // or IE will pull from cache 100% of time (which is really bad)
+
+   readfile($doc);                                         // send file to browser
+                                                           // $doc is whatever was passed as doc= in the url.
+                                                           // getdata.php?doc=hello.txt will open hello.txt.
+?&gt;
+      </pre>
+      <p>
+       Pretty simple huh?  All we do is pass two cache-control headers to make sure IE
+won't cache the url then do a simple readfile of file which was passed as doc= in the
+url.  You'll also note, I hope, that this is horribly insecure.  It's good to illustrate
+what's happening but you certainly don't want to use this live on the web.
+      </p>
+      <p>
+       Now that you have a basic grasp of what ajax is actually doing, there are two related
+articles you may want to browse.   The first is
+       <a href="http://www.hunlock.com/blogs/Concurrent_Ajax">
+        Concurrent Ajax
+       </a>
+       which shows you how to set up your AJAX function as an object making it trivial to
+do many different and simultaneous AJAX calls -- basically a bare bones AJAX framework
+without all the bells and whistles that separate you from what's really going on in your code.
+The second is
+       <a href="http://www.hunlock.com/blogs/AJAX_POST-It_Notes">
+        Ajax Post-It Notes
+       </a>
+       which
+detail how to POST data in AJAX instead of relying solely on GET -- after all, the last thing you want
+is for someone's credit card number, social security number or other personal data to start
+showing up in your server log files!
+       <br/>
+       <br/>
+      </p>
+      <div class="noprint adBar" id="lunarAd" style="font-family: verdana; font-size: 1em; border: 1px solid black; -moz-border-radius: 5px; background-color: #FDFFC1; padding: 5px;">
+      </div>
+     </div>
+    </td>
+    <td align="center" class="noprint" id="sidebar" style="margin: 0px; padding: 5px; background: url(http://www.hunlock.com/images/blue-fade-bg-left.jpg) repeat-y;" valign="top">
+     <div id="indexBar">
+      <div class="indexBar">
+       <div class="indexTitle" id="indexTitle">
+        Article Index
+       </div>
+       <div class="indexContents" id="indexContents">
+       </div>
+      </div>
+      <br/>
+     </div>
+     <script type="text/javascript">
+      if ((_articleAge &gt; _showAds)&amp;&amp;(!getCookie('noads'))) {
+      document.writeln("&lt;div id='noticeBar' class='adBar'&gt;");
+      document.writeln("&lt;div class='rssBar adBar' style='background-color: #FDFFC1; font-family: verdana;'&gt;");
+      document.writeln("&lt;div id='noticeTitle' class='rssTitle'&gt;Service Notice&lt;/div&gt;");
+      document.writeln("&lt;div id='noticeContents' class='rssContents'&gt;");
+      document.writeln("&lt;P&gt;Articles older than "+(_showAds-1)+" days are displayed with ");
+      document.writeln("ads to help offset the production costs of this site.  This article ");
+      document.writeln("is "+Math.floor(_articleAge)+" days old.");
+      document.writeln("&lt;P&gt;If you print this page, all ads and navigational items ");
+      document.writeln("will be automatically removed.  You can banish all ads on this site");
+      document.writeln("for the next 24 hours by &lt;A HREF='#' onclick='noads(); return false'&gt;clicking here&lt;/A&gt;.");
+/*
+      if (screen.width&lt;1250) {
+        google_ad_width = 160;
+        google_ad_height = 600;
+        google_ad_format = "160x600_as";
+      } else {
+        google_ad_width = 336;
+        google_ad_height = 280;
+        google_ad_format = "336x280_as";
+      }
+      google_ad_client = "pub-1034476272741901";
+      google_ad_type = "text_image";
+      google_ad_channel = "";
+      google_color_border = "000000";
+      google_color_bg = "FFFFFF";
+      google_color_link = "0000FF";
+      google_color_text = "000000";
+      google_color_url = "008000";
+
+      document.writeln('&lt;div&gt;&lt;center&gt;');
+      document.write('\&lt;script type="text/javascript" '); 
+      document.write('src="http://pagead2.googlesyndication.com/pagead/show_ads.js"\&gt;');
+      document.writeln('\&lt;\/script\&gt;');
+  */
+      document.writeln('&lt;br clear=all&gt;&lt;center&gt;&lt;a href="http://www.lunarpages.com/id/hunlock2" onMouseOver="window.status=\'http://www.lunarpages.com\';return true" onMouseOut="window.status=\'\';return true" target="_blank"&gt;');
+	  document.writeln('&lt;img style="border: none" src="http://www.lunarpages.com/affiliatebanners/01_lunarpages_300x300.gif" alt="Lunarpages.com Web Hosting" /&gt;&lt;/a&gt;&lt;/center&gt;');  
+      document.writeln('&lt;/center&gt;&lt;/div&gt;');
+      document.writeln("&lt;/div&gt;&lt;BR&gt;");
+      document.writeln("&lt;/div&gt;");
+      document.writeln("&lt;BR&gt;&lt;/div&gt;");
+   }
+     </script>
+     <div id="rssBar">
+      <!--[if lte IE 7]&gt;&lt;div class='adBar'&gt;&lt;br clear=all&gt;&lt;BR&gt;&lt;/div&gt;&lt;![endif]-->
+      <div class="rssBar">
+       <div class="rssTitle" id="rssTitle">
+        Recent Articles
+       </div>
+       <div class="rssContents" id="rssContents">
+        <a href="http://www.hunlock.com/blogs/Social_Javascript_(cross-site_ajax)">
+         Social Javascript (cross-site ajax)
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Dude!__I_got_a_Dell!">
+         Dude!  I got a Dell!
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Are_you_ready_for_this">
+         Are you ready for this
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Closing_The_Book_On_Javascript_Closures">
+         Closing The Book On Javascript Closures
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Essential_Javascript_--_A_Javascript_Tutorial">
+         Essential Javascript -- A Javascript Tutorial
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Deferred_Javascript">
+         Deferred Javascript
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/The_Complete_Javascript_Number_Reference">
+         The Complete Javascript Number Reference
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Javascript_Dates-The_Complete_Reference">
+         Javascript Dates-The Complete Reference
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/The_Complete_Javascript_Strings_Reference">
+         The Complete Javascript Strings Reference
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Downloading_and_Using_Vista_Web_Fonts">
+         Downloading and Using Vista Web Fonts
+        </a>
+        <br/>
+       </div>
+      </div>
+      <br/>
+     </div>
+     <div id="relatedBar">
+      <div class="rssBar">
+       <div class="rssTitle" id="relatedTitle">
+        Related Atricles
+       </div>
+       <div class="rssContents" id="relatedContents">
+        <a href="http://www.hunlock.com/blogs/Concurrent_Ajax">
+         Concurrent Ajax
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/AJAX_from_the_darkside">
+         AJAX from the darkside
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Mastering_JSON_(_JavaScript_Object_Notation_)">
+         Mastering JSON ( JavaScript Object Notation )
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Snippets:_Synchronous_AJAX">
+         Snippets: Synchronous AJAX
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/The_Ultimate_Ajax_Object">
+         The Ultimate Ajax Object
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Mastering_The_Back_Button_With_Javascript">
+         Mastering The Back Button With Javascript
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/AJAX_POST-It_Notes">
+         AJAX POST-It Notes
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Social_Javascript_(cross-site_ajax)">
+         Social Javascript (cross-site ajax)
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Ajax_for_Everyone_(beyond_hello_world)">
+         Ajax for Everyone (beyond hello world)
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/The_Complete_Javascript_Strings_Reference">
+         The Complete Javascript Strings Reference
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/Mastering_Javascript_Arrays">
+         Mastering Javascript Arrays
+        </a>
+        <br/>
+        <a href="http://www.hunlock.com/blogs/XML_For_N00bs,_AJAX_for_Gurus">
+         XML For N00bs, AJAX for Gurus
+        </a>
+        <br/>
+       </div>
+      </div>
+      <br/>
+     </div>
+     <script type="text/javascript">
+      if ((_articleAge &gt; _showAds)&amp;&amp;(!getCookie('noads'))) {
+      document.writeln("&lt;div id='noticeBar2' class='adBar'&gt;");
+      document.writeln("&lt;div class='rssBar' style='background-color: #FDFFC1; font-family: verdana;'&gt;");
+      document.writeln("&lt;div id='noticeTitle' class='rssTitle'&gt;Service Notice&lt;/div&gt;");
+      document.writeln("&lt;div id='noticeContents' class='rssContents'&gt;");
+      document.writeln("&lt;P&gt;Articles older than "+(_showAds-1)+" days are displayed with ");
+      document.writeln("ads to help offset the production costs of this site.  This article ");
+      document.writeln("is "+Math.floor(_articleAge)+" days old.");
+      document.writeln("&lt;P&gt;If you print this page, all ads and navigational items ");
+      document.writeln("will be automatically removed.  You can banish all ads on this site");
+      document.writeln("for the next 24 hours by &lt;A HREF='#' onclick='noads(); return false'&gt;clicking here&lt;/A&gt;.");
+/*
+      if (screen.width&lt;1250) {
+        google_ad_width = 160;
+        google_ad_height = 600;
+        google_ad_format = "160x600_as";
+      } else {
+        google_ad_width = 336;
+        google_ad_height = 280;
+        google_ad_format = "336x280_as";
+      }
+      google_ad_client = "pub-1034476272741901";
+      google_ad_type = "text_image";
+      google_ad_channel = "";
+      google_color_border = "000000";
+      google_color_bg = "FFFFFF";
+      google_color_link = "0000FF";
+      google_color_text = "000000";
+      google_color_url = "008000";
+
+      document.writeln('&lt;center&gt;&lt;div class="adBar"&gt;');
+      document.write('&lt;script type="text\/javascript" '); 
+      document.write('src="http://pagead2.googlesyndication.com/pagead/show_ads.js"&gt;');
+      document.writeln('&lt;\/script&gt;&lt;/div&gt;');     
+*/
+document.writeln('&lt;/div&gt;&lt;br clear=all/&gt;&lt;center&gt;&lt;a href="http://www.lunarpages.com/id/hunlock2" onMouseOver="window.status=\'http://www.lunarpages.com\';return true" onMouseOut="window.status=\'\';return true" target="_blank"&gt;');
+document.writeln('&lt;img style="border: none" src="http://www.lunarpages.com/affiliatebanners/01_lunarpages_300x300.gif" alt="Lunarpages.com Web Hosting" /&gt;&lt;/a&gt;&lt;/center&gt;');  
+
+      document.writeln('&lt;/center&gt;&lt;/div&gt;');
+      document.writeln("&lt;/div&gt;&lt;BR&gt;");
+      document.writeln("&lt;/div&gt;");
+      document.writeln("&lt;BR&gt;&lt;/div&gt;");
+   }
+     </script>
+     <div id="dzoneBar">
+      <!--[if lte IE 7]&gt;&lt;div class='adBar'&gt;&lt;br clear=all&gt;&lt;BR&gt;&lt;/div&gt;&lt;![endif]-->
+      <div class="rssBar">
+       <div class="rssTitle" id="dzoneTitle">
+        My DZone Recommendations
+       </div>
+       <div class="rssContents" id="dzoneContents">
+       </div>
+      </div>
+     </div>
+     <br/>
+     <div class="rssBar" id="delBar">
+      <div class="rssTitle" id="delTitle">
+       My Del.icio.us Recommendations
+      </div>
+      <div class="rssContents" id="delContents">
+      </div>
+     </div>
+    </td>
+   </tr>
+  </table>
+  <div class="footer" id="footer" style="float: right;">
+   <div class="noprint" style="float: left; width: 100px; font-family: verdana;">
+    <div style="background-color: black; color: white;">
+     <center>
+      Feeds
+     </center>
+    </div>
+    <a href="http://www.hunlock.com/feed.php" style="text-decoration: none; color: blue">
+     <img border="0" height="16" src="http://www.hunlock.com/images/rss.gif" width="16"/>
+     RSS 2.0
+    </a>
+    <br/>
+    <a href="http://www.hunlock.com/feed.php?format=json&amp;callback=jsonFeed" style="text-decoration: none; color: blue">
+     <img border="0" height="16" src="http://www.hunlock.com/images/json.gif" width="16"/>
+     JSON
+    </a>
+    <a href="http://www.hunlock.com/examples/json.txt" style="text-decoration: none; color: blue">
+     [?]
+    </a>
+    <br/>
+   </div>
+   This article is copyright  2006, 2007 by
+   <a href="mailto:nospam@notreal.gov" onclick='document.location.href="mailto:pat"+"rick@"+"hun"+"lock.com"; return false;'>
+    Patrick Hunlock
+   </a>
+   .
+   <br/>
+   The example code and concepts, unless otherwise noted, are released into the public domain and may be used and modified without compensation or attribution.
+   <br/>
+   <span class="noprint">
+    The
+    <a class="out" href="http://www.brandspankingnew.net/archive/2006/12/hohoho.html">
+     Mini Icons 2
+    </a>
+    are used under a Creative Commons License.
+    <a class="out" href="http://code.google.com/p/google-code-prettify/">
+     Google's Code Prettifier
+    </a>
+    is used under the Apache 2.0 license.
+   </span>
+  </div>
+ </body>
+ <head>
+  <script src="http://del.icio.us/feeds/json/pcx99?count=10" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   clockID = document.getElementById('clock');
+       doClock();
+function addEvent(elm, evType, fn, useCapture) {
+	if (elm.addEventListener) {
+		elm.addEventListener(evType, fn, useCapture);
+		return true;
+	}
+	else if (elm.attachEvent) {
+		var r = elm.attachEvent('on' + evType, fn);
+		return r;
+	}
+	else {
+		elm['on' + evType] = fn;
+	}
+}
+
+     function startup() {
+       els = document.getElementsByTagName('pre');
+       for (i=0; i&lt;els.length; i++) {
+          addEvent(els[i], 'mouseup', selectNode2, false);
+          addEvent(els[i], 'mousedown', unSelectNode, false);
+       }
+       getFeed('http://www.dzone.com/feed/shared/209881/rss.xml','dzone');
+
+       var lad = new ajaxObject('lunarAd','/lunarad.txt');
+       lad.update();
+
+       // Insert the delicious results.
+       
+       Delicious = Delicious || {};
+       var tmp='';
+       for (var i=0, post; post = Delicious.posts[i]; i++) {
+          tmp+='&lt;a href="'+Delicious.posts[i].u+'" rel="nofollow"&gt;'+Delicious.posts[i].d.toLowerCase()+'&lt;/a&gt;&lt;br&gt;';
+       }
+       document.getElementById('delContents').innerHTML=tmp;
+    }
+
+   
+    els=document.getElementsByTagName('h4');
+    idx='';
+    for (i=0; i&lt;els.length; i++) {
+       idx += '&lt;a href="#quickIDX'+i+'"&gt;'+els[i].innerHTML+'&lt;/a&gt;&lt;BR&gt;';
+       els[i].innerHTML='&lt;a name="quickIDX'+i+'"&gt;&lt;/a&gt;'+els[i].innerHTML;
+    }
+    if (!els.length) {
+       document.getElementById('indexBar').style.display='none';
+    } else {
+       document.getElementById('indexContents').innerHTML=idx;
+    }
+
+		var contact = new ajaxObject('contact','includes/getcontact.php');
+    contact.callback= function(dat) { contactCallback(dat); } 
+
+function getFeed(feed, callback) {
+var newScript = document.createElement('script');
+    newScript.type = 'text/javascript';
+    newScript.src = 'http://pipes.yahoo.com/pipes/9oyONQzA2xGOkM4FqGIyXQ/run?&amp;_render=json&amp;_callback='+callback+'&amp;feed='+feed;
+document.getElementsByTagName("head")[0].appendChild(newScript);
+}
+
+
+function dzone(feed) {
+   var tmp='';
+   for (var i=0; i&lt;feed.value.items.length; i++) {
+      tmp+='&lt;a href="'+feed.value.items[i].link+'" rel="nofollow"&gt;';
+      tmp+=feed.value.items[i].title+'&lt;/a&gt;&lt;br&gt;';
+   }
+   document.getElementById('dzoneContents').innerHTML=tmp;
+}
+
+if (getCookie('noads')) {
+   var el = getCSSRule('.adBar');
+       el.style.display='none';
+}
+
+     registerOnLoad(startup);
+  </script>
+  <script src="http://www.hunlock.com/prettify040107.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17525750-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+ </head>
+</html>

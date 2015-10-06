@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="en" http-equiv="Content-Language"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Obfuscate email tool - Online tools
+  </title>
+  <link href="//www.tools4noobs.com/css/main-combined.css" rel="stylesheet"/>
+  <script src="//www.tools4noobs.com/js/main-combined.js">
+  </script>
+ </head>
+ <body>
+  <div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+    <div class="container">
+     <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+     </a>
+     <a class="brand" href="//www.tools4noobs.com/">
+      Tools4noobs
+     </a>
+     <div class="nav-collapse collapse">
+      <ul class="nav pull-right">
+       <li class="normal">
+        <a href="//www.tools4noobs.com/">
+         Home
+        </a>
+       </li>
+       <li class="normal">
+        <a href="//www.tools4noobs.com/summarize/">
+         Summarize
+        </a>
+       </li>
+       <li class="normal">
+        <a href="//www.tools4noobs.com/picasa/">
+         Picasa Slideshow
+        </a>
+       </li>
+       <li class="active">
+        <a href="//www.tools4noobs.com/online_tools/">
+         Online tools
+        </a>
+       </li>
+       <li class="normal">
+        <a href="//www.tools4noobs.com/online_php_functions/">
+         Online PHP Functions
+        </a>
+       </li>
+       <li class="normal">
+        <a href="//www.tools4noobs.com/contact/">
+         Contact
+        </a>
+       </li>
+       <li class="normal">
+        <a href="//www.tools4noobs.com/about/">
+         About
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </div>
+  <header class="visible-desktop" id="header">
+   <div class="container">
+    <h1>
+     Obfuscate email tool
+    </h1>
+   </div>
+  </header>
+  <div class="container" id="content">
+   <ul class="breadcrumb" id="breadcrumb">
+    <li>
+     <a href="//www.tools4noobs.com/">
+      Home
+     </a>
+     <span class="divider">
+      /
+     </span>
+    </li>
+    <li>
+     <a href="//www.tools4noobs.com/online_tools/">
+      Online tools
+     </a>
+     <span class="divider">
+      /
+     </span>
+    </li>
+    <li class="active">
+     Obfuscate email
+    </li>
+   </ul>
+   <div class="row">
+    <div class="span9">
+     <form action="//www.tools4noobs.com/" class="form-horizontal slim-form" method="post" onsubmit="return do_submit()">
+      <input name="action" type="hidden" value="ajax_obfuscate_email"/>
+      <div class="control-group">
+       <label class="control-label" for="email">
+        Email:
+       </label>
+       <div class="controls">
+        <input class="span6" id="email" name="email" type="text"/>
+       </div>
+       <label class="control-label" for="title">
+        Title:
+       </label>
+       <div class="controls">
+        <input class="span6" id="title" name="title" type="text"/>
+       </div>
+       <label class="control-label" for="method">
+        Method:
+       </label>
+       <div class="controls">
+        <select id="method" name="method">
+         <option value="0">
+          Javascript (default)
+         </option>
+         <option value="1">
+          Unicode entire text
+         </option>
+         <option value="2">
+          Unicode only @ sign
+         </option>
+         <option value="3">
+          Hidden css span (only text)
+         </option>
+         <option value="4">
+          Hex values (only html)
+         </option>
+         <option value="5">
+          HTML Comments (only text)
+         </option>
+         <option value="6">
+          CSS after selector (only text - doesn't work in IE)
+         </option>
+         <option value="7">
+          CSS reverse selector (only text)
+         </option>
+        </select>
+       </div>
+      </div>
+      <div class="control-group">
+       <div class="controls">
+        <label class="checkbox" for="onlytext">
+         <input id="onlytext" name="onlytext" type="checkbox" value="1"/>
+         Obfuscate only text
+        </label>
+       </div>
+      </div>
+      <div style="text-align: center; margin: auto; margin-top: 10px">
+       <input class="btn btn-primary" type="submit" value="Obfuscate email"/>
+      </div>
+     </form>
+     <div id="result">
+     </div>
+    </div>
+    <div class="span3">
+     <div id="right-help">
+      <h4>
+       Why obfuscate emails?
+      </h4>
+      <p>
+       Posting your email in clear text on a web page is like inviting the spambots to add you to their database.
+        Always obfuscate your email address before posting to a public page.
+      </p>
+      <p>
+       <b>
+        Note:
+       </b>
+       Your email address is
+       <b>
+        not
+       </b>
+       stored by this tool.
+      </p>
+     </div>
+    </div>
+   </div>
+   <script type="text/javascript">
+    function do_submit()
+{
+    $('#result').html('&lt;div class="progress progress-striped active"&gt;&lt;div class="bar"style="width: 100%;"&gt;&lt;/div&gt;&lt;/div&gt;');
+
+    $.ajax({
+      type: 'POST',
+        url: '//www.tools4noobs.com/',
+        data: 
+        {
+          action:'ajax_obfuscate_email',
+          email:$('#email').val(),
+          title:$('#title').val(),
+          method:$('#method').val(),
+          onlytext:$('#onlytext').attr('checked')
+        },
+        success: function(data) {
+          $('#result').html(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $('#result').html("&lt;div class=\"alert alert-error\"&gt; Error " + xhr.status + ": " + thrownError + "&lt;/div&gt;");
+        }
+      });
+
+      return false;
+}
+   </script>
+   <hr/>
+   <footer id="footer">
+    <span>
+      Copyright
+     <a href="//www.tools4noobs.com/">
+      Tools 4 noobs
+     </a>
+     2007-2015. All rights reserved.
+     <br/>
+     If you need a particular online tool, don't hesitate to give us a message by using our
+     <a href="//www.tools4noobs.com/contact/">
+      contact form
+     </a>
+     ,
+and we'll see what we can do about it.
+    </span>
+    <span class="pull-right" id="totop">
+     <a href="#">
+      Back to Top
+      <i class="icon-arrow-up">
+      </i>
+     </a>
+    </span>
+   </footer>
+  </div>
+  <script>
+   $(window).load(function() {
+    $("#totop").click(function () {
+        $("body, html").animate({
+            scrollTop: 0
+        }, 300);
+        return false;
+    }); 
+});
+  </script>
+ </body>
+ <script type="text/javascript">
+  /* &lt;![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'https://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]&gt; */
+ </script>
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-254450-13', 'auto');
+  ga('send', 'pageview');
+ </script>
+</html>

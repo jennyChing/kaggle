@@ -1,0 +1,650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="private, must-revalidate, max-age=0" http-equiv="cache-control"/>
+  <title>
+   Wouter's Wiki : 
+    Java Style Classes In C
+  </title>
+  <meta content="DokuWiki" name="generator"/>
+  <meta content="index,follow" name="robots"/>
+  <meta content="java-style-classes-in-c" name="keywords"/>
+  <link href="/lib/exe/opensearch.php" rel="search" title="Wouter's Wiki" type="application/opensearchdescription+xml"/>
+  <link href="/" rel="start"/>
+  <link href="/java-style-classes-in-c?do=index" rel="contents" title="Sitemap"/>
+  <link href="/feed.php" rel="alternate" title="Recent changes" type="application/rss+xml"/>
+  <link href="/feed.php?mode=list&amp;ns=" rel="alternate" title="Current namespace" type="application/rss+xml"/>
+  <link href="/_export/xhtml/java-style-classes-in-c" rel="alternate" title="Plain HTML" type="text/html"/>
+  <link href="/_export/raw/java-style-classes-in-c" rel="alternate" title="Wiki Markup" type="text/plain"/>
+  <link href="http://strlen.com/java-style-classes-in-c" rel="canonical"/>
+  <link href="/lib/exe/css.php?t=wouterstyle&amp;tseed=b6b4b82e23fbc50addb376cf38d9dbb6" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   /*&lt;![CDATA[*/var NS='';var JSINFO = {"id":"java-style-classes-in-c","namespace":""};
+/*!]]&gt;*/
+  </script>
+  <script charset="utf-8" src="/lib/exe/js.php?tseed=b6b4b82e23fbc50addb376cf38d9dbb6" type="text/javascript">
+  </script>
+  <link href="/lib/tpl/wouterstyle/images/favicon.ico" rel="shortcut icon"/>
+ </head>
+ <body>
+  <div class="dokuwiki">
+   <div class="stylehead">
+    <div class="header">
+     <div style="color: #FFF; text-align: center; font-size: 1.8em; padding-top: 29px; font-weight: lighter;">
+      Java Style Classes In C
+     </div>
+     <div class="clearer">
+     </div>
+    </div>
+   </div>
+   <div class="mysidebar">
+    <!--&lt;img width="44" height="310" src="/lib/tpl/wouterstyle/images/title.png"&gt;&lt;br&gt;-->
+    <a accesskey="h" href="/home" id="dokuwiki__top" name="dokuwiki__top" title="[ALT+H]">
+     <img height="310" src="/lib/tpl/wouterstyle/images/title.png" width="44"/>
+    </a>
+    <br/>
+    <a accesskey="h" href="/home" id="dokuwiki__top" name="dokuwiki__top" title="[ALT+H]">
+     HOME
+    </a>
+    <br/>
+    <br/>
+    <a href="mailto:aardappelatgmaildotcom">
+     Contact
+    </a>
+    <br/>
+    <div class="rssicon">
+     <a href="/feed.php" title="Recent changes RSS feed">
+      RSS feed
+      <img alt="Recent changes RSS feed" src="/lib/tpl/wouterstyle/images/rss_png.png"/>
+     </a>
+    </div>
+    <form accept-charset="utf-8" action="/wiki/" class="search" id="dw__search">
+     <div class="no">
+      <input name="do" type="hidden" value="search"/>
+      <input accesskey="f" class="edit" id="qsearch__in" name="id" onclick="this.value='';" title="[F]" type="text" value="search"/>
+      <input class="button" title="Go!" type="submit" value="Go!"/>
+      <div class="ajax_qsearch JSpopup" id="qsearch__out">
+      </div>
+     </div>
+    </form>
+    <br/>
+    <div class="stylefoot">
+     <div class="meta">
+      <div class="doc">
+       modified: 
+          2013/08/2
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="page">
+    <h4 id="java-style-classes-in-c">
+     Java Style Classes in C++
+    </h4>
+    <div class="level4">
+     <p>
+      You can argue night and day about whether C++ is a good language, but for some reason, I have grown to really like it. This may sound especially strange from someone who has looked at several hundred language designs and designed quite a few himself, but the C++ language design makes a lot of sense (most C++ haters simply don't understand the language deeply enough to see the elegance in it), and maybe more importantly, implementation quality for it is sadly still generations ahead of other languages.
+     </p>
+     <p>
+      That said, there is one problem with C++ that is by far the most annoying of all possible shortcomings one could identify in C++: the .cpp/.h seperation for classes, in combination with declare before use.
+     </p>
+     <p>
+      Header files as a simplistic way to aid modularity come from C, and there they work reasonably well, as its contents tends to be short and simple, and neatly seperates interface from implementation. In C++ however, the model is driven to the breaking point:
+     </p>
+     <ul>
+      <li class="level1">
+       <div class="li">
+        classes don't allow a neat interface seperation, as implementation elements (private class state and methods) are required to be present in the header file, making your view of an interface more complicated/cluttered than in C
+       </div>
+      </li>
+      <li class="level1">
+       <div class="li">
+        Having to declare functions/classes before their use (partially or not) is a remnant from the days when the compiler had to run on a pdp-11 with very little memory, and is a burden which almost no other (modern) programming language has. It was already a pain in C, in C++ it makes ordering classes, and declaring/including them in the correct order in larger programs a rather complicated puzzle, and drives more implementation details into the header files.
+       </div>
+      </li>
+      <li class="level1">
+       <div class="li">
+        If you're fanatic about perfect factoring of code like I am, this system is problematic in 3 ways:
+       </div>
+       <ul>
+        <li class="level2">
+         <div class="li">
+          The seperation causes excessive duplication of declarations. Duplication is the #1 sin in programming.
+         </div>
+        </li>
+        <li class="level2">
+         <div class="li">
+          Ideally, tightly coupled elements in code should be close together in source code, and loosely coupled elements should be separated. The C++ model does the opposite (!).
+         </div>
+        </li>
+        <li class="level2">
+         <div class="li">
+          Perfect factoring requires constant refactoring. Refactoring is hard if single elements are spread over multiple files, and every change requires the same changes to be replicated (i.e. method decl vs definition).
+         </div>
+        </li>
+       </ul>
+      </li>
+     </ul>
+     <p>
+      For me, the above are some strong concerns, and being able to fix them would make C++ significantly better to work with. But we can't do away with header file separation, and we can't fix the declaration order. Or can we? As it turns out, some little known facts about C++ make this possible!
+     </p>
+     <p>
+      Java, for all its shortcoming, has a wonderful way of dealing with modularity: you can write classes in a single file, with all method implementations straight inside the class body, with no duplication required. The closest we can get in C++ to make this happen is to write our program entirely in header files (one or more self contained classes each), and include them all in a single .cpp. This does not work as smoothly as it does in Java however, and most C++ programmers will dismiss this idea immediately as unfeasible. But lets look at all complications of using C++ this way in turn, and see if they really hold:
+     </p>
+    </div>
+    <h4 id="separating-interface-from-implementation">
+     Separating Interface from Implementation
+    </h4>
+    <div class="level4">
+     <p>
+      Depending on the size of a program, you can still partition your program in multiple black-box style modules, where each module is written in the above style, with a single .cpp and many headers. The majority of headers can be the implementation of the module, and one of them can be a classical pure abstract interface that is available to the other modules. The concept of a class and an interface should be separate anyway, a module (or component) should have the interface, and the vast majority of classes are implementation chunks of a component, and thus do not require an interface to the outside world.
+     </p>
+    </div>
+    <h4 id="compile-time">
+     Compile time
+    </h4>
+    <div class="level4">
+     <p>
+      This is not issue either. Assuming you have all operating system headers and frequently used containers (STL) or math libraries in precompiled headers, and assuming that if your program is really huge, you have separated it into components as per above, the remaining amount of code is absolutely negligible for a modern C++ compiler. In fact, modern C++ compilers often do more work at link time than at compile time (some even do code generation there), so that it can easily be faster.
+     </p>
+    </div>
+    <h4 id="code-bloat">
+     Code bloat
+    </h4>
+    <div class="level4">
+     <p>
+      Since modern C++ programs already have a lot of implementation code inside headers, and since code bloat is a big concern for cache performance, compilers already do a perfect job at filtering out duplicate method bodies, no matter where you place them or how you name them. And since you only need to include every header just once, it may even produce less code even on older compilers.
+     </p>
+     <p>
+      So it seems like it could work.. but we left the most difficult problem for last:
+     </p>
+    </div>
+    <h4 id="declare-before-use">
+     Declare before Use
+    </h4>
+    <div class="level4">
+     <p>
+      Java doesn't have this problem. If your program is just a list of linearly included header files, circular dependencies between classes have just grown worse compared to the old situation, because now dependencies caused by implementation code can also cause un resolvable loops (which class to declare first). So it seems like our excitement of being able to do Java style programming is dead in the water.. or is it?
+     </p>
+     <p>
+      There is a C++ feature very few programmers seem to know about (or at least, have exploited): and that is that inside a class, declare before use doesn't hold (!). Clearly Bjarne was aware of this legacy problem in C++ and fixed it for the inside of classes, but couldn't do the same for top-level declarations because of backwards compatibility with C (why? there must be some intricacy I am missing here).
+     </p>
+     <p>
+      So we can effectively solve our problems by wrapping the entire program (all our classes/headers) in a single dummy class whose sole purpose is to give us more modern C++ features. We can do this conveniently by putting this class inside our single .cpp, and the #include statement inside that class. This may feel like a dirty hack from a classical C++ perspective, but remember that headers are nothing but textual inclusion, and this system has some significant software engineering benefits. Don't let traditions hold you back!
+     </p>
+     <p>
+      There are some weird C++ quirkynesses that one needs to take into account when programming this way, but they are all very minor. Lets look at an example of usage (imagine the classes could sit in their own files):
+     </p>
+     <pre class="code cpp">
+      <span class="kw4">
+       struct
+      </span>
+      entire_program
+      <span class="br0">
+       {
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      B
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      A
+      <span class="br0">
+       {
+      </span>
+      B
+      <span class="sy2">
+       *
+      </span>
+      bbb
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       void
+      </span>
+      Aa
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="br0">
+       {
+      </span>
+      B bb
+      <span class="sy4">
+       ;
+      </span>
+      bb.
+      <span class="me1">
+       Bb
+      </span>
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      B
+      <span class="br0">
+       {
+      </span>
+      A aaa
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       void
+      </span>
+      Bb
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="br0">
+       {
+      </span>
+      A aa
+      <span class="sy4">
+       ;
+      </span>
+      aa.
+      <span class="me1">
+       Aa
+      </span>
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+     </pre>
+     <p>
+      Notice something amazing, even though the full declaration of B is not yet given at the point of declaration of A, we can create value (full, non-pointer) objects of type B, and we can call methods on it that have not been declared yet! This is pretty much just like Java. Notice that even though I can create a B value inside an A method, I cannot create a B instance variable inside A, I can only create pointers. This make sense, because otherwise we would be able to create a pair of classes which would be impossible to instantiate (would have infinite size!). As you can see, I can create an A instance variable just fine, so it is not really a limitation.
+     </p>
+     <p>
+      It is rather un logical that a forward class decl is still required, as clearly the compiler appears to know everything about the class at that point already (unlike at top level, where a forward decl does not allow you anything except pointer decls). But it is not really a big deal either, because the amount of duplication caused by it is nothing compared to traditional C++. Curiously though, there is a way around these forward declarations:
+     </p>
+     <pre class="code cpp">
+      <span class="kw4">
+       struct
+      </span>
+      entire_program
+      <span class="br0">
+       {
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      A
+      <span class="br0">
+       {
+      </span>
+      <span class="kw4">
+       int
+      </span>
+      a
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       void
+      </span>
+      Aa
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="br0">
+       {
+      </span>
+      bb.
+      <span class="me1">
+       b
+      </span>
+      <span class="sy1">
+       =
+      </span>
+      <span class="nu0">
+       1
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      bb.
+      <span class="me1">
+       Bb
+      </span>
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      bb.
+      <span class="me1">
+       aaa
+      </span>
+      .
+      <span class="me1">
+       Aa
+      </span>
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      B
+      <span class="br0">
+       {
+      </span>
+      <span class="kw4">
+       int
+      </span>
+      b
+      <span class="sy4">
+       ;
+      </span>
+      A aaa
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       void
+      </span>
+      Bb
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="br0">
+       {
+      </span>
+      aa.
+      <span class="me1">
+       a
+      </span>
+      <span class="sy1">
+       =
+      </span>
+      <span class="nu0">
+       1
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      aa.
+      <span class="me1">
+       Aa
+      </span>
+      <span class="br0">
+       (
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       static
+      </span>
+      A aa
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       static
+      </span>
+      B bb
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+     </pre>
+     <p>
+      This now allows you to access everything inside B already from A, but without even the forward decl (!). There are weird limitations to this however, that make it useful only for limited program structures. The A and B objects referred to have to be static (class variables), and if you want additional objects of this type you still require the forward decl. It is therefore mostly useful for situations where you have system/support elements in your module that are referenced thru out, as there is no other way to have instance variables in the outer class easily available to the entire program.
+     </p>
+     <p>
+      An additional thought may be that this outer class looks much like a fake namespace, so could namespaces be used to achieve the same effect? Sadly, no. For some reason, a namespace has the same top level behavior as normal, and thus does not support use before declaration as supported here.
+     </p>
+     <p>
+      As an example, here's the entire .cpp source code of a tiny game engine I am working on:
+     </p>
+     <pre class="code cpp">
+      <span class="co2">
+       #include "stdafx.h"
+      </span>
+      <span class="co2">
+       #include "containers.h"
+      </span>
+      <span class="co2">
+       #include "linalg.h"
+      </span>
+      <span class="kw4">
+       struct
+      </span>
+      engine
+      <span class="br0">
+       {
+      </span>
+      <span class="co2">
+       #include "scriptobj.h"
+      </span>
+      <span class="co2">
+       #include "scriptcfg.h"
+      </span>
+      <span class="co2">
+       #include "camera.h"
+      </span>
+      <span class="co2">
+       #include "cmaloader.h"
+      </span>
+      <span class="co2">
+       #include "gamestat.h"
+      </span>
+      <span class="co2">
+       #include "game.h"
+      </span>
+      <span class="co2">
+       #include "particles.h"
+      </span>
+      <span class="co2">
+       #include "d3dmeshrt.h"
+      </span>
+      <span class="co2">
+       #include "d3drenderer.h"
+      </span>
+      <span class="co2">
+       #include "system.h"
+      </span>
+      <span class="kw4">
+       static
+      </span>
+      System _g
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      engine
+      <span class="sy4">
+       ::
+      </span>
+      <span class="me2">
+       System
+      </span>
+      engine
+      <span class="sy4">
+       ::
+      </span>
+      _g
+      <span class="sy4">
+       ;
+      </span>
+      <span class="kw4">
+       int
+      </span>
+      WINAPI WinMain
+      <span class="br0">
+       (
+      </span>
+      HINSTANCE hInst, HINSTANCE,
+      <span class="kw4">
+       char
+      </span>
+      <span class="sy2">
+       *
+      </span>
+      args,
+      <span class="kw4">
+       int
+      </span>
+      <span class="br0">
+       )
+      </span>
+      <span class="br0">
+       {
+      </span>
+      engine
+      <span class="sy4">
+       ::
+      </span>
+      _g.
+      <span class="me1">
+       Main
+      </span>
+      <span class="br0">
+       (
+      </span>
+      args
+      <span class="br0">
+       )
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+      <span class="br0">
+       }
+      </span>
+      <span class="sy4">
+       ;
+      </span>
+     </pre>
+     <p>
+      The headers at the top are the tools that are entirely independent of the engine, and can thus be included outside of it. The single global _g object contains all system facilities such as logs, timers, and other things that are used from everywhere, and as you can see I am using the static trick above, as this is the only way to make this object available to the entire engine easily.
+     </p>
+     <p>
+      The header files in the middle can be ordered in any way, just that the smarter you order them the less forward decls you require. In this case, the engine requires only one or two forward decls, everything else is in-order. None of the include files above contain any #include statements themselves, all including in the entire program is in the source above. The headers just contain one or more class decls each, with all implementation inside the class, nothing else.
+     </p>
+     <p>
+      Refactoring classes and methods in the above program is incredibly easy and fun, as everything is local in just one place. It is quite amazing to see how code can shrink, and become much more readable as a consequence of removing all superfluous declaration overhead.
+     </p>
+    </div>
+   </div>
+   <div class="clearer">
+   </div>
+  </div>
+  <div class="footerinc">
+  </div>
+  <div class="no">
+   <img alt="" height="1" src="/lib/exe/indexer.php?id=java-style-classes-in-c&amp;1436906369" width="2"/>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en-us" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport"/>
+  <title>
+   Installing and Configuring an SSH Server
+  </title>
+  <link href="http://www.nixtutor.com/css/poole.css" rel="stylesheet"/>
+  <link href="http://www.nixtutor.com/css/syntax.css" rel="stylesheet"/>
+  <link href="http://www.nixtutor.com/css/hyde.css" rel="stylesheet"/>
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface" rel="stylesheet"/>
+  <link href="/apple-touch-icon-144-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144"/>
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <link href="" rel="alternate" title="nixtutor.com" type="application/rss+xml"/>
+  <link href="https://yandex.st/highlightjs/8.0/styles/default.min.css" rel="stylesheet"/>
+  <script src="https://yandex.st/highlightjs/8.0/highlight.min.js">
+  </script>
+  <script>
+   hljs.initHighlightingOnLoad();
+  </script>
+ </head>
+ <body>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-417509-9', 'nixtutor.com');
+  ga('send', 'pageview');
+  </script>
+  <div class="sidebar">
+   <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+     <h1>
+      <a href="/">
+       nixtutor.com
+      </a>
+     </h1>
+     <p class="lead">
+      Helping you Learn Linux
+     </p>
+    </div>
+    <div class="side-ad">
+     <a href="http://rocketship.it/">
+      <img alt="RocketShipIt - Shipping made easy" src="/wp-content/themes/NixTutor/images/rocket-shipit-ad.jpg" style="margin-top: 10px;"/>
+     </a>
+    </div>
+    <ul class="sidebar-nav">
+     <li>
+      <a href="/">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="/post/">
+       All Posts
+      </a>
+     </li>
+     <li>
+      <a href="/about/">
+       About
+      </a>
+     </li>
+     <li>
+      <a href="/contact/">
+       Contact
+      </a>
+     </li>
+    </ul>
+    <p>
+      2014. All rights reserved.
+    </p>
+   </div>
+  </div>
+  <div class="content container">
+   <div class="post">
+    <h1>
+     Installing and Configuring an SSH Server
+    </h1>
+    <span class="post-date">
+     Wed, Jun 3, 2009
+    </span>
+    <h2 id="toc_0">
+     What is SSH?
+    </h2>
+    <p>
+     So what is SSH and why should I care?  Well, SSH stands for secure shell and is a way to connect to a remote machine.  SSH is popular amongst nix users because it both reliable, secure, and adaptable.  SSH is also easy to install and fairly straight forward.
+    </p>
+    <p>
+     -Why SSH?
+Unlike FTP and other protocols SSH is secure, all transactions are encrypted so they cannot be sniffed.  Unlike FTP SSH username/password combinations are not sent in clear text.  SSH is encrypted from the very beginning.  This is important as many web developers will often use FTP to transfer files to their server not knowing that someone could easily sniff the network for their password.  Using SSH with programs like
+     <strong>
+      scp
+     </strong>
+     and
+     <strong>
+      sshfs
+     </strong>
+     are much safer ways of transferring files to remote machines.
+    </p>
+    <h2 id="toc_1">
+     Getting/Installing
+    </h2>
+    <p>
+     Many distributions will come with an SSH client installed by default.  To get the server on a Debian based distro you can do:
+    </p>
+    <pre>
+     <code>
+      sudo apt-get install openssh-server
+     </code>
+    </pre>
+    <p>
+     Arch users can install the server/client with:
+    </p>
+    <pre>
+     <code>
+      sudo pacman -S openssh
+     </code>
+    </pre>
+    <h2 id="toc_2">
+     Configuring the SSH Server
+    </h2>
+    <p>
+     Many times the distros default configuration for SSH will work, but I suggest you make some changes.  Normally the config file is in: 
+     <strong>
+      /etc/ssh/sshd_config
+     </strong>
+     
+    </p>
+    <h3 id="toc_3">
+     Making SSH More secure
+    </h3>
+    <p>
+     Like all services listening on open ports. there is risk.  Here are some configuration changes you can make to mitigate some of risk:
+    </p>
+    <h4 id="toc_4">
+     Disable SSH protocol 1
+    </h4>
+    <p>
+     The first change I would make is to disable the obsolete SSH 1 protocol from connecting to the server.  This protocol is almost never used in modern SSH clients anymore as it is vulnerable to man in the middle attacks.  To ensure that none of the SSH clients you use fall back to this protocol it is best we disable it.
+    </p>
+    <p>
+     Make sure you have this line in your config:
+    </p>
+    <pre>
+     <code>
+      Protocol 2
+     </code>
+    </pre>
+    <h4 id="toc_5">
+     Add the AllowUsers Tag
+    </h4>
+    <p>
+     By default the SSH server is often set to allow all users to access remotely.  It is more secure to specify which users we are going to allow access to this system.  This is especially useful for multiuser machines; however, even single user machines can benefit from this tag as generic user accounts can accidentally be created.
+    </p>
+    <p>
+     Just add this to your config:
+    </p>
+    <pre>
+     <code>
+      AllowUsers user1 user2
+     </code>
+    </pre>
+    <p>
+     Where user1 and user2 are the usernames that you wish to allow remote SSH access.
+    </p>
+    <h4 id="toc_6">
+     Disable Root Login
+    </h4>
+    <p>
+     SSH
+     <a href="http://en.wikipedia.org/wiki/Brute_force_attack">
+      brute force attacks
+     </a>
+     often rely on the username root.  By not disabling root logins you are giving the attacker half the information they need to gain access.  They already know the username all they need to do is guess the correct password.  It is better to keep them guessing.
+    </p>
+    <p>
+     <strong>
+      What if I need to do something as root?
+     </strong>
+     Disabling root logins only prevent the initial login from being root.  You can still switch user to root or use
+     <strong>
+      sudo
+     </strong>
+     once authenticated with a normal user.
+    </p>
+    <p>
+     To disable root logins make sure you have this set:
+    </p>
+    <pre>
+     <code>
+      PermitRootLogin no
+     </code>
+    </pre>
+    <h4 id="toc_7">
+     Key based authentication
+    </h4>
+    <p>
+     The first step is to create a key on the local machine.
+    </p>
+    <p>
+     To create an RSA key do (you can also do DSA):
+    </p>
+    <pre>
+     <code>
+      ssh-keygen -t rsa
+     </code>
+    </pre>
+    <p>
+     Then you need to copy your public key to the remote server by doing:
+    </p>
+    <pre>
+     <code>
+      ssh-copy-id user@remotebox
+     </code>
+    </pre>
+    <p>
+     Or you can do it the ol fashioned way:
+    </p>
+    <pre>
+     <code>
+      scp ~/.ssh/id_rsa.pub user@remotebox:.ssh/authorized_keys
+     </code>
+    </pre>
+    <h4 id="toc_8">
+     Disable password authentication
+    </h4>
+    <p>
+     Once you have successfully tested your key based authentication you can turn off password based authentication.  This ensures that all SSH access attempts must authenticate with a key instead of a password.  This all but eliminates automated script attacks against SSH.
+    </p>
+    <p>
+     Turn off password authentication with:
+    </p>
+    <pre>
+     <code>
+      PasswordAuthentication no
+     </code>
+    </pre>
+    <h4 id="toc_9">
+     Changing the default port
+    </h4>
+    <p>
+     The first line of defense to thwart automated scripts is to simply change the default port of your SSH server.  This is security through obscurity.  There are ways to detect SSH on any port but moving the port of your ssh server can drastically reduce denied login spam in your logs.
+    </p>
+    <p>
+     Just change the port to something else like:
+    </p>
+    <pre>
+     <code>
+      Port 223
+     </code>
+    </pre>
+    <h4 id="toc_10">
+     Port knocking
+    </h4>
+    <p>
+     I talked about the benefits of port knocking in,
+     <a href="/freebsd/9-ways-to-make-linux-more-secure/">
+      9 Ways to Make Linux More Secure
+     </a>
+     and wrote
+     <a href="http://www.marksanborn.net/linux/add-port-knocking-to-ssh-for-extra-security/">
+      an extensive port knocking how to
+     </a>
+     on my
+     <a href="http://www.marksanborn.net">
+      other blog
+     </a>
+     .  Port knocking is a great way to open ports remotely by sending a specified sequence or knock to the remote server.  Once the correct knock is sent, the server will open up the port to the that specific IP address.
+    </p>
+    <h4 id="toc_11">
+     hosts.deny/allow
+    </h4>
+    <p>
+     Here are some general rules for denying/allowing SSH access using the hosts files.
+Let everyone connect to you
+    </p>
+    <pre>
+     <code>
+      sshd: ALL
+     </code>
+    </pre>
+    <p>
+     OR you can restrict it to a certain ip
+    </p>
+    <pre>
+     <code>
+      sshd: 192.168.0.1
+     </code>
+    </pre>
+    <p>
+     OR restrict for an IP range
+    </p>
+    <pre>
+     <code>
+      sshd: 10.0.0.0/255.255.255.0
+     </code>
+    </pre>
+    <p>
+     OR restrict for an IP match
+    </p>
+    <pre>
+     <code>
+      sshd: 192.168.1.
+     </code>
+    </pre>
+    <p>
+     To learn more about securing SSH check out,
+     <a href="http://www.la-samhna.de/library/brutessh.html">
+      Defending against brute force ssh attacks
+     </a>
+    </p>
+    <h3 id="toc_12">
+     Personalizing SSH
+    </h3>
+    <p>
+     I like to add a personal touch to the SSH message of the day, (MOTD).  I usually will add the servers name and some other details.  This helps distinguish which server I am connecting as I find myself connecting to all kinds of servers throughout the day.
+    </p>
+    <p>
+     Usually I use a program called, 
+     <strong>
+      figlet
+     </strong>
+      to display my servers name.  Figlet is a application that will convert text to ascii art in various different fonts.
+    </p>
+    <p>
+     For example:
+    </p>
+    <pre>
+     <code>
+      _      _         _             
+ _ __ (_)_  _| |_ _   _| |_ ___  _ __ 
+| '_ \| \ \/ / __| | | | __/ _ \| '__|
+| | | | |&gt;  &lt;| |_| |_| | || (_) | |   
+|_| |_|_/_/\_\\__|\__,_|\__\___/|_|
+     </code>
+    </pre>
+    <h2 id="toc_13">
+     Accessing SSH from the Outside World
+    </h2>
+    <p>
+     Now that you have your SSH up and running and you can successfully connect to it from another computer in your house it is time to get it connected to the Internet for remote access.  If you are not behind a NAT you are probably already set and this section doesnt apply to you; however, most people are now behind some sort of NAT firewall which restricts incoming traffic to a specified port unless you do
+     <a href="http://en.wikipedia.org/wiki/Port_forwarding">
+      port forwarding
+     </a>
+     .
+    </p>
+    <p>
+     As there are many different types of routers I cannot give you the specifics on how you go about forwarding ports; however, there is a website that has almost every router imaginable with the instructions on how to setup port forwarding,
+     <a href="http://portforward.com/">
+      portforward.com
+     </a>
+     .
+    </p>
+    <p>
+     Many of you will also have IP addresses that change.  This makes connecting to a remote server very difficult as you need to know what the IP address is.  Fortunately, there are free services like
+     <a href="http://www.dyndns.com/">
+      dyndns
+     </a>
+     that will give you a static domain name that is updated each time the IP is changed.
+    </p>
+    <p>
+     <strong>
+      What if I am stuck behind a corporate/university firewall and cant forward ports?
+     </strong>
+     Have no fear, you can
+     <a href="http://www.marksanborn.net/howto/bypass-firewall-and-nat-with-reverse-ssh-tunnel/">
+      bypass it with a reverse SSH tunnel
+     </a>
+     , but in order to do this you will need a middle computer that has SSH running to the public.  This is also how services like, 
+     <a href="https://www.gotomypc.com">
+      Go to my pc
+     </a>
+      work behind a firewall.
+    </p>
+    <h2 id="toc_14">
+     Neat things you can do with SSH
+    </h2>
+    <ul>
+     <li>
+      rsync, scp
+     </li>
+     <li>
+      <a href="http://www.marksanborn.net/howto/bypass-firewall-and-nat-with-reverse-ssh-tunnel/">
+       Reverse tunnel to traverse NAT
+      </a>
+     </li>
+     <li>
+      <a href="http://martybugs.net/smoothwall/puttyvnc.cgi">
+       vnc over ssh
+      </a>
+     </li>
+     <li>
+      <a href="http://www.securityfocus.com/infocus/1816">
+       tunnel other ports
+      </a>
+     </li>
+     <li>
+      <a href="http://lifehacker.com/software/ssh/geek-to-live--encrypt-your-web-browsing-session-with-an-ssh-socks-proxy-237227.php">
+       Encrypt otherwise unencrypted protocols
+      </a>
+     </li>
+     <li>
+      <a href="http://www.nixtutor.com/linux/setting-up-sshfs/">
+       Mount a remote drive with ssh
+      </a>
+     </li>
+     <li>
+      <a href="http://bitbucket.kylewelsh.com/2009/03/07/how-to-tunnel-web-traffic-with-ssh-secure-shell/">
+       Funnel Web Traffic with SSH
+      </a>
+     </li>
+    </ul>
+    <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+    </script>
+    <ins class="adsbygoogle" data-ad-client="ca-pub-9103410842412615" data-ad-slot="8994156778" style="display:inline-block;width:728px;height:90px">
+    </ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+   </div>
+   <div class="advert">
+   </div>
+   <div id="disqus_thread">
+   </div>
+   <script type="text/javascript">
+    var disqus_shortname = 'nixtutor'; 
+
+           
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+   </script>
+   <noscript>
+    Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">
+     comments powered by Disqus.
+    </a>
+   </noscript>
+   <a class="dsq-brlink" href="http://disqus.com">
+    comments powered by
+    <span class="logo-disqus">
+     Disqus
+    </span>
+   </a>
+  </div>
+ </body>
+</html>

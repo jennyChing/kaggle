@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <title>
+   ~jk - php shell
+  </title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+  <link href="/css/pygments.css" rel="stylesheet"/>
+  <style>
+   body {
+		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+	}
+	&lt;/style&gt;
+	&lt;link href="/feed/atom.xml" rel="alternate" title="Articles for Home" type="application/atom+xml" /&gt;
+	&lt;link href="/prettify/prettify.css" type="text/css" rel="stylesheet" /&gt;
+	&lt;script type="text/javascript" src="/prettify/prettify.js"&gt;&lt;/script&gt;
+
+	&lt;!-- script type="text/javascript"&gt;
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-1884152-1']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	&lt;/script --&gt;
+
+&lt;/head&gt;
+&lt;body onload="prettyPrint()"&gt;
+	&lt;div class="navbar navbar-inverse navbar-fixed-top"&gt;
+		&lt;div class="navbar-inner"&gt;
+			&lt;div class="container"&gt;
+				&lt;button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"&gt;
+					&lt;span class="icon-bar"&gt;&lt;/span&gt;
+					&lt;span class="icon-bar"&gt;&lt;/span&gt;
+					&lt;span class="icon-bar"&gt;&lt;/span&gt;
+				&lt;/button&gt;
+				&lt;a class="brand" href="/"&gt;~jk&lt;/a&gt;
+				&lt;div class="nav-collapse collapse"&gt;
+					&lt;ul class="nav"&gt;
+						&lt;li&gt;&lt;a href="/projects" title="projects"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;&lt;a href="/tutorials" title="tutorials"&gt;Tutorials&lt;/a&gt;&lt;/li&gt;
+						&lt;li class="pull-right"&gt;&lt;a href="/about" title="about"&gt;About&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class="container-fluid"&gt;
+		&lt;div class="row-fluid"&gt;
+			&lt;div class="offset1 span10 offset1"&gt;
+				&lt;div&gt;
+	&lt;div&gt;
+		&lt;h2&gt;&lt;a href="/2007/2/16/php-shell/"&gt;php shell&lt;/a&gt;&lt;/h2&gt;
+		&lt;h3&gt;February 16, 2007&lt;/h3&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		&lt;p&gt;The more I work with other languages like python and ruby I like their way how they work on problems. While PHP is very forgiving on errors, it is weak on the debugging side. It was missing a simple to use interactive shell for years. Python and Ruby have their ipython and iruby shell which give you a direct way to interact with the objects. No need to write a script and execute it afterwards.&lt;/p&gt;
+
+&lt;h1 id='features'&gt;Features&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;tab-completion (if &lt;code&gt;readline()&lt;/code&gt; support is compiled into php)&lt;/li&gt;
+
+&lt;li&gt;handles FATAL errors (like calling a undefined function)&lt;/li&gt;
+
+&lt;li&gt;inline help&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;autoload()&lt;/code&gt; is enabled by default&lt;/li&gt;
+
+&lt;li&gt;works on all php platforms (shell wrappers for Unix and Windows)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id='requirements'&gt;Requirements&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PHP 5 or later&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;ext/tokenizer&lt;/code&gt; has to be enabled (this is the default)&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;ext/pcre&lt;/code&gt; has to enabled (this is the default)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id='installation'&gt;Installation&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;download &lt;a href='/assets/projects/php-shell/PHP_Shell-0.3.1.tgz'&gt;PHP_Shell-0.3.1.tgz&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;install the package with &lt;code&gt;pear install&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;## you might have to be root to install $ pear install http://jan.kneschke.de/assets/projects/php-shell/PHP_Shell-0.3.1.tgz&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id='usage'&gt;Usage&lt;/h1&gt;
+
+&lt;p&gt;To check now a how a class is a behaving you first have to understand it.&lt;/p&gt;
+
+&lt;p&gt;Do you know the ArrayObject class which is a Class around the array() functions ?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&gt;&gt; $a = new ArrayObject( )
+ArrayObject::__set_state(array(
+))
+&gt;&gt; $a-&gt;
+__construct(
+append(
+count(
+exchangeArray(
+getArrayCopy(
+getFlags(
+getIterator(
+getIteratorClass(
+offsetExists(
+offsetGet(
+offsetSet(
+offsetUnset(
+setFlags(
+setIteratorClass(
+&gt;&gt; $a-&gt;append( &#39;a&#39; )
+
+&gt;&gt; $a-&gt;count( )
+1
+&gt;&gt; $a-&gt;offsetGet( 0 )
+&#39;a&#39;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id='tabcompletion'&gt;Tab-Completion&lt;/h2&gt;
+
+&lt;p&gt;Tab-Completion works on&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;new Classname()&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;Classname::Methodname()&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;Classname::Constantname&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;$variablename&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;functionname()&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;$object-&gt;methodname()&lt;/code&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;code&gt;$object-&gt;constantname()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To use it type the first characters and press TAB. If there is only one possible match it will complete the name, otherwise pressing TAB again will show you a list of choices.&lt;/p&gt;
+
+&lt;p&gt;To get a list of all declared classes you can use &lt;code&gt;get_declared_classes()&lt;/code&gt; from the PHP core functions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&gt;&gt; get_&lt;TAB&gt;
+&gt;&gt; get_&lt;TAB&gt;&lt;TAB&gt;
+get_browser(
+...
+get_declared_classes(
+...
+get_resource_type(
+&gt;&gt; get_dec&lt;TAB&gt;
+&gt;&gt; get_declared_&lt;TAB&gt;&lt;TAB&gt;
+get_declared_classes(
+get_declared_interfaces(
+get_defined_constants(
+get_defined_functions(
+get_defined_vars(
+&gt;&gt; get_declared_classes( )&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id='discovery'&gt;Discovery&lt;/h2&gt;
+
+&lt;p&gt;The shell supports a shortcut to display DocComments for Classes, Methods and functions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&gt;&gt; get_declared_classes()
+array (
+  0 =&gt; &#39;stdClass&#39;,
+  1 =&gt; &#39;Exception&#39;,
+  2 =&gt; &#39;ErrorException&#39;,
+  ...
+  89 =&gt; &#39;PHP_Shell&#39;,
+)
+
+&gt;&gt; ? PHP_Shell
+&#39;/**
+* PHP_Shell
+*
+* a interactive PHP Shell with tab-completion and history
+* it can catch FATAL errors before executing the code
+*
+...
+*/&#39;
+
+&gt;&gt; PHP_Shell::&lt;tab&gt;&lt;tab&gt;
+PHP_Shell::__construct(
+PHP_Shell::appendCode(
+PHP_Shell::getCode(
+PHP_Shell::getHelp(
+PHP_Shell::getVerbose(
+PHP_Shell::getVersion(
+PHP_Shell::hasReadline(
+PHP_Shell::input(
+PHP_Shell::parse(
+PHP_Shell::readline(
+PHP_Shell::resetCode(
+
+&gt;&gt; ? PHP_Shell::parse()
+&#39;/**
+    * parse the PHP code
+    *
+    * we parse before we eval() the code to
+    * - fetch fatal errors before they come up
+    * - know about where we have to wait for closing braces
+    *
+    */&#39;
+&gt;&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id='changes'&gt;Changes&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;2006-05-29 - Version 0.2.7
+  * added :set autoload and :set background
+  * added ? $obj-&gt;method()
+  * added help for internal PHP functions like ? fopen()
+  * moved shell-wrapper to &lt;a href=&quot;php-shell-cmd.php.html&quot;&gt;php-shell-cmd.php&lt;/a&gt;
+  * removed die()
+  * removed use of SHELL and SHELL_COLOUR
+  * added &lt;a href=&quot;PHP_Prototypes.php.html&quot;&gt;PHP_Prototypes.php&lt;/a&gt; to extract
+    the prototypes from the PHP-5.x source-code
+2006-05-15 - Version 0.2.5
+  * use PHPDoc instead of doxygen for the documentation
+  * moved shell-commands like &#39;quit&#39; and &#39;?&#39; into cmdHelp() and cmdQuit()
+  * added registerCommand() to add user-supplied Commands
+  * handle fopen(&quot;stdin&quot;)-failure in input() instead of a die() in the __construct()
+  * &lt;a href=&quot;http://pear.php.net/pepr/pepr-proposal-show.php?id=397&quot;&gt;PEAR PEPr&lt;/a&gt;
+2006-05-15 - Version 0.2.3
+  * disabled COLOURs by default
+  * use PHP/Shell.php instead of PHP_Shell.php to follow PEARs naming conventions
+2006-05-15 - Version 0.2.2
+  * added handling of dynamic method calls as in $object-&gt;$method() or Class::$method()
+2006-05-15 - Version 0.2.1
+  * migrated the PEAR package.xml 2.0
+  * added a &#39;php-shell.sh&#39; for Unix systems and &#39;php-shell.bat&#39; for Windows
+  * disabled max-execution-time
+2006-05-14 - Version 0.2.0
+  * built a PEAR package
+  * added PHPUnit testcases
+2006-05-13
+  * added more known PHP-tokens
+  * added support for object[...]-&gt;method()
+  * moved shell to the class-file
+2006-05-08
+  * added readline support
+  * added tab-completion
+2006-05-05
+  * first release&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id='usage'&gt;Usage&lt;/h1&gt;
+
+&lt;p&gt;Since PHP_Shell 0.2.1 a shell script is added to start the shell&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ php-shell.sh&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id='documentation'&gt;Documentation&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href='http://forum.lighttpd.net/forum/3'&gt;Support Forum&lt;/a&gt; is the place where you should ask for help&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id='alternatives'&gt;Alternatives&lt;/h2&gt;
+
+&lt;p&gt;the php-shell is not the first attempt to give PHP a interactive shell:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href='http://david.acz.org/phpa/'&gt;http://david.acz.org/phpa/&lt;/a&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;a href='http://www.hping.org/phpinteractive/'&gt;http://www.hping.org/phpinteractive/&lt;/a&gt;&lt;/li&gt;
+
+&lt;li&gt;the interactive mode of php 5.x: &lt;kbd&gt;$ php -a&lt;/kbd&gt;&lt;/li&gt;
+&lt;/ul&gt;
+	&lt;/div&gt;
+	&lt;div&gt;
+		
+		&lt;a href="/tags/php/"&gt;php&lt;/a&gt;
+		
+		&lt;a href="/tags/php-shell/"&gt;php-shell&lt;/a&gt;
+		
+	&lt;/div&gt;
+
+	&lt;div&gt;
+		&lt;hr/&gt;
+		&lt;h3&gt;Comments&lt;/h3&gt;
+		&lt;div id="comments-container"&gt;
+			Enable javascript to load comments.
+		&lt;/div&gt;
+&lt;script type="text/javascript" class="juvia"&gt;
+(function() {
+    var options = {
+        container   : '#comments-container',
+        site_key    : '17a886jljdhpmr02pof86qbs5jfn5pt',
+        topic_key   : "/2007/2/16/php-shell/",
+        topic_url   : 'http://jan.kneschke.de/2007/2/16/php-shell/',
+        topic_title : document.title || location.pathname,
+        include_base: !window.Juvia,
+				include_css : !window.Juvia,
+				comment_order: 'earliest-first'
+    };
+
+    function makeQueryString(options) {
+        var key, params = [];
+        for (key in options) {
+            params.push(
+                encodeURIComponent(key) +
+                '=' +
+                encodeURIComponent(options[key]));
+        }
+        return params.join('&amp;');
+    }
+
+    function makeApiUrl(options) {
+        // Makes sure that each call generates a unique URL, otherwise
+        // the browser may not actually perform the request.
+        if (!('_juviaRequestCounter' in window)) {
+            window._juviaRequestCounter = 0;
+        }
+
+        var result =
+            location.protocol + '//j.lighttpd.net/api/show_topic.js' +
+            '?_c=' + window._juviaRequestCounter +
+            '&amp;' + makeQueryString(options);
+        window._juviaRequestCounter++;
+        return result;
+    }
+
+    document.getElementById('comments-container').innerHTML = "Loading comments...";
+    var s       = document.createElement('script');
+    s.async     = true;
+    s.type      = 'text/javascript';
+    s.className = 'juvia';
+    s.src       = makeApiUrl(options);
+    (document.getElementsByTagName('head')[0] ||
+     document.getElementsByTagName('body')[0]).appendChild(s);
+})();
+&lt;/script&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;script src="/js/jquery.min.js"&gt;&lt;/script&gt;
+	&lt;script src="/js/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+  </style>
+ </head>
+</html>

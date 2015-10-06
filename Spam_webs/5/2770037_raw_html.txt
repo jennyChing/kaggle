@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<!--[if IE 7]&gt;
+&lt;html class="ie ie7" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if IE 8]&gt;
+&lt;html class="ie ie8" lang="en-US"&gt;
+&lt;![endif]-->
+<!--[if !(IE 7) &amp; !(IE 8)]&gt;&lt;!-->
+<html lang="en-US">
+ <!--&lt;![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <title>
+   An AVR-based Analog Plotbot with an E-Paper Display | Evil Mad Scientist Laboratories
+  </title>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://www.evilmadscientist.com/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+	&lt;script src="http://www.evilmadscientist.com/wp-content/themes/twentythirteen/js/html5.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <link href="http://www.evilmadscientist.com/feed/" rel="alternate" title="Evil Mad Scientist Laboratories  Feed" type="application/rss+xml"/>
+  <link href="http://www.evilmadscientist.com/comments/feed/" rel="alternate" title="Evil Mad Scientist Laboratories  Comments Feed" type="application/rss+xml"/>
+  <link href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/feed/" rel="alternate" title="Evil Mad Scientist Laboratories  An AVR-based Analog Plotbot with an E-Paper Display Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.evilmadscientist.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://www.evilmadscientist.com/wp-content/themes/twentythirteen/style.css?ver=4.2.2" id="parent-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.evilmadscientist.com/wp-content/themes/twentythirteen/genericons/genericons.css?ver=3.03" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://www.evilmadscientist.com/wp-content/themes/ems2013/style.css?ver=2013-07-18" id="twentythirteen-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentythirteen-ie-css'  href='http://www.evilmadscientist.com/wp-content/themes/twentythirteen/css/ie.css?ver=2013-07-18' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <script src="http://www.evilmadscientist.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://www.evilmadscientist.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <link href="http://www.evilmadscientist.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://www.evilmadscientist.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://www.evilmadscientist.com/2007/0-999-equals-one/" rel="prev" title="0.999 equals one."/>
+  <link href="http://www.evilmadscientist.com/2007/new-option-read-evilmadscientist-via-e-mail/" rel="next" title="New option: Read evilmadscientist via E-mail"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/" rel="canonical"/>
+  <link href="http://www.evilmadscientist.com/?p=178" rel="shortlink"/>
+  <style media="screen" type="text/css">
+   div.printfriendly {
+            margin: 12px 12px 12px 12px;;
+          }
+          div.printfriendly a, div.printfriendly a:link, div.printfriendly a:visited {
+            text-decoration: none;
+            font-size: 14px;
+            color: #6363ff;
+            vertical-align: bottom;
+            border: none;
+          }
+
+          .printfriendly a:hover {
+            cursor: pointer;
+          }
+
+          .printfriendly a img  {
+            border: none;
+            padding:0;
+            margin-right: 6px;
+            display:inline-block;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+          }
+          .printfriendly a span{
+            vertical-align: bottom;
+          }
+          .pf-alignleft {
+            float: left;
+          }
+          .pf-alignright {
+            float: right;
+          }
+          div.pf-aligncenter {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+          }
+  </style>
+  <style media="print" type="text/css">
+   .printfriendly {
+            display: none;
+          }
+  </style>
+  <style type="text/css">
+   .ssba {
+									
+									
+									
+									
+								}
+								.ssba img
+								{
+									width: 30px !important;
+									padding: 6px;
+									border:  0;
+									box-shadow: none !important;
+									display: inline !important;
+									vertical-align: middle;
+								}
+								.ssba, .ssba a
+								{
+									text-decoration:none;
+									background: none;
+									
+									font-size: 	20px;
+									
+									font-weight: bold;
+								}.ssba a {  border:0! important;
+}
+  </style>
+  <style type="text/css">
+   .recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}
+  </style>
+  <style id="twentythirteen-header-css" type="text/css">
+   .site-header {
+			background: url(http://www.evilmadscientist.com/wp-content/themes/twentythirteen/images/headers/circle.png) no-repeat scroll top;
+			background-size: 1600px auto;
+		}
+		@media (max-width: 767px) {
+			.site-header {
+				background-size: 768px auto;
+			}
+		}
+		@media (max-width: 359px) {
+			.site-header {
+				background-size: 360px auto;
+			}
+		}
+  </style>
+  <link href="http://shop.emscdn.com/infra2/template/images/favicon.ico" rel="shortcut icon"/>
+  <link href="http://shop.emscdn.com/infra2/template/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans:300italic,400italic,700italic,400,300,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css"/>
+ </head>
+ <body class="single single-post postid-178 single-format-standard sidebar no-avatars">
+  <div class="hfeed site" id="page">
+   <header class="site-header" id="masthead" role="banner">
+    <span class="screen-reader-text">
+     <h1 class="site-title">
+      Evil Mad Scientist Laboratories
+     </h1>
+     <h2 class="site-description">
+      Making the world a better place, one Evil Mad Scientist at a time.
+     </h2>
+    </span>
+    <a class="home-link" href="http://www.evilmadscientist.com/" rel="home" title="Evil Mad Scientist Laboratories">
+     <div id="MastheadImageContainer">
+      <img alt="Evil Mad Scientist Shop" height="72" src="http://shop.emscdn.com/infra2/img/storeLogo3@2x.png" width="200"/>
+      <img alt="Evil Mad Scientist" height="58" id="EMSLogoName" src="http://blog.emscdn.com/is/EMSBlogText@2x.png" title="Making the world a better place, one Evil Mad Scientist at a time." width="557"/>
+      <img alt="Evil Mad Scientist" height="63" id="EMSLogoNameSm" src="http://blog.emscdn.com/is/EMSBlogTextSm@2x.png" title="Making the world a better place, one Evil Mad Scientist at a time." width="355"/>
+      <img alt="Evil Mad Scientist" height="50" id="EMSLogoNameXS" src="http://blog.emscdn.com/is/EMSBlogTextXS@2x.png" title="Making the world a better place, one Evil Mad Scientist at a time." width="211"/>
+     </div>
+    </a>
+    <div class="navbar" id="navbar">
+     <nav class="navigation main-navigation" id="site-navigation" role="navigation">
+      <button class="menu-toggle">
+       Menu
+      </button>
+      <a class="screen-reader-text skip-link" href="#content" title="Skip to content">
+       Skip to content
+      </a>
+      <div class="menu-top-menu-container">
+       <ul class="nav-menu" id="primary-menu">
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-784" id="menu-item-784">
+         <a href="http://shop.evilmadscientist.com/">
+          SHOP
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-799" id="menu-item-799">
+         <a href="http://www.evilmadscientist.com/">
+          BLOG
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-912" id="menu-item-912">
+         <a href="http://forum.evilmadscientist.com/" title="Evil Mad Scientist Forum">
+          FORUMS
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-783" id="menu-item-783">
+         <a href="http://www.evilmadscientist.com/about/">
+          ABOUT
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-798" id="menu-item-798">
+         <a href="http://www.evilmadscientist.com/contact/" title="E-mail contact form">
+          CONTACT
+         </a>
+        </li>
+       </ul>
+      </div>
+      <form action="http://www.evilmadscientist.com/" class="search-form" method="get" role="search">
+       <label>
+        <span class="screen-reader-text">
+         Search for:
+        </span>
+        <span class="genericon-search" id="navsearch-icon">
+        </span>
+        <input class="search-field" name="s" placeholder="Search " title="Search for:" type="search" value=""/>
+       </label>
+       <input class="search-submit" type="submit" value="Search"/>
+      </form>
+     </nav>
+     <!-- #site-navigation -->
+    </div>
+    <!-- #navbar -->
+   </header>
+   <!-- #masthead -->
+   <div class="site-main" id="main">
+    <div class="content-area" id="primary">
+     <div class="site-content" id="content" role="main">
+      <article class="post-178 post type-post status-publish format-standard hentry category-art category-emsl-projects category-microcontrollers tag-art-2 tag-avr tag-hacks" id="post-178">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         An AVR-based Analog Plotbot with an E-Paper Display
+        </h1>
+        <div class="entry-meta">
+         By
+         <span class="author vcard">
+          <a class="url fn n" href="http://www.evilmadscientist.com/author/windell_oskay/" rel="author" title="View all posts by Windell Oskay">
+           Windell Oskay
+          </a>
+         </span>
+         on
+         <span class="date">
+          <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/" rel="bookmark" title="Permalink to An AVR-based Analog Plotbot with an E-Paper Display">
+           <time class="entry-date" datetime="2007-03-14T07:26:00+00:00">
+            March 14, 2007
+           </time>
+          </a>
+         </span>
+        </div>
+        <!-- .entry-meta -->
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <div class="pf-content">
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420878439/" title="Photo Sharing">
+           <img alt="Writing" height="375" src="http://farm1.static.flickr.com/127/420878439_4b895e1082.jpg" width="500"/>
+          </a>
+         </p>
+         <p>
+          What do you get when you mix a 1970s style analog chart recorder, an 8-bit microcontroller, and a Fisher-Price Doodle Pro? A truly 21st century toy: An analog PlotBot with e-paper display technology!
+          <br/>
+          <span id="more-178">
+          </span>
+          <br/>
+          <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="350" width="425">
+           <param name="src" value="http://www.youtube.com/v/utAGibfY-V4">
+           </param>
+           <embed height="350" src="http://www.youtube.com/v/utAGibfY-V4" type="application/x-shockwave-flash" width="425">
+           </embed>
+          </object>
+         </p>
+         <p>
+          For the overview, check out the
+          <a href="http://www.youtube.com/watch?v=utAGibfY-V4">
+           video introduction
+          </a>
+          (YouTube).
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420826170/" title="Photo Sharing">
+           <img alt="Plotbot &amp; board" height="180" src="http://farm1.static.flickr.com/157/420826170_6087a607b4_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420826133/" title="Photo Sharing">
+           <img alt="ATMEGA168, and its messy dev board" height="180" src="http://farm1.static.flickr.com/158/420826133_66b84f2324_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          Our machine is based around a vintage analog X-Y data recorder. Its original purpose in life was to perform basic laboratory data collection, plotting two voltages against each other, and was one of the primary tools for that purpose right up until computers took over that job in the 1980s. Because they were once so common and are now generally obsolete, its quite easy to get one of your own. There are usually several under $50 on eBay at any given time, and thats where we got ours. Ours is an Allen Plotamatic 715, which holds a regular sized sheet of paper, takes tiny felt-tip pens, and has stylish faux-wood trim.
+         </p>
+         <p>
+          One of the awesome things about a true analog plotter is that is uses analog servo motors, rather than stepping motors or digitally encoded servo motors, to move the pen. (This is a little bit like the difference between an analog and digital oscilloscope: the analog scope trace is actually controlled by your input signal, whereas
+          <em>
+           you dont know
+          </em>
+          what the digital scope does to your signal!)
+         </p>
+         <p>
+          To change it from just being a plotter into being a PlotBot, its now controlled by a single microcontroller. We used an Atmel AVR 8-bit microcontroller, specifically the ATmega168. (And weve made the source code available for download!) In the photo here, you see it sitting on an Olimex development board, which provides power and a place to hook up connections to it. We also added some buttons that can be used as keys to trigger different plotting programs stored in the microcontroller.
+         </p>
+         <p>
+          The other major modification that weve made is that weve replaced the pen and paper with what seems like out of reach technology: an inexpensive and readily available e-paper display: the panel from a Doodle Pro.
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420826057/" title="Photo Sharing">
+           <img alt="Doodle Pro Dinosaurs!" height="180" src="http://farm1.static.flickr.com/154/420826057_1df986e4e0_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420825972/" title="Photo Sharing">
+           <img alt="Unboxed" height="180" src="http://farm1.static.flickr.com/155/420825972_5f8a49dd1a_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          The
+          <a href="http://www.fisher-price.com/us/products/product.asp?id=28861">
+           Doodle Pro
+          </a>
+          is a descendent of the
+          <a href="http://en.wikipedia.org/wiki/Magna_Doodle">
+           Magna Doodle
+          </a>
+          , a classic childrens toy dating to 1974. (Im not sure what makes this a Pro
+          <em>
+           anything
+          </em>
+          , however.) It uses a simple magnetophoretic display, where ferromagnetic particles are suspended with near-neutral buoyancy in an opaque, viscous white liquid. Using a magnetic stylus, you can attract the black particles to the top surface, or with a magnetic eraser on the bottom side, pull the particles away, leaving only the white liquid visible. You can read more about its design at
+          <a href="http://www.howstuffworks.com/magna-doodle.htm">
+           How Stuff Works
+          </a>
+          .
+         </p>
+         <p>
+          Why did we go for the dinosaur model? It was the cheapest one of the large size available at Target when we went shopping almost certainly because it was the only one without licensed characters decorating it!
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420825941/" title="Photo Sharing">
+           <img alt="Screws" height="180" src="http://farm1.static.flickr.com/184/420825941_7ab7945983_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420825910/" title="Photo Sharing">
+           <img alt="Eraser" height="180" src="http://farm1.static.flickr.com/123/420825910_846bd33a2e_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          Although the frame is abnormally shaped, the panel inside is a regular rectangle, a little bit bigger than you might guess from the frame those dinos do get in the way. The frame is held together with screws and is fairly easy to disassemble. Be forewarned however: the two smaller sizes of Doodle Pro that weve seen are made by insidiously fusing the plastic frames together, and disassembly is a destructive operation.
+         </p>
+         <p>
+          With the back frame of the Doodle Pro removed, you can see the eraser mechanism, which is the black piece of plastic and holds a thin rubber magnet which can be moved back and forth across the screen. The bones and footprints look like
+          <em>
+           black
+          </em>
+          marks on the other (front) side of the panel, and are made with magnetic stamps that came with this dinosaur-themed set.
+         </p>
+         <p>
+          Perhaps the most challenging part of the disassembly is yet to come: the display panel is held into the frame by industrial-strength sticky tape and glue, and it takes some work (and some clean up) to get it free.
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420825872/" title="Photo Sharing">
+           <img alt="closeup" class="alignleft" height="180" src="http://farm1.static.flickr.com/146/420825872_1343bf99ca_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          Here is a close up view of the display panel itself once its been removed from the frame.
+         </p>
+         <p>
+          For me, seeing this was like seeing
+          <a href="http://www.waynesthisandthat.com/etch.htm">
+           the inside
+          </a>
+          of an etch a sketch for the first time!
+         </p>
+         <p>
+          Normally, when you are looking at one of these toys, it appears to have a black hexagonal grid under the the top surface. With backlighting like we have here, it becomes obvious that this honeycomb structure is actually part of the same piece of
+          <em>
+           clear
+          </em>
+          plastic as the front and back surfaces of the panel.
+         </p>
+         <p>
+          You can clearly see the black magnetic particles, which are either against the near or far surfaces of the panel, and therefore visible or not. Remarkably, the total thickness of the panel is only about 1 mm, so the fluid must be remarkably opaque. One of the curious side effects of the panel being so thin is that it is actually much easier to erase the screen thoroughly with a weak magnet than with a strong magnet. The weak rubber magnets that come with the sets slightly attract the magnetic particles to one side and do a good job of erasing. If you instead use a strong neodymium magnet, the magnetic particles line up along rigidly along the field lines and are visible from both sides of the screen, rather than being simply attracted towards the back side.
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420825849/" title="Photo Sharing">
+           <img alt="Stylus" height="180" src="http://farm1.static.flickr.com/176/420825849_7e8f52ce9f_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420825814/" title="Photo Sharing">
+           <img alt="modified stylus" height="180" src="http://farm1.static.flickr.com/160/420825814_a129be7e84_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          On the left is the what the inside of the Doodle Pro stylus looks like. The tip is spring loaded, and contains a small magnet (Alnico?) at the tip, held in a brass adapter. The green string on the back side tethers the plastic stylus to the display panel. Again, it turns out that a fairly weak magnet, like the one that comes with the set, is better for writing on the display. Using a stronger magnet attracts additional magnetic particles from further away and leads to a blurry picture.
+         </p>
+         <p>
+          In order to adapt the stylus to fit into the penholder of the PlotBot, we removed the tip from the original stylus and constructed a tiny body around it, using a couple of small pieces of aluminum tubing. A few layers of masking tape were later added around the middle to give it a more snug fit into the pen holder.
+         </p>
+         <p>
+          Thats it for the construction, and so we merely need a program on the microcontroller in order to see what the PlotBot can do. The starting point for the firmware was our
+          <a href="http://www.evilmadscientist.com/article.php/avrdac">
+           Quick and Dirty D to A
+          </a>
+          tutorial, where we took the pulse-width-modulation outputs from two hardware timers and averaged them with a low-pass RC filter. That allows us to produce slowly-varying analog output voltages that we send to the X-Y inputs of the plotter. A third output channel from the microcontroller is used as a logical signal to drive the pen-lifting mechanism of the plotter. The code is written in C and is based around a simple using three commands for plotting: moveto(x,y), penup() and pendown(). With these simple commands weve been able to program the PlotBot to write out text or draw graphics. Were distributing the code, including a couple of examples, under the
+          <a href="http://www.gnu.org/copyleft/gpl.html">
+           GPL
+          </a>
+          and you can download it
+          <a href="http://www.evilmadscientist.com/media/atmegaplot.zip">
+           here
+          </a>
+          (45 kB .ZIP archive).
+         </p>
+         <p>
+          So, how does it work? Pretty well actually.
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420825746/" title="Photo Sharing">
+           <img alt="high-quality doodles" height="180" src="http://farm1.static.flickr.com/161/420825746_23225431f4_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420825797/" title="Photo Sharing">
+           <img alt="Plotting" height="180" src="http://farm1.static.flickr.com/158/420825797_f17895c172_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          Here is what the output from the PlotBot looks like, in the case of writing some simple and
+          <em>
+           entirely randomly chosen
+          </em>
+           text. =)
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420878418/" title="Photo Sharing">
+           <img alt="Rule" height="180" src="http://farm1.static.flickr.com/159/420878418_bb0300541a_m.jpg" width="240"/>
+          </a>
+          <a href="http://www.flickr.com/photos/oskay/420878465/" title="Photo Sharing">
+           <img alt="Flexible!" height="180" src="http://farm1.static.flickr.com/168/420878465_b8f22ca247_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          So is it really e-paper? It turns out that it is. Strictly speaking, this is a magnetic display, not an electronic display. However, magnetic fields can be generated with electronics, so that point is negotiable. Much more importantly, it has all the hallmarks of
+          <a href="http://en.wikipedia.org/wiki/Electronic_paper">
+           electronic paper
+          </a>
+          : it is a high-contrast, daylight-readable display that reflects ambient light much like regular paper. It is flexible, erasable, and it requires no electricity to maintain an image on the screen. And as it turns out, variations on this technology are actively being explored for use as electronic paper, as evidenced by a growing number of
+          <a href="http://www.google.com/search?q=magnetophoretic+display+site%3Awww.freepatentsonline.com">
+           patents
+          </a>
+          on the subject.
+         </p>
+         <p>
+          This particular one happens to be a big and flexible e-paper display not bad for fifteen bucks!
+         </p>
+         <p>
+          So, what about graphics? The primary limitation to using small microcontrollers like these is that there is typically very little memory. The entire program to write the text strings that youve seen above fits into about 6 K of memory, but graphics tend to take a lot more memory. Thats one of the areas in which larger microcontrollers, like the one in the
+          <a href="http://www.makezine.com/controller/">
+           MAKE Controller
+          </a>
+          , really shine. Over at
+          <a href="http://makezine.com/blog/">
+           Make
+          </a>
+          ,
+          <a href="http://imakethings.com/">
+           Bre Pettis
+          </a>
+          made a great drawbot based upon the MAKE Controller, and the project documentation includes a review of some other techniques for making drawing robots. The project is documented in three parts (
+          <a href="http://www.makezine.com/blog/archive/2006/09/weekend_project_making_a_drawb_1.html">
+           1
+          </a>
+          ,
+          <br/>
+          <a href="http://www.makezine.com/blog/archive/2006/09/make_podcast_weekend_projects_6.html">
+           2
+          </a>
+          ,
+          <a href="http://www.makezine.com/blog/archive/2006/09/make_podcast_weekend_projects_8.html">
+           3
+          </a>
+          ) and is certainly a useful resource if youre building your own. (As long as were talking about other art robots, lets point out that were also partial to the
+          <a href="http://www.taomc.com/studio_machines/egg_plotter.htm">
+           eggbot
+          </a>
+          and the
+          <a href="http://www.finkbuilt.com/blog/kids-art-bot/">
+           ArtBot
+          </a>
+          as seen at FinkBuilt.)
+         </p>
+         <p>
+          We did implement some moderately-simple graphics that would fit within our 16 K of memory, converting a jpeg image into a set of moveto(x,y), penup() and pendown() commands. For graphics, our routine is a dumb-as-a-rock brute force rastering renderer you can do a heck of a lot better in terms of memory usage in any number of ways, but we decided to keep it simple to make the code a little more transparent.
+         </p>
+         <p>
+          We started first with this picture of a 2N3904 transistor, and converted it to a
+          <br/>
+          200 x 150 monochrome image:
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/275142789/" title="Photo Sharing">
+           <img alt="2N3904" height="180" src="http://farm1.static.flickr.com/121/275142789_29944b9b3c_m.jpg" width="240"/>
+          </a>
+          <img alt="" height="152" src="http://www.evilmadscientist.com/images/articles/plotbot_1.png" width="195"/>
+          <a href="http://www.flickr.com/photos/oskay/420825692/" title="Photo Sharing">
+           <img alt="2N3904" class="alignleft" height="180" src="http://farm1.static.flickr.com/147/420825692_2ca19527ba_m.jpg" width="240"/>
+          </a>
+         </p>
+         <p>
+          Remarkably, you can almost read the markings on the transistor, even at that poor resolution.
+         </p>
+         <p>
+          Finally, we tried a slightly more ambitious plotting job, where we took the photo of one the Lego guys from our
+          <a href="http://www.evilmadscientist.com/article.php/LEDMinifigs">
+           Halloween projects
+          </a>
+          and converted it to a low-res monochrome image, which we used to program the PlotBot:
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/265879129/" title="Photo Sharing">
+           <img alt="Blue LED.jpg" height="180" src="http://farm1.static.flickr.com/119/265879129_2b6b17edf2_m.jpg" width="240"/>
+          </a>
+          <img alt="" height="100" src="http://www.evilmadscientist.com/images/articles/plotbot_2.jpg" width="133"/>
+         </p>
+         <p>
+          With result:
+         </p>
+         <p>
+          <a href="http://www.flickr.com/photos/oskay/420878385/" title="Photo Sharing">
+           <img alt="LegoGhost" height="375" src="http://farm1.static.flickr.com/167/420878385_db55535c65.jpg" width="500"/>
+          </a>
+         </p>
+         <div class="printfriendly pf-alignleft">
+          <a class="noslimstat" href="#" onclick="window.print(); return false;" rel="nofollow">
+           <span class="printfriendly-text2 printandpdf">
+            <img alt="Print Friendly Version of this page" height="15" src="http://cdn.printfriendly.com/pf-print-icon.gif" style="border:none;margin-right:6px;" width="16"/>
+            Print
+            <img alt="Get a PDF version of this webpage" height="12" src="http://cdn.printfriendly.com/pf-pdf-icon.gif" style="border:none;-webkit-box-shadow:none; box-shadow:none;margin:0 6px" width="12"/>
+            PDF
+           </span>
+          </a>
+         </div>
+        </div>
+        <!-- Simple Share Buttons Adder (6.0.2) simplesharebuttons.com -->
+        <div class="ssba ssba-wrap">
+         <div style="text-align:left">
+          <a class="ssba_email_share" href="mailto:?subject=An AVR-based Analog Plotbot with an E-Paper Display&amp;body=%20http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/">
+           <img alt="Email this to someone" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/email.png" title="Email"/>
+          </a>
+          <a class="ssba_facebook_share" href="http://www.facebook.com/sharer.php?u=http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/" target="_blank">
+           <img alt="Share on Facebook" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/facebook.png" title="Facebook"/>
+          </a>
+          <a class="ssba_twitter_share" href="http://twitter.com/share?url=http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/&amp;text=An+AVR-based+Analog+Plotbot+with+an+E-Paper+Display+" target="_blank">
+           <img alt="Tweet about this on Twitter" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/twitter.png" title="Twitter"/>
+          </a>
+          <a class="ssba_google_share" href="https://plus.google.com/share?url=http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/" target="_blank">
+           <img alt="Share on Google+" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/google.png" title="Google+"/>
+          </a>
+          <a class="ssba_tumblr_share" href="http://www.tumblr.com/share/link?url=www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/&amp;name=An AVR-based Analog Plotbot with an E-Paper Display" target="_blank">
+           <img alt="Share on Tumblr" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/tumblr.png" title="tumblr"/>
+          </a>
+          <a class="ssba_pinterest_share" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','//assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());">
+           <img alt="Pin on Pinterest" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/pinterest.png" title="Pinterest"/>
+          </a>
+          <a class="ssba_reddit_share" href="http://reddit.com/submit?url=http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/&amp;title=An AVR-based Analog Plotbot with an E-Paper Display" target="_blank">
+           <img alt="Share on Reddit" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/reddit.png" title="Reddit"/>
+          </a>
+          <a class="ssba_stumbleupon_share ssba_share_link" href="http://www.stumbleupon.com/submit?url=http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/&amp;title=An AVR-based Analog Plotbot with an E-Paper Display" target="_blank">
+           <img alt="Share on StumbleUpon" class="ssba ssba-img" src="http://www.evilmadscientist.com/wp-content/plugins/simple-share-buttons-adder/buttons/retro/stumbleupon.png" title="StumbleUpon"/>
+          </a>
+         </div>
+        </div>
+       </div>
+       <!-- .entry-content -->
+       <!-- Move meta to here: -->
+       <div class="entry-meta">
+        This entry was posted in
+        <span class="categories-links">
+         <a href="http://www.evilmadscientist.com/category/art/" rel="category tag">
+          Art
+         </a>
+         ,
+         <a href="http://www.evilmadscientist.com/category/emsl-projects/" rel="category tag">
+          EMSL Projects
+         </a>
+         ,
+         <a href="http://www.evilmadscientist.com/category/engineering/microcontrollers/" rel="category tag">
+          Microcontrollers
+         </a>
+        </span>
+        and tagged
+        <span class="tags-links">
+         <a href="http://www.evilmadscientist.com/tag/art-2/" rel="tag">
+          art
+         </a>
+         ,
+         <a href="http://www.evilmadscientist.com/tag/avr/" rel="tag">
+          AVR
+         </a>
+         ,
+         <a href="http://www.evilmadscientist.com/tag/hacks/" rel="tag">
+          hacks
+         </a>
+        </span>
+        . Bookmark the
+        <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/" rel="bookmark" title="permalink">
+         Permalink
+        </a>
+        .
+       </div>
+       <!-- .entry-meta -->
+       <footer class="entry-meta">
+        <div class="author-info">
+         <div class="author-avatar">
+         </div>
+         <!-- .author-avatar -->
+         <div class="author-description">
+          <h2 class="author-title">
+           About Windell Oskay
+          </h2>
+          <p class="author-bio">
+           Co-founder of Evil Mad Scientist Laboratories.
+           <a class="author-link" href="http://www.evilmadscientist.com/author/windell_oskay/" rel="author">
+            View all posts by Windell Oskay
+            <span class="meta-nav">
+             
+            </span>
+           </a>
+          </p>
+         </div>
+         <!-- .author-description -->
+        </div>
+        <!-- .author-info -->
+       </footer>
+       <!-- .entry-meta -->
+      </article>
+      <!-- #post -->
+      <nav class="navigation post-navigation" role="navigation">
+       <h1 class="screen-reader-text">
+        Post navigation
+       </h1>
+       <div class="nav-links">
+        <a href="http://www.evilmadscientist.com/2007/0-999-equals-one/" rel="prev">
+         <span class="meta-nav">
+          
+         </span>
+         0.999 equals one.
+        </a>
+        <a href="http://www.evilmadscientist.com/2007/new-option-read-evilmadscientist-via-e-mail/" rel="next">
+         New option: Read evilmadscientist via E-mail
+         <span class="meta-nav">
+          
+         </span>
+        </a>
+       </div>
+       <!-- .nav-links -->
+      </nav>
+      <!-- .navigation -->
+      <div class="comments-area" id="comments">
+       <h2 class="comments-title">
+        6 thoughts on 
+        <span>
+         An AVR-based Analog Plotbot with an E-Paper Display
+        </span>
+        
+       </h2>
+       <ol class="comment-list">
+        <li class="comment byuser comment-author-Anonymous even thread-even depth-1 parent" id="comment-1573">
+         <article class="comment-body" id="div-comment-1573">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <b class="fn">
+             Anonymous
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-1573">
+             <time datetime="2007-03-15T12:14:05+00:00">
+              March 15, 2007 at 12:14 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            Wicked Cool!!
+           </p>
+          </div>
+          <!-- .comment-content -->
+         </article>
+         <!-- .comment-body -->
+         <ol class="children">
+          <li class="comment byuser comment-author-windell_oskay bypostauthor odd alt depth-2" id="comment-1574">
+           <article class="comment-body" id="div-comment-1574">
+            <footer class="comment-meta">
+             <div class="comment-author vcard">
+              <b class="fn">
+               <a class="url" href="http://www.evilmadscientist.com" rel="external nofollow">
+                Windell
+               </a>
+              </b>
+              <span class="says">
+               says:
+              </span>
+             </div>
+             <!-- .comment-author -->
+             <div class="comment-metadata">
+              <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-1574">
+               <time datetime="2007-03-15T12:36:09+00:00">
+                March 15, 2007 at 12:36 pm
+               </time>
+              </a>
+             </div>
+             <!-- .comment-metadata -->
+            </footer>
+            <!-- .comment-meta -->
+            <div class="comment-content">
+             <p>
+              Thanks!
+             </p>
+             <p>
+              
+              <br/>
+              Windell H. Oskay
+              <br/>
+              drwho(at)evilmadscientist.com
+              <br/>
+              <a href="http://www.evilmadscientist.com/" rel="nofollow">
+               http://www.evilmadscientist.com/
+              </a>
+             </p>
+            </div>
+            <!-- .comment-content -->
+           </article>
+           <!-- .comment-body -->
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-Anonymous even thread-odd thread-alt depth-1 parent" id="comment-1578">
+         <article class="comment-body" id="div-comment-1578">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <b class="fn">
+             Anonymous
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-1578">
+             <time datetime="2007-03-16T14:03:36+00:00">
+              March 16, 2007 at 2:03 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            This is great! So now who wants to merge the Evil plotter with a glue gun and make a rapid prototyping machine?
+           </p>
+          </div>
+          <!-- .comment-content -->
+         </article>
+         <!-- .comment-body -->
+         <ol class="children">
+          <li class="comment byuser comment-author-windell_oskay bypostauthor odd alt depth-2" id="comment-1579">
+           <article class="comment-body" id="div-comment-1579">
+            <footer class="comment-meta">
+             <div class="comment-author vcard">
+              <b class="fn">
+               <a class="url" href="http://www.evilmadscientist.com" rel="external nofollow">
+                Windell
+               </a>
+              </b>
+              <span class="says">
+               says:
+              </span>
+             </div>
+             <!-- .comment-author -->
+             <div class="comment-metadata">
+              <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-1579">
+               <time datetime="2007-03-16T14:09:54+00:00">
+                March 16, 2007 at 2:09 pm
+               </time>
+              </a>
+             </div>
+             <!-- .comment-metadata -->
+            </footer>
+            <!-- .comment-meta -->
+            <div class="comment-content">
+             <p>
+              Thats an interesting idea, and not so far off from how a number of home-brew machines are being desgined right now. However, were already working on
+              <a href="http://www.evilmadscientist.com/article.php/3printerpreview">
+               our own
+              </a>
+              3D printer at the moment and it prints in
+              <i>
+               sugar
+              </i>
+              !
+             </p>
+             <p>
+              
+              <br/>
+              Windell H. Oskay
+              <br/>
+              drwho(at)evilmadscientist.com
+              <br/>
+              <a href="http://www.evilmadscientist.com/" rel="nofollow">
+               http://www.evilmadscientist.com/
+              </a>
+             </p>
+            </div>
+            <!-- .comment-content -->
+           </article>
+           <!-- .comment-body -->
+          </li>
+          <!-- #comment-## -->
+         </ol>
+         <!-- .children -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-Anonymous even thread-even depth-1" id="comment-3402">
+         <article class="comment-body" id="div-comment-3402">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <b class="fn">
+             Anonymous
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-3402">
+             <time datetime="2008-09-06T17:18:06+00:00">
+              September 6, 2008 at 5:18 pm
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            yea but can you dremel a PCB with it?
+           </p>
+          </div>
+          <!-- .comment-content -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+        <li class="comment byuser comment-author-SaanvelKhalid odd alt thread-odd thread-alt depth-1" id="comment-6716">
+         <article class="comment-body" id="div-comment-6716">
+          <footer class="comment-meta">
+           <div class="comment-author vcard">
+            <b class="fn">
+             Saanvel
+            </b>
+            <span class="says">
+             says:
+            </span>
+           </div>
+           <!-- .comment-author -->
+           <div class="comment-metadata">
+            <a href="http://www.evilmadscientist.com/2007/an-avr-based-analog-plotbot-with-an-e-paper-display/comment-page-1/#comment-6716">
+             <time datetime="2010-11-14T09:26:03+00:00">
+              November 14, 2010 at 9:26 am
+             </time>
+            </a>
+           </div>
+           <!-- .comment-metadata -->
+          </footer>
+          <!-- .comment-meta -->
+          <div class="comment-content">
+           <p>
+            this is very cool
+           </p>
+          </div>
+          <!-- .comment-content -->
+         </article>
+         <!-- .comment-body -->
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!-- .comment-list -->
+       <p class="no-comments">
+        Comments are closed.
+       </p>
+      </div>
+      <!-- #comments -->
+     </div>
+     <!-- #content -->
+    </div>
+    <!-- #primary -->
+    <div class="sidebar-container" id="tertiary" role="complementary">
+     <div class="sidebar-inner">
+      <div class="widget-area">
+       <aside class="widget widget_text" id="text-3">
+        <div class="textwidget">
+         <a href="http://www.evilmadscientist.com/">
+          <img alt="Evil Mad Scientist Laboratories, Established 2006." height="64" src="http://blog.emscdn.com/is/classicLEDs/ClassicLEDs3b@2x.png" style="display: block;
+    margin-left: auto;
+    margin-right: auto" title="Evil Mad Scientist Laboratories, Established 2006." width="193"/>
+         </a>
+         <span style="display: block; width: 260px; text-align: center;
+    margin-left: auto;
+    margin-right: auto">
+          Evil Mad Scientist Laboratories
+          <br/>
+          
+          <i>
+           Established 2006
+          </i>
+          
+         </span>
+        </div>
+       </aside>
+       <aside class="widget widget_recent_entries" id="recent-posts-3">
+        <h3 class="widget-title">
+         Newest Articles
+        </h3>
+        <ul>
+         <li>
+          <a href="http://www.evilmadscientist.com/2015/intel-osh-panel/">
+           Intel Open Source Hardware Advisory Panel
+          </a>
+         </li>
+         <li>
+          <a href="http://www.evilmadscientist.com/2015/steam-fest-2015/">
+           STEAM Fest 2015
+          </a>
+         </li>
+         <li>
+          <a href="http://www.evilmadscientist.com/2015/geekmom-biy-sci-lab/">
+           GeekMom reviews Build-It-Yourself Science Laboratory
+          </a>
+         </li>
+         <li>
+          <a href="http://www.evilmadscientist.com/2015/lemon-plum-jam/">
+           Lemon Plum Jam
+          </a>
+         </li>
+         <li>
+          <a href="http://www.evilmadscientist.com/2015/legojeep/">
+           A visit from the LEGOJeep
+          </a>
+         </li>
+        </ul>
+       </aside>
+       <aside class="widget widget_recent_comments" id="recent-comments-3">
+        <h3 class="widget-title">
+         Newest Comments
+        </h3>
+        <ul id="recentcomments">
+         <li class="recentcomments">
+          <span class="comment-author-link">
+           Jeff
+          </span>
+          on
+          <a href="http://www.evilmadscientist.com/2015/steam-fest-2015/comment-page-1/#comment-426536">
+           STEAM Fest 2015
+          </a>
+         </li>
+         <li class="recentcomments">
+          <span class="comment-author-link">
+           Kevin
+          </span>
+          on
+          <a href="http://www.evilmadscientist.com/2015/biysl-teaser/comment-page-1/#comment-426198">
+           The Annotated Build-It-Yourself Science Laboratory
+          </a>
+         </li>
+         <li class="recentcomments">
+          <span class="comment-author-link">
+           Don
+          </span>
+          on
+          <a href="http://www.evilmadscientist.com/2015/lemon-plum-jam/comment-page-1/#comment-426062">
+           Lemon Plum Jam
+          </a>
+         </li>
+         <li class="recentcomments">
+          <span class="comment-author-link">
+           Don
+          </span>
+          on
+          <a href="http://www.evilmadscientist.com/2015/linkdump-june-2015/comment-page-1/#comment-425460">
+           Linkdump: June 2015
+          </a>
+         </li>
+         <li class="recentcomments">
+          <span class="comment-author-link">
+           Don
+          </span>
+          on
+          <a href="http://www.evilmadscientist.com/2015/diamagnetism/comment-page-1/#comment-424933">
+           A Diamagnetic Demonstration
+          </a>
+         </li>
+        </ul>
+       </aside>
+       <aside class="widget widget_categories" id="categories-4">
+        <h3 class="widget-title">
+         Explore our Archives
+        </h3>
+        <ul>
+         <li class="cat-item cat-item-27">
+          <a href="http://www.evilmadscientist.com/category/art/">
+           Art
+          </a>
+          (286)
+          <ul class="children">
+           <li class="cat-item cat-item-33">
+            <a href="http://www.evilmadscientist.com/category/art/costumes/">
+             Costumes
+            </a>
+            (27)
+           </li>
+           <li class="cat-item cat-item-8">
+            <a href="http://www.evilmadscientist.com/category/art/play-with-your-food/">
+             Play with your food
+            </a>
+            (109)
+           </li>
+          </ul>
+         </li>
+         <li class="cat-item cat-item-28">
+          <a href="http://www.evilmadscientist.com/category/educat/">
+           Education
+          </a>
+          (74)
+         </li>
+         <li class="cat-item cat-item-6">
+          <a href="http://www.evilmadscientist.com/category/emsl-projects/">
+           EMSL Projects
+          </a>
+          (676)
+          <ul class="children">
+           <li class="cat-item cat-item-46">
+            <a href="http://www.evilmadscientist.com/category/emsl-projects/eggbot/">
+             Eggbot
+            </a>
+            (74)
+           </li>
+           <li class="cat-item cat-item-40">
+            <a href="http://www.evilmadscientist.com/category/emsl-projects/watercolorbot/">
+             WaterColorBot
+            </a>
+            (42)
+           </li>
+          </ul>
+         </li>
+         <li class="cat-item cat-item-9">
+          <a href="http://www.evilmadscientist.com/category/emsl-tests-quizzes/">
+           EMSL Tests &amp; Quizzes
+          </a>
+          (7)
+         </li>
+         <li class="cat-item cat-item-30">
+          <a href="http://www.evilmadscientist.com/category/engineering/">
+           Engineering
+          </a>
+          (485)
+          <ul class="children">
+           <li class="cat-item cat-item-36">
+            <a href="http://www.evilmadscientist.com/category/engineering/basics/">
+             Basics
+            </a>
+            (25)
+           </li>
+           <li class="cat-item cat-item-59">
+            <a href="http://www.evilmadscientist.com/category/engineering/cnc/">
+             CNC
+            </a>
+            (67)
+           </li>
+           <li class="cat-item cat-item-38">
+            <a href="http://www.evilmadscientist.com/category/engineering/electr/">
+             Electronics
+            </a>
+            (262)
+           </li>
+           <li class="cat-item cat-item-39">
+            <a href="http://www.evilmadscientist.com/category/engineering/microcontrollers/">
+             Microcontrollers
+            </a>
+            (83)
+           </li>
+           <li class="cat-item cat-item-64">
+            <a href="http://www.evilmadscientist.com/category/engineering/robotics/">
+             Robotics
+            </a>
+            (55)
+           </li>
+          </ul>
+         </li>
+         <li class="cat-item cat-item-5">
+          <a href="http://www.evilmadscientist.com/category/everything-else/">
+           Everything Else
+          </a>
+          (187)
+         </li>
+         <li class="cat-item cat-item-34">
+          <a href="http://www.evilmadscientist.com/category/ems-shop/">
+           Evil Mad Scientist Shop
+          </a>
+          (72)
+         </li>
+         <li class="cat-item cat-item-4">
+          <a href="http://www.evilmadscientist.com/category/field-trips/">
+           Field Trips
+          </a>
+          (137)
+         </li>
+         <li class="cat-item cat-item-3">
+          <a href="http://www.evilmadscientist.com/category/general-news/">
+           General News
+          </a>
+          (51)
+          <ul class="children">
+           <li class="cat-item cat-item-7">
+            <a href="http://www.evilmadscientist.com/category/general-news/site-news/">
+             Site News
+            </a>
+            (20)
+           </li>
+          </ul>
+         </li>
+         <li class="cat-item cat-item-31">
+          <a href="http://www.evilmadscientist.com/category/mathematics/">
+           Mathematics
+          </a>
+          (34)
+         </li>
+         <li class="cat-item cat-item-35">
+          <a href="http://www.evilmadscientist.com/category/open-hardware/">
+           Open Hardware
+          </a>
+          (74)
+         </li>
+         <li class="cat-item cat-item-10">
+          <a href="http://www.evilmadscientist.com/category/reviews/">
+           Reviews
+          </a>
+          (15)
+         </li>
+         <li class="cat-item cat-item-29">
+          <a href="http://www.evilmadscientist.com/category/science/">
+           Science
+          </a>
+          (82)
+          <ul class="children">
+           <li class="cat-item cat-item-45">
+            <a href="http://www.evilmadscientist.com/category/science/citizen-science/">
+             Citizen Science
+            </a>
+            (5)
+           </li>
+           <li class="cat-item cat-item-37">
+            <a href="http://www.evilmadscientist.com/category/science/nature/">
+             Nature
+            </a>
+            (18)
+           </li>
+          </ul>
+         </li>
+         <li class="cat-item cat-item-58">
+          <a href="http://www.evilmadscientist.com/category/software/">
+           Software
+          </a>
+          (31)
+         </li>
+         <li class="cat-item cat-item-32">
+          <a href="http://www.evilmadscientist.com/category/vintage-comp/">
+           Vintage Technology
+          </a>
+          (50)
+         </li>
+        </ul>
+       </aside>
+      </div>
+      <!-- .widget-area -->
+     </div>
+     <!-- .sidebar-inner -->
+    </div>
+    <!-- #tertiary -->
+   </div>
+   <!-- #main -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div class="sidebar-container" id="secondary" role="complementary">
+     <div class="widget-area">
+      <aside class="widget widget_search" id="search-2">
+       <form action="http://www.evilmadscientist.com/" class="search-form" method="get" role="search">
+        <label>
+         <span class="screen-reader-text">
+          Search for:
+         </span>
+         <input class="search-field" name="s" placeholder="Search " title="Search for:" type="search" value=""/>
+        </label>
+        <input class="search-submit" type="submit" value="Search"/>
+       </form>
+      </aside>
+      <aside class="widget widget_categories" id="categories-6">
+       <h3 class="widget-title">
+        Explore our Archives
+       </h3>
+       <label class="screen-reader-text" for="cat">
+        Explore our Archives
+       </label>
+       <select class="postform" id="cat" name="cat">
+        <option value="-1">
+         Select Category
+        </option>
+        <option class="level-0" value="27">
+         Art(286)
+        </option>
+        <option class="level-1" value="33">
+         Costumes(27)
+        </option>
+        <option class="level-1" value="8">
+         Play with your food(109)
+        </option>
+        <option class="level-0" value="28">
+         Education(74)
+        </option>
+        <option class="level-0" value="6">
+         EMSL Projects(676)
+        </option>
+        <option class="level-1" value="46">
+         Eggbot(74)
+        </option>
+        <option class="level-1" value="40">
+         WaterColorBot(42)
+        </option>
+        <option class="level-0" value="9">
+         EMSL Tests &amp; Quizzes(7)
+        </option>
+        <option class="level-0" value="30">
+         Engineering(485)
+        </option>
+        <option class="level-1" value="36">
+         Basics(25)
+        </option>
+        <option class="level-1" value="59">
+         CNC(67)
+        </option>
+        <option class="level-1" value="38">
+         Electronics(262)
+        </option>
+        <option class="level-1" value="39">
+         Microcontrollers(83)
+        </option>
+        <option class="level-1" value="64">
+         Robotics(55)
+        </option>
+        <option class="level-0" value="5">
+         Everything Else(187)
+        </option>
+        <option class="level-0" value="34">
+         Evil Mad Scientist Shop(72)
+        </option>
+        <option class="level-0" value="4">
+         Field Trips(137)
+        </option>
+        <option class="level-0" value="3">
+         General News(51)
+        </option>
+        <option class="level-1" value="7">
+         Site News(20)
+        </option>
+        <option class="level-0" value="31">
+         Mathematics(34)
+        </option>
+        <option class="level-0" value="35">
+         Open Hardware(74)
+        </option>
+        <option class="level-0" value="10">
+         Reviews(15)
+        </option>
+        <option class="level-0" value="29">
+         Science(82)
+        </option>
+        <option class="level-1" value="45">
+         Citizen Science(5)
+        </option>
+        <option class="level-1" value="37">
+         Nature(18)
+        </option>
+        <option class="level-0" value="58">
+         Software(31)
+        </option>
+        <option class="level-0" value="32">
+         Vintage Technology(50)
+        </option>
+       </select>
+       <script type="text/javascript">
+        /* &lt;![CDATA[ */
+(function() {
+	var dropdown = document.getElementById( "cat" );
+	function onCatChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value &gt; 0 ) {
+			location.href = "http://www.evilmadscientist.com/?cat=" + dropdown.options[ dropdown.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onCatChange;
+})();
+/* ]]&gt; */
+       </script>
+      </aside>
+      <aside class="widget widget_text" id="text-7">
+       <h3 class="widget-title">
+        Bookmark us
+       </h3>
+       <div class="textwidget">
+        <ul>
+         <li>
+          Twitter:
+          <a href="http://twitter.com/EMSL">
+           @EMSL
+          </a>
+         </li>
+         <li>
+          <a href="http://www.facebook.com/pages/Evil-Mad-Scientist-Laboratories/24458132880">
+           Facebook page
+          </a>
+         </li>
+         <li>
+          <a href="http://links.evilmadscientist.com/">
+           Tumblr Linkblog
+          </a>
+         </li>
+         <li>
+          <a href="feed://feeds.feedburner.com/EvilMadScientistLaboratories">
+           feedburner
+          </a>
+         </li>
+         <li>
+          <a href="http://www.evilmadscientist.com/backend/geeklog.rss">
+           RSS Feed
+          </a>
+         </li>
+         <li>
+          <a href="http://www.youtube.com/user/oskay">
+           YouTube Channel
+          </a>
+         </li>
+        </ul>
+       </div>
+      </aside>
+      <aside class="widget widget_cmeta" id="cmeta">
+       <h3 class="widget-title">
+        Tools
+       </h3>
+       <ul>
+        <li>
+         <a href="http://www.evilmadscientist.com/wp-login.php?action=register">
+          Register
+         </a>
+        </li>
+        <li>
+         <a href="http://www.evilmadscientist.com/wp-login.php">
+          Log in
+         </a>
+        </li>
+        <li>
+         <a href="http://www.evilmadscientist.com/feed/" title="Syndicate this site using RSS 2.0">
+          Entries
+          <abbr title="Really Simple Syndication">
+           RSS
+          </abbr>
+         </a>
+        </li>
+        <li>
+         <a href="http://www.evilmadscientist.com/comments/feed/" title="The latest comments to all posts in RSS">
+          Comments
+          <abbr title="Really Simple Syndication">
+           RSS
+          </abbr>
+         </a>
+        </li>
+       </ul>
+      </aside>
+     </div>
+     <!-- .widget-area -->
+    </div>
+    <!-- #secondary -->
+    <div class="site-info">
+     Copyright  2015 Evil Mad Scientist. 	
+			Please visit
+     <a href="http://shop.evilmadscientist.com/" title="Evil Mad Scientist Shop">
+      our store
+     </a>
+     !
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <script type="text/javascript">
+   var pfHeaderImgUrl = '';
+          var pfHeaderTagline = '';
+          var pfdisableClickToDel = '0';
+          var pfHideImages = '0';
+          var pfImageDisplayStyle = 'right';
+          var pfDisableEmail = '0';
+          var pfDisablePDF = '0';
+          var pfDisablePrint = '0';
+          var pfCustomCSS = '';
+      (function() {
+            var e = document.createElement('script'); e.type="text/javascript";
+        if('https:' == document.location.protocol) {
+        js='https://pf-cdn.printfriendly.com/ssl/main.js';
+        }
+        else{
+        js='http://cdn.printfriendly.com/printfriendly.js';
+        }
+            e.src = js;
+            document.getElementsByTagName('head')[0].appendChild(e);
+        })();
+  </script>
+  <script src="http://www.evilmadscientist.com/wp-includes/js/masonry.min.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://www.evilmadscientist.com/wp-includes/js/jquery/jquery.masonry.min.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://www.evilmadscientist.com/wp-content/themes/twentythirteen/js/functions.js?ver=20150330" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var clicky_site_ids = clicky_site_ids || [];
+clicky_site_ids.push(66440831);
+(function() {
+  var s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.async = true;
+  s.src = '//static.getclicky.com/js';
+  ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+})();
+  </script>
+  <noscript>
+   <p>
+    <img alt="Clicky" height="1" src="//in.getclicky.com/66440831ns.gif" width="1"/>
+   </p>
+  </noscript>
+ </body>
+</html>

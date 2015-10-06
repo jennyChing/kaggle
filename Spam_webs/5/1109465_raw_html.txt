@@ -1,0 +1,5501 @@
+<html lang="en">
+ <head>
+  <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript">
+  </script>
+  <script src="/javascript/jquery.bgiframe.js" type="text/javascript">
+  </script>
+  <link href="http://www.openleft.com/upload/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/stylesheets/soapblox.css" rel="stylesheet" type="text/css"/>
+  <link href="/stylesheets/comments.css" rel="stylesheet" type="text/css"/>
+  <link href="http://www.openleft.com/rss/rss2.xml" rel="alternate" title="Open Left" type="application/rss+xml"/>
+  <title>
+   Open Left:: I Found My Gut Reason for Voting Obama
+  </title>
+  <script src="/javascript/prototype.js" type="text/javascript">
+  </script>
+  <script>
+   //-- SoapBlox JavaScript
+//-- 7/30/2007 (C)
+
+var baseUrl = '/';
+//-- SoapBlox JavaScript
+//-- 7/30/2007 (C)
+
+	var req;
+	var which;
+	var debug = false;
+	var commentId = "";
+	var diaryId = "";
+	var previewTitle = "";
+	var previewText = "";
+	var postingComment = false;
+	var canPost = false;
+	var previewingComment = false;
+	var hasError = false;
+	var buttonState;
+	
+	function hover(id, imageLoc) {
+		// alert(imageLoc);
+		document.images[id].src = imageLoc;
+	}
+
+	// makes a comment appear when someone clicks "post a comment" or "reply"
+	// id - the commentId (0 if "root"), dId - diaryId
+	function makeCommentAppear(id, dId) {
+
+		var tempTitle = "";
+		var tempText = "";
+	
+		// if this isn't empty, we were trying to perviously post a comment
+		// therefore, we need to clean out all the html in the previous spot
+		// so we don't create "nodeLists" for postCommentTextArea and Title
+		if (commentId != "") {
+			// get the current "postcommenter" element
+			var oldElem = document.getElementById('postcomment' + commentId);
+	
+			if (oldElem) {
+				// this will store whatever we might have had before
+				if (document.forms['rateForm'].elements['postCommentTitle']) {
+					tempTitle = document.forms['rateForm'].elements['postCommentTitle'].value;
+				}	
+				if (document.forms['rateForm'].elements['postCommentTextArea']) {
+					tempText = document.forms['rateForm'].elements['postCommentTextArea'].value;
+				}
+			
+				// clear out the old HTML, so we don't create nodeLists
+				oldElem.innerHTML = "";
+			}
+		}
+	
+		hideArea("post");
+
+		// store the values globally for what we're currently looking at
+	    commentId = id;
+	    diaryId = dId;
+	    
+	    var elementName = 'postcomment' + id;
+	    
+	    // make sure the element is hidden
+		Element.hide(elementName);
+
+		// set the data in it		
+	    document.getElementById(elementName).innerHTML = document.getElementById("contentHolder").innerHTML;
+		document.forms['rateForm'].elements['postCommentTitle'].value = tempTitle;
+		document.forms['rateForm'].elements['postCommentTextArea'].value = tempText;
+	
+		// make it slide down, take half a second, scaleFrom 3 to avoid "stutter" in IE
+		Effect.SlideDown(elementName, { duration: 0.5, scaleFrom: 3});
+		window.setTimeout("document.forms['rateForm'].elements['postCommentTitle'].focus()", 501);
+		
+	    postingComment = true;
+	    // since we're starting a new preview cycle, we're going to need
+	    // to use the slide down effect.  This ensures that
+	    previewingComment = false;
+
+	    var objDiv = document.getElementById(elementName);
+		objDiv.scrollTop = objDiv.scrollHeight;
+	}
+
+	// what we do when someone hits cancel
+	function cancelPost() {
+
+		var cTextElem = document.forms['rateForm'].elements['postCommentTextArea'];
+		var cTitleElem = document.forms['rateForm'].elements['postCommentTitle'];
+		
+		if ((cTextElem &amp;&amp; cTextElem.value != "")
+				|| (cTitleElem &amp;&amp; cTitleElem.value != ""))
+		{
+			// if the don't want to cancel--stop.
+			if (!confirm("Cancel this comment?")) {
+				return;
+			}
+		}
+
+		hideArea("cancel");
+		// we no longer clear this out so in makeCommentAppear we can see if we have to clean
+		// out some hidden HTML
+		//commentId = "";
+		diaryId = "";
+		previewText = "";
+		previewTitle = "";
+		cTextElem.value = "";
+		cTitleElem.value = "";
+		previewingComment = false;	
+		postingComment = false;
+	}
+	
+	// this is the safari default button hack, where we use onfocus to determine what mode we're in
+	function setButtonState(theValue) {
+		buttonState = theValue;
+	}
+
+	// it's how we post a comment!
+	function submitForm(theForm) {
+	
+		// alert(buttonState + " " + previewingComment);
+	
+		// stop the "enter in the subject" bug
+		if (buttonState == "post" &amp;&amp; !previewingComment
+		 		|| buttonState == "post" &amp;&amp; previewingComment &amp;&amp; !canPost) {
+			previewComment(theForm);
+			return false;
+		}
+		
+
+		var theForm = document.forms['rateForm'];	
+		theForm.action = baseUrl + "postComment.do";
+		theForm.elements['replyParentCommentId'].value = commentId;
+
+		if (commentId == 0) {
+			theForm.elements['diaryId'].value = diaryId;	
+		}
+		else {
+			theForm.elements['commentId'].value = commentId;	
+
+		}
+		
+		theForm.elements['replyDiaryId'].value = diaryId;	
+		theForm.elements['submitType'].value = "post";	
+		
+		// alert("yo" + theForm.elements['submitType']);
+		theForm.method = "POST";
+		theForm.submit();
+	}
+
+	// trims a string
+	function trim(str) {     
+		if(!str || typeof str != 'string') {
+			return null;     
+		}
+			
+		return str.replace(/^[\s]+/,'').replace(/[\s]+$/,'').replace(/[\s]{2,}/,' '); 
+		
+	}
+
+	function previewComment(theForm) {
+	
+		// if (tinyMCE) {
+			// tinyMCE.triggerSave();
+		// }
+		
+		// alert(baseUrl);
+
+		var url = baseUrl + "ajaxPreviewComment.do";
+		var errorDiv = "errorcomment" + commentId;
+		
+		// hide any error we might have
+		if (hasError) {
+			Element.hide(errorDiv);
+		}
+			
+		var cTitleElem = document.forms['rateForm'].elements["postCommentTitle"];
+		var cTextElem =  document.forms['rateForm'].elements["postCommentTextArea"];
+	
+		
+		previewTitle = cTitleElem.value;
+		previewText = cTextElem.value;
+	
+	    // trim it so we remove the white sapces
+	    previewTitle = trim(previewTitle);
+
+	    // if we have nothing, set the error
+	    if (previewTitle == null || previewTitle == "") {
+			Effect.Appear(errorDiv, { duration: 0.5 });
+			disallowPost();
+			hasError = true;
+	    	return;
+	    }
+
+	    // if we get this far we don't have an error!
+	    hasError = false;
+	    
+	    // apparently using "escape" funcation messes with utf-8 so we just explicity
+	    // replace newlines with their url-encoding equavilent.
+	    previewText = escape(previewText); 
+	    
+	    previewText = previewText.replace(/\%u201C/ig, "%22");
+	    previewText = previewText.replace(/\%u201D/ig, "%22");
+  	    previewText = previewText.replace(/\%u2018/ig, "%27");
+  	    previewText = previewText.replace(/\%u2019/ig, "%27");  	    
+  	    previewText = previewText.replace(/\%u2013/ig, "-");  
+  	    previewText = previewText.replace(/\%u2014/ig, "-");    	      	    
+  	    previewText = previewText.replace(/\%u2026/ig, "...");    	
+  	    previewText = previewText.replace(/\+/g, "%2B");
+	    
+	    //previewText.replace(/\n/g, "%0a");
+//	    previewText = previewText.replace(/\+/g, "%2b");
+  // 	    previewText = previewText.replace(/\%/g, "%25");
+//   	    alert(previewText);
+	    
+		// add the previewText to the URL querystring    
+		// have to URL encode it for it to work correctly
+	    var params = "t=" + previewText;
+	
+		// do the fun ajax!    
+	    retrieveURL(url, "PREVIEW", commentId, params);
+	}
+
+	function hideArea(theType) {
+		var elementName = 'postcomment' + commentId;
+		var previewName = 'previewcomment' + commentId;
+	
+		// always hide the error div		
+		if (hasError) {
+			var errorDiv = "errorcomment" + commentId;
+			Element.hide(errorDiv);
+			hasError = false;
+		}
+		
+	    if (postingComment) {	
+	        // we must hide the current stored commentId
+	        // if we are canceling, we do it pretty
+	        if (theType == "cancel") {
+				Element.hide(previewName);        
+		        Effect.SlideUp(elementName, { duration: 0.5 });
+		    }
+		    else {
+		    	// otherwise we are posting another comment
+		    	// so do it REAL quick
+				Element.hide(previewName);	    	
+				document.getElementById(elementName).innerHTML = "";
+			}
+	    }
+	}
+
+	function figureOut(theForm) {
+// 		alert(buttonState);
+		
+		if (buttonState == 'preview') {
+			previewComment(theForm);
+		}
+		else if (buttonState == 'cancel') {
+			cancelPost();
+		}
+		else if (buttonState == 'post') {
+			submitForm(theForm);
+		}
+	}
+
+	// this checks the comments for when someone types, and if it's different than what's being preview we
+	// turn off the post button
+	function checkComment() {
+
+		var tTitle = "";
+		var tText = "";
+		
+		if (document.forms['rateForm'].elements['postCommentTitle']) {
+			tTitle = document.forms['rateForm'].elements['postCommentTitle'].value;
+		}
+		
+		if (document.forms['rateForm'].elements['postCommentTextArea']) {
+			tText = document.forms['rateForm'].elements['postCommentTextArea'].value;
+		}
+	    
+	   
+ //    		alert(tTitle + " " + previewTitle + " : " + tText + " " + previewText);
+	    if (canPost &amp;&amp; (tText != previewText || tTitle != previewTitle)) {
+	    	disallowPost();
+	   	}
+	}
+
+	function disallowPost() {
+	    canPost = false;
+	    document.getElementById("postbutton" + commentId).disabled = true;
+	}
+
+	function allowPost() {
+	    canPost = true;
+	    var elem = document.getElementById("postbutton" + commentId);
+	    
+	    elem.disabled = false;
+	    
+	    // alert(previewingComment);
+	    
+	    if (!previewingComment) {
+			window.setTimeout("document.getElementById('postbutton' + commentId).focus()", 501);
+	    }
+	    else {
+		    try {
+		    	 document.getElementById('postbutton' + commentId).focus();
+		   	} catch (e) {
+		   		alert(e);
+		   	}
+	    }
+		
+//		alert(elem);
+//	    document.getElementById("postbutton" + commentId).focus();
+	//    alert(document.getElementById("postbutton" + commentId).focus);
+	}
+
+  function retrieveURL(url, type, id, params) {
+    which = id;
+    if (window.XMLHttpRequest) { // Non-IE browsers
+        req = new XMLHttpRequest();
+
+      
+        // pretty sure this adds a listener, which handles communication
+        // listeners apparently don't like parameters, either
+        if ("RATE" == type) {
+            req.onreadystatechange = processRateStateChange;          
+        }
+        else if ("RECOMMEND" == type) {
+            req.onreadystatechange = processRecommendStateChange;          
+        } 
+        else if ("PREVIEW" == type) {
+			req.onreadystatechange = processPreviewComment;                  
+        }      
+        else {
+            req.onreadystatechange = processStateChange;
+        }
+
+        try {
+            req.open("POST", url, true);
+	   		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+			req.setRequestHeader("Content-length", params.length);
+			req.setRequestHeader("Connection", "close");            	    	
+            req.send(params);
+        } catch (e) {
+            alert(e);
+        }
+    } 
+    else if (window.ActiveXObject) { // IE
+        req = new ActiveXObject("Microsoft.XMLHTTP");
+		
+        if (req) {
+            if ("RATE" == type) {
+                req.onreadystatechange = processRateStateChange;          
+            }
+            else if ("RECOMMEND" == type) {
+                req.onreadystatechange = processRecommendStateChange;          
+            }       
+            else if ("PREVIEW" == type) {
+				req.onreadystatechange = processPreviewComment;                  
+	   		}   
+            else {
+                req.onreadystatechange = processStateChange;
+            }
+        
+            req.open("POST", url, true);
+	   		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			req.setRequestHeader("Content-length", params.length);
+			//req.setRequestHeader("Connection", "close");            	    	
+            req.send(params);
+        }
+    }
+  }
+  
+
+  // listener
+  function processStateChange() {
+    
+    if (req.readyState == 4) { // Complete
+      if (req.status == 200) { // OK response
+        document.getElementById("theTable").innerHTML = req.responseText;
+
+      } else {
+
+        alert("Problem: " + req.statusText);
+
+      }
+
+    }
+  }
+  
+  
+  
+	function processPreviewComment() {
+
+		if (req.readyState == 4) { // Complete
+			if (req.status == 200) { // OK response
+				var postCommentDiv = document.getElementById("postcomment" + commentId);
+				var previewCommentDiv = document.getElementById("previewcomment" + commentId);
+				
+			  	// make it visible
+			    // document.getElementById("previewComment").style.display = "block";
+			    
+				previewText = req.responseText;
+				
+				var commentError = false;
+				
+				if (previewText.indexOf("@@@ERROR@@@") != -1) {
+					previewText = "&lt;div class='soapbloxError'&gt;" + previewText.substring(11, previewText.length) + "&lt;/div&gt;";						
+					commentError = true;
+				}
+    
+		        // set values in the preview area
+			    document.getElementById("previewTitle" + commentId).innerHTML = previewTitle;
+			    document.getElementById("previewCommentText" + commentId).innerHTML = previewText;
+			    
+			    // alert(previewingComment); 
+    
+    			// if we're not already previewing a comment we slide down
+    			if (!previewingComment) {
+					Effect.SlideDown("previewcomment" + commentId, { duration: 0.5, scaleFrom: 3});
+					//window.setTimeout("postButton.focus()", 501);
+				}
+				// otherwise, we just update the text
+				else {
+					Element.show("previewcomment" + commentId);
+				}
+			
+				if (commentError) {
+					disallowPost();
+				}					
+				else {
+					allowPost();
+				}
+				
+				previewingComment = true;
+			}
+			else {
+				alert("Problem: " + req.statusText);
+			}
+		}	
+	}
+  
+    function processRateStateChange() {
+        //alert(loadName);
+        //alert(document.getElementById(loadName));
+
+        if (req.readyState == 4) { // Complete
+        
+            var loadName = "rateLoad" + which; 
+            // alert("elem: " + document.getElementById(loadName));
+            var elem = document.getElementById(loadName);
+           
+
+            if (req.status == 200) { // OK response
+                elem.innerHTML = "&lt;i&gt;Complete!&lt;/i&gt;";
+                if (debug) {
+                    alert(document.getElementById("rating" + which));
+                    alert(req.responseText);
+                }
+
+				// alert(req.responseText);
+
+        		var xmlDoc = req.responseXML;
+        		var theWholeThing = "";
+        		
+        		var rateType = xmlDoc.getElementsByTagName("rateType")[0].childNodes[0].nodeValue;
+        		var scoreType = xmlDoc.getElementsByTagName("scoreType")[0].childNodes[0].nodeValue;
+				var average = xmlDoc.getElementsByTagName("averageScore")[0].childNodes[0].nodeValue;
+				var viewRatingLink = xmlDoc.getElementsByTagName("viewRatingLink")[0].childNodes[0].nodeValue;
+        			        		
+        		//alert(rateType);
+        		
+        		if (rateType == "THUMBS" || rateType == "STARS") {
+				//	if (average == "false") {
+					// loop through the ratings   
+					
+						     		
+	        			for (i = 0; i &lt; xmlDoc.getElementsByTagName("rating").length; i++) {
+	        			
+	        				var theString = "";
+	        			
+		        			var theRating = xmlDoc.getElementsByTagName("rating")[i];
+		        			var commentId = theRating.getElementsByTagName("commentId")[0].childNodes[0].nodeValue;
+							var ratingName = theRating.getElementsByTagName("ratingName")[0].childNodes[0].nodeValue;
+							// var viewRatingLink = theRating.getElementsByTagName("viewRatingLink")[0].childNodes[0].nodeValue;
+		        			var ratingValueId = theRating.getElementsByTagName("ratingValueId")[0].childNodes[0].nodeValue;
+		        			var loc = theRating.getElementsByTagName("image-src")[0].childNodes[0].nodeValue;
+		        			var mouseover = theRating.getElementsByTagName("image-mouseover")[0].childNodes[0].nodeValue;
+		        			var mouseout = theRating.getElementsByTagName("image-mouseout")[0].childNodes[0].nodeValue;
+		        			var count = theRating.getElementsByTagName("count")[0].childNodes[0].nodeValue;
+		        			var theId = "rv" + commentId + "-" + ratingValueId;
+		        			
+		        			if (rateType == "THUMBS") {
+		        			
+//		        				if (average == "false") {
+		        					theString = "&lt;a href='javascript:void(0)' onclick='rateThumb(\"" + commentId + "\", \"" + ratingValueId + "\")'&gt;";
+		        				
+		        					if ("RATING_NAME" == scoreType) {
+		    	    					theString += ratingName;
+			        				}
+			        				else {
+		 
+										theString += "&lt;img border='0' name='" + theId + "' src='" + loc + "' onmouseover='hover(\"" +theId + "\", \"" + mouseover + "\")'  onmouseout='hover(\"" +theId + "\", \"" + mouseout + "\")'&gt;";		        				
+		        					}
+		        					theString += "&lt;/a&gt;";
+		        					
+		        					if (average == "false") {
+		        						 theString += " - " + count;
+									}
+		        			//	}
+		        			//	else {
+		        			//		theString = "(" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + ")";
+		        			//	}
+		        			}
+		        			else { // STARS
+		        				theString = "&lt;a href='javascript:void(0)' onclick='rateThumb(\"" + commentId + "\", \"" + ratingValueId + "\")'&gt;&lt;img border='0' name='star" + commentId + "-" + i + "' src='" + loc + "' onmouseover='starHover(\"" + mouseover + "\", \"" + commentId + "\", \"" + i + "\")'  onmouseout='starHover(\"" + mouseout + "\", \"" + commentId + "\", \"" + i + "\")'&gt;&lt;/a&gt; ";
+		        			}
+		        			
+		        			/*
+		        			var theImage = document.images[theId]; 
+		        			theImage.src = loc;
+		        			
+							theImage.onmouseout= (function (a, b) {
+		      					return function () {
+		      						document.images[a].src = b;
+								};
+		    				})(theId, mouseout);
+								// hover(theId, mouseout); 
+								//alert(e);
+		        				//alert("mout-src: " + loc + "\nId: " + theId + "\nmouseover: " + mouseover + "\n:mouseout: " + mouseout);
+		        				//document.images[theId].src = mouseout;
+		        			
+		        			
+							theImage.onmouseover= (function (a, b) {
+		      					return function () {
+		      						document.images[a].src = b;
+								};
+		    				})(theId, mouseover); */
+		    				
+		    				if (i &lt; xmlDoc.getElementsByTagName("rating").length - 1) {
+		    					theString = theString + "&nbsp;";
+//		    					alert("Your mom");
+		    				}
+		    				
+		    				theWholeThing += theString;
+		        		}
+	        	//	}
+	        	//	else {
+	        	//		alert(xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue);
+	        	//		v
+	        	//		theWholeThing = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+	        	//	}
+	        	
+	        		if (average == "true") {
+	        			theWholeThing = "(&lt;a href=\"" + viewRatingLink+ "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;) " + theWholeThing;
+	        		}
+	        		
+	        	} // End thumbs and stars
+	        	else if ("RADIO" == rateType || "DROP_DOWN" == rateType) {
+	        		var score = "";
+	        		
+	        	//	alert("bob!");
+
+					if (scoreType == "IMAGE") {
+						if (average == "false") {
+							var scoreNode = xmlDoc.getElementsByTagName("score")[0];
+							for (i = 0; i &lt; scoreNode.getElementsByTagName("oneScore").length; i++) {
+								score += "&lt;img border='0' src='" + scoreNode.getElementsByTagName("path")[i].childNodes[0].nodeValue + "'&gt; - " +  scoreNode.getElementsByTagName("count")[i].childNodes[0].nodeValue + " ";
+							}
+						}
+						else {
+							score = "(&lt;a href=\"" + viewRatingLink + "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;)";						
+	//						score = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+							//alert("score: " + score);						
+						}
+					}
+					else {
+						score = "(&lt;a href=\"" + viewRatingLink + "\"&gt;" + xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue + "&lt;/a&gt;)";
+						// alert("score: " + score);
+					} 
+					
+					theWholeThing = score;
+	        	}
+	        	/*
+	        	var score = "";
+
+				if (scoreType == "IMAGE") {
+					var scoreNode = xmlDoc.getElementsByTagName("score")[0];
+					for (i = 0; i &lt; scoreNode.getElementsByTagName("oneScore").length; i++) {
+						score += "&lt;img border='0' src='" + scoreNode.getElementsByTagName("path")[i].childNodes[0].nodeValue + "'&gt; - " +  scoreNode.getElementsByTagName("count")[i].childNodes[0].nodeValue + " ";
+					}
+				}
+				else {
+					score = xmlDoc.getElementsByTagName("score")[0].childNodes[0].nodeValue;
+				} */
+        		        		
+        		document.getElementById("rating" + which).innerHTML = theWholeThing;
+            } 
+            else 
+            {
+                elem.innerHTML = "&lt;b&gt;Error!&lt;/b&gt;";            
+            }
+            
+            Effect.Fade(loadName);
+        }
+    } 
+    
+    function starHover(fileLoc, commentId, theIndex) {
+    	for (var i = 0; i &lt;= theIndex; i++) {
+    		var theStar = "star" + commentId + "-" + i;
+    		document.images[theStar].src = fileLoc;
+    	}
+    }
+    
+    function thumbHover(fileLoc, commentId, theIndex) {
+   		var theStar = "star" + commentId + "-" + theIndex;
+		document.images[theStar].src = fileLoc;
+
+    }    
+  
+    function processRecommendStateChange() {
+        // alert("elem: " + document.getElementById(loadName));
+        var elem = document.getElementById("recommendLoad");
+        var recommender = document.getElementById("recommender");
+    
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                elem.innerHTML = "&lt;i&gt;Complete!&lt;/i&gt;";            
+                recommender.innerHTML = req.responseText;                
+            }
+            else {
+                elem.innerHTML = "&lt;b&gt;Error!&lt;/b&gt;";  
+            }
+            
+            recommender.disabled = false;
+        }
+        
+        Effect.Fade("recommendLoad");        
+    }
+    
+	function rateThumb(theCommentId, ratingValueId) {
+
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + ratingValueId;
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + ratingValueId  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }
+     
+
+    function rate(theCommentId) {
+        var selectName = "select" + theCommentId;
+        var selector = document.rateForm.elements[selectName];
+        var rateValue = selector.options[selector.selectedIndex].value;
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + rateValue;
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + rateValue  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }
+    
+    function radioRate(theCommentId) {
+        var selectName = "select" + theCommentId;
+        var selector = document.rateForm.elements[selectName];
+        var rateValue = "";
+        
+        for (var i = 0; i &lt; selector.length; i++) {
+        	if (selector[i].checked) {
+        		rateValue = selector[i].value;
+        		break;
+        	}
+        }
+        
+        var url = baseUrl + "ajaxRate.do";
+        var params = "id=" + theCommentId + "&amp;value=" + rateValue + "&amp;type=radio";
+        if (debug) {
+            alert("commentId" + commentId + ", value: " + rateValue  + "\nurl: " + url);
+        }
+        
+        var loadName = "rateLoad" + theCommentId;            
+        // alert("loadName: " + loadName);
+        var elem = document.getElementById(loadName);
+        // alert("elem: " + elem);
+        Element.show(elem);
+        elem.innerHTML = "&lt;I&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RATE", theCommentId, params);
+    }    
+    
+    function recommend(diaryId) {
+
+        var url = baseUrl + "ajaxRecommend.do";
+        var params = "id=" + diaryId;
+        
+        if (debug) {
+            alert("diaryId: " + diaryId);        
+            alert("url: " + url);        
+        }
+        
+        var recommender = document.getElementById("recommender");
+        recommender.disabled = true;
+        
+        var elem = document.getElementById("recommendLoad");
+        Element.show(elem);
+        elem.innerHTML = "&lt;br /&gt;&lt;i&gt;Processing...&lt;/i&gt;";
+        
+        retrieveURL(url, "RECOMMEND", diaryId, params);        
+    }
+    
+	function toggleEditor(id) {
+		var elm = document.getElementById(id);
+
+		if (tinyMCE.getInstanceById(id) == null)
+			tinyMCE.execCommand('mceAddControl', false, id);
+		else
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	} 
+	
+	function turnOnEditor(id) {
+		if (tinyMCE.getInstanceById(id) == null)
+			tinyMCE.execCommand('mceAddControl', false, id);	
+	}
+	
+	function turnOffEditor(id) {
+		if (id == "postCommentTextArea" &amp;&amp; !tinyMCE.getInstanceById(id)) {
+			id = "commentText";		
+		}
+		
+		// alert(id);
+
+		if (tinyMCE.getInstanceById(id) != null)
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	}	
+	
+	function setDiaryButtons(id) {
+		var selectedValue = id.options[id.selectedIndex].value;	
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			disableDiaryButtons(true);
+		}
+		else {		
+			disableDiaryButtons(false);		
+		}
+	}
+	
+	
+	function disableDiaryButtons(theValue) {
+		document.getElementById("bold1").disabled = theValue;
+		document.getElementById("italic1").disabled = theValue;
+		document.getElementById("quote1").disabled = theValue;
+		document.getElementById("bold2").disabled = theValue;
+		document.getElementById("italic2").disabled = theValue;
+		document.getElementById("quote2").disabled = theValue;	
+	}	
+	
+	function setCommentButtons(id) {
+		var selectedValue = id.options[id.selectedIndex].value;	
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			disableCommentButtons(true);
+		}
+		else {		
+			disableCommentButtons(false);		
+		}
+	}	
+	
+	function disableCommentButtons(theValue) {
+		document.getElementById("bold1").disabled = theValue;
+		document.getElementById("italic1").disabled = theValue;
+		document.getElementById("quote1").disabled = theValue;
+	}	
+
+	
+	function toggleDiaryEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		// alert(selectedValue);		
+		
+		setDiaryButtons(id);
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("editMainText");
+			turnOnEditor("editExtendedText");	
+		}
+		else {
+			turnOffEditor("editMainText");
+			turnOffEditor("editExtendedText");			
+
+		}
+	}   
+	
+	function toggleCommentEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		
+		setCommentButtons(id);	
+		
+		// alert(selectedValue);
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("postCommentTextArea");
+		}
+		else {
+		    // alert("before turn off");
+			turnOffEditor("postCommentTextArea");
+		}
+	} 
+	
+	function toggleQuickHitEditor(id) {
+		var selectedValue = id.options[id.selectedIndex].value;
+		
+		if (selectedValue == "WYSIWYG") { // which is WYSIWYG
+			turnOnEditor("quickHitText");
+		}
+		else {
+			turnOffEditor("quickHitText");
+		}
+	} 		
+
+	function addTags(textAreaId, startTag, endTag, content) {
+		
+		var textArea;
+		
+		if (document.forms['rateForm']) {
+			textArea = document.forms['rateForm'].elements[textAreaId];
+		}
+		else {
+			textArea = document.getElementById(textAreaId);
+		}
+		
+		if (typeof textArea.selectionStart != "undefined") {
+			textArea.focus();
+			var selStart = textArea.selectionStart;
+			var selEnd = textArea.selectionEnd;
+			var selText = textArea.value.substring(selStart, selEnd);
+			var scrlTop = textArea.scrollTop;
+			var scrlDown = textArea.value.length &lt;= selStart;
+			if (selText.indexOf(startTag) === 0 &amp;&amp; endTag == selText.substring(selText.length - endTag.length, selText.length)) {
+				textArea.value = textArea.value.substring(0, selStart) + selText.substring(startTag.length, selText.length - endTag.length) 
+					+ textArea.value.substring(selEnd, textArea.value.length);
+				textArea.selectionStart = selStart;
+				textArea.selectionEnd = selEnd - (startTag.length + endTag.length);
+				textArea.scrollTop = scrlTop;
+			} else {		
+				textArea.value = textArea.value.substring(0, selStart) + startTag + (content ? content : selText)
+					+ endTag + textArea.value.substring(selEnd, textArea.value.length);
+				textArea.selectionStart = selStart;
+				textArea.selectionEnd = selStart + startTag.length + (content ? content.length : selText.length) + endTag.length;
+				textArea.scrollTop = (scrlDown ? 10000000 : scrlTop);
+			}
+		} else if (document.selection) {
+			var range = document.selection.createRange();
+			if (range.parentElement() != textArea) {
+				var textRange = textArea.createTextRange();
+				textRange.moveStart('character', textArea.value.length);
+				textRange.collapse();
+				textRange.select();
+				range = document.selection.createRange();
+			}
+			textArea.focus();
+			if (range.text.indexOf(startTag) === 0 &amp;&amp; endTag == range.text.substring(range.text.length - endTag.length, range.text.length)) {
+				range.text = range.text.substring(startTag.length, range.text.length - endTag.length);
+			} else {
+				range.text = startTag + (content ? content : range.text) + endTag;
+			}
+		} else {
+			textArea.focus();
+			textArea.value = startTag + (content ? content : "") + endTag;
+			if (typeof textArea.scrollTop != "undefined") {
+				textArea.scrollTop = 10000000;
+			}
+		}
+	}
+	
+	
+	function addBoldTags(textAreaId) {
+		addTags(textAreaId, "&lt;b&gt;", "&lt;/b&gt;");
+		return false;
+	}
+	
+	function addItalicTags(textAreaId) {
+		addTags(textAreaId, "&lt;i&gt;", "&lt;/i&gt;");
+		return false;
+	}
+	
+	function addQuoteTags(textAreaId) {
+		addTags(textAreaId, "&lt;blockquote&gt;", "&lt;/blockquote&gt;");
+		return false;
+	}
+  </script>
+  <script src="/javascript/modules/qhcomments/qhcomments.js" type="text/javascript">
+  </script>
+  <script language="javascript" src="/javascript/effects.js" type="text/javascript">
+  </script>
+  <script language="Javascript">
+   &lt;!--
+var axel = Math.random() + "";
+var ord = axel * 1000000000000000000;
+//--&gt;
+  </script>
+  <script src="/javascript/modules/qhcomments/qhcomments.js" type="text/javascript">
+  </script>
+  <link href="/stylesheets/socialbuttons.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+        _gaq.push(['_setDomainName', 'none']);
+        _gaq.push(['_setAllowLinker', true]);
+        
+        _gaq.push(['t1._setAccount', 'UA-24612334-1']);
+        _gaq.push(['t1._trackPageview']);
+        
+        
+        _gaq.push(['t2._setAccount', 'UA-24079896-15']);
+        _gaq.push(['t2._trackPageview']);
+        
+
+        function track_ga(name, action, url) {
+        
+            _gaq.push(['t1._trackSocial', name, action, url]);
+        
+        
+            _gaq.push(['t2._trackSocial', name, action, url]);
+        
+        }
+  </script>
+ </head>
+ <body>
+  <div id="fb-root">
+  </div>
+  <script>
+   (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+&lt;/script&gt;
+&lt;center&gt;
+    &lt;div class="mainLayout"&gt;
+
+        
+            &lt;link rel="image_src" href="http://www.openleft.com/upload/logo.jpg" /&gt;
+&lt;div style="padding:15px 0px;" id="adblock"&gt;
+&lt;script language=JavaScript src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vj?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;pv="&gt;
+  </script>
+  <noscript>
+   <iframe frameborder="0" height="90" marginheight="0" marginwidth="0" noresize="" scrolling="No" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vh?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;pv=" width="728">
+    <a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/cc?z=csm">
+     <img border="0" height="90" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616324/0/vc?z=csm&amp;dim=616035&amp;kw=&amp;click=&amp;abr=$imginiframe&amp;pv=" width="728"/>
+    </a>
+   </iframe>
+  </noscript>
+  <div id="header">
+   <h1 id="pageTitle">
+    <a href="http://www.openleft.com">
+     Open Left
+    </a>
+   </h1>
+   <ul id="mainMenu">
+    <li>
+     <a href="http://www.openleft.com">
+      Home
+     </a>
+    </li>
+    <li>
+     <a href="http://www.openleft.com/showDiary.do?diaryId=21">
+      About &amp; Contact
+     </a>
+    </li>
+    <li>
+     <a href="http://www.openleft.com/showDiary.do?diaryId=18852" target="_blank">
+      HTML cheat sheet
+     </a>
+    </li>
+    <li>
+     <a href="/rss/rss2.xml">
+      RSS Feed
+     </a>
+    </li>
+    <li>
+     <a href="http://www.feedburner.com/fb/a/emailverifySubmit?feedId=1023104&amp;loc=en_US">
+      Subscribe for Email Updates
+     </a>
+    </li>
+   </ul>
+  </div>
+  <table class="mainTable">
+   <tr>
+    <td class="MAIN_BODY" valign="top">
+     <link href="http://openleft.com/upload/css/splashpage.css" rel="stylesheet" type="text/css"/>
+     <script language="Javascript" src="http://openleft.com/upload/js/splashpage.js" type="text/javascript">
+     </script>
+     <table cellpadding="0" cellspacing="0" class="social_buttons">
+      <tr valign="top">
+       <td class="fb btn">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" src="//www.facebook.com/plugins/like.php?locale=en_US&amp;href=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+&amp;send=false&amp;layout=button_count&amp;width=48&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:48px; height:21px;">
+        </iframe>
+       </td>
+       <td class="btn twitter">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" src="//platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+&amp;scount=none&amp;counturl=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+" style="width:60px; height:20px;">
+        </iframe>
+       </td>
+       <td class="btn google">
+        <g:plusone count="false" href="http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+" size="medium">
+        </g:plusone>
+       </td>
+      </tr>
+     </table>
+     <script language="Javascript">
+      document.cookie = "login_dest="+location.href+"; path=/";
+     </script>
+     <table width="100%">
+      <tr>
+       <td>
+        <h1 class="diaryTitle">
+         <a class="diaryTitle" href="/diary/8546/ ">
+          I Found My Gut Reason for Voting Obama
+         </a>
+        </h1>
+        <h2 class="author">
+         by:
+         <a href="/user/David Sirota">
+          David Sirota
+         </a>
+        </h2>
+        <h3 class="diaryTimestamp">
+         <i>
+          Thu Sep 25, 2008 at 20:31
+         </i>
+        </h3>
+        <br/>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <script language="Javascript" src="http://openleft.com/upload/js/sharelinks.js" type="text/javascript">
+        </script>
+        <script language="Javascript" type="text/javascript">
+         show_socialmedia_links('I Found My Gut Reason for Voting Obama', 'http://openleft.com/showDiary.do?diaryId=8546', true);
+        </script>
+        We all have our own reasons as to why we are going to vote whichever way we are going to vote. I've long had many reasons why I supported Obama in the Democratic primary contest with Hillary Clinton, and why I plan to cast my vote for him in November. My brain tells me he's far more progressive on most of the issues that I care about. But finally last week, I found my gut reason - the reason why I'm going to go into that voting booth and slam my vote through that ballot box with real umph: I'm voting for Barack Obama to reject the people and the views I met head on earlier this week in a debate with fringe-conservative radio host Dennis Prager.
+       </td>
+      </tr>
+      <tr>
+       <td class="theFlip">
+        <a href="/userDiary.do;jsessionid=6C21843118532D7F84F234E29B84446B?personId=1146">
+         David Sirota
+        </a>
+        ::
+        <a href="/showDiary.do;jsessionid=6C21843118532D7F84F234E29B84446B?diaryId=8546">
+         I Found My Gut Reason for Voting Obama
+        </a>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        The debate took place at a suburban high school in Denver in front of 1,500 people. These were almost all fans of Prager - I'd say the breakdown was 85%-15% Prager fans, to progressives. It was an almost uniformly white suburban crowd, and - judging by the giant SUVs and luxury cars in the parking lot - a wealthy one. At each and every turn when Prager slandered blacks, poor people, Muslims and liberals, the crowd went wild.
+        <p>
+         For example, Prager said race in America is as significant "as shoe size" and then blamed African Americans for a society still struggling with structural racism. He said blacks are victims of liberals who tell them that there's racism, when - according to Prager - there isn't. That's right, Prager insisted that African Americans are so stupid that they can be programmed by "liberals" to see a racism that he says doesn't exist. When he said this, the crowd went crazy with applause, and when I pointed out the self-absorbed paternalistic insult of an all white crowd assuming such mindless ignorance of an entire community, I was booed.
+        </p>
+        <p>
+         Prager styles himself as a biblical "scholar" and he flaunted his conservative interpretation of the Bible as proof that conservativism is morally just. When I cited food stamp cuts as an example of how conservatives don't really govern in any way that respects the Bible's words about helping the poor and sick, Prager laughed and said he never knew there was a Biblical passage on food stamps. Again, the crowd went crazy with celebration, and later, I got an email from one of his fans not taking issue with my point, but saying that it was unacceptable for me to make the point I made because Dennis Prager is a "biblical scholar" and apparently, that means no one can question him.
+        </p>
+        <p>
+         After I discussed the right questioning progressives' patriotism, Prager got mad and said there was no concrete examples of this happening - that, in fact, the right never questions the left's patriotism. Apparently, he forgot that the primary mantra of the right is to claim that those who want to end the war want to help Al Qaeda. And, of course, when we moved onto another topic, he was soon claiming the left "hates America" - apparently forgetting his insistence that conservatives never question progressives' patriotism.
+        </p>
+        <p>
+         Most of the time Prager would make an outlandish statement about what is - or is not - "moral" and I would refute his nonsense with empirical facts and data and then he'd counter by saying he doesn't care what the data or the facts say - that, in fact, citing data and facts is a bad thing. I've been getting email all week from some of the audience telling me that's the way it should be. As one lunatic wrote to me today, "you had a do a bunch of research to prove your side because you have no moral compass to guide your answers - you don't need 'back up' when you're acting morally." Indeed, hateful know-nothingism is alive and well in America.
+        </p>
+        <p>
+         I've felt sick to my stomach since the debate. I can't really get it out of my head, not because I think I did poorly (on the contrary, most of the objective observers who were there said I held my own), but because I'm nauseated by the number of selfish, hateful and ignorant people that - even in the face of an intensifying war on the middle class - don't care about anyone other than themselves, adamantly refuse to verify their beliefs with empirical facts on the principle that they don't need facts to know "what's right," and cannot see the world from any one else's perspective. You cannot even meet them on the supposedly "conservative" issues like civil liberties that we should all agree on - many conservatives today are blind authoritarian partisans, people who truly think it is outrageous to say America was misled into the Iraq War, and that that war has something to do with oil. They can only see the world from the gilded gates of their own wealthy white suburbia, and they self-righteously believe that privileged existence is the way every American lives - and if they don't, it's their fault for not trying harder.
+        </p>
+        <p>
+         So when I think about the presidential race, I'm going to be proudly voting for Barack Obama who, while I have a lot of concerns about him, does fundamentally reject the conservative world view that is destroying our country - and I mean that: these people are really, truly destroying our country and our communities. It's really hard not to hate them back as much as they hate so much of America. It's hard to take pity on them, as they and their ideology pillages this nation. And I am convinced these people will be casting their vote for John McCain either because they are racists, or because they believe McCain will make sure that they have to sacrifice not a damn thing for their country during this time of crisis. A McCain presidency will mean they can keep scapegoating others - blacks, the poor, "liberals," the media - for the problems their me-first ideology has created.
+        </p>
+        <p>
+         We cannot have another four years where the audience I met at this debate are allowed to run our country into the ground. The Era of Hate and Greed and Self-Centeredness and Ignorance has to end - and it has to end right now. Obama is an imperfect candidate - he's got some really bad people around him on economic issues, he's been timid at times, he seems too comfortable triangulating against mainstream progressive positions, and he even may vote for this horrific $700 billion bailout. But at a deep level, he represents a move away from mindlessness that I came face-to-face with this week, and that's really, really important.
+        </p>
+        <p>
+         Everytime I get disappointed with Barack, I will be thinking about who I met at this debate. It doesn't absolve him when he sells out - not in the least (and I do believe - unlike many partisans - that we can simultaneously pressure him and support him, that we can use both the carrot and stick, and not just not hurt him - but actually help him do the right thing AND be a better candidate). But it does give me an emphatic reason to support him when election day comes.
+        </p>
+       </td>
+      </tr>
+     </table>
+     <div align="center" style="padding:20px 0px;">
+      <script language="JavaScript" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vj?z=csm&amp;dim=616028&amp;kw=&amp;click=">
+      </script>
+      <noscript>
+       <iframe frameborder="0" height="250" marginheight="0" marginwidth="0" noresize="" scrolling="No" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vh?z=csm&amp;dim=616028&amp;kw=&amp;click=" width="300">
+        <a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/cc?z=csm">
+         <img border="0" height="250" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616267/0/vc?z=csm&amp;dim=616028&amp;kw=&amp;click=&amp;abr=$imginiframe" width="300"/>
+        </a>
+       </iframe>
+      </noscript>
+      <br/>
+      <a href="http://csmads.com">
+       <img border="" src="http://www.openleft.com/upload/csmads300x40.gif"/>
+      </a>
+     </div>
+     <table>
+      <tr>
+       <td>
+        Tags:
+        <a href="/tag/Strategery" rel="tag">
+         Strategery
+        </a>
+        ,
+                                          
+            (
+        <a href="/allTags.do;jsessionid=6C21843118532D7F84F234E29B84446B">
+         All Tags
+        </a>
+        )
+       </td>
+      </tr>
+     </table>
+     <table>
+      <tr>
+       <td valign="bottom">
+        <a href="showDiary.do?diaryId=8546&amp;view=print" target="_new">
+         Print Friendly View
+        </a>
+        <a href="showDiary.do?diaryId=8546&amp;view=print" target="_new">
+         <img border="0" src="/images/printer-icon.GIF"/>
+        </a>
+        <a href="/sendAsEmail.do;jsessionid=6C21843118532D7F84F234E29B84446B?diaryId=8546">
+         Send As Email
+        </a>
+        <a href="/sendAsEmail.do;jsessionid=6C21843118532D7F84F234E29B84446B?diaryId=8546">
+         <img border="0" src="/images/email-icon.GIF"/>
+        </a>
+       </td>
+      </tr>
+     </table>
+     <table cellpadding="0" cellspacing="0" class="social_buttons">
+      <tr valign="top">
+       <td class="fb btn">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" src="//www.facebook.com/plugins/like.php?locale=en_US&amp;href=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+&amp;send=false&amp;layout=button_count&amp;width=48&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:48px; height:21px;">
+        </iframe>
+       </td>
+       <td class="btn twitter">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" src="//platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+&amp;scount=none&amp;counturl=http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+" style="width:60px; height:20px;">
+        </iframe>
+       </td>
+       <td class="btn google">
+        <g:plusone count="false" href="http%3A%2F%2Fwww.openleft.com%2Fdiary%2F8546%2F+" size="medium">
+        </g:plusone>
+       </td>
+      </tr>
+     </table>
+     <br/>
+     <div class="titleBar">
+      <a href="/diary/8546/ ">
+       I Found My Gut Reason for Voting Obama
+      </a>
+      |
+      <b>
+       45
+      </b>
+      comments
+     </div>
+     <form name="rateForm" onsubmit="figureOut(this.form); return false;">
+      <div id="previewcomment0" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle0">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText0">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton0" onclick="setButtonState('post')" onfocus="setButtonState('post')" tabindex="1" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="soapbloxError" id="errorcomment0" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <a name="p0">
+      </a>
+      <div>
+       <div id="postcomment0">
+       </div>
+      </div>
+      <a name="p109985">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="109985">
+        </a>
+        <b>
+         I hear ya, David
+        </b>
+        <span id="rating109985">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=109985">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        The emotion I associate with supporting Obama isn't hope -- it's schadenfreude (well, maybe I hope for schadenfreude, so it comes to the same thing in the end). I expect that I'll get more pleasure gloating over the McCain concession speech than I will from Obama's victory speech. Sorta like Casey/Santorum in '06.
+        <p>
+         Also, I still think there's a small possibility that Obama's organization will turn on him once he's in office. We don't need Congress to support us, or us to support Congress. We need them to fear us. The reason the more clued-in Dems, like Stark and Kaptur, have so little power is that there are no consequences to the vast majority of people in DC for blowing them off. If they feared that we'd destabilize our society absent reforms, we'd get them to act. Obama's campaign organization is big enough to do this, and might be motivated to do so. I don't expect it to treat him as an opponent (which he will be, simply by virtue of occupying the White House), but they might.
+        </p>
+        <p>
+         Final note: when Jean-Marie Le Pen made it to the run-off against Chirac in 2002, Chirac got about 82% of the vote. Now, Chirac is essentially the French version of a hack, and Le Pen isn't a moron like Palin or an aging warmonger like McCain, but he's plenty dangerous, and the French turned him out on his ass. Even with the disaster of the modern GOP, however, there's no way in hell McCain/Palin pull less than, say, 43% of the vote, and that's an absolute best-case scenario for the Dems.
+        </p>
+        <p>
+         Which means well over 40,000,000 Americans are going to vote for McCain and Palin to lead this country. Unbefuckinlievable.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Pesto">
+          Pesto
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=109985">
+          Thu Sep 25, 2008 at 19:47:43 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad109985">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment109985" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle109985">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText109985">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton109985" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment109985" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment109985">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110014">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110014">
+        </a>
+        <b>
+         those numbers are sobering
+        </b>
+        <span id="rating110014">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110014">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        But if we could pull of 3 or 4 successful consecutive white house terms, with a long demonstration of relatively effective governance, we should be able to get that "nutball percentage" well down into the low 30s.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Crab Nebula">
+          Crab Nebula
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110014">
+          Thu Sep 25, 2008 at 20:14:00 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#109985">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110014">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110014" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110014">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110014">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110014" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110014" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110014">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110020">
+      </a>
+      <div class="commentLevel2">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110020">
+        </a>
+        <b>
+         Your protasis assumes your apodasis
+        </b>
+        <span id="rating110020">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110020">
+          4.00 / 3
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        (I might be getting those mixed up -- been a long time since I studied Greek!).
+        <p>
+         Anyway, the point is, how do we get "3 or 4 successful consecutive White House terms" in our current political state? I think that would be the
+         <i>
+          result
+         </i>
+         of a cultural/political transformation, not the cause.
+        </p>
+        <p>
+         I personally think that there's no way to make these changes from within the political system. We need to threaten the system from without -- as happened during the Great Depression, through general strikes, radical organizations of the unemployed, and regional political movements like Longism and Sinclair's 1934 California gubernatorial campaign, or as happened in France in 1968 -- to make them engage in fundamental change. I'm not at all optimistic that Americans will do this, but I can't see any other means to redistribute power in our society.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Pesto">
+          Pesto
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110020">
+          Thu Sep 25, 2008 at 20:24:44 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110014">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110020">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel3" id="previewcomment110020" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110020">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110020">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110020" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110020" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110020">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110127">
+      </a>
+      <div class="commentLevel3">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110127">
+        </a>
+        <b>
+         it could happen with a charismatic politician
+        </b>
+        <span id="rating110127">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110127">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        and well run campaigns. With a little cooperation from events.
+        <p>
+         I don't think the Depression qualifies as threatening the system from without - that's 'within'.  Those kinds of events help. And they do happen. "High capitalism" of the late 20 and early 21st century is over now, and the aftermath helps us.
+        </p>
+        <p>
+         The US has changed before from within...with nudges from without. There won't be any revolution, I don't believe in that stuff. But we may be disagreeing on labels here.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Crab Nebula">
+          Crab Nebula
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110127">
+          Thu Sep 25, 2008 at 22:57:29 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110020">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110127">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel4" id="previewcomment110127" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110127">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110127">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110127" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110127" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110127">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110159">
+      </a>
+      <div class="commentLevel3">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110159">
+        </a>
+        <b>
+         you're absolutely right, but...
+        </b>
+        <span id="rating110159">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110159">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        America doesn't do fast revolution right now. Right now, it does slow moving 30 year long revolution with a combination of political maneuvering and exactly the kind of social movement work you're talking about. In order to get to the point where the kinds of stuff you're talking about would be seen as anything other than reasons for the imposition of Giuliani time (i.e. fascist reaction), there needs to be a slow chipping away of power structurally to allow the kinds of insittutions and ideas and forms of conversation we need to proliferate.
+        <p>
+         However, I think you're right about the importance of criss moments and this is one of them! How often do you have an unpopular war, a global financial crisis, and a political realignment? So this is where we start sanity, and if enough of us keep enough of our principles, when we get to poewr, we can have a revolution over time - and maybe make some really deep and lasting changes in the social, legal, or thought structure of the way things work in the u.s.
+        </p>
+        <p>
+        </p>
+        <blockquote>
+         Anyway, the point is, how do we get "3 or 4 successful consecutive White House terms" in our current political state? I think that would be the result of a cultural/political transformation, not the cause.
+        </blockquote>
+        <p>
+         The two things happen hand in hand in the U.S., not one before the other, but simultaneously (i.e. Paul's analogy of a
+         <a href="http://www.google.com/search?q=passive+revolution&amp;sourceid=navclient-ff&amp;ie=UTF-8&amp;rlz=1B3GGGL_enIN233IN233">
+          Gramscian passive revolution is the right model
+         </a>
+         , I think, as long we don't get swept up in believing it's the only kind). There are time lags and whatnot, but we can't create the terrain for a social movement - but we can take advantage of the fact that there's one there for us RIGHT NOW. and globally! Just have to keep in mind always the balancing of power and principle.
+        </p>
+        <p>
+         It's a good time to be alive, contrary to all signs, and I'm not saying that just because the Mets won last night :)
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/dr anonymous">
+          dr anonymous
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110159">
+          Fri Sep 26, 2008 at 01:28:06 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110020">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110159">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel4" id="previewcomment110159" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110159">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110159">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110159" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110159" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110159">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110022">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110022">
+        </a>
+        <b>
+         Nixon/Agnew got 43% of the popular vote in 1968
+        </b>
+        <span id="rating110022">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110022">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        and 60% in 1972.
+        <p>
+         Let's not kid ourselves that lack of character judgement in the populace at large is anything new.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/RapsodiaStellare">
+          RapsodiaStellare
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110022">
+          Thu Sep 25, 2008 at 20:25:27 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#109985">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110022">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110022" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110022">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110022">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110022" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110022" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110022">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110043">
+      </a>
+      <div class="commentLevel2">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110043">
+        </a>
+        <b>
+         1968
+        </b>
+        <span id="rating110043">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110043">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        And I'm not even going to check what percentage Wallace got. I'm depressed enough as it is.
+        <p>
+         Yeah, this is nothing new, as far as I'm concerned. This is really who we are as a society.
+        </p>
+        <p>
+        </p>
+        <blockquote>
+         "Nixon will be re-elected by a huge majority of Americans who feel he is not only more honest and more trustworthy than George McGovern, but also more likely to end the war in Vietnam. The polls also indicate that Nixon will get a comfortable majority of the Youth Vote. And that he might carry all fifty states... This may be the year when we finally come face to face with ourselves; finally just lay back and say it - that we are really just a nation of 220 million used car salesmen with all the money we need to buy guns, and no qualms at all about killing anybody else in the world who tries to make us uncomfortable. The tragedy of all this is that George McGovern, for all his mistakes... understands what a fantastic monument to all the best instincts of the human race this country might have been, if we could have kept it out of the hands of greedy little hustlers like Richard Nixon. McGovern made some stupid mistakes, but in context they seem almost frivolous compared to the things Richard Nixon does every day of his life, on purpose... Jesus! Where will it end? How low do you have to stoop in this country to be President?"
+         <p>
+          Hunter S. Thompson,
+          <i>
+           Fear and Loathing on the Campaign Trail '72
+          </i>
+          ,
+         </p>
+        </blockquote>
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Pesto">
+          Pesto
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110043">
+          Thu Sep 25, 2008 at 20:48:45 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110022">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110043">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel3" id="previewcomment110043" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110043">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110043">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110043" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110043" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110043">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p109987">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="109987">
+        </a>
+        <b>
+         Excellent Post
+        </b>
+        <span id="rating109987">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=109987">
+          4.00 / 5
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        You are so right about this. This combination of willful ignorance, arrogant certitude and condescension towards any who sare to disagree is sickening. Every word these ignorant wingnuts spout reeks of hypocrisy, bitterness, bigotry and self-loathing. And the irony is that they get off on their abusive conduct towards the rest of us. These folks really have some subconscious sado-masochism thing going.
+        <p>
+         Thanks for crystallizing what so many of us have been feeling.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/MT from CC">
+          MT from CC
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=109987">
+          Thu Sep 25, 2008 at 19:48:31 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad109987">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment109987" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle109987">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText109987">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton109987" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment109987" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment109987">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110047">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110047">
+        </a>
+        <b>
+         Agree
+        </b>
+        <span id="rating110047">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110047">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Well said, David.
+        <p>
+         Yes, this...matters tremendously:
+        </p>
+        <p>
+        </p>
+        <blockquote>
+         But at a deep level, he represents a move away from mindlessness that I came face-to-face with this week, and that's really, really important.
+        </blockquote>
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/NCDemAmy">
+          NCDemAmy
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110047">
+          Thu Sep 25, 2008 at 20:53:36 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#109987">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110047">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110047" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110047">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110047">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110047" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110047" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110047">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p109993">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="109993">
+        </a>
+        <b>
+         Great post
+        </b>
+        <span id="rating109993">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=109993">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        let's get helping Obama elected.
+        <br/>
+        Keep writing posts like this(you are a great writer), these are great reasons to be voting for Obama.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/JPcaster">
+          JPcaster
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=109993">
+          Thu Sep 25, 2008 at 19:53:58 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad109993">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment109993" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle109993">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText109993">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton109993" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment109993" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment109993">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p109998">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="109998">
+        </a>
+        <b>
+         keeping the Republicans out is a damn good reason
+        </b>
+        <span id="rating109998">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=109998">
+          4.00 / 4
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        to vote for almost any Democrat.
+        <p>
+         I'm sorry you had to find yourself in front of a conservative audience. I'm used to debating conservative people. You honestly have to back up and either accept their first principles, or debate them.
+        </p>
+        <p>
+         I prefer to go after conservatives by:
+        </p>
+        <p>
+         - Showing that the market isn't good for everything. We don't put our kids on the black market, so that parenting is sorted by the highest bidder. We don't let the market decide if people want drugs or not. That's because
+         <b>
+          we intervene in the market for moral reasons.
+         </b>
+         Once they accept that, then we can start to talk about moral objectives to achieve in the market.
+        </p>
+        <p>
+         - Showing that fiscal conservatives aren't conservative. Democrats balance budgets. We shouldn't raise the taxes of working Americans, but "borrow and spend" has destroyed this economy more than "tax and spend" ever did.
+        </p>
+        <p>
+         - Appealing to traditional values like family, and how much external pressure is put on families by bad economic situations. Democrats are pro-family because we raise the minimum wage and want to expand health care. (Did you know that medical bills are a common cause of bankruptcy in America?) Obama is pro-family because he'll take the tax pressure off the middle class, while McCain does virtually nothing.
+        </p>
+        <p>
+         - Tackling racism is almost impossible, and infuriating. But if you can stomach it, you can talk about equal opportunity: do you honestly believe that a kid growing up in an inner city slum has the same opportunities as Bush's kids? Yeah, I'd love to put two loving, well-educated, stable parents in every single household, and add a highly supportive extended family nearby. But some parents just don't have the tools. That's why our public school system is so important.
+        </p>
+        <p>
+         You can sometimes debate conservatives if you accept their principles, and show how conservative politicians fail their own principles. But tarting from a progressive (e.g.: rational) worldview makes it literally impossible to find any common ground, and win any argument.
+        </p>
+        <p>
+         In situations like that, try to ignore the partisans and reach out to the middle.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/danthrax">
+          danthrax
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=109998">
+          Thu Sep 25, 2008 at 19:56:00 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad109998">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment109998" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle109998">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText109998">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton109998" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment109998" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment109998">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110000">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110000">
+        </a>
+        <b>
+         I've been hearing similar sentiments
+        </b>
+        <span id="rating110000">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110000">
+          4.00 / 6
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        with increasing frequency lately.
+        <p>
+         People are just sick and tired of the irrational, seething bile spewing from the right.
+        </p>
+        <p>
+         And as much as the MSM likes to pretend that it all equals out (I've had people try to convince me that Arianna Huffington is simply the left's Ann Coulter. gah.), I think that a lot of people see through it to the pure, unadulterated hatred that drives so much of conservative thought these days (and I use the term thought lightly).
+        </p>
+        <p>
+         My parents were the typical fiscally conservative, socially liberal Republicans right up until about 2003, and my mom sounded downright weary the other day after watching some cable show where the Republican commentator basically issued one snide non sequitur after another in lieu of actual discussion. The snark, the lying, the racial and religious divisiveness and homophobia, it all just about drives her crazy. And she and my dad are both fired up about Obama this year.
+        </p>
+        <p>
+         I bet they're not the only former Republicans who feel that way.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/HS">
+          HS
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110000">
+          Thu Sep 25, 2008 at 19:57:13 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110000">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110000" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110000">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110000">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110000" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110000" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110000">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110010">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110010">
+        </a>
+        <b>
+         What took you so long?
+        </b>
+        <span id="rating110010">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110010">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Honestly, David, I admire your work, but I'm really surprised it took you so long to see things this way, and that you seemingly didn't know about these types of bigoted and proudly ignorant anti-intellectual knee jerk "conservatives." Fortunately, they are shrinking as a percentage of the larger population.
+        <br/>
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Crab Nebula">
+          Crab Nebula
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110010">
+          Thu Sep 25, 2008 at 20:10:56 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110010">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110010" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110010">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110010">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110010" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110010" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110010">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110025">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110025">
+        </a>
+        <b>
+         from the heart
+        </b>
+        <span id="rating110025">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110025">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        your post comes from the heart and speaks to my heart. It is easy to hate people in the heat of the moment but they are in it like a football season .. join a team, cheer it on, demonize the opponent. It is not the people I want to hate, it is the ideology and the behavior. They are good people in other ways like any group of people there are good and bad apples.
+        <p>
+         The self justifying solipsism is so destructive, as you say .. it is the seed of mob rule, fanaticism, anti science, anti reason. Democracy can not survive blind fanaticism and it creeps into every nook of our government and life more every day. These people would launch nukewar because they believe it will make Jesus come .. we need a national culture that just says no to haters.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/T Maysle">
+          T Maysle
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110025">
+          Thu Sep 25, 2008 at 20:29:49 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110025">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110025" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110025">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110025">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110025" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110025" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110025">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110056">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110056">
+        </a>
+        <b>
+         no, I want to hate them
+        </b>
+        <span id="rating110056">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110056">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        And I do. And I'll dance on their political graves on Nov. 4. They'll rise again like freaking vampires, but I'll hate them forever. Soulless, uncaring, unserious wastes of flesh.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Weeferdog">
+          Weeferdog
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110056">
+          Thu Sep 25, 2008 at 21:06:05 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110025">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110056">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110056" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110056">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110056">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110056" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110056" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110056">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110067">
+      </a>
+      <div class="commentLevel2">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110067">
+        </a>
+        <b>
+         I hate their politics and their agenda
+        </b>
+        <span id="rating110067">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110067">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        But I want to do good things for them individually. Like give them healthcare, and make sure that their kids have good schools and colleges.
+        <p>
+         Of course, I also want to tax the hell out of their SUV's and McMansions, so they don't appreciate all the good things I want to do for them... ;-)
+        </p>
+        <p>
+         But politically? I'm with you - dancing on their vampire graves on Nov. 4. Let's bring stakes, shall we?
+         <br/>
+         <br/>
+         <i>
+          War is Peace; Freedom is Slavery; Ignorance is Strength; McCain/Palin 2008
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/cheesehead">
+          cheesehead
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110067">
+          Thu Sep 25, 2008 at 21:20:22 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110056">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110067">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel3" id="previewcomment110067" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110067">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110067">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110067" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110067" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110067">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110030">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110030">
+        </a>
+        <b>
+         You can't debate that group
+        </b>
+        <span id="rating110030">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110030">
+          4.00 / 5
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        David, the fact that you tried is a tribute to your inherent optimism.
+        <p>
+         That group is hopeless.
+         <i>
+          <b>
+           They cannot be reasoned with, they can only be defeated.
+          </b>
+         </i>
+         They are not conservative, they are anti-intellectual and they are fascist. You summed it up quite eloquently:
+        </p>
+        <p>
+        </p>
+        <blockquote>
+         people that ... don't care about anyone other than themselves, adamantly refuse to verify their beliefs with empirical facts on the principle that they don't need facts to know "what's right," and cannot see the world from any one else's perspective. ...(they) are blind authoritarian partisans. They can only see the world from the gilded gates of their own wealthy white suburbia, and they self-righteously believe that privileged existence is the way every American lives
+        </blockquote>
+        <p>
+         These are the Limbaughs, the Coulters, the Hannities, the DeLays and worse... they don't believe in this country, they believe in themselves, in their power, and would trade our proud history and Constitution for a fascist dictatorship in a moment if they thought they could.
+        </p>
+        <p>
+         My hat's off to you for trying, though. You are a better, braver man than I. Don't feel sick about it, hold your head high.
+         <br/>
+         <br/>
+         <i>
+          War is Peace; Freedom is Slavery; Ignorance is Strength; McCain/Palin 2008
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/cheesehead">
+          cheesehead
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110030">
+          Thu Sep 25, 2008 at 20:33:51 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110030">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110030" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110030">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110030">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110030" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110030" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110030">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110031">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110031">
+        </a>
+        <b>
+         I'm glad you woke up
+        </b>
+        <span id="rating110031">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110031">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I'm voting for Barack Obama because I believe in this country. I believe that once elected, you and your folks can keep on him. You're supposed to. That's what democracy entails - active citizenry.
+        <p>
+         As I watched that Klan rally known as the GOP Convention, there wasn't any doubt in my mind about me redoubling my efforts for Obama.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/rikyrah">
+          rikyrah
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110031">
+          Thu Sep 25, 2008 at 20:33:54 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110031">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110031" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110031">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110031">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110031" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110031" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110031">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110032">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110032">
+        </a>
+        <b>
+         Good on you David
+        </b>
+        <span id="rating110032">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110032">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        This is an example of instead of people looking out for the Universe of other people, they only look out for the MEniverse of themselves.
+        <br/>
+        <br/>
+        <i>
+         It's Electric! TheOverheadWire.com
+        </i>
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/The Overhead Wire">
+          The Overhead Wire
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110032">
+          Thu Sep 25, 2008 at 20:36:27 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110032">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110032" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110032">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110032">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110032" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110032" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110032">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110034">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110034">
+        </a>
+        <b>
+         Living Well is the Best Revenge
+        </b>
+        <span id="rating110034">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110034">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        have you heard the REM song,
+        <a href="http://www.youtube.com/watch?v=f9DoM2W0YDQ&amp;feature=related">
+         here
+        </a>
+        ? seems like the right one for your mood:)
+        <p>
+         Seriously, when you come across hate, it is jarring, especially when it comes from someone who's higher on the totem pole, rather than lower. My guess is it's important not to let it affect you too much, and it's important not to judge these people as bad, or irredeemable. I think Randy Pausch, in his last lecture, made a really good point:
+        </p>
+        <p>
+         <a href="http://download.srv.cs.cmu.edu/~pausch/Randy/pauschlastlecturetranscript.pdf">
+          http://download.srv.cs.cmu.edu...
+         </a>
+        </p>
+        <p>
+         ". . .The other thing that I learned from Jon Snoddy - I could do easily an hour long talk just on what have I learned from Jon Snoddy. One of the things he told me was that wait long enough and people will surprise and impress you. He said, when you're pissed off at somebody and you're angry at them, you just haven't given them enough time. Just give them a little more time and they'll almost always impress you. And that really stuck with me. I think he's absolutely right on that one. . ."
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/roublen">
+          roublen
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110034">
+          Thu Sep 25, 2008 at 20:37:51 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110034">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110034" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110034">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110034">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110034" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110034" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110034">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110077">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110077">
+        </a>
+        <b>
+         or the album
+        </b>
+        <span id="rating110077">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110077">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        "Living well is the Best Revenge" is also the name of a
+        <a href="http://www.amazon.com/Living-Well-Best-Revenge-Midtown/dp/B0000657ZI/ref=sr_1_1?ie=UTF8&amp;s=music&amp;qid=1222395632&amp;sr=1-1">
+         pretty good album
+        </a>
+        by the New Jersey band Midtown.
+        <p>
+         I have no answers as to how to talk to racists, though I would advise if you have to try, doing it in front of 1000+ may not be the best venue... Ultimately the only way one can change their worldview is if they acknowledge their insecurities and actually question their own beliefs, which you cannot do for them. I can remember being a teenager and having to confront my own prejudices against gays, but it's a hell of a lot easier for a teenager to ask themselves those questions than it is for a 40 year old. If there is any hope, it is that there are (rare) individuals who do successfully grow past racism and other isms. I am thinking of the time I was flipping channels and saw a former white supremacist on Oprah (or some daytime show) who changed his life and went on to lecture against racism.
+         <br/>
+         <br/>
+         <i>
+          "I think the economic logic behind dumping a load of toxic waste in the lowest wage country is impeccable and we should face up to that."
+          <br/>
+          -
+          <a href="http://www.whirledbank.org/ourwords/summers.html">
+           Lawrence Summers
+          </a>
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/kbuck">
+          kbuck
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110077">
+          Thu Sep 25, 2008 at 21:32:54 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110034">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110077">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110077" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110077">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110077">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110077" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110077" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110077">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110147">
+      </a>
+      <div class="commentLevel2">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110147">
+        </a>
+        <b>
+         I'll never forget how I shut down a racist wingnut
+        </b>
+        <span id="rating110147">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110147">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        several years ago who was spouting off on liberals and gays and abortion and what a great president Bush was and how he was so strong on national security, by asking the question that invariably shuts them up: "So, where's Osama?". He was literally speechless.
+        <p>
+         I suspect that for most wingnuts, there are such questions that will stump them to the point of shutting them up--or making them so angry and unhinged that even their friends get scared. I don't do it often, because some of these people are so insane that you don't know what they're liable to do (i.e. they like guns), but every now and then I just love to do this to a wingnut, and see how it twists them into a pretzel.
+         <br/>
+         <br/>
+         <i>
+          "Those who stand for nothing fall for anything...Mankind are forever destined to be the dupes of bold &amp; cunning imposture" -- Alexander Hamilton
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/kovie">
+          kovie
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110147">
+          Thu Sep 25, 2008 at 23:47:56 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110077">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110147">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel3" id="previewcomment110147" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110147">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110147">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110147" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110147" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110147">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110161">
+      </a>
+      <div class="commentLevel3">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110161">
+        </a>
+        <b>
+         those are the easy ones :)
+        </b>
+        <span id="rating110161">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110161">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        i had fun with the log cabin republican who apparently hadn't run into someone queer who could talk about trillion dollar tax cuts before.
+        <p>
+         But I grew more from talking to a White dude on facebook poker who said "the people with the money make all the rules" and said a couple of mildly racist or xenophobic things, but at the end of the day was receptive to what I was saying.
+        </p>
+        <p>
+         One step at a time x 1 million people = 1 million steps at a time. :)
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/dr anonymous">
+          dr anonymous
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110161">
+          Fri Sep 26, 2008 at 01:30:54 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110147">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110161">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel4" id="previewcomment110161" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110161">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110161">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110161" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110161" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110161">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110166">
+      </a>
+      <div class="commentLevel4">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110166">
+        </a>
+        <b>
+         Yeah, I know
+        </b>
+        <span id="rating110166">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110166">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        But even if I can't turn them around, it's nice to at least stump or frustrate them sometimes. Nothing more satisfying in such situations than deflating their balloons or ruining their mood.
+        <p>
+         They are, of course, all trolls. Some just happen to have money and power. Still trolls.
+         <br/>
+         <br/>
+         <i>
+          "Those who stand for nothing fall for anything...Mankind are forever destined to be the dupes of bold &amp; cunning imposture" -- Alexander Hamilton
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/kovie">
+          kovie
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110166">
+          Fri Sep 26, 2008 at 02:01:59 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110161">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110166">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel5" id="previewcomment110166" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110166">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110166">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110166" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110166" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110166">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110046">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110046">
+        </a>
+        <b>
+         I don't know if this will make you feel any better, David
+        </b>
+        <span id="rating110046">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110046">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I looked online to see if I could find audio or video of the debate. I couldn't find anything, but I did find comments about it at this Prager fan site:
+        <p>
+         <a href="http://dennisprager.meetup.com/2/calendar/8463054/">
+          http://dennisprager.meetup.com...
+         </a>
+        </p>
+        <p>
+         Even though it doesn't appear that you convinced any of the die-hards, at least many of them respected the job you did, even if they didn't agree with you. Very few "that stupid liberal got his butt kicked" comments. So maybe there's hope for us yet? One can only hope.
+        </p>
+        <p>
+         P.S. If you do have audio or video of the debate, please post it! Thanks.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/rickd24">
+          rickd24
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110046">
+          Thu Sep 25, 2008 at 20:52:13 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110046">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110046" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110046">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110046">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110046" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110046" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110046">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110191">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110191">
+        </a>
+        <b>
+         "two people capable of aptly presenting their side of the topic"
+        </b>
+        <span id="rating110191">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110191">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Uh, well, "Art and Ginnie" may be a nice couple, judging by their comment where they also say "More of this kind of dialog is needed for people to make an INFORMED decision about the future of their country". However, after this "discussion", where one person represented his side with facts, while the other simply laughed them off, without bringing up anything of real substance, it is disheartening to see nice people come to the conclusion above. It's a sign of how low the political discourse has already sunk when people think that reinforcing prejudices is an "apt" way of presenting one's side. That's embarassing.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Gray">
+          Gray
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110191">
+          Fri Sep 26, 2008 at 04:16:40 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110046">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110191">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110191" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110191">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110191">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110191" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110191" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110191">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110193">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110193">
+        </a>
+        <b>
+         Judging from the comments of those "Prager groupies"...
+        </b>
+        <span id="rating110193">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110193">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        this was a fight that David couldn't win. Those morons would have laughed good ole Mose off the stage, no matter if he would have presented the ten commandments carved in stone to them or not. Those people can't be reached by any facts anymore. They are the diehard 30% of the poulation who can't be convinced, but only defeated.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Gray">
+          Gray
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110193">
+          Fri Sep 26, 2008 at 04:26:09 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110046">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110193">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110193" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110193">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110193">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110193" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110193" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110193">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110051">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110051">
+        </a>
+        <b>
+         David, no offense, but --
+        </b>
+        <span id="rating110051">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110051">
+          0.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        It took THIS? How old are you again? You just realized these people exist?
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Weeferdog">
+          Weeferdog
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110051">
+          Thu Sep 25, 2008 at 21:04:08 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110051">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110051" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110051">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110051">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110051" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110051" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110051">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110060">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110060">
+        </a>
+        <b>
+         You have my full empathy
+        </b>
+        <span id="rating110060">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110060">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I have lots of gut reasons to vote Obama, but yes, this is one of them. My gut NEED to vote for Obama increases everytime I'm confronted with naked racism. The entire point of my creating "The Obama Project" was that his candidacy is a lightning rod for these issues - suddenly they are all out in the open, and everyone gets to see who's who. In some ways, it is very scary, as an African American. I go through this time wondering - is there going to be a race war if he's elected, or conversely, if he's not? And in either case, I don't believe it would be blacks starting said race war. I fear white racism if he gets elected and I fear white triumphant racism if he gets defeated.
+        <p>
+         Between the story of the Obama likeness shown hanging, the Obama Waffles, and the stories cited in my post here:
+         <a href="http://obamaproject.windonwater.net/?p=154,">
+          http://obamaproject.windonwate...
+         </a>
+         I become determined to see Obama win.
+        </p>
+        <p>
+         So, David, this post covers a multitude of faults. ;) Good luck, and thanks for sharing this.
+        </p>
+        <p>
+         QT
+         <br/>
+         <br/>
+         <i>
+         </i>
+        </p>
+        <p>
+         Visit the
+         <a href="http://obamaproject.windonwater.net">
+          Obama Project
+         </a>
+         <br/>
+         <br/>
+         <br/>
+        </p>
+        <p>
+         <a href="http://www.windonwater.net/">
+          WindOnWater.net
+         </a>
+         <br/>
+         <br/>
+         <br/>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/QueenTiye">
+          QueenTiye
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110060">
+          Thu Sep 25, 2008 at 21:09:16 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110060">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110060" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110060">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110060">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110060" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110060" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110060">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110062">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110062">
+        </a>
+        <b>
+         Was it surprising to you?
+        </b>
+        <span id="rating110062">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110062">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Because I have to put up with this BS every day, from "Could you really bring yourself to vote for a
+        <i>
+         black man
+        </i>
+        ?" to "I don't want a nigger in the White House, and that's that," both said without a lick of shame, and accepted as perfectly respectable political opinions not deserving of instant lambasting by the people standing nearby (not me, of course).
+        <p>
+         I suppose the people we surround ourselves with greatly impact our optimism, but this is the supreme reason I have felt utterly hopeless about the political and intellectual state of this country. Here in Kentucky and Ohio, it's ugly like the debate you attended on a daily basis. Having said that, you don't seem like one who shies away from people who have differing views than you, so I'm surprised that you were so shocked by what you saw there. For many of us, it's what we come up against every single day. But maybe ignorance should never cease to astound.
+         <br/>
+         <br/>
+         <i>
+          You owe it to yourself to listen to This American Life's
+          <a href="http://thislife.org/Radio_Episode.aspx?episode=365">
+           fantastic and common-sense explanation of the economic crisis
+          </a>
+          .
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/whathaveyou">
+          whathaveyou
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110062">
+          Thu Sep 25, 2008 at 21:15:54 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110062">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110062" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110062">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110062">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110062" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110062" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110062">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110144">
+      </a>
+      <div class="commentLevel1">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110144">
+        </a>
+        <b>
+         What really bothers these people, I suspect
+        </b>
+        <span id="rating110144">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110144">
+          4.00 / 3
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        is the thought that there are "N------" who are smarter and better than them--and they know it. People tend to hate people who remind them of what abject failures they are. Which these people are. Perhaps not financially--lots of rich racists, of course--but as human beings, and professionally. The idea that a black man is smarter, more successful and more powerful than them just kills them. Jackie Robinson lived this every day of his life, and had to just take it.
+        <p>
+         One of the lesser joys of Obama winning is knowing that these people will wake up every morning knowing that a "N-----" is their president, and they can't do a damn thing about it. To them, this will be a living hell. And a well-earned one.
+         <br/>
+         <br/>
+         <i>
+          "Those who stand for nothing fall for anything...Mankind are forever destined to be the dupes of bold &amp; cunning imposture" -- Alexander Hamilton
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/kovie">
+          kovie
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110144">
+          Thu Sep 25, 2008 at 23:39:35 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        [
+        <a href="#110062">
+         Parent
+        </a>
+        ]
+        <!-- do reply link -->
+        <span id="rateLoad110144">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel2" id="previewcomment110144" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110144">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110144">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110144" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110144" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110144">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110119">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110119">
+        </a>
+        <b>
+         Welcome To My Nightmare!
+        </b>
+        <span id="rating110119">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110119">
+          4.00 / 3
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I LIVE in that crap. My home town is in Barr's old congressional district, used to be in Larry McDonald's district for those of you old enough to remember that true American Fascist original. One of my uncles was on McDonald's advisory committee. Hell I grew up seeing J B Stoner on Atlanta television every election cycle running for president, DURING Lester Maddox's governorship. I've been there-done that!
+        <p>
+         I just noticed tonight during my walk that downtown was full of new SUV's, the 5 mpg types, all of which carried McCain-Palin stickers.
+        </p>
+        <p>
+         I've heard every variation on the "I ain't voting for no n****r!" theme there is. And, I've heard them mostly from "good, God fearing Baptists". Churches with clusters of McCain-Palin signs. Pastors handing out Dobson provided "voter's guides".
+        </p>
+        <p>
+         Those of you in other parts of the country are incredibly lucky. Those of us in the Deep South live this every day.
+        </p>
+        <p>
+         So, David, welcome to the real world.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Silence Doesnogood">
+          Silence Doesnogood
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110119">
+          Thu Sep 25, 2008 at 22:46:57 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110119">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110119" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110119">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110119">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110119" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110119" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110119">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110136">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110136">
+        </a>
+        <b>
+         A thought for you, David.
+        </b>
+        <span id="rating110136">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110136">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        <i>
+         The brave make a place at their table for Evil. For only first-hand knowledge of evil can transform meditation into action.
+        </i>
+        -
+        <a href="http://www.poetrymagazine.com/archives/2003/Feb03/hinsey.htm">
+         Ellen Hinsey
+        </a>
+        <p>
+         On the other hand, one can fault a deficient education system. Like Rousseau, I believe that human beings are inherently good. It's the conditions that surround them that eventually lead them astray.
+        </p>
+        <p>
+         Still, you witnessed something quite awful and I guess it will be some time before you are able to overcome the nausea. I wish you well.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Gene">
+          Gene
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110136">
+          Thu Sep 25, 2008 at 23:23:14 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110136">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110136" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110136">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110136">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110136" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110136" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110136">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110139">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110139">
+        </a>
+        <b>
+         Stupid + selfish + racist + crazy + cowardly + lazy + amoral = GOP
+        </b>
+        <span id="rating110139">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110139">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Not all Repubs are all of these things. Many are just one or two or three. But that's all it takes to be a Repub. It's some combination of cultural and ethnic tribalism, nuttiness, selfishness, fear, anger, hatred, paranoia, stupidity, ignorance, laziness, cowardice, and a basic inability and/or unwillingness to be a complete human being, especially in the moral and mental sense of the term, that causes people to become, or remain, Repubs. These people are not like us. They have no souls, no consciences, no humanity. All human form, no human substance.
+        <p>
+         And yeah, of course Obama's far from perfect. But he's no Republican. Not even close.
+         <br/>
+         <br/>
+         <i>
+          "Those who stand for nothing fall for anything...Mankind are forever destined to be the dupes of bold &amp; cunning imposture" -- Alexander Hamilton
+         </i>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/kovie">
+          kovie
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110139">
+          Thu Sep 25, 2008 at 23:28:25 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110139">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110139" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110139">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110139">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110139" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110139" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110139">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110149">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110149">
+        </a>
+        <b>
+         I've met only a few.
+        </b>
+        <span id="rating110149">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110149">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I couldn't believe that my fellow college students would send me hate mail for writing an ENTIRELY positive letter to the editor about Obama in the university newspaper. That has never happened to me before. I was astonished. One seemed to border on threatening, and I was close to going to the police (I knew his name!). I couldn't believe that my fellow students would rip Obama fliers out of my hands and throw them at me in anger. Obama's appearance on the scene has really galvanized their insanity. They know that we are winning.
+        <br/>
+        <br/>
+        <i>
+         <a href="http://www.msnbc.msn.com/id/24844889">
+          John McCain
+         </a>
+         lets lobbyists shape his economic policy
+        </i>
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/cilerder86">
+          cilerder86
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110149">
+          Thu Sep 25, 2008 at 23:55:25 PM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110149">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110149" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110149">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110149">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110149" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110149" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110149">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110177">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110177">
+        </a>
+        <b>
+         I've felt sick to my stomach since the debate.
+        </b>
+        <span id="rating110177">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110177">
+          4.00 / 2
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Take a shower. Seriously, I know what you mean. I have pretty much disassociated myself from any and all known Republican friends and family. I can't. I think the party is mean, stupid and greedy and that anybody that supports them must be at least one or all three. In other words, not my cup of tea.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/dkmich">
+          dkmich
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110177">
+          Fri Sep 26, 2008 at 03:50:26 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110177">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110177" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110177">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110177">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110177" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110177" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110177">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110184">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110184">
+        </a>
+        <b>
+         the only winning move
+        </b>
+        <span id="rating110184">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110184">
+          0.00 / 0
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        is not to play - when the stakes are 85% against you. Good job at exposing the horrible, pseudo-christian (without any compassion), hateful mindset of those diehard rethuglican morons. Certainly a revealing experience, even though more of the same could turn even the most stable person insane.
+        <p>
+         Really, what's to be gained by discussing these assholes when it's totally unlikely to change even a single mind? Didn't you feel like wasting your time there???
+        </p>
+        <p>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Gray">
+          Gray
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110184">
+          Fri Sep 26, 2008 at 04:04:04 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110184">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110184" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110184">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110184">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110184" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110184" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110184">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110195">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110195">
+        </a>
+        <b>
+         Being a fan of Don Quixote...
+        </b>
+        <span id="rating110195">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110195">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        I have to congratulate you for waging this impossible quest, David. Nothing could probably be gained by doing it, but at least you did the ethically right thing by trying to reach out to the diehard haters. This gives you some kind of moral superiority over the rethuglicans with their closed townhall meetings full of preselected fans. And even if it was a totally futile gesture, at least it gave you some insightful experience. Kudos!
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/Gray">
+          Gray
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110195">
+          Fri Sep 26, 2008 at 04:31:30 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110195">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110195" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110195">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110195">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110195" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110195" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110195">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110199">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110199">
+        </a>
+        <b>
+         And knowing is half of the battle
+        </b>
+        <span id="rating110199">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110199">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        These are the kinds of people I grew up with, who my parents still are, and that have been allowed far too much influence in politics given their relatively small percentage of the population.
+        <p>
+         If politics was merely a debate between conservatives like George Will or Andrew Sullivan and you, I would love to get into every detail and every nuance as conservative and progressive philosophies are pulled apart and examined and vigorously debated.
+        </p>
+        <p>
+         But the real argument is between these anti-thought, unblinking, mean people whose razor-thin Bush victories have given them enough power to feel that their opinions are in the majority and should be backed up with force. We have to strip them of their power. We have to expose their fear-mongering to the warm light of reality. This is the battle that most of us feel that we're facing. It
+         <em>
+          is
+         </em>
+         a gut-level visceral disgust. This is where the passion comes from that sometimes lands on you when you discuss the race from an arms length. It's not your (true) observations that get people riled up but the clinical analysis when most of us feel like we're repeatedly getting punched in the face.
+        </p>
+        <p>
+         I deeply appreciate hearing your account of this event and taking one for the team.
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/indythink">
+          indythink
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110199">
+          Fri Sep 26, 2008 at 06:46:29 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110199">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110199" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110199">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110199">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110199" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110199" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110199">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110238">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110238">
+        </a>
+        <b>
+         To be a bit shorter about it:
+        </b>
+        <span id="rating110238">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110238">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        The animating impulse of the modern conservative movement is, at its base. fascism.
+        <br/>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/illissius">
+          illissius
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110238">
+          Fri Sep 26, 2008 at 09:50:10 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110238">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110238" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110238">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110238">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110238" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110238" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110238">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <a name="p110283">
+      </a>
+      <div class="commentLevel0">
+       <div class="commentBar">
+       </div>
+       <div>
+        <a name="110283">
+        </a>
+        <b>
+         Gut'ter choices
+        </b>
+        <span id="rating110283">
+         (
+         <a href="/viewRating.do;jsessionid=6C21843118532D7F84F234E29B84446B?rateCommentId=110283">
+          4.00 / 1
+         </a>
+         )
+        </span>
+       </div>
+       <div>
+        Setting aside the wisdom of attempting any civil communication with such individuals and audiences, I am disappointed that exposure to them generates a move to the center (similar to the tendencies of the Democratic party) based on the genuine fear of the alternative. It is one thing to use a lesser evil argument and take your cues from those facing the worst of the greater evil i.e., if minorities, women, the poor call out to us to vote for Obama just to save them from the GOP, it is preferable to heed that call in the absence of strong counter-argument.
+        <p>
+         But today, when Huffington Post is reporting that once again, just as in war funding and FISA, Obama is working against progressive protest on the bailout (by suggesting that neither bankruptcy reform nor his own larger economic plans should be a part of the bailout), we should not fool ourselves that any purpose is served by voting for Obama other than avoidance of the GOP. Even if the preliminary report of Obama's position is untrue or incomplete, we have enough evidence of the ideas that motivate the man and the actions he will most likely carry out once in power.
+        </p>
+        <p>
+         While an awareness of the extremes of the other side might cause us to don a pragmatic hat and vote for the Democrats, let us not confuse that with the actions that are necessary to counter those extremes. Almost none of those will be accomplished through this vote. Since the 1970s, left movement has been 2 steps back (with every backlash GOP success) and 1 step forward (when GOP excesses lead to the installation of a more moderate Democratic administration and Congress). As disparities and [negative] growth in real wages, among other things, reflect, the net result has not been progress.
+         <br/>
+         <br/>
+        </p>
+        <hr align="left" width="50%"/>
+       </div>
+       <div>
+        <i>
+         by:
+         <a href="/user/ravi">
+          ravi
+         </a>
+         @
+         <a href="/showComment.do;jsessionid=6C21843118532D7F84F234E29B84446B?commentId=110283">
+          Fri Sep 26, 2008 at 11:08:01 AM CDT
+         </a>
+        </i>
+       </div>
+       <!-- RATINGS -->
+       <div>
+        <!-- do reply link -->
+        <span id="rateLoad110283">
+        </span>
+       </div>
+      </div>
+      <div class="commentLevel1" id="previewcomment110283" style="display: none;">
+       <div class="commentBar">
+       </div>
+       <div class="ajaxPreviewCommentTitle" id="previewTitle110283">
+       </div>
+       <div class="ajaxPreviewCommentText" id="previewCommentText110283">
+       </div>
+       <hr align="left" width="50%"/>
+       <div class="ajaxPreviewCommentAuthor">
+        by: you @ soon
+       </div>
+       <div class="ajaxPreviewPostBar">
+        <p>
+         <b>
+          To post this comment click here:
+          <input id="postbutton110283" onclick="setButtonState('post')" onfocus="setButtonState('post')" type="submit" value="Post"/>
+         </b>
+        </p>
+        <p>
+         Otherwise click cancel.
+        </p>
+       </div>
+      </div>
+      <div class="errorcomment" id="errorcomment110283" style="display: none;">
+       <li>
+        You must enter a subject for your comment
+       </li>
+      </div>
+      <div id="postcomment110283">
+      </div>
+      <!-- END MINIMAL COMMENT MODE -->
+      <input name="commentId" type="hidden"/>
+      <input name="replyParentCommentId" type="hidden"/>
+      <input name="submitType" type="hidden"/>
+      <input name="replyDiaryId" type="hidden"/>
+      <input name="diaryId" type="hidden"/>
+     </form>
+     <div class="titleBar">
+      <a href="/diary/8546/ ">
+       I Found My Gut Reason for Voting Obama
+      </a>
+      |
+      <b>
+       45
+      </b>
+      comments
+     </div>
+    </td>
+    <td class="RIGHT_SIDE" valign="top">
+     <span class="rightii">
+      <a href="http://www.openleft.com/">
+       <b>
+        USER MENU
+       </b>
+      </a>
+     </span>
+     <div class="smallText" style="border-bottom: 1px dashed #EFE0E2;">
+      <table width="100%">
+       <tr>
+        <td class="objectContent">
+         <ul class="sidebarlist">
+          <p>
+           <b>
+            New here?
+           </b>
+           <br/>
+           <a href="/join.do;jsessionid=6C21843118532D7F84F234E29B84446B">
+            Make a New Account
+           </a>
+          </p>
+          <p>
+           <b>
+            Have an account? Log in!
+           </b>
+          </p>
+          <p>
+          </p>
+         </ul>
+         <form action="/logonSubmit.do;jsessionid=6C21843118532D7F84F234E29B84446B" method="post" name="logonForm">
+          Username:
+          <br/>
+          <input name="username" type="text" value=""/>
+          <br/>
+          Password:
+          <br/>
+          <input name="password" type="password" value=""/>
+          <br/>
+          <input type="submit" value="Submit"/>
+         </form>
+         <p>
+          <a href="/emailPassword.do;jsessionid=6C21843118532D7F84F234E29B84446B">
+           Forget your username or password?
+          </a>
+         </p>
+         <p>
+         </p>
+         <ul class="sidebarlist">
+          <li>
+           <a href="https://secure.openleft.com/page/contribute/openleft">
+            Support This Site
+           </a>
+          </li>
+          <li>
+           <a href="http://web.blogads.com/adspotsfolder/ba_adspotsfolder_revision_create_shortcut?persistent_uid=1c93ae3a2228fcc1b397b5795366e38f">
+            Advertise Here
+           </a>
+          </li>
+          <!--&lt;li&gt;&lt;a href="#"&gt;Make Us Your Homepage&lt;/a&gt;&lt;/li&gt;-->
+         </ul>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <span class="rightii">
+      <i>
+       Open Left Campaigns
+      </i>
+     </span>
+     <p>
+     </p>
+     <ul class="sidebarlist smallText">
+      <li style="padding-bottom:10px;">
+       <a href="http://www.actblue.com/page/bd2010">
+        Better Democrats 2010
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=Living+Liberally">
+        Living Liberally
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=net+neutrality">
+        Net Neutrality
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=The%20Progressive%20Revolution">
+        The Progressive Revolution
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag/No%20On%201%20Maine">
+        Protect Maine Equality
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag/whip%20count">
+        Public Option Whip Count
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag/whip%20count">
+        Senate Forecast 2010
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://therealspecter2010.com/real">
+        Arlen Specter
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.actblue.com/page/olbd">
+        Better Democrats 2008
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=BlogPAC">
+        BlogPac
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.actblue.com/page/bluemajority">
+        Blue Majority
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://openleft.com/tag.do?tag=Bush+Dogs">
+        Bush Dogs
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=Buy%20America">
+        Buy America
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://openleft.com/tag.do?tag=MD-04">
+        Donna Edwards for Congress
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://openleft.com/tag.do?tag=MD-04">
+        Get FISA Right
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=House%20forecast">
+        House Forecast 2008
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=legislation%20project">
+        Legislation Project
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=nomination+at+a+glance">
+        Nomination At A Glance
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=residual+forces">
+        No Residual Forces in Iraq
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=personal%20paid%20media">
+        Personal Paid Media
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=Presidential%20Forecast">
+        Presidential Forecast 2008
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=Responsible%20plan">
+        Responsible Plan to End the War
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=SEO">
+        Searching for John McCain
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag/Senate%202008">
+        Senate Forecast 2008
+       </a>
+      </li>
+      <li style="padding-bottom:10px;">
+       <a href="http://www.openleft.com/tag.do?tag=Use%20it%202008">
+        Use It Or Lose It 2008
+       </a>
+      </li>
+     </ul>
+     <script language="JavaScript" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vj?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;pv=">
+     </script>
+     <noscript>
+      <iframe frameborder="0" height="600" marginheight="0" marginwidth="0" noresize="" scrolling="No" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vh?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;pv=" width="160">
+       <a href="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/cc?z=csm">
+        <img border="0" height="600" src="http://csm.rotator.hadj7.adjuggler.net/servlet/ajrotator/616325/0/vc?z=csm&amp;dim=616025&amp;kw=&amp;click=&amp;abr=$imginiframe&amp;pv=" width="160"/>
+       </a>
+      </iframe>
+     </noscript>
+     <!-- search.jsp -->
+     <form action="/search.do;jsessionid=6C21843118532D7F84F234E29B84446B" method="post" name="searchForm">
+      <div class="smallText" style="border-bottom: 1px dashed #EFE0E2; border-top: 1px dashed #EFE0E2; padding-top:8px;">
+       <span class="rightii">
+        SEARCH
+       </span>
+       <p>
+        <select name="searchTypeId" style="width:70px;">
+         <option value="2">
+          Diaries
+         </option>
+         <option value="1">
+          Comments
+         </option>
+        </select>
+        <input name="searchWords" size="10" type="text"/>
+        <input type="submit" value="Search"/>
+       </p>
+       <p>
+        <a href="/search.do;jsessionid=6C21843118532D7F84F234E29B84446B">
+         Advanced Search
+        </a>
+       </p>
+      </div>
+     </form>
+    </td>
+    <td class="LEFT_SIDE" valign="top">
+     <div class="rightcol">
+      <div style="border-bottom: 1px dashed rgb(239, 224, 226);">
+       <span class="rightii">
+        <a href="http://www.openleft.com/viewQuickHits.do">
+         <b>
+          QUICK HITS
+         </b>
+        </a>
+        <a href="/quickHits.do?feed=rss">
+         <img border="0" height="12" src="/images/feed-icon.jpg;jsessionid=6C21843118532D7F84F234E29B84446B" width="12"/>
+        </a>
+       </span>
+       <ul class="sidebarlist smallText">
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17239">
+          Where are you going? What links have you got? Whats next? What's left?
+         </a>
+         (HousesofProgress) 48 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17238">
+          Nicholas Kristof: Mr. Mubarak's goons carrying wooden clubs with nails embedded in them
+         </a>
+         (HousesofProgress) 6 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17237">
+          Forget "Red" or "Blue" Virginia, How About "Brown" Virginia?
+         </a>
+         (lowkell) 3 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17236">
+          Amy Goodman interviews Noam Chomsky: Egypt now.
+         </a>
+         (HousesofProgress) 1 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17235">
+          An old man in tears of pride, chanting "Egyptians finally have worth &amp; dignity."" #Tahrir
+         </a>
+         (HousesofProgress) 0 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17234">
+          Mubarek's net worth estimated at $4070 billion
+         </a>
+         (jeffweinberg) 7 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17233">
+          How the Senate resolution on Egyptian democracy died.
+         </a>
+         (Emocrat) 10 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17232">
+          Kristoff tweets about the round-up of journalists Human rights workers
+         </a>
+         (HousesofProgress) 1 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17231">
+          tSenator Patrick Leahy: We Will Cut Off Aid If Mubarak Does Not Step Down
+         </a>
+         (HousesofProgress) 9 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17230">
+          The Daily Show with Kristen Schaal skewers the GOP's exclusion of only "rapish.".
+         </a>
+         (LibWingofLibWing) 3 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17229">
+          Wallace Shawn: Are You Smarter Than Thomas Jefferson?
+         </a>
+         (Paul Rosenberg) 6 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17228">
+          Gallup Helps Explain Egyptian/Tunisia Uprisings
+         </a>
+         (david mizner) 2 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17227">
+          Shell makes $2,208,480 (1.6m) an hour, [Clue on gas prices]
+         </a>
+         (HousesofProgress) 5 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17226">
+          Food costs at record levels, likely to go higher
+         </a>
+         (doubledown) 3 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17225">
+          More Teachers Being Replaced By Technology
+         </a>
+         (jeffbinnc) 9 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17224">
+          Speek to Tweet
+         </a>
+         (Mark Matson) 0 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17223">
+          Virginia Moves to Extend Autism Benefits to Families
+         </a>
+         (lowkell) 1 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17222">
+          Howard Dean shellacks Newt Gingerich on immigration
+         </a>
+         (Jonathan Smucker) 1 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17221">
+          Aljazeera English has NOT been taken offline...
+         </a>
+         (Paul Rosenberg) 6 comment(s)
+        </li>
+        <li style="padding-bottom: 10px;">
+         <a href="/viewQuickHits.do#17220">
+          Israeli Politics In Lockstep with McCarthyism
+         </a>
+         (shergald) 3 comment(s)
+        </li>
+        <li>
+         (
+         <a href="/viewQuickHits.do;jsessionid=6C21843118532D7F84F234E29B84446B">
+          view all recent
+         </a>
+         )
+        </li>
+       </ul>
+       <br/>
+      </div>
+     </div>
+     <img src="http://openleft.com/upload/DFA%20button.JPG"/>
+     <span class="rightii">
+      STATE BLOGS
+     </span>
+     <ul class="sidebarlist">
+      <a href="http://www.leftinalabama.com/" title="">
+       Alabama
+      </a>
+      <br/>
+      <a href="http://www.divasblueoasis.com/" title="">
+       Alaska
+      </a>
+      <br/>
+      <a href="http://www.aznetroots.com/" title="">
+       Arizona
+      </a>
+      <br/>
+      <a href="http://bluearkansasblog.com/" title="">
+       Arkansas
+      </a>
+      <br/>
+      <a href="http://www.calitics.com/" title="">
+       California
+      </a>
+      <br/>
+      <a href="http://www.squarestate.net/" title="">
+       Colorado
+      </a>
+      <br/>
+      <a href="http://www.myleftnutmeg.com/" title="">
+       Connecticut
+      </a>
+      <br/>
+      <a href="http://www.delawareliberal.net/" title="">
+       Delaware
+      </a>
+      <br/>
+      <a href="http://www.flapolitics.com/" title="">
+       Florida
+      </a>
+      <br/>
+      <a href="http://www.tondeestavern.com/" title="">
+       Georgia
+      </a>
+      <br/>
+      <a href="http://www.43rdstateblues.com/" title="">
+       Idaho
+      </a>
+      <br/>
+      <a href="http://www.prairiestateblue.com/" title="">
+       Illinois
+      </a>
+      <br/>
+      <a href="http://www.blueindiana.net/" title="">
+       Indiana
+      </a>
+      <br/>
+      <a href="http://www.bleedingheartland.com/" title="">
+       Iowa
+      </a>
+      <br/>
+      <a href="http://forwardkansas.com/" title="">
+       Kansas
+      </a>
+      <br/>
+      <a href="http://www.kansasfreepress.com/" title="">
+       Kansas
+      </a>
+      <br/>
+      <a href="http://www.dailykingfish.com/" title="">
+       Louisiana
+      </a>
+      <br/>
+      <a href="http://www.dirigoblue.com/" title="">
+       Maine
+      </a>
+      <br/>
+      <a href="http://www.freestatepolitics.us/" title="">
+       Maryland
+      </a>
+      <br/>
+      <a href="http://www.bluemassgroup.com" title="">
+       Massachusetts
+      </a>
+      <br/>
+      <a href="http://www.michiganliberal.com" title="ML">
+       Michigan
+      </a>
+      <br/>
+      <a href="http://www.mnprogressiveproject.com/" title="">
+       Minnesota
+      </a>
+      <br/>
+      <a href="http://blog.showmeprogress.com/" title="">
+       Missouri
+      </a>
+      <br/>
+      <a href="http://www.firedupmissouri.com/" title="">
+       Missouri
+      </a>
+      <br/>
+      <a href="http://www.leftinthewest.com/" title="">
+       Montana
+      </a>
+      <br/>
+      <a href="http://www.newnebraska.net/" title="">
+       Nebraska
+      </a>
+      <br/>
+      <a href="http://nenetroots.com/" title="">
+       Nebraska
+      </a>
+      <br/>
+      <a href="http://www.bluehampshire.com" title="">
+       New Hampshire
+      </a>
+      <br/>
+      <a href="http://www.bluejersey.com" title="">
+       New Jersey
+      </a>
+      <br/>
+      <a href="http://www.nmfbihop.com/" title="">
+       New Mexico
+      </a>
+      <br/>
+      <a href="http://www.dailygotham.com/" title="">
+       New York
+      </a>
+      <br/>
+      <a href="http://www.thealbanyproject.com/" title="">
+       New York
+      </a>
+      <br/>
+      <a href="http://www.bluenc.com/" title="">
+       North Carolina
+      </a>
+      <br/>
+      <a href="http://www.northdecoder.com/" title="">
+       North Dakota
+      </a>
+      <br/>
+      <a href="http://www.buckeyestateblog.com/" title="">
+       Ohio
+      </a>
+      <br/>
+      <a href="http://www.ohiodailyblog.com/" title="">
+       Ohio
+      </a>
+      <br/>
+      <a href="http://www.blueoklahoma.org/" title="">
+       Oklahoma
+      </a>
+      <br/>
+      <a href="http://www.loadedorygun.net/" title="">
+       Oregon
+      </a>
+      <br/>
+      <a href="http://www.pennsylvaniaprogressive.com/" title="">
+       Pennsylvania
+      </a>
+      <br/>
+      <a href="http://www.rifuture.org/" title="">
+       Rhode Island
+      </a>
+      <br/>
+      <a href="http://www.indigojournal.com/" title="">
+       South Carolina
+      </a>
+      <br/>
+      <a href="http://www.tennviews.com/" title="">
+       Tennessee
+      </a>
+      <br/>
+      <a href="http://www.burntorangereport.com/" title="">
+       Texas
+      </a>
+      <br/>
+      <a href="http://www.texaskaos.com/" title="">
+       Texas
+      </a>
+      <br/>
+      <a href="http://www.wasatchwatcher.com/" title="">
+       Utah
+      </a>
+      <br/>
+      <a href="http://www.greenmountaindaily.com/" title="">
+       Vermont
+      </a>
+      <br/>
+      <a href="http://www.bluecommonwealth.com/" title="">
+       Virginia
+      </a>
+      <br/>
+      <a href="http://www.washblog.com/" title="">
+       Washington
+      </a>
+      <br/>
+      <a href="http://www.wvablue.com/" title="">
+       West Virginia
+      </a>
+      <br/>
+      <a href="http://www.uppitywis.org/" title="">
+       Wisconsin
+      </a>
+     </ul>
+    </td>
+   </tr>
+  </table>
+  <div align="center" class="footer">
+   <p style="clear:both">
+    <a href="/">
+     Home
+    </a>
+    |
+    <a href="/rss/rss2.xml">
+     RSS/XML Feed
+    </a>
+    |
+    <a href="http://www.openleft.com/join.do">
+     Register
+    </a>
+    |
+    <a href="/showDiary.do?diaryId=21">
+     Contact
+    </a>
+   </p>
+   <div style="float:left">
+     OpenLeft 2007-2010, Powered by
+    <a href="http://www.soapblox.net">
+     SoapBlox
+    </a>
+   </div>
+   <!-- Site Meter -->
+   <script src="
+http://s38.sitemeter.com/js/counter.js?site=s38photar" type="text/javascript">
+   </script>
+   <noscript>
+    <a href="http://s38.sitemeter.com/stats.asp?site=s38photar" target="_top">
+     <img alt="Site
+Meter" border="0" src="http://s38.sitemeter.com/meter.asp?site=s38photar"/>
+    </a>
+   </noscript>
+   <!-- Copyright (c)2006 Site Meter -->
+   <div style="float:right; padding-top:34px;">
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+     _uacct = "UA-2203653-1";
+urchinTracker();
+    </script>
+   </div>
+  </div>
+  <!-- Contenture.com Micropayments -->
+  <script type="text/javascript">
+   var ctrdomain = location.protocol == "https:" ? "https://secure." : "http://t.";
+document.write(unescape("%3Cscript src='" + ctrdomain + "contenture.com/t.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <a href="http://contenture.com/" title="micropayments microtransactions freemium">
+   <script type="text/javascript">
+    if( typeof( _ctr ) != "object" ) {
+    var ctr_blocked = 1;
+    var _ctr={init:function(){},is_user:function(){return false;},is_authorized:function(){return false;},priority_content:function(){},filter:function(){},hide_ads:function(){}};
+  }
+  &lt;!-- All customizations MUST go between this line and the "init" line below. --&gt;
+  
+  _ctr.init( '34249', 'cdb1' );
+   </script>
+  </a>
+  <!-- End Contenture -->
+  <table width="100%">
+   <tr>
+    <td align="right">
+     <!-- Start of StatCounter Code -->
+     <script language="javascript" type="text/javascript">
+      var sc_project=1767529; 
+var sc_invisible=1; 
+var sc_partition=16; 
+var sc_security="859e170d";
+     </script>
+     <script language="javascript" src="http://www.statcounter.com/counter/counter.js" type="text/javascript">
+     </script>
+     <noscript>
+      <a href="http://www.statcounter.com/" target="_blank">
+       <img alt="free hit counter javascript" border="0" src="http://c17.statcounter.com/counter.php?sc_project=1767529&amp;java=0&amp;security=859e170d&amp;invisible=1"/>
+      </a>
+     </noscript>
+     <!-- End of StatCounter Code -->
+     Powered by:
+     <a href="http://www.soapblox.net">
+      SoapBlox
+     </a>
+    </td>
+   </tr>
+  </table>
+  <div id="socialPopup" style="display: none; z-index: 1000;">
+   <table cellpadding="5" cellspacing="0">
+    <tr valign="top">
+     <td>
+      <a class="more_delicious" href="javascript:void(0);" onclick="javascript:more_delicious();">
+      </a>
+     </td>
+     <td>
+      <a class="more_reddit" href="javascript:void(0)" onclick="javascript:more_reddit();">
+      </a>
+     </td>
+    </tr>
+    <tr valign="top">
+     <td>
+      <a class="more_digg" href="javascript:void(0);" onclick="javascript:more_digg();">
+      </a>
+     </td>
+     <td>
+      <a class="more_furl" href="javascript:void(0);" onclick="javascript:more_furl();">
+      </a>
+     </td>
+    </tr>
+    <tr valign="top">
+     <td colspan="2">
+      <a class="more_stumbleupon" href="javascript:void(0);" onclick="javascript:more_stumbleupon();">
+      </a>
+     </td>
+    </tr>
+   </table>
+  </div>
+  <script src="http://connect.facebook.net/en_US/all.js#appId=272790849411337&amp;xfbml=1" type="text/javascript">
+  </script>
+  <script src="http://platform.linkedin.com/in.js" type="text/javascript">
+  </script>
+  <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+  </script>
+  <script src="/javascript/ga_social_tracking.js" type="text/javascript">
+  </script>
+  <script>
+   var local_url;
+
+    jQuery(document).ready(function () {
+        jQuery(".google iframe").width('62px');
+        
+        _ga.trackSocial(null, 't1');
+        
+        
+        _ga.trackSocial(null, 't2');
+        
+
+
+        if (/chrome/.test(navigator.userAgent.toLowerCase())) {
+            jQuery('iframe').each(function() {
+                var url = jQuery(this).attr("src");
+                var result = url.search(/youtube/i);
+                if (result != -1) {
+                    result = url.indexOf('wmode=');
+                    if (result == -1) {
+                        result = url.indexOf('?');
+                        if (result != -1) {
+                            jQuery(this).attr("src", url + "&amp;wmode=transparent");
+                        } else {
+                            jQuery(this).attr("src", url + "?wmode=transparent");
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    function showSocialPopup(t, event, url) {
+        local_url = url;
+        t.after(jQuery("#socialPopup"));
+        jQuery("#socialPopup").show();
+        if (jQuery.browser.msie) {
+            jQuery("#socialPopup").css("right", "-62px");
+            jQuery("#socialPopup").bgiframe();
+        }
+        event.cancelBubble = true;
+        if (event.stopPropagation) event.stopPropagation();
+        return false;
+    }
+
+    jQuery(document).click(
+            function () {
+                jQuery("#socialPopup").hide();
+            }
+    );
+
+    function more_delicious() {
+        track_ga('delicious', 'share', encodeURIComponent(local_url));
+        window.open('http://www.delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url=' + encodeURIComponent(local_url) + '&amp;title=' + encodeURIComponent(document.title), 'delicious', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_reddit() {
+        track_ga('reddit', 'share', encodeURIComponent(local_url));
+        window.open('http://ru.reddit.com/submit?url=' + encodeURIComponent(local_url), 'reddit', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_digg() {
+        track_ga('digg', 'share', encodeURIComponent(local_url));
+        window.open('http://digg.com/submit?url=' + encodeURIComponent(local_url), 'digg', 'toolbar=no,width=550,height=550');
+        return false;
+    }
+
+    function more_furl() {
+        track_ga('furl', 'share', encodeURIComponent(local_url));
+        window.open('http://www.furl.net/storeIt.jsp?u=' + encodeURIComponent(local_url), 'furl', 'toolbar=no');
+        return false;
+    }
+
+    function more_stumbleupon() {
+        window.open('http://www.stumbleupon.com/submit?url=' + encodeURIComponent(local_url), 'stumbleupon', 'toolbar=no');
+        return false;
+    }
+  </script>
+ </body>
+</html>

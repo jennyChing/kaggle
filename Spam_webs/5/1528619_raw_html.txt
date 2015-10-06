@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="https://d38ofaepfaaflh.cloudfront.net/static/css/25/css_bootstrap.css" rel="stylesheet"/>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]&gt;
+		&lt;script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"&gt;&lt;/script&gt;
+		&lt;script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <title>
+   Why RAID is (usually) a Terrible Idea - Puget Custom Computers
+  </title>
+  <meta content="17290084" property="twitter:account_id"/>
+  <meta content="Jon Bach" name="AUTHOR"/>
+  <link href="https://plus.google.com/+JonBach79?rel=author" rel="author" title="Jon Bach Biography"/>
+  <meta content="build, your, own, computer, system, computers, systems, pc, custom, built, laptop, laptops, server, servers, mini, pcs" name="keywords"/>
+  <meta content="As president of Puget Custom Computers, I get a unique perspective on computer products and technology.  Our company specializes in selling high performance custom computers, and that naturally brings up the question of RAID often.  There is an overwhelming opinion out there that if you have the money and want a blazing fast and stable computer, that you should put your hard drives in RAID.   We have known for years that this perception is just flat out wrong, but the problem is that the idea is so widely accepted that it is nearly impossible to convince our customers otherwise.  In fact, if we try too hard to talk them out of it, we end up losing the sale!   Should we be selling configurations that we know are flawed, for the sake of making the sale?   We think the answer comes in the form of transparency and education!  This article is just the latest effort in educating the public about RAID." name="description"/>
+  <meta content="15 days" name="revisit-after"/>
+  <meta content="General" name="rating"/>
+  <meta content="Global" name="distribution"/>
+  <meta content="index,follow" name="robots"/>
+  <meta content="Why RAID is (usually) a Terrible Idea" property="og:title"/>
+  <meta content="article" property="og:type"/>
+  <meta content="https://www.pugetsystems.com/labs/articles/Why-RAID-is-usually-a-Terrible-Idea-29/" property="og:url"/>
+  <meta content="https://www.pugetsystems.com/gfx/logo_square.jpg" property="og:image"/>
+  <meta content="Puget Systems" property="og:site_name"/>
+  <meta content="695926160,503154705,42901903" property="fb:admins"/>
+  <meta content="info@pugetsystems.com" property="og:email"/>
+  <meta content="425-458-0273" property="og:phone_number"/>
+  <meta content="425-484-6208" property="og:fax_number"/>
+  <meta content="47.331704" property="og:latitude"/>
+  <meta content="-122.250951" property="og:longitude"/>
+  <meta content="2707 West Valley Hwy N" property="og:street-address"/>
+  <meta content="Auburn" property="og:locality"/>
+  <meta content="WA" property="og:region"/>
+  <meta content="98001" property="og:postal-code"/>
+  <meta content="USA" property="og:country-name"/>
+  <meta content="As president of Puget Custom Computers, I get a unique perspective on computer products and technology.  Our company specializes in selling high performance custom computers, and that naturally brings up the question of RAID often.  There is an overwhelming opinion out there that if you have the money and want a blazing fast and stable computer, that you should put your hard drives in RAID.   We have known for years that this perception is just flat out wrong, but the problem is that the idea is so widely accepted that it is nearly impossible to convince our customers otherwise.  In fact, if we try too hard to talk them out of it, we end up losing the sale!   Should we be selling configurations that we know are flawed, for the sake of making the sale?   We think the answer comes in the form of transparency and education!  This article is just the latest effort in educating the public about RAID." property="og:description"/>
+  <link href="https://www.pugetsystems.com/labs/articles/Why-RAID-is-usually-a-Terrible-Idea-29/" rel="canonical"/>
+  <link href="/apple-touch-icon-144x144.png" rel="apple-touch-icon" sizes="144x144"/>
+  <link href="/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"/>
+  <link href="/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"/>
+  <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+  <link href="/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144"/>
+  <link href="/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon-precomposed" sizes="114x114"/>
+  <link href="/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon-precomposed" sizes="72x72"/>
+  <link href="/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed"/>
+  <link href="http://feeds2.feedburner.com/pugetsystems_all" rel="alternate" title="Puget Systems Announcements" type="application/rss+xml"/>
+  <link href="http://feeds2.feedburner.com/pugetsystems_blog" rel="alternate" title="Puget Systems Blog" type="application/rss+xml"/>
+  <link href="http://feeds2.feedburner.com/pugetsystems_hpc" rel="alternate" title="Puget Systems HPC Blog" type="application/rss+xml"/>
+  <link href="http://feeds2.feedburner.com/pugetsystems_articles" rel="alternate" title="Puget Systems Articles" type="application/rss+xml"/>
+  <link href="https://plus.google.com/114738378324353303788/" rel="publisher"/>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-113713-1', 'pugetsystems.com');
+				
+		ga('require', 'displayfeatures');
+		ga('require', 'linkid', 'linkid.js');
+		ga('send', 'pageview');
+  </script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="row navbar-puget-row">
+    <div class="hidden-xs col-sm-4 col-md-3">
+     <a href="https://www.pugetsystems.com/">
+      <img alt="Puget Systems logo" data-placement="bottom" data-toggle="tooltip" height="78" src="https://d3u7azvt6f12ub.cloudfront.net/images/logo_med_optimized.png" style="margin-top:5px;" title="America's Custom Computer Leader" width="215"/>
+     </a>
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-9">
+     <div class="pull-right hidden-xs" style="height:40px;line-height:40px;">
+      <a class="dark nounder register_link" href="/register.php">
+       Create Account
+      </a>
+      |
+      <a class="dark nounder login_link" href="/login.php">
+       Log In
+      </a>
+     </div>
+     <nav class="navbar navbar-inverse navbar-puget" style="clear:both;">
+      <div class="container-fluid">
+       <div class="navbar-header">
+        <button aria-controls="puget-navbar" aria-expanded="false" class="navbar-toggle" data-target="#puget-navbar" data-toggle="collapse" id="puget-xs-menu" type="button">
+         <span class="sr-only">
+          Toggle navigation
+         </span>
+         <span class="icon-bar">
+         </span>
+         <span class="icon-bar">
+         </span>
+         <span class="icon-bar">
+         </span>
+        </button>
+        <a class="navbar-brand visible-xs-block" href="https://www.pugetsystems.com/">
+         <img alt="Puget Systems small logo" height="30" src="https://d3u7azvt6f12ub.cloudfront.net/images/logo_white_sm.png" width="83"/>
+        </a>
+       </div>
+       <div class="navbar-collapse collapse" id="puget-navbar">
+        <ul class="nav navbar-nav navbar-right">
+         <li class="hidden-xs" id="puget-search-li-on">
+          <a href="#" id="puget-search-a-on">
+           <span class="glyphicon glyphicon-search">
+           </span>
+          </a>
+         </li>
+         <li class="hidden" id="puget-search-li-off">
+          <a href="#" id="puget-search-a-off">
+           <span class="glyphicon glyphicon-remove">
+           </span>
+          </a>
+         </li>
+        </ul>
+        <form action="/search.php" class="navbar-form visible-xs navbar-right" id="puget-navbar-form" role="search">
+         <div class="input-group">
+          <input class="form-control" id="puget_search_query" name="query" placeholder="Search" type="text"/>
+          <div class="input-group-btn">
+           <button class="btn" type="submit">
+            <span class="glyphicon glyphicon-search">
+            </span>
+           </button>
+          </div>
+         </div>
+        </form>
+        <ul class="nav navbar-nav">
+         <li class="dropdown hidden-lg hidden-md hidden-xs">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/desktop.php" role="button">
+           Products
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/desktop.php" tabindex="-1">
+             Desktops
+            </a>
+           </li>
+           <li>
+            <a href="/laptop.php" tabindex="-1">
+             Laptops
+            </a>
+           </li>
+           <li>
+            <a href="/peak.php" tabindex="-1">
+             HPC
+            </a>
+           </li>
+           <li>
+            <a href="/server.php" tabindex="-1">
+             Servers
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown hidden-sm">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/desktop.php" role="button">
+           Desktops
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/echo.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:0px 0px;">
+             </span>
+             <b>
+              Echo
+             </b>
+             <br/>
+             <small>
+              Our smallest PC, with full desktop performance.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/obsidian.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-45px 0px;">
+             </span>
+             <b>
+              Obsidian
+             </b>
+             <br/>
+             <small>
+              Rock solid reliability for business and government.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/spirit.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-90px 0px;">
+             </span>
+             <b>
+              Spirit
+             </b>
+             <br/>
+             <small>
+              A general purpose desktop. Give yourself room to grow.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/serenity.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-45px 0px;">
+             </span>
+             <b>
+              Serenity
+             </b>
+             <br/>
+             <small>
+              Enjoy the silence in your studio, lab, home or office.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/deluge.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-135px 0px;">
+             </span>
+             <b>
+              Deluge
+             </b>
+             <br/>
+             <small>
+              Extreme performance with overclocking and multi-GPU.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/genesis.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-180px 0px;">
+             </span>
+             <b>
+              Genesis
+             </b>
+             <br/>
+             <small>
+              Post production and design. Cutting edge workstations.
+             </small>
+            </a>
+           </li>
+           <li class="divider">
+           </li>
+           <li>
+            <a href="/configure.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-225px 0px;">
+             </span>
+             <b>
+              Custom Computers
+             </b>
+             <br/>
+             <small>
+              Want more choices? Customize an air cooled desktop from scratch.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/configliquid.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-270px 0px;">
+             </span>
+             <b>
+              Liquid Cooled Computers
+             </b>
+             <br/>
+             <small>
+              Want higher performance? Customize a liquid cooled desktop.
+             </small>
+            </a>
+           </li>
+           <li class="divider">
+           </li>
+           <li>
+            <a href="/desktop.php" tabindex="-1">
+             View Desktops by Usage
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown hidden-sm">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/laptop.php" role="button">
+           Laptops
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/nav/traverse/standard_15/customize.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-315px 0px;">
+             </span>
+             <b>
+              Traverse 15"
+             </b>
+             <br/>
+             <small>
+              Intel Haswell for high performance.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/traverse/pro_15/customize.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-360px 0px;">
+             </span>
+             <b>
+              Traverse Pro 15"
+             </b>
+             <br/>
+             <small>
+              The perfect balance of power and mobility.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/traverse/pro_17/customize.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-405px 0px;">
+             </span>
+             <b>
+              Traverse Pro 17"
+             </b>
+             <br/>
+             <small>
+              Full size keyboard. Great desktop replacement.
+             </small>
+            </a>
+           </li>
+           <li class="divider">
+           </li>
+           <li>
+            <a href="/laptop.php" tabindex="-1">
+             Compare All Laptops
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown hidden-sm">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/peak.php" role="button">
+           HPC
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/nav/peak/mini/information.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-450px 0px;">
+             </span>
+             <b>
+              Mini Developer Box
+             </b>
+             <br/>
+             <small>
+              For Intel Phi and NVIDIA Tesla. Small and portable.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/peak/tower/information.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-180px 0px;">
+             </span>
+             <b>
+              HPC Tower Workstation
+             </b>
+             <br/>
+             <small>
+              For Intel Phi and NVIDIA Tesla. Designed for quiet operation.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/peak/quad_tower/information.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-495px 0px;">
+             </span>
+             <b>
+              Quad CPU Workstation
+             </b>
+             <br/>
+             <small>
+              Maximum memory and cores. Intel Xeon and AMD Opteron.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/peak/2U/customize.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-585px 0px;">
+             </span>
+             <b>
+              GPU HPC Server
+             </b>
+             <br/>
+             <small>
+              For Intel Phi and NVIDIA Tesla. 4 cards in 2U, 8 cards in 3U
+             </small>
+            </a>
+           </li>
+           <li class="divider">
+           </li>
+           <li>
+            <a href="/peak.php" tabindex="-1">
+             About Peak HPC
+            </a>
+           </li>
+           <li>
+            <a href="/all_hpc.php" tabindex="-1">
+             HPC Blog
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown hidden-sm">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/server.php" role="button">
+           Servers
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/nav/summit/servers/configure.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-630px 0px;">
+             </span>
+             <b>
+              Summit Servers
+             </b>
+             <br/>
+             <small>
+              Intel Xeon, 2U/3U/4U, flexible rackmount design.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/nav/summit/storage/configure.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-675px 0px;">
+             </span>
+             <b>
+              Summit Storage
+             </b>
+             <br/>
+             <small>
+              Intel Xeon, 2U/3U/4U, up to 20 hot swap disks.
+             </small>
+            </a>
+           </li>
+           <li>
+            <a href="/configserver.php" tabindex="-1">
+             <span class="puget-menubar-image hidden-xs" style="background-position:-225px 0px;">
+             </span>
+             <b>
+              Custom Servers
+             </b>
+             <br/>
+             <small>
+              Want more choices? Customize an server from scratch.
+             </small>
+            </a>
+           </li>
+           <li class="divider">
+           </li>
+           <li>
+            <a href="/server.php" tabindex="-1">
+             About Summit Servers
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown puget-nav-group">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/support/index.php" role="button">
+           Support
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/support/index.php" tabindex="-1">
+             Contact Support
+            </a>
+           </li>
+           <li>
+            <a href="/help/index.php" tabindex="-1">
+             Online Help
+            </a>
+           </li>
+           <li>
+            <a href="/warranty.php" tabindex="-1">
+             Warranty Info
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown puget-nav-group">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/news.php" role="button">
+           Resources
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/all_news.php" tabindex="-1">
+             News
+            </a>
+           </li>
+           <li>
+            <a href="/blog/" tabindex="-1">
+             Blog
+            </a>
+           </li>
+           <li>
+            <a href="/all_hpc.php" tabindex="-1">
+             HPC Blog
+            </a>
+           </li>
+           <li>
+            <a href="/all_articles.php" tabindex="-1">
+             Articles
+            </a>
+           </li>
+           <li>
+            <a href="/featured.php" tabindex="-1">
+             Featured Systems
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="dropdown puget-nav-group">
+          <a aria-expanded="false" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" href="/aboutus.php" role="button">
+           About Us
+          </a>
+          <ul class="dropdown-menu" role="menu">
+           <li>
+            <a href="/aboutus.php" tabindex="-1">
+             About Us
+            </a>
+           </li>
+           <li>
+            <a href="/contact.php" tabindex="-1">
+             Contact Us
+            </a>
+           </li>
+           <li>
+            <a href="/reviews.php" tabindex="-1">
+             Reviews
+            </a>
+           </li>
+           <li>
+            <a href="/press.php" tabindex="-1">
+             Press Kit
+            </a>
+           </li>
+           <li>
+            <a href="/feedback.php" tabindex="-1">
+             Testimonials
+            </a>
+           </li>
+           <li>
+            <a href="/careers.php" tabindex="-1">
+             Careers
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="visible-xs puget-nav-group">
+          <a href="/register.php">
+           Create Account
+          </a>
+         </li>
+         <li class="visible-xs puget-nav-group">
+          <a href="/login.php">
+           Log In
+          </a>
+         </li>
+        </ul>
+       </div>
+       <!--/.nav-collapse -->
+      </div>
+      <!--/.container-fluid -->
+     </nav>
+    </div>
+   </header>
+   <div class="row">
+    <ol class="breadcrumb">
+     <li class="">
+      <a href="https://www.pugetsystems.com">
+       Home
+      </a>
+     </li>
+     <li class="">
+      <a href="/all_articles.php">
+       View All Articles
+      </a>
+     </li>
+     <li class="active">
+      Why RAID is (usually) a Terrible Idea
+     </li>
+    </ol>
+   </div>
+   <main class="row">
+    <article class="col-md-9 puget-article">
+     <div>
+      <div class="media">
+       <div class="media-body media-middle">
+        <h1 class="media-heading">
+         Why RAID is (usually) a Terrible Idea
+        </h1>
+        <span>
+         Written on February 5, 2007 by
+         <a href="https://www.pugetsystems.com/bios.php?name=jonbach">
+          Jon Bach
+         </a>
+        </span>
+       </div>
+      </div>
+     </div>
+     <script type="text/javascript">
+      var addthis_config = {
+				username: "pugetsys",
+				ui_cobrand: "Puget Systems",
+				ui_header_color: "#ffffff",
+				ui_header_background: "#003399",
+				ui_hover_direction: 1,
+				data_track_clickback: 1,
+				ui_email_from: ""
+			}
+			var addthis_share =
+			{
+				url: "https://www.pugetsystems.com/labs/articles/Why-RAID-is-usually-a-Terrible-Idea-29/",
+				title: "Why RAID is (usually) a Terrible Idea",
+				description:  "As president of Puget Custom Computers, I get a unique perspective on computer products and technology.  Our company specializes in selling high performance custom computers, and that naturally brings up the question of RAID often.  There is an overwhelming opinion out there that if you have the money and want a blazing fast and stable computer, that you should put your hard drives in RAID.   We have known for years that this perception is just flat out wrong, but the problem is that the idea is so widely accepted that it is nearly impossible to convince our customers otherwise.  In fact, if we try too hard to talk them out of it, we end up losing the sale!   Should we be selling configurations that we know are flawed, for the sake of making the sale?   We think the answer comes in the form of transparency and education!  This article is just the latest effort in educating the public about RAID.",
+				templates: {
+					twitter: 'Why RAID is (usually) a Terrible Idea (via @PugetSystems) {{url}}',
+						}   
+			}
+     </script>
+     <div class="addthis_sharing_toolbox" style="margin:1em 0;">
+     </div>
+     <div class="alert alert-danger" role="alert">
+      <strong>
+       Always look at the date when you read a hardware article.
+      </strong>
+      Some of the content in this article is most likely out of date, as it was written on
+      <strong>
+       February 5, 2007
+      </strong>
+      . Check out our
+      <a href="/all_articles.php">
+       more recent articles
+      </a>
+      .
+     </div>
+     <div class="clearfix">
+      <h3 id="Introduction">
+       Introduction
+      </h3>
+     </div>
+     <div>
+      <p>
+       As President of Puget Custom Computers, I get a unique perspective on computer products and technology.  Our company specializes in selling high performance custom computers, and that naturally brings up the question of RAID often.  There is an overwhelming opinion out there that if you have the money and want a blazing fast and stable computer, that you should put your hard drives in RAID.   We have known for years that this perception is just flat out wrong, but the problem is that the idea is so widely accepted that it is nearly impossible to convince our customers otherwise.  In fact, if we try too hard to talk them out of it, we end up losing the sale!   So, should we be selling configurations that we know are flawed, for the sake of making the sale?  We think the answer comes in the form of transparency and education!  This article is just the latest effort in educating the public about RAID.
+       <br/>
+       <br/>
+       To be clear, there are definitely times when RAID is a good route.  I will get into that later, but I need to start by saying that I am not talking about enterprise servers.  That is a completely different type of computer.  I am talking about home desktops, enthusiast computers, and professional workstations.
+      </p>
+      <div>
+       <div class="clearfix">
+        <h3 id="WhatistheProblem?">
+         What is the Problem?
+        </h3>
+       </div>
+       <div>
+        <p>
+         So what do I have against RAID?  I have no problem with the concept.  The problem is that for 90% of the people out there, it isn't a good idea.  Since high end enthusiast machines are some of our most common builds here at Puget, we frequently are asked to build machines with RAID when it doesn't make sense.  I am here to say that those RAID configurations account for one of the biggest sources of frustration for our customers, as evidenced by the fact that they make up a very large portion of our support tickets.  That is the root of my problem with RAID -- I see the frustrations it causes all the time.  When I weigh that against the benefits of RAID, I just can't recommend it except in very select cases.
+         <br/>
+         <br/>
+         The underlying problem with RAID is the fact that by using it, you are making your computer significantly more complicated.  Not only are you now relying on two hard drives to work properly, but you are also relying on a much more complicated controller (the RAID controller).  If any one of those items has a problem, the array fails.  If one hard drive has a problem even for a moment, you have a degraded array on your hands.  At that point, you are relying on the RAID controller for error correction and array management, and the fact of the matter is that all (yes, all) RAID controllers onboard a motherboard are low quality.  They have been added to the motherboard as an afterthought - a feature added simply because the manufacturer knows that if they add any feature they can, they're more likely to sell their product.  At at a time when nearly every modern motherboard has built in RAID, they have to offer it just to be considered as feature rich as their competitors.
+        </p>
+        <div>
+         <div class="clearfix">
+          <h3 id="RAID1(mirroring)forDataLossProtection">
+           RAID1 (mirroring) for Data Loss Protection
+          </h3>
+         </div>
+         <div>
+          <p>
+           <a class="img-responsive" href="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=9619" target="_blank">
+            <img align="right" border="0" class="img-responsive" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=9619&amp;width=150"/>
+           </a>
+           One of the commonly accepted beliefs is that if you want your data to be ultra-secure, then a RAID1 array for hard drive redundancy is the best route.  This an area where the first hand data we have accumulated gives me a very strong argument to the contrary.  As we sell hundreds of computers a month, our self-built administrative systems log every single failed piece of hardware and trouble ticket we open.  With this, we can see hard data on how often hard drives fail, and how often a RAID array has problems.   This is really useful information to look at!  Here is the data I have for our hard drive sales in the last year, where we have sold at least 200 units:
+           <br/>
+           <br/>
+           <br/>
+          </p>
+          <table cellpadding="3" cellspacing="0" style="border:1px solid black;" width="80%">
+           <tr style="background-color:black;color:white;">
+            <td>
+             <b>
+              Hard Drive
+             </b>
+            </td>
+            <td>
+             <b>
+              # Units Sold
+             </b>
+            </td>
+            <td>
+             <b>
+              Failure Rate
+             </b>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=3567" target="_blank">
+              Seagate Barracuda 7200.9 250GB SATAII
+             </a>
+            </td>
+            <td>
+             280
+            </td>
+            <td>
+             3.21%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=1014" target="_blank">
+              Seagate SATA Barracuda 80GB
+             </a>
+            </td>
+            <td>
+             271
+            </td>
+            <td>
+             2.58%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=1551" target="_blank">
+              Western Digital SATA Raptor 74GB
+             </a>
+            </td>
+            <td>
+             592
+            </td>
+            <td>
+             2.03%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=4065" target="_blank">
+              Seagate Barracuda 7200.10 320GB SATAII
+             </a>
+            </td>
+            <td>
+             202
+            </td>
+            <td>
+             1.98%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=1072" target="_blank">
+              Seagate Barracuda 7200.9 160GB SATAII
+             </a>
+            </td>
+            <td>
+             265
+            </td>
+            <td>
+             1.89%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=3570" target="_blank">
+              Seagate Barracuda 7200.9 80GB SATAII
+             </a>
+            </td>
+            <td>
+             403
+            </td>
+            <td>
+             1.74%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=598" target="_blank">
+              Western Digital ATA100 80.0GB WD800JB
+             </a>
+            </td>
+            <td>
+             290
+            </td>
+            <td>
+             1.72%
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <a href="/part_info.php?part=3486" target="_blank">
+              Western Digital SATA Raptor 150GB
+             </a>
+            </td>
+            <td>
+             278
+            </td>
+            <td>
+             1.44%
+            </td>
+           </tr>
+          </table>
+          <br/>
+          When I look at those numbers I see excellent reliability.  Specifically, the Western Digital Raptor hard drives impress me.  We sell a huge amount of those drives, and have only had a handful fail.  In fact, two of those failures were our fault -- one we wired incorrectly and fried, and the other we dropped on the concrete warehouse floor...so technically, the Raptor failure rate should be a bit lower.  Impressive!  Neither of these damaged hard drives ever even left our facilities, obviously.
+          <br/>
+          <br/>
+          Unfortunately, it is not as clear of a number when it comes down to how many RAID failures there have been.  Since it is not a black and white failure issue, I do not have hard data.  However, at the agreement of our support staff, I estimate that anywhere from 25% to 30% of our customers with RAID will call us at some point in the first year to report a degraded RAID array or problem directly resulting from their RAID configuration.  Granted, a failed RAID1 array does not mean data loss, but it certainly means a long, frustrating hassle.  On the other hand, a single hard drive will often give warning signs before failure, so that scenario doesn't necessarily mean data loss either.
+          <br/>
+          <br/>
+          The real question is:  Is RAID1 really worth being 15-20 times more likely to have a problem?  Keep in mind, RAID1 does nothing to protect you from:
+          <br/>
+          <br/>
+          <ol>
+           <li>
+            Accidental deletion or user error
+           </li>
+           <li>
+            Viruses or malware
+           </li>
+           <li>
+            Theft or catastrophic damage
+           </li>
+           <li>
+            Data corruption due to other failed hardware or power loss
+           </li>
+          </ol>
+          So if you are going with a RAID array to protect your data, just look at the numbers, and make an informed decision.  My personal recommendation is that if 3% or less is too high a risk of possible data loss, then get yourself an external SATA or USB hard drive, and run a scheduled backup.  Not only does that get you nearly all the protection of RAID1, but it also protects you from the four things above.   This leaves you even more protected in the end.  Not only that, but it vastly simplifies your computer, leaving you literally 15-20 times less likely to have frustrating problems with your data storage.
+          <br/>
+          <div>
+           <div class="clearfix">
+            <h3 id="RAID0(striping)forPerformance">
+             RAID0 (striping) for Performance
+            </h3>
+           </div>
+           <div>
+            <p>
+             <a class="img-responsive" href="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=9617" target="_blank">
+              <img align="right" border="0" class="img-responsive" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=9617&amp;width=150"/>
+             </a>
+             It is generally well accepted that RAID0 carries a sizable risk of data loss.  When that is acceptable, people will often desire RAID0 for the speed benefits.  What is not understood is that the speed benefits are dependent on the type of disk usage.  To make a vast simplification of the issue,  there are two main factors in disk performance:  access time, and throughput.  Access time dictates how quickly a hard drive can go from one operation to the next, and throughput dictates how quickly data can be read or written.  RAID0 does increase throughput, but it does absolutely nothing to help the access time.  What does that mean?  It means that if you are reading and writing a large number of smaller files, the performance benefit will be very minimal.  If you are reading or writing a large amount of data at one location on the disk, that is where you will see a benefit.  Therefore, in times where you are working with transferring or copying very large files, RAID0 can make sense.
+             <br/>
+             <br/>
+             Video editing is a good example of when RAID0 might make sense.  Now, you still need to be sure that the speed of the hard drives is the right place to focus.  For example, if you are editing a video, and when doing so your CPU usage is pegged at 100%, then you can be fairly certain that moving to RAID0 will not be a help, because you'll still be limited by your CPU.  Therefore, video editing alone does not mean RAID0 will be useful...it has to be video editing in which your CPU or memory is not the bottleneck, which honestly is very uncommon.  My personal recommendation -- do your homework.  Do not take on the hassles of RAID unless you know it will be a help.  Go into your research with the knowledge that it is actually very uncommon for RAID0 to be faster in desktop usage.
+             <br/>
+             <br/>
+             Don't take my word for it!  Storagereview.com, an authority in hard drive performance analysis and discussion, has a
+             <a href="http://faq.storagereview.com/tiki-index.php?page=SingleDriveVsRaid0" target="_blank">
+              whole page
+             </a>
+             talking about RAID0.
+             <br/>
+             <br/>
+             The other time when RAID can make sense is if you need an extremely large volume of space.  RAID0 or RAID5 would be able to let you combine drives together.  If you're working with HD video and need to be able to save 2-3TB of data, then a RAID array is necessary to have a working space that large.
+            </p>
+            <div>
+             <div class="clearfix">
+              <h3 id="OtherTypesofRAID">
+               Other Types of RAID
+              </h3>
+             </div>
+             <div>
+              <p>
+               Discussing RAID1 and RAID0 gives me the most well defined discussion points, but the same principles can be combined to apply to RAID5 and RAID10.  Remember that I am not talking about server usage.  With servers, RAID can often bring more benefits, though a large reason for that is because the quality of the RAID controllers in a server environment is often much higher.
+              </p>
+              <div>
+               <div class="clearfix">
+                <h3 id="RAIDControllers">
+                 RAID Controllers
+                </h3>
+               </div>
+               <div>
+                <p>
+                 <a class="img-responsive" href="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=8543" target="_blank">
+                  <img align="right" border="0" class="img-responsive" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?id=8543&amp;width=220"/>
+                 </a>
+                 If you do decide that RAID makes sense for you, make sure you use a quality RAID controller.  Software RAID controllers are not good quality.  Not only are they lower performance, which negates a major point of RAID, but they are much more prone to failure and bugs in general.  Make sure you get a hardware RAID controller, such as one from 3Ware.  The quality is higher, the performance is better, and when you have a problem with your array, the rebuilding and diagnostic tools are far superior.  A good raid controller starts at $300.  If you have a RAID controller on your $150 motherboard, what does that say about the quality?  I know it is difficult to justify the cost of a hardware controller when your motherboard may already have a software controller onboard, but if you can't bring yourself to cover that cost, then I submit that RAID is not important enough to you.
+                </p>
+                <div>
+                 <div class="clearfix">
+                  <h3 id="Conclusions">
+                   Conclusions
+                  </h3>
+                 </div>
+                 <div>
+                  <p>
+                   It is quite obvious by now that in a desktop environment, I am dead set against RAID.  Problems are common, and benefits are few.  Just remember that I am taking this position due to experience.  I even fell prey to the hype myself once!  At one time I ran my office workstation on a RAID0 array.  It had problems once or twice over the years, but because I kept a second hard drive for storage and I am perfectly comfortable with a Windows reinstall, it was never a large issue for me.  I ended up moving back to a single drive because I didn't notice any performance difference.
+                   <br/>
+                   <br/>
+                   My conclusions are based on benchmark data, as well as over six years running a custom computer company, a company whose target market is made up of all the people that are targeted by the hype of RAID.  If you have anything to add, please email me!  I'd be happy to consider adding it to this article.
+                  </p>
+                  <div>
+                   <aside class="col-md-3">
+                    <div class="puget-panel-box panel panel-default">
+                     <div class="panel-heading">
+                      <h3>
+                       Related Articles
+                      </h3>
+                     </div>
+                     <div class="panel-body">
+                      <ul style="padding-left:1.5em;">
+                       <li>
+                        <a href="/labs/articles/Qualification-LSI-9341-8i-9361-8i-RAID-Controllers-545/">
+                         Qualification: LSI 9341-8i &amp; 9361-8i RAID Controllers
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/labs/articles/RAID-Explained-24/">
+                         RAID Explained
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/labs/articles/Product-Roundup-Intel-LSI-RAID-cards-98/">
+                         Product Roundup: Intel/LSI RAID cards
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                    </div>
+                    <div class="puget-panel-box panel panel-default">
+                     <div class="panel-heading">
+                      <h3>
+                       Tagged
+                      </h3>
+                     </div>
+                     <div class="panel-body">
+                      <a href="/all_articles.php?tag=RAID">
+                       RAID
+                      </a>
+                      <a href="/all_articles.php?tag=Storage">
+                       Storage
+                      </a>
+                     </div>
+                    </div>
+                    <div class="puget-panel-box panel panel-default hidden-xs">
+                     <div class="panel-heading">
+                      <h3>
+                       Follow Us
+                      </h3>
+                     </div>
+                     <div class="panel-body">
+                      <div class="side-fb">
+                       <iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://www.facebook.com/plugins/likebox.php?id=75534321610&amp;width=240&amp;colorscheme=light&amp;show_faces=false&amp;border_color&amp;stream=false&amp;header=false&amp;height=62" style="border:none; overflow:hidden; width:240px; height:62px; margin-left:-10px;">
+                       </iframe>
+                       <br/>
+                       <br/>
+                       <a class="twitter-follow-button" data-show-count="false" data-size="large" href="https://twitter.com/PugetSystems">
+                        Follow @PugetSystems
+                       </a>
+                       <script>
+                        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                       </script>
+                       <br/>
+                       <br/>
+                      </div>
+                     </div>
+                    </div>
+                    <div class="puget-panel-box panel panel-default hidden-xs">
+                     <div class="panel-heading">
+                      <h3>
+                       Request a Topic
+                      </h3>
+                     </div>
+                     <div class="panel-body">
+                      <p>
+                       Have a topic you'd like us to write about? Let us know!
+                      </p>
+                      <form id="topicform">
+                       <b>
+                        Name
+                       </b>
+                       <br/>
+                       <input name="name" style="width: 185px;margin-bottom:5px;" type="text"/>
+                       <br/>
+                       <b>
+                        Email:
+                       </b>
+                       <br/>
+                       <input name="email" style="width: 185px;margin-bottom:5px;" type="text"/>
+                       <br/>
+                       <b>
+                        Topic:
+                       </b>
+                       <br/>
+                       <textarea name="topic" style="width: 185px; height: 75px;margin-bottom:5px;">
+                       </textarea>
+                       <br/>
+                       <input class="button" name="action" onclick="submit_topic();" type="button" value="Submit"/>
+                      </form>
+                      <p id="topic_suggest_message">
+                      </p>
+                     </div>
+                    </div>
+                    <script type="text/javascript">
+                     function submit_topic() {
+	var queryString = $('#topicform').serialize();
+	$.post("/ajax_handler.php?action=submit_topic&amp;url="+escape(window.location.href), queryString,
+	function(data){
+		$.each(data,function(lbl, val) {
+			if(lbl == "result"){
+				if(val == "success"){ $('#topic_suggest_box').hide(); }
+			} else if(lbl == "message"){ 				
+				$("#topic_suggest_message").html(val);
+			} else if(lbl == "alert"){ 
+				alert(val);
+			}
+		})
+	}, "json");
+}
+                    </script>
+                    <div class="puget-panel-box panel panel-default">
+                     <div class="panel-heading">
+                      <h3>
+                       Subscribe
+                      </h3>
+                     </div>
+                     <div class="panel-body">
+                      <p>
+                       <a href="http://feeds2.feedburner.com/pugetsystems_all" rel="alternate" type="application/rss+xml">
+                        <img alt="Subscribe" src="https://www.feedburner.com/fb/images/pub/feed-icon16x16.png" style="vertical-align:middle;border:0"/>
+                       </a>
+                       <a href="https://www.pugetsystems.com/subscribe.php" rel="alternate" type="application/rss+xml">
+                        Subscribe
+                       </a>
+                      </p>
+                      <form action="https://pugetsystems.us2.list-manage.com/subscribe/post?u=373359a5e640519a314d8885a&amp;id=43b8290129" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" target="_blank">
+                       Or receive articles by email:
+                       <br/>
+                       <input name="EMAIL" style="width:90px" type="text"/>
+                       <input name="subscribe" type="submit" value="Subscribe"/>
+                      </form>
+                     </div>
+                    </div>
+                    <div class="text-center hidden-xs hidden-sm">
+                     <div style="margin-bottom:2em;">
+                      <a href="https://www.pugetsystems.com/nav/genesis/II/customize.php">
+                       <img alt="Puget Genesis II" height="75" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?pheight=75&amp;pwidth=100&amp;height=75&amp;width=100&amp;gravity=south&amp;id=24242" width="100"/>
+                       <br/>
+                       <h5 style="margin:0;">
+                        <b>
+                         Puget Genesis II
+                        </b>
+                       </h5>
+                       Starting at $4860.42
+                      </a>
+                     </div>
+                     <div style="margin-bottom:2em;">
+                      <a href="https://www.pugetsystems.com/nav/deluge/A2/customize.php">
+                       <img alt="Puget Deluge" height="75" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?pheight=75&amp;pwidth=100&amp;height=75&amp;width=100&amp;gravity=south&amp;id=28783" width="100"/>
+                       <br/>
+                       <h5 style="margin:0;">
+                        <b>
+                         Puget Deluge
+                        </b>
+                       </h5>
+                       Starting at $2407.69
+                      </a>
+                     </div>
+                     <div style="margin-bottom:2em;">
+                      <a href="https://www.pugetsystems.com/nav/peak/2U/customize.php">
+                       <img alt="Puget Peak 2U" height="75" src="https://d2fn9540hpidsu.cloudfront.net/images/pic_disp.php?pheight=75&amp;pwidth=100&amp;height=75&amp;width=100&amp;gravity=south&amp;id=24236" width="100"/>
+                       <br/>
+                       <h5 style="margin:0;">
+                        <b>
+                         Puget Peak 2U
+                        </b>
+                       </h5>
+                       Starting at $4759.02
+                      </a>
+                     </div>
+                    </div>
+                   </aside>
+                   <div class="col-xs-12">
+                    <div id="disqus_thread">
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/9cb3bcd88ca5aa9a3ca2119ae7e62e3f/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=9cb3bcd88ca5aa9a3ca2119ae7e62e3f" style="margin-right:10px;" width="32"/>
+                       </a>
+                       youngbeard
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I mostly agree, but wish you had more hard evidence of RAID failure (like the table about hard drive failures) than just employees saying "25-30%".
+                       </p>
+                       <p>
+                        The simple version that I tell to my gaming buddies who ask me about building a system: A good backup schedule is way better than RAID 1.  And, at best you'll get slightly faster load times with a RAID 0. Once the game/level/video is loaded and everything is in memory that RAID isn't doing you a bit of good. Only if you are swapping to HD would it give any speedup -- and if you're swapping in a game you will have crap performance regardless of your storage speed and you need to add more RAM, not a fancy RAID array.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-06 18:15:50
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/0920f77fef5d00dbad505b69822c2e18/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=0920f77fef5d00dbad505b69822c2e18" style="margin-right:10px;" width="32"/>
+                       </a>
+                       WaltC
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        Hello Jon!   I actually signed up here to briefly comment on your opinions as expressed about RAID in general.  So first, let me say that in your position and from your perspective I can certainly understand your comments.  This about sums them all up for me:
+                       </p>
+                       <p>
+                        It is generally well accepted that RAID0 carries a sizable risk of data loss.
+                       </p>
+                       <p>
+                        ...pretty much echoes what I consider to be a myth about RAID 0 and "the heightened risk" of data loss.  I'll explain.
+                       </p>
+                       <p>
+                        First of all, let's consider a situation where a person purchases two of these: Western Digital ATA100 80.0GB WD800JB's, just as an example. From your chart in the article,  it has been your experience that this drive has a 1.72% failure rate in terms of how many of these drives your company has sold that have required replacement because they failed.  Here's the point I want to suggest to you:
+                       </p>
+                       <p>
+                        If your customer decides on purchasing two of these drives to be used as normal IDE drives instead of RAID drives, then based on your company's experience to date he's running about a 1.72% chance that  either one or both of the drives he's purchased could be defective from the factory and fail prematurely. If it happens that one of the drives should fail while the other doesn't, then your customer will lose the data from that drive (assuming here no backups were done and so on) even though he may not even know how to spell the word RAID. If the drive that fails is a boot drive, then your customer will lose his boot drive and be unable to boot his system, and he'll have to reconfigure his second hard drive as the boot drive and reinstall his OS there if he wishes to boot his system at all prior to getting a replacement drive. All of this, of course, is possible even if no RAID was ever deployed in the system from the start.
+                       </p>
+                       <p>
+                        The thing that most people do not understand in general is that two drives running as normal IDE drives are still the identical drives when configured under RAID 0.  The drives themselves do not know about any differences between RAID and IDE, and they do not behave any differently at all when running as IDE instead of RAID 0, or vice-versa.  Thus, the failure rate for each of the two drives running IDE is *exactly the same* as it would be for each of those same two drives running in a RAID 0 configuration. Single drives running in IDE have no fault tolerance, just as single drives running in RAID 0 have no fault tolerance. Again, the drives themselves just do not care whether you run them in IDE or in RAID 0--the drives have no preference--they run and operate exactly the same way regardless.  This is an important point to remember when thinking about RAID and IDE drive operation.
+                       </p>
+                       <p>
+                        OK, now, some people will say, "Aha, yes, but when running in RAID 0 you need two drives instead of one, and that means that your two drives, because they are two, are twice as likely to fail as the single IDE drive you could use instead of RAID 0."
+                       </p>
+                       <p>
+                        Really? So, by that logic, then, the more components of a type that I have in my system, the higher the risk of failure accordingly?  I do not believe, thankfully, that this is way things work...;) If things worked this way in reality, well, all of us would have a very tough time finding anything that worked to any degree of reliability...;)  Here's what I mean:
+                       </p>
+                       <p>
+                        Let's go back to your drive failure chart for a moment and consider the Western Digital ATA100 80.0GB WD800JB drive.  According to your numbers you've sold 290 of those drives and yet the chance of failure for each drive you've sold is but 1.72%--which means that your company has seen ~5 (4.998...or so) of those 290 drives fail.
+                       </p>
+                       <p>
+                        So, if we take the logic that says using two drives instead of one means that the possibility of a drive failing is 100% greater than the possibility of a single drive failing if only a single drive is deployed, then ought not the possibility of one of those 290 drives failing be 29000% greater than if your company had sold but ONE Western Digital ATA100 80.0GB WD800JB?  Obviously, though, even though you have sold 290 Western Digital ATA100 80.0GB WD800JBs, the odds of a drive failure are only 1.72%, or roughly 5 drives out of the 290, so we can see plainly that deploying more than a single drive does not increase the odds of a drive failure by 100% x the total number of drives deployed.  Does it?
+                       </p>
+                       <p>
+                        And yet, this is the way that many people think about that issue, it seems to me. They think, wrongly, that if they have two drives in a system the odds of a single drive failing are 100% greater than if they had but a single drive.  Obviously, the experience of your company in selling hundreds of these drives and, indeed, the experience of Western Digital in selling millions of these drives is *not* that the risk of drive failure accelerates by 100% for every additional drive you deploy after the first one. Allow me to suggest that if it was then neither you nor Western Digital could conduct business...;)
+                       </p>
+                       <p>
+                        So what *is* the risk that *a* drive will fail, regardless of how many such drives you either sell or else deploy in a single system?  You'll find that risk estimated by every hard drive manufacturer: it's called the MTBF-hours number.  You'll also find that number listed plainly in the specifications each hard drive maker lists for each drive he manufactures and sells.  So whether you have two drives in a system, five drives or ten drives, etc., that have a MTBF-hour rating of, say, 10,000 hours (just to throw out a number) then you can be assured that on average the manufacturer expects that *each* drive he makes and sells will run that long before failing. Of course, this is an average, and the actual drive you buy may last half that long or twice that long, but on average this is the kind of operational durability you should expect from each of your drives--whether you have one, or two or ten, etc.  The *number* of drives in a system has, of course, no impact at all upon the manufacturer's MTBF-hours estimates of operational life for each of his drives that you own.
+                       </p>
+                       <p>
+                        The second point that needs addressing is this: are you really any safer in terms of your data if you have a single 300Gb drive running as IDE than if you had two 150Gb drives running as one RAID 0 300Gb drive? Well, if it turns out that that the MTBF-hours estimates for the 300GB drive is the same as for the 150Gb drives--then the answer is "no."  In that case, there is exactly the same risk between the 300Gb drive failing and one of the two 150Gb drives that comprise your RAID 0 drive.  Indeed, in this scenario,  if you lose you single 300Gb IDE drive, or you lose one of your two 150Gb RAID 0 drives, then you lose *all* your data, don't you?  Likewise, if the 300Gb drive you buy to use as an IDE drive has a MTBF-hour rating of 50,000 hours, but each of the 150Gb drives you use in your RAID 0 configuration has a MTBF-hour rating of 25,000 hours, then you may expect that your IDE drive will possibly run twice as long as your RAID drives before failing.  You could as easily reverse that to see your RAID 0 drives logically being expected to outlive your single IDE drive by twice as long, too.
+                       </p>
+                       <p>
+                        So, it isn't the number of drives a user has in his system that determines the likelihood of a drive failure, it is the MTBF-hour rating that each drive has that is the only barometer for judging how likely it is that a drive will fail, and whether you are running your drives as IDE or running them as RAID 0 makes no difference whatever.
+                       </p>
+                       <p>
+                        At home, for instance, I am in my *fourth year* of running RAID 0 configurations--and although I've used several different types of drives and RAID controllers over that span, I have yet to have a single RAID 0 drive failure.  Conversely, though, in the years prior to that before I ever ran RAID 0 and was running either SCSI or IDE, I had two (that I can remember) drives fail--both of which were replaced under warranty by the manufacturer.  If I thought like many people do about RAID 0 then certainly I would reach the conclusion that running IDE or SCSI was much more risky than running RAID 0--heh...;)--but of course I don't think like that so that's not what I think.  If anything, I think that drives today are just made a lot better than they were a decade ago, and they just last a lot longer, too--and of course, whether I'm running them as RAID 0 or as IDE makes not a whit of difference there.
+                       </p>
+                       <p>
+                        But, to answer your complaints about some RAID 0 configurations, I think you'll agree with me that the weakest link in a RAID 0 configuration is the RAID *controller* one chooses to use.  In the last four years, since I decided to try RAID 0 for myself, I've used only Promise FastTrack TX RAID controllers at home--first the TX2200 and most recently the TX4200 (TX4200 is coupled to two Maxtor 300Gb SataII drives--it's two years now using the 4200 without a single drive error or failure. The TX2200 I moved to my wife's box, with a pair of WD100 0JBs, has been operating for *four years* without a failure of any kind.)   OK, these are dedicated, hardware, PCI RAID controllers which I consider to be several steps above the mostly software-RAID-type controllers found on most motherboards these days as standard equipment.  Yes, people *are* reporting a sizable number of RAID 0 (and other RAID mode problems) with these controllers.  I think the issue boils down to the quality of the RAID controller--which is exactly what I mean when I say that the efficacy of a RAID setup is greatly dependent on "how" you set it up, and "what" you set it up with in terms of controllers, and of course hard drives, too.
+                       </p>
+                       <p>
+                        IE, you go "cheap" then you get cheap, if you know what I mean...;) When it comes to components of any sort I believe that very often you get exactly what you pay for--which is also why I'm not a believer in motherboard sound, or motherboard graphics, either.  Generally, it's been my experience that the drivers for motherboard-integrated devices of all kinds are just not as good nor as reliable as the kind of driver support you get with name-brand discrete peripherals.
+                       </p>
+                       <p>
+                        Anyway, Jon, this has been my experience at home with RAID 0 over the last four years, and I appreciate the opportunity to share it.  Thanks again.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-06 18:19:50
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                         <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                         Jon Bach
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Thanks for the commments!
+                        </p>
+                        <p>
+                         Youngbead, exactly....for gaming there are a lot of other things in line for your money before you should consider RAID.  Video card, CPU, memory...
+                        </p>
+                        <p>
+                         WaltC, yes...the situation and the hardware definitely plays a role, which is why I was specifically talking about desktop usage, with onboard RAID controllers.   However, your math is incorrect.  If one drive has a 1.72% chance of failure, then if you have two drives, your chance of failure on one of the drives doubles.  That's just simple math.  Both drives still have a 1.72% chance of failure individually, but together as a set, the number doubles.  You're right that looking at MTBF is another way of approaching it, but it is just another way of saying the same thing.   My stats are in failures per year, and those stats are in hours per failure, it is just an inverse number with different units.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2007-02-06 19:56:59
+                        </div>
+                       </div>
+                       <div style="clear:both;margin-left:37px;">
+                        <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                         <a class="nounder" href="http://disqus.com/guest/bd525419ef3b9240ca3e781d076380bc/" rel="nofollow">
+                          <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=bd525419ef3b9240ca3e781d076380bc" style="margin-right:10px;" width="32"/>
+                         </a>
+                         cowboyshootist
+                        </div>
+                        <div style="padding:10px;margin-left:37px;">
+                         <p>
+                          Thanks for the commments!
+                         </p>
+                         <p>
+                          Youngbead, exactly....for gaming there are a lot of other things in line for your money before you should consider RAID.  Video card, CPU, memory...
+                         </p>
+                         <p>
+                          WaltC, yes...the situation and the hardware definitely plays a role, which is why I was specifically talking about desktop usage, with onboard RAID controllers.   However, your math is incorrect.  If one drive has a 1.72% chance of failure, then if you have two drives, your chance of failure on one of the drives doubles.  That's just simple math.  Both drives still have a 1.72% chance of failure individually, but together as a set, the number doubles.  You're right that looking at MTBF is another way of approaching it, but it is just another way of saying the same thing.   My stats are in failures per year, and those stats are in hours per failure, it is just an inverse number with different units.
+                         </p>
+                         <p>
+                          Jon, I don't think your math is correct here. Just because a drive has a 1.72% chance of failure doesn't mean with 2 drives you have a 3.44% chance of having a drive failure. For example, (using numbers that make the math simple) if a drive has a 1% chance of failure then having 100 drives does not mean that you have a 100% chance that a failure will occur. Sure, if you extend the time frame out long enough then yes you will have a failure because as we know drives are mechanical devices that wear out over time.
+                         </p>
+                         <p>
+                          With respect to your article on RAID I think your title should have been  "Why RAID "CAN" be a terrible idea". I respectfully disagree that RAID is "usually" a terrible idea. There are many good reasons to use RAID on the desktop including performance, data availability and system high availability. Suggesting that implementing RAID is a bad idea because the built-in RAID controllers are of low quality is akin to saying that doing 3-D graphics is a bad idea because the built-in graphics cards are of low quality. If the controller isn't sufficient to the task then get one that is.
+                         </p>
+                         <p>
+                          The main reason, IMHO, to use RAID in a desktop environment is data protection and availabiliy. As drive sizes increase the impact of losing a drive becomes greater and as we all know SATA drives have lower duty cycles than Fiber or SCSI drives and are more susceptible to failure. In a RAID 1 or RAID 5 configuration you'll be able to recover from degraded mode much quicker than with no RAID protection. Even if you back up your data to tape or CD restoring that data will take hours especially with one of the larger SATA drives. With tape you may not even be able to recover the data due to a 25-30% failure rate of tape media. In degraded mode you can still access your data and operate your computer while the drive is being rebuilt.
+                         </p>
+                         <p>
+                          Personally I am not a fan of just doing RAID 0. If I wanted to get the performance benefits of RAID 0 I would combine it with RAID 1 or RAID 5 to get both striping and data protection. Naturally this type of configuration comes with a cost but what is that cost compared to having to recover data or not being able to recover data at all?
+                         </p>
+                         <p>
+                          In the end, the decision to RAID or not to RAID should be based on the cost-benefit analysis not whether it's likely to generate a support call. Many people operate small businesses on desktop computers out of their homes and the loss of data or the inability to access that data due to drive failures can be costly to the business.
+                         </p>
+                         <p>
+                          Sincerely,
+                          <br/>
+                          TC
+                         </p>
+                         <div style="font-size:10px;color:#666;margin-top:10px;">
+                          Posted on 2007-02-17 12:04:45
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/817d2439f65ea13fe5dad002fd7e93bd/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=817d2439f65ea13fe5dad002fd7e93bd" style="margin-right:10px;" width="32"/>
+                       </a>
+                       AustinM
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        With two drives in a RAID 0 configuration, data loss occurs when either drive A *OR* drive B fails.
+                       </p>
+                       <p>
+                        Take any introductory statistics course and you'll learn that the probability of an *OR* event is the sum of the probabilities of its component events minus any overlapping probability between component events.  Because these component events are mutually exclusive, there is no overlapping probability - which means that the probability of data loss is the probability of drive A failure plus the probability of drive B failure.  .0172 + .0172 = .0344, or 3.44% - indicating that chances of data loss are exactly twice as likely with two drives in a RAID 0 configuration compared with a single standalone drive.
+                       </p>
+                       <p>
+                        Apologies WaltC...
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-06 21:35:44
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/be8f99343b72786370b4fce2f1994bbf/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=be8f99343b72786370b4fce2f1994bbf" style="margin-right:10px;" width="32"/>
+                        </a>
+                        chartguy
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Take any introductory statistics course and you'll learn that the probability of an *OR* event is the sum of the probabilities of its component events minus any overlapping probability between component events.  Because these component events are mutually exclusive, there is no overlapping probability - which means that the probability of data loss is the probability of drive A failure plus the probability of drive B failure.  .0172 + .0172 = .0344, or 3.44% - indicating that chances of data loss are exactly twice as likely with two drives in a RAID 0 configuration compared with a single standalone drive.
+                        </p>
+                        <p>
+                         Apologies WaltC...
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2007-06-22 10:09:08
+                        </div>
+                       </div>
+                       <div style="clear:both;margin-left:37px;">
+                        <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                         <a class="nounder" href="http://disqus.com/guest/b80bc5ae269a60ece27799a7dc2190b7/" rel="nofollow">
+                          <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=b80bc5ae269a60ece27799a7dc2190b7" style="margin-right:10px;" width="32"/>
+                         </a>
+                         <a class="nounder" href="http://www.bobharbison.com" rel="nofollow">
+                          BobH
+                         </a>
+                        </div>
+                        <div style="padding:10px;margin-left:37px;">
+                         <p>
+                          OK, I'm not nearly skilled enough in mathematics to argue whether the correct method of calculating this is to use the complement or to use the sum of the probabilities (or know the difference between them) Your answers are pretty close to one another in any case.
+                         </p>
+                         <p>
+                          However, I do have a background in engineering, and it appears to me that you've both left out an important component. What about the RAID controller? What are the typical failure rates for those, and how does that affect the rest of the system? It would certainly seem a controller failure or problem could also cause data corruption, so there's an additional risk factor you've introduced into the system.
+                         </p>
+                         <div style="font-size:10px;color:#666;margin-top:10px;">
+                          Posted on 2008-05-14 17:30:31
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/8a2cdc97dc2e48ba6c24ab2b047d1789/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1371236082%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=8a2cdc97dc2e48ba6c24ab2b047d1789" style="margin-right:10px;" width="32"/>
+                        </a>
+                        Mike
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Came upon this in my research and I feel I should correct this even though it is quite late.
+                        </p>
+                        <p>
+                         Your calculation is not correct.  The events are not mutually exclusive, i.e. drive A and B can both fail.
+                        </p>
+                        <p>
+                         As an experiment, using your numbers, consider a RAID 0 of 100 drives, with each's probability of failure as 1.72% as you indicated.  If we simply added them, we would receive a 172% probability of failure, an impossible value.
+                        </p>
+                        <p>
+                         The correct methodology for a network such as this is to take the complement of the product of the complements of the probability of failure.  So, for example, the probability of a RAID 0 of 100 drives failing is 1-(0.9826^100), or ~82%.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2013-06-15 23:43:13
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/80f2dcefb0ce2f6769621b8490e9ac33/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=80f2dcefb0ce2f6769621b8490e9ac33" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Lee Thompson
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I don't think I'd ever use RAID, anything goes wrong on any drive in that array and you are SOL.    Seems like a lot of risk for just a minor read speed bump.     Moreover, the more disks in the array the worse it gets.
+                       </p>
+                       <p>
+                        I use RAID5 for data storage, and I purposely mix brands (but not too much so they still work) so that they don't all have the same MTBF.  (I'm using Infrant ReadyNAS NV boxes which also are doing hardware raid).  (Even RAID5 is pushing your luck with 4 drives (3+1), you're better off doing RAID6 (3+2) or at least having a hot spare.
+                       </p>
+                       <p>
+                        I mix brand also because over the years, I've had some kind of problem wtih every brand of drive.  It happens, it will happen again.   Sometimes it's Hiatchi, sometimes Seagate, sometimes Maxtor, sometimes WDC...   hardware's being pushed so rapidly nothing is really getting *perfected* and glitches are guaranteed to show up.    My RAID5 strategy is both to make sure the MTBFs do NOT match and to vary brands because they all seem to have bad batches and at least this way I will (hopefully) only have one failure at a time. :)    Is it perfect? Is there still a chance of data loss?   "No and Yes"    But hopefully I've minimized as much as I can in this price range... :)
+                       </p>
+                       <p>
+                        On my workstations/gaming box, I don't do any RAID at all.   There's no need for it.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-08 23:43:58
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/ac116eac2d9f4be812957fcfe2aef299/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=ac116eac2d9f4be812957fcfe2aef299" style="margin-right:10px;" width="32"/>
+                        </a>
+                        baneaic
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         So here's a question.
+                        </p>
+                        <p>
+                         Say you've got a RAID0 configuration and want to get rid of it, using the 2 drives as separate drives.
+                        </p>
+                        <p>
+                         Is it as simple as backing up, disconnecting the drives and reconnecting them each to the board just by their own individual SATA cables?  Would the drives then have to be reformatted to be used (since some data could be broken into parts with some on one drive, some on the other)?
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2007-02-12 08:24:28
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                        <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                       </a>
+                       <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                        Jon Bach
+                       </a>
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        Yep, that'd be a perfect use of a disk imaging software.  You can just recable the hard drives to non-RAID ports, or often times you can simply disable RAID in the BIOS, which makes those same ports into standard SATA ports.  Both hard drives would need to be repartitioned and formatted.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-12 11:02:26
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/7c50c24f32e1f31527f692ce3d88d078/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=7c50c24f32e1f31527f692ce3d88d078" style="margin-right:10px;" width="32"/>
+                        </a>
+                        raohara
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         I am not sure the simple addition of failure rates is the right approach to this problem.  Instead, I suggest evaluating the system reliability using parallel and or series availability methods.  For example, if two drives are in a redundant configuration such that the system will continue to function if one drive fails then use the parallel approach.  When calculating system availability for devices operating in parallel the combined availability of the two devices is always higher than the availability of the individual parts.
+                        </p>
+                        <p>
+                         There are numerous articles that can explain this in more detail.  Here is one:
+                        </p>
+                        <p>
+                         <a href="http://www.eventhelix.com/RealtimeMantra/FaultHandling/system_reliability_availability.htm" rel="nofollow">
+                          http://www.eventhelix.com/Real...
+                         </a>
+                        </p>
+                        <p>
+                         Regards,
+                        </p>
+                        <p>
+                         Rich
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2007-02-13 09:10:39
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                        <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                       </a>
+                       <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                        Jon Bach
+                       </a>
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        At that point in the article, I was talking about failure of the array from the standpoint of hassle, not data loss.  If we're looking at the chances of a degraded array, then addition of failure rates is appropriate.
+                       </p>
+                       <p>
+                        Sorry!
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-13 10:10:27
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/59a9818eda5fdc408ed76aa179ab0c97/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=59a9818eda5fdc408ed76aa179ab0c97" style="margin-right:10px;" width="32"/>
+                       </a>
+                       PCC- Builder Dan
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        From a purely technical perspective, as the numbers of drives both sold and failed are finite, yes, having one drive fail does reduce the odds of another failing. I believe that the statistically correct way of looking at it is to multiply the odds of a drive not failing with itself as many times as you have drives, to get the odds of no drive failures at all. When the numbers of drives are sufficiently large (and I'd call our total hard drive sales sufficiently large), adding the two probabilities of failure together gives at least a close approximation of the correct probability.
+                       </p>
+                       <p>
+                        However, those differences are practically nill compared to, say, the odds of the drives falling out of RAID, or any other of a half-million controller-related issues. While you and I are certainly power-users enough to replace drives and rebuild the array without calling tech support, my Aunt Tillie most certainly is not. She, and not us, is who the article is aimed at.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2007-02-17 19:59:52
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/75ce4ca39476fa5116a30611a4a19687/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=75ce4ca39476fa5116a30611a4a19687" style="margin-right:10px;" width="32"/>
+                        </a>
+                        a.lizard
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Using RAID, if something like a power surge eats both drives, you're SOL.
+                        </p>
+                        <p>
+                         With a simple offline drive image on a mirror drive, one is back up as soon as the mirror is hooked up... I keep the mobile rack with the mirror drive somewhere else and only have it plugged in when actually backing up.
+                        </p>
+                        <p>
+                         I do an rsync image backup (I use Linux, I presume there's a Windoze equivalent, though I think one could actually use what's described here) to a drive mirror using a slightly customized Knoppix disk. (if one uses LVM, building a UUID gets kind of ugly, but it's doable) With Knoppix running as an OS as a LiveCD, there's no disk concurrency problem, and rsync only updates changed files, i.e. once the drive image is transferred, one does differential backup only. So I let the computer boot to the Knoppix home page, click to the backup page, click the rsync icon which is hooked to a script... and go away for a few minutes.
+                        </p>
+                        <p>
+                         Drive recovery, assuming that nothing else is fried is simply a matter of bolting in the backup, changing the drive LVM ID using Knoppix, and rebooting in the native OS. (Debian Etch in my case)
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2007-04-11 00:07:03
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/1ebb7885f92d4f34586230a518389b75/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=1ebb7885f92d4f34586230a518389b75" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Locke
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        RAID 0 performance boosts for gaming is probably one of the most overrated things on the PC market today.
+                       </p>
+                       <p>
+                        RAID setups see the biggest advantages in arrays of 8+ disks, like the ones found in high end video editing computers.
+                       </p>
+                       <p>
+                        I have my Vista on a RAID 0 setup, but I don't see a huge performance boost over using a single drive, especially in every day applications.
+                       </p>
+                       <p>
+                        On the other hand, my HD editing setup (which is probably running at the bare minimum required) has an awesome performance boost when raiding.
+                       </p>
+                       <p>
+                        In fact, it's the only way to even capture/edit/view uncompressed HD video.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2008-05-15 09:27:14
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/b80bc5ae269a60ece27799a7dc2190b7/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=b80bc5ae269a60ece27799a7dc2190b7" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.bobharbison.com" rel="nofollow">
+                         BobH
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         I have my Vista on a RAID 0 setup, but I don't see a huge performance boost over using a single drive, especially in every day applications.
+                        </p>
+                        <p>
+                         On the other hand, my HD editing setup (which is probably running at the bare minimum required) has an awesome performance boost when raiding.
+                        </p>
+                        <p>
+                         OK, so what is the difference between the two systems? How are they set up and what hardware are they? Since I'm not familiar with either one of your systems, it's hard for me to understand why it works great for one, but is barely noticable on the other... (I'm guessing the video editing system has higher specs, but I'd like specifics)
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2008-05-15 13:26:18
+                        </div>
+                       </div>
+                       <div style="clear:both;margin-left:37px;">
+                        <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                         <a class="nounder" href="http://disqus.com/guest/1ebb7885f92d4f34586230a518389b75/" rel="nofollow">
+                          <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=1ebb7885f92d4f34586230a518389b75" style="margin-right:10px;" width="32"/>
+                         </a>
+                         Locke
+                        </div>
+                        <div style="padding:10px;margin-left:37px;">
+                         <p>
+                          OK, so what is the difference between the two systems? How are they set up and what hardware are they? Since I'm not familiar with either one of your systems, it's hard for me to understand why it works great for one, but is barely noticable on the other... (I'm guessing the video editing system has higher specs, but I'd like specifics)
+                         </p>
+                         <p>
+                          Actually, both RAID configurations are on the same setup.
+                         </p>
+                         <p>
+                          My OS and applications are installed on 2 x WD Raptors, while my HD storage array is 4 x Seagate Barracuda
+                         </p>
+                         <p>
+                          I am not using on-board RAID, rather a 6-port PCI-Express.
+                         </p>
+                         <p>
+                          System Specs:
+                         </p>
+                         <p>
+                          Q6600 @ 2.8GHz
+                          <br/>
+                          ASUS P5E
+                          <br/>
+                          2 x 2Gb Crucial Ballistix DDR2
+                          <br/>
+                          XFX GeForce 8800GT
+                         </p>
+                         <p>
+                          Everything after that is just icing on the cake.
+                         </p>
+                         <p>
+                          Like I mentioned before, not a huge difference running the OS and apps. in a RAID0, at least not enough to justify the cost.
+                         </p>
+                         <div style="font-size:10px;color:#666;margin-top:10px;">
+                          Posted on 2008-05-20 14:42:23
+                         </div>
+                        </div>
+                        <div style="clear:both;margin-left:37px;">
+                         <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                          <a class="nounder" href="http://disqus.com/guest/b80bc5ae269a60ece27799a7dc2190b7/" rel="nofollow">
+                           <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=b80bc5ae269a60ece27799a7dc2190b7" style="margin-right:10px;" width="32"/>
+                          </a>
+                          <a class="nounder" href="http://www.bobharbison.com" rel="nofollow">
+                           BobH
+                          </a>
+                         </div>
+                         <div style="padding:10px;margin-left:37px;">
+                          <p>
+                           &gt; both RAID configurations are on the same setup...
+                          </p>
+                          <p>
+                           OK, so I guess I'm just not understanding the difference then...
+                          </p>
+                          <p>
+                           You say one isn't much difference at all, but on the other it's a huge difference. Is it the software that's making the big difference, or the fact that video needs so much data your single drive just can't keep up?
+                          </p>
+                          <div style="font-size:10px;color:#666;margin-top:10px;">
+                           Posted on 2008-05-21 09:07:11
+                          </div>
+                         </div>
+                         <div style="clear:both;margin-left:37px;">
+                          <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                           <a class="nounder" href="http://disqus.com/guest/1ebb7885f92d4f34586230a518389b75/" rel="nofollow">
+                            <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=1ebb7885f92d4f34586230a518389b75" style="margin-right:10px;" width="32"/>
+                           </a>
+                           Locke
+                          </div>
+                          <div style="padding:10px;margin-left:37px;">
+                           <p>
+                            &gt; both RAID configurations are on the same setup...
+                           </p>
+                           <p>
+                            OK, so I guess I'm just not understanding the difference then...
+                           </p>
+                           <p>
+                            You say one isn't much difference at all, but on the other it's a huge difference. Is it the software that's making the big difference, or the fact that video needs so much data your single drive just can't keep up?
+                           </p>
+                           <p>
+                            Capturing uncompressed HD with a single drive isn't possible (using conventional 7200RPM or even 10k RMP drives)
+                           </p>
+                           <p>
+                            In order to capture/edit/playback these files, you need to have a hard drive array capable of very high read/write capabilities.
+                           </p>
+                           <p>
+                            For this particular application, one can obviously see the benefits of RAID because a single drive simply isn't an option.
+                           </p>
+                           <p>
+                            RAID for your applications (which I also have setup) was really a bit of a desappointment to me.  I bought two Rators, my buddy bought one.  He and I get equal load times for the Operating System and Apps.
+                           </p>
+                           <div style="font-size:10px;color:#666;margin-top:10px;">
+                            Posted on 2008-05-21 14:29:57
+                           </div>
+                          </div>
+                          <div style="clear:both;margin-left:37px;">
+                           <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                            <a class="nounder" href="http://disqus.com/guest/0ea1d2dc421f29f168b5acb8ca71d628/" rel="nofollow">
+                             <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=0ea1d2dc421f29f168b5acb8ca71d628" style="margin-right:10px;" width="32"/>
+                            </a>
+                            dwight
+                           </div>
+                           <div style="padding:10px;margin-left:37px;">
+                            <p>
+                             Great article. It's good to see people starting to wake up to the fact that RAID doesn't deliver on the hype which has been attributed to it. Though it's hard for some (if not many) to admit that they've blown money on a solution which just isn't close to delivering on its promises.
+                            </p>
+                            <p>
+                             Some researchers at Google published a similar conclusion a year ago last fall, IIRC. That's one of the reasons why (they claimed) Google doesn't waste money on RAID.  But there's so much mindset in place with RAID that people have difficulty accepting the fact that it's really just a waste of money for many, if not most, of its designated uses.
+                            </p>
+                            <p>
+                             Regarding data integrity, no one has mentioned that parity(!) is a joke, especially as it's applied to modern day RAID. Parity might be cutting edge 1980's technology, but honestly, it's a joke IMHO now. Use cryptographic checksums if you want real data integrity checking. Multiway cgcs's if you absolute have to be certain of the data. But not parity.
+                            </p>
+                            <p>
+                             Thanks again.
+                            </p>
+                            <div style="font-size:10px;color:#666;margin-top:10px;">
+                             Posted on 2008-05-23 21:53:27
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/f9b3c170d2fe5c3ed2262e29df4ba2dc/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=f9b3c170d2fe5c3ed2262e29df4ba2dc" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Giaour
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I use RAID solutions on my workstations at home but I also use enterprise level hardware (SCSI / separate controller / etc.).  I have had little issue over the nearly six years of usage (across multiple machines albeit).
+                       </p>
+                       <p>
+                        The hardware identified by the article is still designed around a desktop platform which means to me not running 24-7 so the failure rates may be missing the all important - time to failure aspect; which could be accelerated using non-enterprise hardware in an enterprise way.
+                       </p>
+                       <p>
+                        In my opinion, as the gap between enterprise and non-enterprise hardware gets smaller, one the ability to buy enterprise grade hardware shouldn't be so steep.
+                       </p>
+                       <p>
+                        Anywho ... I wanted to say if you *MUST* do RAID ... please use a dedicated controller not the ensure a better chance of longevity and determine the typical weekly hourly usage of the drives.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2008-05-30 14:42:31
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/e0fd64b1f0c9caabc373ead824c35c2a/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=e0fd64b1f0c9caabc373ead824c35c2a" style="margin-right:10px;" width="32"/>
+                       </a>
+                       SergeantMajor15
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I was just wondering...why do people use raid when they can just get one big hard drive? Wouldn't that just be easier?
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2008-06-01 13:03:01
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/b80bc5ae269a60ece27799a7dc2190b7/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=b80bc5ae269a60ece27799a7dc2190b7" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.bobharbison.com" rel="nofollow">
+                         BobH
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         I was just wondering...why do people use raid when they can just get one big hard drive? Wouldn't that just be easier?
+                        </p>
+                        <p>
+                         There are two reasons to use RAID.
+                        </p>
+                        <p>
+                         1) Speed - Since a hard drive is a physical device, it can only transmit data so fast. The drive spins at a certain speed, and the drive head moves back and forth to access the data.
+                        </p>
+                        <p>
+                         By using two drives in a RAID configuration, you can acess your data faster. Just how much faster depends on a huge number of factors, and can vary from not at all to nearly twice as fast. Gamers like RAID since the game is never waiting to load data, or if it is waiting, the wait is less than it would be otherwise.
+                        </p>
+                        <p>
+                         2) Data Security - RAID drives can be set up to make a copy of all your data. They can do it by mirroring, which simply makes two copies, or in more complex installations by striping, which I won't try to explain here, but data security striping takes 3 or more drives and complex software.
+                        </p>
+                        <p>
+                         No matter which technique, the end result is that if you lose a hard drive due to disk failure, you data won't be lost. That is an important feature in some applications.
+                        </p>
+                        <p>
+                         Please note that it pretty much only protects you from physical disk problems. If you get a nasty virus for example, or delete a file by mistake, RAID users are usually no better off than regular computer users.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2008-06-01 18:23:20
+                        </div>
+                       </div>
+                       <div style="clear:both;margin-left:37px;">
+                        <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                         <a class="nounder" href="http://disqus.com/guest/0ea1d2dc421f29f168b5acb8ca71d628/" rel="nofollow">
+                          <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=0ea1d2dc421f29f168b5acb8ca71d628" style="margin-right:10px;" width="32"/>
+                         </a>
+                         dwight
+                        </div>
+                        <div style="padding:10px;margin-left:37px;">
+                         <p>
+                          I agree. Those are the only two real justifications for raid. But then you have to ask yourself whether it's work the money?
+                         </p>
+                         <p>
+                          Personally, I prefer to spend the money on a hard disk somewhere else, and just use rsync.  That way, I don't have to worry about someone accidentally deleting all of the files.
+                         </p>
+                         <p>
+                          It really depends on what you're using it for, of course. But what I chuckle at are the people who toss out the raid buzzword, and spend a lot of money, without really understanding what their requirements are.
+                         </p>
+                         <p>
+                          Hey, if it meets your needs, that's great. But just don't expect to impress everyone because you're using RAID. Some will laugh at you. :)
+                         </p>
+                         <div style="font-size:10px;color:#666;margin-top:10px;">
+                          Posted on 2008-06-02 19:14:02
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/fded76d281a7a1b8995c8396b80156d9/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=fded76d281a7a1b8995c8396b80156d9" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Semper Fuzz
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        Say hi to the "VelociRaptor"  I have two Raptor 150's and they were in Raid 0 and when they worked it was great.  Have any crashes or have to reload and the average Joe like me could not get the raid back up.  Now i am running on one Raptor and the other sits being liquid cooled and it laughs at me.
+                       </p>
+                       <p>
+                        I am buying the Velociraptor as my main operating and will use my Raptors as storage !
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2008-06-30 19:45:41
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/e88a326276e398c6cd4a60f558e266f6/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=e88a326276e398c6cd4a60f558e266f6" style="margin-right:10px;" width="32"/>
+                        </a>
+                        Grease Monkey
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Hello,
+                        </p>
+                        <p>
+                         Good info here.
+                        </p>
+                        <p>
+                         On the topic of RAID 0 in the context of gaming, I understand that the benefits are almost nil with hard disks because of the seek time.
+                        </p>
+                        <p>
+                         Now what if we use solid state drives, or hyperdrives 4 - I would expect this setup to actually   significantly outperform ssd . hyped-4 by two fold.
+                        </p>
+                        <p>
+                         Any thoughts?
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2008-11-15 17:18:19
+                        </div>
+                       </div>
+                       <div style="clear:both;margin-left:37px;">
+                        <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                         <a class="nounder" href="http://disqus.com/guest/d5115e459a8e86247ba18c769acb25ea/" rel="nofollow">
+                          <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=d5115e459a8e86247ba18c769acb25ea" style="margin-right:10px;" width="32"/>
+                         </a>
+                         scottish
+                        </div>
+                        <div style="padding:10px;margin-left:37px;">
+                         <p>
+                          I apologize for reviving this post, but I have to say that I am SO appreciative in regard to Jeff Stubbers and his answers to my questions in regard to a RAID set-up for the new system I ordered with Puget.
+                         </p>
+                         <p>
+                          I initially submitted the configuration with two WD Raptors 300GB 10k in Raid 0 - Jeff immediately recommended a good quality controller.  A bit later (another 3-4 emails) I was questioning whether I really needed a RAID set-up (this is a new gaming system btw) and Jeff detailed exactly what a RAID set-up is for.  He didn't say I should or shouldn't have one, but gave me the information I needed to make a decent decision on my own.
+                         </p>
+                         <p>
+                          In the end I decided against the RAID and after reading this thread I'm tickled to death that I did so (Jeff commented as well that he thought it a wise decision).  An added benefit was the 700.00+ savings that resulted from the change! :)
+                         </p>
+                         <p>
+                          Just awesome service from you guys here!
+                         </p>
+                         <div style="font-size:10px;color:#666;margin-top:10px;">
+                          Posted on 2009-05-22 17:08:15
+                         </div>
+                        </div>
+                        <div style="clear:both;margin-left:37px;">
+                         <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                          <a class="nounder" href="http://disqus.com/guest/54dedce1324980dba6c6a1586c7dfcc7/" rel="nofollow">
+                           <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=54dedce1324980dba6c6a1586c7dfcc7" style="margin-right:10px;" width="32"/>
+                          </a>
+                          Computer_Newbie
+                         </div>
+                         <div style="padding:10px;margin-left:37px;">
+                          <p>
+                           Jon, your my hero.  Reading that article made me realize what has been wrong with my computer for 2 years.  My computer will(it seems just to spite me) go BSOD on me.  Sometimes it rarely happens and sometimes it happens every 20 minutes.  Now I have realized that it has been caused by a Degraded RAID Array.  My computer has been sick and giving very loud hints and I've been blaming it for all the problems It's been having.  I feel so ashamed!  Damn it feels good getting that out.  Now I've got to go do something. *Gets down on hands and knees begging the computer for forgiveness**Computer slaps me* "OUCH!!"  Now where was I... Oh Yeah!  Now whose to blame for all of these problems!  The computer companies who sold computers with RAID with insufficient RAID Controllers!  Let's Tar and Feather the lot of them!  *Goes to General Store to pick up Tar*  "Hello kind sir.  I'm having a bit of a dispute with my local Computer Company.  Where do you keep the Tar and Feathers?"  "isle 8.  Anything else, sir?"  "Um yes, where do keep the AR-15 rounds and those things you bury and when you step on them they explode?"  "Landmines?"  "Landmines, landmines!  That's what I was thinking of!"  They're on isle 11."  "Thank you."  "Have a nice day."  *Returns to Forum Thread*  Well I'm ready, now!  You know that was a very nice stock boy I hope they're paying him well.  And If not, they'll be the next target!;):cool:
+                          </p>
+                          <div style="font-size:10px;color:#666;margin-top:10px;">
+                           Posted on 2011-03-09 21:14:53
+                          </div>
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/google-3e192aa1c99d3e30d4f45ff85a7c3a31/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=3e192aa1c99d3e30d4f45ff85a7c3a31" style="margin-right:10px;" width="32"/>
+                       </a>
+                       no reply
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                         Dedicated raid at a pricepoint of ~$300 vs cheap PCI or onboard controller makes a difference when we're talking about raid 5, or other more complicated configurations. When it comes to Rad 0,1, 0+1 etc, they are virtually identical in performance. The expensive hardware and brains on those raid controllers is for the overhead associated with calculating and distributing parity across all of the drives. Spending $300 on an expensive controller only to stripe or mirror is a waste of money, those are not complicated procedures and don't need a complicated brain to run them like you find on those expensive 3ware/adaptec controllers. It's all about what you want - if you want speed and don't care about data integrity, and there are some desktop and workstation situations where this can be true - go ahead and set up a raid 0, but expect equal or less data integrity than running a single disk. You want protection against hard disk failure, go ahead and setup a Raid 1, but expect the same protection (read:none) against deleting files, trojans, viruses, malware. You want speed and protection against hard drive failure, set up a striped+mirrored RAID setup. There are end user, non enterprise server settings where each of these might work. For my setup, I have striped-mirrored setup running on a file-server, on an old MB+cpu, that automatically images on a weekly basis to one of two removeable drives, that are rotated, and stored off premises. Works great. This box runs as file server, web server for our office intranet, and SQL server as back-end to our ASP pages. Works great. We're in a small office of about 3-5 people and it suits our needs, but it could just as easily be my home server hosting my library of movies etc, and is a fine setup for a enthusiast/sophisticated user. Sure know what you're getting into, but dabbling in this sort of thing, asking these questions, and working through these issues to find what's right is a great way for people to learn. I'm sure the cost of your service calls means you want things to work all the time, the flip side is, instead of telling your clients why one thing or another is a good or bad tell them why - educate them. The only problem with RAID 1 is the misconception that it provides protection against deletion of files, trojans, viruses ets, but in the end it always come back to creating an offsite copy of your data that can be reverted to in the case of not just data loss, but also data corruption. In terms of statistics, if we're going to talk numbers, let's do them right. if Drive X has a failure rate of 1%, and Drive Y has a failure rate of 1%, it is not an issue of adding up the two failure rates, instead you have to look at the rate they won't fail. If each has a 99% chance of not failing, then the rate of both of them not failing is .99x.99 = 98.01% chance that they both will not fail, or a 1.99% chance that one of them will fail. To put this in terms of the numbers you cited it would be (1.0 - 0.0172)(1.0 - 0.0172) = 0.96589584, or a 3.41% chance one of them will fail. Yeah, that's pretty darn close to 3.44%, but that's because we're dealing with probabilities on either end -e.g. either a veryHIGH liklihood that they will NOT fail, or a very LOW liklihood that they WILL fail. Point is, it's not accurate simply to say that it's double, and as you add more disks to the array, this difference will be magnified. Here's an example of a power user setup thatis simpe and would benefit from RAID 0: User has OS installed on striped RAID, has second disk where images of OS are stored, and where data files are stored. When all is well, OS and programs run fast, when it shits the bed, data is on separate drive, and you simply reimage. User cares about data safety? Back it up to a NAS or USB thumbdrive. Easy sleazy.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2012-05-17 19:18:32
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/google-3e192aa1c99d3e30d4f45ff85a7c3a31/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=3e192aa1c99d3e30d4f45ff85a7c3a31" style="margin-right:10px;" width="32"/>
+                       </a>
+                       no reply
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        And remember - servers are not just limited to the old VAX/VMS at the local Uni - look at any household that has more than one computer - tons of these people are running their boxes as servers, home servers are ubiquitus nowadays,and tons of enthusiasts have some incarnation of a server running, even though they aren't "enterprises"
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2012-05-17 19:22:39
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/3b902cc4f36babc5985b44df531d744d/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=3b902cc4f36babc5985b44df531d744d" style="margin-right:10px;" width="32"/>
+                       </a>
+                       whiterabbit
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I just had an SSD drive go bad after only 10 months. I was down for a week before the new drive got to me and I got it set up again. In the interest of preventing downtime in the future, Iwent with RAID 1 this time. If a drive goes bad I can just switch to the other one. I also do backups, but I think this gives me the least amount of downtime in case of a singledisk failure.
+                       </p>
+                       <p>
+                        Then the question is hwvs sw RAID? It seems to me that when using RAID 1 you are moving the single point of failure from the drive to the RAID controller: if the RAID controller fails, you've just lost everything *and* you have to get an *identical* RAID controller to access the data on your drives. RAID controllers (esp. on motherboards) change so often that I think this might be a difficult task. This seems to be a point that I never read about. Most articles strongly recommend hw RAID vs sw RAID, but leave out this important point that you will need to find an identical controller if yours goes bad. Maybe I'm missing something, but this is the way it looks to me. I'd really like to know if I'm mistaken here. On my motherboard, switching the disk from AHCI to RAID requiresthe diskto be reformatted, so you can't just easily switch back and forth. It's a Z68 chipset; sayI used the motherboard RAIDandthe motherboard dies in acouple of years... motherboards will likely have a different controller by then, and I won't easily be able to test my disks with a new motherboard. Will I be able to find a controller (even a discrete controller)that can read my disks?
+                       </p>
+                       <p>
+                        I chose Windows 7 software mirroring so that I have duplicated disks that can be plugged into any computer in the case of a motherboard failure. I don't notice any performance hit at all. I thought it was interesting that this article refers to the motherboard RAID controller as "software" RAID; if that's the case then Windows RAID should be just as good.
+                       </p>
+                       <p>
+                        During this event (and after buying two drives), I realized thatWindows Backup backs up your entiresystem, including all installed programs.I had no idea it backed up all programs. Amazing. This seems like huge progress, and shouldonly take a few hours to recover the entire system. This is my secondary backup plan. :) If I'd realized this I could've saved a lot of time. The more I've learned about WinRE and Windows Backup makes me think downtime could be very minimal if you use these tools, and the need for any type of RAID becomes less.
+                       </p>
+                       <p>
+                        Puget Systems was excellent during this adventure. :) Having all of the drivers so easily accessible, up-to-date, and easy to see which ones you need was really helpful and impressive! Also having the BIOS screenshots was helpul (but I wish I'd realized all I need to do was load the saved profile!) My only suggestion might be to have an article recommending a backup strategy and the steps to recover from a disk failure; for example, using Windows Backup with a system backup, and then how to recover it using WinRE. And noting that the BIOS can be loaded in profile 1 would be good too. They have provided an excellent set of tools and disks with the computer that would've been extremely helpful had I had them with me. :) But just a little more info on how to recover would've been great. I'm still highly impressed! Thank you!!
+                        <br/>
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2012-07-16 00:59:25
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/bef6e1fac18dc9c392dbde9ab55283f1/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=bef6e1fac18dc9c392dbde9ab55283f1" style="margin-right:10px;" width="32"/>
+                       </a>
+                       SXXX
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        if drive has 1.000.000 or 1.500.000 hours untilll failure convertit to earth years will be around 100-170 years. good luck RAIDERS
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2012-08-03 02:11:41
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                         <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                         Jon Bach
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Using the MTBF to indicate expected lifespan isn't quite how it works. I found this explanation amusing:
+                        </p>
+                        <p>
+                         "What is the MTBF of an 25 year old human being? 70 years? 80? No, its actually over 800 years which highlights the difference between lifetime and MTBF. Take a large population of, say, 500,000 over a year, and seeing how many failed (died) that year  e.g. 600  so the failure rate is 600 per 500,000 people-years, i.e. 0.12% per year and the MTBF is the inverse of that which is 830 years. An individual wontlastthat long, they will wear out long before then (unless they are Doctor Who), but for the population as a whole, in that high reliability portion of their lifespan, it holds true  in a typical year you will only have to replace 600 of them."
+                        </p>
+                        <p>
+                         Quoted from:
+                         <br/>
+                         <a href="http://www.qualityandproducts.com/2010/07/06/the-real-meaning-of-mtbf/" rel="nofollow">
+                          http://www.qualityandproducts....
+                         </a>
+                         
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2012-08-03 02:33:05
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/guest/adb2379cd0f3e9fe04da8931f18db250/" rel="nofollow">
+                        <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=adb2379cd0f3e9fe04da8931f18db250" style="margin-right:10px;" width="32"/>
+                       </a>
+                       smr
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        It is hard to adapt probabilities that are certain only with high quantities, and considering failures rate of a single personal disk.
+                        <br/>
+                        We know that throwing a dice, we can expect to get number 4 with a 1/6 probability. But in reality, it can happen you throw a dice 10 or 20 times without getting a 4. Probability becomes certain only for high quantities.
+                        <br/>
+                        Jon Bach got 3% failure rates on 300 or more disks sold. It doesn't mean your particular disk will have 3 failures in a 100 days period. It could have 0 failure (or more).
+                        <br/>
+                        An other practical example is I'm very happy having two cars, because it is hard to face a car failure when you have only one, you can't drive for many days as long the car is under repair. When you have two cars, you can use second car when one fails.
+                       </p>
+                       <p>
+                        So is RAID concept. Probability to have failure on one disk is say 3%. Having 2 disks causes to have 6% (3+3) probability of failure on one of two disks but, as Whiterabbit said, probability to have failure on two disks at same time is the product of each case, so 3% * 3% = 9/10 000. This is why RAID is interesting. Probabilty of a disk failure is higher, but probability of two simultaneous disk failures is much less. And reality is much much less.
+                       </p>
+                       <p>
+                        More than this, as said, this is true only for high number of experiences. In particular experience, I never had my two cars in failure at same time! They are both old cars, with higher failure rate than a Rolls Royce, but I'm confident because they never fail at same time!
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2012-10-13 10:06:48
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                         <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                         Jon Bach
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Statistics is NOT only true for high number of experiences! That's not how statistics works :) If you personally have hard drives that don't fail, it means that someone else has twice as many that fail. It all evens out! It is true that the purpose of RAID is to insulate the user from the ill effects of disk failure. The point of this article is that I'm saying that for desktop users, the other downsides of poor RAID implementation outweigh those benefits. To your analogy, it is like owning two junker cars vs. one good quality car. Yes, you have "redundancy" in the two junker cars, but you'll constantly be dealing with failures and headaches. That's not a great analogy because with RAID, the quality of the disks isn't the variable factor, but I can't think of a better analogy at the moment :) With desktop class RAID, it isn't the disks you should worry about. It is the poor controller, the buggy drivers, the poorly written UI, and the false sense of security that uneducated users derive regarding things RAID does nothing to protect you from.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2012-10-13 17:45:53
+                        </div>
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/guest/ed1605e88e4f7fc29a8619fb7c8b906e/" rel="nofollow">
+                         <img height="32" src="https://blocked.gravatar.com/avatar.php?default=https%3A%2F%2Fmediacdn.disqus.com%2F1363132609%2Fimages%2Fnoavatar92.png&amp;size=92&amp;gravatar_id=ed1605e88e4f7fc29a8619fb7c8b906e" style="margin-right:10px;" width="32"/>
+                        </a>
+                        Montrose439
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Your case of having 6 % probability of failure on one of two disks is proven wrong, when probability exceeds 100 percent(for example 50 drives times 3% = %150 percent) because you cannot have more than 100 percent failure in real life , the formula is proven wrong. Because you cannot prove that one drive will go bad in the first hour, even if you have 200 drives on at once.
+                         <br/>
+                         But you CAN have a exponential curve formula that never goes over 100 percent and is not proven wrong.
+                        </p>
+                        <p>
+                         So this is what I believe it is:
+                         <br/>
+                         I could be wrong but I had a good Statistics teacher in school and think its right.
+                        </p>
+                        <p>
+                         n = 1 hard drive. Disk Array is 1+1 and so forth.
+                         <br/>
+                         If failure rate is 3%. Then:
+                        </p>
+                        <p>
+                         So one drive is 3%/n .
+                         <br/>
+                         2 drives is (3%/n ) + (3%/2n).
+                         <br/>
+                         3 drives is (3%/n) +(3%/2n) + (3%/3n)
+                         <br/>
+                         4 drives is (3%/n) +(3%/2n) + (3%/3n) + (3%/4n)
+                        </p>
+                        <p>
+                         This gives probability of one drive going out.
+                        </p>
+                        <p>
+                         Then divide that number by the number of hard drives in your system to get total unrecoverable error rate.
+                        </p>
+                        <p>
+                         Let me know if you think of a better formula that does not go over %100 percent.
+                         <br/>
+                         Thanks. Marty C.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2012-11-01 04:59:19
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/facebook-654101898/" rel="nofollow">
+                        <img height="32" src="https://disqus.com/api/users/avatars/facebook-654101898.jpg" style="margin-right:10px;" width="32"/>
+                       </a>
+                       <a class="nounder" href="http://www.facebook.com/frank.vandermast" rel="nofollow">
+                        Frank Van Der Mast
+                       </a>
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        Jon,
+                       </p>
+                       <p>
+                        You've written a very compelling article. I completely agree with you, but would like to point out that you are making it sound as if 'RAID' itself is flawed while you should be saying 'on-board software RAID' is flawed.
+                       </p>
+                       <p>
+                        I had a 4x1TB RAID5 (ICH10R) array on my previous pc and, as you might have guessed, it gave me nothing but trouble. disks dropped out of the array for no apparent reason, rebuilding could be tiresome and complicated and at one point it even went horribly wrong when I tried to restore the array forcefully (using 3rd party tools) after 2 disks had dropped out simultaneously. I managed to restore the array but I (by lack of knowledge/research) screwed up the partitioning ending up with a 2TB partition instead of the 2.7TB it should have been... basically almost half of my files had gotten corrupted due to that 'oversight'.
+                       </p>
+                       <p>
+                        Now, in my new computer, I did things differently.
+                       </p>
+                       <p>
+                        I bought an ARECA ARC 8 ports RAID controller card and hooked up 6x2TB in RAID6 and 2x1TB in RAID1. I have an SSD with windows and apps, the raid1 stores all my games and the raid6 stores all my data and multimedia. I backup my entire OS disk to the RAID6 and an external 2TB HDD weekly and I also backup the vital data (documents and photos etc) from the RAID6 to the external HDD.
+                       </p>
+                       <p>
+                        You mention 4 other possible causes for data-loss in your article but I am afraid I have to admit that I have never EVER lost data that way. I hope my setup at least satisfies your request to always backup your stuff. (if a RAID6 + external HDD with its own power source isnt safe enough I don't know what is)
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2013-02-16 18:40:15
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="http://disqus.com/facebook-100005237886766/" rel="nofollow">
+                        <img height="32" src="https://disqus.com/api/users/avatars/facebook-100005237886766.jpg" style="margin-right:10px;" width="32"/>
+                       </a>
+                       <a class="nounder" href="http://www.facebook.com/mike.foley.5245" rel="nofollow">
+                        Mike Foley
+                       </a>
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I'll throw in my 2 cents. When it comes to software RAID and integrated RAID support on motherboards and I'll agree that if you're seriously considering RAID get the right stuff. When it comes to a small business, who isn't going to spend the extra bucks for all the fancy stuff, a simple RAID 1 solely for the purpose of having a mirror (due to failure) isn't a bad idea. While a good backup schedule is essential, it is much easier to swap drives around should one fail. I've seen plenty of drives fail well before their time, and I've also have one here that is over 11 years old and 65,000 hours and keeps on running. While it is far more likely that something else fails before the hard drives, you can't replace data. I don't know how many businesses around here have zero backups, or a crappy one at that. While RAID doesn't protect against accidental data loss or a severe power surge, it does protect against a drive failure. Had one of these businesses used RAID1 they wouldn't be forking out $1,500 to recover their data. I've seen it happen time and time again with small businesses.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2013-04-14 13:39:24
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="" rel="nofollow">
+                        <img height="32" src="//a.disquscdn.com/1390344098/images/noavatar92.png" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Archibald
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        You're missing out on a major market here. If people want it give it to them but develop a system where the raid makes sense. Perhaps a 5 drive raid10 setup. Two drives can fail and life goes on as normal. Striped and mirrored. Perhaps source a decent pci-e x3 raid controller and sell it with your high end rig as the RAID option. Don't offer to configure consumer board raid features on lower tiered builds. People who want raid get a quality raid with a solid backbone.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2014-01-22 07:12:01
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="http://disqus.com/pugetsystems/" rel="nofollow">
+                         <img height="32" src="https://disqus.com/api/users/avatars/pugetsystems.jpg" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://www.pugetsystems.com" rel="nofollow">
+                         Jon Bach
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Yep!  That's exactly what we've been doing for years.  That prices it out of a range that makes sense for most consumers, which is who this article was targeted for.  Professionals, businesses, and server applications....RAID most certainly makes more sense there, and for those situations, we do it right.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2014-01-22 17:14:40
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                     <div style="clear:both;">
+                      <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                       <a class="nounder" href="https://disqus.com/by/amygwin/" rel="nofollow">
+                        <img height="32" src="https://disqus.com/api/users/avatars/amygwin.jpg" style="margin-right:10px;" width="32"/>
+                       </a>
+                       Amy Gwin
+                      </div>
+                      <div style="padding:10px;margin-left:37px;">
+                       <p>
+                        I spent two years dealing with failing RAIDs and more importantly failing RAID controllers. The more parts to the system, the more points for failure. Yes, it a new drive can replace the old one, but while all the parity bits get into place... the dreaded REBUILDING... your storage is at a slow turtle pace until complete. It isn't always as turnkey as it should be.
+                       </p>
+                       <div style="font-size:10px;color:#666;margin-top:10px;">
+                        Posted on 2014-12-12 03:57:54
+                       </div>
+                      </div>
+                      <div style="clear:both;margin-left:37px;">
+                       <div style="width:100%;font-size:14px;font-weight:bold;background-color:#EEE;padding:5px;">
+                        <a class="nounder" href="https://disqus.com/by/onwireless/" rel="nofollow">
+                         <img height="32" src="https://disqus.com/api/users/avatars/onwireless.jpg" style="margin-right:10px;" width="32"/>
+                        </a>
+                        <a class="nounder" href="http://onwireless.com.au/" rel="nofollow">
+                         onwireless
+                        </a>
+                       </div>
+                       <div style="padding:10px;margin-left:37px;">
+                        <p>
+                         Very useful advice.
+                         <br/>
+                         Im currently setting up a server and realised the MB does not support RAID... which turns out to be a goo thing.
+                         <br/>
+                         I also use a QNAP NAS with 5x 2TB consumer grade drives. It was set to RAID5 with the assumption that coverage for one drive failure would be enough.
+                         <br/>
+                         Well we had two drives fail within minutes of each other. So we rebuilt with RAID6, but lost all data. Ironic, since the whole purpose of having this NAS is for data backup! Also, RAID5 and RAID6, as pointed out, require a lot of I/O. This also results in quite high power consumption.
+                        </p>
+                        <div style="font-size:10px;color:#666;margin-top:10px;">
+                         Posted on 2015-06-02 01:21:47
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                    </div>
+                    <script type="text/javascript">
+                     var disqus_shortname = 'pugetsystems';
+    var disqus_identifier = 'ARTICLE_29';
+    var disqus_url = 'https://www.pugetsystems.com/labs/articles/Why-RAID-is-usually-a-Terrible-Idea-29/';
+	var disqus_title = 'Why RAID is (usually) a Terrible Idea';
+
+    var disqus_config = function () {
+		var config = this;
+		config.callbacks.preData.push(function() {
+			document.getElementById('disqus_thread').innerHTML = '';
+		});
+    };
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+                    </script>
+                    <noscript>
+                     Please enable JavaScript to view the
+                     <a href="https://disqus.com/?ref_noscript">
+                      comments powered by Disqus.
+                     </a>
+                    </noscript>
+                   </div>
+                   <footer>
+                    <div class="row">
+                     <ol class="breadcrumb puget-footer-bar small">
+                      <li>
+                       <a href="/configmenu.php">
+                        Build Your Own
+                       </a>
+                      </li>
+                      <li>
+                       <a href="/contact.php">
+                        Contact Us
+                       </a>
+                      </li>
+                      <li>
+                       <a href="/aboutus.php">
+                        About Us
+                       </a>
+                      </li>
+                      <li>
+                       <a href="/store/index.php">
+                        Parts Store
+                       </a>
+                      </li>
+                      <li>
+                       <a href="/site_map.php">
+                        Site Map
+                       </a>
+                      </li>
+                      <li>
+                       <a href="/faq.php">
+                        FAQ
+                       </a>
+                      </li>
+                      <li>
+                       <span title="Page parsed in 13 ms with 5.82 MB memory used. video  ">
+                        
+                       </span>
+                       Copyright 2015 -
+                       <a href="https://www.pugetsystems.com/">
+                        Puget Custom Computers
+                       </a>
+                      </li>
+                      <li class="puget-footer-social hidden-xs hidden-sm">
+                       <a class="puget_rating_trigger" href="#" title="Give feedback about this page!">
+                        [+]
+                       </a>
+                       <a class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/PugetSystems" rel="nofollow" target="_blank" title="Become a fan on Facebook">
+                        <i class="fa fa-facebook">
+                        </i>
+                       </a>
+                       <a class="btn btn-social-icon btn-twitter" href="https://www.twitter.com/PugetSystems" rel="nofollow" target="_blank" title="Follow us on Twitter">
+                        <i class="fa fa-twitter">
+                        </i>
+                       </a>
+                       <a class="btn btn-social-icon btn-google-plus" href="https://plus.google.com/114738378324353303788" rel="nofollow" target="_blank" title="Find us on Google+">
+                        <i class="fa fa-google-plus">
+                        </i>
+                       </a>
+                       <a class="btn btn-social-icon btn-youtube" href="https://www.youtube.com/user/pugetsys" rel="nofollow" target="_blank" title="View our YouTube channel">
+                        <i class="fa fa-youtube">
+                        </i>
+                       </a>
+                       <a class="btn btn-social-icon btn-linkedin" href="https://www.linkedin.com/company/puget-systems" rel="nofollow" target="_blank" title="View us on Linked In">
+                        <i class="fa fa-linkedin">
+                        </i>
+                       </a>
+                       <a class="btn btn-social-icon btn-rss" href="/subscribe.php" target="_blank" title="View our RSS Feeds">
+                        <i class="fa fa-rss">
+                        </i>
+                       </a>
+                      </li>
+                     </ol>
+                    </div>
+                    <div class="row">
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         Systems
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/echo.php">
+                         Echo
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/obsidian.php">
+                         Obsidian
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/spirit.php">
+                         Spirit
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/serenity.php">
+                         Serenity
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/genesis.php">
+                         Genesis
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/deluge.php">
+                         Deluge
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         Desktops
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/gaming.php">
+                         Gaming
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/business.php">
+                         Business
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/workstation.php">
+                         Video Editing
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/photo.php">
+                         Photography
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/go/trading.php">
+                         Stock Trading
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/liquid.php">
+                         Liquid Cooled
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/quiet.php">
+                         Quiet
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/htpc.php">
+                         HTPC
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                     <div class="clearfix visible-xs-block">
+                     </div>
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         Laptops
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/nav/traverse/standard_15/customize.php">
+                         Traverse
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/nav/traverse/pro_15/customize.php">
+                         Traverse Pro
+                        </a>
+                       </li>
+                       <li>
+                       </li>
+                       <li>
+                        <h5>
+                         Servers
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/peak.php">
+                         Peak Workstations
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/nav/summit/servers/configure.php">
+                         Summit Servers
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/nav/summit/storage/configure.php">
+                         Storage Servers
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/server.php">
+                         Custom Servers
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         About Us
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/aboutus.php">
+                         About Us
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/contact.php">
+                         Contact Us
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/reviews.php">
+                         Reviews
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/press.php">
+                         Press Kit
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/gsa/index.php">
+                         GSA Schedule
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/feedback.php">
+                         Testimonials
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/featured.php">
+                         Featured Systems
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                     <div class="clearfix visible-xs-block">
+                     </div>
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         Resources
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/all_articles.php">
+                         Hardware Articles
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/blog/">
+                         Blog
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/all_hpc.php">
+                         HPC Blog
+                        </a>
+                       </li>
+                       <li>
+                       </li>
+                       <li>
+                        <h5>
+                         Support
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/help/index.php">
+                         Online Guides
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/support/index.php">
+                         Request Support
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/remote/">
+                         Remote Help
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                     <div class="col-sm-2 col-xs-6 puget-footer-list small">
+                      <ul>
+                       <li>
+                        <h5>
+                         Policies
+                        </h5>
+                       </li>
+                       <li>
+                        <a href="/warranty.php">
+                         Warranty &amp; Return
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/privacy.php">
+                         Privacy
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/delivery.php">
+                         Delivery Times
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/response_time.php">
+                         Response Times
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/bulk.php">
+                         Bulk Orders
+                        </a>
+                       </li>
+                       <li>
+                        <a href="/bulk/resellers.php">
+                         Resellers
+                        </a>
+                       </li>
+                      </ul>
+                     </div>
+                    </div>
+                   </footer>
+                  </div>
+                  <!-- /.container -->
+                  <script src="https://d38ofaepfaaflh.cloudfront.net/static/js/15/js_bootstrap.js" type="text/javascript">
+                  </script>
+                  <script async="async" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=pugetsys" type="text/javascript">
+                  </script>
+                  <script type="text/javascript">
+                   $(document).ready(function(){
+						
+		});
+	
+		&lt;!-- BEGIN: Google Trusted Store --&gt;
+		var gts = gts || [];
+		gts.push(["id", "22047"]);
+				gts.push(["google_base_subaccount_id", "1212854"]);
+		gts.push(["google_base_country", "US"]);
+		gts.push(["google_base_language", "en"]);
+		(function() {
+			var scheme = (("https:" == document.location.protocol) ? "https://" : "http://");
+			var gts = document.createElement("script");
+			gts.type = "text/javascript";
+			gts.async = true;
+			gts.src = scheme + "www.googlecommerce.com/trustedstores/gtmp_compiled.js";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(gts, s);
+		})();
+		&lt;!-- END: Google Trusted Store --&gt;
+                  </script>
+                  <!-- Puget Systems PUG-SEA-MPX Retargeting Pixel NEW -->
+                  <noscript>
+                   <iframe height="0" src="//www.googletagmanager.com/ns.html?id=GTM-W8QWJD" style="display:none;visibility:hidden" width="0">
+                   </iframe>
+                  </noscript>
+                  <script>
+                   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+	'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayerZypMedia','GTM-W8QWJD');
+                  </script>
+                  <!-- END Puget Systems PUG-SEA-MPX Retargeting Pixel NEW -->
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </article>
+   </main>
+  </div>
+ </body>
+</html>

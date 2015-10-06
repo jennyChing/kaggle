@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://kidakaka.com/blog/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+	&lt;script src="http://kidakaka.com/blog/wp-content/themes/twentyfifteen/js/html5.js"&gt;&lt;/script&gt;
+	&lt;![endif]-->
+  <script>
+   (function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);
+  </script>
+  <title>
+   Taking WordPress to Scale
+  </title>
+  <!-- Google Tag Manager for WordPress by DuracellTomi - http://duracelltomi.com -->
+  <script type="text/javascript">
+   var gtm4wp_datalayer_name = "dataLayer";
+	var dataLayer = dataLayer || []
+  </script>
+  <!-- End Google Tag Manager for WordPress by DuracellTomi -->
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v2.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+  <meta content="How to scale up your WordPress installation to handle a lot of traffic." name="description"/>
+  <link href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/" rel="canonical"/>
+  <link href="https://plus.google.com/u/0/+PrasadAjinkya" rel="publisher"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Taking WordPress to Scale" property="og:title"/>
+  <meta content="How to scale up your WordPress installation to handle a lot of traffic." property="og:description"/>
+  <meta content="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/" property="og:url"/>
+  <meta content="The Big Fat Geek" property="og:site_name"/>
+  <meta content="https://www.facebook.com/kidakaka" property="article:publisher"/>
+  <meta content="http://facebook.com/kidakaka" property="article:author"/>
+  <meta content="hosting" property="article:tag"/>
+  <meta content="performance" property="article:tag"/>
+  <meta content="scale" property="article:tag"/>
+  <meta content="tech" property="article:tag"/>
+  <meta content="tuning" property="article:tag"/>
+  <meta content="wordpress" property="article:tag"/>
+  <meta content="WordPress" property="article:section"/>
+  <meta content="2014-05-28T13:00:36+00:00" property="article:published_time"/>
+  <meta content="2015-01-17T17:30:04+00:00" property="article:modified_time"/>
+  <meta content="2015-01-17T17:30:04+00:00" property="og:updated_time"/>
+  <meta content="10152813716976440" property="fb:admins"/>
+  <meta content="http://www.13llama.com/cms/wp-content/uploads/2014/05/66157_527256860691168_1460145325_n-226x300.png" property="og:image"/>
+  <meta content="http://www.13llama.com/cms/wp-content/uploads/2014/05/WordPress_Scale-300x284.png" property="og:image"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="How to scale up your WordPress installation to handle a lot of traffic." name="twitter:description"/>
+  <meta content="Taking WordPress to Scale" name="twitter:title"/>
+  <meta content="@kidakaka" name="twitter:site"/>
+  <meta content="The Big Fat Geek" name="twitter:domain"/>
+  <meta content="http://www.13llama.com/cms/wp-content/uploads/2014/05/66157_527256860691168_1460145325_n-226x300.png" name="twitter:image:src"/>
+  <meta content="@kidakaka" name="twitter:creator"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="http://kidakaka.com/feed/" rel="alternate" title="The Big Fat Geek  Feed" type="application/rss+xml"/>
+  <link href="http://kidakaka.com/comments/feed/" rel="alternate" title="The Big Fat Geek  Comments Feed" type="application/rss+xml"/>
+  <link href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/feed/" rel="alternate" title="The Big Fat Geek  Taking WordPress to Scale Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/kidakaka.com\/blog\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://kidakaka.com/blog/wp-content/plugins/jetpack/modules/theme-tools/compat/twentyfifteen.css" id="twentyfifteen-jetpack-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Noto+Sans%3A400italic%2C700italic%2C400%2C700%7CNoto+Serif%3A400italic%2C700italic%2C400%2C700%7CInconsolata%3A400%2C700&amp;subset=latin%2Clatin-ext" id="twentyfifteen-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://kidakaka.com/blog/wp-content/plugins/jetpack/_inc/genericons/genericons/genericons.css" id="genericons-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://kidakaka.com/blog/wp-content/themes/twentyfifteen/style.css" id="twentyfifteen-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <style id="twentyfifteen-style-inline-css" type="text/css">
+   .post-navigation .nav-previous { background-image: url(http://i2.wp.com/kidakaka.com/blog/wp-content/uploads/2014/05/Inception-of-Inception_thumb.png?resize=526%2C510); }
+			.post-navigation .nav-previous .post-title, .post-navigation .nav-previous a:hover .post-title, .post-navigation .nav-previous .meta-nav { color: #fff; }
+			.post-navigation .nav-previous a:before { background-color: rgba(0, 0, 0, 0.4); }
+		
+			.post-navigation .nav-next { background-image: url(http://i1.wp.com/kidakaka.com/blog/wp-content/uploads/2014/05/RiseofNationsExtendedEdition.jpg?resize=825%2C510); border-top: 0; }
+			.post-navigation .nav-next .post-title, .post-navigation .nav-next a:hover .post-title, .post-navigation .nav-next .meta-nav { color: #fff; }
+			.post-navigation .nav-next a:before { background-color: rgba(0, 0, 0, 0.4); }
+		
+
+		/* Custom Header Background Color */
+		body:before,
+		.site-header {
+			background-color: #efecca;
+		}
+
+		@media screen and (min-width: 59.6875em) {
+			.site-header,
+			.secondary {
+				background-color: transparent;
+			}
+
+			.widget button,
+			.widget input[type="button"],
+			.widget input[type="reset"],
+			.widget input[type="submit"],
+			.widget_calendar tbody a,
+			.widget_calendar tbody a:hover,
+			.widget_calendar tbody a:focus {
+				color: #efecca;
+			}
+		}
+  </style>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentyfifteen-ie-css'  href='http://kidakaka.com/blog/wp-content/themes/twentyfifteen/css/ie.css' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <!--[if lt IE 8]&gt;
+&lt;link rel='stylesheet' id='twentyfifteen-ie7-css'  href='http://kidakaka.com/blog/wp-content/themes/twentyfifteen/css/ie7.css' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://kidakaka.com/blog/wp-content/plugins/jetpack/css/jetpack.css" id="jetpack_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <!-- This site uses the Google Analytics by Yoast plugin v5.4.2 - Universal enabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-3529032-1', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('require', 'displayfeatures');
+	__gaTracker('send','pageview');
+  </script>
+  <!-- / Google Analytics by Yoast -->
+  <script src="http://kidakaka.com/blog/wp-includes/js/jquery/jquery.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-includes/js/jquery/jquery-migrate.min.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/plugins/jetpack/modules/related-posts/related-posts.js" type="text/javascript">
+  </script>
+  <script src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/plugins/duracelltomi-google-tag-manager/js/gtm4wp-form-move-tracker.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/plugins/duracelltomi-google-tag-manager/js/gtm4wp-social-tracker.js" type="text/javascript">
+  </script>
+  <link href="http://wp.me/p25IJ8-F7" rel="shortlink"/>
+  <link href="http://kidakaka.com/blog/wp-content/plugins/author-product-review/author-product-review.css" rel="stylesheet" type="text/css"/>
+  <link href="//i0.wp.com" rel="dns-prefetch"/>
+  <link href="//i1.wp.com" rel="dns-prefetch"/>
+  <link href="//i2.wp.com" rel="dns-prefetch"/>
+  <link href="http://i0.wp.com/kidakaka.com/blog/wp-content/uploads/2014/10/13_Llama_Cake1-545398ea_site_icon.png?fit=32%2C32" rel="icon" sizes="32x32"/>
+  <link href="http://i0.wp.com/kidakaka.com/blog/wp-content/uploads/2014/10/13_Llama_Cake1-545398ea_site_icon.png?fit=114%2C114" rel="apple-touch-icon-precomposed"/>
+  <meta content="http://i0.wp.com/kidakaka.com/blog/wp-content/uploads/2014/10/13_Llama_Cake1-545398ea_site_icon.png?fit=114%2C114" name="msapplication-TileImage"/>
+  <style id="custom-background-css" type="text/css">
+   body.custom-background { background-color: #046380; }
+  </style>
+  <!-- Google Tag Manager for WordPress by DuracellTomi -->
+  <script type="text/javascript">
+   dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["wordpress-technology"],"pageAttributes":["hosting","performance","scale","tech","tuning","wordpress"],"pagePostAuthor":"Prasad Ajinkya"});
+  </script>
+  <style id="custom-css-css">
+   .share-twitter i,.share-google-plus-1 i,.share-pinterest i,.share-reddit i,.share-linkedin i,.share-end i,.share-facebook i{background-image:none !important;height:0 !important;background:none !important;display:none !important}.entry-footer{background:#E6E2AF}.entry-title{color:#002F2F}.site-title{font-family:"Noto Serif", serif}#livefyre-comments{padding:8%}.fyre-comment{color:#EFECCA}.fyre a{color:#A7A37E !important}.sd-social .sd-button .share-count{background:#046380}
+  </style>
+ </head>
+ <body class="single single-post postid-2549 single-format-standard custom-background">
+  <div class="hfeed site" id="page">
+   <a class="skip-link screen-reader-text" href="#content">
+    Skip to content
+   </a>
+   <div class="sidebar" id="sidebar">
+    <header class="site-header" id="masthead" role="banner">
+     <div class="site-branding">
+      <p class="site-title">
+       <a href="http://kidakaka.com/" rel="home">
+        The Big Fat Geek
+       </a>
+      </p>
+      <p class="site-description">
+       Personal blog of Prasad Ajinkya
+      </p>
+      <button class="secondary-toggle">
+       Menu and widgets
+      </button>
+     </div>
+     <!-- .site-branding -->
+    </header>
+    <!-- .site-header -->
+    <div class="secondary" id="secondary">
+     <nav class="main-navigation" id="site-navigation" role="navigation">
+      <div class="menu-top_nav-container">
+       <ul class="nav-menu" id="menu-top_nav">
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-2704" id="menu-item-2704">
+         <a href="http://kidakaka.com/blog/category/technology/">
+          Technology
+          <div class="menu-item-description">
+           Technology is the collection of tools, including machinery, modifications, arrangements and procedures used by humans. Engineering is the discipline that seeks to study and design new technologies. The Big Fat Geek is an Engineer.
+          </div>
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2279" id="menu-item-2279">
+           <a href="http://kidakaka.com/blog/category/technology/analytics-technology/">
+            Analytics
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1675" id="menu-item-1675">
+           <a href="http://kidakaka.com/blog/category/technology/web/">
+            Web
+           </a>
+           <ul class="sub-menu">
+            <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2278" id="menu-item-2278">
+             <a href="http://kidakaka.com/blog/category/technology/web/seo-web/">
+              SEO
+             </a>
+            </li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2117" id="menu-item-2117">
+             <a href="http://kidakaka.com/blog/tag/wordpress/">
+              WordPress
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1206" id="menu-item-1206">
+           <a href="http://kidakaka.com/blog/category/linux/">
+            Linux
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-2705" id="menu-item-2705">
+         <a href="http://kidakaka.com/blog/category/business/">
+          Business
+          <div class="menu-item-description">
+           The Big Fat Geeks thoughts on Business and how business processes can be automated via workflows and technology.
+          </div>
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1121" id="menu-item-1121">
+           <a href="http://kidakaka.com/blog/category/social/" title="Social">
+            Social
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1390" id="menu-item-1390">
+           <a href="http://kidakaka.com/blog/category/education-2/">
+            Education
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1010" id="menu-item-1010">
+           <a href="http://kidakaka.com/blog/category/careers/">
+            Careers
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1123" id="menu-item-1123">
+           <a href="http://kidakaka.com/blog/category/work/" title="Work">
+            Work
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1013" id="menu-item-1013">
+         <a href="http://kidakaka.com/blog/category/personal/">
+          Personal
+         </a>
+         <ul class="sub-menu">
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1011" id="menu-item-1011">
+           <a href="http://kidakaka.com/blog/category/games/">
+            Games
+           </a>
+           <ul class="sub-menu">
+            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1468" id="menu-item-1468">
+             <a href="http://kidakaka.com/blog/tag/diablo/">
+              Diablo
+             </a>
+            </li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1389" id="menu-item-1389">
+             <a href="http://kidakaka.com/blog/tag/riseofnations/">
+              Rise of Nations
+             </a>
+            </li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1674" id="menu-item-1674">
+             <a href="http://kidakaka.com/blog/tag/worldofwarcraft/">
+              World of Warcraft
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1205" id="menu-item-1205">
+           <a href="http://kidakaka.com/blog/category/book/">
+            Books
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1012" id="menu-item-1012">
+           <a href="http://kidakaka.com/blog/category/movies/">
+            Movies
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1122" id="menu-item-1122">
+           <a href="http://kidakaka.com/blog/category/funny/" title="Funny">
+            Funny
+            <div class="menu-item-description">
+             whatever makes me laff
+            </div>
+           </a>
+          </li>
+          <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1120" id="menu-item-1120">
+           <a href="http://kidakaka.com/blog/category/foo/">
+            Foo
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2428" id="menu-item-2428">
+         <a href="http://kidakaka.com/about/">
+          About
+         </a>
+        </li>
+       </ul>
+      </div>
+     </nav>
+     <!-- .main-navigation -->
+     <nav class="social-navigation" id="social-navigation" role="navigation">
+      <div class="menu-social-container">
+       <ul class="menu" id="menu-social">
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2708" id="menu-item-2708">
+         <a href="https://www.facebook.com/kidakaka" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://www.facebook.com/kidakaka', 'Facebook');">
+          <span class="screen-reader-text">
+           Facebook
+          </span>
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2709" id="menu-item-2709">
+         <a href="https://twitter.com/kidakaka" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://twitter.com/kidakaka', 'Twitter');">
+          <span class="screen-reader-text">
+           Twitter
+          </span>
+         </a>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2710" id="menu-item-2710">
+         <a href="http://linkedin.com/in/prasadajinkya/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://linkedin.com/in/prasadajinkya/', 'LinkedIn');">
+          <span class="screen-reader-text">
+           LinkedIn
+          </span>
+         </a>
+        </li>
+       </ul>
+      </div>
+     </nav>
+     <!-- .social-navigation -->
+     <div class="widget-area" id="widget-area" role="complementary">
+      <aside class="widget widget_text" id="text-4">
+       <div class="textwidget">
+        <a class="wordpress-follow-button" data-blog="http://kidakaka.com" data-lang="en" data-show-follower-count="true" href="http://kidakaka.com">
+         Follow The Big Fat Geek on WordPress.com
+        </a>
+        <script type="text/javascript">
+         (function(d){var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');p.type = 'text/javascript';p.async = true;p.src = '//widgets.wp.com/platform.js';f.parentNode.insertBefore(p,f);}(document));
+        </script>
+       </div>
+      </aside>
+      <aside class="widget widget_search" id="search-4">
+       <form action="http://kidakaka.com/" class="search-form" method="get" role="search">
+        <label>
+         <span class="screen-reader-text">
+          Search for:
+         </span>
+         <input class="search-field" name="s" placeholder="Search " title="Search for:" type="search" value=""/>
+        </label>
+        <input class="search-submit screen-reader-text" type="submit" value="Search"/>
+       </form>
+      </aside>
+      <aside class="widget widget_text" id="text-3">
+       <div class="textwidget">
+        <a href="http://www.snapdeal.com?utm_source=aff_prog&amp;utm_campaign=afts&amp;offer_id=17&amp;aff_id=36360" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.snapdeal.com?utm_source=aff_prog&amp;utm_campaign=afts&amp;offer_id=17&amp;aff_id=36360', '\n  \n');" target="_blank">
+         <img alt="Shop Now" src="http://125.63.90.53/affprog/banner/Snapdeal-21-april-banner-7.jpg" style="width:300px;height:250px;border:0"/>
+        </a>
+       </div>
+      </aside>
+      <aside class="widget widget_links" id="linkcat-418">
+       <h2 class="widget-title">
+        Featured
+       </h2>
+       <ul class="xoxo blogroll">
+        <li>
+         <a href="http://kidakaka.com/blog/2010/03/12/laptop-comparison/" rel="me" target="_top" title="A comparison of different laptops available that are there in the market and a decision framework for purchasing one">
+          Laptop Purchase
+         </a>
+        </li>
+        <li>
+         <a href="http://kidakaka.com/blog/2013/03/27/personal-lift-custom-made-for-you/" rel="me" title="Technology behind Stairlifts">
+          Technology behind Stairlifts
+         </a>
+        </li>
+        <li>
+         <a href="http://kidakaka.com/blog/2012/12/29/the-cinderella-visitor/" rel="me" title="How visitors in Google Analytics are counted during midnight">
+          The Cinderella Visitor
+         </a>
+        </li>
+        <li>
+         <a href="http://kidakaka.com/blog/2013/01/06/understanding-the-__utmz-google-analytics-cookie/" rel="me" title="Getting to know what is stored in the __utmz cookie used by Google Analytics">
+          The __utmz Cookie
+         </a>
+        </li>
+       </ul>
+      </aside>
+      <aside class="widget widget_text" id="text-5">
+       <div class="textwidget">
+        <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+        </script>
+        <!-- sidebanner-mid-kidakaka -->
+        <ins class="adsbygoogle" data-ad-client="ca-pub-9833220184772142" data-ad-slot="8474378483" style="display:inline-block;width:300px;height:250px">
+        </ins>
+        <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+       </div>
+      </aside>
+      <aside class="widget widget_tag_cloud" id="tag_cloud-6">
+       <h2 class="widget-title">
+        Tags
+       </h2>
+       <div class="tagcloud">
+        <a class="tag-link-20" href="http://kidakaka.com/blog/tag/ads/" style="font-size: 9.4pt;" title="14 topics">
+         ads
+        </a>
+        <a class="tag-link-35" href="http://kidakaka.com/blog/tag/analytics/" style="font-size: 13.32pt;" title="28 topics">
+         analytics
+        </a>
+        <a class="tag-link-4" href="http://kidakaka.com/blog/tag/blogs/" style="font-size: 13.6pt;" title="29 topics">
+         blogs
+        </a>
+        <a class="tag-link-28" href="http://kidakaka.com/blog/tag/books/" style="font-size: 9.4pt;" title="14 topics">
+         books
+        </a>
+        <a class="tag-link-12" href="http://kidakaka.com/blog/tag/business/" style="font-size: 22pt;" title="118 topics">
+         Business
+        </a>
+        <a class="tag-link-63" href="http://kidakaka.com/blog/tag/careers/" style="font-size: 11.36pt;" title="20 topics">
+         Careers
+        </a>
+        <a class="tag-link-26" href="http://kidakaka.com/blog/tag/content/" style="font-size: 8.98pt;" title="13 topics">
+         content
+        </a>
+        <a class="tag-link-39" href="http://kidakaka.com/blog/tag/customer/" style="font-size: 8pt;" title="11 topics">
+         customer
+        </a>
+        <a class="tag-link-90" href="http://kidakaka.com/blog/tag/ecommerce/" style="font-size: 8.42pt;" title="12 topics">
+         ecommerce
+        </a>
+        <a class="tag-link-44" href="http://kidakaka.com/blog/tag/economy/" style="font-size: 11.36pt;" title="20 topics">
+         economy
+        </a>
+        <a class="tag-link-24" href="http://kidakaka.com/blog/tag/education/" style="font-size: 11.08pt;" title="19 topics">
+         education
+        </a>
+        <a class="tag-link-54" href="http://kidakaka.com/blog/tag/entrepreneurs/" style="font-size: 9.68pt;" title="15 topics">
+         entrepreneurs
+        </a>
+        <a class="tag-link-76" href="http://kidakaka.com/blog/tag/events/" style="font-size: 8.98pt;" title="13 topics">
+         events
+        </a>
+        <a class="tag-link-7" href="http://kidakaka.com/blog/tag/eyantra/" style="font-size: 11.92pt;" title="22 topics">
+         eyantra
+        </a>
+        <a class="tag-link-129" href="http://kidakaka.com/blog/tag/fb/" style="font-size: 14.72pt;" title="35 topics">
+         fb
+        </a>
+        <a class="tag-link-6" href="http://kidakaka.com/blog/tag/foo/" style="font-size: 19.2pt;" title="74 topics">
+         foo
+        </a>
+        <a class="tag-link-18" href="http://kidakaka.com/blog/tag/funny/" style="font-size: 16.54pt;" title="48 topics">
+         Funny
+        </a>
+        <a class="tag-link-22" href="http://kidakaka.com/blog/tag/games/" style="font-size: 18.22pt;" title="64 topics">
+         Games
+        </a>
+        <a class="tag-link-32" href="http://kidakaka.com/blog/tag/geek/" style="font-size: 9.4pt;" title="14 topics">
+         geek
+        </a>
+        <a class="tag-link-112" href="http://kidakaka.com/blog/tag/google/" style="font-size: 14.44pt;" title="34 topics">
+         google
+        </a>
+        <a class="tag-link-350" href="http://kidakaka.com/blog/tag/google-analytics/" style="font-size: 8.42pt;" title="12 topics">
+         google analytics
+        </a>
+        <a class="tag-link-52" href="http://kidakaka.com/blog/tag/gyaan/" style="font-size: 9.68pt;" title="15 topics">
+         gyaan
+        </a>
+        <a class="tag-link-62" href="http://kidakaka.com/blog/tag/illumine/" style="font-size: 8.98pt;" title="13 topics">
+         illumine
+        </a>
+        <a class="tag-link-58" href="http://kidakaka.com/blog/tag/india/" style="font-size: 10.52pt;" title="17 topics">
+         india
+        </a>
+        <a class="tag-link-526" href="http://kidakaka.com/blog/tag/infographic/" style="font-size: 9.68pt;" title="15 topics">
+         infographic
+        </a>
+        <a class="tag-link-5" href="http://kidakaka.com/blog/tag/life/" style="font-size: 19.76pt;" title="82 topics">
+         life
+        </a>
+        <a class="tag-link-16" href="http://kidakaka.com/blog/tag/marketing/" style="font-size: 15.14pt;" title="38 topics">
+         marketing
+        </a>
+        <a class="tag-link-21" href="http://kidakaka.com/blog/tag/movies/" style="font-size: 15.14pt;" title="38 topics">
+         Movies
+        </a>
+        <a class="tag-link-14" href="http://kidakaka.com/blog/tag/musing/" style="font-size: 16.4pt;" title="47 topics">
+         musing
+        </a>
+        <a class="tag-link-192" href="http://kidakaka.com/blog/tag/neev/" style="font-size: 10.1pt;" title="16 topics">
+         neev
+        </a>
+        <a class="tag-link-19" href="http://kidakaka.com/blog/tag/news/" style="font-size: 14.16pt;" title="32 topics">
+         News
+        </a>
+        <a class="tag-link-3" href="http://kidakaka.com/blog/tag/personal/" style="font-size: 19.48pt;" title="79 topics">
+         Personal
+        </a>
+        <a class="tag-link-9" href="http://kidakaka.com/blog/tag/philosophique/" style="font-size: 14.86pt;" title="36 topics">
+         philosophique
+        </a>
+        <a class="tag-link-43" href="http://kidakaka.com/blog/tag/politics/" style="font-size: 8pt;" title="11 topics">
+         politics
+        </a>
+        <a class="tag-link-88" href="http://kidakaka.com/blog/tag/riseofnations/" style="font-size: 8.98pt;" title="13 topics">
+         riseofnations
+        </a>
+        <a class="tag-link-265" href="http://kidakaka.com/blog/tag/seo/" style="font-size: 11.08pt;" title="19 topics">
+         seo
+        </a>
+        <a class="tag-link-45" href="http://kidakaka.com/blog/tag/social/" style="font-size: 17.52pt;" title="57 topics">
+         Social
+        </a>
+        <a class="tag-link-70" href="http://kidakaka.com/blog/tag/startup/" style="font-size: 8.42pt;" title="12 topics">
+         startup
+        </a>
+        <a class="tag-link-87" href="http://kidakaka.com/blog/tag/strategy/" style="font-size: 9.4pt;" title="14 topics">
+         strategy
+        </a>
+        <a class="tag-link-11" href="http://kidakaka.com/blog/tag/tech/" style="font-size: 20.6pt;" title="95 topics">
+         tech
+        </a>
+        <a class="tag-link-41" href="http://kidakaka.com/blog/tag/tips/" style="font-size: 15.84pt;" title="43 topics">
+         tips
+        </a>
+        <a class="tag-link-130" href="http://kidakaka.com/blog/tag/tt/" style="font-size: 14.44pt;" title="34 topics">
+         tt
+        </a>
+        <a class="tag-link-17" href="http://kidakaka.com/blog/tag/web/" style="font-size: 20.74pt;" title="97 topics">
+         Web
+        </a>
+        <a class="tag-link-140" href="http://kidakaka.com/blog/tag/wordpress/" style="font-size: 9.4pt;" title="14 topics">
+         wordpress
+        </a>
+        <a class="tag-link-8" href="http://kidakaka.com/blog/tag/work/" style="font-size: 20.46pt;" title="93 topics">
+         Work
+        </a>
+       </div>
+      </aside>
+      <aside class="widget jetpack_subscription_widget" id="blog_subscription-3">
+       <h2 class="widget-title">
+        Subscribe to Blog via Email
+       </h2>
+       <form accept-charset="utf-8" action="#" id="subscribe-blog-blog_subscription-3" method="post">
+        <div id="subscribe-text">
+         <p>
+          Enter your email address to subscribe to this blog and receive notifications of new posts by email.
+         </p>
+        </div>
+        <p>
+         Join 487 other subscribers
+        </p>
+        <p id="subscribe-email">
+         <label for="subscribe-field" id="jetpack-subscribe-label">
+          Email Address
+         </label>
+         <input class="required" id="subscribe-field" name="email" placeholder="Email Address" required="required" type="email" value=""/>
+        </p>
+        <p id="subscribe-submit">
+         <input name="action" type="hidden" value="subscribe"/>
+         <input name="source" type="hidden" value="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/"/>
+         <input name="sub-type" type="hidden" value="widget"/>
+         <input name="redirect_fragment" type="hidden" value="blog_subscription-3"/>
+         <input name="jetpack_subscriptions_widget" type="submit" value="Subscribe"/>
+        </p>
+       </form>
+       <script>
+        ( function( d ) {
+					if ( ( 'placeholder' in d.createElement( 'input' ) ) ) {
+						var label = d.getElementById( 'jetpack-subscribe-label' );
+	 					label.style.clip 	 = 'rect(1px, 1px, 1px, 1px)';
+	 					label.style.position = 'absolute';
+	 					label.style.height   = '1px';
+	 					label.style.width    = '1px';
+	 					label.style.overflow = 'hidden';
+					}
+				} ) ( document );
+
+				// Special check for required email input because Safari doesn't support HTML5 "required"
+				jQuery( '#subscribe-blog-blog_subscription-3' ).submit( function( event ) {
+					var requiredInput = jQuery( this ).find( '.required' );
+					if ( requiredInput.val() == '' ) {
+						event.preventDefault();
+						requiredInput.focus();
+					}
+				});
+       </script>
+      </aside>
+      <aside class="widget widget_text" id="text-2">
+       <div class="textwidget">
+        <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+        </script>
+        <!-- Archive - 1 (kidakaka.com) -->
+        <ins class="adsbygoogle" data-ad-client="ca-pub-9833220184772142" data-ad-format="auto" data-ad-slot="8082505283" style="display:block;background:#EFECCA">
+        </ins>
+        <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+       </div>
+      </aside>
+     </div>
+     <!-- .widget-area -->
+    </div>
+    <!-- .secondary -->
+   </div>
+   <!-- .sidebar -->
+   <div class="site-content" id="content">
+    <div class="content-area" id="primary">
+     <main class="site-main" id="main" role="main">
+      <article class="post-2549 post type-post status-publish format-standard hentry category-wordpress-technology tag-hosting tag-performance tag-scale tag-tech tag-tuning tag-wordpress" id="post-2549">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         Taking WordPress to Scale
+        </h1>
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         I originally wrote this post on the
+         <a href="http://www.13llama.com/2014/05/performance-tuning-wordpress-scale/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.13llama.com/2014/05/performance-tuning-wordpress-scale/', '13 Llama Blog');">
+          13 Llama Blog
+         </a>
+         .
+        </p>
+        <p>
+        </p>
+        <p>
+         Having your own website and maintaining it has its own set of wins and losses. If your site is not popular enough, thats a heartburn.
+        </p>
+        <p>
+         Then one fine day, you get TechCrunched or Mashabled or Redditted  and boom, comes a spike. Or even better, you start doing well on your own and the traffic grows. Soon, this traffic becomes so big, that your existing hosting plan starts creaking and squawking under this load.
+        </p>
+        <p>
+         This post is for those of you who have a site which has loads of traffic, so much so that the site performance is under impact due to it. Like quite a few of our clients.
+         <em>
+          *Touchwood*
+         </em>
+        </p>
+        <p>
+         <span id="more-2549">
+         </span>
+        </p>
+        <h3>
+         Too much Traffic, a Bad thing?
+        </h3>
+        <p>
+         Theres never such a thing as too much traffic. However, what happens when your existing server hits the peak capacity at which it can serve the responses reliably?
+        </p>
+        <p>
+         The site seems slower, sluggish  the horde of traffic which is coming to your site start complaining  hey, this site does not load.
+        </p>
+        <p>
+         This is the next heartburn  you spent all those efforts in building traffic and now you do not want your visitors to have a bad experience because of speed! So what do we do? Do we say no to the additional traffic?
+        </p>
+        <p>
+         Never! Heres what we did for one of our clients.
+        </p>
+        <blockquote>
+         <h3>
+          Case Study
+         </h3>
+         <p>
+          <strong>
+           Clients
+          </strong>
+          : One of the top TV Channels in India in the Food and Lifestyle segment
+         </p>
+         <p>
+          <strong>
+           Problem
+          </strong>
+          : Their site was being reported as sluggish and slow. We checked it, and found that the server was taking more than 70 seconds to respond, and a whole 2 minutes went by before the screen showed any elements on the browser!
+         </p>
+         <p>
+          <strong>
+           Impact
+          </strong>
+          : When you are such a popular brand, any fault (however small) is blown out of proportion in Social Media. The brand was facing such taunts on their own Social Media Channels, that this became a gigantic issue.
+         </p>
+         <p>
+          <strong>
+           Solution
+          </strong>
+          : What we proposed was web performance optimization of their site. Since the site was based on WordPress, most of the things we did to speed up the site can be referred to as Performance Tuning WordPress for Scale.
+         </p>
+         <h3>
+          Phase I
+         </h3>
+         <p>
+          The first job was looking at the server configuration and changing it to ensure that the memory utilization of Apache and MySQL is optimum. We did this by tweaking the
+          <em>
+           mpm_prefork
+          </em>
+          settings in Apache and by changing the MySQL connection settings in
+          <em>
+           my.cnf
+          </em>
+          .
+         </p>
+         <p>
+          After this, we installed a caching mechanism on the WordPress platform. We looked at multiple options, and settled on
+          <a href="https://wordpress.org/plugins/wp-super-cache/" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://wordpress.org/plugins/wp-super-cache/', 'WP Super Cache');" rel="nofollow" title="WP Super Cache">
+           WP Super Cache
+          </a>
+          . The ease with which this plug-in installs and starts serving cached content is simply awesome.
+         </p>
+         <p>
+          Apart from caching (which had huge savings), we also installed the
+          <a href="https://developers.google.com/speed/pagespeed/module" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://developers.google.com/speed/pagespeed/module', 'PageSpeed module');" rel="nofollow" title="PageSpeed Module">
+           PageSpeed module
+          </a>
+          which Google has published, on the web server. That, and image
+          <a href="http://www.smush.it/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.smush.it/', 'smushing');" rel="nofollow">
+           smushing
+          </a>
+          .
+         </p>
+         <p>
+          The result 
+         </p>
+         <figure class="wp-caption alignleft" id="attachment_1183" style="width: 226px;">
+          <a href="https://www.facebook.com/13Llama/photos/a.515010785249109.1073741825.237139449702912/527256860691168/?type=1" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://www.facebook.com/13Llama/photos/a.515010785249109.1073741825.237139449702912/527256860691168/?type=1', '');">
+           <img alt="Tuning WordPress for Scale" class="size-medium wp-image-1183" data-recalc-dims="1" src="http://i0.wp.com/www.13llama.com/cms/wp-content/uploads/2014/05/66157_527256860691168_1460145325_n-226x300.png?resize=226%2C300"/>
+          </a>
+          <figcaption class="wp-caption-text">
+           Tuning WordPress for Scale
+          </figcaption>
+         </figure>
+         <p>
+          The loading time dropped from 70 odd seconds to 7 seconds. The site was loading faster and it could handle more requests. This was in the month of September. Over the next 6 months, this site has grown with us.
+         </p>
+         <p>
+          They are now doing really well on Social Media. In fact a huge 40% of their traffic is due to Facebook!!
+         </p>
+         <p>
+          With traffic comes one more overhead, the cost of increasing bandwidth! Now, I do not see enough people complaining about this, but if your site is popular and contains rich media, then soon enough, your hosting provider is going to start charging you extra for bandwidth. Dont be surprised  even Amazon and Rackspace charge for bandwidth.
+         </p>
+         <p>
+          With around 18,000 visitors hitting the site every day, the hosting provider of the site was facing big issues. Not only was this one server clogging up the network and using up the 10 MBps pipe he had allocated to it, it was asking for more.
+         </p>
+         <h3>
+          Phase II
+         </h3>
+         <p>
+          Websites which have a lot of static content (js, css, images, etc) should look at this route. Having a CDN ahead of your hosting not only takes the pressure off your server, but also improves the response times of your pages.
+         </p>
+         <p>
+          We typically use the WordPress CDN via JetPacks Photon. However, in this case, we went with
+          <a href="http://www.cloudflare.com/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.cloudflare.com/', 'CloudFlare');" rel="nofollow">
+           CloudFlare
+          </a>
+          . CloudFlare does multiple things for you and its definitely worth checking out. What they do is cache all the static content of the site, and serve that from their network.
+         </p>
+         <p>
+          The end result 
+         </p>
+         <figure class="wp-caption alignleft" id="attachment_1186" style="width: 300px;">
+          <img alt="Taking WordPress to Scale" class="size-medium wp-image-1186" data-recalc-dims="1" src="http://i0.wp.com/www.13llama.com/cms/wp-content/uploads/2014/05/WordPress_Scale-300x284.png?resize=300%2C284"/>
+          <figcaption class="wp-caption-text">
+           Taking WordPress to Scale
+          </figcaption>
+         </figure>
+         <p>
+          Unfortunately, I wasnt quick enough to take a screenshot when the number was above 250
+          <img alt=":-)" class="wp-smiley" data-recalc-dims="1" src="http://i0.wp.com/kidakaka.com/blog/wp-includes/images/smilies/simple-smile.png?w=660" style="height: 1em; max-height: 1em;"/>
+         </p>
+         <p>
+          Using CloudFlare ensured that more content could be served to more number of people at the same time! All of this was done on a single server (Dual Core, 8 GB RAM).
+         </p>
+        </blockquote>
+        <h3>
+         Conclusion
+        </h3>
+        <p>
+         In a lot of the discussions we have had with clients, it seems they think of WordPress as a simple blogging platform instead of a kick-ass powerful Content Management System. One of the major concerns we keep hearing is 
+         <em>
+          Can it Scale?
+         </em>
+        </p>
+        <p>
+         Well, does this post answer your question?
+        </p>
+        <div class="sharedaddy sd-sharing-enabled">
+         <div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing">
+          <div class="sd-content">
+           <ul>
+            <li class="share-facebook">
+             <a class="share-facebook sd-button share-icon" data-shared="sharing-facebook-2549" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=facebook" rel="nofollow" target="_blank" title="Share on Facebook">
+              <span>
+               Facebook
+              </span>
+             </a>
+            </li>
+            <li class="share-twitter">
+             <a class="share-twitter sd-button share-icon" data-shared="sharing-twitter-2549" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=twitter" rel="nofollow" target="_blank" title="Click to share on Twitter">
+              <span>
+               Twitter
+              </span>
+             </a>
+            </li>
+            <li class="share-google-plus-1">
+             <a class="share-google-plus-1 sd-button share-icon" data-shared="sharing-google-2549" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=google-plus-1" rel="nofollow" target="_blank" title="Click to share on Google+">
+              <span>
+               Google
+              </span>
+             </a>
+            </li>
+            <li class="share-linkedin">
+             <a class="share-linkedin sd-button share-icon" data-shared="sharing-linkedin-2549" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=linkedin" rel="nofollow" target="_blank" title="Click to share on LinkedIn">
+              <span>
+               LinkedIn
+              </span>
+             </a>
+            </li>
+            <li class="share-pinterest">
+             <a class="share-pinterest sd-button share-icon" data-shared="sharing-pinterest-2549" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=pinterest" rel="nofollow" target="_blank" title="Click to share on Pinterest">
+              <span>
+               Pinterest
+              </span>
+             </a>
+            </li>
+            <li class="share-reddit">
+             <a class="share-reddit sd-button share-icon" data-shared="" href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/?share=reddit" rel="nofollow" target="_blank" title="Click to share on Reddit">
+              <span>
+               Reddit
+              </span>
+             </a>
+            </li>
+            <li class="share-end">
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+        <div class="jp-relatedposts" id="jp-relatedposts">
+         <h3 class="jp-relatedposts-headline">
+          <em>
+           Related
+          </em>
+         </h3>
+        </div>
+       </div>
+       <!-- .entry-content -->
+       <div class="author-info">
+        <h2 class="author-heading">
+         Published by
+        </h2>
+        <div class="author-avatar">
+        </div>
+        <!-- .author-avatar -->
+        <div class="author-description">
+         <h3 class="author-title">
+          Prasad Ajinkya
+         </h3>
+         <p class="author-bio">
+          Prasad Ajinkya is the Big Fat Geek and often he spends his time working on the WordPress or Google eco-system. He loves to solve business problems with technology.
+          <a class="author-link" href="http://kidakaka.com/blog/author/prasad/" rel="author">
+           View all posts by Prasad Ajinkya
+          </a>
+         </p>
+         <!-- .author-bio -->
+        </div>
+        <!-- .author-description -->
+       </div>
+       <!-- .author-info -->
+       <footer class="entry-footer">
+        <span class="posted-on">
+         <span class="screen-reader-text">
+          Posted on
+         </span>
+         <a href="http://kidakaka.com/blog/2014/05/28/taking-wordpress-scale/" rel="bookmark">
+          <time class="entry-date published" datetime="2014-05-28T13:00:36+00:00">
+           May 28, 2014
+          </time>
+          <time class="updated" datetime="2015-01-17T17:30:04+00:00">
+           January 17, 2015
+          </time>
+         </a>
+        </span>
+        <span class="byline">
+         <span class="author vcard">
+          <span class="screen-reader-text">
+           Author
+          </span>
+          <a class="url fn n" href="http://kidakaka.com/blog/author/prasad/">
+           Prasad Ajinkya
+          </a>
+         </span>
+        </span>
+        <span class="cat-links">
+         <span class="screen-reader-text">
+          Categories
+         </span>
+         <a href="http://kidakaka.com/blog/category/technology/wordpress-technology/" rel="category tag">
+          WordPress
+         </a>
+        </span>
+        <span class="tags-links">
+         <span class="screen-reader-text">
+          Tags
+         </span>
+         <a href="http://kidakaka.com/blog/tag/hosting/" rel="tag">
+          hosting
+         </a>
+         ,
+         <a href="http://kidakaka.com/blog/tag/performance/" rel="tag">
+          performance
+         </a>
+         ,
+         <a href="http://kidakaka.com/blog/tag/scale/" rel="tag">
+          scale
+         </a>
+         ,
+         <a href="http://kidakaka.com/blog/tag/tech/" rel="tag">
+          tech
+         </a>
+         ,
+         <a href="http://kidakaka.com/blog/tag/tuning/" rel="tag">
+          tuning
+         </a>
+         ,
+         <a href="http://kidakaka.com/blog/tag/wordpress/" rel="tag">
+          wordpress
+         </a>
+        </span>
+       </footer>
+       <!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div id="livefyre-comments">
+       <script>
+        (function() {
+    
+   var a=this;var b,c,d,e,f;function g(){return a.navigator?a.navigator.userAgent:null}f=e=d=c=b=!1;var h;if(h=g()){var i=a.navigator;b=0==h.indexOf("Opera");c=!b&amp;&amp;-1!=h.indexOf("MSIE");e=(d=!b&amp;&amp;-1!=h.indexOf("WebKit"))&amp;&amp;-1!=h.indexOf("Mobile");f=!b&amp;&amp;!d&amp;&amp;"Gecko"==i.product}var j=c,k=f,l=d,m=e;var n;if(b&amp;&amp;a.opera){var o=a.opera.version;"function"==typeof o&amp;&amp;o()}else k?n=/rv\:([^\);]+)(\)|;)/:j?n=/MSIE\s+([^\);]+)(\)|;)/:l&amp;&amp;(n=/WebKit\/(\S+)/),n&amp;&amp;n.exec(g());var p=document,q=p.createElement("link");q.rel="stylesheet";q.type="text/css";q.href="http://zor.fyre.co/wjs/v3.0/css/livefyre_"+(m?"mobile":"embed")+".css";q.media="all";p.getElementsByTagName("head")[0].appendChild(q);var r="header hgroup footer article section aside nav figure figcaption embed audio video canvas details summary time mark".split(" "),s=p.createDocumentFragment(),t;for(t=0; t&lt;r.length; t++){s.appendChild(p.createElement(r[t]))};
+   })();
+       </script>
+       <div class="fyre fyre-width-large fyre-bootstrap">
+        <div class="fyre-widget">
+         <div class="fyre-stream-stats">
+          <div class="fyre-comment-count">
+           <span>
+            0 comments
+           </span>
+          </div>
+          <div class="fyre-divider">
+          </div>
+          <div class="fyre-help">
+           <div class="fyre-box-wrapper">
+            <a href="http://livefyre.com" target="_blank">
+             <span class="fyre-logo-drop">
+              &amp;nbsp
+             </span>
+             <img alt="Livefyre" class="fyre-logo-help" src="http://zor.fyre.co/wjs/v3.0/images/lf-logo.png"/>
+            </a>
+            <ul class="fyre-box-list">
+             <li>
+              <a href="http://livefyre.com" target="_blank" title="Get Livefyre">
+               Get
+            Livefyre
+              </a>
+             </li>
+             <li>
+              <a href="http://support.livefyre.com" target="_blank" title="FAQ">
+               FAQ
+              </a>
+             </li>
+            </ul>
+           </div>
+          </div>
+         </div>
+         <div class="fyre-auth">
+          <div class="fyre-login-bar">
+           <a class="fyre-user-loggedout" href="#" rel="nofollow">
+            Sign in
+           </a>
+          </div>
+         </div>
+         <div class="fyre-editor">
+          <div class="fyre-editor-container">
+           <div class="fyre-editor-editable" style="height: 100px;">
+           </div>
+           <div class="fyre-editor-toolbar">
+            <div aria-activedescendant="" class="goog-toolbar goog-toolbar-horizontal" role="toolbar" style="-webkit-user-select: none;">
+             <div class="goog-inline-block fyre-button-left fyre-format-button" id=":0" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-left-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-left-inner-box" style="-webkit-user-select: none;">
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-left fyre-mention-button" id=":1" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-left-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-left-inner-box" style="-webkit-user-select: none;">
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-left fyre-follow-button" id=":2" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-left-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-left-inner-box" style="-webkit-user-select: none;">
+                + Follow
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-right fyre-post-button fyre-post-button-enabled" id=":3" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-right-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-right-inner-box" style="-webkit-user-select: none;">
+                Post comment
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-right fyre-post-to fyre-post-to-facebook" id=":4" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-right-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-right-inner-box" style="-webkit-user-select: none;">
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-right fyre-post-to fyre-post-to-twitter" id=":5" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-right-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-right-inner-box" style="-webkit-user-select: none;">
+               </div>
+              </div>
+             </div>
+             <div class="goog-inline-block fyre-button-right fyre-post-to fyre-post-to-linkedin" id=":7" role="button" style="-webkit-user-select: none;" title="">
+              <div class="goog-inline-block fyre-button-right-outer-box" style="-webkit-user-select: none;">
+               <div class="goog-inline-block fyre-button-right-inner-box" style="-webkit-user-select: none;">
+               </div>
+              </div>
+             </div>
+             <div class="goog-toolbar-separator goog-inline-block" id=":6" role="separator" style="-webkit-user-select: none;">
+             </div>
+            </div>
+            <div class="fyre-format-toolbar" style="display: none;">
+             <div class="goog-toolbar goog-toolbar-horizontal" role="toolbar" style="-webkit-user-select: none;" tabindex="-1">
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+bold" role="button" style="-webkit-user-select: none;" title="Bold">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-icon tr-bold" style="-webkit-user-select: none;">
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+italic" role="button" style="-webkit-user-select: none;" title="Italic">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-icon tr-italic" style="-webkit-user-select: none;">
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+underline" role="button" style="-webkit-user-select: none;" title="Underline">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-icon tr-underline" style="-webkit-user-select: none;">
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+link" role="button" style="-webkit-user-select: none;" title="Add or remove link">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-link" style="-webkit-user-select: none;">
+                  Link
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+insertOrderedList" role="button" style="-webkit-user-select: none;" title="Numbered list">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-icon tr-insertOrderedList" style="-webkit-user-select: none;">
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div aria-pressed="true" class="goog-inline-block goog-toolbar-button" id="+insertUnorderedList" role="button" style="-webkit-user-select: none;" title="Bullet list">
+               <div class="goog-inline-block goog-toolbar-button-outer-box" style="-webkit-user-select: none;">
+                <div class="goog-inline-block goog-toolbar-button-inner-box" style="-webkit-user-select: none;">
+                 <div class="tr-icon tr-insertUnorderedList" style="-webkit-user-select: none;">
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="fyre-comment-stream" style="">
+          <div class="fyre-stream-sort">
+           <a class="fyre-stream-sort-newest">
+            Newest
+           </a>
+           |
+           <a class="fyre-stream-sort-oldest">
+            Oldest
+           </a>
+          </div>
+          <div class="fyre-stream-content">
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <nav class="navigation post-navigation" role="navigation">
+       <h2 class="screen-reader-text">
+        Post navigation
+       </h2>
+       <div class="nav-links">
+        <div class="nav-previous">
+         <a href="http://kidakaka.com/blog/2014/05/15/inception-inception/" rel="prev">
+          <span aria-hidden="true" class="meta-nav">
+           Previous
+          </span>
+          <span class="screen-reader-text">
+           Previous post:
+          </span>
+          <span class="post-title">
+           Inception of Inception
+          </span>
+         </a>
+        </div>
+        <div class="nav-next">
+         <a href="http://kidakaka.com/blog/2014/05/31/re-release-rise-nations/" rel="next">
+          <span aria-hidden="true" class="meta-nav">
+           Next
+          </span>
+          <span class="screen-reader-text">
+           Next post:
+          </span>
+          <span class="post-title">
+           Re-Release of Rise of Nations
+          </span>
+         </a>
+        </div>
+       </div>
+      </nav>
+     </main>
+     <!-- .site-main -->
+    </div>
+    <!-- .content-area -->
+   </div>
+   <!-- .site-content -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div class="site-info">
+     <a href="https://wordpress.org/">
+      Proudly powered by WordPress
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- .site-footer -->
+  </div>
+  <!-- .site -->
+  <script type="text/javascript">
+   var lf_config = [{"collectionMeta":"eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0aXRsZSI6IlRha2luZyBXb3JkUHJlc3MgdG8gU2NhbGUiLCJ1cmwiOiJodHRwOlwvXC9raWRha2FrYS5jb21cL2Jsb2dcLzIwMTRcLzA1XC8yOFwvdGFraW5nLXdvcmRwcmVzcy1zY2FsZVwvIiwidGFncyI6WyJob3N0aW5nIiwicGVyZm9ybWFuY2UiLCJzY2FsZSIsInRlY2giLCJ0dW5pbmciLCJ3b3JkcHJlc3MiXSwiY2hlY2tzdW0iOiIyMjE1ODAxYzBiMWEzMTliMDkzNjhhNTFlZGM3Y2I4ZSIsImFydGljbGVJZCI6MjU0OX0.ATLQPg-EsNbknciq1qkLW9EfJzooCZ_ztw0hSWVhKFs","checksum":"2215801c0b1a319b09368a51edc7cb8e","siteId":"366978","articleId":2549,"strings":"","el":"livefyre-comments"}];var conv = fyre.conv.load({}, lf_config);
+  </script>
+  <!-- LF DEBUG
+            site-id: 366978
+            article-id: 2549
+            post-type: post
+            comments-open: true
+            is-single: true
+            display-posts: true
+            display-pages: false
+            -->
+  <noscript>
+   <iframe height="0" src="//www.googletagmanager.com/ns.html?id=GTM-SWBL" style="display:none;visibility:hidden" width="0">
+   </iframe>
+  </noscript>
+  <script>
+   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-SWBL');
+  </script>
+  <!-- End Google Tag Manager -->
+  <script type="text/javascript">
+   window.WPCOM_sharing_counts = {"http:\/\/kidakaka.com\/blog\/2014\/05\/28\/taking-wordpress-scale\/":2549};
+		window.WPCOM_jetpack = true;
+				window.WPCOM_site_ID = 30916246;
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-google-plus-1' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomgoogle-plus-1', 'menubar=1,resizable=1,width=480,height=550' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-linkedin' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+				return false;
+			});
+		});
+  </script>
+  <script type="text/javascript">
+   jQuery(document).on('ready', function(){
+				jQuery('body').on('click', 'a.share-pinterest', function(e){
+					e.preventDefault();
+
+					// Load Pinterest Bookmarklet code
+					var s = document.createElement("script");
+					s.type = "text/javascript";
+					s.src = window.location.protocol + "//assets.pinterest.com/js/pinmarklet.js?r=" + ( Math.random() * 99999999 );
+					var x = document.getElementsByTagName("script")[0];
+					x.parentNode.insertBefore(s, x);
+
+					// Trigger Stats
+					var s = document.createElement("script");
+					s.type = "text/javascript";
+					s.src = this + ( this.toString().indexOf( '?' ) ? '&amp;' : '?' ) + 'js_only=1';
+					var x = document.getElementsByTagName("script")[0];
+					x.parentNode.insertBefore(s, x);
+				});
+			});
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/plugins/jetpack/modules/photon/photon.js" type="text/javascript">
+  </script>
+  <script src="http://s0.wp.com/wp-content/js/devicepx-jetpack.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/themes/twentyfifteen/js/skip-link-focus-fix.js" type="text/javascript">
+  </script>
+  <script src="http://kidakaka.com/blog/wp-includes/js/comment-reply.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var screenReaderText = {"expand":"&lt;span class=\"screen-reader-text\"&gt;expand child menu&lt;\/span&gt;","collapse":"&lt;span class=\"screen-reader-text\"&gt;collapse child menu&lt;\/span&gt;"};
+/* ]]&gt; */
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/themes/twentyfifteen/js/functions.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]&gt; */
+  </script>
+  <script src="http://kidakaka.com/blog/wp-content/plugins/jetpack/modules/sharedaddy/sharing.js" type="text/javascript">
+  </script>
+  <script async="" defer="" src="http://stats.wp.com/e-201526.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.5.3',blog:'30916246',post:'2549',tz:'5.5',srv:'kidakaka.com'} ]);
+	_stq.push([ 'clickTrackerInit', '30916246', '2549' ]);
+  </script>
+ </body>
+</html>
+<!-- Dynamic page generated in 0.914 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2015-06-23 21:44:42 -->

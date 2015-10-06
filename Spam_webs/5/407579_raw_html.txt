@@ -1,0 +1,2741 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   The busy Java developer's guide to Scala: Of traits and behaviors
+  </title>
+  <link href="http://purl.org/DC/elements/1.0/" rel="schema.DC"/>
+  <link href="//www.ibm.com/favicon.ico" rel="SHORTCUT ICON"/>
+  <meta content=" CopyrightIBM Corporation2008" name="DC.Rights"/>
+  <meta content="Scala, Scalable Language, Java, JVM, functional, object-oriented,  OOP, classes, objects, POJOs, inheritance, multiple, private, traits, behaviors, interfaces, JavaBeans, language design,Ted Neward , tttjca" name="Keywords"/>
+  <meta content="2008-04-29" name="DC.Date" scheme="iso8601"/>
+  <meta content="v17 delivery:developerWorks" name="Source"/>
+  <meta content="Public" name="Security"/>
+  <meta content="Scala doesn't just bring functional concepts to the JVM, it offers us a modern perspective on object-oriented language design. In this month's installment, Ted Neward shows you how Scala exploits traits to make objects simpler and easier to build. As you'll learn, traits are both similar to and different from the traditional polarities offered by Java interfaces and C++ multiple inheritance." name="Abstract"/>
+  <meta content="Scala doesn't just bring functional concepts to the JVM, it offers us a modern perspective on object-oriented language design. In this month's installment, Ted Neward shows you how Scala exploits traits to make objects simpler and easier to build. As you'll learn, traits are both similar to and different from the traditional polarities offered by Java interfaces and C++ multiple inheritance." name="Description"/>
+  <meta content="2008-04-29" name="IBM.Effective" scheme="W3CDTF"/>
+  <meta content="developerWorks Content/Raleigh/IBM" name="Owner"/>
+  <meta content="en" name="DC.Language" scheme="rfc1766"/>
+  <meta content="SP001" name="IBM.SpecialPurpose"/>
+  <meta content="ZZ" name="IBM.Country"/>
+  <meta content="index,follow" name="Robots"/>
+  <meta content="CT316" name="DC.Type" scheme="IBM_ContentClassTaxonomy"/>
+  <meta content="TT300" name="DC.Subject" scheme="IBM_SubjectTaxonomy"/>
+  <meta content="1" name="dW.ContentArea"/>
+  <meta content="263" name="dW.Topic"/>
+  <meta content="SOFDCJVAZZ" name="IBM.WTMCategory" scheme="IBM_WTMCategory"/>
+  <!-- SITE MON : START (DO NOT DELETE) -->
+  <!-- developerWorks monitoring token -->
+  <!-- SITE MON : END (DO NOT DELETE) -->
+  <link href="http://www.ibm.com/developerworks/library/j-scala04298/index.html" rel="canonical"/>
+  <!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+  <link href="//1.www.s81c.com/common/v17/css/www.css" rel="stylesheet" title="www" type="text/css"/>
+  <!--  Masthead/footer  -->
+  <link href="//dw1.s81c.com/developerworks/css/dw-mf/v17/dw-mfN2015-01.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-article-6.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-common-features.css" rel="stylesheet" title="www" type="text/css"/>
+  <link href="//dw1.s81c.com/developerworks/css/v17/dw-bluemix-regbar.css" media="screen,projection" rel="stylesheet" title="www" type="text/css"/>
+  <script src="//1.www.s81c.com/common/js/dojo/www.js" type="text/javascript">
+   //
+  </script>
+  <script src="//dw1.s81c.com/developerworks/js/v17/dw-www-v2.js" type="text/javascript">
+   //
+  </script>
+  <script type="text/javascript">
+   dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_rb_cta="Runtimes, boilerplates, and services for Java development.";dojo.attr(dojo.byId("dw-regbar-vp"),"innerHTML",dw_rb_cta);var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var lnkID="article-rbar-bmix-home-regbar";dojo.attr(dojo.query(".dw-regbar-btn")[0],"id",lnkID);var lnkHref=dojo.attr(dojo.byId(lnkID),"href")+"?lang="+dw_lang+"&amp;ca="+dw_source+"-_-bluemix-_-"+dw_content+"-_-regbar-article";dojo.attr(dojo.byId(lnkID),"href",lnkHref);dojo.attr(dojo.byId(lnkID),"onclick","trkOBL('"+lnkHref+"','"+lnkID+"'); return false;");var dwRegbarShow=dojo.animateProperty({node:"dw-regbar",duration:1000,delay:1000,properties:{opacity:{start:0,end:1},top:0}});var ibmTopShow=dojo.animateProperty({node:"ibm-top",duration:1000,delay:1000,properties:{marginTop:{start:0,end:42}}});dwRegbarShow.play();ibmTopShow.play()})
+  </script>
+  <script type="text/javascript">
+   //  ibmweb.config.set({ sbs: { enabled: false }});
+  </script>
+  <!-- Continuous Feedback Survey (jpp 04/06/15 -->
+  <script type="text/javascript">
+   ibmweb.config.set({
+    opinionlab: {
+    intercept: {
+    percent: 15,
+    start: "April 5 2015",
+    stop: "May 15 2015",
+    invitation: {
+    title: "Tell developerWorks what you think",
+    content: "We want your feedback to help us improve developerWorks. Please take a few minutes to complete our brief survey.",
+    yes_label: "Yes",
+    no_label: "No Thanks"
+    },
+    survey: {
+    type: "sg",
+    id: "s3/2048432/Tell-developerWorks-what-you-think",
+    width: 720,
+    height: 600
+    }
+    }
+    }
+    });
+  </script>
+  <script type="text/javascript">
+   dojo.addOnLoad(function(){var dw_lang="en_US";var dw_source="dw";var dw_register="Sign up for a free Bluemix trial";var dw_connect="Connect with Bluemix developers";var dw_vp="Develop and deploy your next&lt;br/&gt;app on the IBM Bluemix&lt;br/&gt;cloud platform.";var dw_cta="Start your free trial";var dw_tile_alt="Develop and deploy your next app on the IBM Bluemix cloud platform. Start building for free.";var dw_videopr="It's never been easier&lt;br/&gt;to build and deploy your apps in the cloud.&lt;br/&gt;";var dw_videopr_cta="Start your free trial";var dw_campaign="bluemix";var dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-2];if(dw_content=="library"){dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-1];dw_content=window.location.pathname.split("/")[window.location.pathname.split("/").length-3]+"-"+dw_content.substring(0,dw_content.indexOf(".html"))}var bluDevComURL="https://developer.ibm.com/bluemix/";var bluLink="https://www.bluemix.net/";var lnkID;var lnkIDd;var lnkIDt;var bLinkEnd;var bLinkTemp;var idTrkr=[];var idCnt;var artTop=dojo.query("div.ibm-col-1-1")[0];var artChildren=dojo.query(artTop).children();var edgy=false;if(dojo.hasClass(artChildren[0],"ibm-inset"))edgy=true;if((artChildren[0].nodeName=="H2")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-inset")))edgy=true;if(dojo.hasClass(artChildren[0],"codesection"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"codesection")))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(artChildren[1].width&gt;=701))edgy=true;if(artChildren[1].width&gt;=701)edgy=true;if(dojo.hasClass(artChildren[0],"ibm-data-table"))edgy=true;if((artChildren[0].nodeName=="H5")&amp;&amp;(dojo.hasClass(artChildren[1],"ibm-data-table")))edgy=true;if(!(edgy)){var sBarAB='&lt;div class="dw-article-sidebar dw-bluemix" id="dwc-exp-a"&gt;'+'&lt;img src="//dw1.s81c.com/developerworks/i/bluemix-graphic.png" height="64" width="64" alt=""/&gt;'+'&lt;p&gt;'+dw_vp+'&lt;/p&gt;'+'&lt;p class="ibm-button-link-alternate dw-button-green"&gt;'+'&lt;a id="tutc-sbar-bmix-home-btn-ABa" href="'+bluLink+'" class="dw-button-large"&gt;'+dw_cta+'&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;';dojo.place(sBarAB,artTop,"first")}dojo.forEach(dojo.query("#ibm-content-main a"),function(item,index){var dw_medium="article";var bLink=dojo.attr(item,"href");var linkClass=dojo.attr(item,"class");if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-sbar-")&gt;-1))dw_medium="sidebar";if((dojo.attr(item,"id")!=null)&amp;&amp;(dojo.attr(item,"id").indexOf("-vpromo-")&gt;-1))dw_medium="video-promotion";if(bLink&amp;&amp;(bLink.indexOf("//bluemix.net")&gt;-1))bLink=bLink.replace("//bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//ace.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//ace.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;(bLink.indexOf("//console.ng.bluemix.net")&gt;-1))bLink=bLink.replace("//console.ng.bluemix.net","//www.bluemix.net");if(bLink&amp;&amp;((bLink.indexOf("//www.bluemix.net")&gt;-1)||(bLink.indexOf("//www.ng.bluemix.net")&gt;-1)||(bLink.indexOf("//hub.jazz.net")&gt;-1))){bLinkEnd="";bLink=bLink.split("?");if((bLink[1])&amp;&amp;(bLink[1].indexOf("repository=")!=-1)){var deployBtn=true;bLink[0]=bLink[0]+"?"+bLink[1];bLink[1]=null}if((bLink[1])&amp;&amp;(bLink[1].indexOf("/")!=-1))bLinkEnd=bLink[1].substring(bLink[1].indexOf("/"));if(dojo.attr(item,"id")==null){bLinkTemp=bLink[0]+bLinkEnd;if(bLinkTemp.indexOf("bluemix")!=-1){lnkIDd="bmix";if(bLinkTemp.indexOf("/#/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/solutions")!=-1){lnkIDd=lnkIDd+"-solution"}else if(bLinkTemp.indexOf("/#/store")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/catalog")!=-1){lnkIDd=lnkIDd+"-service"}else if(bLinkTemp.indexOf("/docs")!=-1){lnkIDd=lnkIDd+"-docs"}else{lnkIDd=lnkIDd+"-home"}}else{if((bLinkTemp.indexOf("//hub.jazz.net/git")&gt;-1)||(bLinkTemp.indexOf("//hub.jazz.net/project")&gt;-1)){lnkIDd=deployBtn?"devops-deploy":"devops-code"}else{lnkIDd=bLinkTemp.substring(bLinkTemp.indexOf("hub.jazz.net/")+13);lnkIDd=lnkIDd==""?"devops-home":"devops-"+lnkIDd.split("/")[0]}}if(dojo.attr(dojo.query(item).parent()[0],"class").indexOf("ibm-button")!=-1){lnkIDt="btn"}else{lnkIDt="txt"}}bLink=bLink[0];if(bLink.indexOf("//hub.jazz.net")&gt;-1){if(!(deployBtn)&amp;&amp;((bLink.indexOf("//hub.jazz.net/git")&gt;-1)||(bLink.indexOf("//hub.jazz.net/project")&gt;-1))){bLink="https://login.jazz.net/psso/proxy/jazzregister?utm_source="+dw_source+"&amp;utm_medium="+dw_medium+"&amp;utm_content="+dw_content+"&amp;utm_campaign="+dw_campaign+"&amp;redirect_uri="+bLink}else{if(deployBtn){bLink=bLink+"&amp;cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}else{bLink=bLink+"?utm_source="+dw_source+"&amp;utm_campaign="+dw_campaign+"&amp;utm_content="+dw_content+"&amp;utm_medium="+dw_medium}}}else{if(bLink.indexOf("/#/")==-1){if(bLink.substring(bLink.length-7)=="/docs/#"){bLink=bLink.replace("/docs/#","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else if(bLink.substring(bLink.length-5)=="/docs"){bLink=bLink.replace("/docs","/docs/"+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium)}else{bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}}else{bLink=bLink.substring(0,bLink.indexOf("#"))+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium+bLink.substring(bLink.indexOf("#")-1)}}if(bLinkEnd)bLink=bLink+bLinkEnd;if(linkClass.indexOf("bluemix-home")==-1){if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("/catalog")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net/")!=-1)){bLink=bLink.replace("//www.bluemix.net/","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}if((bLink.indexOf("#")==-1)&amp;&amp;(bLink.indexOf("/solutions")==-1)&amp;&amp;(bLink.indexOf("//www.bluemix.net?")!=-1)){bLink=bLink.replace("//www.bluemix.net","//developer.ibm.com/sso/bmregistration");if(bLink.indexOf("http://")==0)bLink=bLink.replace("http://","https://");if(bLink.indexOf("//")==0)bLink=bLink.replace("//","https://");if(bLink.indexOf("?cm_mmc=")!=-1)bLink=bLink.replace("?cm_mmc=","?lang="+dw_lang+"&amp;ca=")}}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("solutions")!=-1)){bLinkTemp=bLink.substring(0,bLink.indexOf("?"));bLink=bLink.substring(bLink.indexOf("/#/")+3,bLink.length);bLink=bLinkTemp+bLink;bLinkTemp=bLink.substring(0,bLink.indexOf("solution="));bLink=bLink.substring(bLink.indexOf("/solution=")+10,bLink.length);bLink=bLinkTemp+bLink;bLink=bLink+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if((bLink.indexOf("#")!=-1)&amp;&amp;(bLink.indexOf("store")!=-1)){if(bLink.indexOf("&amp;cloudOEPaneId=store")!=-1){bLinkTemp=bLink.split("&amp;cloudOEPaneId=store");bLink=bLinkTemp[0]}bLinkTemp=bLink.substring(bLink.indexOf("serviceOfferingGuid=")+20,bLink.length);bLink=bLink.substring(0,bLink.indexOf(".net/")+5)+"catalog/"+bLinkTemp+"?cm_mmc="+dw_source+"-_-"+dw_campaign+"-_-"+dw_content+"-_-"+dw_medium}if(dojo.attr(item,"id")==null){lnkID="tutc-main-"+lnkIDd+"-"+lnkIDt;idCnt=0;dojo.forEach(idTrkr,function(item,index){if(item.indexOf(lnkID)!=-1){idCnt++}});if(idCnt&gt;0){lnkID=lnkID+"-"+idCnt}dojo.attr(item,"id",lnkID);idTrkr.push(lnkID)}else{lnkID=dojo.attr(item,"id")}dojo.attr(item,"href",bLink);dojo.attr(item,"onclick","trkOBL('"+bLink+"','"+lnkID+"'); return false;");}});var istndom=setInterval(function(){if(!!dojo.byId('ibm-social-tools')){var ibmsi=["print","email","digg","facebook","twitter","delicious","linkedin","stumble","googleplus"];dojo.forEach(ibmsi,function(item,index){var siHref=escape(dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"href"));var siID="ibmShare-B-"+item;siHref=siHref.replace(/%250A/g,"");siHref=siHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+siHref+"','"+siID+"');")});clearInterval(istndom)}},1000);var dwistndom=setInterval(function(){if(!!dojo.byId('dw-ibm-social-tools')){var dwibmsi=["facebook","twitter","linkedin","googleplus"];dojo.forEach(dwibmsi,function(item,index){var dwsiHref=escape(dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href"));var dwsiID="dwShare-B-"+item;dwsiHref=dwsiHref.replace(/%250A/g,"");dwsiHref=dwsiHref.replace(/%2520%2520/g,"");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"onclick","trkOBL('"+dwsiHref+"','"+dwsiID+"');");dojo.removeAttr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"target");dojo.attr(dojo.query("#dw-ibm-social-tools .ibm-share-"+item)[0],"href","javascript:void(0)")});clearInterval(dwistndom)}},1000);});
+  </script>
+  <!-- LEADSPACE_STYLES -->
+ </head>
+ <body id="ibm-com">
+  <div aria-labelledby="dw-regbar-vp" class="dw-home-band" id="dw-regbar" role="complementary">
+   <div class="ibm-columns">
+    <div class="ibm-col-6-6">
+     <span id="dw-regbar-bluemix">
+      IBM
+      <strong>
+       Bluemix
+      </strong>
+     </span>
+     <span id="dw-regbar-vp">
+      Develop in the cloud at the click of a button!
+     </span>
+     <p class="ibm-button-link-alternate dw-button-green">
+      <a class="dw-button-large dw-regbar-btn" href="https://developer.ibm.com/sso/bmregistration">
+       Start your free trial
+      </a>
+     </p>
+    </div>
+   </div>
+  </div>
+  <div class="ibm-landing-page" id="ibm-top">
+   <!-- MASTHEAD_BEGIN -->
+   <div id="ibm-masthead">
+    <!-- TOP ROW -->
+    <div id="dw-masthead-top-row">
+     <ul aria-label="Masthead navigation" id="ibm-mast-options-dw" role="toolbar">
+      <li id="dw-mast-top-4" role="presentation">
+       <a href="http://www.ibm.com/developerworks/" tabindex="0">
+        <img alt="dW" aria-label="dW" height="22" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-badge.png" width="43"/>
+       </a>
+      </li>
+      <li id="dw-mast-top-0" role="presentation">
+       <div id="dw-mast-signin">
+        <a class="dw-mf-noscript" href="#" id="dw-mf-signin-link" tabindex="2" title="Sign in requires JavaScript">
+         Sign in
+        </a>
+        <span class="dw-mf-signin-spacer">
+         |
+        </span>
+        <a class="dw-mf-noscript" href="#" id="dw-mf-reg-link" tabindex="3" title="Register requires JavaScript">
+         Register
+        </a>
+       </div>
+       <div class="dw-mf-hide" id="dw-mast-auth-link">
+        <a class="authenticated ibm-active" href="#" role="button" tabindex="2">
+        </a>
+        <ul class="dw-mf-hide" id="dw-mast-auth-menu">
+         <li aria-hidden="true" class="dw-mast-auth-menu-title">
+          developerWorks Community
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/profiles/html/myProfileView.do?lang=en" tabindex="3">
+           My profile
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/groups/service/html/mycommunities?lang=en" tabindex="4">
+           My communities
+          </a>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="/developerworks/community/news/?lang=en" tabindex="5">
+           Settings
+          </a>
+         </li>
+         <li class="dw-mast-auth-menu-divider">
+          <hr/>
+         </li>
+         <li>
+          <span aria-hidden="true" class="dw-mast-auth-menu-arrow">
+           
+          </span>
+          <a href="#" id="dw-mast-signout-link" tabindex="6">
+           Sign out
+          </a>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li id="dw-mast-top-1">
+       <div>
+       </div>
+      </li>
+      <li id="dw-mast-top-3" role="presentation">
+       <a href="http://www.ibm.com" tabindex="1">
+        IBM
+       </a>
+      </li>
+     </ul>
+    </div>
+    <!-- BOTTOM ROW -->
+    <div aria-label="Site map" id="ibm-universal-nav-dw">
+     <ul id="ibm-unav-links-dw">
+      <li id="ibm-unav-home-dwlogo">
+       <a href="http://www.ibm.com/developerworks/">
+        <img alt="developerWorks" height="28" src="//dw1.s81c.com/developerworks/i/mf/dwn-dw-wordmark.png" width="225"/>
+       </a>
+      </li>
+     </ul>
+     <ul aria-label="Site map" id="ibm-menu-links-dw" role="toolbar">
+      <li id="dw-mast-nav-0" role="presentation">
+       <a href="http://www.ibm.com/developerworks/topics/" tabindex="0">
+        Technical topics
+       </a>
+      </li>
+      <li id="dw-mast-nav-1" role="presentation">
+       <a href="http://www.ibm.com/developerworks/downloads/" tabindex="0">
+        Evaluation software
+       </a>
+      </li>
+      <li id="dw-mast-nav-2" role="presentation">
+       <a href="http://www.ibm.com/developerworks/community/index.html" tabindex="0">
+        Community
+       </a>
+      </li>
+      <li id="dw-mast-nav-3" role="presentation">
+       <a href="http://www.ibm.com/developerworks/events/" tabindex="0">
+        Events
+       </a>
+      </li>
+     </ul>
+     <form action="//www.ibm.com/search/csass/search/" aria-label="IBM developerWorks Search" id="ibm-search-form" method="get" name="form1" role="search">
+      <p>
+       <label for="q">
+        <span class="ibm-access">
+         Search developerWorks
+        </span>
+       </label>
+       <input id="q" maxlength="100" name="q" type="text" value="Search developerWorks"/>
+       <input name="sn" type="hidden" value="dw"/>
+       <input name="lang" type="hidden" value="en"/>
+       <input name="cc" type="hidden" value="US"/>
+       <input name="en" type="hidden" value="utf"/>
+       <input name="hpp" type="hidden" value="20"/>
+       <input name="dws" type="hidden" value="dw"/>
+       <input class="ibm-btn-search" id="ibm-search" type="submit" value="Submit"/>
+      </p>
+     </form>
+    </div>
+   </div>
+   <div class="ibm-access" id="fdiv">
+   </div>
+   <!-- MASTHEAD_END -->
+   <!-- LAYOUT -->
+   <!-- LEADSPACE_BEGIN -->
+   <div id="ibm-leadspace-head">
+    <!-- LEADSPACE_BODY_BEGIN -->
+    <div id="ibm-leadspace-body">
+     <!-- Navigation_Trail_BEGIN -->
+     <ul id="ibm-navigation-trail">
+      <li>
+       <a href="http://www.ibm.com/developerworks/">
+        developerWorks
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/topics/">
+        Technical topics
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/java/">
+        Java technology
+       </a>
+      </li>
+      <li>
+       <a href="http://www.ibm.com/developerworks/java/library/">
+        Technical library
+       </a>
+      </li>
+     </ul>
+     <!-- END_Navigation_Trail -->
+     <!-- Title_Subtitle -->
+     <h1>
+      The busy Java developer's guide to Scala: Of traits and behaviors
+     </h1>
+     <p>
+      <em>
+       <span>
+        Using Scala's version of Java interfaces
+       </span>
+      </em>
+     </p>
+    </div>
+    <!-- LEADSPACE_BODY_END -->
+    <!-- SUMMARY_BEGIN -->
+    <div class="dw-summary-columns" id="dw-summary-area">
+     <div class="ibm-col-6-4">
+      <p>
+       Scala doesn't just bring functional concepts to the JVM, it
+offers us a modern perspective on object-oriented language design. In this
+month's installment, Ted Neward shows you how
+Scala exploits traits to make objects simpler and easier to build. As you'll
+learn, traits are both similar to and different from the traditional
+polarities offered by Java interfaces and C++ multiple
+inheritance.
+      </p>
+      <p class="ibm-no-print ibm-ind-link">
+       <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=scala+neward">
+        View more content in this series
+       </a>
+       <span class="dw-summary-bar">
+        |
+       </span>
+       <a class="ibm-pdf-link" href="j-scala04298-pdf.pdf">
+        PDF
+       </a>
+       (284 KB)
+       <span class="dw-summary-bar">
+        |
+       </span>
+       <span id="nCmts">
+       </span>
+      </p>
+      <div id="dw-social-tools-container">
+       <span class="dw-social-lead-in">
+        Share:
+       </span>
+      </div>
+     </div>
+     <div class="ibm-col-6-2 dw-toc-margin">
+      <p class="dw-summary-author">
+       <a class="ibm-popup-link" href="#authorN1002B" onclick="ibmweb.overlay.show('authorN1002B',this);return false;">
+        Ted Neward
+       </a>
+       , Principal, Neward &amp; Associates
+      </p>
+      <div class="ibm-common-overlay" id="authorN1002B">
+       <div class="ibm-head">
+        <p>
+         <a class="ibm-common-overlay-close" href="#close">
+          Close [x]
+         </a>
+        </p>
+       </div>
+       <div class="ibm-body">
+        <div class="ibm-main">
+         <div class="ibm-title">
+          <!--this is where the h2 usually
+                                    goes-->
+         </div>
+         <div class="ibm-container ibm-alternate">
+          <div class="ibm-container-body">
+           <p>
+            <!--.-->
+            <img align="" alt="Ted Neward photo" class="dw-summary-bio-image-x64" src="/developerworks/i/p-tneward.jpg" valign="top" width="64"/>
+            Ted Neward is the principal of Neward &amp; Associates, where he
+        consults, mentors, teaches, and presents on Java, .NET, XML Services,
+        and other platforms. He resides near Seattle, Washington.
+           </p>
+           <br/>
+           <br/>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="ibm-footer">
+        <!-- -->
+       </div>
+      </div>
+      <p class="dw-summary-date">
+       29 April 2008
+      </p>
+      <p>
+       Also available in
+       <a href="http://www.ibm.com/developerworks/cn/java/j-scala04298.html">
+        Chinese
+       </a>
+       <a href="http://www.ibm.com/developerworks/ru/library/j-scala04298/">
+        Russian
+       </a>
+       <a href="http://www.ibm.com/developerworks/jp/java/library/j-scala04298.html">
+        Japanese
+       </a>
+      </p>
+      <div aria-hidden="true" class="ibm-container" id="dw-toc">
+       <div class="ibm-container-body">
+        <ul class="ibm-twisty">
+         <li>
+          <a class="ibm-twisty-trigger" href="#toggle">
+           <img alt="-" src="//www.ibm.com/i/c.gif"/>
+          </a>
+          <span class="ibm-twisty-head">
+           Table of contents
+          </span>
+          <div class="ibm-twisty-body">
+           <ul class="ibm-link-list" style="font-size:0.8em">
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10061">
+              Inheritance in C++ and the Java language
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N100C1">
+              Reusable behavior, revisited
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10163">
+              Traits and behavioral reuse in Scala
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N10243">
+              Traits in the JVM
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N102CA">
+              Traits and collections
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1032A">
+              Scala and Java compatibility
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#N1038B">
+              In conclusion
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#resources">
+              Resources
+             </a>
+            </li>
+            <li>
+             <a class="ibm-anchor-down-em-link" href="#icomments">
+              Comments
+             </a>
+            </li>
+           </ul>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- SUMMARY_END -->
+   </div>
+   <!-- LEADSPACE_END -->
+   <div id="ibm-pcon">
+    <!-- BEGIN_IBM-CONTENT -->
+    <div id="ibm-content">
+     <!-- BEGIN_IBM-CONTENT-BODY -->
+     <div id="ibm-content-body">
+      <!-- BEGIN_IBM-CONTENT-MAIN -->
+      <div id="ibm-content-main">
+       <!-- 1_1_COLUMN_BEGIN -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <p>
+          Sir Isaac Newton, famous scientist and researcher, is credited with the
+words: "If I have seen further it is by standing on the shoulders of giants." As an avid historian and political scientist, I might offer a slight
+revision to the great man's quote: "If I have seen further, it is because I
+have stood on the shoulders of history." These words reflect another 
+statement, made by the historian George Santayana: "Those who cannot remember
+the past are condemned to repeat it." In other words, if we cannot look back
+upon history and learn from the mistakes made by those who came before us
+(including ourselves), then there is little chance of improvement.
+         </p>
+         <p>
+          So, you're wondering, what does this philosophizing have to do with
+Scala? Inheritance, for one thing. Consider the fact that the Java language was
+created close to 20 years ago, in the heyday of "object-orientation."  It
+was designed to mimic C++, the dominant language of the day, in a naked
+attempt to woo that language's developers over to the Java platform. Certain
+decisions were made that seemed obvious and necessary at the time, but in
+retrospect, we know that some of them are not as beneficial as the
+creators then believed.
+         </p>
+         <div class="dw-sidebar ibm-inset">
+          <h2 id="N10053">
+           The straight dope: Ted Neward on Scala
+          </h2>
+          <p>
+           Learn about the differences between functional and object-oriented languages, as well as some important domains where the Java language and other purely OO languages simply are not a good fit in
+           <a href="http://www.javaworld.com/podcasts/jtech/2008/061008jtech.html">
+            this podcast
+           </a>
+           from
+           <em>
+            JavaWorld
+           </em>
+           .
+          </p>
+         </div>
+         <p>
+          For instance, 20 years ago, it made sense to the creators of the Java language  to reject both C++-style private inheritance and multiple inheritance.
+Since that time, many Java developers have had cause to regret their decision. In this
+month's guide to Scala, I revisit the history of multiple and private inheritance in the
+Java language. Then, you'll see what Scala does to rewrite that history for the greater benefit of us all.
+         </p>
+         <h2 id="N10061">
+          Inheritance in C++ and the Java language
+         </h2>
+         <blockquote>
+          <em>
+           History is that version of events that people have decided to agree on.
+           <br/>
+            Napoleon Bonaparte
+          </em>
+         </blockquote>
+         <p>
+          Those who labored in the C++ mines will recall that private inheritance was
+a way of absorbing behavior from a base class without explicitly accepting the
+          <em>
+           IS-A
+          </em>
+          relationship. Marking the base class as "private" allowed the
+derived class to inherit from it without actually
+          <em>
+           becoming
+          </em>
+          one of them.
+Private inheritance on its own was one of those features that never quite
+took, however. The idea of inheriting from a base class without being able to downcast to
+it or upcast to the base just seemed silly.
+         </p>
+         <div class="dw-sidebar ibm-inset">
+          <h2 id="N10076">
+           About this series
+          </h2>
+          <p>
+           Ted Neward dives into the Scala programming language and takes you along
+with him. In this new developerWorks
+           <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=scala+neward">
+            series
+           </a>
+           , you'll learn what all the recent
+hype is about and see some of Scala's linguistic capabilities in action. Scala
+code and Java code will be shown side by side wherever comparison is relevant,
+but (as you'll discover) many things in Scala have no direct correlation to
+anything you've found in Java programming and therein lies much of Scala's charm! After
+all, if Java code could do it, why bother learning Scala?
+          </p>
+         </div>
+         <p>
+          Multiple inheritance, on the other hand, was commonly held as a necessary
+element of object-oriented programming. When modeling a hierarchy of vehicles,
+the
+          <code>
+           SeaPlane
+          </code>
+          clearly needs to inherit from both
+          <code>
+           Boat
+          </code>
+          (with its methods
+          <code>
+           startEngine()
+          </code>
+          and
+          <code>
+           sail()
+          </code>
+          ) and
+          <code>
+           Plane
+          </code>
+          (with its methods
+          <code>
+           startEngine()
+          </code>
+          and
+          <code>
+           fly()
+          </code>
+          ). A
+          <code>
+           SeaPlane
+          </code>
+          acts as both a
+          <code>
+           Boat
+          </code>
+          and a
+          <code>
+           Plane
+          </code>
+          , doesn't it?
+         </p>
+         <p>
+          That was the thinking in the golden age of C++,  anyway. When we
+fast-forward to the Java language, we perceive that multiple inheritance is
+just as flawed as private inheritance. Instead, any Java developer will tell
+you,
+          <code>
+           SeaPlane
+          </code>
+          should inherit from the interfaces
+          <code>
+           Floatable
+          </code>
+          and
+          <code>
+           Flyable
+          </code>
+          (and probably the interface or base class
+          <code>
+           EnginePowered
+          </code>
+          , as well). Inheritance from interfaces
+means being able to implement all the methods the class requires without
+encountering the horror of
+          <em>
+           virtual multiple inheritance
+          </em>
+          (wherein we
+attempt to solve the question of which base's
+          <code>
+           startEngine()
+          </code>
+          to call when
+          <code>
+           SeaPlane
+          </code>
+          's
+          <code>
+           startEngine()
+          </code>
+          method
+is called).
+         </p>
+         <p>
+          Unfortunately, tossing out private and multiple inheritance has cost us
+dearly in terms of code reuse. Java developers may rejoice in being free of
+virtual multiple inheritance, but the trade-off is often painstaking  and
+error-prone  work done by the programmer.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N100C1">
+          Reusable behavior, revisited
+         </h2>
+         <blockquote>
+          <em>
+           Events ... may be roughly divided into those which probably never happened and those which do not matter.
+           <br/>
+            William Ralph Inge
+          </em>
+         </blockquote>
+         <p>
+          The JavaBeans specification is a foundation of the Java platform, giving
+rise to the POJO that so much of our Java ecosystem depends on. We're all
+aware of the idea that properties in Java code are managed by
+          <code>
+           get()/set()
+          </code>
+          pairs, as shown in Listing 1:
+         </p>
+         <h5 id="listing1">
+          Listing 1.
+          <code>
+           Person
+          </code>
+          POJO
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Java      
+public class Person
+{
+    private String lastName;
+    private String firstName;
+    private int age;
+    
+    public Person(String fn, String ln, int a)
+    {
+        lastName = ln; firstName = fn; age = a;
+    }
+    
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String v) { firstName = v; }
+    public String getLastName() { return lastName; }
+    public void setLastName(String v) { lastName = v; }
+    public int getAge() { return age; }
+    public void setAge(int v) { age = v; }
+}
+          </pre>
+         </div>
+         <p>
+          That looks fairly simple and not so hard to do. But what if you wanted to
+provide notification support  such that third parties could register with a
+POJO and receive callbacks when a property changes? According to the JavaBeans
+spec, you would then have to implement the
+          <code>
+           PropertyChangeListener
+          </code>
+          interface and its single method,
+          <code>
+           propertyChange()
+          </code>
+          . If you wanted to allow any of the
+POJO's
+          <code>
+           PropertyChangeListener
+          </code>
+          s to "vote" on the
+changes to properties, then your POJO would also need to implement the
+          <code>
+           VetoableChangeListener
+          </code>
+          interface, which requires the
+          <code>
+           vetoableChange()
+          </code>
+          method to be implemented.
+         </p>
+         <p>
+          At least, that's how it's supposed to work.
+         </p>
+         <p>
+          In fact, the
+          <code>
+           PropertyChangeListener
+          </code>
+          interface
+must be implemented by would-be recipients of the notifications of property
+changes, and the sender (in this case the
+          <code>
+           Person
+          </code>
+          class) must offer up public methods that take instances of this interface, as
+well as the name of the property that the listener wants to listen to. The end
+result is the more complicated
+          <code>
+           Person
+          </code>
+          shown in
+Listing 2:
+         </p>
+         <h5 id="listing2">
+          Listing 2.
+          <code>
+           Person
+          </code>
+          POJO, take 2
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Java      
+public class Person
+{
+    // rest as before, except that inside each setter we have to do something
+    // like:
+    // public setFoo(T newValue)
+    // {
+    //     T oldValue = foo;
+    //     foo = newValue;
+    //     pcs.firePropertyChange("foo", oldValue, newValue);
+    // }
+    
+    public void addPropertyChangeListener(PropertyChangeListener pcl)
+    {
+        // keep a reference to pcl
+    }
+    public void removePropertyChangeListener(PropertyChangeListener pcl)
+    {
+        // find the reference to pcl and remove it
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Keeping the reference to the property change listener means the
+          <code>
+           Person
+          </code>
+          POJO has to keep some kind of collection class
+(such as
+          <code>
+           ArrayList
+          </code>
+          ) to contain all the references.
+The POJO then has to be instantiated, inserted into, and removed from  and,
+because these actions are not atomic, it also has to contain appropriate
+synchronization protections.
+         </p>
+         <p>
+          Finally, if a property changes, the list of property listeners must be
+notified, usually by iterating through the collection of
+          <code>
+           PropertyChangeListener
+          </code>
+          s and calling
+          <code>
+           propertyChange()
+          </code>
+          on each one of them. And that process
+includes passing in a new
+          <code>
+           PropertyChangeEvent
+          </code>
+          describing the property, the old value, and the new value, as demanded by the
+          <code>
+           PropertyChangeEvent
+          </code>
+          class and the JavaBeans
+spec.
+         </p>
+         <p>
+          It's no wonder that so few of our written POJOs support listener notification: it's a ton of work, and it has to be repeated, by hand, for every JavaBean/POJO created.
+         </p>
+         <h3 id="N1011F">
+          Work, work, work  where's the workaround?
+         </h3>
+         <p>
+          Interestingly, had C++'s support for private inheritance carried over into
+the Java language, we could use it today to resolve some of the conundrums
+of the JavaBeans specification. A base class could provide the POJO's basic
+          <code>
+           add()
+          </code>
+          and
+          <code>
+           remove()
+          </code>
+          methods,
+the collection class, and the "
+          <code>
+           firePropertyChanged()
+          </code>
+          "
+method to notify the listeners of property changes.
+         </p>
+         <p>
+          We could still do that with the Java class, but because Java lacks private
+inheritance, the
+          <code>
+           Person
+          </code>
+          class would have to inherit
+from a base
+          <code>
+           Bean
+          </code>
+          class and would therefore be
+          <em>
+           upcastable
+          </em>
+          to
+          <code>
+           Bean
+          </code>
+          . This would preclude
+          <code>
+           Person
+          </code>
+          from inheriting from any other class.
+Multiple inheritance might save us from the latter problem, but it would also
+lead us back to virtual inheritance, which we definitely want to avoid.
+         </p>
+         <p>
+          The Java language solution to this problem is the well-known idiom of a
+          <em>
+           support
+          </em>
+          class, in this case
+          <code>
+           PropertyChangeSupport
+          </code>
+          : instantiate one of these inside
+the POJO, put the necessary public methods on the POJO itself, and each of the
+public methods calls into the
+          <code>
+           Support
+          </code>
+          class to do
+the dirty work. Here's the
+          <code>
+           Person
+          </code>
+          POJO updated to
+use
+          <code>
+           PropertyChangeSupport
+          </code>
+          :
+         </p>
+         <h5 id="listing3">
+          Listing 3.
+          <code>
+           Person
+          </code>
+          POJO, take 3
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Java      
+import java.beans.*;
+
+public class Person
+{
+    private String lastName;
+    private String firstName;
+    private int age;
+
+    private PropertyChangeSupport propChgSupport =
+        new PropertyChangeSupport(this);
+    
+    public Person(String fn, String ln, int a)
+    {
+        lastName = ln; firstName = fn; age = a;
+    }
+    
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String newValue)
+    {
+        String old = firstName;
+        firstName = newValue;
+        propChgSupport.firePropertyChange("firstName", old, newValue);
+    }
+    
+    public String getLastName() { return lastName; }
+    public void setLastName(String newValue)
+    {
+        String old = lastName;
+        lastName = newValue;
+        propChgSupport.firePropertyChange("lastName", old, newValue);
+    }
+    
+    public int getAge() { return age; }
+    public void setAge(int newValue)
+    {
+        int old = age;
+        age = newValue;
+        propChgSupport.firePropertyChange("age", old, newValue);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl)
+    {
+        propChgSupport.addPropertyChangeListener(pcl);
+    }
+    public void removePropertyChangeListener(PropertyChangeListener pcl)
+    {
+        propChgSupport.removePropertyChangeListener(pcl);
+    }
+}
+          </pre>
+         </div>
+         <p>
+          I'm not sure about you, but the complexity of that code almost makes me
+want to take up assembly language again. What's worse is knowing you'll have
+to repeat this exact sequence of code in every POJO you write. Half of the
+work in Listing 3 is in the POJO itself, and therefore cannot be reused 
+except by the traditions of "cut and paste" programming.
+         </p>
+         <p>
+          Now let's see what Scala has to offer in the way of a better workaround.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10163">
+          Traits and behavioral reuse in Scala
+         </h2>
+         <blockquote>
+          <em>
+           Everyone has the obligation to ponder well his own specific traits of character. He must also regulate them adequately and not wonder whether someone else's traits might suit him better.
+           <br/>
+            Cicero
+          </em>
+         </blockquote>
+         <p>
+          Scala enables you to define a new construct that lies halfway
+between an interface and a class, called a
+          <em>
+           trait
+          </em>
+          . Traits are unusual in
+that a class can incorporate as many of them as desired, like interfaces, but
+they can also contain behavior, like classes. Also, like both classes and
+interfaces, traits can introduce new methods. But unlike either, the 
+definition of that behavior isn't checked until the trait is actually
+incorporated as part of a class.  Or, put differently, you can define methods
+that aren't checked for correctness until they're incorporated into a trait-using class definition.
+         </p>
+         <p>
+          Traits may sound complex, but they're easier understood once you've seen
+them in action. To get started, here's the
+          <code>
+           Person
+          </code>
+          POJO redefined in Scala:
+         </p>
+         <h5 id="listing4">
+          Listing 4. Scala's
+          <code>
+           Person
+          </code>
+          POJO
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+class Person(var firstName:String, var lastName:String, var age:Int)
+{
+}
+          </pre>
+         </div>
+         <p>
+          You could also ensure that your Scala POJO has the
+          <code>
+           get()/set()
+          </code>
+          methods expected in Java POJO-based environments,
+simply by using the
+          <code>
+           scala.reflect.BeanProperty
+          </code>
+          annotation on the class parameters
+          <code>
+           firstName
+          </code>
+          ,
+          <code>
+           lastName
+          </code>
+          , and
+          <code>
+           age
+          </code>
+          . For now,
+I'll leave those methods out of the equation to keep things
+simple.
+         </p>
+         <p>
+          If the
+          <code>
+           Person
+          </code>
+          class wants to be able to accept
+          <code>
+           PropertyChangeListener
+          </code>
+          s, it can do so as shown in
+Listing 5:
+         </p>
+         <h5 id="listing5">
+          Listing 5. Scala's
+          <code>
+           Person
+          </code>
+          POJO with listeners
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+object PCL
+    extends java.beans.PropertyChangeListener
+{
+    override def propertyChange(pce:java.beans.PropertyChangeEvent):Unit =
+    {
+        System.out.println("Bean changed its " + pce.getPropertyName() +
+            " from " + pce.getOldValue() +
+            " to " + pce.getNewValue())
+    }
+}
+object App
+{
+    def main(args:Array[String]):Unit =
+    {
+        val p = new Person("Jennifer", "Aloi", 28)
+
+        p.addPropertyChangeListener(PCL)
+        
+        p.setFirstName("Jenni")
+        p.setAge(29)
+        
+        System.out.println(p)
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Notice how using the
+          <code>
+           object
+          </code>
+          in Listing 5 enables
+me to register a static method as a listener  something I could never do in my
+Java code without explicitly creating the
+          <code>
+           Singleton
+          </code>
+          class and instantiating it.  This is just more evidence for the theory that
+Scala learns from the historical
+          <a href="http://www.artima.com/forums/flat.jsp?forum=106&amp;thread=194961">
+           pain points
+          </a>
+          of Java
+development.
+         </p>
+         <p>
+          The next step for
+          <code>
+           Person
+          </code>
+          is to provide the
+          <code>
+           addPropertyChangeListener()
+          </code>
+          method and fire
+          <code>
+           propertyChange()
+          </code>
+          method calls at each of the listeners when
+the properties change. In Scala, doing this in a reusable way is as easy as
+defining and using a trait, as shown in Listing 6. I call this trait
+          <code>
+           BoundPropertyBean
+          </code>
+          because "notified" properties are
+formally called
+          <em>
+           bound properties
+          </em>
+          in the JavaBeans specification.
+         </p>
+         <h5 id="listing6">
+          Listing 6. Holy behavioral reuse, Batman!
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+trait BoundPropertyBean
+{
+    import java.beans._
+
+    val pcs = new PropertyChangeSupport(this)
+    
+    def addPropertyChangeListener(pcl : PropertyChangeListener) =
+        pcs.addPropertyChangeListener(pcl)
+    
+    def removePropertyChangeListener(pcl : PropertyChangeListener) =
+        pcs.removePropertyChangeListener(pcl)
+    
+    def firePropertyChange(name : String, oldVal : _, newVal : _) : Unit =
+        pcs.firePropertyChange(new PropertyChangeEvent(this, name, oldVal, newVal))
+}
+          </pre>
+         </div>
+         <p>
+          Again, I'm still making use of the
+          <code>
+           PropertyChangeSupport
+          </code>
+          class from the
+          <code>
+           java.beans
+          </code>
+          package, not only because it provides
+about 60 percent of the implementation details I need, but also because that way I
+have the same behavior as those JavaBeans/POJOs that use it directly.
+Any additional enhancements to this "
+          <code>
+           Support
+          </code>
+          " class will be
+propagated through my trait as well. The difference is that now the
+          <code>
+           Person
+          </code>
+          POJO doesn't need to worry about using
+          <code>
+           PropertyChangeSupport
+          </code>
+          directly, as shown in Listing
+7:
+         </p>
+         <h5 id="listing7">
+          Listing 7. Scala's
+          <code>
+           Person
+          </code>
+          POJO, take 2
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+class Person(var firstName:String, var lastName:String, var age:Int)
+    extends Object
+    with BoundPropertyBean
+{
+    override def toString = "[Person: firstName=" + firstName +
+        " lastName=" + lastName + " age=" + age + "]"
+}
+          </pre>
+         </div>
+         <p>
+          After compiling, a quick glance at the
+          <code>
+           Person
+          </code>
+          definition reveals that it has the public methods
+          <code>
+           addPropertyChangeListener()
+          </code>
+          ,
+          <code>
+           removePropertyChangeListener()
+          </code>
+          , and
+          <code>
+           firePropertyChange()
+          </code>
+          , just as the Java version of
+          <code>
+           Person
+          </code>
+          did. In effect, Scala's
+          <code>
+           Person
+          </code>
+          version got these new methods by virtue of
+just the one additional line of code: the
+          <em>
+           with
+          </em>
+          clause in the class
+declaration that marks the class Person as inheriting from the trait
+          <code>
+           BoundPropertyBean
+          </code>
+          .
+         </p>
+         <p>
+          Unfortunately, I'm not quite done yet; the
+          <code>
+           Person
+          </code>
+          class now has the support to accept, remove, and
+notify listeners, but the default methods generated by Scala for the
+          <code>
+           firstName
+          </code>
+          member doesn't make use of them. And, equally
+unfortunate, as of this writing Scala doesn't have a nifty annotation to
+          <em>
+           automagically
+          </em>
+          generate the get/set methods that use the
+          <code>
+           PropertyChangeSupport
+          </code>
+          instance, so I have to write them
+myself, as shown in Listing 8:
+         </p>
+         <h5 id="listing8">
+          Listing 8. Scala's
+          <code>
+           Person
+          </code>
+          POJO, take 3
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+class Person(var firstName:String, var lastName:String, var age:Int)
+    extends Object
+    with BoundPropertyBean
+{
+    def setFirstName(newvalue:String) =
+    {
+        val oldvalue = firstName
+        firstName = newvalue
+        firePropertyChange("firstName", oldvalue, newvalue)
+    }
+
+    def setLastName(newvalue:String) =
+    {
+        val oldvalue = lastName
+        lastName = newvalue
+        firePropertyChange("lastName", oldvalue, newvalue)
+    }
+
+    def setAge(newvalue:Int) =
+    {
+        val oldvalue = age
+        age = newvalue
+        firePropertyChange("age", oldvalue, newvalue)
+    }
+
+    override def toString = "[Person: firstName=" + firstName +
+        " lastName=" + lastName + " age=" + age + "]"
+}
+          </pre>
+         </div>
+         <h3 id="N10218">
+          A good trait to have
+         </h3>
+         <p>
+          Traits are hardly a
+          <em>
+           functional
+          </em>
+          concept; rather, they're
+the result of a decade's worth of hindsight in object programming. In fact, you
+might find yourself using the following trait without even realizing it in
+simple Scala programs:
+         </p>
+         <h5 id="listing9">
+          Listing 9. Begone, foul main()!
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+object App extends Application
+{
+    val p = new Person("Jennifer", "Aloi", 29)
+
+    p.addPropertyChangeListener(PCL)
+    
+    p.setFirstName("Jenni")
+    p.setAge(30)
+    
+    System.out.println(p)
+}
+          </pre>
+         </div>
+         <p>
+          The
+          <code>
+           Application
+          </code>
+          trait defines the same
+          <code>
+           main()
+          </code>
+          method that you've been defining by hand all along. In fact, it includes one
+other useful little tidbit: a
+          <em>
+           timer
+          </em>
+          , which times the execution of the
+application if the system property
+          <code>
+           scala.time
+          </code>
+          is passed to the
+          <code>
+           Application
+          </code>
+          -implementing code  as shown in Listing 10:
+         </p>
+         <h5 id="listing10">
+          Listing 10. Timing is everything
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           $ scala -Dscala.time App
+Bean changed its firstName from Jennifer to Jenni
+Bean changed its age from 29 to 30
+[Person: firstName=Jenni lastName=Aloi age=30]
+[total 15ms]
+          </pre>
+         </div>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N10243">
+          Traits in the JVM
+         </h2>
+         <blockquote>
+          <em>
+           Any sufficiently advanced technology is indistinguishable from
+magic.
+           <br/>
+            Arthur C Clarke
+          </em>
+         </blockquote>
+         <p>
+          At this point, it's fair to ask how the seeming magic of this
+interface-with-methods construct (
+          <em>
+           aka
+          </em>
+          trait) gets mapped onto the JVM.
+In Listing 11, our good friend
+          <code>
+           javap
+          </code>
+          shows us what's
+happening behind the magic curtain:
+         </p>
+         <h5 id="listing11">
+          Listing 11.
+          <code>
+           Person
+          </code>
+          , cracked open
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           $ javap -classpath C:\Prg\scala-2.7.0-final\lib\scala-library.jar;classes Person
+Compiled from "Person.scala"
+public class Person extends java.lang.Object implements BoundPropertyBean,scala.
+ScalaObject{
+    public Person(java.lang.String, java.lang.String, int);
+    public java.lang.String toString();
+    public void setAge(int);
+    public void setLastName(java.lang.String);
+    public void setFirstName(java.lang.String);
+    public void age_$eq(int);
+    public int age();
+    public void lastName_$eq(java.lang.String);
+    public java.lang.String lastName();
+    public void firstName_$eq(java.lang.String);
+    public java.lang.String firstName();
+    public int $tag();
+    public void firePropertyChange(java.lang.String, java.lang.Object, java.lang
+.Object);
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener);
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener);
+    public final void pcs_$eq(java.beans.PropertyChangeSupport);
+    public final java.beans.PropertyChangeSupport pcs();
+}
+          </pre>
+         </div>
+         <p>
+          Notice the class declaration for
+          <code>
+           Person
+          </code>
+          . This
+POJO implements an interface called
+          <code>
+           BoundPropertyBean
+          </code>
+          , which is how the trait maps to the JVM
+itself: as an interface. But what about the implementation of the trait's
+methods? Remember that the compiler can pull all sorts of tricks, just as long
+as the final result obeys the semantic meaning of the Scala language. In this
+case, it drops the method implementations and field declarations defined in
+the trait into the class that implements the trait,
+          <code>
+           Person
+          </code>
+          . Running
+          <code>
+           javap
+          </code>
+          with
+          <code>
+           -private
+          </code>
+          makes this pretty obvious  if it wasn't
+already from the last two lines of the
+          <code>
+           javap
+          </code>
+          output
+(referencing the
+          <em>
+           pcs
+          </em>
+          val defined in the trait):
+         </p>
+         <h5 id="listing12">
+          Listing 12.
+          <code>
+           Person
+          </code>
+          cracked open, take 2
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           $ javap -private -classpath C:\Prg\scala-2.7.0-final\lib\scala-library.jar;classes Person
+Compiled from "Person.scala"
+public class Person extends java.lang.Object implements BoundPropertyBean,scala.
+ScalaObject{
+    private final java.beans.PropertyChangeSupport pcs;
+    private int age;
+    private java.lang.String lastName;
+    private java.lang.String firstName;
+    public Person(java.lang.String, java.lang.String, int);
+    public java.lang.String toString();
+    public void setAge(int);
+    public void setLastName(java.lang.String);
+    public void setFirstName(java.lang.String);
+    public void age_$eq(int);
+    public int age();
+    public void lastName_$eq(java.lang.String);
+    public java.lang.String lastName();
+    public void firstName_$eq(java.lang.String);
+    public java.lang.String firstName();
+    public int $tag();
+    public void firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object);
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener);
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener);
+    public final void pcs_$eq(java.beans.PropertyChangeSupport);
+    public final java.beans.PropertyChangeSupport pcs();
+}
+          </pre>
+         </div>
+         <p>
+          In fact, this explanation also answers the question of how the execution of
+the trait's methods can be deferred until they're used for checking. Because
+the trait's methods aren't really a "part" of any class until the trait is
+implemented by that class, the compiler can leave out checking some aspects of
+the methods' logic until later. This is useful because it allows a trait to
+call
+          <code>
+           super()
+          </code>
+          without having to know what the actual
+base class of the class implementing the trait will be.
+         </p>
+         <h3 id="N10288">
+          Notes of a trait-or
+         </h3>
+         <p>
+          In the
+          <code>
+           BoundPropertyBean
+          </code>
+          , I use trait
+functionality in the construction of the
+          <code>
+           PropertyChangeSupport
+          </code>
+          instance. Its constructor wants the
+bean on which the properties are notified, and in the trait defined earlier, I
+passed "
+          <code>
+           this
+          </code>
+          ". Because the trait isn't really
+defined until it's implemented on
+          <code>
+           Person
+          </code>
+          , "
+          <code>
+           this
+          </code>
+          " will refer to the
+          <code>
+           Person
+          </code>
+          instance, not the
+          <code>
+           BoundPropertyBean
+          </code>
+          trait itself.
+This particular facet of traits the delayed resolution of definitions  is
+subtle, but it can be powerful for this kind of "late-binding."
+         </p>
+         <p>
+          In the case of the
+          <code>
+           Application
+          </code>
+          trait, the magic
+takes place in two parts; the
+          <code>
+           main()
+          </code>
+          method of the
+          <code>
+           Application
+          </code>
+          trait provides the ubiquitous entry
+point for Java applications, and also does the check for the
+          <code>
+           -Dscala.time
+          </code>
+          system property to see if it should track
+the execution time. However, because
+          <code>
+           Application
+          </code>
+          is
+a trait, the method actually "shows up" on the subclass (
+          <code>
+           App
+          </code>
+          ). To execute this method, it is necessary to
+create the
+          <code>
+           App
+          </code>
+          singleton, which means constructing
+an instance of
+          <code>
+           App
+          </code>
+          , which means "playing" the body
+of the class, which effectively executes the application. Only after that is
+complete does the trait's
+          <code>
+           main()
+          </code>
+          get invoked and
+display the time spent executing.
+         </p>
+         <p>
+          It's a bit backward but it works, with the caveat that the application
+doesn't have access to any command-line parameters passed in to
+          <code>
+           main()
+          </code>
+          . It also demonstrates how the trait's behavior is
+"deferred" down into the implementing class.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N102CA">
+          Traits and collections
+         </h2>
+         <blockquote>
+          <em>
+           If you're not part of the solution, you're part of the precipitate.
+           <br/>
+            Henry J Tillman
+          </em>
+         </blockquote>
+         <p>
+          Traits are particularly powerful when they combine concrete behavior with
+abstract declarations to provide convenience to the implementer. For example,
+consider the classic Java collection interfaces/classes
+          <code>
+           List
+          </code>
+          and
+          <code>
+           ArrayList
+          </code>
+          . The
+          <code>
+           List
+          </code>
+          interface guarantees that the contents of this
+collection can be traversed in the same order they were inserted, or, in more
+formal terms, that "positional semantics are honored."
+         </p>
+         <p>
+          <code>
+           ArrayList
+          </code>
+          is a particular type of
+          <code>
+           List
+          </code>
+          , storing its contents in an allocated array, whereas
+          <code>
+           LinkedList
+          </code>
+          uses a linked-list implementation
+instead.
+          <code>
+           ArrayList
+          </code>
+          s are better for random-access of
+the contents of the list, whereas
+          <code>
+           LinkedList
+          </code>
+          is
+better for insertions and removal from anywhere but the end of the list.
+Regardless, it turns out that a phenomenal amount of behavior between these
+two classes is identical, and as a result, both in turn inherit from a common
+base class,
+          <code>
+           AbstractList
+          </code>
+          .
+         </p>
+         <p>
+          Had traits been supported in Java programming, they would have been a far superior
+construct for this tricky kind of "reusable behavior without having to resort
+to inheriting a common base class" sort of problem. A trait could act as a
+kind of C++ "private inheritance" mechanism, saving the potential confusion of
+whether a new
+          <code>
+           List
+          </code>
+          subtype should implement
+          <code>
+           List
+          </code>
+          directly (and potentially forget to implement the
+          <code>
+           RandomAccess
+          </code>
+          interface as well) or extend the base
+class
+          <code>
+           AbstractList
+          </code>
+          . This was sometimes called a
+"mixin" in C++, though not to be confused with Ruby mixins (or the Scala
+mixin, which I'll discuss in a later article.)
+         </p>
+         <p>
+          Within the Scala documentation set, the classic example is the
+          <code>
+           Ordered
+          </code>
+          trait, which defines
+methods-with-funny-names to provide comparison (and thus ordering)
+capabilities, as shown in Listing 13:
+         </p>
+         <h5 id="listing13">
+          Listing 13. Order, order
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+trait Ordered[A] {
+  def compare(that: A): Int
+  
+  def &lt;  (that: A): Boolean = (this compare that) &lt;  0
+  def &gt;  (that: A): Boolean = (this compare that) &gt;  0
+  def &lt;= (that: A): Boolean = (this compare that) &lt;= 0
+  def &gt;= (that: A): Boolean = (this compare that) &gt;= 0
+  def compareTo(that: A): Int = compare(that)
+}
+          </pre>
+         </div>
+         <p>
+          Here, the
+          <code>
+           Ordered
+          </code>
+          trait (with a parameterized
+type,
+          <em>
+           a la
+          </em>
+          Java 5 generics) defines one abstract method,
+          <code>
+           compare
+          </code>
+          , which expects to take an
+          <em>
+           A
+          </em>
+          as a parameter
+and needs to return either less than 1 if this is "less than" that, greater
+than 1 if this is "greater than" that, or 0 if they are equal. Then it goes on
+to define the relational operators (
+          <code>
+           &lt;
+          </code>
+          ,
+          <code>
+           &gt;
+          </code>
+          , and
+so on) in terms of the
+          <code>
+           compare()
+          </code>
+          method, as well as
+the more familiar
+          <code>
+           compareTo()
+          </code>
+          method that the
+          <code>
+           java.util.Comparable
+          </code>
+          interface also uses.
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1032A">
+          Scala and Java compatibility
+         </h2>
+         <blockquote>
+          <em>
+           A picture is worth a thousand words. An interface is worth a thousand pictures.
+           <br/>
+            Ben Shneiderman
+          </em>
+         </blockquote>
+         <p>
+          Actually, pseudo-implementation-inheritance is not the most common or
+powerful use of traits within Scala; instead, traits serve as the basic
+replacement in Scala for Java's interfaces. Java programmers looking to call
+into Scala should also be familiar with traits as a mechanism for using
+Scala.
+         </p>
+         <p>
+          As I have pointed out throughout this series so far, compiled Scala code
+doesn't always offer high fidelity to the Java language. Recall, for example,
+that Scala's "methods with funny names" (such as "
+          <code>
+           +
+          </code>
+          " or "
+          <code>
+           \
+          </code>
+          "), are often encoded
+with characters that aren't directly usable by the Java language syntax (with
+"
+          <code>
+           $
+          </code>
+          " being the big one to worry about). For that
+reason, creating a "Java-callable" interface can simplify calling into Scala
+code.
+         </p>
+         <p>
+          This particular example is a bit contrived, and the
+          <em>
+           Scala-isms
+          </em>
+          used
+don't really require the layer of indirection that a trait will provide (given
+I'm not using "methods with funny names"), but bear with me: the concept is
+the key here. In Listing 14, I want to have a traditional Java-style factory
+that produces
+          <code>
+           Student
+          </code>
+          instances, such as you've
+commonly seen in a variety of Java object models. To start, I need a
+Java-compatible interface to the
+          <code>
+           Student
+          </code>
+          :
+         </p>
+         <h5 id="listing14">
+          Listing 14. I, Student
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+trait Student
+{
+    def getFirstName : String;
+    def getLastName : String;
+    def setFirstName(fn : String) : Unit;
+    def setLastName(fn : String) : Unit;
+    
+    def teach(subject : String)
+}
+          </pre>
+         </div>
+         <p>
+          When compiled, this turns into a POJI: Plain Old Java Interface, as seen by
+a quick glance with
+          <code>
+           javap
+          </code>
+          :
+         </p>
+         <h5 id="listing15">
+          Listing 15. It's a POJI!
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           $ javap Student
+Compiled from "Student.scala"
+public interface Student extends scala.ScalaObject{
+    public abstract void setLastName(java.lang.String);
+    public abstract void setFirstName(java.lang.String);
+    public abstract java.lang.String getLastName();
+    public abstract java.lang.String getFirstName();
+    public abstract void teach(java.lang.String);
+}
+          </pre>
+         </div>
+         <p>
+          Next, I need a class to be the factory itself. Normally, in Java code, this
+would be a static method on a class (called something like "
+          <code>
+           StudentFactory
+          </code>
+          "), but recall that Scala has no such thing
+as static methods. Instead, Scala has objects, which are singletons with
+instance methods. I think that's exactly what I'm looking for here, so I
+create a
+          <code>
+           StudentFactory
+          </code>
+          object and put my
+          <code>
+           Factory
+          </code>
+          method there:
+         </p>
+         <h5 id="listing16">
+          Listing 16. I Make Students
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Scala
+object StudentFactory
+{
+    class StudentImpl(var first:String, var last:String, var subject:String)
+        extends Student
+    {
+        def getFirstName : String = first
+        def setFirstName(fn: String) : Unit = first = fn
+        def getLastName : String = last
+        def setLastName(ln: String) : Unit = last = ln
+        
+        def teach(subject : String) =
+            System.out.println("I know " + subject)
+    }
+
+    def getStudent(firstName: String, lastName: String) : Student =
+    {
+        new StudentImpl(firstName, lastName, "Scala")
+    }
+}
+          </pre>
+         </div>
+         <p>
+          The nested class
+          <code>
+           StudentImpl
+          </code>
+          is the
+implementation of the
+          <code>
+           Student
+          </code>
+          trait, which thus
+provides the
+          <code>
+           get()/set()
+          </code>
+          method pairs demanded by it.
+Remember, despite the fact that traits can have behavior, the fact that it's
+being modeled against the JVM as an interface means that attempts to
+instantiate a trait will result in errors claiming that
+          <code>
+           Student
+          </code>
+          is abstract.
+         </p>
+         <p>
+          The important payout of this trivial little sample, of course, is to write
+a Java application that can make use of these new Scala-created objects:
+         </p>
+         <h5 id="listing17">
+          Listing 17. Student Neo
+         </h5>
+         <div class="codesection">
+          <pre class="displaycode">
+           //This is Java
+public class App
+{
+    public static void main(String[] args)
+    {
+        Student s = StudentFactory.getStudent("Neo", "Anderson");
+        s.teach("Kung fu");
+    }
+}
+          </pre>
+         </div>
+         <p>
+          Run this and you'll see "I know Kung fu." (That was a long setup
+for a cheap movie reference, I know.)
+         </p>
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+         <h2 id="N1038B">
+          In conclusion
+         </h2>
+         <blockquote>
+          <em>
+           People do not like to think. If one thinks, one must reach conclusions. Conclusions are not always pleasant.
+           <br/>
+            Helen Keller
+          </em>
+         </blockquote>
+         <p>
+          Traits offer a powerful mechanism for categorization and definition in
+Scala, both to define an interface for clients to use,
+          <em>
+           a la
+          </em>
+          traditional
+Java interfaces, and as a mechanism for behavioral inheritance based on other
+behaviors defined within the trait. Perhaps what we need is a new inheritance
+phrase,
+          <em>
+           IN-TERMS-OF
+          </em>
+          , to describe the relationship between a trait
+and an implementing class.
+         </p>
+         <p>
+          There are many more ways to use traits than I've described in this article,
+but part of the goal of the series is to provide enough information about the
+language to enable further experimentation at home; download the Scala
+implementation, experiment with it, and see where Scala can plug into your
+current Java systems. And, as always, if you find Scala useful, if you have a
+comment on the article, or you (
+          <em>
+           sigh
+          </em>
+          ) find a bug in the code or prose,
+          <a href="mailto:ted@tedneward.com">
+           drop me a note
+          </a>
+          and let me know about
+it.
+         </p>
+         <p>
+          That's it until next time, functional fans.
+         </p>
+         <!--CMA ID: true-->
+         <!--Site ID: 1-->
+         <!--XSLT stylesheet used to transform this file:
+        dw-document-html-7.0.xsl-->
+        </div>
+       </div>
+       <!-- 1_1_COLUMN_END -->
+       <!-- SPLIT_COLUMNS_BEGIN -->
+       <div class="ibm-columns">
+        <!-- 6_4_COLUMN_BEGIN -->
+        <div class="ibm-col-6-4">
+         <h2 class="ibm-rule" id="resources">
+          Resources
+         </h2>
+         <h3 class="dw-resources-category-heading">
+          Learn
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://www.javaworld.com/podcasts/jtech/2008/061008jtech.html">
+            Podcast: Scala revealed
+           </a>
+           (JavaWorld, June 2008): developerWorks contributors Andrew Glover and Ted Neward talk about the differences between functional and object-oriented languages, as well as some important domains where the Java language and other purely OO languages simply are not a good fit, including concurrency and database programming.
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=scala+neward">
+            <em>
+             The
+busy Java developer's guide to Scala
+            </em>
+           </a>
+           (Ted Neward, developerWorks, 2008): Read the complete series.
+          </li>
+          <li>
+           "
+           <a href="http://www.scala-lang.org/intro/mixin.html">
+            A Tour of Scala: Mixin Class Composition
+           </a>
+           " (Scala language documentation): Learn more about inheritance in Scala and mix-in class composition.
+          </li>
+          <li>
+           "
+           <a href="http://www.javacoffeebreak.com/articles/thinkinginjava/comparingc++andjava.html">
+            Thinking in Java: Comparing C++ and Java
+           </a>
+           " (Bruce Eckel, Java Coffee Break): This excerpt from Bruce's book highlights the differences between the Java language and C++.
+          </li>
+          <li>
+           "
+           <a href="http://weblogs.java.net/blog/cayhorstmann/archive/2008/01/dinosaurs_can_t_1.html">
+            Dinosaurs Can Take the Pain
+           </a>
+           " (Cay Horstmann, Java.net, January 2008): Invokes the idea that Java programmers are at an evolutionary impasse and proposes some solutions.
+          </li>
+          <li>
+           "
+           <a href="http://www.artima.com/forums/flat.jsp?forum=106&amp;thread=194961">
+            What are your Java pain points, really?
+           </a>
+           " (Bill Venners, Artima.com, February 2007): A topic of discussion in the Artima forums, with 264 replies as of this writing.
+          </li>
+          <li>
+           <a href="http://blogs.tedneward.com/CategoryView,category,Languages.aspx">
+            Interoperability happens - Languages
+           </a>
+           : Read more of Ted Neward's thoughts about language design and evolution.
+          </li>
+          <li>
+           "
+           <a href="http://www.ibm.com/developerworks/java/library/j-fp.html">
+            Functional programming in the Java language
+           </a>
+           " (Abhijit Belapurkar, developerWorks, July 2004): Understand the benefits and uses of functional programming from a Java developer's perspective.
+          </li>
+          <li>
+           "
+           <a href="http://www.scala-lang.org/docu/files/ScalaByExample.pdf">
+            Scala by Example
+           </a>
+           " (Martin Odersky, December 2007): A short, code-driven introduction to Scala, including the Quicksort application used in this article (PDF).
+          </li>
+          <li>
+           <a href="http://www.artima.com/shop/forsale">
+            Programming in Scala
+           </a>
+           (Martin Odersky, Lex Spoon, and Bill Venners; Artima preprint published February 2008): The first book-length introduction to Scala, co-authored by Bill Venners.
+          </li>
+          <li>
+           The
+           <a href="http://www.ibm.com/developerworks/java/">
+            developerWorks Java technology zone
+           </a>
+           : Hundreds of articles about every aspect of Java programming.
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Get products and technologies
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://www.scala-lang.org/">
+            Download Scala
+           </a>
+           : Currently in version 2.7.0-final.
+          </li>
+         </ul>
+         <h3 class="dw-resources-category-heading">
+          Discuss
+         </h3>
+         <ul class="ibm-bullet-list">
+          <li>
+           <a href="http://www.ibm.com/developerworks/forums/dw_forum.jsp?forum=375&amp;cat=5">
+            Participate in the discussion forum
+           </a>
+           .
+          </li>
+          <li>
+           <a href="http://www.ibm.com/developerworks/blogs/">
+            developerWorks
+blogs
+           </a>
+           : Get involved in the
+           <a href="http://www.ibm.com/developerworks/community">
+            developerWorks community
+           </a>
+           .
+          </li>
+         </ul>
+         <!-- INLINE_COMMENTS_BEGIN -->
+         <h2 class="ibm-alternate-rule ibm-no-print" id="icomments">
+          Comments
+         </h2>
+         <div class="ibm-no-print" id="dw-icomments-container">
+          <div id="threadShow">
+          </div>
+         </div>
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <!-- Sign in OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="signin_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              developerWorks: Sign in
+             </h2>
+             <div class="no-display" id="ibm-overlay-error-signin">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="sFormId" method="post" name="sForm" onsubmit="return false;">
+               <p>
+                <label for="ibmid">
+                 IBM ID:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="ibmid" name="ibm-id" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;d='+encodeURIComponent(location.protocol + '//' + location.hostname + location.pathname + '#icomments'); return false;">
+                  Need an IBM ID?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="/developerworks/dwwi/jsp/WSHelp.jsp?lang=en_US">
+                  Forgot your IBM ID?
+                 </a>
+                </span>
+               </p>
+               <p>
+                <label for="password">
+                 Password:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input class="required" id="password" name="password" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="password" value=""/>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(dwsi.siInst.getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Den_US%26d%3D'+encodeURIComponent(location.href);})();">
+                  Forgot your password?
+                 </a>
+                 <br/>
+                 <a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">
+                  Change your password
+                 </a>
+                </span>
+               </p>
+               <p class="dw-perm-box">
+                <span>
+                 <input id="perm" name="perm_name" type="checkbox"/>
+                 <label for="perm">
+                  Keep me signed in.
+                 </label>
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('signin_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <p>
+               The first time you sign into developerWorks, a profile is created for you.
+               <strong>
+                Information in your profile (your name, country/region, and company name) is displayed to the public and will accompany any content you post, unless you opt to hide your company name
+               </strong>
+               .  You may update your IBM account at any time.
+              </p>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- Display name OVERLAY STARTS HERE -->
+         <div class="ibm-common-overlay" id="displayname_overlay">
+          <div class="ibm-head">
+           <p>
+            <a class="ibm-common-overlay-close" href="#" onclick="dwsi.siInst.clearForm();">
+             Close [x]
+            </a>
+           </p>
+          </div>
+          <div class="ibm-body">
+           <div class="ibm-main">
+            <div class="ibm-title">
+             <h2>
+              Choose your display name
+             </h2>
+             <br/>
+             <br/>
+             <div class="no-display" id="ibm-overlay-error-dname">
+             </div>
+            </div>
+            <div class="ibm-container ibm-alternate ibm-buttons-last">
+             <div class="ibm-container-body">
+              <p class="ibm-overlay-intro">
+               The first time you sign in to developerWorks, a profile is created for you, so you need to choose a display name.  Your display name accompanies the content you post on developerWorks.
+              </p>
+              <p>
+               <strong>
+                Please choose a display name between 3-31 characters
+               </strong>
+               . Your display name must be unique in the developerWorks community and should not be your email address for privacy reasons.
+              </p>
+              <p class="ibm-overlay-intro">
+               Required fields are indicated with an asterisk (
+               <span class="ibm-required">
+                *
+               </span>
+               ).
+              </p>
+              <form action="" class="ibm-column-form" id="dFormId" method="post" name="dForm" onsubmit="return false;">
+               <p>
+                <label for="displayname">
+                 Display name:
+                 <span class="ibm-required">
+                  *
+                 </span>
+                </label>
+                <span>
+                 <input id="displayname" name="displayname" onkeypress="dwsi.siInst.handleEP(event,this.form);" size="25" type="text" value=""/>
+                </span>
+                <span class="ibm-form-note">
+                 (Must be between 3  31 characters.)
+                </span>
+               </p>
+               <p>
+                By clicking
+                <strong>
+                 Submit
+                </strong>
+                , you agree to the
+                <a href="https://www.ibm.com/developerworks/community/terms/">
+                 developerWorks terms of use
+                </a>
+                .
+               </p>
+               <div class="ibm-buttons-row">
+                <p>
+                 <input class="ibm-btn-arrow-pri" name="ibm-submit" onclick="dwsi.siInst.signin();return false;" type="submit" value="Submit"/>
+                 <span class="ibm-sep">
+                 </span>
+                 <input class="ibm-btn-cancel-sec" name="ibm-cancel" onclick="dwsi.siInst.clearForm();ibmweb.overlay.hide('displayname_overlay');return false;" type="button" value="Cancel"/>
+                </p>
+               </div>
+              </form>
+              <div class="ibm-overlay-rule">
+               <hr/>
+              </div>
+              <div>
+               <p class="dw-c-overlay-secure">
+                All information submitted is secure.
+               </p>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="ibm-footer">
+          </div>
+         </div>
+         <!-- INLINE_COMMENTS_END -->
+        </div>
+        <!-- 6_4_COLUMN_END -->
+        <!-- 6_2_COLUMN_BEGIN -->
+        <div class="ibm-col-6-2">
+         <!-- Next_Steps -->
+         <!-- Dig_Deeper -->
+         <!-- DIG_DEEPER_START -->
+         <h2 class="ibm-rule">
+          Dig deeper into Java technology on developerWorks
+         </h2>
+         <ul class="ibm-link-list">
+          <li class="ibm-first">
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/">
+            Overview
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/newto/">
+            New to Java programming
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/library/">
+            Technical library (tutorials and more)
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="https://www.ibm.com/developerworks/community/forums/html/category?id=33333333-0000-0000-0000-000000000010">
+            Forums
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="https://www.ibm.com/developerworks/community/blogs/home/search?lang=en&amp;t=blog&amp;f=all&amp;q=Java">
+            Blogs
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="https://www.ibm.com/developerworks/community/groups/service/html/allcommunities?search=Java">
+            Communities
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/find/downloads/">
+            Downloads and products
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/find/projects/">
+            Open source projects
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/find/standards/">
+            Standards
+           </a>
+          </li>
+          <li>
+           <a class="ibm-forward-link" href="http://www.ibm.com/developerworks/java/find/events/">
+            Events
+           </a>
+          </li>
+         </ul>
+         <!-- DIG_DEEPER_END -->
+         <!-- Promotion_Module -->
+         <!-- PROMOTION_MODULE_START -->
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <ul class="ibm-portrait-module-list">
+          <li>
+           <img alt="" height="60" src="//dw1.s81c.com/developerworks/i/sm-f-bluemixdev60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://developer.ibm.com/bluemix/">
+             Bluemix Developers Community
+            </a>
+           </h3>
+           <p>
+            Get samples, articles, product docs, and community resources to help build, deploy, and manage your cloud apps.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-dwnewsletters60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://ibmdeveloperworks.mkt6741.com/dWdWWeeklyNewsletterSubscriptionPage/">
+             developerWorks Weekly Newsletter
+            </a>
+           </h3>
+           <p>
+            Keep up with the best and latest technical info to help you tackle your development challenges.
+           </p>
+          </li>
+          <!-- &lt;li&gt;&lt;img height="60" width="60" src="//www.ibm.com/developerworks/i/sm-f-dwlabs60.png" alt=""/&gt;
+&lt;h3&gt;&lt;a class="ibm-feature-link" href="http://www.ibm.com/developerworks/labs/?ca=dti-tiles-labs"&gt;developerWorks Labs&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Experiment with new directions in software development.&lt;/p&gt;&lt;/li&gt; -->
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-jazzhub2.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="https://hub.jazz.net/?utm_source=developerWorks&amp;utm_medium=ad&amp;utm_campaign=dW+tiny+ad">
+             DevOps Services
+            </a>
+           </h3>
+           <p>
+            Software development in the cloud.  Register today to create a project.
+           </p>
+          </li>
+          <li>
+           <img alt="" height="60" src="//www.ibm.com/developerworks/i/sm-f-evaluationsoftware60.png" width="60"/>
+           <h3>
+            <a class="ibm-feature-link" href="http://www.ibm.com/developerworks/downloads/?ca=dti-tiles-evaluate">
+             IBM evaluation software
+            </a>
+           </h3>
+           <p>
+            Evaluate IBM software and solutions, and transform challenges into opportunities.
+           </p>
+          </li>
+         </ul>
+         <!-- PROMOTION_MODULE_END -->
+        </div>
+        <!-- 6_2_COLUMN_END -->
+       </div>
+       <!-- SPLIT_COLUMNS_END -->
+       <!-- BOTTOM_BACK_TO_TOP -->
+       <div class="ibm-columns">
+        <div class="ibm-col-1-1">
+         <div class="ibm-alternate-rule">
+          <hr/>
+         </div>
+         <p class="ibm-ind-link ibm-back-to-top">
+          <a class="ibm-anchor-up-link" href="#ibm-content">
+           Back to top
+          </a>
+         </p>
+        </div>
+       </div>
+       <!-- Rating_Meta_BEGIN -->
+       <!--Rating_Meta_BEGIN-->
+       <div class="metavalue">
+        static.content.url=http://www.ibm.com/developerworks/js/artrating/
+       </div>
+       <div class="metavalue">
+        SITE_ID=1
+       </div>
+       <div class="metavalue">
+        Zone=Java technology
+       </div>
+       <div class="metavalue">
+        ArticleID=304818
+       </div>
+       <div class="metavalue">
+        ArticleTitle=The busy Java developer's guide to Scala: Of traits and behaviors
+       </div>
+       <div class="metavalue">
+        publish-date=04292008
+       </div>
+       <script language="javascript" type="text/javascript">
+        document.write('&lt;div class="metavalue"&gt;url='+location.href.replace(/&lt;/g,  '%3C')+'&lt;/div&gt;');
+       </script>
+       <!--Rating_Meta_END-->
+       <!-- Rating_Meta_END -->
+      </div>
+      <!-- END_IBM_CONTENT_MAIN -->
+     </div>
+     <!-- END_IBM_CONTENT_BODY -->
+    </div>
+    <!-- END_IBM_CONTENT -->
+   </div>
+   <!-- END_IBM_PCON -->
+   <!-- FOOTER_BEGIN -->
+   <div id="ibm-footer">
+    <!-- IBM footer container; disabled -->
+   </div>
+   <div aria-label="developerWorks Footer" id="ibm-footer-module-dwwrapper" role="contentinfo">
+    <div id="ibm-footer-module-dw">
+     <div class="dw-footer-columns">
+      <div class="dw-footer-col-6-1">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/" tabindex="0">
+          About
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/feedback" tabindex="0">
+          Help
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/aboutdw/contacts.html" tabindex="0">
+          Contact us
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/ideas" tabindex="0">
+          Submit content
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-2">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/developerworks/feeds/" tabindex="0">
+          Feeds
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/newsletter/" tabindex="0">
+          Newsletters
+         </a>
+        </li>
+        <li>
+         <a class="ibm-twitter-link" href="http://twitter.com/developerWorks" tabindex="0" target="_blank">
+          Follow
+         </a>
+        </li>
+        <li>
+         <a class="ibm-facebook-link" href="http://www.facebook.com/developerworks" tabindex="0" target="_blank">
+          Like
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-3">
+       <ul>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/report/" tabindex="0">
+          Report abuse
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/use/" tabindex="0">
+          Terms of use
+         </a>
+        </li>
+        <li>
+         <a href="https://www.ibm.com/developerworks/community/terms/thirdparty/" tabindex="0">
+          Third party notice
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/privacy/" tabindex="0">
+          IBM privacy
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/accessibility/" tabindex="0">
+          IBM accessibility
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-4">
+       <ul>
+        <li>
+         <a href="http://www.ibm.com/ibm/university/academic/pub/page/academic_initiative" tabindex="0">
+          Faculty
+         </a>
+        </li>
+        <li>
+         <a href="http://asmarterplanet.com/studentsfor/" tabindex="0">
+          Students
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/isv/" tabindex="0">
+          Business Partners
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-5">
+       <ul>
+        <li class="dw-footer-lang-head">
+         Select a language:
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/" tabindex="0">
+          English
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/cn/" lang="zh" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/jp/" lang="ja" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ru/" lang="ru" tabindex="0">
+          
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/br/" lang="pt" tabindex="0">
+          Portugus (Brasil)
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/ssa/" lang="es" tabindex="0">
+          Espaol
+         </a>
+        </li>
+        <li>
+         <a href="http://www.ibm.com/developerworks/vn/" lang="vi" tabindex="0">
+          Vit
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div class="dw-footer-col-6-6">
+       <img alt="IBM" height="46" src="//dw1.s81c.com/developerworks/i/mf/dwn-ibm-logo-v17.png" width="223"/>
+       <img alt="" class="dw-preload" height="1" src="//1.www.s81c.com/i/v17/icons/ibm_sprite_social_blue_ON.png" width="1"/>
+       <img alt="" class="dw-preload" height="1" src="//dw1.s81c.com/developerworks/i/mf/arrow-down-active.gif" width="1"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- FOOTER_END -->
+   <!-- END_IBM-TOP -->
+  </div>
+  <!-- SCRIPTS_INCLUDE_BEGIN -->
+  <script src="/developerworks/js/v17/dw-comments.js" type="text/javascript">
+   //
+  </script>
+  <script language="JavaScript" type="text/javascript">
+   dojo.ready(function(){
+		rBHash = typeof rBHash == "undefined" ? {} : rBHash;
+		rBHash['viperLang'] = 'en';
+		rBHash['urlLang'] = 'en';
+		rBHash['dwwi2Lang'] = 'en_US';
+		rBHash['appCode'] = 'dwmav';
+		rBHash['signoutUrl'] = (location.host.toLowerCase() === "www.ibm.com" || location.host.toLowerCase() === "developer.ibm.com") ? 'http://www.ibm.com/developerworks/' : ''; 
+		dwsi.siInst = new dwweb.dynnav.dwsi();
+		dwsi.siInst.initSI();		
+
+		// construct the comment widget
+		dwc &amp;&amp; new dwc.comments('threadShow','95%',5,'nCmts','icomments');
+		});
+  </script>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-41146412-3','auto');ga('require','linkid','linkid.js');var dcdate="2008-04-29";ga('set','dimension1',dcdate);var dw_canonical="http://www.ibm.com/developerworks/library/j-scala04298/index.html";dw_canonical=dw_canonical.substring(dw_canonical.indexOf(".ibm.com")+8);ga('send','pageview',{'page':dw_canonical,'dimension1':dcdate});var trkOBL=function(url,id){id=id.split("-");if(id[0].indexOf("Share")&gt;-1){var cat="Share from toolbar";if(id[0]=="dwShare")cat="Share from summary";var act="Color toolbar";if(id[1]=="B")act="Gray toolbar";var label=id[2];var ab=0;ga('send','event',cat,act,label,ab,{'page':dw_canonical});if(id[0]=="dwShare"){url=unescape(url);if(label='twitter'&amp;&amp;url.indexOf("%2F%2Fwww.ibm.com%2Fdeveloperworks%2F")&gt;-1){var ohref=url.substring(url.indexOf("=http")+1,url.indexOf(".html")+5);ohref=unescape(ohref);var bitly=new ibmweb.bitly({url:ohref,onSuccess:function(){url=url.replace(/http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2F(.*)%20-%20/,this.shorturl+'%20-%20');window.open(url)}});bitly.shorten()}else{window.open(url)}}}else{var cat="Rich tutorial";if(id[0]=="tutc")cat="Classic tutorial";if(id[0]=="lpzone")cat="Zone landing";if(id[0]=="lptrial")cat="Trial landing";if(id[0]=="lpgen")cat="Generic landing";var act="Bluemix";if(id[2]=="devops")act="Devops";act=act+' '+id[3];if(id[4]){var label=id[4];if(label=="btn")label="button";if(label=="txt")label="text link";if(label=="bnr")label="banner";if(label=="tl")label="tile";if(label=="regbar")label="registration bar";if(label=="spop")label="scroll pop";if(label=="vp")label="video promotion"}var ab=0;if(id[5]){if(id[5]=="ABa")ab=1;if(id[5]=="ABb")ab=2;if(id[5]=="ABc")ab=3;if(id[5]=="ABd")ab=4;if(id[5]=="ABe")ab=5;if(id[5]=="ABf")ab=6;if(id[5]=="ABg")ab=7;if(id[5]=="ABh")ab=8}ga('send','event',cat,act,label,ab,{'page':dw_canonical,'hitCallback':function(){document.location=url}})}}
+  </script>
+  <script src="/developerworks/js/v17/dw-event-tagging.js" type="text/javascript">
+   //
+  </script>
+  <!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+  <script language="JavaScript">
+   var NTPT_PGEXTRA="ibmSkillLevel=2&amp;ibmCmaId=304818&amp;ibmContentAreas=java";
+  </script>
+  <!--END -->
+  <!-- SCRIPTS_INCLUDE_END -->
+  <div id="ibm-metrics">
+   <script src="//dw1.s81c.com/common/stats/stats.js" type="text/javascript">
+    //
+   </script>
+  </div>
+ </body>
+</html>

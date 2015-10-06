@@ -1,0 +1,453 @@
+<html>
+ <head>
+  <title>
+   Zeroflux.org // Judd Vinet
+  </title>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <script src="/js/jquery.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   $(function(){ var m = $('#nav').attr('rel'); $('a#'+m).addClass('current') });
+  </script>
+ </head>
+ <body>
+  <div id="header">
+   <div id="header-content">
+    <h1 id="logo">
+     <span class="blue">
+      zero
+     </span>
+     <span>
+      flux
+     </span>
+     <span class="blue">
+      .
+     </span>
+     <span>
+      org
+     </span>
+    </h1>
+    <ul id="nav" rel="&lt;%= menu %&gt;">
+     <li>
+      <a alt="home" href="/">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="http://twitter.com/juddv">
+       Twitter
+      </a>
+     </li>
+     <li>
+      <a href="http://github.com/jvinet">
+       GitHub
+      </a>
+     </li>
+     <li>
+      <a alt="projects" class="current" href="/projects">
+       Projects
+      </a>
+     </li>
+     <li>
+      <a alt="tabs" href="/tabs">
+       Guitar Tabs
+      </a>
+     </li>
+    </ul>
+   </div>
+  </div>
+  <div id="content">
+   <h1>
+    knockd - a port-knocking server
+   </h1>
+   <h2>
+    Synopsis
+   </h2>
+   <p>
+    knockd [options]
+   </p>
+   <h2>
+    Description
+   </h2>
+   <p>
+    knockd is a port-knock server. It listens to all traffic on an ethernet (or PPP) interface, looking for special "knock" sequences of port-hits. A client makes these port-hits by sending a TCP (or UDP) packet to a port on the server. This port need not be open -- since knockd listens at the link-layer level, it sees all traffic even if it's destined for a closed port. When the server detects a specific sequence of port-hits, it runs a command defined in its configuration file. This can be used to open up holes in a firewall for quick access.
+   </p>
+   <h2>
+    Version
+   </h2>
+   <p>
+    The current version of knockd is
+    <strong>
+     0.7
+    </strong>
+    , released on 2014-06-09.
+   </p>
+   <h2>
+    Download
+   </h2>
+   <ul>
+    <li>
+     <a href="https://github.com/jvinet/knock">
+      Source Code (Git)
+     </a>
+    </li>
+    <li>
+     <a href="http://www.zeroflux.org/proj/knock/files/knock-0.7.tar.gz">
+      Source Tarball
+     </a>
+    </li>
+   </ul>
+   <h2>
+    Other Downloads
+   </h2>
+   <ul>
+    <li>
+     <a href="http://packages.debian.org/unstable/net/knockd">
+      Debian Package
+     </a>
+    </li>
+    <li>
+     <a href="http://www.invoca.ch/pub/packages/knock/">
+      RPM Package
+     </a>
+    </li>
+    <li>
+     <a href="http://slackbuilds.org/repository/12.2/network/knock/">
+      Slackware Package
+     </a>
+    </li>
+    <li>
+     <a href="http://www.zeroflux.org/proj/knock/files/knock-cygwin.zip">
+      Cygwin/Win32 Knock Client
+     </a>
+    </li>
+    <li>
+     <a href="http://www.zeroflux.org/proj/knock/files/knock-win32.zip">
+      Native Win32 Client
+     </a>
+    </li>
+    <li>
+     <a href="http://www.zeroflux.org/proj/knock/files/knock-macos.tar.gz">
+      MacOS Client
+     </a>
+    </li>
+    <li>
+     <a href="http://www.dannysung.com/main/?q=node/25">
+      iPhone Knock Client
+     </a>
+    </li>
+    <li>
+     <a href="https://play.google.com/store/apps/details?id=com.droidknocker">
+      Android Knock Client
+     </a>
+    </li>
+   </ul>
+   <h2>
+    Options
+   </h2>
+   <strong>
+    -i, --interface &lt;int&gt;
+   </strong>
+   <blockquote>
+    Specify an interface to listen on. The default is eth0.
+   </blockquote>
+   <strong>
+    -d, --daemon
+   </strong>
+   <blockquote>
+    Become a daemon. This is usually desired for normal server-like operation.
+   </blockquote>
+   <strong>
+    -c, --config &lt;file&gt;
+   </strong>
+   <blockquote>
+    Specify an alternate location for the config file. Default is /etc/knockd.conf.
+   </blockquote>
+   <strong>
+    -D, --debug
+   </strong>
+   <blockquote>
+    Ouput debugging messages.
+   </blockquote>
+   <strong>
+    -l, --lookup
+   </strong>
+   <blockquote>
+    Lookup DNS names for log entries. This may be a security risk! See section SECURITY NOTES.
+   </blockquote>
+   <strong>
+    -v, --verbose
+   </strong>
+   <blockquote>
+    Output verbose status messages.
+   </blockquote>
+   <strong>
+    -V, --version
+   </strong>
+   <blockquote>
+    Display the version.
+   </blockquote>
+   <strong>
+    -h, --help
+   </strong>
+   <blockquote>
+    Syntax help.
+   </blockquote>
+   <h2>
+    Configuration
+   </h2>
+   <p>
+    knockd reads all knock/event sets from a configuration file. Each knock/event begins with a title marker, in the form [name], where name is the name of the event that will appear in the log. A special marker, [options], is used to define global options.
+   </p>
+   <h3>
+    Example #1:
+   </h3>
+   <p>
+    This example uses two knocks. The first will allow the knocker to access port 22 (SSH), and the second will close the port when the knocker is complete. As you can see, this could be useful if you run a very restrictive (DENY policy) firewall and would like to access it discreetly.
+   </p>
+   <pre>
+    [options]
+        logfile = /var/log/knockd.log
+
+  [openSSH]
+        sequence    = 7000,8000,9000
+        seq_timeout = 10
+        tcpflags    = syn
+        command     = /usr/sbin/iptables -A INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
+
+  [closeSSH]
+        sequence    = 9000,8000,7000
+        seq_timeout = 10
+        tcpflags    = syn
+        command     = /usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
+   </pre>
+   <h3>
+    Example #2:
+   </h3>
+   <p>
+    This example uses a single knock to control access to port 22 (SSH). After receiving a successful knock, the daemon will run the start_command, wait for the time specified in cmd_timeout, then execute the stop_command. This is useful to automatically close the door behind a knocker. The knock sequence uses both UDP and TCP ports.
+   </p>
+   <pre>
+    [options]
+        logfile = /var/log/knockd.log
+
+  [opencloseSSH]
+        sequence      = 2222:udp,3333:tcp,4444:udp
+        seq_timeout   = 15
+        tcpflags      = syn,ack
+        start_command = /usr/sbin/iptables -A INPUT -s %IP% -p tcp --syn --dport 22 -j ACCEPT
+        cmd_timeout   = 10
+        stop_command  = /usr/sbin/iptables -D INPUT -s %IP% -p tcp --syn --dport 22 -j ACCEPT
+   </pre>
+   <h3>
+    Example #3:
+   </h3>
+   <p>
+    This example doesn't use a single, fixed knock sequence to trigger an event, but a set of sequences taken from a sequence file (one-time sequences), specified by one_time_sequences directive. After each successful knock, the used sequence will be invalidated and the next sequence from the sequence file has to be used for a successful knock. This prevents an attacker from doing a replay attack after having discovered a sequence (eg, while sniffing the network).
+   </p>
+   <pre>
+    [options]
+        logfile = /var/log/knockd.log
+
+  [opencloseSMTP]
+        one_time_sequences = /etc/knockd/smtp_sequences
+        seq_timeout        = 15
+        tcpflags           = fin,!ack
+        start_command      = /usr/sbin/iptables -A input -s %IP% -p tcp --dport 25 -j ACCEPT
+        cmd_timeout        = 5
+        stop_command       = /usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 25 -j ACCEPT
+   </pre>
+   <h2>
+    Configuration: Global Directives
+   </h2>
+   <b>
+    UseSyslog
+   </b>
+   <blockquote>
+    Log action messages through syslog(). This will insert log entries into your /var/log/messages or equivalent.
+   </blockquote>
+   <strong>
+    LogFile = /path/to/file
+   </strong>
+   <blockquote>
+    Log actions directly to a file, usually /var/log/knockd.log.
+   </blockquote>
+   <strong>
+    PidFile = /path/to/file
+   </strong>
+   <blockquote>
+    Pidfile to use when in daemon mode, default: /var/run/knockd.pid.
+   </blockquote>
+   <strong>
+    Interface = &lt;interface_name&gt;
+   </strong>
+   <blockquote>
+    Network interface to listen on.
+   </blockquote>
+   <h2>
+    Configuration: Knock/Event Directives
+   </h2>
+   <strong>
+    Sequence = &lt;port1&gt;[:&lt;tcp|udp&gt;][,&lt;port2&gt;[:&lt;tcp|udp&gt;] ...]
+   </strong>
+   <blockquote>
+    Specify the sequence of ports in the special knock. If a wrong port with the same flags is received, the knock is discarded. Optionally, you can define the protocol to be used on a per-port basis (default is TCP).
+   </blockquote>
+   <strong>
+    One_Time_Sequences = /path/to/one_time_sequences_file
+   </strong>
+   <blockquote>
+    <p>
+     File containing the one time sequences to be used. Instead of using a fixed sequence, knockd will read the sequence to be used from that file. After each successful knock attempt this sequence will be disabled by writing a '#' character at the first position of th eline containing the used sequence. That used sequence will then be replaced by the next valid sequence from the file.
+    </p>
+    <p>
+     Because the first character is replaced by a '#', it is recommended that you leave a space at the beginning of each line. Otherwise the first digit in your knock sequence will be overwritten with a '#' after it has been used.
+    </p>
+    <p>
+     Each line in the one time sequences file contains exactly one sequence and has the same format as the one for the Sequences directive. Lines beginning with a '#' character will be ignored.
+    </p>
+    <p>
+     Note: Do not edit the file while knockd is running!
+    </p>
+   </blockquote>
+   <strong>
+    Seq_Timeout = &lt;timeout&gt;
+   </strong>
+   <blockquote>
+    Time to wait for a sequence to complete in seconds. If the time elapses before the knock is complete, it is discarded.
+   </blockquote>
+   <strong>
+    TCPFlags = fin|syn|rst|psh|ack|urg
+   </strong>
+   <blockquote>
+    <p>
+     Only pay attention to packets that have this flag set. When using TCP flags, knockd will IGNORE tcp packets that don't match the flags. This is different than the normal behavior, where an incorrect packet would invalidate the entire knock, forcing the client to start over. Using "TCPFlags = syn" is useful if you are testing over an SSH connection, as the SSH traffic will usually interfere with (and thus invalidate) the knock.
+    </p>
+    <p>
+     Separate multiple flags with commas (eg, "TCPFlags = syn,ack,urg"). Flags can be explicitly excluded by a "!" (eg, TCPFlags = syn,!ack).
+    </p>
+   </blockquote>
+   <strong>
+    Start_Command = &lt;command&gt;
+   </strong>
+   <blockquote>
+    Specify the command to be executed when a client makes the correct port-knock. All instances of %IP% will be replaced with the knocker's IP address. The Command directive is an alias for Start_Command.
+   </blockquote>
+   <strong>
+    Cmd_Timeout = &lt;timeout&gt;
+   </strong>
+   <blockquote>
+    Time to wait between Start_Command and Stop_Command. This directive is optional, only required if Stop_Command is used.
+   </blockquote>
+   <strong>
+    Stop_Command = &lt;command&gt;
+   </strong>
+   <blockquote>
+    Specify the command to be executed when Cmd_Timeout seconds have passed since Start_Command has been executed. All instances of %IP% will be replaced with the knocker's IP address. This directive is optional.
+   </blockquote>
+   <h2>
+    ChangeLog
+   </h2>
+   <pre>
+    VERSION         DESCRIPTION
+-----------------------------------------------------------------------------
+0.7           - Patches from Oswald Buddenhagen:
+                - Document the 'target' configuration directive.
+                - Merging OS-specific networking code to reduce LOCs and the
+                  sea of #ifdefs.
+              - Added 50ms timeout to pcap_open_live() to reduce CPU usage
+                on network-heavy hosts. Pcap recommends we not use zero.
+0.6           - Patches from Oswald Buddenhagen:
+                - Cleanup: Don't null-check before free
+                - Cleanup: Consolidate flag-check logic
+                - Accept single-knock sequences
+                - Introduce a 'target' configuration directive, enabling
+                  knockd to react to connect attempts to a target host.
+                  Useful in cases where knockd is on a router and you want
+                  to send a target a wakeup packet.
+0.5           - Added ability to change the knocking protocol (TCP/UDP) on a
+                per-port basis using the knock client (instead of the -u
+                switch)
+              - Patches from Philippe Lovis
+    <philippe.lovis>
+     :
+                - Fixed memory leaks and potential security vulnerabilities
+                - Added --lookup option for DNS lookups (default is off)
+                - Added support for one-time sequences
+                - Added Interface directive to select the listening interface
+                - Moved packet filtering to kernel space with BPF filters
+                - Support for excluding TCP flags with "!"
+                - Removed the leftover/deprecated layer-2 MAC logic
+0.4           - Added support for DLT_RAW (PPPoE) interfaces
+              - Changed packet inspection to use the interface's IP address
+                to determine the flow direction, rather than the ethernet
+                MAC address
+              - Changed logging date format to ISO (yyyy-mm-dd)
+              - Added hostnames to logging output
+0.3.1         - Fixed a segfault occurring when a hostname cannot be resolved
+              - Patch from Simon Matter
+     <simon.matter>
+      :
+                - fixes build errors on Fedora
+              - Patch from Per Cederberg
+      <per>
+       :
+                - fixes TCP SYN timeouts in knock client
+0.3           - Added PPP (LINUX_SLL) support
+              - Patches from Leo Costela:
+                - added Start_Command, Stop_Command, Cmd_Timeout directives,
+                  allowing a single door to open and then close after a
+                  timeout period
+                - knockd now re-reads config when a HUP is received
+                - multiple protocols supported on a per-port basis
+0.2.1         - Bugfix for TCP flag discrimination
+0.2           - Fixed the zombie process problem
+              - Added patch from Leo Costela:
+                - PidFile configuration directive
+                - support for specific TCP flags
+0.1           - Initial release
+      </per>
+     </simon.matter>
+    </philippe.lovis>
+   </pre>
+   <h2>
+    Security Notes
+   </h2>
+   <p>
+    Using the -l or --lookup commandline option to resolve DNS names for log entries may be a security risk! An attacker may find out the first port of a sequence if he can monitor the DNS traffic of the host running knockd. Also, a host supposed to be stealthy (eg, dropping packets to closed TCP ports instead of replying with an ACK+RST packet) may give itself away by resolving a DNS name if an attacker manages to hit the first (unknown) port of a sequence.
+   </p>
+   <h2>
+    See Also
+   </h2>
+   <p>
+    knock is the accompanying port-knock client, though telnet or netcat could
+	be used for simple TCP knocks instead. For more advanced knocks, see
+    <a href="http://www.earth.li/projectpurple/progs/sendip.html">
+     sendip
+    </a>
+    ,
+    <a href="http://packit.sourceforge.net/downloads/packit-1.0.tgz">
+     packit
+    </a>
+    , or
+    <a href="http://www.hping.org/">
+     hping
+    </a>
+    .
+   </p>
+   <h2>
+    Author
+   </h2>
+   <p>
+    Judd Vinet &lt;jvinet at zeroflux dot org&gt;
+   </p>
+  </div>
+  <div id="footer">
+   <div id="footer-content">
+    <p class="center">
+     Copyright  2000-2015 Judd Vinet
+    </p>
+   </div>
+  </div>
+ </body>
+</html>

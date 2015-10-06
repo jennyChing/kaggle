@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <!--[if IE ]&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" /&gt;
+    &lt;![endif]-->
+  <title>
+   MySQL ::   MySQL 5.0 Reference Manual :: 3 Tutorial
+  </title>
+  <link href="/common/css/mysql.css?v=20140618" media="screen" rel="stylesheet"/>
+  <link href="/common/css/print.css?v=20111230" media="print" rel="stylesheet"/>
+  <link href="/doc/docs.css" rel="stylesheet"/>
+  <link href="index.html" rel="contents" title="MySQL Manual"/>
+  <link href="index.html" rel="start" title="MySQL Manual"/>
+  <link href="perl-support-problems.html" rel="prev" title="2.22.3 Problems Using the Perl DBI/DBD Interface"/>
+  <link href="connecting-disconnecting.html?ff=nopfpls" rel="next" title="3.1 Connecting to and Disconnecting from the Server"/>
+  <link href="index.html" rel="up" title="MySQL 5.0 Reference Manual"/>
+  <link href="/common/themes/sakila/favicon.ico" rel="shortcut icon"/>
+ </head>
+ <body class="doc">
+  <div id="container">
+   <!--UdmComment-->
+   <a class="skipToContent" href="#mainContent">
+    Skip navigation links
+   </a>
+   <div id="header">
+    <div class="left">
+     <div id="logo">
+      <a href="http://dev.mysql.com/" title="MySQL">
+       <img alt="MySQL" height="57" src="/common/logos/logo-mysql-110x57.png" width="110"/>
+      </a>
+     </div>
+     <div id="tagline">
+      The world's most popular open source database
+     </div>
+    </div>
+    <div class="right">
+     <div id="login">
+      <p>
+       <a class="contact_us" href="http://www.mysql.com/about/contact/">
+        Contact MySQL
+       </a>
+       |
+       <a href="https://dev.mysql.com/auth/login/?dest=http%3a%2f%2fdev.mysql.com%2Fdoc%2Frefman%2F5.0%2Fen%2Ftutorial.html">
+        Login
+       </a>
+       |
+       <a href="https://dev.mysql.com/auth/register/">
+        Register
+       </a>
+      </p>
+     </div>
+     <div id="search_box">
+      <!-- Start Search -->
+      <form action="https://search.oracle.com/search/search" id="searchform" method="get" name="searchform">
+       <input class="swap_value" id="q" name="q" onfocus="this.value='';" type="text" value="Search"/>
+       <input id="search_dest" name="group" type="hidden" value="MySQL"/>
+       <input alt="Search" id="go" src="/common/themes/sakila/search_g.png" title="Search" type="image"/>
+      </form>
+     </div>
+     <!-- End Search -->
+    </div>
+   </div>
+   <!-- MySQL Navigation -->
+   <div id="nav_container">
+    <div id="flags">
+     <ul>
+      <li style="position: relative; top: -5px;">
+       <!-- Icons from http://icondock.com/free/vector-social-media-icons //-->
+       <a href="http://www.facebook.com/mysql">
+        <img alt="fb" class="facebook-icon" height="20" src="/common/themes/sakila/sp.gif" title="Join us on Facebook" width="20"/>
+       </a>
+       <a href="https://plus.google.com/+mysql">
+        <img alt="g+" class="googleplus-icon" height="20" src="/common/themes/sakila/sp.gif" title="Join Google+ to follow MySQL" width="20"/>
+       </a>
+       <a href="https://twitter.com/#!/mysql">
+        <img alt="tw" class="twitter-icon" height="20" src="/common/themes/sakila/sp.gif" title="Follow us on Twitter" width="20"/>
+       </a>
+       <a href="http://www.youtube.com/mysqlchannel">
+        <img alt="yt" class="youtube-icon" height="20" src="/common/themes/sakila/sp.gif" title="Visit our YouTube channel" width="20"/>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div id="nav-tabs">
+     <ul>
+      <li class="off-left-end">
+      </li>
+      <li>
+       <a href="http://www.mysql.com">
+        MySQL.com
+       </a>
+      </li>
+      <li class="off-mid">
+      </li>
+      <li>
+       <a href="http://www.mysql.com/downloads/">
+        Downloads
+       </a>
+      </li>
+      <li class="on-left">
+      </li>
+      <li class="current">
+       <a href="http://dev.mysql.com/doc/">
+        Documentation
+       </a>
+      </li>
+      <li class="on-right">
+      </li>
+      <li>
+       <a href="http://dev.mysql.com">
+        Developer Zone
+       </a>
+      </li>
+      <li class="off-right-end">
+      </li>
+     </ul>
+    </div>
+    <div id="mysql_menu">
+     <ul>
+      <li class="current">
+       <a class="current " href="/doc/">
+        MySQL Server
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-enterprise.html">
+        MySQL Enterprise Edition
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-gui.html">
+        Workbench
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-utils-fabric.html">
+        Utilities/Fabric
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-cluster.html">
+        Cluster
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-connectors.html">
+        Connectors
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-topic.html">
+        Topic Guides
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-expert.html">
+        Expert Guides
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-other.html">
+        Other Docs
+       </a>
+      </li>
+      <li class="link">
+       <a href="/doc/index-archive.html">
+        Archives
+       </a>
+      </li>
+      <li class="link last">
+       <a href="/doc/index-about.html">
+        About
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div id="og_sakila">
+    </div>
+    <div id="og_title">
+    </div>
+   </div>
+   <!-- End Navigation Container -->
+   <!--/UdmComment-->
+   <div class="page_container">
+    <div class="page_sidebar">
+     <!--UdmCommentTest-->
+     <div id="menu_title">
+     </div>
+     <div id="menu">
+      <ul>
+       <li class="current">
+        <a class="current subitems" href="/doc/index.html">
+         Documentation Library
+        </a>
+        <ul class="subitems1">
+         <li>
+          <a href="index.html">
+           <b>
+            Table of Contents
+           </b>
+          </a>
+          <ul class="subitems2">
+           <li>
+            <a href="/doc/refman/5.7/en/tutorial.html">
+             MySQL 5.7 Manual
+            </a>
+           </li>
+           <li>
+            <a href="/doc/refman/5.6/en/tutorial.html">
+             MySQL 5.6 Manual
+            </a>
+           </li>
+           <li>
+            <a href="/doc/refman/5.5/en/tutorial.html">
+             MySQL 5.5 Manual
+            </a>
+           </li>
+           <li>
+            <a href="/doc/refman/5.1/en/tutorial.html">
+             MySQL 5.1 Manual
+            </a>
+           </li>
+           <li class="current">
+            MySQL 5.0 Manual
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <div class="searchmanual">
+       <form action="https://search.oracle.com/search/search" id="docsearch" method="get">
+        <strong>
+         <label for="searchq">
+          Search manual:
+         </label>
+        </strong>
+        <br/>
+        <input id="searchq" name="q" size="14" type="text" value=""/>
+        <input id="searchsubmit" type="submit" value="Go"/>
+        <input id="searchgroup" name="group" type="hidden" value="MySQL"/>
+       </form>
+      </div>
+     </div>
+    </div>
+    <!-- Main content -->
+    <div class="sidebar" id="page">
+     <!--UdmComment-->
+     <div id="docheader">
+      <a href="index.html">
+       MySQL 5.0 Reference Manual
+      </a>
+      :: 3 Tutorial
+     </div>
+     <script language="javascript">
+      &lt;!--
+function toggle(what){
+ if(document.getElementById(what).style.display == "none"){
+   document.getElementById(what).style.display = "block";
+ }else{
+   document.getElementById(what).style.display = "none";
+ }
+}
+//--&gt;
+     </script>
+     <noscript>
+     </noscript>
+     <div style="float: right; width: 250px; margin: 0px 0px 8px 8px; background: white">
+      <div style="text-align: right; font-size: 90%; margin-bottom: 4px">
+       <div style="text-align: left;">
+        <a href="perl-support-problems.html" style="text-decoration: none" title="Previous Section">
+          2.22.3 Problems Using the Perl DBI/DBD Interface
+        </a>
+       </div>
+       <hr align="center" noshade="noshade" size="1" style="margin: 0px auto 2px auto" width="40"/>
+       <a href="connecting-disconnecting.html" style="text-decoration: none" title="Next Section">
+        3.1 Connecting to and Disconnecting from the Server  
+       </a>
+      </div>
+      <div style="padding: 4px 0px 0px 4px; border: 2px dotted #ccc; border-right: none;">
+       <b>
+        Section Navigation
+       </b>
+       <small>
+        [
+        <a href="#" onclick="toggle('sectionnav');" onkeypress="if (event.keyCode == 13) { toggle('sectionnav'); }">
+         Toggle
+        </a>
+        ]
+       </small>
+       <ul id="sectionnav">
+        <li>
+         <a href="preface.html">
+          Preface and Legal Notices
+         </a>
+        </li>
+        <li>
+         <a href="introduction.html">
+          1 General Information
+         </a>
+        </li>
+        <li>
+         <a href="installing.html">
+          2 Installing and Upgrading MySQL
+         </a>
+        </li>
+        <li class="self">
+         3 Tutorial
+         <ul class="children">
+          <li>
+           <a href="connecting-disconnecting.html">
+            3.1 Connecting to and Disconnecting from the Server
+           </a>
+          </li>
+          <li>
+           <a href="entering-queries.html">
+            3.2 Entering Queries
+           </a>
+          </li>
+          <li>
+           <a href="database-use.html">
+            3.3 Creating and Using a Database
+           </a>
+          </li>
+          <li>
+           <a href="getting-information.html">
+            3.4 Getting Information About Databases and Tables
+           </a>
+          </li>
+          <li>
+           <a href="batch-mode.html">
+            3.5 Using mysql in Batch Mode
+           </a>
+          </li>
+          <li>
+           <a href="examples.html">
+            3.6 Examples of Common Queries
+           </a>
+          </li>
+          <li>
+           <a href="apache.html">
+            3.7 Using MySQL with Apache
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <a href="programs.html">
+          4 MySQL Programs
+         </a>
+        </li>
+        <li>
+         <a href="server-administration.html">
+          5 MySQL Server Administration
+         </a>
+        </li>
+        <li>
+         <a href="security.html">
+          6 Security
+         </a>
+        </li>
+        <li>
+         <a href="backup-and-recovery.html">
+          7 Backup and Recovery
+         </a>
+        </li>
+        <li>
+         <a href="optimization.html">
+          8 Optimization
+         </a>
+        </li>
+        <li>
+         <a href="language-structure.html">
+          9 Language Structure
+         </a>
+        </li>
+        <li>
+         <a href="globalization.html">
+          10 Globalization
+         </a>
+        </li>
+        <li>
+         <a href="data-types.html">
+          11 Data Types
+         </a>
+        </li>
+        <li>
+         <a href="functions.html">
+          12 Functions and Operators
+         </a>
+        </li>
+        <li>
+         <a href="sql-syntax.html">
+          13 SQL Statement Syntax
+         </a>
+        </li>
+        <li>
+         <a href="storage-engines.html">
+          14 Storage Engines
+         </a>
+        </li>
+        <li>
+         <a href="ha-overview.html">
+          15 High Availability and Scalability
+         </a>
+        </li>
+        <li>
+         <a href="replication.html">
+          16 Replication
+         </a>
+        </li>
+        <li>
+         <a href="mysql-cluster.html">
+          17 MySQL Cluster
+         </a>
+        </li>
+        <li>
+         <a href="stored-programs-views.html">
+          18 Stored Programs and Views
+         </a>
+        </li>
+        <li>
+         <a href="information-schema.html">
+          19 INFORMATION_SCHEMA Tables
+         </a>
+        </li>
+        <li>
+         <a href="connectors-apis.html">
+          20 Connectors and APIs
+         </a>
+        </li>
+        <li>
+         <a href="extending-mysql.html">
+          21 Extending MySQL
+         </a>
+        </li>
+        <li>
+         <a href="mysql-enterprise.html">
+          22 MySQL Enterprise Edition
+         </a>
+        </li>
+        <li>
+         <a href="faqs.html">
+          A MySQL 5.0 Frequently Asked Questions
+         </a>
+        </li>
+        <li>
+         <a href="error-handling.html">
+          B Errors, Error Codes, and Common Problems
+         </a>
+        </li>
+        <li>
+         <a href="news.html">
+          C MySQL Release Notes
+         </a>
+        </li>
+        <li>
+         <a href="restrictions.html">
+          D Restrictions and Limits
+         </a>
+        </li>
+        <li>
+         <a href="licenses-third-party.html">
+          E Licenses for Third-Party Components
+         </a>
+        </li>
+        <li>
+         <a href="ix01.html">
+          General Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-cfunc.html">
+          C Function Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-command.html">
+          Command Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-function.html">
+          Function Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-is.html">
+          INFORMATION_SCHEMA Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-jointype.html">
+          Join Types Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-operator.html">
+          Operator Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-option.html">
+          Option Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-priv.html">
+          Privileges Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-sqlmode.html">
+          SQL Modes Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-statement.html">
+          Statement/Syntax Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-statvar.html">
+          Status Variable Index
+         </a>
+        </li>
+        <li>
+         <a href="dynindex-sysvar.html">
+          System Variable Index
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <!--/UdmComment-->
+     <div class="chapter">
+      <div class="titlepage">
+       <div>
+        <div>
+         <h1 class="title">
+          <a name="tutorial">
+          </a>
+          Chapter3Tutorial
+         </h1>
+        </div>
+       </div>
+      </div>
+      <div class="toc">
+       <p>
+        <b>
+         Table of Contents
+        </b>
+        <small>
+         [
+         <a class="tocdetail" href="#" onclick="toggle('tocdetail-1'); toggle('tocdetail-2'); return false;" onkeypress="if (event.keyCode == 13) { toggle('tocdetail-1'); toggle('tocdetail-2'); return false; } ">
+          +/-
+         </a>
+         ]
+        </small>
+       </p>
+       <dl id="tocdetail">
+        <dt>
+         <span class="section">
+          <a href="connecting-disconnecting.html">
+           3.1 Connecting to and Disconnecting from the Server
+          </a>
+         </span>
+        </dt>
+        <dt>
+         <span class="section">
+          <a href="entering-queries.html">
+           3.2 Entering Queries
+          </a>
+         </span>
+        </dt>
+        <dt>
+         <span class="section">
+          <a href="database-use.html">
+           3.3 Creating and Using a Database
+          </a>
+         </span>
+         <small>
+          [
+          <a class="tocdetail" href="#" onclick="toggle('tocdetail-1'); return false;" onkeypress="if (event.keyCode == 13) { toggle('tocdetail-1'); return false;}">
+           +/-
+          </a>
+          ]
+         </small>
+        </dt>
+        <dd id="tocdetail-1" style="display:none;">
+         <dl>
+          <dt>
+           <span class="section">
+            <a href="creating-database.html">
+             3.3.1 Creating and Selecting a Database
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="creating-tables.html">
+             3.3.2 Creating a Table
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="loading-tables.html">
+             3.3.3 Loading Data into a Table
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="retrieving-data.html">
+             3.3.4 Retrieving Information from a Table
+            </a>
+           </span>
+          </dt>
+         </dl>
+        </dd>
+        <dt>
+         <span class="section">
+          <a href="getting-information.html">
+           3.4 Getting Information About Databases and Tables
+          </a>
+         </span>
+        </dt>
+        <dt>
+         <span class="section">
+          <a href="batch-mode.html">
+           3.5 Using mysql in Batch Mode
+          </a>
+         </span>
+        </dt>
+        <dt>
+         <span class="section">
+          <a href="examples.html">
+           3.6 Examples of Common Queries
+          </a>
+         </span>
+         <small>
+          [
+          <a class="tocdetail" href="#" onclick="toggle('tocdetail-2'); return false;" onkeypress="if (event.keyCode == 13) { toggle('tocdetail-2'); return false;}">
+           +/-
+          </a>
+          ]
+         </small>
+        </dt>
+        <dd id="tocdetail-2" style="display:none;">
+         <dl>
+          <dt>
+           <span class="section">
+            <a href="example-maximum-column.html">
+             3.6.1 The Maximum Value for a Column
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-maximum-row.html">
+             3.6.2 The Row Holding the Maximum of a Certain Column
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-maximum-column-group.html">
+             3.6.3 Maximum of Column per Group
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-maximum-column-group-row.html">
+             3.6.4 The Rows Holding the Group-wise Maximum of a Certain Column
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-user-variables.html">
+             3.6.5 Using User-Defined Variables
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-foreign-keys.html">
+             3.6.6 Using Foreign Keys
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="searching-on-two-keys.html">
+             3.6.7 Searching on Two Keys
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="calculating-days.html">
+             3.6.8 Calculating Visits Per Day
+            </a>
+           </span>
+          </dt>
+          <dt>
+           <span class="section">
+            <a href="example-auto-increment.html">
+             3.6.9 Using AUTO_INCREMENT
+            </a>
+           </span>
+          </dt>
+         </dl>
+        </dd>
+        <dt>
+         <span class="section">
+          <a href="apache.html">
+           3.7 Using MySQL with Apache
+          </a>
+         </span>
+        </dt>
+       </dl>
+      </div>
+      <a class="indexterm" name="idm140415582108368">
+      </a>
+      <a class="indexterm" name="idm140415582107296">
+      </a>
+      <a class="indexterm" name="idm140415582105808">
+      </a>
+      <a class="indexterm" name="idm140415582104320">
+      </a>
+      <p>
+       This chapter provides a tutorial introduction to MySQL by showing
+    how to use the
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       client program to create and
+    use a simple database.
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       (sometimes referred
+    to as the
+       <span class="quote">
+        
+        <span class="quote">
+         terminal monitor
+        </span>
+        
+       </span>
+       or just
+       <span class="quote">
+        
+        <span class="quote">
+         monitor
+        </span>
+        
+       </span>
+       ) is an interactive program that enables you
+    to connect to a MySQL server, run queries, and view the results.
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       may also be used in batch mode: you place
+    your queries in a file beforehand, then tell
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       to execute the contents of the file. Both
+    ways of using
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       are covered here.
+      </p>
+      <p>
+       To see a list of options provided by
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       ,
+    invoke it with the
+       <a class="link" href="mysql-command-options.html#option_mysql_help">
+        <code class="option">
+         --help
+        </code>
+       </a>
+       option:
+      </p>
+      <pre class="programlisting">
+       shell&gt;
+       <strong class="userinput">
+        <code>
+         mysql --help
+        </code>
+       </strong>
+      </pre>
+      <p>
+       This chapter assumes that
+       <a class="link" href="mysql.html" title="4.5.1mysql  The MySQL Command-Line Tool">
+        <span class="command">
+         <strong>
+          mysql
+         </strong>
+        </span>
+       </a>
+       is installed on
+    your machine and that a MySQL server is available to which you can
+    connect. If this is not true, contact your MySQL administrator. (If
+       <span class="emphasis">
+        <em>
+         you
+        </em>
+       </span>
+       are the administrator, you need to consult
+    the relevant portions of this manual, such as
+       <a class="xref" href="server-administration.html" title="Chapter5MySQL Server Administration">
+        Chapter5,
+        <i>
+         MySQL Server Administration
+        </i>
+       </a>
+       .)
+      </p>
+      <p>
+       This chapter describes the entire process of setting up and using a
+    database. If you are interested only in accessing an existing
+    database, you may want to skip over the sections that describe how
+    to create the database and the tables it contains.
+      </p>
+      <p>
+       Because this chapter is tutorial in nature, many details are
+    necessarily omitted. Consult the relevant sections of the manual for
+    more information on the topics covered here.
+      </p>
+      <div class="copyright-footer">
+      </div>
+      <!--UdmComment-->
+      <div id="docnav">
+       <a href="perl-support-problems.html" rel="prev" title="2.22.3 Problems Using the Perl DBI/DBD Interface">
+        Previous
+       </a>
+       /
+       <a href="connecting-disconnecting.html" rel="next" title="3.1 Connecting to and Disconnecting from the Server">
+        Next
+       </a>
+       /
+       <a href="index.html" rel="up" title="MySQL 5.0 Reference Manual">
+        Up
+       </a>
+       /
+       <a href="index.html" rel="contents">
+        Table of Contents
+       </a>
+      </div>
+      <!--/UdmComment-->
+      <br class="clear"/>
+      <!--UdmComment-->
+      <div id="comments">
+       <h1>
+        User Comments
+       </h1>
+       <p>
+       </p>
+       <form action="/doc/mysql/comment.php" method="POST">
+        <input name="sect" type="hidden" value="tutorial"/>
+        <input name="return" type="hidden" value="/doc/refman/5.0/en/tutorial.html"/>
+        <input type="submit" value="Add your own comment"/>
+       </form>
+      </div>
+      <!--UdmComment-->
+      <div id="docnav">
+       <a href="#">
+        Top
+       </a>
+       /
+       <a href="perl-support-problems.html" rel="prev" title="2.22.3 Problems Using the Perl DBI/DBD Interface">
+        Previous
+       </a>
+       /
+       <a href="connecting-disconnecting.html" rel="next" title="3.1 Connecting to and Disconnecting from the Server">
+        Next
+       </a>
+       /
+       <a href="index.html" rel="up" title="MySQL 5.0 Reference Manual">
+        Up
+       </a>
+       /
+       <a href="index.html" rel="contents">
+        Table of Contents
+       </a>
+      </div>
+      <!--/UdmComment-->
+     </div>
+    </div>
+   </div>
+   <!--End Container -->
+  </div>
+  <div id="footer">
+   <div class="five-col">
+    <div class="links">
+     <ul>
+      <li class="top">
+       <a href="http://dev.mysql.com">
+        Developer Zone
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/articles/">
+        Developer Articles
+       </a>
+      </li>
+      <li>
+       <a href="http://forums.mysql.com/">
+        Forums
+       </a>
+      </li>
+      <li>
+       <a href="http://bugs.mysql.com/">
+        Bugs
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/worklog/">
+        Worklog
+       </a>
+      </li>
+      <li>
+       <a href="http://planet.mysql.com/">
+        Planet MySQL
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="links">
+     <ul>
+      <li class="top">
+       <a href="http://dev.mysql.com/downloads/">
+        Downloads
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/downloads/mysql/">
+        MySQL Community Server
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/downloads/cluster/">
+        MySQL Cluster
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/downloads/fabric/">
+        MySQL Fabric
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/downloads/utilities/">
+        MySQL Utilities
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/downloads/workbench/">
+        MySQL Workbench
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="links">
+     <ul>
+      <li class="top">
+       <a href="http://dev.mysql.com/doc/">
+        Documentation
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/doc/">
+        MySQL Reference Manuals
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/doc/index-gui.html">
+        MySQL Workbench
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/doc/index-expert.html">
+        Expert Guides
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/doc/index-topic.html">
+        Topic Guides
+       </a>
+      </li>
+      <li>
+       <a href="http://dev.mysql.com/doc/index-cluster.html">
+        MySQL Cluster
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="links">
+     <ul>
+      <li class="top">
+       <a href="http://www.mysql.com/about/">
+        About MySQL
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/about/contact/">
+        Contact Us
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/buy-mysql/">
+        How to Buy
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/partners/">
+        Partners
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/about/jobs/">
+        Job Opportunities
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/sitemap.html">
+        Site Map
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="links">
+     <ul>
+      <li class="top">
+       <a href="http://www.mysql.com/about/legal/">
+        Legal
+       </a>
+      </li>
+      <li>
+       <a href="http://www.mysql.com/about/legal/">
+        Legal Policies
+       </a>
+      </li>
+      <li>
+       <a href="http://www.oracle.com/us/legal/privacy/index.htm">
+        Your Privacy Rights
+       </a>
+      </li>
+      <li>
+       <a href="http://www.oracle.com/us/legal/terms/index.html">
+        Terms of Use
+       </a>
+      </li>
+      <li>
+       <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">
+        Trademark Policy
+       </a>
+      </li>
+      <li>
+       <a href="http://www.oracle.com/technetwork/community/oca-486395.html">
+        Contributor Agreement
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="en" id="search">
+     <form action="https://search.oracle.com/search/search" id="footer_search" method="get">
+      <input class="swap_value" id="f_q" name="q" type="text" value=""/>
+      <input name="group" type="hidden" value="MySQL"/>
+      <input alt="Search" id="f_go" src="/common/themes/sakila/footer_search_g.png" title="Search" type="image"/>
+     </form>
+    </div>
+   </div>
+  </div>
+  <!-- End Footer -->
+  <div id="copyright-oracle">
+   <a href="http://www.oracle.com/">
+    <img alt="Oracle" height="22" src="/common/logos/logo-oracle-red-91x22.gif" width="91"/>
+   </a>
+   <span>
+     2015, Oracle Corporation and/or its affiliates
+   </span>
+  </div>
+  <script src="/common/js/metrics/s_code_remote.js">
+  </script>
+ </body>
+</html>

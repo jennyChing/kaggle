@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <link href="/buscatextual/resources/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+  <link href="/buscatextual/resources/css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="/buscatextual/resources/css/advanced.css" rel="stylesheet" type="text/css"/>
+  <link href="/buscatextual/resources/css/captcha.css" rel="stylesheet" type="text/css"/>
+  <link href="/buscatextual/resources/demo/style.css" rel="stylesheet" type="text/css"/>
+  <link href="/buscatextual/resources/css/estilo-busca-textual.css" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css"/>
+  <script src="/buscatextual/resources/js/jquery.js">
+  </script>
+  <script src="/buscatextual/resources/js/bootstrap.js">
+  </script>
+  <script type="text/javascript">
+   $(document).ready(function() {	
+	$('#btn_validar_captcha').bind('click',function(){	
+		validar();
+		return false;
+					
+	});	
+});
+	$(document).keypress(function(e) {
+						if (e.which == 13) {
+							validar();
+							document.getElementById("informado").value='';
+							return false;
+						}						
+					});
+	function validar(){	
+		var data = {
+				informado : $("#informado").val(),
+				metodo : "validaCaptcha"
+			};		
+			cnpqCaptcha.doGet(data, function(result) {
+				messagesCaptcha.limpar();
+				var wrapper = messagesCaptcha.getWrapper();
+				if (result.estado == "sucesso") {
+					wrapper.append(mensagem);
+					$("#image_captcha").hide();
+					cnpqCaptcha.validacaoCaptchaCallback(data);
+				}else{				
+					cnpqCaptcha.refreshCaptcha();
+					var mensagem = messagesCaptcha
+							.criarErro('Texto incorreto. Tente novamente!');				
+					wrapper.append(mensagem);
+					
+					}
+			});
+			return false;	
+		}
+  </script>
+ </head>
+ <body>
+  <div class="header">
+   <div class="header-content max-width">
+    <div class="identity center">
+     <div class="combo">
+      <a href="http://lattes.cnpq.br/" target="_blank" title="Currculo Lattes">
+       <img alt="Currculo Lattes" src="/buscatextual/images/titulo-sistema.png" title="Currculo Lattes"/>
+      </a>
+     </div>
+     <div class="logo">
+      <a href="http://www.cnpq.br" target="_blank" title="CNPq - Conselho Nacional de Desenvolvimento Cientfico e Tecnolgico">
+      </a>
+     </div>
+     <div class="menu-header">
+      <!--&lt;a
+					class="bt-menu-header titBottom fontMais icons-top icons-top-fontMais"
+					href="javascript:void(0)" title="Aumentar a fonte"&gt; &lt;/a&gt; &lt;a
+					class="bt-menu-header titBottom fontMenos icons-top icons-top-fontMenos "
+					href="javascript:void(0)" title="Fonte padro"&gt; &lt;/a&gt; &lt;a
+					class="bt-menu-header titBottom contraste icons-top icons-top-contraste"
+					href="javascript:void(0)" title="Alto contraste"&gt;&lt;/a&gt;  &lt;a
+					title="Click here to change the language to english"
+					class="bt-menu-header titBottom icons-top icons-top-enUK"
+					onClick="mudarIdioma()" id="idBandeira" href="javascript:void(0)"&gt;
+				&lt;/a&gt;  &lt;a class="bt-menu-header titBottom  icons-top icons-top-help"
+					target="_blank"
+					href="http://ajuda.cnpq.br/index.php/Pgina_principal"
+					title="Ajuda"&gt; &lt;/a&gt;-->
+     </div>
+    </div>
+   </div>
+  </div>
+  <form action="/buscatextual/visualizacv.do;jsessionid=F57854479830AA0B2EECE6BF282079F1.jb_buscacv_218" enctype="multipart/form-data" id="formulario" method="post" name="visualizacvForm">
+   <input id="metodo" name="metodo" type="hidden" value=""/>
+   <input id="id" name="id" type="hidden" value="K4291587Y9"/>
+   <input id="idiomaExibicao" name="idiomaExibicao" type="hidden" value=""/>
+   <input id="tipo" name="tipo" type="hidden" value=""/>
+   <div class="wrap ">
+    <div class="container">
+     <div class="conteudo">
+      <div class="iframe-simulation">
+       <div class="conteudo-2">
+        <div class="layout-cell layout-cell-6 captcha">
+         <script language="JavaScript">
+          var cnpqCaptcha = {refreshCaptcha: function() {var timestamp = Number(new Date());document.getElementById('div_image_captcha').innerHTML="&lt;img id='image_captcha' class='imageCaptcha' src='/buscatextual/servlet/captcha?metodo=getImagemCaptcha&amp;noCache=" + timestamp + "' alt='Captcha' border='0'/&gt;";}, audioCaptcha: function() {var timestamp = Number(new Date());document.getElementById('audio_span').innerHTML="&lt;audio src='/buscatextual/servlet/captcha?metodo=getAudioCaptcha&amp;noCache=" + timestamp + "' type='audio/mpeg; codecs=\"mp3\"' autoplay&gt;&lt;p&gt;Your browser does not support the audio element&lt;/p&gt;&lt;/audio&gt;";}, validarCaptcha: function() {var data = {metodo: 'validaCaptcha',informado: $('#informado').val()};cnpqCaptcha.doGet(data, cnpqCaptcha.validacaoCaptchaCallback);}, doGet: function(data, callback) {$.ajax({type: 'get',dataType: 'json',data: data,url: '/buscatextual/servlet/captcha',success: callback});}, validacaoCaptchaCallback: function(data) {cnpqCaptcha.refreshCaptcha();$('#informado').val('');messagesCaptcha.limpar();var wrapper = messagesCaptcha.getWrapper();if (data['estado'] == 'erro') {var mensagem = messagesCaptcha.criarErro('Texto incorreto. Tente novamente!');wrapper.append(mensagem);} else {$("#image_captcha").hide();var f = document.forms[0];f.metodo.value = 'visualizarCV';f.submit();}}};var messagesCaptcha = {getWrapper: function() {return $('#wrapper-messages-captcha');}, limpar: function() {messagesCaptcha.getWrapper().empty();}, criarSucesso: function(msg) {var wrapper = $("&lt;div class='divMessageSucesso' /&gt;"),colunaIcone = $("&lt;div class='divIconeSucesso' /&gt;").appendTo(wrapper),icone = $("&lt;span class='spanIconeSucesso' /&gt;").appendTo(colunaIcone),colunaMensagem = $("&lt;div class='divMensagemSucesso' /&gt;").text(msg).appendTo(wrapper),colunaClear = $("&lt;div class='divClear' /&gt;").appendTo(wrapper);return wrapper;}, criarErro: function(msg) {var wrapper = $("&lt;div class='divMessageErro' /&gt;"),colunaIcone = $("&lt;div class='divIconeErro' /&gt;").appendTo(wrapper),icone = $("&lt;span class='spanIconeErro' /&gt;").appendTo(colunaIcone),colunaMensagem = $("&lt;div class='divMensagemErro' /&gt;").text(msg).appendTo(wrapper),colunaClear = $("&lt;div class='divClear' /&gt;").appendTo(wrapper);return wrapper;}};$(document).ready(function() {$('#btn_refresh_captcha').bind('click', cnpqCaptcha.refreshCaptcha);$('#btn_audio_captcha').bind('click', cnpqCaptcha.audioCaptcha);$('#btn_validar_captcha').bind('click', cnpqCaptcha.validarCaptcha);});
+         </script>
+         <div class="divCaptcha">
+          <h2 class="tituloCaptcha">
+           Cdigo de segurana
+          </h2>
+          <span>
+           <h3 class="subTituloCaptcha">
+            Digite os caracteres da imagem abaixo
+           </h3>
+           <br/>
+          </span>
+          <div id="wrapper-messages-captcha">
+          </div>
+          <input class="inputCaptcha" id="informado" name="informado" size="10" title="Digite os caracteres da imagem abaixo" type="text"/>
+          <div align="center" class="divImageCaptcha" id="div_image_captcha">
+           <img alt="Captcha" border="0" class="imageCaptcha" id="image_captcha" src="/buscatextual/servlet/captcha?metodo=getImagemCaptcha"/>
+          </div>
+          <div style="margin-top: 10px; padding: 0 7px 0 140px;">
+           <a href="javascript:void(0)" id="btn_refresh_captcha" title="Obter outro cdigo de segurana">
+            <span class="icon icon-atualizar">
+            </span>
+           </a>
+           <a href="javascript:void(0)" id="btn_audio_captcha" title="Escutar udio do cdigo de segurana">
+            <span class="icon icon-volume">
+            </span>
+           </a>
+           <div class="divButtonCaptcha">
+            <a class="linkButtonCaptcha" href="javascript:void(0)" id="btn_validar_captcha" title="Submeter">
+             Submeter
+            </a>
+           </div>
+          </div>
+          <span id="audio_span">
+          </span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </form>
+ </body>
+</html>

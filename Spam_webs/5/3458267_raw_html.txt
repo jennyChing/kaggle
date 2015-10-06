@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://foorious.com/xmlrpc.php" rel="pingback"/>
+  <title>
+   Vagrant | foorious
+  </title>
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v2.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+  <meta content="noodp,noydir" name="robots"/>
+  <meta content="Vagrantcreate an exact working copy of any system from a config file across multiple platformsin literally 10 secondsand save lots of time." name="description"/>
+  <link href="http://www.iknownothing.com/2014/08/vagrant/" rel="canonical"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Vagrant" property="og:title"/>
+  <meta content="Create an exact working copy of any system from a config file across multiple platformsin literally 10 secondsand save lots of time." property="og:description"/>
+  <meta content="http://www.iknownothing.com/2014/08/vagrant/" property="og:url"/>
+  <meta content="foorious" property="og:site_name"/>
+  <meta content="deployment" property="article:tag"/>
+  <meta content="Vagrant" property="article:tag"/>
+  <meta content="virtualization" property="article:tag"/>
+  <meta content="VM" property="article:tag"/>
+  <meta content="Developer" property="article:section"/>
+  <meta content="2014-08-14T22:57:19+00:00" property="article:published_time"/>
+  <meta content="2014-09-11T01:16:49+00:00" property="article:modified_time"/>
+  <meta content="2014-09-11T01:16:49+00:00" property="og:updated_time"/>
+  <meta content="http://www.iknownothing.com/wp-content/uploads/2014/08/image-1.jpg" property="og:image"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="http://foorious.com/feed/" rel="alternate" title="foorious  Feed" type="application/rss+xml"/>
+  <link href="http://foorious.com/comments/feed/" rel="alternate" title="foorious  Comments Feed" type="application/rss+xml"/>
+  <link href="http://foorious.com/blog/2014/08/vagrant/feed/" rel="alternate" title="foorious  Vagrant Comments Feed" type="application/rss+xml"/>
+  <!-- This site is powered by Shareaholic - https://shareaholic.com -->
+  <script data-cfasync="false" type="text/javascript">
+   //&lt;![CDATA[
+    _SHR_SETTINGS = {"endpoints":{"local_recs_url":"http:\/\/foorious.com\/wp-admin\/admin-ajax.php?action=shareaholic_permalink_related","share_counts_url":"http:\/\/foorious.com\/wp-admin\/admin-ajax.php?action=shareaholic_share_counts_api"}};
+
+    (function() {
+      var shr = document.createElement('script');
+      shr.setAttribute('data-cfasync', 'false');
+      shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+      shr.type = 'text/javascript'; shr.async = 'true';
+      shr.onload = shr.onreadystatechange = function() {
+        var rs = this.readyState;
+        if (rs &amp;&amp; rs != 'complete' &amp;&amp; rs != 'loaded') return;
+        var site_id = 'f0f96984b72b8fd885a5596d73fcee92';
+        var page_config = {"endpoints":{"local_recs_url":"http:\/\/foorious.com\/wp-admin\/admin-ajax.php?action=shareaholic_permalink_related","share_counts_url":"http:\/\/foorious.com\/wp-admin\/admin-ajax.php?action=shareaholic_share_counts_api"},"apps":{"share_buttons":{"get_share_counts":  function(url, services, cb) {
+    Shareaholic.Utils.ajax({
+      cache: true,
+      cache_ttl: '1 minute',
+      url: 'http://foorious.com/wp-admin/admin-ajax.php',
+      data: { action: 'shareaholic_share_counts_api', url: url, services: services },
+      success: function(res) {
+        if(res &amp;&amp; res.data) {
+          cb(res.data, true);
+        }
+      }
+    })
+  }}}};
+        try { Shareaholic.init(site_id, page_config); } catch (e) {}
+      };
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(shr, s);
+    })();
+  //]]&gt;
+  </script>
+  <!-- Shareaholic Content Tags -->
+  <meta content="foorious" name="shareaholic:site_name"/>
+  <meta content="en-US" name="shareaholic:language"/>
+  <meta content="http://foorious.com/blog/2014/08/vagrant/" name="shareaholic:url"/>
+  <meta content="deployment, vagrant, virtualization, vm, developer, ikn, it/sys admin" name="shareaholic:keywords"/>
+  <meta content="2014-08-14T21:57:19+00:00" name="shareaholic:article_published_time"/>
+  <meta content="2015-06-14T22:00:58+00:00" name="shareaholic:article_modified_time"/>
+  <meta content="true" name="shareaholic:shareable_page"/>
+  <meta content="Niccol Brogi" name="shareaholic:article_author_name"/>
+  <meta content="f0f96984b72b8fd885a5596d73fcee92" name="shareaholic:site_id"/>
+  <meta content="7.6.0.4" name="shareaholic:wp_version"/>
+  <meta content="http://www.iknownothing.com/wp-content/uploads/2014/08/image-1.jpg" name="shareaholic:image"/>
+  <!-- Shareaholic Content Tags End -->
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/foorious.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&amp;&amp;c.getContext("2d");return d&amp;&amp;d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length&gt;3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&amp;&amp;c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&amp;&amp;c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&amp;&amp;f.twemoji&amp;&amp;(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <link href="http://foorious.com/wp-content/plugins/page-list/css/page-list.css?ver=5.0" id="page-list-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://foorious.com/wp-content/plugins/email-pick-up/css/public.css?ver=1.3.0" id="email-pick-up-plugin-styles-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://foorious.com/wp-content/themes/decode/style.css?ver=3.0.1" id="decode-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="//fonts.googleapis.com/css?family=Oxygen&amp;ver=4.2.2" id="decode-font-stylesheet-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://foorious.com/assets/wp-amd.css?ver=2102" id="wp-amd-style-css" media="" rel="stylesheet" type="text/css"/>
+  <script src="http://foorious.com/wp-includes/js/jquery/jquery.js?ver=1.11.2" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/wp-content/plugins/email-pick-up/js/public.js?ver=1.3.0" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/wp-content/plugins/google-analyticator/external-tracking.min.js?ver=6.4.9" type="text/javascript">
+  </script>
+  <link href="http://foorious.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://foorious.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://foorious.com/?p=1279" rel="shortlink"/>
+  <!-- Decode Custom Colors CSS -->
+  <style type="text/css">
+   body, .sidebar, .sidebar-top, .menu ul ul, .header-style-ghost .site { background-color: #ffffff; }body, button, input, select, textarea, .site-title a, .menu a, .entry-title, .search-entry, .search-entry .entry-title, .entry-title a, .format-link .entry-title h2 a, .read-more, .author-name a, .explore-page .widget h1, .decode-reply-tool-plugin .replylink, .decode-reply-tool-plugin .replytrigger { color: #4C4C4C; }.menu ul &gt; .menu-item-has-children &gt; a::after, .menu ul &gt; .page_item_has_children &gt; a::after { border-top-color: #4C4C4C; }.footer-menu ul &gt; .menu-item-has-children &gt; a::after, .footer-menu ul &gt; .page_item_has_children &gt; a::after { border-bottom-color: #4C4C4C; }.menu-icon, .close-icon, .social-icon-fill { fill: #4C4C4C; }a, .no-touch a:hover, button, input[type=button], input[type=reset], input[type=submit], .no-touch .site-title a:hover, .no-touch .menu a:hover, .menu ul li.open &gt; a, .sidebar-menu a, .menu .current-menu-item &gt; a, .menu .current_page_item &gt; a, .no-touch .search-entry:hover, .no-touch .search-entry:hover .entry-title, .no-touch article .date a:hover, .no-touch .format-link .entry-title a:hover, .no-touch .comment-metadata a:hover, .no-touch .decode-reply-tool-plugin .replylink:hover { color: #00B0CC; }.no-touch button:hover, .no-touch input[type=button]:hover, .no-touch input[type=reset]:hover, .no-touch input[type=submit]:hover, .no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus, .no-touch .site-description a:hover, .no-touch .entry-content a:hover, .no-touch .categories a:hover, .no-touch .tags a:hover, .no-touch .comments-link a:hover, .no-touch .edit-link a:hover, .no-touch .author-site a:hover, .no-touch .theme-info a:hover, .no-touch .site-colophon a:hover, .site-header, .menu ul ul, .menu a:focus, .site-breadcrumbs, .page-title, .post blockquote, .page blockquote, .entry-footer, .entry-header .entry-meta, .search .entry-footer, .sidebar-top, .sidebar-style-constant .sidebar.left, .sidebar-style-constant .sidebar.right, .explore-page .widget h1 { border-color: #00B0CC; }.no-touch .menu ul &gt; .menu-item-has-children &gt; a:hover::after, .no-touch .menu ul &gt; .page_item_has_children &gt; a:hover::after, .menu ul li.open &gt; a::after, .sidebar-menu ul .menu-item-has-children &gt; a::after, .sidebar-menu ul .page_item_has_children &gt; a::after, .menu ul &gt; .current_page_item.menu-item-has-children &gt; a::after, .menu ul &gt; .current_page_item.page_item_has_children &gt; a::after { border-top-color: #00B0CC; }.no-touch .footer-menu ul &gt; .menu-item-has-children &gt; a:hover::after, .no-touch .footer-menu ul &gt; .page_item_has_children &gt; a:hover::after, .footer-menu ul &gt; li.open &gt; a::after, .footer-menu ul &gt; .current_page_item.menu-item-has-children &gt; a::after, .footer-menu ul &gt; .current_page_item.page_item_has_children &gt; a::after { border-bottom-color: #00B0CC; }.no-touch a:active, .no-touch button:focus, .touch button:focus, .no-touch button:active, .touch button:active, .no-touch input[type=button]:focus, .touch input[type=button]:focus, .no-touch input[type=button]:active, .touch input[type=button]:active, .no-touch input[type=reset]:focus, .touch input[type=reset]:focus, .no-touch input[type=reset]:active, .touch input[type=reset]:active, .no-touch input[type=submit]:focus, .touch input[type=submit]:focus, .no-touch input[type=submit]:active, .touch input[type=submit]:active, .no-touch .site-title a:active, .no-touch .menu a:active, .no-touch .sidebar-menu a:hover, .sidebar-menu ul li.open &gt; a, .menu .current-menu-item &gt; a:hover, .menu .current_page_item &gt; a:hover, .sidebar-menu ul .current-menu-item &gt; a, .sidebar-menu ul .current_page_item &gt; a, .no-touch .sidebar-content a:hover, .no-touch .search-entry:active, .no-touch .search-entry:active .entry-title, .no-touch article .date a:active, .no-touch .format-link .entry-title a:active, .no-touch .comment-metadata a:active, .no-touch .site-description a:active, .decode-reply-tool-plugin .replylink:active, .no-touch .decode-reply-tool-plugin .replylink:active { color: #008094; }.no-touch button:focus, .touch button:focus, .no-touch button:active, .touch button:active, .no-touch input[type=button]:focus, .touch input[type=button]:focus, .no-touch input[type=button]:active, .touch input[type=button]:active, .no-touch input[type=reset]:focus, .touch input[type=reset]:focus, .no-touch input[type=reset]:active, .touch input[type=reset]:active, .no-touch input[type=submit]:focus, .touch input[type=submit]:focus, .no-touch input[type=submit]:active, .touch input[type=submit]:active, .no-touch .site-description a:active, .no-touch .entry-content a:active, .no-touch .categories a:active, .no-touch .tags a:active, .no-touch .comments-link a:active, .no-touch .edit-link a:active, .no-touch .author-site a:active, .no-touch .theme-info a:active, .no-touch .site-colophon a:active { border-color: #008094; }.no-touch .menu ul &gt; .menu-item-has-children &gt; a:active::after, .no-touch .menu ul &gt; .page_item_has_children &gt; a:active::after, .no-touch .sidebar-menu ul .menu-item-has-children &gt; a:hover::after, .no-touch .sidebar-menu ul .page_item_has_children &gt; a:hover::after, .sidebar-menu ul li.open &gt; a::after, .sidebar-menu ul .current_page_item.menu-item-has-children &gt; a::after, .sidebar-menu ul .current_page_item.page_item_has_children &gt; a::after { border-top-color: #008094; }.no-touch .footer-menu ul &gt; .menu-item-has-children &gt; a:active::after, .no-touch .footer-menu ul &gt; .page_item_has_children &gt; a:active::after { border-bottom-color: #008094; }.no-touch input[type=text]:hover, .no-touch input[type=email]:hover, .no-touch input[type=password]:hover, .no-touch input[type=search]:hover, .no-touch input[type=tel]:hover, .no-touch input[type=url]:hover, .no-touch textarea:hover, article .tags, article .categories, article .date, article .date a, .comment-metadata a, .search .page-header input[type=search] { color: #8C8C8C; }.no-touch input[type=text]:hover, .no-touch input[type=email]:hover, .no-touch input[type=password]:hover, .no-touch input[type=search]:hover, .no-touch input[type=tel]:hover, .no-touch input[type=url]:hover, .no-touch textarea:hover, .no-touch .search .page-header input[type=search]:hover { border-color: #8C8C8C; }.no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus { color: #4C4C4C; }.no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus, .no-touch .search .page-header input[type=search]:focus, .touch .search .page-header input[type=search]:focus { border-color: #00B0CC; }
+  </style>
+  <style id="custom-background-css" type="text/css">
+   body.custom-background { background-color: #ffffff; }
+  </style>
+  <!-- Google Analytics Tracking by Google Analyticator 6.4.9: http://www.videousermanuals.com/google-analyticator/ -->
+  <script type="text/javascript">
+   var analyticsFileTypes = [''];
+    var analyticsSnippet = 'disabled';
+    var analyticsEventTracking = 'enabled';
+  </script>
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-325870-31', 'auto');
+ 
+	ga('send', 'pageview');
+  </script>
+ </head>
+ <body class="single single-post postid-1279 single-format-standard custom-background">
+  <div class="hfeed site" id="page">
+   <a class="skip-link screen-reader-text" href="#content">
+    Skip to content
+   </a>
+   <header class="site-header" id="masthead" role="banner">
+    <div class="site-branding">
+     <a href="http://foorious.com/" rel="home" title="foorious">
+      <img alt="" class="site-logo" height="475" src="http://foorious.com/wp-content/uploads/2014/11/Unicorn_Portrait_Black_and_White-unicorn15.png" width="1200"/>
+     </a>
+    </div>
+    <!-- .site-branding -->
+   </header>
+   <!-- #masthead -->
+   <nav class="site-breadcrumbs" role="navigation">
+    <div class="site-breadcrumbs-container">
+     <div class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">
+      <span class="trail-browse">
+       Browse:
+      </span>
+      <span class="trail-begin">
+       <a href="http://foorious.com" rel="home" title="foorious">
+        Home
+       </a>
+      </span>
+      <span class="sep">
+       /
+      </span>
+      <a href="http://foorious.com/blog/" title="Blog">
+       Blog
+      </a>
+      <span class="sep">
+       /
+      </span>
+      <a href="http://foorious.com/blog/2014/">
+       2014
+      </a>
+      <span class="sep">
+       /
+      </span>
+      <a href="http://foorious.com/blog/2014/08/">
+       August
+      </a>
+      <span class="sep">
+       /
+      </span>
+      <span class="trail-end">
+       Vagrant
+      </span>
+     </div>
+    </div>
+   </nav>
+   <!-- .breadcrumbs -->
+   <div class="site-content" id="content">
+    <div class="content-area" id="primary">
+     <main class="site-main" id="main" role="main">
+      <article class="post-1279 post type-post status-publish format-standard hentry category-developer category-ikn category-sys-admin tag-deployment tag-vagrant tag-virtualization tag-vm" id="post-1279">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         <a href="http://foorious.com/blog/2014/08/vagrant/" rel="bookmark">
+          Vagrant
+         </a>
+        </h1>
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p>
+         <img alt="image-1" class="alignnone size-full wp-image-1285" height="800" src="http://www.iknownothing.com/wp-content/uploads/2014/08/image-1.jpg" width="980"/>
+         <a href="http://www.vagrantup.com" title="Vagrant">
+          Vagrant
+         </a>
+         is absolutely awesome. I see it as a wrapper of VirtualBox (and other VMs) and Puppet/Chef.
+        </p>
+        <h2>
+         &lt;3
+        </h2>
+        <p>
+         Regardless, what it does is pretty cool: it abstracts your development environmentincluding the OS, modules, settings etc. etc. into what is called a Vagrantfilea plain text file that contains info about your system. When you feed this file to Vagrant on any other system, it will create a virtual machine that is an exact working copy of the system described in the Vagrantfile, installing/setting things up by itself, so that onecan just get startedwith his work. This is a huge time-saver. You dont have to go crazy to replicate systems between stage/production, or between developers/testers working on the same application: just give them the Vagrantfile and theyll be up and running with an identical environmentas the one youre work on,in literally 10 seconds.
+        </p>
+        <h2>
+         &lt;/3
+        </h2>
+        <p>
+         Theres one thing so far that had me raise my eyebrows: according to
+         <a href="http://docs.vagrantup.com/v2/installation/backwards-compatibility.html">
+          http://docs.vagrantup.com/v2/installation/backwards-compatibility.html
+         </a>
+         , Vagrant promises to keep compatibilityamongmajor versions, while minor versions might break your Vagrantfiles.I dont know if I misinterpreted the docs, but if this is true, the safest way to use Vagrant would be to stick to the latest major version (1.0 at the time of writing), and wait until 2.0 gets released. Weird.
+        </p>
+        <h2>
+         Video(s)
+        </h2>
+        <p>
+         I like watching videos to learn new stuff.
+        </p>
+        <p>
+         Heres a great 16-mins introductory video:
+         <a href="https://www.youtube.com/watch?v=FSxS6iPJMFw">
+          Introduction to Vagrant
+         </a>
+         .
+        </p>
+        <p>
+         <iframe allowfullscreen="allowfullscreen" frameborder="0" height="315" src="//www.youtube.com/embed/FSxS6iPJMFw" width="556">
+         </iframe>
+        </p>
+        <p>
+         and heres a complete overview of Vagrant (52-mins):
+         <a href="https://www.youtube.com/watch?v=Im4wNqlolqQ">
+          Automated Development Environments w/ Vagrant
+         </a>
+         .
+        </p>
+        <p>
+         <iframe allowfullscreen="allowfullscreen" frameborder="0" height="315" src="//www.youtube.com/embed/Im4wNqlolqQ" width="560">
+         </iframe>
+        </p>
+        <h2>
+         Will experiment with it
+        </h2>
+        <p>
+         In the next few days, Im planning on playing with
+         <a href="http://coreos.com" title="CoreOS">
+          CoreOS
+         </a>
+         , and Ill use Vagrant to create VMs and even whole clusters, mainly to learn more about specific features that I just looked at briefly while reading the documentation. Im pretty excited about this tool, though. Wonder if Ill end up using it a lot in my workflow
+        </p>
+        <div class="shareaholic-canvas" data-app="share_buttons" data-app-id="8057025" data-link="http://foorious.com/blog/2014/08/vagrant/" data-summary="" data-title="Vagrant">
+        </div>
+        <div class="shareaholic-canvas" data-app="recommendations" data-app-id="8057033" data-link="http://foorious.com/blog/2014/08/vagrant/" data-summary="" data-title="Vagrant">
+        </div>
+       </div>
+       <footer class="entry-footer">
+        <div class="entry-meta">
+         <p class="tags">
+          Tagged as:
+          <a href="http://foorious.com/blog/tag/deployment/" rel="tag">
+           deployment
+          </a>
+          ,
+          <a href="http://foorious.com/blog/tag/vagrant/" rel="tag">
+           Vagrant
+          </a>
+          ,
+          <a href="http://foorious.com/blog/tag/virtualization/" rel="tag">
+           virtualization
+          </a>
+          ,
+          <a href="http://foorious.com/blog/tag/vm/" rel="tag">
+           VM
+          </a>
+         </p>
+         <p class="categories">
+          Categorized in:
+          <a href="http://foorious.com/blog/category/developer/" rel="category tag">
+           Developer
+          </a>
+          ,
+          <a href="http://foorious.com/blog/category/ikn/" rel="category tag">
+           IKN
+          </a>
+          ,
+          <a href="http://foorious.com/blog/category/developer/sys-admin/" rel="category tag">
+           IT/Sys admin
+          </a>
+         </p>
+         <p class="date">
+          <span class="posted-on">
+           Posted on
+           <a href="http://foorious.com/blog/2014/08/vagrant/" rel="bookmark">
+            <time class="entry-date published" datetime="2014-08-14T22:57:19+00:00">
+             August 14, 2014
+            </time>
+            <time class="updated screen-reader-text" datetime="2014-09-11T01:16:49+00:00">
+             September 11, 2014
+            </time>
+           </a>
+          </span>
+          <span class="byline">
+           by
+           <span class="author vcard">
+            <a class="url fn n" href="http://foorious.com/blog/author/nbrogi/">
+             Niccol Brogi
+            </a>
+           </span>
+          </span>
+         </p>
+        </div>
+       </footer>
+       <!-- .entry-footer -->
+      </article>
+      <!-- #post-1279 -->
+      <div class="comments-area" id="comments">
+       <h2 class="comments-title">
+        One thought on 
+        <span>
+         Vagrant
+        </span>
+        
+       </h2>
+       <ol class="comment-list">
+        <li class="pingback even thread-even depth-1" id="comment-3729">
+         <div class="comment-body">
+          Pingback:
+          <a class="url" href="http://getstuffdone.xyz/2014/08/vagrant/" rel="external nofollow">
+           Vagrant : Get Stuff Done
+          </a>
+         </div>
+        </li>
+        <!-- #comment-## -->
+       </ol>
+       <!-- .comment-list -->
+       <div class="comment-respond" id="respond">
+        <h3 class="comment-reply-title" id="reply-title">
+         Leave a Reply
+         <small>
+          <a href="/blog/2014/08/vagrant/#respond" id="cancel-comment-reply-link" rel="nofollow" style="display:none;">
+           Cancel reply
+          </a>
+         </small>
+        </h3>
+        <form action="http://foorious.com/wp-comments-post.php" class="comment-form" id="commentform" method="post" novalidate="">
+         <p class="comment-notes">
+          <span id="email-notes">
+           Your email address will not be published.
+          </span>
+          Required fields are marked
+          <span class="required">
+           *
+          </span>
+         </p>
+         <p class="comment-form-author">
+          <label for="author">
+           Name
+           <span class="required">
+            *
+           </span>
+          </label>
+          <input aria-required="true" id="author" name="author" required="required" size="30" type="text" value=""/>
+         </p>
+         <p class="comment-form-email">
+          <label for="email">
+           Email
+           <span class="required">
+            *
+           </span>
+          </label>
+          <input aria-describedby="email-notes" aria-required="true" id="email" name="email" required="required" size="30" type="email" value=""/>
+         </p>
+         <p class="comment-form-url">
+          <label for="url">
+           Website
+          </label>
+          <input id="url" name="url" size="30" type="url" value=""/>
+         </p>
+         <p class="comment-form-comment">
+          <label for="comment">
+           Comment
+          </label>
+          <textarea aria-describedby="form-allowed-tags" aria-required="true" cols="45" id="comment" name="comment" required="required" rows="8">
+          </textarea>
+         </p>
+         <p class="form-allowed-tags" id="form-allowed-tags">
+          You may use these
+          <abbr title="HyperText Markup Language">
+           HTML
+          </abbr>
+          tags and attributes:
+          <code>
+           &lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt;
+          </code>
+         </p>
+         <p class="form-submit">
+          <input class="submit" id="submit" name="submit" type="submit" value="Post Comment"/>
+          <input id="comment_post_ID" name="comment_post_ID" type="hidden" value="1279"/>
+          <input id="comment_parent" name="comment_parent" type="hidden" value="0"/>
+         </p>
+         <p style="display: none;">
+          <input id="akismet_comment_nonce" name="akismet_comment_nonce" type="hidden" value="d2e0a03280"/>
+         </p>
+         <p style="display: none;">
+          <input id="ak_js" name="ak_js" type="hidden" value="84"/>
+         </p>
+        </form>
+       </div>
+       <!-- #respond -->
+       <script>
+        function hasClass( el, cls ) {
+				return ( ' ' + el.className + ' ' ).indexOf( ' ' + cls + ' ' ) &gt; -1;
+			}
+			
+			var target = document.querySelector( '.form-allowed-tags' );
+			
+			document.querySelector( 'textarea#comment' ).addEventListener( 'click', function() {
+				if ( ! hasClass( target, 'visible' ) ) {
+					target.className += ' ' + 'visible';
+				}
+			}, false );
+       </script>
+      </div>
+      <!-- #comments -->
+     </main>
+     <!-- #main -->
+     <nav class="navigation post-navigation" role="navigation">
+      <h1 class="screen-reader-text">
+       Post navigation
+      </h1>
+      <div class="nav-links">
+       <div class="nav-previous">
+        <a href="http://foorious.com/blog/2014/08/what-is-docker/" rel="prev">
+         <span class="meta-nav">
+          
+         </span>
+         What is Docker? (and why its cool)
+        </a>
+       </div>
+       <div class="nav-next">
+        <a href="http://foorious.com/blog/2014/08/what-is-soa/" rel="next">
+         What is SOA?
+         <span class="meta-nav">
+          
+         </span>
+        </a>
+       </div>
+      </div>
+      <!-- .nav-links -->
+     </nav>
+     <!-- .navigation -->
+    </div>
+    <!-- #primary -->
+   </div>
+   <!-- #content -->
+   <footer class="site-footer" id="colophon" role="contentinfo">
+    <div class="theme-info">
+     <p>
+      <a href="http://ScottHSmith.com/projects/decode/" rel="designer">
+       Decode
+      </a>
+      by Scott Smith
+     </p>
+    </div>
+    <!-- .theme-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <!-- #sidebar -->
+  <script src="http://foorious.com/wp-content/plugins/akismet/_inc/form.js?ver=3.1.2" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/wp-content/themes/decode/scripts/decode.js?ver=3.0.0" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/wp-includes/js/comment-reply.min.js?ver=4.2.2" type="text/javascript">
+  </script>
+  <script src="http://foorious.com/assets/wp-amd.js?ver=2311" type="text/javascript">
+  </script>
+ </body>
+</html>

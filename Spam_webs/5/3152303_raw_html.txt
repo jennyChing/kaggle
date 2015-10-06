@@ -1,0 +1,53 @@
+<html>
+ <head>
+ </head>
+ <body>
+  <div>
+   This page has moved, please wait while we redirect you to the new page.
+  </div>
+  <script type="text/javascript">
+   function $getQuerystring(key, default_) {
+            if (default_ == null) default_ = "";
+            key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regex = new RegExp("[\\?&amp;]" + key + "=([^&amp;#]*)", "i");
+            var qs = regex.exec(window.location.href);
+
+            if (qs == null)
+                return default_;
+            else
+                return qs[1];
+        }
+
+        function getIdFromFragment() {
+            var path = document.location.toString();
+
+            if (path.match('#')) {
+                var fileID = '#' + path.split('#')[1];
+
+                if (fileID.toLowerCase().indexOf("downloadid=") &gt; 0) {
+                    fileID = fileID.split("=");
+
+                    if (fileID[1].length &gt; 0)
+                        return fileID[1];
+                }
+            }
+            return null;
+        }
+
+        var url = 'http://windowsformsaero.codeplex.com/releases';
+        var releaseId = $getQuerystring('ReleaseId');
+        var releaseName = $getQuerystring('ReleaseName');
+        var downloadId = $getQuerystring("DownloadId");
+        if (!downloadId)
+            downloadId = getIdFromFragment();
+
+        if (releaseId)
+            url += '/view/' + releaseId;
+        else if (releaseName)
+            url += '?ReleaseName=' + releaseName;
+        if (downloadId != null)
+            url += '#DownloadId=' + downloadId;
+        window.location.href = url;
+  </script>
+ </body>
+</html>

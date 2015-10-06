@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html xmlns:cc="http://creativecommons.org/ns#">
+ <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# medium-com: http://ogp.me/ns/fb/medium-com#">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" user-scalable="no"/>
+  <title>
+   About size_t and ptrdiff_t  Medium
+  </title>
+  <link href="https://medium.com/@viva64articles/about-size_t-and-ptrdiff_t-da0d61577104" rel="canonical"/>
+  <meta content="About size_t and ptrdiff_t" name="title"/>
+  <meta content="always" name="referrer"/>
+  <meta content="The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they m" name="description"/>
+  <meta content="Medium" property="og:site_name"/>
+  <meta content="About size_t and ptrdiff_t" property="og:title"/>
+  <meta content="https://medium.com/@viva64articles/about-size_t-and-ptrdiff_t-da0d61577104" property="og:url"/>
+  <meta content="https://d262ilb51hltx0.cloudfront.net/max/800/0*GHsqccBkfnjmz1yH.png" property="og:image"/>
+  <meta content="542599432471018" property="fb:app_id"/>
+  <meta content="The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they m" property="og:description"/>
+  <meta content="@Medium" name="twitter:site"/>
+  <meta content="https://d262ilb51hltx0.cloudfront.net/max/800/0*GHsqccBkfnjmz1yH.png" name="twitter:image:src"/>
+  <link href="https://plus.google.com/103654360130207659246" rel="publisher"/>
+  <link href="https://medium.com/@viva64articles" rel="author"/>
+  <meta content="Love C&amp;C++" name="author"/>
+  <meta content="article" property="og:type"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="https://www.facebook.com/medium" property="article:publisher"/>
+  <meta content="https://medium.com/@viva64articles" property="article:author"/>
+  <meta content="noauto" property="fb:smart_publish:robots"/>
+  <meta content="2014-11-22T10:46:33.181Z" property="article:published_time"/>
+  <meta content="@nestortsu071" name="twitter:creator"/>
+  <meta content="Medium" name="twitter:app:name:iphone"/>
+  <meta content="828256236" name="twitter:app:id:iphone"/>
+  <meta content="medium:/p/da0d61577104" name="twitter:app:url:iphone"/>
+  <meta content="Medium" property="al:ios:app_name"/>
+  <meta content="828256236" property="al:ios:app_store_id"/>
+  <meta content="medium:/p/da0d61577104" property="al:ios:url"/>
+  <meta content="https://medium.com/@viva64articles/about-size_t-and-ptrdiff_t-da0d61577104" property="al:web:url"/>
+  <meta content="#000000" name="theme-color"/>
+  <link href="https://dnqgz544uhbo8.cloudfront.net/_/fp/css/main-base.z6B00ig_91n1ztoWRcwpGw.css" rel="stylesheet"/>
+  <script>
+   if (window.top !== window.self) window.top.location = window.self.location.href;var OB_startTime = new Date().getTime(); var OB_fontLoaded = 0; var OB_loadErrors = []; function _onerror(e) { OB_loadErrors.push(e) }; if (document.addEventListener) document.addEventListener("error", _onerror, true); else if (document.attachEvent) document.attachEvent("onerror", _onerror); function _asyncScript(u) {var d = document, f = d.getElementsByTagName("script")[0], s = d.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = u; f.parentNode.insertBefore(s, f);}function _asyncStyles(u) {var d = document, f = d.getElementsByTagName("script")[0], s = d.createElement("link"); s.rel = "stylesheet"; s.href = u; f.parentNode.insertBefore(s, f); return s}var _gaq = _gaq || []; _gaq.push(["_setAccount", "UA-24232453-2"]); _gaq.push(["_setDomainName", window.location.hostname]); _gaq.push(["_setAllowLinker", true]); _gaq.push(["_trackPageview"]); _asyncScript(("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js");(new Image()).src = "/_/stat?event=pixel.load&amp;origin=" + encodeURIComponent(location.origin);
+  </script>
+  <script>
+   _asyncStyles('https:\/\/dnqgz544uhbo8.cloudfront.net\/_\/fp\/css\/main-sprites.1B2M2Y8AsgTpgAmY7PhCfg.css')
+  </script>
+  <link href="/manifest.json" rel="manifest"/>
+  <script>
+   (function () {var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; document.write("&lt;style&gt;section.section-image--fullBleed {padding-top: " + Math.round(1.1 * height) + "px;}section.section-image--fullScreen, section.section-image--coverFade {min-height: " + height + "px; padding-top: " + Math.round(0.5 * height) + "px;}.u-sizeViewHeight100 {height: " + height + "px !important;}.u-sizeViewHeightMin100 {min-height: " + height + "px !important;}section.section-image--coverFade, .section-image--fullScreen &gt; .section-background, .section-image--coverFade &gt; .section-background, .section-image--fullBleed .section-backgroundImage, .section-image--fullScreen .section-backgroundImage, .section-image--coverFade .section-backgroundImage {height: " + height + "px;}.section-image--content &gt; .section-background, .section-image--content .section-backgroundImage, .section-aspectRatioViewportPlaceholder, .section-aspectRatioViewportCropPlaceholder {max-height: " + height + "px;}.section-image--fullBleed &gt; .section-background {height: " + Math.round(1.1 * height) + "px;}.section-aspectRatioViewportBottomSpacer, .section-aspectRatioViewportBottomPlaceholder {max-height: " + Math.round(0.5 * height) + "px;}&lt;/style&gt;");})()
+  </script>
+  <!--[if lt IE 9]&gt;&lt;script charset="UTF-8" src="https://dnqgz544uhbo8.cloudfront.net/_/fp/js/shiv.RI2ePTZ5gFmMgLzG5bEVAA.js"&gt;&lt;/script&gt;&lt;![endif]-->
+  <link href="https://dnqgz544uhbo8.cloudfront.net/_/fp/icons/favicon.n7eHNqdWyHhbTLN2-3a-6g.ico" rel="shortcut icon"/>
+  <link href="/apple-touch-icon-precomposed-152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/>
+  <link href="/apple-touch-icon-precomposed-120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/>
+  <link href="/apple-touch-icon-precomposed-76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/>
+  <link href="/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed"/>
+ </head>
+ <body class=" template-flex-article js-loading " itemscope="" itemtype="http://schema.org/Article">
+  <div class="site-main" id="container">
+   <div class="butterBar butterBar--error">
+   </div>
+   <div class="surface">
+    <div class="screenContent" id="prerendered">
+     <canvas class="canvas-renderer">
+     </canvas>
+     <nav class="metabar u-clearfix js-metabar metabar--top metabar--postArticle ">
+      <div class="metabar-block metabar-left u-floatLeft">
+       <a class="siteNav-logo" data-log-event="home" href="https://medium.com/">
+        <span class="icon icon--logoM">
+        </span>
+        <span class="u-textScreenReader">
+         Homepage
+        </span>
+       </a>
+      </div>
+      <div class="metabar-block metabar-center">
+       <span class="postCollectionManagement js-postCollectionManagement postMetaInline u-hide u-xs-hide">
+        <button class="button button--withChrome button--withIcon button--withIconAndLabel button--withIconRight" data-action="show-editor-request-to-add-panel">
+         <span class="button-label ">
+          Request story
+         </span>
+         <span class="icon is-pulledRight icon--arrowDownThin">
+         </span>
+        </button>
+       </span>
+      </div>
+      <div class="metabar-block metabar-right u-floatRight">
+       <div class="buttonSet">
+       </div>
+       <div class="inputGroup u-xs-hide metabar-predictiveSearch">
+        <button aria-label="Click to start typing a search term" class="button button--chromeless button--inline button--withIcon is-inSiteNavBar button--withSvgIcon" data-action="focus-search-input" title="Click to start typing a search term">
+         <svg class="svgIcon svgIcon--search svgIcon-size--25px" height="25" viewbox="0 0 25 25" width="25">
+          <use xlink:href="#svg-search25px">
+          </use>
+         </svg>
+        </button>
+        <input class="js-predictiveSearchInput textInput textInput--rounded textInput--dark" placeholder="Search Medium" type="search"/>
+       </div>
+       <div class="buttonSet">
+        <button aria-label="Search" class="button button--circle button--withChrome button--withIcon is-inSiteNavBar u-showOnMobile button--withSvgIcon" data-action="open-search" title="Search">
+         <svg class="svgIcon svgIcon--search svgIcon-size--25px" height="25" viewbox="0 0 25 25" width="25">
+          <use xlink:href="#svg-search25px">
+          </use>
+         </svg>
+        </button>
+        <a class="button button--primary button--withChrome" data-action="sign-in-prompt" data-action-source="nav_signup" data-redirect="https://medium.com:443/@viva64articles/about-size_t-and-ptrdiff_t-da0d61577104" href="https://medium.com/m/signin?redirect=https%3A%2F%2Fmedium.com%3A443%2F%40viva64articles%2Fabout-size_t-and-ptrdiff_t-da0d61577104">
+         Sign in / Sign up
+        </a>
+       </div>
+      </div>
+     </nav>
+     <div class="metabar u-clearfix metabar--bottom metabar--bordered metabar--social metabar--postSecondaryBar js-postSecondaryBar">
+      <div class="metabar-block metabar-left u-floatLeft">
+       <span class="postMetaInline postMetaInline--avatar">
+        <a aria-label="Go to the profile of Love C&amp;C++" class="link link--secondary avatar" dir="auto" href="https://medium.com/@viva64articles" title="Go to the profile of Love C&amp;C++">
+         <img alt="Go to the profile of Love C&amp;C++" class="avatar-image avatar-image--icon" src="https://d262ilb51hltx0.cloudfront.net/fit/c/32/32/0*knFblRQBPBlEY5uu.jpeg"/>
+        </a>
+       </span>
+       <span class="postMetaInline postMetaInline--authorDateline">
+        <a aria-label="Go to the profile of Love C&amp;C++" class="link link--secondary" dir="auto" href="https://medium.com/@viva64articles" title="Go to the profile of Love C&amp;C++">
+         Love C&amp;C++
+        </a>
+        <span class="u-showOnTabletMini">
+         <br/>
+        </span>
+        <span class="u-noWrap">
+         <span class="u-xs-hide">
+          on
+         </span>
+         <time class="post-date">
+          Nov 22, 2014
+         </time>
+         <span class="middotDivider">
+         </span>
+         9 min
+        </span>
+       </span>
+      </div>
+      <div class="metabar-block metabar-right u-floatRight">
+       <div class="voteWidget voteWidget--secondaryBar js-voteWidgetSecondaryBar is-iconVisible">
+       </div>
+       <div class="metabar-shareActions">
+        <button aria-label="Recommend to share this article with your followers and let the author know you liked it" class="button button--chromeless button--social button--recommend js-recommendButton" data-action="sign-in-prompt" data-action-source="metabar_recommend" data-redirect="https://medium.com/_/vote/p/da0d61577104" data-requires-token="true" data-sign-in-action="upvote" title="Recommend to share this article with your followers and let the author know you liked it">
+         <span class="icon icon--heart2Outline">
+         </span>
+         <span class="icon icon--heart2">
+         </span>
+        </button>
+        <button aria-label="Bookmark this story to read later" class="button button--chromeless button--social js-bookmarkButton" data-action="sign-in-prompt" data-action-source="metabar_bookmark" data-redirect="https://medium.com/_/bookmark/p/da0d61577104" data-requires-token="true" data-sign-in-action="add-to-bookmarks" title="Bookmark this story to read later">
+         <span class="icon icon--readingList2outline">
+         </span>
+         <span class="icon icon--readingList2">
+         </span>
+        </button>
+        <button aria-label="Share this story on Twitter, Facebook, or email" class="button button--chromeless u-showOnMobile button--withIcon button--social" data-action="toggle-share-drawer" data-action-source="metabar_share_mobile" data-action-value="da0d61577104" title="Share this story on Twitter, Facebook, or email">
+         <span class="icon icon--share2Outline">
+         </span>
+        </button>
+        <button aria-label="Share this story on Twitter, Facebook, or email" class="button button--chromeless u-xs-hide button--withIcon button--social" data-action="show-share-popover" data-action-source="metabar_share" data-action-value="da0d61577104" title="Share this story on Twitter, Facebook, or email">
+         <span class="icon icon--share2Outline">
+         </span>
+        </button>
+       </div>
+       <div class="metabar-readNext js-metabarReadNext">
+        <button class="button button--chromeless">
+         Next story
+        </button>
+       </div>
+      </div>
+     </div>
+     <div class="metabar u-clearfix metabar--bottom metabar--social metabar--peekaboo js-persistentShareFooter">
+      <div class="metabar-block metabar-left u-floatLeft">
+      </div>
+      <div class="metabar-block metabar-center">
+       <div class="metabar-readNext metabar-readNext--bottom js-metabarReadNextMobile">
+        <button class="button button--chromeless">
+         Next story
+        </button>
+       </div>
+       <div class="metabar-shareActions">
+        <button aria-label="Recommend to share this article with your followers and let the author know you liked it" class="button button--chromeless button--social button--recommend js-recommendButton" data-action="sign-in-prompt" data-action-source="metabar_recommend" data-redirect="https://medium.com/_/vote/p/da0d61577104" data-requires-token="true" data-sign-in-action="upvote" title="Recommend to share this article with your followers and let the author know you liked it">
+         <span class="icon icon--heart2Outline">
+         </span>
+         <span class="icon icon--heart2">
+         </span>
+        </button>
+        <button aria-label="Bookmark this story to read later" class="button button--chromeless button--social js-bookmarkButton" data-action="sign-in-prompt" data-action-source="metabar_bookmark" data-redirect="https://medium.com/_/bookmark/p/da0d61577104" data-requires-token="true" data-sign-in-action="add-to-bookmarks" title="Bookmark this story to read later">
+         <span class="icon icon--readingList2outline">
+         </span>
+         <span class="icon icon--readingList2">
+         </span>
+        </button>
+        <button aria-label="Share this story on Twitter, Facebook, or email" class="button button--chromeless u-showOnMobile button--withIcon button--social" data-action="toggle-share-drawer" data-action-source="metabar_share_mobile" data-action-value="da0d61577104" title="Share this story on Twitter, Facebook, or email">
+         <span class="icon icon--share2Outline">
+         </span>
+        </button>
+        <button aria-label="Share this story on Twitter, Facebook, or email" class="button button--chromeless u-xs-hide button--withIcon button--social" data-action="show-share-popover" data-action-source="metabar_share" data-action-value="da0d61577104" title="Share this story on Twitter, Facebook, or email">
+         <span class="icon icon--share2Outline">
+         </span>
+        </button>
+       </div>
+       <div class="metabar-drawer">
+        <div class="metabar-drawerWarning">
+         The author chose to make this story unlisted, which means only people with a link can see it. Are you sure you want to share it?
+         <button class="button button--chromeless" data-action="ignore-share-drawer-warning">
+          Yes, show me sharing options
+         </button>
+        </div>
+        <div class="metabar-drawerContent">
+         <h4 class="metabar-drawerTitle">
+          About size_t and ptrdiff_t
+         </h4>
+         <ul class="list">
+          <li>
+           <button class="button button--chromeless" data-action="share-on-twitter" data-action-source="metabar_mobile" data-action-value="da0d61577104">
+            <span class="icon icon--twitter">
+            </span>
+            Share on Twitter
+           </button>
+          </li>
+          <li>
+           <button class="button button--chromeless" data-action="share-on-facebook" data-action-source="metabar_mobile" data-action-value="da0d61577104">
+            <span class="icon icon--facebook">
+            </span>
+            Share on Facebook
+           </button>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="logo-container">
+     </div>
+     <article class="u-sizeViewHeightMin100 postArticle postArticle--full is-languageTier1" data-allow-notes="true" lang="en">
+      <header class="postArticle-header container u-size740">
+      </header>
+      <div class="postArticle-content js-postField js-notesSource" role="main">
+       <section class=" section--body section--first section--last" name="eede">
+        <div class="section-divider layoutSingleColumn">
+         <hr class="section-divider"/>
+        </div>
+        <div class="section-content">
+         <div class="section-inner layoutSingleColumn">
+          <h2 class="graf--h2 graf--first" id="4118" name="4118">
+           About size_t and ptrdiff_t
+          </h2>
+          <p class="graf--p" id="16eb" name="16eb">
+           The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The article will be interesting for those developers who begin creation of 64-bit applications where use of size_t and ptrdiff_t types provides high performance, possibility to operate large data sizes and portability between different platforms.
+          </p>
+          <h3 class="graf--h3" id="d87b" name="d87b">
+           Introduction
+          </h3>
+          <p class="graf--p" id="29fe" name="29fe">
+           Before we begin I would like to notice that the definitions and recommendations given in the article refer to the most popular architectures for the moment (
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0060/" href="http://www.viva64.com/en/t/0060/" rel="nofollow">
+            IA-3
+           </a>
+           2,
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0022/" href="http://www.viva64.com/en/t/0022/" rel="nofollow">
+            Intel 6
+           </a>
+           4,
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0017/" href="http://www.viva64.com/en/t/0017/" rel="nofollow">
+            IA-6
+           </a>
+           4) and may not fully apply to some exotic architectures.
+          </p>
+          <p class="graf--p" id="979a" name="979a">
+           The types size_t and ptrdiff_t were created to perform correct
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0005/" href="http://www.viva64.com/en/t/0005/" rel="nofollow">
+            address arithmetic
+           </a>
+           . It had been assumed for a long time that the size of int coincides with the size of a computer word (microprocessors capacity) and it can be used as indexes to store sizes of objects or pointers. Correspondingly, address arithmetic was built with the use of int and unsigned types as well. int type is used in most training materials on programming in C and C++ in the loops bodies and as indexes. The following example is nearly a canon:
+          </p>
+          <pre class="graf--pre" id="330f" name="330f">
+           for (int i = 0; i &lt; n; i++)
+           <br/>
+           a[i] = 0;
+          </pre>
+          <p class="graf--p" id="abf4" name="abf4">
+           As microprocessors developed over time and their capacity increased, it became irrational to further increase int types sizes. There are a lot of reasons for that: economy of memory used, maximum portability etc. As a result, several data model appeared declaring the relations of C/C++ base types. Table N1 shows the main
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0012/" href="http://www.viva64.com/en/t/0012/" rel="nofollow">
+            data models
+           </a>
+           and lists the most popular systems using them.
+          </p>
+          <figure class="graf--figure" id="8ff7" name="8ff7">
+           <div class="aspectRatioPlaceholder is-locked" style="max-width: 580px; max-height: 271px;">
+            <div class="aspect-ratio-fill" style="padding-bottom: 46.7%;">
+            </div>
+            <img class="graf-image" data-height="271" data-image-id="0*GHsqccBkfnjmz1yH.png" data-width="580" src="https://d262ilb51hltx0.cloudfront.net/max/800/0*GHsqccBkfnjmz1yH.png"/>
+           </div>
+          </figure>
+          <p class="graf--p" data-align="center" id="83a1" name="83a1">
+           <em class="markup--em markup--p-em">
+            Table N1. Data models
+           </em>
+          </p>
+          <p class="graf--p" id="c5ed" name="c5ed">
+           As you can see from the table, it is not so easy to choose a variables type to store a pointer or an objects size. To find the smartest solution of this problem size _t and ptrdiff_t types were created. They are guaranteed to be used for address arithmetic. And now the following code must become a canon:
+          </p>
+          <pre class="graf--pre" id="25e2" name="25e2">
+           for (ptrdiff_t i = 0; i &lt; n; i++)
+           <br/>
+           a[i] = 0;
+          </pre>
+          <p class="graf--p" id="f870" name="f870">
+           It is this code that can provide safety, portability and good performance. The rest of the article explains why.
+          </p>
+          <h3 class="graf--h3" id="8460" name="8460">
+           size_t type
+          </h3>
+          <p class="graf--p" id="0da6" name="0da6">
+           size_t type is a base unsigned integer type of C/C++ language. It is the type of the result returned by sizeof operator. The types size is chosen so that it could store the maximum size of a theoretically possible array of any type. On a 32-bit system size_t will take 32 bits, on a 64-bit one 64 bits. In other words, a variable of size_t type can safely store a pointer. The exception is pointers to class functions but this is a special case. Although size_t can store a pointer, it is better to use another unsinged integer type
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0050/" href="http://www.viva64.com/en/t/0050/" rel="nofollow">
+            uintptr_t
+           </a>
+           for that purpose (its name reflects its capability). The types size_t and uintptr_t are synonyms. size_t type is usually used for loop counters, array indexing and address arithmetic.
+          </p>
+          <p class="graf--p" id="136f" name="136f">
+           The maximum possible value of size_t type is constant SIZE_MAX.
+          </p>
+          <h3 class="graf--h3" id="e27b" name="e27b">
+           ptrdiff_t type
+          </h3>
+          <p class="graf--p" id="3a66" name="3a66">
+           ptrdiff_t type is a base signed integer type of C/C++ language. The types size is chosen so that it could store the maximum size of a theoretically possible array of any type. On a 32-bit system ptrdiff_t will take 32 bits, on a 64-bit one 64 bits. Like in size_t, ptrdiff_t can safely store a pointer except for a pointer to a class function. Also, ptrdiff_t is the type of the result of an expression where one pointer is subtracted from the other (ptr1-ptr2). ptrdiff_t type is usually used for loop counters, array indexing, size storage and address arithmetic. ptrdiff_t type has its synonym
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/t/0023/" href="http://www.viva64.com/en/t/0023/" rel="nofollow">
+            intptr_t
+           </a>
+           whose name indicates more clearly that it can store a pointer.
+          </p>
+          <h3 class="graf--h3" id="a9cc" name="a9cc">
+           Portability of size_t and ptrdiff_t
+          </h3>
+          <p class="graf--p" id="fa94" name="fa94">
+           The types size_t and ptrdiff_t enable you to write well-portable code. The code created with the use of size_t and ptrdiff_t types is easy-portable. The size of size_t and ptrdiff_t always coincide with the pointers size. Because of this, it is these types that should be used as indexes for large arrays, for storage of pointers and pointer arithmetic.
+          </p>
+          <p class="graf--p" id="2d6b" name="2d6b">
+           Linux-application developers often use long type for these purposes. Within the framework of 32-bit and 64-bit data models accepted in Linux, this really works. long types size coincides with the pointers size. But this code is incompatible with Windows data model and, consequently, you cannot consider it easy-portable. A more correct solution is to use types size_t and ptrdiff_t.
+          </p>
+          <p class="graf--p" id="2869" name="2869">
+           As an alternative to size_t and ptrdiff_t, Windows-developers can use types DWORD_PTR, SIZE_T, SSIZE_T etc. But still it is desirable to confine to size_t and ptrdiff_t types.
+          </p>
+          <h3 class="graf--h3" id="7b73" name="7b73">
+           Safety of ptrdiff_t and size_t types in address arithmetic
+          </h3>
+          <p class="graf--p" id="b6d7" name="b6d7">
+           Address arithmetic issues have been occurring very frequently since the beginning of adaptation of 64-bit systems. Most problems of porting 32-bit applications to 64-bit systems relate to the use of such types as int and long which are unsuitable for working with pointers and type arrays. The problems of porting applications to 64-bit systems are not limited by this, but most errors relate to address arithmetic and operation with indexes.
+          </p>
+          <p class="graf--p" id="0ae2" name="0ae2">
+           Here is a simplest example:
+          </p>
+          <pre class="graf--pre" id="009d" name="009d">
+           size_t n = ...;
+           <br/>
+           for (unsigned i = 0; i &lt; n; i++)
+           <br/>
+           a[i] = 0;
+          </pre>
+          <p class="graf--p" id="c985" name="c985">
+           If we deal with the array consisting of more than UINT_MAX items, this code is incorrect. It is not easy to detect an error and predict the behavior of this code. The debug-version will hung but hardly will anyone process gigabytes of data in the debug-version. And the release-version, depending on the optimization settings and codes peculiarities, can either hung or suddenly fill all the array cells correctly producing thus an illusion of correct operation. As a result, there appear floating errors in the program occurring and vanishing with a subtlest change of the code. To learn more about such phantom errors and their dangerous consequences see the article 
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/a/0043/" href="http://www.viva64.com/en/a/0043/" rel="nofollow">
+            A 64-bit horse that can count
+           </a>
+            [1].
+          </p>
+          <p class="graf--p" id="85f1" name="85f1">
+           Another example of one more sleeping error which occurs at a particular combination of the input data (values of A and B variable):
+          </p>
+          <pre class="graf--pre" id="cf81" name="cf81">
+           int A = -2;
+           <br/>
+           unsigned B = 1;
+           <br/>
+           int array[5] = { 1, 2, 3, 4, 5 };
+           <br/>
+           int *ptr = array + 3;
+           <br/>
+           ptr = ptr + (A + B); //Error
+           <br/>
+           printf(%i\n, *ptr);
+          </pre>
+          <p class="graf--p" id="8c39" name="8c39">
+           This code will be correctly performed in the 32-bit version and print number 3. After compilation in 64-bit mode there will be a fail when executing the code. Lets examine the sequence of code execution and the cause of the error:
+          </p>
+          <ul class="postList">
+           <li class="graf--li" id="2a74" name="2a74">
+            A variable of int type is cast into unsigned type;
+           </li>
+           <li class="graf--li" id="690d" name="690d">
+            A and B are summed. As a result, we get 0xFFFFFFFF value of unsigned type;
+           </li>
+           <li class="graf--li graf--startsWithDoubleQuote" id="74c3" name="74c3">
+            ptr + 0xFFFFFFFFu expression is calculated. The result depends on the pointers size on the current platform. In the 32-bit program, the expression will be equal to ptr1" and we will successfully print number 3. In the 64-bit program, 0xFFFFFFFFu value will be added to the pointer and as a result, the pointer will be far beyond the arrays limits.
+           </li>
+          </ul>
+          <p class="graf--p" id="702d" name="702d">
+           Such errors can be easily avoided by using size_t or ptrdiff_t types. In the first case, if the type of i variable is size_t, there will be no infinite loop. In the second case, if we use size_t or ptrdiff_t types for A and B variable, we will correctly print number 3".
+          </p>
+          <p class="graf--p" id="1c9b" name="1c9b">
+           Lets formulate a guideline: wherever you deal with pointers or arrays you should use size_t and ptrdiff_t types.
+          </p>
+          <p class="graf--p" id="f302" name="f302">
+           To learn more about the errors you can avoid by using size_t and ptrdiff_t types, see the following articles:
+          </p>
+          <ul class="postList">
+           <li class="graf--li" id="a9bb" name="a9bb">
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0004/" href="http://www.viva64.com/en/a/0004/" rel="nofollow">
+             20 issues of porting C++ code on the 64-bit platform
+            </a>
+            [2];
+           </li>
+           <li class="graf--li" id="709c" name="709c">
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0046/" href="http://www.viva64.com/en/a/0046/" rel="nofollow">
+             Safety of 64-bit code
+            </a>
+            [3];
+           </li>
+           <li class="graf--li" id="1e70" name="1e70">
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0012/" href="http://www.viva64.com/en/a/0012/" rel="nofollow">
+             Traps detection during migration of C and C++ code to 64-bit Windows
+            </a>
+            [4].
+           </li>
+          </ul>
+          <h3 class="graf--h3" id="7076" name="7076">
+           Performance of code using ptrdiff_t and size_t
+          </h3>
+          <p class="graf--p" id="17d2" name="17d2">
+           Besides code safety, the use of ptrdiff_t and size_t types in address arithmetic can give you an additional gain of performance. For example, using int type as an index, the formers capacity being different from that of the pointer, will lead to that the binary code will contain additional data conversion commands. We speak about 64-bit code where pointers size is 64 bits and int types size remains 32 bits.
+          </p>
+          <p class="graf--p" id="1c8c" name="1c8c">
+           It is a difficult task to give a brief example of size_t types advantage over unsigned type. To be objective we should use the compilers optimizing abilities. And the two variants of the optimized code frequently become too different to show this very difference. We managed to create something like a simple example only with a sixth try. And still the example is not ideal because it demonstrates not those unnecessary data type conversions we spoke above, but that the compiler can build a more efficient code when using size_t type. Lets consider a program code arranging an arrays items in the inverse order:
+          </p>
+          <pre class="graf--pre" id="abb0" name="abb0">
+           unsigned arraySize;
+           <br/>
+           ...
+           <br/>
+           for (unsigned i = 0; i &lt; arraySize / 2; i++)
+           <br/>
+           {
+           <br/>
+           float value = array[i];
+           <br/>
+           array[i] = array[arraySizei1];
+           <br/>
+           array[arraySizei1] = value;
+           <br/>
+           }
+          </pre>
+          <p class="graf--p" id="e5a5" name="e5a5">
+           In the example, arraySize and i variables have unsigned type. This type can be easily replaced with size_t type, and now compare a small fragment of assembler code shown on Figure 1.
+          </p>
+          <figure class="graf--figure" id="c3bf" name="c3bf">
+           <div class="aspectRatioPlaceholder is-locked" style="max-width: 580px; max-height: 168px;">
+            <div class="aspect-ratio-fill" style="padding-bottom: 28.999999999999996%;">
+            </div>
+            <img class="graf-image" data-height="168" data-image-id="0*ZOfVlegMNb-XsTar.png" data-width="580" src="https://d262ilb51hltx0.cloudfront.net/max/800/0*ZOfVlegMNb-XsTar.png"/>
+           </div>
+          </figure>
+          <p class="graf--p" data-align="center" id="108a" name="108a">
+           <em class="markup--em markup--p-em">
+            Figure N1.Comparison of 64-bit assembler code when using unsigned and size_t types
+           </em>
+          </p>
+          <p class="graf--p" id="cefc" name="cefc">
+           The compiler managed to build a more laconic code when using 64-bit registers. I am not affirming that the code created with the use of unsigned type will operate slower than the code using size_t. It is a very difficult task to compare speeds of code execution on modern processors. But from the example you can see that when the compiler operates arrays using 64-bit types it can build a shorter and faster code.
+          </p>
+          <p class="graf--p" id="9d79" name="9d79">
+           Proceeding from my own experience I can say that reasonable replacement of int and unsigned types with ptrdiff_t and size_t can give you an additional performance gain up to 10% on a 64-bit system. You can see an example of speed increase when using ptrdiff_t and size_t types in the fourth section of the article 
+           <a class="markup--anchor markup--p-anchor" data-href="http://www.viva64.com/en/a/0018/" href="http://www.viva64.com/en/a/0018/" rel="nofollow">
+            Development of Resource-intensive Applications in Visual C++
+           </a>
+            [5].
+          </p>
+          <h3 class="graf--h3" id="738f" name="738f">
+           Code refactoring with the purpose of moving to ptrdiff_t and size_t
+          </h3>
+          <p class="graf--p" id="9e17" name="9e17">
+           As the reader can see, using ptrdiff_t and size_t types gives some advantages for 64-bit programs. However, it is not a good way out to replace all unsigned types with size_t ones. Firstly, it does not guarantee correct operation of a program on a 64-bit system. Secondly, it is most likely that due to this replacement, new errors will appear data format compatibility will be violated and so on. You should not forget that after this replacement the memory size needed for the program will greatly increase as well. And increase of the necessary memory size will slow down the applications work for cache will store fewer objects being dealt with.
+          </p>
+          <p class="graf--p" id="67ef" name="67ef">
+           Consequently, introduction of ptrdiff_t and size_t types into old code is a task of gradual refactoring demanding a great amount of time. In fact, you should look through the whole code and make the necessary alterations. Actually, this approach is too expensive and inefficient. There are two possible variants:
+          </p>
+          <ul class="postList">
+           <li class="graf--li" id="d6a3" name="d6a3">
+            To use specialized tools like Viva64 included into
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/pvs-studio/" href="http://www.viva64.com/en/pvs-studio/" rel="nofollow">
+             PVS-Studio
+            </a>
+            . Viva64 is a static code analyzer detecting sections where it is reasonable to replace data types for the program to become correct and work efficiently on 64-bit systems. To learn more, see 
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/d/0011/" href="http://www.viva64.com/en/d/0011/" rel="nofollow">
+             PVS-Studio Tutorial
+            </a>
+             [6].
+           </li>
+           <li class="graf--li" id="a5bc" name="a5bc">
+            If you do not plan to adapt a 32-bit program for 64-bit systems, there is no sense in data types refactoring. A 32-bit program will not benefit in any way from using ptrdiff_t and size_t types.
+           </li>
+          </ul>
+          <h3 class="graf--h3" id="7375" name="7375">
+           References
+          </h3>
+          <ul class="postList">
+           <li class="graf--li" id="608c" name="608c">
+            Andrey Karpov. A 64-bit horse that can count.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0043/" href="http://www.viva64.com/en/a/0043/" rel="nofollow">
+             http://www.viva64.com/en/a/0043/
+            </a>
+           </li>
+           <li class="graf--li" id="41dd" name="41dd">
+            Andrey Karpov, Evgeniy Ryzhkov. 20 issues of porting C++ code on the 64-bit platform.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0004/" href="http://www.viva64.com/en/a/0004/" rel="nofollow">
+             http://www.viva64.com/en/a/0004/
+            </a>
+           </li>
+           <li class="graf--li" id="1347" name="1347">
+            Andrey Karpov. Safety of 64-bit code.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0046/" href="http://www.viva64.com/en/a/0046/" rel="nofollow">
+             http://www.viva64.com/en/a/0046/
+            </a>
+           </li>
+           <li class="graf--li" id="1144" name="1144">
+            Andrey Karpov, Evgeniy Ryzhkov. Traps detection during migration of C and C++ code to 64-bit Windows.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0012/" href="http://www.viva64.com/en/a/0012/" rel="nofollow">
+             http://www.viva64.com/en/a/0012/
+            </a>
+           </li>
+           <li class="graf--li" id="6c24" name="6c24">
+            Andrey Karpov, Evgeniy Ryzhkov. Development of Resource-intensive Applications in Visual C++.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/a/0018/" href="http://www.viva64.com/en/a/0018/" rel="nofollow">
+             http://www.viva64.com/en/a/0018/
+            </a>
+           </li>
+           <li class="graf--li graf--last" id="fa74" name="fa74">
+            Evgeniy Ryzhkov. PVS-Studio Tutorial.
+            <a class="markup--anchor markup--li-anchor" data-href="http://www.viva64.com/en/d/0011/" href="http://www.viva64.com/en/d/0011/" rel="nofollow">
+             http://www.viva64.com/en/d/0011/
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </section>
+      </div>
+      <footer class="postArticle-footer">
+       <div class="postFooter--simple2 supplementalPostContent js-postFooter">
+        <div class="container u-size740">
+         <div class="row">
+          <div class="col u-xs-size12of12">
+           <div class="u-clearfix postFooter-actions--simple2">
+            <div class="u-floatLeft">
+             <button aria-label="Recommend to share this article with your followers and let the author know you liked it" class="button button--primary button--withChrome button--withIcon button--withIconAndLabel button--recommend js-recommendButton" data-action="sign-in-prompt" data-action-source="footer_recommend" data-redirect="https://medium.com/_/vote/p/da0d61577104" data-requires-token="true" data-sign-in-action="upvote" title="Recommend to share this article with your followers and let the author know you liked it">
+              <span class="icon icon--heart2Outline75 button-defaultState">
+              </span>
+              <span class="icon icon--heart2 button-activeState">
+              </span>
+              <span class="button-label button-defaultState">
+               Recommend
+              </span>
+              <span class="button-label button-activeState">
+               Recommended
+              </span>
+             </button>
+             <div class="voteWidget voteWidget--footer js-voteWidget">
+             </div>
+            </div>
+            <div class="u-floatRight">
+             <div class="buttonSet">
+              <button aria-label="Bookmark this story to read later" class="button button--vertical button--withChrome button--withIcon button--withIconAndLabel button--bookmark js-bookmarkButton" data-action="sign-in-prompt" data-action-source="footer_bookmark" data-redirect="/_/bookmark/p/da0d61577104" data-requires-token="true" data-sign-in-action="add-to-bookmarks" title="Bookmark this story to read later">
+               <span class="icon icon--readingList2outline button-defaultState">
+               </span>
+               <span class="icon icon--readingList2 button-activeState">
+               </span>
+               <span class="button-label button-defaultState">
+                Bookmark
+               </span>
+               <span class="button-label button-activeState">
+                Bookmarked
+               </span>
+              </button>
+              <button aria-label="Share this story on Twitter, Facebook, or email" class="button button--vertical button--withChrome button--withIcon button--withIconAndLabel button--share" data-action="show-share-popover" data-action-source="footer_share" data-action-value="da0d61577104" title="Share this story on Twitter, Facebook, or email">
+               <span class="icon icon--share2Outline">
+               </span>
+               <span class="button-label ">
+                Share
+               </span>
+              </button>
+              <button aria-label="More actions" class="button button--vertical u-xs-hide button--withChrome button--withIcon button--withIconAndLabel button--more" data-action="more-actions" title="More actions">
+               <span class="icon icon--arrowDownThin">
+               </span>
+               <span class="button-label ">
+                More
+               </span>
+              </button>
+             </div>
+            </div>
+           </div>
+           <div class="postFooter-mobileRecommendNote u-showOnMobile js-recommendNote">
+           </div>
+          </div>
+         </div>
+         <div class="row">
+          <div class="col u-xs-size12of12 postFooter-tags infoCard js-postTags">
+          </div>
+         </div>
+        </div>
+        <div class="container u-size740">
+         <div class="row postFooter-info2">
+          <div class="col u-xs-size12of12">
+           <hr class="postFooter-infoDivider"/>
+          </div>
+         </div>
+         <div class="row js-postFooterInfo">
+          <div class="col u-xs-size12of12">
+           <li class="card card-user">
+            <div class="u-floatRight">
+             <span class="followState buttonSet-inner js-followState" data-user-id="67b72a9416b0">
+              <button class="button button--small u-noUserSelect button--withChrome button--withHover button--unblock js-unblockButton" data-action="sign-in-prompt" data-action-source="footer_card" data-requires-token="true" data-sign-in-action="toggle-block-user">
+               <span class="button-label button-defaultState">
+                Blocked
+               </span>
+               <span class="button-label button-hoverState">
+                Unblock
+               </span>
+              </button>
+              <button class="button button--primary button--small u-noUserSelect button--withChrome button--follow js-followButton" data-action="sign-in-prompt" data-action-source="footer_card_follow" data-redirect="https://medium.com/_/subscribe/user/67b72a9416b0" data-requires-token="true" data-sign-in-action="toggle-subscribe-user">
+               <span class="button-label button-defaultState">
+                Follow
+               </span>
+               <span class="button-label button-activeState">
+                Following
+               </span>
+              </button>
+             </span>
+            </div>
+            <div class="card-imageWrapper ">
+             <a aria-label="Go to the profile of Love C&amp;C++" class="link avatar" data-action-source="footer_card" dir="auto" href="https://medium.com/@viva64articles?source=footer_card" title="Go to the profile of Love C&amp;C++">
+              <img alt="Go to the profile of Love C&amp;C++" class="avatar-image avatar-image--small" src="https://d262ilb51hltx0.cloudfront.net/fit/c/60/60/0*knFblRQBPBlEY5uu.jpeg"/>
+             </a>
+            </div>
+            <div class="card-content">
+             <h3 class="card-name">
+              <a aria-label="Go to the profile of Love C&amp;C++" class="link link--primary" dir="auto" href="https://medium.com/@viva64articles" property="cc:attributionName" rel="author cc:attributionUrl" title="Go to the profile of Love C&amp;C++">
+               Love C&amp;C++
+              </a>
+             </h3>
+             <p class="card-description">
+              Interested in programming C++, C#
+             </p>
+            </div>
+           </li>
+          </div>
+         </div>
+         <div class="row">
+          <div class="col u-xs-size12of12">
+           <div class="postFooter-additionalPostInfo postFooter-additionalPostInfo--light">
+            <div class="postMeta-acknowledgments">
+             Published
+             <span class="u-noWrap">
+              <span class="u-xs-hide">
+               on
+              </span>
+              <time class="post-date">
+               Nov 22, 2014
+              </time>
+             </span>
+             .
+             <a class="link" data-tooltip="Except where otherwise noted, all rights to this work are reserved by the author." href="//medium.com/policy/9db0094a1e0f" rel="license" target="_blank">
+              All rights reserved
+             </a>
+             by the author.
+             <span class="postMeta-licenseIcons">
+             </span>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="responsesWrapper supplementalPostContent js-responsesWrapper">
+       </div>
+       <div class="post-footer supplementalPostContent js-readNext">
+       </div>
+      </footer>
+     </article>
+     <div class="promoCardWrapper js-promoCardWrapper">
+      <div class="promoCard">
+       <button class="button button--chromeless button--close" data-action="popup-dismiss">
+        
+       </button>
+       <div class="promoCard-header">
+        Dont miss Love C&amp;C++s next story
+       </div>
+       <div class="u-floatRight">
+        <span class="followState buttonSet-inner js-followState" data-user-id="67b72a9416b0">
+         <button class="button u-noUserSelect button--withChrome button--withHover button--unblock js-unblockButton" data-action="sign-in-prompt" data-action-source="user_follow_popup" data-requires-token="true" data-sign-in-action="toggle-block-user">
+          <span class="button-label button-defaultState">
+           Blocked
+          </span>
+          <span class="button-label button-hoverState">
+           Unblock
+          </span>
+         </button>
+         <button class="button button--primary u-noUserSelect button--withChrome button--follow js-followButton" data-action="sign-in-prompt" data-action-source="user_follow_popup_follow" data-redirect="https://medium.com/_/subscribe/user/67b72a9416b0" data-requires-token="true" data-sign-in-action="toggle-subscribe-user">
+          <span class="button-label button-defaultState">
+           Follow
+          </span>
+          <span class="button-label button-activeState">
+           Following
+          </span>
+         </button>
+        </span>
+       </div>
+       <div class="avatar">
+        <img alt="Love C&amp;C++" class="avatar-image avatar-image--smaller" src="https://d262ilb51hltx0.cloudfront.net/fit/c/40/40/0*knFblRQBPBlEY5uu.jpeg"/>
+        <span class="avatar-text">
+         Love C&amp;C++
+        </span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="loadingBar">
+  </div>
+  <script>
+   // &lt;![CDATA[
+var GLOBALS = {"audioUrl":"https://d1fcbxp97j4nb2.cloudfront.net","baseUrl":"https://medium.com","bestOfFirstSlug":"may-2013","bestOfLatestSlug":"june-2015","buildLabel":"16390-100e96d","currentUser":{"userId":"lo_f0cb421d71cf","isVerified":"","subscriberEmail":""},"currentUserHasUnverifiedEmail":false,"defaultPreviewImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/default-preview-image.IsBK38jFAJBlWifMLO4z9g.png","defaultUserImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/default-avatar.dmbNkD5D-u45r44go_cf0g.png","editorTipsAddCoverImage":"/img/help/add-cover.gif","editorTipsAddMediaImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/add-media.SZH2LBmkwVExuhozFfVvYg.gif","editorTipsAddMediaImageStatic":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/add-media-start.GXmqQ2Svt1WfZGIZSM93tg.gif","editorTipsEmbedImageStatic":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/embed-start.EBJ2PcWFJuYopsQV4wwklA.gif","editorTipsShareDraftImage":"/img/help/share-draft.gif","editorTipsTextHighlightImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/text-highlight.XVChoKYZ1-s3gJgHm9-7Yg.gif","editorTipsTextHighlightImageStatic":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/text-highlight-start.AvTbakaFuUCd05YoMECoMQ.gif","facebookKey":"542599432471018","facebookScope":["public_profile","email","user_friends"],"homeImageId":"1*4ncz3hLxmL8E_bUh-0z62w.jpeg","importHighlightMenuImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/import/highlight-menu.kzoaVM8mJJ-Hu9m9uo3Omg.png","importImageHighlightMenuImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/import/image-highlight-menu.q43-H2dl0JvBS_5znQCW8A.png","importPublishImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/import/publish-metabar.YbEX1a2Pu0rAR_LuKeg8JA.png","isAuthenticated":false,"isCurrentUserVerified":"","language":null,"loadingPlaceholderImg":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/media-loading-placeholder.b31hiO4ynbDLRrXWEFF4aQ.png","mediumTwitterScreenName":"medium","miroUrl":"https://d262ilb51hltx0.cloudfront.net","moduleUrls":{"base":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-base.bundle.SO0b8-B90xgkH1YjzY9GdQ.js","notes":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-notes.bundle.F_ofR6LrqpRN2x6brxymJw.js","posters":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-posters.bundle.Ban40iZ8EPMOm3N7-JzhdA.js","common-async":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-common-async.bundle.2ywVFxvb2VL_xytV7Hxmqw.js","stats":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-stats.bundle.VGxP3K3PTDgSfHjaf-KhJA.js","misc-screens":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-misc-screens.bundle.sKZulHznjyVwiBsCSqmbhQ.js"},"onboardingLandscapeFooterImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/logged-out-footer/landscape-bg.W4fnHJbJjHt0fgxh7ssrvQ.jpg","postColumnWidth":700,"previewConfig":{"weightThreshold":1,"weightEmptyParagraph":0,"weightIframeParagraph":0.8,"weightImageParagraph":0.51,"weightTextParagraph":0.05,"weightBq":0.003,"weightH":0.003,"weightP":0.0025,"minPTextLength":40,"truncateBoundaryChars":20,"detectTitle":true,"detectTitleLevThreshold":0.15,"experimentImagesInsetCenter":false,"previewConfigVariantA":{"experimentImagesInsetCenter":true},"previewConfigVariantB":{"weightThreshold":10,"detectTitle":false}},"productName":"Medium","responsesRecommendationThreshold":5,"supportsEdit":false,"termsUrl":"//medium.com/policy/9db0094a1e0f","textshotHost":"textshot.medium.com","transactionId":"1436886035470:7270562aca05","useragent":{"browser":"other","family":"","os":"","version":0,"supportsDesktopEdit":false,"supportsMobileEdit":false,"supportsInteract":false,"supportsView":true,"isMobile":false,"isTablet":false,"isNative":false,"supportsFileAPI":false,"isTier1":false,"clientVersion":"","unknownParagraphsBad":false,"clientChannel":"","supportsRealScrollEvents":false,"supportsVhUnits":false,"ruinsViewportSections":false,"supportsHtml5Video":false,"supportsMagicUnderlines":false,"isFacebook":false},"variants":{"can_vote":true,"can_update_settings":true,"can_send_push_notifications":true,"can_export_data":true,"enable_notes":true,"allow_test_auth":"disallow","enable_email_login":true,"enable_email_registration":true,"enable_post_licensing":true,"filter_other_languages":true,"use_experimental_css":true,"can_resume_from_last_read_location":true,"can_report_bad_posts":true,"enable_embeds":true,"enable_recommend_notes":true,"enable_recommend_notes_composition":true,"use_full_width_images":true,"upload_multiple_files":true,"can_follow_users":true,"can_block_users":true,"filter_posts_from_blocked_users":true,"filter_posts_from_blocking_users":true,"filter_notes_from_blocked_users":true,"filter_notes_from_blocking_users":true,"hide_blocker_profile_from_blockee":true,"hide_blocker_post_page_from_blockee":true,"prevent_interactions_from_blockee":true,"enable_custom_push_notification_prompts_ios":true,"onboarding_connect_addtional_social_accounts_enabled_ios":true,"allow_request_account_deletion":true,"enable_bookmarks_list_ios":true,"see_featured_post_tab":true,"receive_rec_note_pushes":true,"receive_post_published_pushes":true,"enable_account_conversion":true,"use_new_scheduled_delivery_flow":true,"feed_homepage":true,"enable_collection_subscription_fanout":true,"send_delighted_survey":true,"welcome_post_url":"https://medium.com/@Medium/welcome-to-medium-735fbbc085a1","google_search":true,"signin_services":"twitter,facebook,google","signup_services":"twitter,facebook,google","enable_homepage_promos":true,"promo_stream_signup":true,"promo_stream_feature_following":true,"promo_stream_why_write":true,"promo_stream_feature_responses":true,"promo_stream_onboarding":true,"promo_sidebar_start_writing":true,"promo_sidebar_writing_prompt":true,"promo_sidebar_feature_unlisted":true,"sidebar_connect_other_service_promo":true,"mobile_app_promotion":"dialog","enable_bing_search":true,"enable_algolia_search":true,"show_tagged_posts_in_search":true,"enable_textshots":true,"enable_respond_to_web":true,"drafts_unauth":true,"enable_quotes":true,"enable_profile_quotes":true,"combined_margin_quotes":true,"friends_only_quotes":true,"enable_quotes_emails":true,"enable_search_ios":true,"enable_connect_social_accounts_from_settings_ios":true,"enable_new_cover_flow_ios":true,"enable_rating_prompt":true,"enable_post_show_refactor":true,"enable_your_stories_more_actions":true,"enable_user_search_with_bing":true,"show_related_tags":true,"restrict_set_visibility":true,"enable_post_top_quotes":true,"min_quoters_top_quotes":2,"max_quotes_top_quotes":1,"enable_session_cookie_encryption":true,"enable_follow_tags":true,"enable_tabbed_homepage_ios":true,"enable_editors_can_pull_stories":true,"enable_email_capture_flow_ios":true,"enable_send_pub_newsletters":true,"enable_receive_pub_newsletters":true,"enable_new_onboarding_flow_ios":true,"enable_follow_tags_from_post_list_ios":true,"enable_embedded_onboarding_education_and_login_ios":true,"enable_simple_reach":true,"enable_tag_follow_onboarding":true,"your_top_stories_source":"similar-posts","follower_suggestion_source":"friends-of-friends","enable_follow_tags_stream":true,"enable_query_by_in_response_to_post_id":true,"enable_gif_to_video_ios":true,"enable_international_typographic_quotes_through_icu_ios":true,"enable_service_worker":true,"android_quotes":true,"android_rating_prompt_recommend_threshold":5,"enable_promo_post_header_ios":true,"enable_promo_post_header_android":true,"reengagement_notification_duration":3,"logged_out_writing_responses":true,"enable_view_all_responses":true,"enable_promo_sign_in_wall":true,"onboarding_tag_stream_experiment":"control","google_sign_in_backend":true,"google_sign_in_android":true,"enable_quote_feed_write":true,"footer_promo_bucket":"control","footer_promo_title":"Dont stop now, the next great story is waiting in the app","footer_promo_subtitle":"Read the best stories and tell your own","post_header_promo_bucket":"control","post_header_promo_title":"Change your mind, among others. Use our free app to read, respond, and follow.","homepage_promo_bucket":"control","homepage_promo_title":"Welcome to Medium","homepage_promo_subtitle":"Sign in to read, write, and interact with millions of ideas and stories from around the world.","enable_onboarding_tags_search":true,"enable_post_page_follow_popup":true,"enable_friends_recommends_plugin":true,"enable_write_stats_cache":true,"send_using_sendgrid":true,"top_stories_for_you_title":"control","no_push_notification_for_responses":true},"xsrfToken":"","useDynamicScripts":false,"canonicalBaseUrl":"https://medium.com","iosAppId":"828256236","supportEmail":"yourfriends@medium.com","teamName":"Team Medium","fp":{"/img/email/check1.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/check1.0DM77li7vZhq5o2V9cVYLQ.png","/img/email/check2.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/check2.GLlNusQmn1hwo9WDN-gE1w.png","/img/email/check3.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/check3.7VxOUVMXAVbHRRnzMrJ_5A.png","/img/email/fb_logo.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/fb_logo.Q0M98YwNTu77gLWTK6-RyQ.png","/img/email/heart1.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/heart1.rnGEmSwcGUhztl_zSU7l6Q.png","/img/email/heart2.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/heart2.HBiLu3koIYsKjjKroohgbA.png","/img/email/heart3.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/heart3.AIJBOHw11HuhdClVJNtmtg.png","/img/email/logo.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/logo.dPr5ZCzgKMooKYKJwnKarQ.png","/img/email/twitter_logo.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/twitter_logo.Pz4a3o9WMU5QioxLKcyFhQ.png","/img/email/unlisted.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/unlisted.ikh8R2LElOz_1YM8A2Db4g.png","/img/email/follow.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/follow.-VSXwmQhfi2entHPht8l2g.png","/img/email/recommend.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/recommend.scZJ6ysjDBJYd-K3wFK2Hg.png","/img/email/write.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/write.wWIWbAqfZUqn1JD4YSJYNw.png","/img/email/large.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/large.4EIhZbIk5sgqYSoB4YPmUA.png","/img/email/app_store_badge@2x.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/app_store_badge@2x.8bDQGNMm-Xs7Hz6WA2XquQ.png","/img/email/google_play_badge@2x.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/google_play_badge@2x.iWEWlt5_Qj20rr79-IGEBQ.png","/img/email/app-devices@2x.png":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/email/app-devices@2x.Ewl5-si-nhkLKZFIFSgrOw.png"},"configLabel":"558de79","cssBaseUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/css/main-base.z6B00ig_91n1ztoWRcwpGw.css","cssSpriteUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/css/main-sprites.1B2M2Y8AsgTpgAmY7PhCfg.css","cssFontUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/css/fonts-base.RB0XGp9t6rSpksYHwudieQ.css","googleAnalyticsTrackingCode":"UA-24232453-2","iconsJsUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/icons.PX62l8bCrOXFl44-EauI0w.js","jsShivUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/shiv.RI2ePTZ5gFmMgLzG5bEVAA.js","jsUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-base.bundle.SO0b8-B90xgkH1YjzY9GdQ.js","facebookNamespace":"medium-com","highlightAnimationImg":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/highlight-educational-animation._BG4I2h0KF83wFb3fWnWbA.gif","editorTipsEmbedImage":"https://dnqgz544uhbo8.cloudfront.net/_/fp/img/help/embed.1BM0Di9vd91Kv8fLioJabw.gif","authBaseUrl":"https://medium.com","imageUploadSizeMb":25,"isAuthDomainRequest":true,"favIconUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/icons/favicon.n7eHNqdWyHhbTLN2-3a-6g.ico","algoliaApiEndpoint":"https://MQ57UUUQZ2.algolia.io","algoliaAppId":"MQ57UUUQZ2","algoliaSearchOnlyApiKey":"aadabda268e3bfaffe7b287709262fec","iosAppStoreUrl":"https://itunes.apple.com/app/medium-everyones-stories/id828256236?pt=698524&amp;mt=8","iosAppLinkBaseUrl":"medium:","algoliaIndexPrefix":"medium_","androidPlayStoreUrl":"https://play.google.com/store/apps/details?id=com.medium.reader","googleClientId":"216296035834-k1k6qe060s2tp2a2jam4ljdcms00sttg.apps.googleusercontent.com","cssFontHintedUrl":"https://dnqgz544uhbo8.cloudfront.net/_/fp/css/fonts-hinted-base.h1mF0S6dQagtUyBbsS0NbQ.css","embedded":{"value":{"id":"da0d61577104","versionId":"44b536031dcb","creatorId":"67b72a9416b0","creator":{"userId":"67b72a9416b0","name":"Love C&amp;C++","username":"viva64articles","createdAt":1415791721703,"lastPostCreatedAt":1430402662206,"imageId":"0*knFblRQBPBlEY5uu.jpeg","backgroundImageId":"","bio":"Interested in programming C++, C#","twitterScreenName":"nestortsu071","social":{"userId":"lo_f0cb421d71cf","targetUserId":"67b72a9416b0","type":"Social"},"facebookAccountId":"","type":"User"},"homeCollectionId":"","title":"About size_t and ptrdiff_t","detectedLanguage":"en","latestVersion":"44b536031dcb","latestPublishedVersion":"44b536031dcb","hasUnpublishedEdits":false,"latestRev":126,"createdAt":1416652861759,"updatedAt":1416653193181,"acceptedAt":0,"firstPublishedAt":1416653193181,"latestPublishedAt":1416653193181,"isRead":false,"vote":false,"experimentalCss":"","displayAuthor":"","content":{"subtitle":"The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The","image":{"backgroundSize":"full","strategy":"crop-fixed"},"bodyModel":{"paragraphs":[{"name":"4118","type":2,"text":"About size_t and ptrdiff_t","markups":[]},{"name":"16eb","type":1,"text":"The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The article will be interesting for those developers who begin creation of 64-bit applications where use of size_t and ptrdiff_t types provides high performance, possibility to operate large data sizes and portability between different platforms.","markups":[]},{"name":"d87b","type":3,"text":"Introduction","markups":[]},{"name":"29fe","type":1,"text":"Before we begin I would like to notice that the definitions and recommendations given in the article refer to the most popular architectures for the moment (IA-32, Intel 64, IA-64) and may not fully apply to some exotic architectures.","markups":[{"type":3,"start":157,"end":161,"href":"http://www.viva64.com/en/t/0060/","title":"","rel":"","anchorType":0},{"type":3,"start":164,"end":171,"href":"http://www.viva64.com/en/t/0022/","title":"","rel":"","anchorType":0},{"type":3,"start":174,"end":178,"href":"http://www.viva64.com/en/t/0017/","title":"","rel":"","anchorType":0}]},{"name":"979a","type":1,"text":"The types size_t and ptrdiff_t were created to perform correct address arithmetic. It had been assumed for a long time that the size of int coincides with the size of a computer word (microprocessors capacity) and it can be used as indexes to store sizes of objects or pointers. Correspondingly, address arithmetic was built with the use of int and unsigned types as well. int type is used in most training materials on programming in C and C++ in the loops bodies and as indexes. The following example is nearly a canon:","markups":[{"type":3,"start":63,"end":81,"href":"http://www.viva64.com/en/t/0005/","title":"","rel":"","anchorType":0}]},{"name":"330f","type":8,"text":"for (int i = 0; i \x3c n; i++)\n  a[i] = 0;","markups":[]},{"name":"abf4","type":1,"text":"As microprocessors developed over time and their capacity increased, it became irrational to further increase int types sizes. There are a lot of reasons for that: economy of memory used, maximum portability etc. As a result, several data model appeared declaring the relations of C/C++ base types. Table N1 shows the main data models and lists the most popular systems using them.","markups":[{"type":3,"start":324,"end":335,"href":"http://www.viva64.com/en/t/0012/","title":"","rel":"","anchorType":0}]},{"name":"8ff7","type":4,"text":"","markups":[],"layout":1,"metadata":{"id":"0*GHsqccBkfnjmz1yH.png","originalWidth":580,"originalHeight":271}},{"name":"83a1","type":1,"text":"Table N1. Data models","markups":[{"type":2,"start":0,"end":21}],"alignment":2},{"name":"c5ed","type":1,"text":"As you can see from the table, it is not so easy to choose a variables type to store a pointer or an objects size. To find the smartest solution of this problem size _t and ptrdiff_t types were created. They are guaranteed to be used for address arithmetic. And now the following code must become a canon:","markups":[]},{"name":"25e2","type":8,"text":"for (ptrdiff_t i = 0; i \x3c n; i++)\n  a[i] = 0;","markups":[]},{"name":"f870","type":1,"text":"It is this code that can provide safety, portability and good performance. The rest of the article explains why.","markups":[]},{"name":"8460","type":3,"text":"size_t type","markups":[]},{"name":"0da6","type":1,"text":"size_t type is a base unsigned integer type of C/C++ language. It is the type of the result returned by sizeof operator. The types size is chosen so that it could store the maximum size of a theoretically possible array of any type. On a 32-bit system size_t will take 32 bits, on a 64-bit one 64 bits. In other words, a variable of size_t type can safely store a pointer. The exception is pointers to class functions but this is a special case. Although size_t can store a pointer, it is better to use another unsinged integer type uintptr_t for that purpose (its name reflects its capability). The types size_t and uintptr_t are synonyms. size_t type is usually used for loop counters, array indexing and address arithmetic.","markups":[{"type":3,"start":534,"end":543,"href":"http://www.viva64.com/en/t/0050/","title":"","rel":"","anchorType":0}]},{"name":"136f","type":1,"text":"The maximum possible value of size_t type is constant SIZE_MAX.","markups":[]},{"name":"e27b","type":3,"text":"ptrdiff_t type","markups":[]},{"name":"3a66","type":1,"text":"ptrdiff_t type is a base signed integer type of C/C++ language. The types size is chosen so that it could store the maximum size of a theoretically possible array of any type. On a 32-bit system ptrdiff_t will take 32 bits, on a 64-bit one 64 bits. Like in size_t, ptrdiff_t can safely store a pointer except for a pointer to a class function. Also, ptrdiff_t is the type of the result of an expression where one pointer is subtracted from the other (ptr1-ptr2). ptrdiff_t type is usually used for loop counters, array indexing, size storage and address arithmetic. ptrdiff_t type has its synonym intptr_t whose name indicates more clearly that it can store a pointer.","markups":[{"type":3,"start":598,"end":606,"href":"http://www.viva64.com/en/t/0023/","title":"","rel":"","anchorType":0}]},{"name":"a9cc","type":3,"text":"Portability of size_t and ptrdiff_t","markups":[]},{"name":"fa94","type":1,"text":"The types size_t and ptrdiff_t enable you to write well-portable code. The code created with the use of size_t and ptrdiff_t types is easy-portable. The size of size_t and ptrdiff_t always coincide with the pointers size. Because of this, it is these types that should be used as indexes for large arrays, for storage of pointers and pointer arithmetic.","markups":[]},{"name":"2d6b","type":1,"text":"Linux-application developers often use long type for these purposes. Within the framework of 32-bit and 64-bit data models accepted in Linux, this really works. long types size coincides with the pointers size. But this code is incompatible with Windows data model and, consequently, you cannot consider it easy-portable. A more correct solution is to use types size_t and ptrdiff_t.","markups":[]},{"name":"2869","type":1,"text":"As an alternative to size_t and ptrdiff_t, Windows-developers can use types DWORD_PTR, SIZE_T, SSIZE_T etc. But still it is desirable to confine to size_t and ptrdiff_t types.","markups":[]},{"name":"7b73","type":3,"text":"Safety of ptrdiff_t and size_t types in address arithmetic","markups":[]},{"name":"b6d7","type":1,"text":"Address arithmetic issues have been occurring very frequently since the beginning of adaptation of 64-bit systems. Most problems of porting 32-bit applications to 64-bit systems relate to the use of such types as int and long which are unsuitable for working with pointers and type arrays. The problems of porting applications to 64-bit systems are not limited by this, but most errors relate to address arithmetic and operation with indexes.","markups":[]},{"name":"0ae2","type":1,"text":"Here is a simplest example:","markups":[]},{"name":"009d","type":8,"text":"size_t n = ...;\nfor (unsigned i = 0; i \x3c n; i++)\n  a[i] = 0;","markups":[]},{"name":"c985","type":1,"text":"If we deal with the array consisting of more than UINT_MAX items, this code is incorrect. It is not easy to detect an error and predict the behavior of this code. The debug-version will hung but hardly will anyone process gigabytes of data in the debug-version. And the release-version, depending on the optimization settings and codes peculiarities, can either hung or suddenly fill all the array cells correctly producing thus an illusion of correct operation. As a result, there appear floating errors in the program occurring and vanishing with a subtlest change of the code. To learn more about such phantom errors and their dangerous consequences see the article A 64-bit horse that can count [1].","markups":[{"type":3,"start":671,"end":700,"href":"http://www.viva64.com/en/a/0043/","title":"","rel":"","anchorType":0}]},{"name":"85f1","type":1,"text":"Another example of one more sleeping error which occurs at a particular combination of the input data (values of A and B variable):","markups":[]},{"name":"cf81","type":8,"text":"int A = -2;\nunsigned B = 1;\nint array[5] = { 1, 2, 3, 4, 5 };\nint *ptr = array + 3;\nptr = ptr + (A + B); //Error\nprintf(%i\\n, *ptr);","markups":[]},{"name":"8c39","type":1,"text":"This code will be correctly performed in the 32-bit version and print number 3. After compilation in 64-bit mode there will be a fail when executing the code. Lets examine the sequence of code execution and the cause of the error:","markups":[]},{"name":"2a74","type":9,"text":"A variable of int type is cast into unsigned type;","markups":[]},{"name":"690d","type":9,"text":"A and B are summed. As a result, we get 0xFFFFFFFF value of unsigned type;","markups":[]},{"name":"74c3","type":9,"text":"ptr + 0xFFFFFFFFu expression is calculated. The result depends on the pointers size on the current platform. In the 32-bit program, the expression will be equal to ptr  1\" and we will successfully print number 3. In the 64-bit program, 0xFFFFFFFFu value will be added to the pointer and as a result, the pointer will be far beyond the arrays limits.","markups":[]},{"name":"702d","type":1,"text":"Such errors can be easily avoided by using size_t or ptrdiff_t types. In the first case, if the type of i variable is size_t, there will be no infinite loop. In the second case, if we use size_t or ptrdiff_t types for A and B variable, we will correctly print number 3\".","markups":[]},{"name":"1c9b","type":1,"text":"Lets formulate a guideline: wherever you deal with pointers or arrays you should use size_t and ptrdiff_t types.","markups":[]},{"name":"f302","type":1,"text":"To learn more about the errors you can avoid by using size_t and ptrdiff_t types, see the following articles:","markups":[]},{"name":"a9bb","type":9,"text":"20 issues of porting C++ code on the 64-bit platform [2];","markups":[{"type":3,"start":0,"end":52,"href":"http://www.viva64.com/en/a/0004/","title":"","rel":"","anchorType":0}]},{"name":"709c","type":9,"text":"Safety of 64-bit code [3];","markups":[{"type":3,"start":0,"end":21,"href":"http://www.viva64.com/en/a/0046/","title":"","rel":"","anchorType":0}]},{"name":"1e70","type":9,"text":"Traps detection during migration of C and C++ code to 64-bit Windows [4].","markups":[{"type":3,"start":0,"end":68,"href":"http://www.viva64.com/en/a/0012/","title":"","rel":"","anchorType":0}]},{"name":"7076","type":3,"text":"Performance of code using ptrdiff_t and size_t","markups":[]},{"name":"17d2","type":1,"text":"Besides code safety, the use of ptrdiff_t and size_t types in address arithmetic can give you an additional gain of performance. For example, using int type as an index, the formers capacity being different from that of the pointer, will lead to that the binary code will contain additional data conversion commands. We speak about 64-bit code where pointers size is 64 bits and int types size remains 32 bits.","markups":[]},{"name":"1c8c","type":1,"text":"It is a difficult task to give a brief example of size_t types advantage over unsigned type. To be objective we should use the compilers optimizing abilities. And the two variants of the optimized code frequently become too different to show this very difference. We managed to create something like a simple example only with a sixth try. And still the example is not ideal because it demonstrates not those unnecessary data type conversions we spoke above, but that the compiler can build a more efficient code when using size_t type. Lets consider a program code arranging an arrays items in the inverse order:","markups":[]},{"name":"abb0","type":8,"text":"unsigned arraySize;\n...\nfor (unsigned i = 0; i \x3c arraySize / 2; i++)\n{\n  float value = array[i];\n  array[i] = array[arraySizei1];\n  array[arraySizei1] = value;\n}","markups":[]},{"name":"e5a5","type":1,"text":"In the example, arraySize and i variables have unsigned type. This type can be easily replaced with size_t type, and now compare a small fragment of assembler code shown on Figure 1.","markups":[]},{"name":"c3bf","type":4,"text":"","markups":[],"layout":1,"metadata":{"id":"0*ZOfVlegMNb-XsTar.png","originalWidth":580,"originalHeight":168}},{"name":"108a","type":1,"text":"Figure N1.Comparison of 64-bit assembler code when using unsigned and size_t types","markups":[{"type":2,"start":0,"end":82}],"alignment":2},{"name":"cefc","type":1,"text":"The compiler managed to build a more laconic code when using 64-bit registers. I am not affirming that the code created with the use of unsigned type will operate slower than the code using size_t. It is a very difficult task to compare speeds of code execution on modern processors. But from the example you can see that when the compiler operates arrays using 64-bit types it can build a shorter and faster code.","markups":[]},{"name":"9d79","type":1,"text":"Proceeding from my own experience I can say that reasonable replacement of int and unsigned types with ptrdiff_t and size_t can give you an additional performance gain up to 10% on a 64-bit system. You can see an example of speed increase when using ptrdiff_t and size_t types in the fourth section of the article Development of Resource-intensive Applications in Visual C++ [5].","markups":[{"type":3,"start":315,"end":375,"href":"http://www.viva64.com/en/a/0018/","title":"","rel":"","anchorType":0}]},{"name":"738f","type":3,"text":"Code refactoring with the purpose of moving to ptrdiff_t and size_t","markups":[]},{"name":"9e17","type":1,"text":"As the reader can see, using ptrdiff_t and size_t types gives some advantages for 64-bit programs. However, it is not a good way out to replace all unsigned types with size_t ones. Firstly, it does not guarantee correct operation of a program on a 64-bit system. Secondly, it is most likely that due to this replacement, new errors will appear data format compatibility will be violated and so on. You should not forget that after this replacement the memory size needed for the program will greatly increase as well. And increase of the necessary memory size will slow down the applications work for cache will store fewer objects being dealt with.","markups":[]},{"name":"67ef","type":1,"text":"Consequently, introduction of ptrdiff_t and size_t types into old code is a task of gradual refactoring demanding a great amount of time. In fact, you should look through the whole code and make the necessary alterations. Actually, this approach is too expensive and inefficient. There are two possible variants:","markups":[]},{"name":"d6a3","type":9,"text":"To use specialized tools like Viva64 included into PVS-Studio. Viva64 is a static code analyzer detecting sections where it is reasonable to replace data types for the program to become correct and work efficiently on 64-bit systems. To learn more, see PVS-Studio Tutorial [6].","markups":[{"type":3,"start":51,"end":61,"href":"http://www.viva64.com/en/pvs-studio/","title":"","rel":"","anchorType":0},{"type":3,"start":254,"end":273,"href":"http://www.viva64.com/en/d/0011/","title":"","rel":"","anchorType":0}]},{"name":"a5bc","type":9,"text":"If you do not plan to adapt a 32-bit program for 64-bit systems, there is no sense in data types refactoring. A 32-bit program will not benefit in any way from using ptrdiff_t and size_t types.","markups":[]},{"name":"7375","type":3,"text":"References","markups":[]},{"name":"608c","type":9,"text":"Andrey Karpov. A 64-bit horse that can count. http://www.viva64.com/en/a/0043/","markups":[{"type":3,"start":46,"end":78,"href":"http://www.viva64.com/en/a/0043/","title":"","rel":"","anchorType":0}]},{"name":"41dd","type":9,"text":"Andrey Karpov, Evgeniy Ryzhkov. 20 issues of porting C++ code on the 64-bit platform.http://www.viva64.com/en/a/0004/","markups":[{"type":3,"start":85,"end":117,"href":"http://www.viva64.com/en/a/0004/","title":"","rel":"","anchorType":0}]},{"name":"1347","type":9,"text":"Andrey Karpov. Safety of 64-bit code. http://www.viva64.com/en/a/0046/","markups":[{"type":3,"start":38,"end":70,"href":"http://www.viva64.com/en/a/0046/","title":"","rel":"","anchorType":0}]},{"name":"1144","type":9,"text":"Andrey Karpov, Evgeniy Ryzhkov. Traps detection during migration of C and C++ code to 64-bit Windows. http://www.viva64.com/en/a/0012/","markups":[{"type":3,"start":102,"end":134,"href":"http://www.viva64.com/en/a/0012/","title":"","rel":"","anchorType":0}]},{"name":"6c24","type":9,"text":"Andrey Karpov, Evgeniy Ryzhkov. Development of Resource-intensive Applications in Visual C++.http://www.viva64.com/en/a/0018/","markups":[{"type":3,"start":93,"end":125,"href":"http://www.viva64.com/en/a/0018/","title":"","rel":"","anchorType":0}]},{"name":"fa74","type":9,"text":"Evgeniy Ryzhkov. PVS-Studio Tutorial. http://www.viva64.com/en/d/0011/","markups":[{"type":3,"start":38,"end":70,"href":"http://www.viva64.com/en/d/0011/","title":"","rel":"","anchorType":0}]}],"sections":[{"name":"eede","startIndex":0}]},"postDisplay":{"coverless":true}},"media":null,"virtuals":{"statusForCollection":"","createdAtRelative":"8 months ago","updatedAtRelative":"8 months ago","acceptedAtRelative":"","createdAtEnglish":"November 22, 2014","updatedAtEnglish":"November 22, 2014","acceptedAtEnglish":"","firstPublishedAtEnglish":"November 22, 2014","latestPublishedAtEnglish":"November 22, 2014","allowNotes":true,"languageTier":1,"snippet":"The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The","previewImage":{"imageId":"0*GHsqccBkfnjmz1yH.png","filter":"","backgroundSize":"","originalWidth":580,"originalHeight":271,"strategy":"resample","height":0,"width":0},"wordCount":2050,"imageCount":2,"readingTime":8.119182389937107,"subtitle":"The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The","postedIn":[],"publishedInCount":0,"usersBySocialRecommends":[],"notesBySocialRecommends":[],"proposedAtRelative":"","latestPublishedAtAbbreviated":"Nov 22, 2014","firstPublishedAtAbbreviated":"Nov 22, 2014","emailSnippet":"article will be interesting for those developers who begin creation of 64-bit applications where use of size_t and ptrdiff_t types provides high performance, possibility to operate large data sizes and portability between different platforms. \n\nIntroduction \n\nBefore we begin I would like to notice that the definitions and recommendations given in the article refer to the most popular architectures for the moment (IA-32, Intel 64, IA-64) and may not fully apply to some exotic architectures.","recommends":0,"featuredRecommendNoteId":"","socialRecommends":[],"addedToFeedAt":0,"isBookmarked":false,"tags":[],"socialRecommendsCount":0},"coverless":true,"slug":"about-size_t-and-ptrdiff_t","translationSourcePostId":"","translationSourceCreatorId":"","isApprovedTranslation":false,"inResponseToPostId":"","inResponseToRemovedAt":0,"isTitleSynthesized":false,"allowResponses":true,"importedUrl":"","importedPublishedAt":0,"visibility":0,"contentType":0,"isViewed":false,"uniqueSlug":"","previewContent":{"bodyModel":{"paragraphs":[{"name":"4118","type":2,"text":"About size_t and ptrdiff_t","markups":[],"alignment":1},{"name":"16eb","type":1,"text":"The article will help the readers understand what size_t and ptrdiff_t types are, what they are used for and when they must be used. The article will be interesting for those developers who begin creation of 64-bit applications where use of size_t and ptrdiff_t types provides high performance, possibility to operate large data sizes and portability between","markups":[],"alignment":1}],"sections":[{"startIndex":0}]},"isFullContent":false},"license":0,"inResponseToMediaResourceId":"","canonicalUrl":"https://medium.com/@viva64articles/about-size_t-and-ptrdiff_t-da0d61577104","approvedHomeCollectionId":"","newsletterId":"","type":"Post","_isPopulated":true},"collaborators":[],"collectionUserRelations":[],"mode":null,"references":{"User":{"67b72a9416b0":{"userId":"67b72a9416b0","name":"Love C&amp;C++","username":"viva64articles","createdAt":1415791721703,"lastPostCreatedAt":1430402662206,"imageId":"0*knFblRQBPBlEY5uu.jpeg","backgroundImageId":"","bio":"Interested in programming C++, C#","twitterScreenName":"nestortsu071","social":{"userId":"lo_f0cb421d71cf","targetUserId":"67b72a9416b0","type":"Social"},"facebookAccountId":"","type":"User"}},"Social":{"67b72a9416b0":{"userId":"lo_f0cb421d71cf","targetUserId":"67b72a9416b0","type":"Social"}}}}}
+// ]]&gt;
+  </script>
+  <script async="true" charset="UTF-8" src="https://dnqgz544uhbo8.cloudfront.net/_/fp/js/main-base.bundle.SO0b8-B90xgkH1YjzY9GdQ.js">
+  </script>
+  <script charset="UTF-8" src="https://dnqgz544uhbo8.cloudfront.net/_/fp/js/icons.PX62l8bCrOXFl44-EauI0w.js">
+  </script>
+ </body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:addthis="http://www.addthis.com/help/api-spec" xmlns:contact="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss">
+ <head>
+  <title>
+   Askew, Mary Ann ( on 03 Jun 1961) : Oshawa Newspapers
+  </title>
+  <meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="text/css" http-equiv="Content-Style-Type"/>
+  <meta content="text/javascript" http-equiv="Content-Script-Type"/>
+  <meta content=" Askew, Mary Ann ( on 03 Jun 1961) " name="dc:title"/>
+  <meta content="" name="dcterms:created"/>
+  <meta content="en" name="dc:language"/>
+  <meta content="id://news.ourontario.ca/oshawa/details/ID=1176292&amp;n=7" name="dc:identifier"/>
+  <meta content="" name="gmapkey"/>
+  <link href="http://images.ourontario.ca/Partners/oshawa/CSS/OshPL_s_202.css" rel="stylesheet" type="text/css"/>
+  <link href="http://news.ourontario.ca/oshawa/1176292/data#title" rel="primaryTopic"/>
+  <link href="http://news.ourontario.ca/oshawa/1176292.rdf" rel="resourcemap" type="application/rdf+xml"/>
+  <link href="http://news.ourontario.ca/oshawa/rss.xml" id="gallery" rel="alternate" title="Oshawa Newspapers: RSS" type="application/rss+xml"/>
+  <link href="http://news.ourontario.ca/oshawa/atom.xml" rel="alternate" title="Oshawa Newspapers: Atom" type="application/atom+xml"/>
+  <link href="http://news.ourontario.ca/oshawa/rss.xml?q=&amp;fm=true" rel="alternate" title="Oshawa Newspapers: Mysteries" type="application/rss+xml"/>
+  <link href="http://news.ourontario.ca/oshawa/OpenSearch.xml" rel="search" title="Oshawa Newspapers" type="application/opensearchdescription+xml"/>
+  <link href="http://images.ourontario.ca/Partners/oshawa/graphics/OshPL_s_202.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link href="http://search.ourontario.ca/unapi" rel="unapi-server" title="unAPI" type="application/xml"/>
+  <script src="http://news.ourontario.ca/oshawa/scripts/jquery-1.11.1.min.js" type="text/javascript">
+  </script>
+  <script src="http://news.ourontario.ca/oshawa/scripts/jquery-ui-1.10.3.custom.min.js" type="text/javascript">
+  </script>
+  <link href="http://news.ourontario.ca/oshawa/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+  <link href="http://news.ourontario.ca/oshawa/css/jquery-ui-override.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   $(function() {
+		
+			$("#user_login").show();
+			$("#user_logoff").hide();
+			$("#user_collections").hide();
+			$("#user_collect").hide();
+		
+            $( "#user_collect" ).click(function() {
+				$.ajax({
+					type:'GET',
+					url: 'http://news.ourontario.ca/oshawa/UserGroup.asp',
+					success: function(response){
+						console.log(response);
+						$("#groupList").html(response);
+					}
+				});
+                $( "#dialog-collect" ).dialog( "open" );
+            });
+            $( "#user_collections" ).click(function() {
+                window.open("http://collect.vitacollections.ca/index","myFavourites")
+            });
+            $( "#user_login" ).click(function() {
+                $( "#dialog-login" ).dialog( "open" );
+            });
+            $( "#user_logoff" ).click(function() {
+        		$("#user_login").show();
+        		$("#user_logoff").hide();
+        		$("#user_collect").hide();
+				$("#user_collections").hide();
+				$("user_id").val('');
+        		$.ajax({
+					type:'POST',
+					url: 'http://news.ourontario.ca/oshawa/UserLogout.asp'
+				});           
+            });
+            $( "#dialog-login" ).dialog({
+                autoOpen: false,
+                resizable: false,
+                height:350,
+                width:375,
+                modal: true,
+                buttons: {
+                    "New account": function() {
+                    	window.location = "http://collect.vitacollections.ca/accounts/signup/";
+                    },
+                    "Login": function() {
+                        $("#login_message").html("");
+                        $.ajax({
+                            type:'POST',
+                            url: 'http://news.ourontario.ca/oshawa/UserLogin.asp',
+                            data: {
+                            	'user': $("#user_name").val(),
+                            	'pwd': $("#user_pwd").val()
+                            },
+                            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                            success: function(response){
+                            	//console.log(response);
+                            	if (response){
+                            		if (response.substr(0,4) == "User"){
+                            			//alert("response:" + response);
+                            			$("#login_message").html(response);
+                            		}else if (response.substr(0,2) == "&lt;!"){
+                            			$("#login_message").html("User not found");
+                            		}else{
+                            			var json = $.parseJSON(response)
+										$.each(json, function(key, data){
+											user_id = json.user_id;
+											//alert(user_id);
+										});
+										$("#user_login").hide();
+										$("#user_logoff").show();
+										$("#user_collect").show();
+										$("#user_collections").show();
+										$("#user_id").val(user_id);
+                      					$( "#dialog-login" ).dialog( "close" );
+									};
+                            	}else{
+                            		alert("huh!");
+                            	}
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                alert(thrownError + '\n' + xhr.status + '\n' + ajaxOptions)
+                            }
+                        })
+                    },
+                    "Close": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+            $( "#dialog-collect" ).dialog({
+                autoOpen: false,
+                resizable: false,
+                height:600,
+                width:600,
+                modal: true,
+                buttons: {
+                    "Add this item": function() {
+                        $.ajax({
+                            type:'POST',
+                            url: 'http://news.ourontario.ca/oshawa/UserAdd.asp',
+                            data: {
+                            	'title': $("#my_title").html(),
+                            	'user_title': $("#user_title").val(),
+                            	'description': $("#my_description").html(),
+                            	'user_notes': $("#my_user_notes").val(),
+                            	'user_tags': $("#my_user_tags").val(),
+                            	'user_id': $("#user_id").val(),
+                            	'url': 'http://news.ourontario.ca/oshawa/1176292/data',
+                            	'url_thumbnail': 'http://images.ourontario.ca/Partners/ourontario/OO001115364t.jpg',
+                            	'vita_id': 'OOV.1176292',
+                            	'group_id': $("#groupList :checked").map(function () {return this.value;}).get().join(",")
+                            },
+                            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                            success: function(response){
+                            	//console.log(response); 
+                            	$("#user_collect_label").html("Already added");
+                            	$('#user_collect').hide();
+                            	$("#dialog-collect" ).dialog( "close" );
+                            }
+                        });
+                    },
+                    "Close": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        })
+  </script>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-12415320-55']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+  </script>
+ </head>
+ <body>
+  <div class="bodyContent">
+   <a href="http://news.ourontario.ca/oshawa/">
+    <img alt="Oshawa Public Libraries' Newspaper Index" src="http://images.ourontario.ca/Partners/oshawa/graphics/OshPL_s_202.jpg" width="100%"/>
+   </a>
+   <div>
+    <abbr class="unapi-id" title="OOI.1176292">
+    </abbr>
+   </div>
+   <div class="NavBar">
+    <a href="http://news.ourontario.ca/oshawa/search">
+     Search
+    </a>
+    (
+    <a href="http://news.ourontario.ca/oshawa/advancedsearch">
+     Advanced
+    </a>
+    ) &gt;&gt;
+    <a href="http://news.ourontario.ca/oshawa/whatsnew">
+     What's New
+    </a>
+    &gt;&gt; Details
+        &lt;&lt; Previous
+   
+    
+        &gt;&gt; Next
+    <form action="http://news.ourontario.ca/oshawa/results" method="get">
+     <div class="Inline">
+      <strong>
+       <label for="qtext1">
+        Search:
+       </label>
+      </strong>
+      <input id="qtext1" name="q" size="15" type="text"/>
+      <input name="st" type="hidden" value="kw"/>
+      <input class="NavBarButtonSubmit" type="submit" value="Go"/>
+     </div>
+    </form>
+    <script type="text/javascript">
+     var addthis_config = {
+		ui_delay: 500,
+		ui_username: "ourontario",
+	
+		ui_header_color: "#ffffff",
+     	ui_header_background: "#0147a7",
+		services_compact: 'email, delicious, digg, facebook, friendfeed, google, reddit, stumbleupon, technorati,  twitter, more'
+}
+    </script>
+    <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;username=ourontario">
+     <img alt="Share" height="16" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125"/>
+    </a>
+    <script src="http://s7.addthis.com/js/250/addthis_widget.js" type="text/javascript">
+    </script>
+    <input id="user_login" type="button" value="Login to My Favourites"/>
+    <input id="user_logoff" type="button" value="Logout of My Favourites"/>
+    <input id="user_collections" type="button" value="See My Favourites"/>
+    <input id="user_collect" type="button" value="Add to My Favourites"/>
+    <div class="noBreak" id="user_collect_label">
+    </div>
+    <br/>
+   </div>
+   <table width="100%">
+    <tr>
+     <td colspan="2">
+     </td>
+    </tr>
+    <tr>
+     <td valign="top">
+      <div class="RecordTitle" property="dc:title">
+       <b>
+        Askew, Mary Ann
+       </b>
+       ( on 03 Jun 1961)
+      </div>
+      <div class="DetailsDL">
+       appeared in Oshawa Times, 3 Jun 1961,
+       <div class="pageSearchBlock">
+       </div>
+       <br/>
+       <br/>
+       <div class="DetailsCurrentTab">
+        Description
+       </div>
+       <div class="DetailsAlternateTab">
+        <a href="http://news.ourontario.ca/oshawa/1176292/comments?n=7">
+         Comments (0)
+        </a>
+       </div>
+       <div class="detailsDisplay">
+        <dl>
+         <dt>
+          <b>
+           Media Type:
+          </b>
+         </dt>
+         <dd property="dc:type">
+          Genealogical Resource
+         </dd>
+         <dd property="dc:type">
+          Newspaper
+         </dd>
+         <dt>
+          <b>
+           Item Type:
+          </b>
+         </dt>
+         <dd>
+          Death notices
+         </dd>
+         <dt>
+          <b>
+           Notes:
+          </b>
+         </dt>
+         <dd property="dc:description">
+          Oshawa Union Cemetery
+         </dd>
+         <dt>
+          <b>
+           Date of Publication:
+          </b>
+         </dt>
+         <dd property="dcterms:temporal">
+          3 Jun 1961
+         </dd>
+         <dt>
+          <b>
+           Date Of Event:
+          </b>
+         </dt>
+         <dd property="dcterms:temporal">
+          03 Jun 1961
+         </dd>
+         <dt>
+          <b>
+           Last Name(s):
+          </b>
+         </dt>
+         <dd>
+          <a href="http://news.ourontario.ca/oshawa/results?ln=Askew">
+           Askew
+          </a>
+          <br/>
+         </dd>
+         <dt>
+          <b>
+           Local identifier:
+          </b>
+         </dt>
+         <dd>
+          Ontario.BMD.308876
+         </dd>
+         <dt>
+          <b>
+           Language of Item:
+          </b>
+         </dt>
+         <dd property="dc:language">
+          English
+         </dd>
+         <ul>
+         </ul>
+         <dt>
+          <b>
+           Copyright Statement:
+          </b>
+         </dt>
+         <dd property="rights">
+          Copyright status unknown. Responsibility for determining the copyright status and any use rests exclusively with the user.
+         </dd>
+         <dt>
+          <b>
+           Contact
+          </b>
+         </dt>
+         <dd>
+          <div class="vcard">
+           <div class="fn org block">
+            Oshawa Public Libraries
+           </div>
+           Email
+           <script type="text/javascript">
+            &lt;!--
+			var varusr = "lmcewan";
+			var vardom = "oshawalibrary";
+			var vartld = "on.ca";
+			var varady = varusr + "@" + vardom + "." + vartld;
+			document.write("&lt;a href=\"" + "mai" + "lto:" + varady + "\"&gt;" + varady +"&lt;/a&gt;")
+			//--&gt;
+           </script>
+           <br/>
+           WWW address
+           <div class="url Inline">
+            <a href="http://www.oshawalibrary.on.ca/">
+             http://www.oshawalibrary.on.ca/
+            </a>
+           </div>
+           <br/>
+           Agency street/mail address
+           <div class="adr Inline">
+            Laura McEwan
+65 Bagot Street
+Oshawa, ON L1H 1N2
+           </div>
+          </div>
+         </dd>
+        </dl>
+       </div>
+      </div>
+     </td>
+     <td valign="top">
+      <div class="detailsMenu">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <div class="NavBar">
+    <a href="http://news.ourontario.ca/oshawa/search">
+     Search
+    </a>
+    (
+    <a href="http://news.ourontario.ca/oshawa/advancedsearch">
+     Advanced
+    </a>
+    ) &gt;&gt;
+    <a href="http://news.ourontario.ca/oshawa/whatsnew">
+     What's New
+    </a>
+    &gt;&gt; Details
+        &lt;&lt; Previous
+   
+    
+        &gt;&gt; Next
+    <form action="http://news.ourontario.ca/oshawa/results" method="get">
+     <div class="Inline">
+      <strong>
+       <label for="qtext2">
+        Search:
+       </label>
+      </strong>
+      <input id="qtext2" name="q" size="15" type="text"/>
+      <input name="st" type="hidden" value="kw"/>
+      <input class="NavBarButtonSubmit" type="submit" value="Go"/>
+     </div>
+    </form>
+    <script type="text/javascript">
+     var addthis_config = {
+		ui_delay: 500,
+		ui_username: "ourontario",
+	
+		ui_header_color: "#ffffff",
+     	ui_header_background: "#0147a7",
+		services_compact: 'email, delicious, digg, facebook, friendfeed, google, reddit, stumbleupon, technorati,  twitter, more'
+}
+    </script>
+    <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;username=ourontario">
+     <img alt="Share" height="16" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125"/>
+    </a>
+    <script src="http://s7.addthis.com/js/250/addthis_widget.js" type="text/javascript">
+    </script>
+   </div>
+   <div class="Footer">
+   </div>
+   <div class="VTFooter">
+    Powered by / Aliment par
+    <a href="http://vitatoolkit.ca" target="_blank">
+     <img alt="VITA Toolkit" src="/glib/VITA_footer_25h.gif"/>
+    </a>
+   </div>
+  </div>
+  <div class="ui-helper-hidden" id="dialog-login" title="My Favourites account">
+   <form action="" id="form_login" method="POST">
+    <div class="alert" id="login_message">
+    </div>
+    <label for="user_name">
+     Username:
+    </label>
+    <br/>
+    <input id="user_name" name="user" size="20" type="text"/>
+    <br/>
+    <label for="user_pwd">
+     Password:
+    </label>
+    <br/>
+    <input id="user_pwd" name="pwd" size="20" type="password"/>
+    <br/>
+    <p>
+     My favourites lets you save items you like, tag them and group them into collections for your own personal use. Viewing "My favourites" will open in a new tab. 
+Login here or start a My favourites account.
+    </p>
+   </form>
+  </div>
+  <div class="ui-helper-hidden" id="dialog-collect" title="Add to My favourites">
+   <form action="" id="form_collection" method="POST">
+    <div class="alert" id="login_message">
+    </div>
+    <img src="http://images.ourontario.ca/Partners/ourontario/OO001115364t.jpg"/>
+    <br/>
+    <label for="user_title">
+     My title:
+    </label>
+    <br/>
+    <input id="user_title" name="user_title" size="20" type="text" value="&lt;b&gt;Askew, Mary Ann&lt;/b&gt;( on 03 Jun 1961) "/>
+    <br/>
+    <label for="my_user_notes">
+     My notes:
+    </label>
+    <br/>
+    <textarea id="my_user_notes" name="user_notes">
+    </textarea>
+    <br/>
+    <label for="my_user_tags">
+     My tags:
+    </label>
+    <br/>
+    <textarea id="my_user_tags" name="user_tags">
+    </textarea>
+    <br/>
+    <input id="user_id" name="user_id" type="hidden" value=""/>
+    <label for="groupList">
+     My collections
+    </label>
+    <br/>
+    <div id="groupList">
+    </div>
+    <label for="my_title">
+     Original title:
+    </label>
+    <br/>
+    <div class="small" id="my_title">
+     <b>
+      Askew, Mary Ann
+     </b>
+     ( on 03 Jun 1961)
+    </div>
+    <br/>
+    <div class="small" id="my_description">
+    </div>
+    <br/>
+   </form>
+  </div>
+ </body>
+</html>

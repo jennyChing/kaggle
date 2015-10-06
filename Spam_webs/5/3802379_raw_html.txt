@@ -1,0 +1,2186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <script type="text/javascript">
+   (function() { var b=window,f="chrome",g="tick",k="jstiming";(function(){function d(a){this.t={};this.tick=function(a,d,c){var e=void 0!=c?c:(new Date).getTime();this.t[a]=[e,d];if(void 0==c)try{b.console.timeStamp("CSI/"+a)}catch(h){}};this[g]("start",null,a)}var a;b.performance&amp;&amp;(a=b.performance.timing);var n=a?new d(a.responseStart):new d;b.jstiming={Timer:d,load:n};if(a){var c=a.navigationStart,h=a.responseStart;0&lt;c&amp;&amp;h&gt;=c&amp;&amp;(b[k].srt=h-c)}if(a){var e=b[k].load;0&lt;c&amp;&amp;h&gt;=c&amp;&amp;(e[g]("_wtsrt",void 0,c),e[g]("wtsrt_","_wtsrt",h),e[g]("tbsd_","wtsrt_"))}try{a=null,
+b[f]&amp;&amp;b[f].csi&amp;&amp;(a=Math.floor(b[f].csi().pageT),e&amp;&amp;0&lt;c&amp;&amp;(e[g]("_tbnd",void 0,b[f].csi().startE),e[g]("tbnd_","_tbnd",c))),null==a&amp;&amp;b.gtbExternal&amp;&amp;(a=b.gtbExternal.pageT()),null==a&amp;&amp;b.external&amp;&amp;(a=b.external.pageT,e&amp;&amp;0&lt;c&amp;&amp;(e[g]("_tbnd",void 0,b.external.startE),e[g]("tbnd_","_tbnd",c))),a&amp;&amp;(b[k].pt=a)}catch(p){}})();b.tickAboveFold=function(d){var a=0;if(d.offsetParent){do a+=d.offsetTop;while(d=d.offsetParent)}d=a;750&gt;=d&amp;&amp;b[k].load[g]("aft")};var l=!1;function m(){l||(l=!0,b[k].load[g]("firstScrollTime"))}b.addEventListener?b.addEventListener("scroll",m,!1):b.attachEvent("onscroll",m);
+ })();
+  </script>
+  <meta content="blogger" name="generator"/>
+  <link href="http://www.cocoawithlove.com/favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html" rel="canonical"/>
+  <link href="http://www.cocoawithlove.com/feeds/posts/default" rel="alternate" title="Cocoa with Love - Atom" type="application/atom+xml"/>
+  <link href="http://www.cocoawithlove.com/feeds/posts/default?alt=rss" rel="alternate" title="Cocoa with Love - RSS" type="application/rss+xml"/>
+  <link href="http://www.blogger.com/feeds/371408380585915800/posts/default" rel="service.post" title="Cocoa with Love - Atom" type="application/atom+xml"/>
+  <link href="http://www.cocoawithlove.com/feeds/7328627687129730239/comments/default" rel="alternate" title="Cocoa with Love - Atom" type="application/atom+xml"/>
+  <!--[if IE]&gt; &lt;script&gt; (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i &lt; html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); &lt;/script&gt; &lt;![endif]-->
+  <title>
+   Cocoa with Love: A look at how malloc works on the Mac
+  </title>
+  <meta content="LBBg7Y1b9wc2NkpjoJ61z7M7dNPr4J2+LANwlVy8Ea4=" name="verify-v1"/>
+  <link href="https://www.blogger.com/static/v1/widgets/1943648796-widget_css_bundle.css" rel="stylesheet" type="text/css"/>
+  <link href="https://www.blogger.com/dyn-css/authorization.css?targetBlogID=371408380585915800&amp;zx=18b17d36-3b54-4055-b50e-4f3e7f7248aa" rel="stylesheet" type="text/css"/>
+  <style id="page-skin-1" type="text/css">
+   &lt;!--
+body {
+margin: 0;
+padding: 0;
+border: 0;
+text-align: left;
+background-color:#647479;
+font-size: 13px;
+font-family: "Helvetica Neue", Helvetica, Arial;
+color:#333;
+background-attachment:fixed;
+background-image:url(http://projectswithlove.com/images/background-gradient.png);
+background-repeat:repeat-x;
+}
+a:link {
+color:#25a;
+}
+a:hover {
+color:#ff8000;
+}
+a:active {
+color:#ff8000;
+}
+a:visited {
+color:#624229;
+}
+table {
+text-align:left;
+border-collapse:collapse;
+width:100%;
+}
+table thead td {
+background-color:#E0E0E0;
+font-weight:bold;
+}
+table td {
+background-color:#F8F8F8;
+border:solid thin #666;
+padding:4px;
+}
+img {
+display:block;
+margin:auto;
+border:0px;
+}
+div.scroll {
+border:solid thin #666;
+width:578px;
+overflow:auto;
+}
+div.js-singleCommentMenu {
+display:none !important;
+}
+div.jsk-HeaderWrapper {
+display:none !important;
+}
+div.js-singleViaLinkWrapper {
+display:none !important;
+}
+div.js-LeaveComment {
+margin-top:-26px;
+}
+span.jsk-ItemBodyText {
+display:block;
+}
+div.jsk-ThreadWrapper {
+padding:0px !important;
+}
+.clear {
+clear: both;
+}
+pre {
+background: #fcf6ee;
+color: rgb(0, 27, 76);
+white-space:pre;
+overflow:visible;
+word-wrap:normal;
+font-size:11px;
+padding:8px;
+padding-left:4px;
+border:solid 1px rgb(255, 180, 80);
+border-left:solid thick rgb(255, 140, 0);
+font-family:"Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+}
+div.comments pre{
+width:100%;
+background:rgb(255, 255, 255);
+color:#333;
+white-space:pre;
+line-height:125%;
+overflow:visible;
+word-wrap:normal;
+font-size:9px;
+margin:0px;
+padding:0px;
+border:none;
+border-top:thin dotted rgb(200, 200, 200);
+border-bottom:thin dotted rgb(200, 200, 200);
+padding-top:4px;
+padding-bottom:4px;
+font-family:Monaco, monospace;
+}
+blockquote {
+border:solid 1px #DAA;
+border-left:solid thick #800;
+margin-left:0;
+margin-right:0;
+padding-left:12px;
+padding-right:12px;
+padding-top:4px;
+padding-bottom:4px;
+margin-top:8px;
+margin-bottom:8px;
+background: rgb(255, 243, 240);
+color:#444;
+}
+h1, h2, h3, h4, h5, h6 {
+font-family:"Baskerville", "Times New Roman", "Times", Serif;
+font-weight:lighter;
+font-style:italic;
+margin:0;
+padding:0;
+padding-top:8px;
+padding-bottom:4px;
+color:#000;
+}
+h1, h2, h3 {
+font-size:26px;
+}
+h4 {
+font-size:22px;
+}
+h5 {
+font-size:18px;
+}
+h6 {
+font-size:15px;
+}
+ul {
+padding-left:26px;
+}
+code, span.monospace {
+font-family:Courier, monospace;
+font-size:12px;
+}
+#navbar {
+display:none !important;
+}
+/* Wrapper */
+#blog-body-wrapper {
+padding-top: 8px;
+}
+#blog-outer-wrapper {
+margin: 0 auto;
+padding: 0;
+border: 0;
+width:1018px;
+position:relative;
+}
+/* Header */
+#blog-header-wrapper	{
+background: url(http://projectswithlove.com/images/cwl-banner.png) bottom left no-repeat;
+margin: 0;
+padding: 0;
+border: 0;
+width:1020px;
+height:137px;
+position:relative;
+}
+#blog-header {
+display:none;
+}
+#blog-header .description {
+margin: 0;
+}
+/*- Main Menu in Header */
+#blog-button-links {
+height:22px;
+position:absolute;
+left:89px;
+bottom:4px;
+padding:0px;
+padding-left:282px;
+bottom:1px;
+float:right;
+list-style:none;
+border-spacing:2px 0px;
+margin:0px;
+border-bottom:solid thin #888;
+}
+#blog-button-links li {
+text-align:center;
+display:block;
+float:left;
+padding-left:24px;
+padding-right:4px;
+}
+#blog-button-links li a {
+display:block;
+text-decoration:none;
+font-family:"Baskerville", "Times New Roman", "Times", Serif;
+font-size:15px;
+}
+#blog-button-links li a:visited {
+color:#624229;
+}
+#blog-button-links li a:link {
+color:#624229;
+}
+#blog-button-links li a:hover {
+color:#ff8000;
+}
+/* General styles */
+#blog-content-wrapper {
+background: url(http://projectswithlove.com/images/cwl-body.png);
+margin: 0;
+padding: 0;
+border: 0;
+width:1020px;
+}
+/* Main layout */
+h3.post-title.entry-title {
+padding-top: 32px;
+padding-bottom: 12px;
+}
+h3.post-title.entry-title a {
+text-decoration:none;
+color:#000;
+}
+h3.post-title.entry-title a:hover {
+text-decoration:underline;
+color:#25a;
+}
+h3.post-title.entry-title a:active {
+text-decoration:underline;
+color:#a50;
+}
+div.status-msg-border {
+border:0;
+}
+div.status-msg-wrap {
+display:block;
+width:100%;
+margin:0px;
+}
+div.status-msg-body {
+width:100%;
+padding-top:10px;
+padding-bottom:10px;
+padding-left:0px;
+padding-right:0px;
+margin:0px;
+background: #5b85b8;
+color:#fff;
+}
+span.introduction {
+font-size: 13px;
+font-style: italic;
+font-family: "Helvetica Neue", Helvetica, Arial;
+color:#888;
+}
+#blog-main-wrapper {
+margin: 0;
+padding-left: 89px;
+padding-right: 89px;
+width:578px;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: visible; 		/* fix for long non-text content breaking IE sidebar float */
+}
+#blog-main {
+background: #ffffff;
+}
+/* Sidebar layout */
+#blog-sidebar-wrapper {
+float:right;
+border: 0;
+padding-right:26px;
+margin-top:32px;
+width:220px;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden; 		/* fix for long non-text content breaking IE sidebar float */
+}
+#blog-sidebar {
+background: #ffffff;
+}
+#blog-sidebar h2 {
+font-size:18px;
+}
+div.sidebar div.widget {
+margin-bottom:24px;
+padding-left:8px;
+padding-right:8px;
+padding-bottom:8px;
+background-color: #fcf6ee;
+border:solid thin #ecd0ab;
+}
+.BlogArchive #ArchiveList .expanded ul.posts li {
+list-style-type:circle;
+text-indent:0em;
+margin-left:0.4em;
+padding-left:0em;
+margin-bottom:0.5em;
+}
+div.bookmark-buttons {
+background-color:#f0eadd;
+float:left;
+margin-top:6px;
+padding:4px;
+border:solid thin #ccc;
+}
+div.bookmark-buttons img {
+vertical-align: middle;
+display:inline;
+border-width:0px;
+}
+div.post-footer {
+display:block;
+border-top:solid thin #2b4669;
+width:100%;
+float:right;
+margin-top:18px;
+padding-top:8px;
+margin-bottom:8px;
+}
+span.post-author.vcard {
+display:block;
+float:right;
+}
+span.post-timestamp {
+display:block;
+clear:right;
+float:right;
+}
+span.read-more {
+display:block;
+float:left;
+}
+span.entry-timestamp {
+display:block;
+float:right;
+}
+span.post-labels {
+display:block;
+clear:right;
+float:right;
+}
+div.comments {
+clear:both;
+}
+/* Footer layout */
+#blog-pager {
+clear:left;
+padding-top:25px;
+margin:0px;
+width:100%;
+}
+#blog-pager a {
+display:block;
+background-color:#eeeeee;
+padding:5px;
+margin-right:5px;
+border:solid thin #999999;
+width:130px;
+text-align:center;
+}
+#blog-pager-newer-link {
+display:block;
+float:left;
+}
+#blog-pager-older-link {
+display:block;
+float:left;
+}
+div.blog-mobile-link{
+margin-top:50px;
+padding:0px !important;
+display:block;
+}
+a.home-link {
+display:block;
+float:left;
+}
+#blog-pager a {
+display:block;
+background-color:#eeeeee;
+padding:5px;
+margin-right:5px;
+border:solid thin #999999;
+width:130px;
+text-align:center;
+}
+#blog-footer-wrapper {
+padding-bottom:20px;
+border:0;
+width:1020px;
+background: url(http://projectswithlove.com/images/cwl-bottom-shadow.png) bottom left no-repeat;
+}
+#blog-footer {
+background: url(http://projectswithlove.com/images/cwl-body.png);
+padding-left:60px;
+padding-right:60px;
+padding-top:22px;
+font-size: 11px;
+font-family: "Helvetica Neue", Helvetica, Arial;
+}
+#blog-footer span {
+display:block;
+width:100%;
+padding-top:12px;
+padding-bottom:24px;
+border-top:solid thin #888;
+text-align:center;
+}
+
+--&gt;
+  </style>
+  <style type="text/css">
+   span.fullpost {display:inline;}
+  </style>
+  <script src="http://projectswithlove.com/sh/shCore.js" type="text/javascript">
+  </script>
+  <script src="http://projectswithlove.com/sh/shBrushObjC.js" type="text/javascript">
+  </script>
+  <link href="http://projectswithlove.com/sh/shCore.css" rel="stylesheet" type="text/css"/>
+  <link href="http://projectswithlove.com/sh/shThemeDefault.css" rel="stylesheet" type="text/css"/>
+  <link href="http://projectswithlove.com/images/heartandcup.png" rel="shortcut icon" type="image/png"/>
+  <link href="http://projectswithlove.com/images/heartandcup.png" rel="icon" type="image/png"/>
+  <link href="http://projectswithlove.com/images/phone_icon.png" rel="apple-touch-icon"/>
+  <script type="text/javascript">
+   var a="indexOf",b="&amp;m=1",e="(^|&amp;)m=",f="?",g="?m=1";function h(){var c=window.location.href,d=c.split(f);switch(d.length){case 1:return c+g;case 2:return 0&lt;=d[1].search(e)?null:c+b;default:return null}}var k=navigator.userAgent;if(-1!=k[a]("Mobile")&amp;&amp;-1!=k[a]("WebKit")&amp;&amp;-1==k[a]("iPad")||-1!=k[a]("Opera Mini")||-1!=k[a]("IEMobile")){var l=h();l&amp;&amp;window.location.replace(l)};
+  </script>
+  <script type="text/javascript">
+   if (window.jstiming) window.jstiming.load.tick('headEnd');
+  </script>
+ </head>
+ <body>
+  <div class="navbar section" id="navbar">
+   <div class="widget Navbar" id="Navbar1">
+    <script type="text/javascript">
+     function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+    </script>
+    <div id="navbar-iframe-container">
+    </div>
+    <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+     gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+          if (gapi.iframes &amp;&amp; gapi.iframes.getContext) {
+            gapi.iframes.getContext().openChild({
+                url: 'https://www.blogger.com/navbar.g?targetBlogID\075371408380585915800\46blogName\75Cocoa+with+Love\46publishMode\75PUBLISH_MODE_HOSTED\46navbarType\75BLUE\46layoutType\75LAYOUTS\46searchRoot\75http://www.cocoawithlove.com/search\46blogLocale\75en\46v\0752\46homepageUrl\75http://www.cocoawithlove.com/\46targetPostID\0757328627687129730239\46blogPostOrPageUrl\75http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html\46vt\0753657456914421303686',
+                where: document.getElementById("navbar-iframe-container"),
+                id: "navbar-iframe"
+            });
+          }
+        });
+    </script>
+    <script type="text/javascript">
+     (function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '//pagead2.googlesyndication.com/pagead/js/google_top_exp.js';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+    </script>
+   </div>
+  </div>
+  <div id="blog-body-wrapper">
+   <div id="blog-outer-wrapper">
+    <div id="blog-header-wrapper">
+     <a href="http://cocoawithlove.com" style="display:block;padding-bottom:90px;">
+     </a>
+     <div class="header section" id="blog-header">
+      <div class="widget Header" id="Header1">
+       <div id="header-inner">
+        <div class="titlewrapper">
+         <h1 class="title">
+          <a href="http://www.cocoawithlove.com/">
+           Cocoa with Love
+          </a>
+         </h1>
+        </div>
+        <div class="descriptionwrapper">
+         <p class="description">
+          <span>
+           Advanced programming tips, tricks and hacks for Mac development in C/Objective-C and Cocoa.
+          </span>
+         </p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <ul id="blog-button-links">
+      <li>
+       <a href="http://cocoawithlove.com">
+        Home
+       </a>
+      </li>
+      <li>
+       <a href="http://cocoawithlove.com/p/about.html">
+        About
+       </a>
+      </li>
+      <li>
+       <a href="http://zqueue.com">
+        zqueue.com
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div id="blog-content-wrapper">
+     <div id="blog-sidebar-wrapper">
+      <div class="sidebar section" id="blog-sidebar">
+       <div class="widget HTML" id="HTML1">
+        <h2 class="title">
+         Search
+        </h2>
+        <div class="widget-content">
+         <form action="http://cocoawithlove.com/search" id="searchthis" method="get" style="display:inline;">
+          <input id="b-query" maxlength="255" name="q" size="18" type="text"/>
+          <input id="b-searchbtn" type="submit" value="Search"/>
+         </form>
+        </div>
+        <div class="clear">
+        </div>
+        <span class="widget-item-control">
+         <span class="item-control blog-admin">
+          <a class="quickedit" href="//www.blogger.com/rearrange?blogID=371408380585915800&amp;widgetType=HTML&amp;widgetId=HTML1&amp;action=editWidget&amp;sectionId=blog-sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML1"));' target="configHTML1" title="Edit">
+           <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+          </a>
+         </span>
+        </span>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="widget HTML" id="HTML3">
+        <h2 class="title">
+         Sponsors
+        </h2>
+        <div class="widget-content">
+        </div>
+        <div class="clear">
+        </div>
+        <span class="widget-item-control">
+         <span class="item-control blog-admin">
+          <a class="quickedit" href="//www.blogger.com/rearrange?blogID=371408380585915800&amp;widgetType=HTML&amp;widgetId=HTML3&amp;action=editWidget&amp;sectionId=blog-sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML3"));' target="configHTML3" title="Edit">
+           <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+          </a>
+         </span>
+        </span>
+        <div class="clear">
+        </div>
+       </div>
+       <div class="widget BlogArchive" id="BlogArchive1">
+        <h2>
+         Archive
+        </h2>
+        <div class="widget-content">
+         <div id="ArchiveList">
+          <div id="BlogArchive1_ArchiveList">
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://www.cocoawithlove.com/search?updated-min=2011-01-01T00:00:00-08:00&amp;updated-max=2012-01-01T00:00:00-08:00&amp;max-results=10">
+              2011
+             </a>
+             <span class="post-count" dir="ltr">
+              (10)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2011_06_01_archive.html">
+                June 2011
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2011_05_01_archive.html">
+                May 2011
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2011_04_01_archive.html">
+                April 2011
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2011_03_01_archive.html">
+                March 2011
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2011_01_01_archive.html">
+                January 2011
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate expanded">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy toggle-open">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://www.cocoawithlove.com/search?updated-min=2010-01-01T00:00:00-08:00&amp;updated-max=2011-01-01T00:00:00-08:00&amp;max-results=41">
+              2010
+             </a>
+             <span class="post-count" dir="ltr">
+              (41)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_12_01_archive.html">
+                December 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_11_01_archive.html">
+                November 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (3)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_10_01_archive.html">
+                October 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_09_01_archive.html">
+                September 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_08_01_archive.html">
+                August 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_07_01_archive.html">
+                July 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (2)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_06_01_archive.html">
+                June 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate expanded">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy toggle-open">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_05_01_archive.html">
+                May 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+               <ul class="posts">
+                <li>
+                 <a href="http://www.cocoawithlove.com/2010/05/handling-unhandled-exceptions-and.html">
+                  Handling unhandled exceptions and signals
+                 </a>
+                </li>
+                <li>
+                 <a href="http://www.cocoawithlove.com/2010/05/5-ways-to-draw-2d-shape-with-hole-in.html">
+                  5 ways to draw a 2D shape with a hole in CoreGraph...
+                 </a>
+                </li>
+                <li>
+                 <a href="http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html">
+                  A look at how malloc works on the Mac
+                 </a>
+                </li>
+                <li>
+                 <a href="http://www.cocoawithlove.com/2010/05/finding-or-creating-application-support.html">
+                  Finding or creating the application support direct...
+                 </a>
+                </li>
+               </ul>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_04_01_archive.html">
+                April 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_03_01_archive.html">
+                March 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_02_01_archive.html">
+                February 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2010_01_01_archive.html">
+                January 2010
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://www.cocoawithlove.com/search?updated-min=2009-01-01T00:00:00-08:00&amp;updated-max=2010-01-01T00:00:00-08:00&amp;max-results=50">
+              2009
+             </a>
+             <span class="post-count" dir="ltr">
+              (56)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_12_01_archive.html">
+                December 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_11_01_archive.html">
+                November 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_10_01_archive.html">
+                October 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_09_01_archive.html">
+                September 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (6)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_08_01_archive.html">
+                August 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_07_01_archive.html">
+                July 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_06_01_archive.html">
+                June 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_05_01_archive.html">
+                May 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_04_01_archive.html">
+                April 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_03_01_archive.html">
+                March 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_02_01_archive.html">
+                February 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2009_01_01_archive.html">
+                January 2009
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+           <ul class="hierarchy">
+            <li class="archivedate collapsed">
+             <a class="toggle" href="javascript:void(0)">
+              <span class="zippy">
+               
+              </span>
+             </a>
+             <a class="post-count-link" href="http://www.cocoawithlove.com/search?updated-min=2008-01-01T00:00:00-08:00&amp;updated-max=2009-01-01T00:00:00-08:00&amp;max-results=47">
+              2008
+             </a>
+             <span class="post-count" dir="ltr">
+              (47)
+             </span>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_12_01_archive.html">
+                December 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_11_01_archive.html">
+                November 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_10_01_archive.html">
+                October 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_09_01_archive.html">
+                September 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_08_01_archive.html">
+                August 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_07_01_archive.html">
+                July 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_06_01_archive.html">
+                June 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_05_01_archive.html">
+                May 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (5)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_04_01_archive.html">
+                April 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (4)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_03_01_archive.html">
+                March 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (7)
+               </span>
+              </li>
+             </ul>
+             <ul class="hierarchy">
+              <li class="archivedate collapsed">
+               <a class="toggle" href="javascript:void(0)">
+                <span class="zippy">
+                 
+                </span>
+               </a>
+               <a class="post-count-link" href="http://www.cocoawithlove.com/2008_02_01_archive.html">
+                February 2008
+               </a>
+               <span class="post-count" dir="ltr">
+                (1)
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </div>
+         </div>
+         <div class="clear">
+         </div>
+         <span class="widget-item-control">
+          <span class="item-control blog-admin">
+           <a class="quickedit" href="//www.blogger.com/rearrange?blogID=371408380585915800&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive1&amp;action=editWidget&amp;sectionId=blog-sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target="configBlogArchive1" title="Edit">
+            <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+           </a>
+          </span>
+         </span>
+         <div class="clear">
+         </div>
+        </div>
+       </div>
+       <div class="widget Label" id="Label1">
+        <h2>
+         Categories
+        </h2>
+        <div class="widget-content list-label-widget-content">
+         <ul>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/AppKit">
+            AppKit
+           </a>
+           <span dir="ltr">
+            (38)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/C%2B%2B">
+            C++
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Cocoa%20Touch">
+            Cocoa Touch
+           </a>
+           <span dir="ltr">
+            (32)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/code%20management">
+            code management
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Core%20Data">
+            Core Data
+           </a>
+           <span dir="ltr">
+            (10)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/CoreAnimation">
+            CoreAnimation
+           </a>
+           <span dir="ltr">
+            (7)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/CoreAudio">
+            CoreAudio
+           </a>
+           <span dir="ltr">
+            (5)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/CoreGraphics">
+            CoreGraphics
+           </a>
+           <span dir="ltr">
+            (8)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Foundation">
+            Foundation
+           </a>
+           <span dir="ltr">
+            (45)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/fun%20hacks">
+            fun hacks
+           </a>
+           <span dir="ltr">
+            (12)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/graphics">
+            graphics
+           </a>
+           <span dir="ltr">
+            (6)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Lion">
+            Lion
+           </a>
+           <span dir="ltr">
+            (1)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/numerical%20methods">
+            numerical methods
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/object-oriented%20design">
+            object-oriented design
+           </a>
+           <span dir="ltr">
+            (17)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Objective-C">
+            Objective-C
+           </a>
+           <span dir="ltr">
+            (38)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/performance%20tests">
+            performance tests
+           </a>
+           <span dir="ltr">
+            (7)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/self%20promotion">
+            self promotion
+           </a>
+           <span dir="ltr">
+            (6)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Snow%20Leopard">
+            Snow Leopard
+           </a>
+           <span dir="ltr">
+            (6)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Standard%20C">
+            Standard C
+           </a>
+           <span dir="ltr">
+            (17)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/testing">
+            testing
+           </a>
+           <span dir="ltr">
+            (6)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/UIKit">
+            UIKit
+           </a>
+           <span dir="ltr">
+            (26)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/WebKit">
+            WebKit
+           </a>
+           <span dir="ltr">
+            (3)
+           </span>
+          </li>
+          <li>
+           <a dir="ltr" href="http://www.cocoawithlove.com/search/label/Xcode">
+            Xcode
+           </a>
+           <span dir="ltr">
+            (18)
+           </span>
+          </li>
+         </ul>
+         <div class="clear">
+         </div>
+         <span class="widget-item-control">
+          <span class="item-control blog-admin">
+           <a class="quickedit" href="//www.blogger.com/rearrange?blogID=371408380585915800&amp;widgetType=Label&amp;widgetId=Label1&amp;action=editWidget&amp;sectionId=blog-sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Label1"));' target="configLabel1" title="Edit">
+            <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+           </a>
+          </span>
+         </span>
+         <div class="clear">
+         </div>
+        </div>
+       </div>
+       <div class="widget HTML" id="HTML2">
+        <h2 class="title">
+         RSS/Atom and Twitter Feeds
+        </h2>
+        <div class="widget-content">
+         <p>
+          <a href="http://feeds.feedburner.com/CocoaWithLove" rel="alternate" type="application/rss+xml">
+           <img alt="" src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" style="display:inline;vertical-align:middle;border:0"/>
+          </a>
+          <a href="http://feeds.feedburner.com/CocoaWithLove" rel="alternate" type="application/rss+xml">
+           Subscribe to this blog
+          </a>
+         </p>
+         <p>
+          <a href="http://www.twitter.com/cocoawithlove">
+           <img alt="Follow cocoawithlove on Twitter" src="http://twitter-badges.s3.amazonaws.com/t_mini-a.png" style="display:inline;vertical-align:middle;border:0"/>
+          </a>
+          <a href="http://www.twitter.com/cocoawithlove">
+           cocoawithlove on Twitter
+          </a>
+         </p>
+        </div>
+        <div class="clear">
+        </div>
+        <span class="widget-item-control">
+         <span class="item-control blog-admin">
+          <a class="quickedit" href="//www.blogger.com/rearrange?blogID=371408380585915800&amp;widgetType=HTML&amp;widgetId=HTML2&amp;action=editWidget&amp;sectionId=blog-sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML2"));' target="configHTML2" title="Edit">
+           <img alt="" height="18" src="//img1.blogblog.com/img/icon18_wrench_allbkg.png" width="18"/>
+          </a>
+         </span>
+        </span>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+     </div>
+     <div id="blog-main-wrapper">
+      <div class="main section" id="blog-main">
+       <div class="widget Blog" id="Blog1">
+        <div class="blog-posts hfeed">
+         <!-- google_ad_section_start(name=default) -->
+         <div class="date-outer">
+          <div class="date-posts">
+           <div class="post-outer">
+            <div class="post hentry" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+             <meta content="371408380585915800" itemprop="blogId"/>
+             <meta content="7328627687129730239" itemprop="postId"/>
+             <a name="7328627687129730239">
+             </a>
+             <h3 class="post-title entry-title" itemprop="name">
+              A look at how malloc works on the Mac
+             </h3>
+             <div class="post-header">
+              <div class="post-header-line-1">
+              </div>
+             </div>
+             <div class="post-body entry-content" id="post-body-7328627687129730239" itemprop="description articleBody">
+              <span class="introduction">
+               <p>
+                In this post, I'll take a high-level look at how malloc is implemented on the Mac. I'll look at how memory is allocated for "tiny", "small" and "large" allocation scales, the multi-core performance improvements introduced in Snow Leopard and some inbuilt debugging features you can trigger for finding memory problems including buffer overruns.
+               </p>
+              </span>
+              <span class="fullpost">
+               <h4>
+                Introduction
+               </h4>
+               <p>
+                All memory in Mac OS X is allocated to applications by the kernel. The kernel allocates memory to applications by mapping virtual memory pages (which are 4 kilobytes in size) into the application's memory space.
+               </p>
+               <p>
+                You can allocate memory in your application this way (using the
+                <code>
+                 mmap
+                </code>
+                function) to get your memory 4 kilobytes at a time. Alternately, you can simply use memory on the stack (which is 64 kilobytes big by default) and is mapped automatically for every thread.
+               </p>
+               <p>
+                But most of the time when people talk about allocating memory, they are referring to allocations using
+                <code>
+                 malloc
+                </code>
+                .
+               </p>
+               <p>
+                Compared to requesting pages of virtual memory directly,
+                <code>
+                 malloc
+                </code>
+                is finer grained (you can request much smaller sizes than 4 kilobytes) and considerably faster (since it doesn't require an
+                <code>
+                 mmap
+                </code>
+                every time).
+               </p>
+               <p>
+                Of course, internally,
+                <code>
+                 malloc
+                </code>
+                does receive its memory from the kernel by mapping virtual memory pages. Malloc gains its advantage by dividing those pages (or clusters of pages) into smaller regions and returning pointers to addresses within those regions when smaller allocations are requested.
+               </p>
+               <blockquote>
+                I'm using the term "
+                <code>
+                 malloc
+                </code>
+                " but this article applies to Objective-C's
+                <code>
+                 alloc
+                </code>
+                and
+                <code>
+                 allocWithZone:
+                </code>
+                , all CoreFoundation allocations and all related C functions like
+                <code>
+                 calloc
+                </code>
+                ,
+                <code>
+                 realloc
+                </code>
+                ,
+                <code>
+                 valloc
+                </code>
+                ,
+                <code>
+                 malloc_zone_malloc
+                </code>
+                ,
+                <code>
+                 malloc_zone_calloc
+                </code>
+                ,
+                <code>
+                 malloc_zone_valloc
+                </code>
+                ,
+                <code>
+                 malloc_zone_realloc
+                </code>
+                and
+                <code>
+                 malloc_zone_batch_malloc
+                </code>
+                since all these functions go through the same internal implementation on the Mac.
+               </blockquote>
+               <h4>
+                A generic malloc implementation
+               </h4>
+               <p>
+                Malloc implementations work by requesting a handful of virtual memory pages from the kernel and returning pointers to free areas within those pages when memory is requested. To know which areas within the pages are free at any given time, a malloc implementation must maintain metadata about the size and location of each allocated block in use and any free space between blocks.
+               </p>
+               <blockquote>
+                The pages of memory managed by malloc are collectively called "the heap" but it should be noted that malloc generally does not use a
+                <a href="http://en.wikipedia.org/wiki/Heap_(data_structure)">
+                 heap data structure
+                </a>
+                (which is a form of sorted tree) to track blocks; the two uses of the term "heap" are unrelated.
+               </blockquote>
+               <p>
+                As the program requires more memory, the malloc implementation requests more virtual memory pages, increasing the application's memory footprint. Every reasonable effort should to be made to allocate new blocks in the spaces left by previously free blocks to keep the memory footprint low.
+               </p>
+               <p>
+                The main difficulty for a memory allocator is to keep the amount of metadata and the amount of processing time low. This can be very difficult to do when memory becomes a mottled pattern of allocated blocks and freed space.
+               </p>
+               <p>
+                If the memory allocator kept an array of every single allocation, its location and size, the metadata could easily take as much memory as the allocations themselves. To increase efficiency, most allocators do not track every single byte in memory. Most use a resolution of 16 bytes or more. This allows reduced metadata to track allocated and freed runs.
+               </p>
+               <p>
+                Further, most allocators use free lists; instead of traversing memory on each allocation looking for an empty space of the appropriate size, the allocator keeps lists of freed areas categorized by their approximate sizes. As a further optimization, these free lists do not always track all free areas in a block (the free lists normally track a finite number of free areas).
+               </p>
+               <h4>
+                The Mac's implementation of malloc
+               </h4>
+               <p>
+                Despite the fact that all C standard library implementations offer a function named
+                <code>
+                 malloc
+                </code>
+                , they all have very different internal implementations.
+               </p>
+               <p>
+                The Mac's implementation of malloc is open source and is composed of two key implementation files:
+               </p>
+               <ul>
+                <li>
+                 <a href="http://www.opensource.apple.com/source/Libc/Libc-594.1.4/gen/malloc.c">
+                  malloc.c
+                 </a>
+                </li>
+                <li>
+                 <a href="http://www.opensource.apple.com/source/Libc/Libc-594.1.4/gen/magazine_malloc.c">
+                  magazine_malloc.c
+                 </a>
+                </li>
+               </ul>
+               <p>
+                The
+                <em>
+                 malloc.c
+                </em>
+                file is mostly a wrapper around the internal implementation in
+                <em>
+                 magazine_malloc.c
+                </em>
+                . This external wrapper routes regular
+                <code>
+                 malloc
+                </code>
+                invocations through the
+                <code>
+                 malloc_zone_malloc
+                </code>
+                function using the default malloc zone  so all malloc allocations on the Mac are actually zoned allocations sharing the same implementation that's used by Objective-C's
+                <code>
+                 +[NSObject allocWithZone:]
+                </code>
+                .
+               </p>
+               <p>
+                Up until Snow Leopard, the internal implementation was named
+                <a href="http://www.opensource.apple.com/source/Libc/Libc-594.1.4/gen/scalable_malloc.c">
+                 scalable_malloc.c
+                </a>
+                . It is scalable because it contains different code paths for allocations based on their size. The newer version magazine_malloc.c retains much of the code from scalable_malloc.c but adds multithreaded improvements for smaller allocations and removes the old "huge" scale (instead using the same allocation approach for "large" and "huge" scale allocations).
+               </p>
+               <h4>
+                The Mac's malloc regions
+               </h4>
+               <p>
+                The malloc allocation on the Mac has different code paths for the following allocation sizes:
+               </p>
+               <table>
+                <thead>
+                 <tr>
+                  <td width="44%">
+                   Allocation Size
+                  </td>
+                  <td width="11%">
+                   Code path name
+                  </td>
+                  <td width="27%">
+                   Quantum size (Allocation resolution)
+                  </td>
+                  <td>
+                   Region size
+                  </td>
+                 </tr>
+                </thead>
+                <tr>
+                 <td>
+                  32-bit: 1 byte to 496 bytes
+                  <br/>
+                  64-bit: 1 byte to 992 bytes
+                 </td>
+                 <td>
+                  Tiny
+                 </td>
+                 <td>
+                  16 bytes
+                 </td>
+                 <td>
+                  32-bit: 1MB
+                  <br/>
+                  64-bit: 2MB
+                 </td>
+                </tr>
+                <tr>
+                 <td>
+                  32-bit: 497 bytes to "Large" threshold
+                  <br/>
+                  64-bit: 993 bytes to "Large" threshold
+                 </td>
+                 <td>
+                  Small
+                 </td>
+                 <td>
+                  512 bytes
+                 </td>
+                 <td>
+                  32-bit: 8MB
+                  <br/>
+                  64-bit: 16MB
+                 </td>
+                </tr>
+                <tr>
+                 <td>
+                  &lt; 1GB RAM: 15kB or greater
+                  <br/>
+                  &gt;= 1GB RAM: 127kB or greater
+                 </td>
+                 <td>
+                  Large
+                 </td>
+                 <td>
+                  4kB
+                 </td>
+                 <td>
+                  N/A
+                 </td>
+                </tr>
+               </table>
+               <p>
+                The key point to note about the Mac's scalable malloc implementation is that it doesn't just divide up virtual memory pages to return smaller blocks but it allocates "tiny" and "small" allocations from their own separate regions ("large" allocations are simply allocated as virtual memory pages).
+               </p>
+               <p>
+                Allocating a "tiny" amount results in memory being returned from within a 2MB block (1MB in 32-bit programs). Allocations are always rounded up to the nearest 16 byte boundary since the tiny regions only track allocations at a resolution of 16 bytes. This has the additional advantage that it ensures all memory allocations are 16-byte aligned (helpful for SSE/Altivec instructions).
+               </p>
+               <p>
+                Of course, the 1 or 2 MB regions used for tiny allocations are only big enough to hold around 64,000 allocations at the smallest size  less for larger allocations. More regions are created as needed.
+               </p>
+               <p>
+                Beyond 15kB (127kB on systems with more than 1GB RAM) the Mac's malloc allocates memory purely as virtual memory pages  no additional tracking or metadata is maintained (although the kernel does maintain tracking for these pages).
+               </p>
+               <p>
+                To summarize the levels of hierarchy then:
+               </p>
+               <ul>
+                <li>
+                 Malloc zones allocate "tiny" and "small" regions or "large" blocks directly
+                </li>
+                <li>
+                 Regions return blocks from their contents as results for "tiny" and "small" malloc operations
+                </li>
+               </ul>
+               <h4>
+                The importance of regions
+               </h4>
+               <p>
+                The reason for separate regions for tiny and small allocations is that it allows the region's metadata to be more efficiently tuned to tracking the size of object it contains. For "tiny" allocations, tracking memory down to 16 byte units is worthwhile (it allows freed space to be reclaimed better and doesn't waste large amounts of memory around allocated objects). For "small" sized objects though, tracking at this resolution would be a poor tradeoff between CPU time (traversing through lists of freed or allocated blocks) and memory efficiency  the coarser 512 byte resolution is more efficient.
+               </p>
+               <p>
+                The tiny regions also have the advantage of reducing the impact of memory fragmentation. By keeping small and large allocations separate, the pattern of small allocations in the midst of otherwise large, free areas that is a cause of memory fragmentation is avoided. Of course, it doesn't eliminate fragmentation but helps.
+               </p>
+               <p>
+                The existence of the "tiny" region is of great important to Objective-C. Since Objective-C allocates all objects within malloc zones and almost all Objective-C objects fall within the "tiny" size bounds, it is of great benefit to have an optimized code path for such allocations.
+               </p>
+               <h4>
+                Threading improvements in Mac OS X 10.6
+               </h4>
+               <p>
+                In Snow Leopard, Apple replaced the old
+                <a href="http://www.opensource.apple.com/source/Libc/Libc-594.1.4/gen/scalable_malloc.c">
+                 scalable_malloc.c
+                </a>
+                with the newer
+                <a href="http://www.opensource.apple.com/source/Libc/Libc-594.1.4/gen/magazine_malloc.c">
+                 magazine_malloc.c
+                </a>
+                . This new implementation introduces a new approach of creating special "tiny" memory allocation regions for each thread.
+               </p>
+               <p>
+                This approach is "inspired" by the
+                <a href="http://www.cs.umass.edu/~emery/pubs/berger-asplos2000.pdf">
+                 Hoard memory allocator
+                </a>
+                with the thread-specific clusters and "superblocks" of that approach implemented as the magazine and regions in the Mac malloc implementation. Most of the allocation metadata that was previously kept in the "zone" structures moves into the new "magazine" level of the hierarchy so that it can be kept thread-specific. This includes all data that needs to be updated per allocation, like the number of allocated regions, the free lists and available memory counts.
+               </p>
+               <p>
+                Each "tiny" region is itself allocated by the top level allocator but is then assigned to a specific thread. Since the region is then thread-specific, the top-level, shared, allocator does not need to be locked and the chance of any thread contention is very low.
+               </p>
+               <p>
+                To summarize the levels of hierarchy for "tiny" allocations with these additions:
+               </p>
+               <ul>
+                <li>
+                 Malloc zones allocate magazines for "tiny" regions (1 per thread) and allocated the regions themselves when requested by the magazines.
+                </li>
+                <li>
+                 Magazines manage the regions for a thread
+                </li>
+                <li>
+                 Regions return blocks from their contents
+                </li>
+               </ul>
+               <p>
+                Of course, locks are still used internally when allocating or freeing from a region (since a malloc from one thread can still be freed in a different thread) but the chance of two threads contesting a lock is significantly reduced. The likelihood  of cache lines shared unnecessarily between CPUs is also reduced since threads don't allocate memory in the same regions.
+               </p>
+               <p>
+                Then end result is that the majority of memory allocations in Objective-C (which are typically allocated in a thread and released by the autorelease pool on that thread) will have near perfect thread independence.
+               </p>
+               <h4>
+                A pair of minor notes
+               </h4>
+               <p>
+                When you free memory, your application footprint will not immediately go down. Freeing region allocated memory adds the space to the free list for the region but will not cause the region to be released unless it was the last block in the region. Your application's footprint will only go down if an entire region is freed and the zone can unmap the virtual memory pages.
+               </p>
+               <p>
+                <code>
+                 calloc
+                </code>
+                takes two parameters: a size and a number of elements.
+                <code>
+                 malloc
+                </code>
+                only takes a size but is often calculated by multiplying a
+                <code>
+                 sizeof(SomeType)
+                </code>
+                by a number of elements. The end result is identical: internally, calloc just multiplies its two parameters together  other than some overflow checking on the multiplication, the size of the returned block from
+                <code>
+                 calloc(a, b)
+                </code>
+                is identical to the block returned by
+                <code>
+                 malloc(a * b)
+                </code>
+                .
+               </p>
+               <h4>
+                Debugging information
+               </h4>
+               <p>
+                One important point to note from reading the malloc.c file is that the Mac memory allocator can be configured at runtime to generate logging information. The following environment variables can be set to have the memory allocator perform debug behaviors:
+               </p>
+               <ul>
+                <li>
+                 <b>
+                  MallocLogFile
+                 </b>
+                 &lt;f&gt; to create/append messages to file &lt;f&gt; instead of stderr
+                </li>
+                <li>
+                 <b>
+                  MallocGuardEdges
+                 </b>
+                 to add 2 guard pages for each large block
+                </li>
+                <li>
+                 <b>
+                  MallocDoNotProtectPrelude
+                 </b>
+                 to disable protection (when previous flag set)
+                </li>
+                <li>
+                 <b>
+                  MallocDoNotProtectPostlude
+                 </b>
+                 to disable protection (when previous flag set)
+                </li>
+                <li>
+                 <b>
+                  MallocStackLogging
+                 </b>
+                 to record all stacks.  Tools like leaks can then be applied
+                </li>
+                <li>
+                 <b>
+                  MallocStackLoggingNoCompact
+                 </b>
+                 to record all stacks.  Needed for malloc_history
+                </li>
+                <li>
+                 <b>
+                  MallocStackLoggingDirectory
+                 </b>
+                 to set location of stack logs, which can grow large; default is /tmp
+                </li>
+                <li>
+                 <b>
+                  MallocScribble
+                 </b>
+                 to detect writing on free blocks and missing initializers:
+  0x55 is written upon free and 0xaa is written on allocation
+                </li>
+                <li>
+                 <b>
+                  MallocCheckHeapStart
+                 </b>
+                 &lt;n&gt; to start checking the heap after &lt;n&gt; operations
+                </li>
+                <li>
+                 <b>
+                  MallocCheckHeapEach
+                 </b>
+                 &lt;s&gt; to repeat the checking of the heap after &lt;s&gt; operations
+                </li>
+                <li>
+                 <b>
+                  MallocCheckHeapSleep
+                 </b>
+                 &lt;t&gt; to sleep &lt;t&gt; seconds on heap corruption
+                </li>
+                <li>
+                 <b>
+                  MallocCheckHeapAbort
+                 </b>
+                 &lt;b&gt; to abort on heap corruption if &lt;b&gt; is non-zero
+                </li>
+                <li>
+                 <b>
+                  MallocCorruptionAbort
+                 </b>
+                 to abort on malloc errors, but not on out of memory for 32-bit processes
+  MallocCorruptionAbort is always set on 64-bit processes
+                </li>
+                <li>
+                 <b>
+                  MallocErrorAbort
+                 </b>
+                 to abort on any malloc error, including out of memory
+                </li>
+                <li>
+                 <b>
+                  MallocHelp
+                 </b>
+                 - this help!
+                </li>
+               </ul>
+               <p>
+                Unfortunately, the normal build of magazine_malloc.c in Mac OS X has the limitation that it won't apply guard pages to "small" or "tiny" allocations. To apply guard pages to all data, you'll need to use the libgmalloc library. Do this by setting the following environment variable:
+               </p>
+               <pre>
+                export DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib
+               </pre>
+               <p>
+                For more information, see the
+                <a href="http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/man3/libgmalloc.3.html">
+                 libgmalloc Manual Page
+                </a>
+                .
+               </p>
+               <p>
+                You can also set environment variables in Xcode by right-clicking on the executable in the Tree view, selecting "Get Info" and going to the "Arguments" tab.
+               </p>
+               <h4>
+                Conclusion
+               </h4>
+               <p>
+                I'm not sure there are a huge number of lessons to be directly taken from this article and immediately used in a program. The debug options are useful to know should the need arise but this article is mostly an exercise in investigating one of more heavily used library functions on the Mac.
+               </p>
+               <p>
+                The memory allocator on the Mac has lots of different OS-specific behaviors related to alignment, granularity and thread performance. Depending on the size of the allocation, and even the amount of installed memory, some of these behaviors will change from allocation to allocation.
+               </p>
+               <p>
+                One reassuring point to take from this is to know that the many thousands of tiny Objective-C object allocations in a typical Cocoa program do have a heavily optimized path on the Mac.
+               </p>
+              </span>
+             </div>
+             <div class="post-footer">
+              <div class="post-footer-line post-footer-line-1">
+               <span class="post-icons">
+               </span>
+               <span class="post-author vcard">
+                Posted by
+                <span class="fn" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                 <meta content="http://www.blogger.com/profile/12617910364694969282" itemprop="url"/>
+                 <a class="g-profile" href="http://www.blogger.com/profile/12617910364694969282" rel="author" title="author profile">
+                  <span itemprop="name">
+                   Matt Gallagher
+                  </span>
+                 </a>
+                </span>
+               </span>
+               <span class="post-timestamp">
+                on
+                <meta content="http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html" itemprop="url"/>
+                <a class="timestamp-link" href="http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html" rel="bookmark" title="permanent link">
+                 <abbr class="published" itemprop="datePublished" title="2010-05-12T00:53:00-07:00">
+                  Wednesday, May 12, 2010
+                 </abbr>
+                </a>
+               </span>
+               <span class="post-labels">
+                Filed in categories:
+                <a href="http://www.cocoawithlove.com/search/label/Objective-C" rel="tag">
+                 Objective-C
+                </a>
+                ,
+                <a href="http://www.cocoawithlove.com/search/label/Standard%20C" rel="tag">
+                 Standard C
+                </a>
+               </span>
+              </div>
+              <div class="post-footer-line post-footer-line-2">
+              </div>
+              <div class="post-footer-line post-footer-line-3">
+               <span class="post-comment-link">
+               </span>
+               <span class="post-location">
+               </span>
+              </div>
+             </div>
+            </div>
+            <div class="comments" id="comments">
+             <a name="comments">
+             </a>
+             <div id="backlinks-container">
+              <div id="Blog1_backlinks-container">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <!-- google_ad_section_end -->
+        </div>
+        <div class="blog-pager" id="blog-pager">
+         <span id="blog-pager-newer-link">
+          <a class="blog-pager-newer-link" href="http://www.cocoawithlove.com/2010/05/5-ways-to-draw-2d-shape-with-hole-in.html" id="Blog1_blog-pager-newer-link" title="Newer Post">
+           Newer Post
+          </a>
+         </span>
+         <span id="blog-pager-older-link">
+          <a class="blog-pager-older-link" href="http://www.cocoawithlove.com/2010/05/finding-or-creating-application-support.html" id="Blog1_blog-pager-older-link" title="Older Post">
+           Older Post
+          </a>
+         </span>
+         <a class="home-link" href="http://www.cocoawithlove.com/">
+          Home
+         </a>
+        </div>
+        <div class="clear">
+        </div>
+        <div class="post-feeds">
+        </div>
+        <script type="text/javascript">
+         window.___gcfg = {'lang': 'en'};
+        </script>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="blog-footer-wrapper">
+     <div id="blog-footer">
+      <span>
+       All content  Matt Gallagher, all rights reserved.
+						Email:
+       <script type="text/javascript">
+        //&lt;![CDATA[
+
+function hiveware_enkoder(){var i,j,x,y,x=
+"x=\"53Br^o7d9ix=\\\"e7(65x=\\\\j8)3\\\"\\\\\\\\1}6y\\\\&amp;dx3\\\"\\\\\\\\;=3" +
+"\\\\\\\\jg8t\\\\\\\\\\\\\\\"6h7;\\\\\\\\4y6i8+f&gt;7#3+8)e775:{6j278gd=3x5784" +
+"3.8c58565h7a178e:r8C17865o7d377fde7Ag8756);yb37f='';6878for(4883i=0;578:i&lt;" +
+"x.4885leng8\\\\\\\"=th;ix8,7+=2)&gt;:38{y+=*776x.su:389b:)75373jd+3947d=195d7" +
+"724e;7g381y2+87779=5S86833t5r3f776i1n54777g8.7g47ef2rxe64d.lend333gth;g77e" +
+"i+=22742){y+f73:=x.s373dubst:847r(i,*6*71);}&lt;4~8y=y.z5\\\\\\\\subs\\\\\\\\" +
+"\\\\\\\"tr(j\\\\\\\\c7);=e4g14val(4bc7x.ch#e&lt;7arAtz2&gt;8(0))(5(8;x=x&lt;5g5.sub" +
+"p1s8str()1j81i,h&gt;317tgne&lt;gj7l.x(=by7nim./6m7htaMf4o8=j(rh5u8of{)i4&lt;817=+j=" +
+"70i;ht6;3ignel6&lt;4x.x&lt;i3.4l;0=i1e6n(rof25|7;''=z9,7y;\\\\\\\"&gt;dv7str(ogf8i," +
+"1)t7d7;}fob6q3r(i=ff)71;i&lt;(4&7;y}}(g,7;)j(ye/4tAratgv8hc.xc4t8=+y{u6s7);i=" +
+")3j7&gt;j---b3t;)174(ei+\\\";y6)d-='';313;for(5i6fi=0;7(eji&lt;x.7&lt;23leng724;th;" +
+"iey5=+=784'7'){fog;7xr(j=4=7uMathgn7e.min2s6c(x.l8a7pengt:e8(h,i+5x7)78);9" +
+";5f--j&gt;do7r=i;)g(8i{y+=77odx.chm7CdarAth7a2(j);r7C8}}y;\";j=eval(x.charAt(" +
+"0));x=x.substr(1);y='';for(i=0;i&lt;x.length;i+=8){y+=x.substr(i,4);}for(i=4;" +
+"i&lt;x.length;i+=8){y+=x.substr(i,4);}y=y.substr(j);";
+while(x=eval(x));}hiveware_enkoder();
+
+//]]&gt;
+       </script>
+       <br/>
+       Code samples may be used in accordance with the zlib-style license shown on
+       <a href="http://cocoawithlove.com/p/about.html">
+        the About page
+       </a>
+      </span>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script type="text/javascript">
+   SyntaxHighlighter.all()
+  </script>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   _uacct = "UA-3926336-1";
+urchinTracker();
+  </script>
+  <script type="text/javascript">
+   if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+  </script>
+  <script src="https://www.blogger.com/static/v1/widgets/3190386002-widgets.js" type="text/javascript">
+  </script>
+  <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   if (typeof(BLOG_attachCsiOnload) != 'undefined' &amp;&amp; BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";window['blogger_blog_id'] = '371408380585915800';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d371408380585915800','//www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html','371408380585915800');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '371408380585915800', 'bloggerUrl': 'http://www.blogger.com', 'title': 'Cocoa with Love', 'pageType': 'item', 'postId': '7328627687129730239', 'url': 'http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html', 'canonicalUrl': 'http://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html', 'canonicalHomepageUrl': 'http://www.cocoawithlove.com/', 'homepageUrl': 'http://www.cocoawithlove.com/', 'blogspotFaviconUrl': 'http://www.cocoawithlove.com/favicon.ico', 'enabledCommentProfileImages': false, 'adultContent': false, 'disableAdSenseWidget': false, 'analyticsAccountNumber': '', 'searchLabel': '', 'searchQuery': '', 'pageName': 'A look at how malloc works on the Mac', 'pageTitle': 'Cocoa with Love: A look at how malloc works on the Mac', 'encoding': 'UTF-8', 'locale': 'en', 'localeUnderscoreDelimited': 'en', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Cocoa with Love - Atom\42 href\75\42http://www.cocoawithlove.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42Cocoa with Love - RSS\42 href\75\42http://www.cocoawithlove.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42Cocoa with Love - Atom\42 href\75\42http://www.blogger.com/feeds/371408380585915800/posts/default\42 /\76\n\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Cocoa with Love - Atom\42 href\75\42http://www.cocoawithlove.com/feeds/7328627687129730239/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var b\75window,f\75\42chrome\42,g\75\42tick\42,k\75\42jstiming\42;(function(){function d(a){this.t\75{};this.tick\75function(a,d,c){var e\75void 0!\75c?c:(new Date).getTime();this.t[a]\75[e,d];if(void 0\75\75c)try{b.console.timeStamp(\42CSI/\42+a)}catch(h){}};this[g](\42start\42,null,a)}var a;b.performance\46\46(a\75b.performance.timing);var n\75a?new d(a.responseStart):new d;b.jstiming\75{Timer:d,load:n};if(a){var c\75a.navigationStart,h\75a.responseStart;0\74c\46\46h\76\75c\46\46(b[k].srt\75h-c)}if(a){var e\75b[k].load;0\74c\46\46h\76\75c\46\46(e[g](\42_wtsrt\42,void 0,c),e[g](\42wtsrt_\42,\42_wtsrt\42,h),e[g](\42tbsd_\42,\42wtsrt_\42))}try{a\75null,\nb[f]\46\46b[f].csi\46\46(a\75Math.floor(b[f].csi().pageT),e\46\0460\74c\46\46(e[g](\42_tbnd\42,void 0,b[f].csi().startE),e[g](\42tbnd_\42,\42_tbnd\42,c))),null\75\75a\46\46b.gtbExternal\46\46(a\75b.gtbExternal.pageT()),null\75\75a\46\46b.external\46\46(a\75b.external.pageT,e\46\0460\74c\46\46(e[g](\42_tbnd\42,void 0,b.external.startE),e[g](\42tbnd_\42,\42_tbnd\42,c))),a\46\46(b[k].pt\75a)}catch(p){}})();b.tickAboveFold\75function(d){var a\0750;if(d.offsetParent){do a+\75d.offsetTop;while(d\75d.offsetParent)}d\75a;750\76\75d\46\46b[k].load[g](\42aft\42)};var l\75!1;function m(){l||(l\75!0,b[k].load[g](\42firstScrollTime\42))}b.addEventListener?b.addEventListener(\42scroll\42,m,!1):b.attachEvent(\42onscroll\42,m);\n })();\74/script\076', 'mobileHeadScript': '', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/cda3ddef07a85452', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'sf': 'n', 'tf': ''}}, {'name': 'skin', 'data': {'vars': {}, 'override': ''}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\75classic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\75flipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\75magazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\75mosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\75sidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\75snapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\75timeslide'}}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', null, document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'blog-header', null, document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'blog-sidebar', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML3', 'blog-sidebar', null, document.getElementById('HTML3'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'blog-sidebar', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr', 'loadingMessage': 'Loading...'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label1', 'blog-sidebar', null, document.getElementById('Label1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'blog-sidebar', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'blog-main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/2449464588-lbx.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/2392111094-lightbox_bundle.css'}, 'displayModeFull'));
+  </script>
+ </body>
+</html>

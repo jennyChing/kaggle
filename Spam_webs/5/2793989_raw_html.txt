@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   Irish Craft Studio
+  </title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-type"/>
+  <meta content="" name="description"/>
+  <meta content="" name="keywords"/>
+  <!-- Google code for Analytics tracking -->
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22069422-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+  <link href="/Themes/ICS/Content/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/Content/smoothness/jquery-ui-1.8.17.custom.css" rel="stylesheet" type="text/css"/>
+  <script src="/Scripts/jquery-1.7.1.min.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/jquery.validate.min.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/jquery-ui.min.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/public.common.js" type="text/javascript">
+  </script>
+  <script src="/Scripts/public.ajaxcart.js" type="text/javascript">
+  </script>
+  <!--Powered by nopCommerce - http://www.nopCommerce.com-->
+  <!--Copyright (c) 2008-2012-->
+ </head>
+ <body>
+  <div id="dialog-notifications-success" style="display:none;" title="Notification">
+  </div>
+  <div id="dialog-notifications-error" style="display:none;" title="Error">
+  </div>
+  <div class="bar-notification" id="bar-notification">
+   <img alt="Close" class="close" src="/Content/Images/ico-close-notification-bar.png" title="Close"/>
+  </div>
+  <div class="master-wrapper-page">
+   <div class="master-wrapper-content">
+    <script type="text/javascript">
+     AjaxCart.init(false, '.header-links .cart-qty', '.header-links .wishlist-qty', '#flyout-cart');
+    </script>
+    <div class="header">
+     <div class="header-links-wrapper">
+      <div class="header-links">
+       <ul>
+        <li>
+         <a class="ico-register" href="/register">
+          Register
+         </a>
+        </li>
+        <li>
+         <a class="ico-login" href="/login">
+          Log in
+         </a>
+        </li>
+        <li id="topcartlink">
+         <a class="ico-cart" href="/cart">
+          Shopping cart
+         </a>
+         <a class="cart-qty" href="/cart">
+          (0)
+         </a>
+        </li>
+       </ul>
+       <script type="text/javascript">
+        $('#topcartlink').live('mouseenter', function () {
+                $('#flyout-cart').addClass('active');
+            });
+            $('#topcartlink').live('mouseleave', function () {
+                $('#flyout-cart').removeClass('active');
+            });
+            $('#flyout-cart').live('mouseenter', function () {
+                $('#flyout-cart').addClass('active');
+            });
+            $('#flyout-cart').live('mouseleave', function () {
+                $('#flyout-cart').removeClass('active');
+            });
+       </script>
+      </div>
+      <div id="flyout-cart">
+       <div class="mini-shopping-cart">
+        <div class="count">
+         You have no items in your shopping cart.
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="header-selectors-wrapper">
+      <div class="tax-display-type-selector">
+      </div>
+      <div class="currency-selector">
+       <select id="customerCurrency" name="customerCurrency" onchange="setLocation(this.value);">
+        <option selected="selected" value="/changecurrency/6">
+         Euro
+        </option>
+        <option value="/changecurrency/1">
+         US Dollar
+        </option>
+       </select>
+      </div>
+      <div class="language-selector">
+      </div>
+     </div>
+     <div class="header-logo">
+      <a class="logo" href="/">
+      </a>
+     </div>
+    </div>
+    <div class="header-menu">
+     <div class="search-box">
+      <form action="/search" method="get" onsubmit="return check_small_search_form()">
+       <ul>
+        <li>
+         <input autocomplete="off" class="search-box-text" id="small-searchterms" name="q" onblur="if(this.value=='') {this.value = 'Search store';}" onfocus="if(this.value=='Search store')this.value=''" type="text" value="Search store"/>
+        </li>
+        <li>
+         <input class="button-1 search-box-button" type="submit" value="Search"/>
+        </li>
+       </ul>
+       <script type="text/javascript">
+        function check_small_search_form() {
+                var search_terms = $("#small-searchterms");
+                if (search_terms.val() == "") {
+                    alert('Please enter some search keyword');
+                    search_terms.focus();
+                    return false;
+                }
+
+                return true;
+            }
+                
+                $(function () {
+                    $('#small-searchterms').autocomplete({
+                        delay: 500,
+                        minLength: 3,
+                        source: '/catalog/searchtermautocomplete',
+			            select: function( event, ui ) {
+				            $("#small-searchterms").val(ui.item.label);
+                            setLocation(ui.item.producturl);
+				            return false;
+			            }
+                    })
+                    .data("autocomplete")._renderItem = function( ul, item ) {
+                    var t = item.label;
+                    //html encode
+                    t = htmlEncode(t);
+                    return $("&lt;li&gt;&lt;/li&gt;")
+                    .data("item.autocomplete", item)
+                    .append("&lt;a&gt;" + t + "&lt;/a&gt;")
+                    .appendTo(ul);
+                    };
+                });
+       </script>
+      </form>
+     </div>
+     <ul class="top-menu">
+      <li>
+       <a href="/">
+        Home page
+       </a>
+      </li>
+      <li>
+       <a href="/newproducts">
+        New products
+       </a>
+      </li>
+      <li>
+       <a href="/search">
+        Search
+       </a>
+      </li>
+      <li>
+       <a href="/customer/info">
+        My account
+       </a>
+      </li>
+      <li>
+       <a href="/contactus">
+        Contact us
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="ajax-loading-block-window" style="display: none">
+     <div class="loading-image">
+     </div>
+    </div>
+    <div class="master-wrapper-side-2">
+     <div class="clear">
+     </div>
+     <div class="block block-category-navigation">
+      <div class="title">
+       Categories
+      </div>
+      <div class="clear">
+      </div>
+      <div class="listbox">
+       <ul>
+        <li class="inactive">
+         <a href="/c/108/hatshead-pieces">
+          Hats/Head Pieces
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/109/knittingcrochet">
+          knitting/crochet
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/53/ceramics">
+          ceramics
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/55/glass">
+          glass
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/56/handweaving">
+          handweaving
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/57/bog-wood-sculpture">
+          wood
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/58/paintings">
+          paintings
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/66/prints-unique">
+          prints
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/67/ireland-landscape-photography">
+          photography
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/71/books">
+          books
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/74/metal">
+          metal
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/77/hand-felting">
+          hand felting
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/80/jewellery">
+          jewellery
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/83/knitted-characters">
+          knitted characters
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/87/handmade-soap">
+          handmade soap
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/90/stone-masonry-carving-craftsmanship-sand-stone-sculpture-celtic-design">
+          stone
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/93/prints-and-cards">
+          Prints and Cards
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/98/candles">
+          Candles
+         </a>
+        </li>
+        <li class="inactive">
+         <a href="/c/103/unique-hand-embroidery">
+          Unique Hand Embroidery
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <div class="block block-info">
+      <div class="title">
+       Information
+      </div>
+      <div class="clear">
+      </div>
+      <div class="listbox">
+       <ul>
+        <li>
+         <a href="/contactus">
+          Contact us
+         </a>
+        </li>
+        <li>
+         <a href="/t/aboutus">
+          About us
+         </a>
+        </li>
+        <li>
+         <a href="/newproducts">
+          New products
+         </a>
+        </li>
+        <li>
+         <a href="/recentlyviewedproducts">
+          Recently viewed products
+         </a>
+        </li>
+        <li>
+         <a href="/compareproducts">
+          Compare products list
+         </a>
+        </li>
+        <li>
+         <a href="/sitemap">
+          Sitemap
+         </a>
+        </li>
+        <li>
+         <a href="/t/shippinginfo">
+          Shipping &amp; Returns
+         </a>
+        </li>
+        <li>
+         <a href="/t/privacyinfo">
+          Privacy Notice
+         </a>
+        </li>
+        <li>
+         <a href="/t/conditionsofUse">
+          Conditions of Use
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="clear">
+     </div>
+     <div class="facebookimg">
+     </div>
+    </div>
+    <div class="master-wrapper-center-2">
+     <div class="page home-page">
+      <div class="page-body">
+       <div class="topic-html-content">
+        <div class="topic-html-content-body">
+         <p>
+         </p>
+         <p>
+         </p>
+         <center>
+          <div class="welcome">
+          </div>
+         </center>
+         <div class="homepagetext">
+          <p>
+           Irish Craft Studio is an online store which embraces Irish Art, Craftsmanship and Design in its purest form. Each piece in the collection is lovingly hand-crafted by talented artists from all over Ireland.
+           <br/>
+           <br/>
+           <i>
+            The Artists draw on Irelands rich natural resources of wood, stone, clay and wool to create unique, contemporary designs which capture the mystery of Ireland and its landscape.
+           </i>
+           <br/>
+           <br/>
+           <i>
+            Weather it be an interior design project, a gift or a statement piece in your own home, Irish Craft Studios' collection can fulfill your need.
+           </i>
+          </p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="clear">
+      </div>
+      <div class="home-page-product-grid">
+       <div class="title">
+        Featured products
+       </div>
+       <div class="clear">
+       </div>
+       <table>
+        <tr>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/109/donegal-tweed-baby-blanket" title="Show details for donegal tweed baby blanket">
+               donegal tweed baby blanket
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/109/donegal-tweed-baby-blanket" title="Show details for donegal tweed baby blanket">
+               <img alt="Picture of donegal tweed baby blanket" src="http://www.irishcraftstudio.com/content/images/thumbs/0000269_donegal_tweed_baby_blanket_125.jpeg" title="Show details for donegal tweed baby blanket"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/97/fused-glass-pendant" title="Show details for fused glass pendant">
+               fused glass pendant
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/97/fused-glass-pendant" title="Show details for fused glass pendant">
+               <img alt="Picture of fused glass pendant" src="http://www.irishcraftstudio.com/content/images/thumbs/0000220_fused_glass_pendant_125.jpeg" title="Show details for fused glass pendant"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/280/book-of-kells-inspired-carving-on-solid-beech-wood-wall-hanging" title="Show details for Illuminated Letter D Wallhanging - Book of Kells series">
+               Illuminated Letter D Wallhanging - Book of Kells series
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/280/book-of-kells-inspired-carving-on-solid-beech-wood-wall-hanging" title="Show details for Illuminated Letter D Wallhanging - Book of Kells series">
+               <img alt="Picture of Illuminated Letter D Wallhanging - Book of Kells series" src="http://www.irishcraftstudio.com/content/images/thumbs/0000677_book_of_kells_inspired_carving_on_solid_beech_wood_wall_hanging__125.jpeg" title="Show details for Illuminated Letter D Wallhanging - Book of Kells series"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/149/light-turquoise-on-porcelain" title="Show details for light turquoise on porcelain">
+               light turquoise on porcelain
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/149/light-turquoise-on-porcelain" title="Show details for light turquoise on porcelain">
+               <img alt="Picture of light turquoise on porcelain" src="http://www.irishcraftstudio.com/content/images/thumbs/0000383_light_turquoise_on_porcelain_125.jpeg" title="Show details for light turquoise on porcelain"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/108/mountcharles-shore" title="Show details for mountcharles shore">
+               mountcharles shore
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/108/mountcharles-shore" title="Show details for mountcharles shore">
+               <img alt="Picture of mountcharles shore" src="http://www.irishcraftstudio.com/content/images/thumbs/0000266_mountcharles_shore_125.jpeg" title="Show details for mountcharles shore"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/320/path-to-lovers-cove" title="Show details for Path to Lovers Cove">
+               Path to Lovers Cove
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/320/path-to-lovers-cove" title="Show details for Path to Lovers Cove">
+               <img alt="Picture of Path to Lovers Cove" src="http://www.irishcraftstudio.com/content/images/thumbs/0000770_path_to_lovers_cove_125.jpeg" title="Show details for Path to Lovers Cove"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+        </tr>
+        <tr>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/337/precious-heart" title="Show details for Precious Heart">
+               Precious Heart
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/337/precious-heart" title="Show details for Precious Heart">
+               <img alt="Picture of Precious Heart" src="http://www.irishcraftstudio.com/content/images/thumbs/0000811_precious-heart_125.jpeg" title="Show details for Precious Heart"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+         <td>
+          <div class="item-box">
+           <div class="product-items">
+            <div class="small-product-item">
+             <div class="product-title">
+              <a href="/p/137/tulips" title="Show details for tulips">
+               tulips
+              </a>
+             </div>
+             <div class="picture">
+              <a href="/p/137/tulips" title="Show details for tulips">
+               <img alt="Picture of tulips" src="http://www.irishcraftstudio.com/content/images/thumbs/0000353_tulips_125.jpeg" title="Show details for tulips"/>
+              </a>
+             </div>
+            </div>
+           </div>
+          </div>
+         </td>
+        </tr>
+       </table>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="footer">
+   <div class="designby">
+    Website by Digital Door
+    <div class="footer-disclaimer">
+     Copyright  2015 Irish Craft Studio. All rights reserved.
+    </div>
+   </div>
+   <div class="footer-poweredby">
+    Powered by
+    <a href="http://www.nopcommerce.com/">
+     nopCommerce
+    </a>
+    <!--Would you like
+                to remove the "Powered by nopCommerce" link in the bottom of the footer? Find more
+                info here http://www.nopcommerce.com/copyrightremoval.aspx -->
+   </div>
+   <div class="footer-store-theme">
+   </div>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<!--[if IE 7]&gt;
+&lt;html class="ie ie7" lang="en-US"
+ xmlns:fb="http://ogp.me/ns/fb#" prefix="og: http://ogp.me/ns#"&gt;
+&lt;![endif]-->
+<!--[if IE 8]&gt;
+&lt;html class="ie ie8" lang="en-US"
+ xmlns:fb="http://ogp.me/ns/fb#" prefix="og: http://ogp.me/ns#"&gt;
+&lt;![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]&gt;&lt;!-->
+<html lang="en-US" prefix="og: http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#">
+ <!--&lt;![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="http://fernieadventure.com/xmlrpc.php" rel="pingback"/>
+  <!--[if lt IE 9]&gt;
+&lt;script src="http://fernieadventure.com/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v1.3.4.4 - http://yoast.com/wordpress/seo/ -->
+  <title>
+   Authentication and Authorisation -Week 6 of The Starter League
+  </title>
+  <meta content="Another week has flown past! This week we have learnt a few essential things and I had a few ideas of the type of problems I would like to solve. We did a bunch of work on authentication and authorisation." name="description"/>
+  <link href="http://fernieadventure.com/authentication-and-authorisation/" rel="canonical"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="Authentication and Authorisation -Week 6 of The Starter League" property="og:title"/>
+  <meta content="Another week has flown past! This week we have learnt a few essential things and I had a few ideas of the type of problems I would like to solve. We did a bunch of work on authentication and authorisation." property="og:description"/>
+  <meta content="http://fernieadventure.com/authentication-and-authorisation/" property="og:url"/>
+  <meta content="Fernieadventure.com" property="og:site_name"/>
+  <meta content="article" property="og:type"/>
+  <meta content="http://fernieadventure.com/wp-content/uploads/2013/08/Register-as-a-New-user-on-MySkiLesson.jpg" property="og:image"/>
+  <meta content="http://fernieadventure.com/wp-content/uploads/2013/08/Log-in-Page-for-MySkiLesson.jpg" property="og:image"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="http://fernieadventure.com/feed/" rel="alternate" title="Fernieadventure.com  Feed" type="application/rss+xml"/>
+  <link href="http://fernieadventure.com/comments/feed/" rel="alternate" title="Fernieadventure.com  Comments Feed" type="application/rss+xml"/>
+  <script type="text/javascript">
+   //&lt;![CDATA[
+			// Google Analytics for WordPress by Yoast v4.2.8 | http://yoast.com/wordpress/google-analytics/
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-35872652-1']);
+							_gaq.push(['_trackPageview']);
+			(function () {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+			//]]&gt;
+  </script>
+  <link href="http://fernieadventure.com/authentication-and-authorisation/feed/" rel="alternate" title="Fernieadventure.com  Authentication and Authorisation Comments Feed" type="application/rss+xml"/>
+  <link href="http://fernieadventure.com/wp-content/plugins/mailchimp//css/flick/flick.css?ver=3.5" id="flick-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fernieadventure.com/?mcsf_action=main_css&amp;ver=3.5" id="mailchimpSF_main_css-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if IE]&gt;
+&lt;link rel='stylesheet' id='mailchimpSF_ie_css-css'  href='http://fernieadventure.com/wp-content/plugins/mailchimp/css/ie.css?ver=3.5' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://fernieadventure.com/wp-content/plugins/author-hreview/style/style.css?ver=3.5" id="myStyleSheets-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&amp;subset=latin,latin-ext" id="twentytwelve-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="http://fernieadventure.com/wp-content/themes/twentytwelve/style.css?ver=3.5" id="twentytwelve-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <!--[if lt IE 9]&gt;
+&lt;link rel='stylesheet' id='twentytwelve-ie-css'  href='http://fernieadventure.com/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' /&gt;
+&lt;![endif]-->
+  <link href="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/style.css?ver=3.5" id="acx-widget-si-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="http://fernieadventure.com/wp-includes/js/jquery/jquery.js?ver=1.8.3" type="text/javascript">
+  </script>
+  <script src="http://fernieadventure.com/wp-content/plugins/mailchimp/js/scrollTo.js?ver=1.2.13" type="text/javascript">
+  </script>
+  <script src="http://fernieadventure.com/wp-includes/js/jquery/jquery.form.min.js?ver=2.73" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var mailchimpSF = {"ajax_url":"http:\/\/fernieadventure.com\/"};
+/* ]]&gt; */
+  </script>
+  <script src="http://fernieadventure.com/wp-content/plugins/mailchimp/js/mailchimp.js?ver=1.2.13" type="text/javascript">
+  </script>
+  <script src="http://fernieadventure.com/wp-includes/js/jquery/ui/jquery.ui.core.min.js?ver=1.9.2" type="text/javascript">
+  </script>
+  <script src="http://fernieadventure.com/wp-content/plugins/mailchimp//js/datepicker.js?ver=3.5" type="text/javascript">
+  </script>
+  <link href="http://fernieadventure.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://fernieadventure.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <meta content="WordPress 3.5" name="generator"/>
+  <link href="http://fernieadventure.com/?p=1038" rel="shortlink"/>
+  <!-- Starting Styles For Social Media Icon From Acurax International www.acurax.com -->
+  <style type="text/css">
+   #acx_social_widget img 
+{
+width: 32px; 
+}
+#acx_social_widget 
+{
+min-width:0px; 
+position: static; 
+}
+  </style>
+  <!-- Ending Styles For Social Media Icon From Acurax International www.acurax.com -->
+  <link href="http://fernieadventure.com/wp-content/plugins/digg-digg/css/diggdigg-style.css?ver=5.3.0" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fernieadventure.com/wp-content/uploads/2013/08/Register-as-a-New-user-on-MySkiLesson.jpg" rel="image_src"/>
+  <meta content="278117508975838" property="fb:app_id"/>
+  <meta content="" property="fb:admins"/>
+  <script type="text/javascript">
+   jQuery(function($) {
+			$('.date-pick').datepicker({
+				autoFocusNextInput: true,
+				constrainInput: false,
+				changeMonth: true,
+				changeYear: true,
+				beforeShow: function(input, inst) { $('#ui-datepicker-div').addClass('show'); },
+				dateFormat: 'yy/mm/dd',
+			});			
+			
+			d = new Date();
+			$('.birthdate-pick').datepicker({
+				autoFocusNextInput: true,
+				constrainInput: false,
+				changeMonth: true,
+				changeYear: false,
+				minDate: new Date(d.getFullYear(), 1-1, 1),
+				maxDate: new Date(d.getFullYear(), 12-1, 31),
+				beforeShow: function(input, inst) { $('#ui-datepicker-div').removeClass('show'); },
+				dateFormat: 'mm/dd',
+			});
+			
+				
+		});
+  </script>
+  <style id="custom-background-css" type="text/css">
+   body.custom-background { background-color: #e6e6e6; }
+  </style>
+ </head>
+ <body class="single single-post postid-1038 single-format-standard custom-background custom-font-enabled single-author">
+  <div class="hfeed site" id="page">
+   <header class="site-header" id="masthead" role="banner">
+    <hgroup>
+     <h1 class="site-title">
+      <a href="http://fernieadventure.com/" rel="home" title="Fernieadventure.com">
+       Fernieadventure.com
+      </a>
+     </h1>
+     <h2 class="site-description">
+      holiday of a lifetime
+     </h2>
+    </hgroup>
+    <nav class="main-navigation" id="site-navigation" role="navigation">
+     <h3 class="menu-toggle">
+      Menu
+     </h3>
+     <a class="assistive-text" href="#content" title="Skip to content">
+      Skip to content
+     </a>
+     <div class="menu-main-nav-container">
+      <ul class="nav-menu" id="menu-main-nav">
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-85" id="menu-item-85">
+        <a href="http://fernieadventure.com/">
+         Home
+        </a>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-196" id="menu-item-196">
+        <a href="http://fernieadventure.com/category/fernie/">
+         Fernie
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-63" id="menu-item-63">
+          <a href="http://fernieadventure.com/category/getting-ready/">
+           Getting Ready
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-108" id="menu-item-108">
+            <a href="http://fernieadventure.com/the-last-big-hurdle/">
+             The Last big Hurdle
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-109" id="menu-item-109">
+            <a href="http://fernieadventure.com/fernie-here-we-come/">
+             Fernie here we come!
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-110" id="menu-item-110">
+            <a href="http://fernieadventure.com/other-side-of-the-world/">
+             The other side of the World
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-111" id="menu-item-111">
+            <a href="http://fernieadventure.com/moving-and-selling/">
+             Moving and Selling
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-313" id="menu-item-313">
+            <a href="http://fernieadventure.com/today-is-the-day/">
+             Today is the day
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-197" id="menu-item-197">
+          <a href="http://fernieadventure.com/category/settling-in/">
+           Settling in
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-198" id="menu-item-198">
+            <a href="http://fernieadventure.com/getting-to-fernie/">
+             Getting to Fernie
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-211" id="menu-item-211">
+            <a href="http://fernieadventure.com/buying-a-car-in-fernie/">
+             Buying a car in Fernie
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-257" id="menu-item-257">
+            <a href="http://fernieadventure.com/skis-for-fernies-legendary-powder/">
+             Skis for Fernies powder
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-276" id="menu-item-276">
+            <a href="http://fernieadventure.com/canadian-bank-account/">
+             Opening a bank Account
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-296" id="menu-item-296">
+            <a href="http://fernieadventure.com/getting-connected/">
+             Getting Connected
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-310" id="menu-item-310">
+            <a href="http://fernieadventure.com/nandos-in-calgary/">
+             Nandos in Calgary
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-362" id="menu-item-362">
+            <a href="http://fernieadventure.com/new-found-friendship/">
+             New found Friendship
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-501" id="menu-item-501">
+            <a href="http://fernieadventure.com/buy-eat-drink-and-enjoy/">
+             Buy, eat, drink and enjoy!
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-550" id="menu-item-550">
+            <a href="http://fernieadventure.com/best-ski-boots-in-the-world/">
+             Best Ski Boots in the World
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-430" id="menu-item-430">
+          <a href="http://fernieadventure.com/category/fernie/activities-in-fernie/">
+           Activities in Fernie
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-400" id="menu-item-400">
+            <a href="http://fernieadventure.com/tips-for-teaching-kids-to-ski/">
+             Tips for Teaching kids to Ski
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-437" id="menu-item-437">
+            <a href="http://fernieadventure.com/fernie-aquatic-centre/">
+             Fernie Aquatic Centre
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-543" id="menu-item-543">
+            <a href="http://fernieadventure.com/curling/">
+             Curling Rink
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-749" id="menu-item-749">
+            <a href="http://fernieadventure.com/fernie-alpine-resort/">
+             Fernie Alpine Resort
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-480" id="menu-item-480">
+          <a href="http://fernieadventure.com/category/fernie/nonstop-ski-instructors-course/">
+           Nonstop Ski Instructors Course
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-481" id="menu-item-481">
+            <a href="http://fernieadventure.com/pumped-up-and-ready-to-go/">
+             Pumped up and Ready to GO
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-490" id="menu-item-490">
+            <a href="http://fernieadventure.com/getting-the-balance-right/">
+             Getting the Balance Right
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-509" id="menu-item-509">
+            <a href="http://fernieadventure.com/lessons-from-week-1/">
+             Lessons from Week 1
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-590" id="menu-item-590">
+            <a href="http://fernieadventure.com/avalanche-safety-training/">
+             Avalanche Safety Training
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-602" id="menu-item-602">
+            <a href="http://fernieadventure.com/csia-level-1/">
+             CSIA Level 1
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-660" id="menu-item-660">
+            <a href="http://fernieadventure.com/cat-skiing/">
+             Cat Skiing
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-771" id="menu-item-771">
+            <a href="http://fernieadventure.com/backcountry-trip/">
+             Backcountry trip
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-811" id="menu-item-811">
+          <a href="http://fernieadventure.com/category/fernie/season-2/">
+           Season 2
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-810" id="menu-item-810">
+            <a href="http://fernieadventure.com/heading-back-to-fernie/">
+             We are heading back to Fernie
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor menu-item-834" id="menu-item-834">
+        <a href="http://fernieadventure.com/category/chicago/">
+         Chicago
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-ancestor current-menu-parent current-custom-parent menu-item-786" id="menu-item-786">
+          <a href="http://fernieadventure.com/category/coding/starter-league/">
+           Starter League
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-785" id="menu-item-785">
+            <a href="http://fernieadventure.com/i-am-going-to-the-starter-league/">
+             I am going!
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-874" id="menu-item-874">
+            <a href="http://fernieadventure.com/day-one-the-starter-league/">
+             Day One of TSL
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-944" id="menu-item-944">
+            <a href="http://fernieadventure.com/1871-home-the-starter-league/">
+             1871  Co-working Space
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-953" id="menu-item-953">
+            <a href="http://fernieadventure.com/my-facepage-app/">
+             MY FACEPAGE APP
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-981" id="menu-item-981">
+            <a href="http://fernieadventure.com/my-first-rails-app/">
+             My first rails app
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1034" id="menu-item-1034">
+            <a href="http://fernieadventure.com/buildingour-own-imdb/">
+             IMDB Clone
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-1051" id="menu-item-1051">
+            <a href="http://fernieadventure.com/authentication-and-authorisation/">
+             Authentication and Authorisation
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1095" id="menu-item-1095">
+            <a href="http://fernieadventure.com/pushing-an-app-to-the-web-for-the-first-time/">
+             Pushing an App to the web
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1140" id="menu-item-1140">
+            <a href="http://fernieadventure.com/builders-weekend/">
+             Builders Weekend
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1152" id="menu-item-1152">
+            <a href="http://fernieadventure.com/learning-javascript/">
+             Learning Javascript
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-832" id="menu-item-832">
+          <a href="http://fernieadventure.com/opening-a-us-bank-account/">
+           Opening a US Bank Account
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-862" id="menu-item-862">
+          <a href="http://fernieadventure.com/category/chicago/things-to-do-in-chicago/">
+           Things to Do in Chicago
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-861" id="menu-item-861">
+            <a href="http://fernieadventure.com/us-cellular-field/">
+             US Cellular Field
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-912" id="menu-item-912">
+            <a href="http://fernieadventure.com/willis-tower/">
+             Willis Tower
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-966" id="menu-item-966">
+            <a href="http://fernieadventure.com/wrigley-field/">
+             Wrigley Field
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-397" id="menu-item-397">
+        <a href="http://fernieadventure.com/category/random-thoughts/">
+         Random Thoughts
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-146" id="menu-item-146">
+          <a href="http://fernieadventure.com/doing-vs-owning/">
+           Doing vs Owning
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-163" id="menu-item-163">
+          <a href="http://fernieadventure.com/why-learn-to-code/">
+           Why Learn to Code?
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-169" id="menu-item-169">
+          <a href="http://fernieadventure.com/the-startup-dream/">
+           The Startup Dream
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-398" id="menu-item-398">
+          <a href="http://fernieadventure.com/corruption-and-monopolies/">
+           Corruption and Monopolies
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-399" id="menu-item-399">
+          <a href="http://fernieadventure.com/turning-point/">
+           Turning Point
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-401" id="menu-item-401">
+          <a href="http://fernieadventure.com/should-we-consider-homeschooling/">
+           Should we consider Homeschooling
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-409" id="menu-item-409">
+          <a href="http://fernieadventure.com/do-i-want-to-be-a-hacker/">
+           Do I want to be a Hacker?
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-825" id="menu-item-825">
+          <a href="http://fernieadventure.com/solve-one-meaningful-problem/">
+           Solve one meaningful problem
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-845" id="menu-item-845">
+          <a href="http://fernieadventure.com/keeping-up-with-your-innovation/">
+           Keeping up with your own Innovation
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-926" id="menu-item-926">
+          <a href="http://fernieadventure.com/lifetime-building-startups/">
+           Lifetime building startups
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-992" id="menu-item-992">
+          <a href="http://fernieadventure.com/customer-experience/">
+           Customer Experience
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1117" id="menu-item-1117">
+          <a href="http://fernieadventure.com/us-dont-want-me-to-pay-tax/">
+           US dont want me to pay TAX
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1201" id="menu-item-1201">
+          <a href="http://fernieadventure.com/change-a-life-in-3-months/">
+           Change a Life in 3 months
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-64" id="menu-item-64">
+        <a href="http://fernieadventure.com/category/reviews/">
+         Reviews
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-86" id="menu-item-86">
+          <a href="http://fernieadventure.com/category/reviews/book-reviews/">
+           Book Reviews
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-667" id="menu-item-667">
+            <a href="http://fernieadventure.com/category/reviews/lifestyle-books/">
+             Lifestyle Books
+            </a>
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-124" id="menu-item-124">
+              <a href="http://fernieadventure.com/a-million-miles-in-a-thousand-years/">
+               A Million Miles
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-134" id="menu-item-134">
+              <a href="http://fernieadventure.com/the-4-hour-workweek/">
+               The 4-Hour workweek
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-639" id="menu-item-639">
+              <a href="http://fernieadventure.com/zen-and-the-art-of-motorcycle-maintenance/">
+               Zen and the Art of Motorcycle Maintenance
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-668" id="menu-item-668">
+              <a href="http://fernieadventure.com/vagabonding-review/">
+               Vagabonding
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1105" id="menu-item-1105">
+              <a href="http://fernieadventure.com/the-100-doller-startup/">
+               The $100 Startup
+              </a>
+             </li>
+            </ul>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-671" id="menu-item-671">
+            <a href="http://fernieadventure.com/category/reviews/book-reviews/startup-books/">
+             Startup Books
+            </a>
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-112" id="menu-item-112">
+              <a href="http://fernieadventure.com/the-lean-startup/">
+               The Lean Startup
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-113" id="menu-item-113">
+              <a href="http://fernieadventure.com/venture-deals/">
+               Venture Deals
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-114" id="menu-item-114">
+              <a href="http://fernieadventure.com/the-launch-pad/">
+               The Launch Pad
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-187" id="menu-item-187">
+              <a href="http://fernieadventure.com/startup-communities/">
+               Startup Communities
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-283" id="menu-item-283">
+              <a href="http://fernieadventure.com/do-more-faster/">
+               Do More Faster
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-333" id="menu-item-333">
+              <a href="http://fernieadventure.com/founders-at-work-review/">
+               Founders at Work
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-471" id="menu-item-471">
+              <a href="http://fernieadventure.com/the-art-of-the-start-review/">
+               The Art of the Start
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-578" id="menu-item-578">
+              <a href="http://fernieadventure.com/the-founders-dilemmas-review/">
+               The Founders Dilemmas
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-632" id="menu-item-632">
+              <a href="http://fernieadventure.com/startup-life-review/">
+               Startup Life
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-418" id="menu-item-418">
+              <a href="http://fernieadventure.com/hackers-and-painters-review/">
+               Hackers and Painters
+              </a>
+             </li>
+            </ul>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-673" id="menu-item-673">
+            <a href="http://fernieadventure.com/category/reviews/book-reviews/general/">
+             General
+            </a>
+            <ul class="sub-menu">
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-240" id="menu-item-240">
+              <a href="http://fernieadventure.com/rework/">
+               Rework
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-532" id="menu-item-532">
+              <a href="http://fernieadventure.com/getting-real-review/">
+               Getting Real
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-796" id="menu-item-796">
+              <a href="http://fernieadventure.com/business-model-generation-review/">
+               Business Model Generation
+              </a>
+             </li>
+             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-903" id="menu-item-903">
+              <a href="http://fernieadventure.com/think-and-grow-rich-review/">
+               Think and Grow Rich
+              </a>
+             </li>
+            </ul>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-87" id="menu-item-87">
+          <a href="http://fernieadventure.com/category/reviews/tech-toys/">
+           Tech Toys
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-115" id="menu-item-115">
+            <a href="http://fernieadventure.com/mod-live-from-recon/">
+             MOD Live from Recon
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-320" id="menu-item-320">
+            <a href="http://fernieadventure.com/kindle-paperwhite-review/">
+             Kindle Paperwhite
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-347" id="menu-item-347">
+            <a href="http://fernieadventure.com/oakley-airwave-review/">
+             Oakley Airwave
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-892" id="menu-item-892">
+            <a href="http://fernieadventure.com/macbook-pro-15-retina-display/">
+             Macbook Pro 15 with Retina Display
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1002" id="menu-item-1002">
+        <a href="http://fernieadventure.com/category/sport/">
+         Sports
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-457" id="menu-item-457">
+          <a href="http://fernieadventure.com/category/sport/ski-resorts/">
+           Ski Resorts
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-617" id="menu-item-617">
+            <a href="http://fernieadventure.com/castle-mountain-review/">
+             Castle Mountain
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-748" id="menu-item-748">
+            <a href="http://fernieadventure.com/fernie-alpine-resort/">
+             Fernie Alpine Resort
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-458" id="menu-item-458">
+            <a href="http://fernieadventure.com/kimberley-alpine-resort-review/">
+             Kimberley Alpine Resort
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-713" id="menu-item-713">
+            <a href="http://fernieadventure.com/lake-louise-ski-area/">
+             Lake Louise Ski Area
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-724" id="menu-item-724">
+            <a href="http://fernieadventure.com/panorama-mountain-village/">
+             Panorama Mountain Village
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-690" id="menu-item-690">
+            <a href="http://fernieadventure.com/revelstoke-mountain-resort-review/">
+             Revelstoke Mountain Resort
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-737" id="menu-item-737">
+            <a href="http://fernieadventure.com/sunshine-village-resort/">
+             Sunshine Village Resort
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-577" id="menu-item-577">
+            <a href="http://fernieadventure.com/whitefish-mountain-resort/">
+             Whitefish Mountain Resort
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-700" id="menu-item-700">
+            <a href="http://fernieadventure.com/whistler-blackcomb-review/">
+             Whistler Blackcomb
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1006" id="menu-item-1006">
+          <a href="http://fernieadventure.com/category/sport/baseball/">
+           baseball
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1005" id="menu-item-1005">
+            <a href="http://fernieadventure.com/wrigley-field/">
+             Wrigley Field
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1007" id="menu-item-1007">
+            <a href="http://fernieadventure.com/us-cellular-field/">
+             Us Cellular Field
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1021" id="menu-item-1021">
+            <a href="http://fernieadventure.com/yankee-stadium/">
+             Yankee Stadium
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1071" id="menu-item-1071">
+            <a href="http://fernieadventure.com/miller-park/">
+             Miller Park
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1082" id="menu-item-1082">
+            <a href="http://fernieadventure.com/comerica-park/">
+             Comerica Park
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1177" id="menu-item-1177">
+          <a href="http://fernieadventure.com/category/sport/american-football/">
+           America Football
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1176" id="menu-item-1176">
+            <a href="http://fernieadventure.com/the-big-house-michigan-stadium/">
+             The Big House
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1189" id="menu-item-1189">
+            <a href="http://fernieadventure.com/soldier-field/">
+             Soldier Field
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+       <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-84" id="menu-item-84">
+        <a href="http://fernieadventure.com/about-us/">
+         About Us
+        </a>
+        <ul class="sub-menu">
+         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-261" id="menu-item-261">
+          <a href="http://fernieadventure.com/social/">
+           Social
+          </a>
+          <ul class="sub-menu">
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-241" id="menu-item-241">
+            <a href="http://www.facebook.com/FernieAdventure" onclick="javascript:_gaq.push(['_trackEvent','outbound-menu','http://www.facebook.com']);">
+             Like on Facebook
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-242" id="menu-item-242">
+            <a href="http://twitter.com/JustinusA" onclick="javascript:_gaq.push(['_trackEvent','outbound-menu','http://twitter.com']);">
+             Follow on Twitter
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-243" id="menu-item-243">
+            <a href="http://www.youtube.com/fernieadventure" onclick="javascript:_gaq.push(['_trackEvent','outbound-menu','http://www.youtube.com']);">
+             Subscribe on YouTube
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-244" id="menu-item-244">
+            <a href="http://pinterest.com/fernieadventure/" onclick="javascript:_gaq.push(['_trackEvent','outbound-menu','http://pinterest.com']);">
+             Follow on Pinterest
+            </a>
+           </li>
+           <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-245" id="menu-item-245">
+            <a href="http://fernieadventure.com/feed/">
+             Subscribe to RSS
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </div>
+    </nav>
+    <!-- #site-navigation -->
+    <a href="http://fernieadventure.com/">
+     <img alt="" class="header-image" height="250" src="http://fernieadventure.com/wp-content/uploads/2012/12/new-cover.jpg" width="960"/>
+    </a>
+   </header>
+   <!-- #masthead -->
+   <div class="wrapper" id="main">
+    <div class="site-content" id="primary">
+     <div id="content" role="main">
+      <article class="post-1038 post type-post status-publish format-standard hentry category-chicago category-coding category-starter-league" id="post-1038">
+       <header class="entry-header">
+        <h1 class="entry-title">
+         Authentication and Authorisation
+        </h1>
+       </header>
+       <!-- .entry-header -->
+       <div class="entry-content">
+        <p style="text-align: justify;">
+         Another week has flown past! Last week we learnt a few essential concepts and I also had a few ideas about the type of problems I would like to solve. We did a bunch of work on authentication and authorisation.
+        </p>
+        <p style="text-align: justify;">
+         Working on authentication was fascinating. So when you have an app you obviously would like to customize the experience for your users, which means you need to identify and recognize them. The easiest way to do this is by getting users to register and choose a password.
+        </p>
+        <div class="wp-caption aligncenter" id="attachment_1042" style="width: 610px">
+         <a href="http://fernieadventure.com/authentication-and-authorisation/register-as-a-new-user-on-myskilesson/" rel="attachment wp-att-1042">
+          <img alt="Example of User registration page." class="size-full wp-image-1042" height="280" src="http://fernieadventure.com/wp-content/uploads/2013/08/Register-as-a-New-user-on-MySkiLesson.jpg" width="600"/>
+         </a>
+         <p class="wp-caption-text">
+          Here is an example of a Registration page asking for a password and confirmation
+         </p>
+        </div>
+        <p style="text-align: justify;">
+         But having users passwords in your database without encryption is a bad idea. Since most people tend to use the same password for many services. Therefore it is better to encrypt the password, but if you use an encryption service that can be decrypted, somebody can still use the encrypted value you store to get the original password.
+        </p>
+        <p style="text-align: justify;">
+         The answer to this is to use one-way encryption that is consistent. This means it cannot be decrypted, but every time the same password is encrypted the result is the same so you can compare the encrypted versions to see if they match. Like many other features that most apps use, there is a gem to help in rails. Which once again, makes the whole process a breeze.
+        </p>
+        <div class="wp-caption aligncenter" id="attachment_1043" style="width: 610px">
+         <a href="http://fernieadventure.com/authentication-and-authorisation/log-in-page-for-myskilesson/" rel="attachment wp-att-1043">
+          <img alt="Example of login page" class="size-full wp-image-1043" height="136" src="http://fernieadventure.com/wp-content/uploads/2013/08/Log-in-Page-for-MySkiLesson.jpg" width="600"/>
+         </a>
+         <p class="wp-caption-text">
+          Once registered a new user can just log in for future visits
+         </p>
+        </div>
+        <p style="text-align: justify;">
+         Now you would think that when choosing which encryption method to use, you would want something difficult to crack but that can still do its work as quickly as possible; but it turns out you actually want one that is slow, which makes it harder to brute force it. This article on
+         <a href="http://codahale.com/how-to-safely-store-a-password/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://codahale.com']);" style="line-height: 1.714285714; font-size: 1rem;" target="_blank" title="Why should your encryption be slow? Read here to find the answer:">
+          How to safely store a password explains
+         </a>
+         it in detail. So we ended up using bcrypt.
+        </p>
+        <p style="text-align: justify;">
+         This next step after authenticating users, involves deciding who should have access to which services in your app. Once again something that rails makes very easy!
+        </p>
+        <p style="text-align: justify;">
+         I think
+         <a href="http://fernieadventure.com/category/coding/starter-league/" title="My post about The Starter League">
+          The Starter League
+         </a>
+         has done an awesome job so far with the curriculum, it feels like they introduce us to the right concept at the right time in the right dose. They also leave enough for us to figure out on our own. This week Jeff the Chief Instructor at Starter League shared this video that shows a little of the teaching methodology that they try and follow:
+        </p>
+        <p>
+         <iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/NWUFjb8w9Ps" width="560">
+         </iframe>
+        </p>
+        <p style="text-align: justify;">
+         It was another great week, it was fun learning about authentication and authorisation. I have also spent a great deal of time this week thinking about the problems I would like to solve, and will do another post about that.
+        </p>
+        <div class="dd_post_share">
+         <div class="dd_buttons">
+          <div class="dd_button">
+           <div class="dd-twitter-ajax-load dd-twitter-1038">
+           </div>
+           <a class="twitter-share-button" data-count="vertical" data-text="Authentication and Authorisation" data-url="http://fernieadventure.com/authentication-and-authorisation/" data-via="@justinusa" href="http://twitter.com/share" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://twitter.com']);">
+           </a>
+          </div>
+          <div class="dd_button">
+           <script src="http://www.stumbleupon.com/hostedbadge.php?s=5&amp;r=http%3A%2F%2Ffernieadventure.com%2Fauthentication-and-authorisation%2F">
+           </script>
+          </div>
+          <div class="dd_button">
+           <div class="dd-fblike-ajax-load dd-fblike-1038">
+           </div>
+           <iframe allowtransparency="true" class="DD_FBLIKE_AJAX_1038" frameborder="0" height="0" scrolling="no" src="" width="0">
+           </iframe>
+          </div>
+          <div class="dd_button">
+           <div class="dd-google1-ajax-load dd-google1-1038">
+           </div>
+           <g:plusone href="http://fernieadventure.com/authentication-and-authorisation/" size="tall">
+           </g:plusone>
+          </div>
+          <div class="dd_button">
+           <div class="dd-linkedin-ajax-load dd-linkedin-1038">
+           </div>
+           <script data-counter="top" data-url="http://fernieadventure.com/authentication-and-authorisation/" type="IN/share">
+           </script>
+          </div>
+          <div class="dd_button">
+           <a class="pin-it-button dd-pinterest-ajax-load dd-pinterest-1038" count-layout="vertical" href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Ffernieadventure.com%2Fauthentication-and-authorisation%2F&amp;description=Authentication%20and%20Authorisation&amp;media=" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://pinterest.com']);">
+           </a>
+          </div>
+         </div>
+         <div style="clear:both">
+         </div>
+        </div>
+        <script type="text/javascript">
+         jQuery(document).ready(function($) { window.setTimeout('loadTwitter_1038()',1000);window.setTimeout('loadFBLike_1038()',1000);window.setTimeout('loadGoogle1_1038()',1000);window.setTimeout('loadLinkedin_1038()',1000);window.setTimeout('loadPinterest_1038()',1000); });
+        </script>
+        <script type="text/javascript">
+         function loadTwitter_1038(){ jQuery(document).ready(function($) { $('.dd-twitter-1038').remove();$.getScript('http://platform.twitter.com/widgets.js'); }); } function loadFBLike_1038(){ jQuery(document).ready(function($) { $('.dd-fblike-1038').remove();$('.DD_FBLIKE_AJAX_1038').attr('width','50');$('.DD_FBLIKE_AJAX_1038').attr('height','62');$('.DD_FBLIKE_AJAX_1038').attr('src','http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffernieadventure.com%2Fauthentication-and-authorisation%2F&amp;locale=en_US&amp;layout=box_count&amp;action=like&amp;width=50&amp;height=60&amp;colorscheme=light'); }); } function loadGoogle1_1038(){ jQuery(document).ready(function($) { $('.dd-google1-1038').remove();$.getScript('https://apis.google.com/js/plusone.js'); }); } function loadLinkedin_1038(){ jQuery(document).ready(function($) { $('.dd-linkedin-1038').remove();$.getScript('http://platform.linkedin.com/in.js'); }); }function loadPinterest_1038(){ jQuery(document).ready(function($) { $.getScript('http://assets.pinterest.com/js/pinit.js'); }); }
+        </script>
+        <script src="http://fernieadventure.com/wp-content/plugins/digg-digg//js/diggdigg-linkedin.js?ver=5.3.0" type="text/javascript">
+        </script>
+        <!-- Social Buttons Generated by Digg Digg plugin v5.3.0,
+    Author : Buffer, Inc
+    Website : http://bufferapp.com/diggdigg -->
+        <!-- Facebook Comments for WordPress: http://3doordigital.com/wordpress/plugins/facebook-comments/ -->
+        <h3>
+         Comments
+        </h3>
+        <p>
+         <fb:comments-count href="http://fernieadventure.com/authentication-and-authorisation/">
+         </fb:comments-count>
+         comments
+        </p>
+        <div class="fb-comments" data-colorscheme="light" data-href="http://fernieadventure.com/authentication-and-authorisation/" data-num-posts="5" data-width="580">
+        </div>
+       </div>
+       <!-- .entry-content -->
+       <footer class="entry-meta">
+        This entry was posted in
+        <a href="http://fernieadventure.com/category/chicago/" rel="category tag" title="View all posts in Chicago">
+         Chicago
+        </a>
+        ,
+        <a href="http://fernieadventure.com/category/coding/" rel="category tag" title="View all posts in Coding">
+         Coding
+        </a>
+        ,
+        <a href="http://fernieadventure.com/category/coding/starter-league/" rel="category tag" title="View all posts in Starter League">
+         Starter League
+        </a>
+        on
+        <a href="http://fernieadventure.com/authentication-and-authorisation/" rel="bookmark" title="15:46">
+         <time class="entry-date" datetime="2013-08-13T15:46:46+00:00">
+          2013/08/13
+         </time>
+        </a>
+        <span class="by-author">
+         by
+         <span class="author vcard">
+          <a class="url fn n" href="http://fernieadventure.com/author/admin/" rel="author" title="View all posts by Justinus">
+           Justinus
+          </a>
+         </span>
+        </span>
+        .
+       </footer>
+       <!-- .entry-meta -->
+      </article>
+      <!-- #post -->
+      <nav class="nav-single">
+       <h3 class="assistive-text">
+        Post navigation
+       </h3>
+       <span class="nav-previous">
+        <a href="http://fernieadventure.com/buildingour-own-imdb/" rel="prev">
+         <span class="meta-nav">
+          
+         </span>
+         Building our own IMDB
+        </a>
+       </span>
+       <span class="nav-next">
+        <a href="http://fernieadventure.com/my-dream-business/" rel="next">
+         My Dream Business
+         <span class="meta-nav">
+          
+         </span>
+        </a>
+       </span>
+      </nav>
+      <!-- .nav-single -->
+      <div class="comments-area" id="comments">
+      </div>
+      <!-- #comments .comments-area -->
+     </div>
+     <!-- #content -->
+    </div>
+    <!-- #primary -->
+    <div class="widget-area" id="secondary" role="complementary">
+     <aside class="widget widget_search" id="search-2">
+      <form action="http://fernieadventure.com/" id="searchform" method="get" role="search">
+       <div>
+        <label class="screen-reader-text" for="s">
+         Search for:
+        </label>
+        <input id="s" name="s" type="text" value=""/>
+        <input id="searchsubmit" type="submit" value="Search"/>
+       </div>
+      </form>
+     </aside>
+     <aside class="widget acx-social-icons-desc" id="acx-social-icons-widget-2">
+      <h3 class="widget-title">
+       Follow us on Social Media
+      </h3>
+      <style>
+       .widget-acx-social-icons-widget-2-widget img 
+{
+width:48px; 
+ }
+      </style>
+      <div align="center" class="acx_smw_float_fix widget-acx-social-icons-widget-2-widget" id="acurax_si_widget_simple">
+       <a href="http://www.twitter.com/@justinusA" target="_blank" title="Visit Us On Twitter">
+        <img alt="Visit Us On Twitter" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/twitter.png"/>
+       </a>
+       <a href="http://www.facebook.com/FernieAdventure" target="_blank" title="Visit Us On Facebook">
+        <img alt="Visit Us On Facebook" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/facebook.png"/>
+       </a>
+       <a href="http://www.pinterest.com/fernieadventure" target="_blank" title="Visit Us On Pinterest">
+        <img alt="Visit Us On Pinterest" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/pinterest.png"/>
+       </a>
+       <a href="https://www.youtube.com/fernieadventure" target="_blank" title="Visit Us On Youtube">
+        <img alt="Visit Us On Youtube" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/youtube.png"/>
+       </a>
+       <a href="http://fernieadventure.com/feed/" target="_blank" title="Check Our Feed">
+        <img alt="Check Our Feed" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/feed.png"/>
+       </a>
+      </div>
+     </aside>
+     <aside class="widget widget_wp_insert_ad_widget" id="wp_insert_ad_widget-2">
+      <div class="wpInsert wpInsertAdWidget" style="margin: 15px; padding: 10px; border:solid 1px #000;">
+       <script type="text/javascript">
+        &lt;!--
+google_ad_client = "ca-pub-6574885451969993";
+/* Fernie new with border */
+google_ad_slot = "8104129932";
+google_ad_width = 200;
+google_ad_height = 200;
+//--&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js"&gt;
+       </script>
+      </div>
+     </aside>
+     <aside class="widget widget_mailchimpsf_widget" id="mailchimpsf_widget-3">
+      <h3 class="widget-title">
+       Subscribe to follow our EPIC adventure!
+      </h3>
+      <div id="mc_signup">
+       <form action="#mc_signup" id="mc_signup_form" method="post">
+        <input id="mc_submit_type" name="mc_submit_type" type="hidden" value="html"/>
+        <input name="mcsf_action" type="hidden" value="mc_submit_signup_form"/>
+        <input id="_mc_submit_signup_form_nonce" name="_mc_submit_signup_form_nonce" type="hidden" value="3c3a998f57"/>
+        <div class="mc_form_inside">
+         <div class="updated" id="mc_message">
+         </div>
+         <!-- /mc_message -->
+         <div class="mc_merge_var">
+          <label class="mc_var_label" for="mc_mv_EMAIL">
+           Email Address
+          </label>
+          <input class="mc_input" id="mc_mv_EMAIL" name="mc_mv_EMAIL" size="18" type="text" value=""/>
+         </div>
+         <!-- /mc_merge_var -->
+         <div class="mc_signup_submit">
+          <input class="button" id="mc_signup_submit" name="mc_signup_submit" type="submit" value="Subscribe"/>
+         </div>
+         <!-- /mc_signup_submit -->
+        </div>
+        <!-- /mc_form_inside -->
+       </form>
+       <!-- /mc_signup_form -->
+      </div>
+      <!-- /mc_signup_container -->
+     </aside>
+     <aside class="widget widget_recent_entries" id="recent-posts-2">
+      <h3 class="widget-title">
+       Recent Posts
+      </h3>
+      <ul>
+       <li>
+        <a href="http://fernieadventure.com/the-real-cause-of-xenophobia/" title="What I am doing about the real cause of Xenophobia">
+         What I am doing about the real cause of Xenophobia
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/creating-an-oversupply-of-developers/" title="Creating an oversupply of developers!">
+         Creating an oversupply of developers!
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/change-a-life-in-3-months/" title="Can YOU change someones life in 3 months?">
+         Can YOU change someones life in 3 months?
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/soldier-field/" title="Soldier Field  Home of the Chicago Bears">
+         Soldier Field  Home of the Chicago Bears
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/the-big-house-michigan-stadium/" title="The Big House">
+         The Big House
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/multipliers/" title="Multipliers by Liz Wiseman and Greg McKeown">
+         Multipliers by Liz Wiseman and Greg McKeown
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/learning-javascript/" title="Learning JavaScript using a Rosetta Stone">
+         Learning JavaScript using a Rosetta Stone
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/builders-weekend/" title="Builders Weekend  My first Hackathon">
+         Builders Weekend  My first Hackathon
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/us-dont-want-me-to-pay-tax/" title="US dont want me to Pay Tax">
+         US dont want me to Pay Tax
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/the-100-doller-startup/" title="The $100 Startup">
+         The $100 Startup
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <aside class="widget widget_wp_insert_ad_widget" id="wp_insert_ad_widget-4">
+      <div class="wpInsert wpInsertAdWidget" style="margin: 5px; padding: 0px;">
+       <div class="fb-like-box" data-header="true" data-href="http://www.facebook.com/fernieadventure" data-show-faces="true" data-stream="false" data-width="240">
+       </div>
+       <div id="fb-root">
+       </div>
+       <script>
+        (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+       </script>
+      </div>
+     </aside>
+     <aside class="widget widget_archive" id="archives-2">
+      <h3 class="widget-title">
+       Archives
+      </h3>
+      <ul>
+       <li>
+        <a href="http://fernieadventure.com/2015/04/" title="April 2015">
+         April 2015
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2014/12/" title="December 2014">
+         December 2014
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2014/05/" title="May 2014">
+         May 2014
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/09/" title="September 2013">
+         September 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/08/" title="August 2013">
+         August 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/07/" title="July 2013">
+         July 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/06/" title="June 2013">
+         June 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/05/" title="May 2013">
+         May 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/04/" title="April 2013">
+         April 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/03/" title="March 2013">
+         March 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/02/" title="February 2013">
+         February 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2013/01/" title="January 2013">
+         January 2013
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2012/12/" title="December 2012">
+         December 2012
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2012/11/" title="November 2012">
+         November 2012
+        </a>
+       </li>
+       <li>
+        <a href="http://fernieadventure.com/2012/10/" title="October 2012">
+         October 2012
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <aside class="widget widget_categories" id="categories-2">
+      <h3 class="widget-title">
+       Categories
+      </h3>
+      <ul>
+       <li class="cat-item cat-item-13">
+        <a href="http://fernieadventure.com/category/fernie/activities-in-fernie/" title="View all posts filed under Activities in Fernie">
+         Activities in Fernie
+        </a>
+       </li>
+       <li class="cat-item cat-item-26">
+        <a href="http://fernieadventure.com/category/sport/american-football/" title="View all posts filed under American Football">
+         American Football
+        </a>
+       </li>
+       <li class="cat-item cat-item-25">
+        <a href="http://fernieadventure.com/category/sport/baseball/" title="View all posts filed under Baseball">
+         Baseball
+        </a>
+       </li>
+       <li class="cat-item cat-item-6">
+        <a href="http://fernieadventure.com/category/reviews/book-reviews/" title="View all posts filed under Book Reviews">
+         Book Reviews
+        </a>
+       </li>
+       <li class="cat-item cat-item-22">
+        <a href="http://fernieadventure.com/category/chicago/" title="View all posts filed under Chicago">
+         Chicago
+        </a>
+       </li>
+       <li class="cat-item cat-item-19">
+        <a href="http://fernieadventure.com/category/coding/" title="View all posts filed under Coding">
+         Coding
+        </a>
+       </li>
+       <li class="cat-item cat-item-9">
+        <a href="http://fernieadventure.com/category/fernie/" title="View all posts filed under Fernie">
+         Fernie
+        </a>
+       </li>
+       <li class="cat-item cat-item-18">
+        <a href="http://fernieadventure.com/category/reviews/book-reviews/general/" title="View all posts filed under General">
+         General
+        </a>
+       </li>
+       <li class="cat-item cat-item-3">
+        <a href="http://fernieadventure.com/category/getting-ready/" title="Some post in the lead up to our departure for Fernie!">
+         Getting Ready
+        </a>
+       </li>
+       <li class="cat-item cat-item-16">
+        <a href="http://fernieadventure.com/category/reviews/book-reviews/lifestyle-books/" title="View all posts filed under Lifestyle Books">
+         Lifestyle Books
+        </a>
+       </li>
+       <li class="cat-item cat-item-15">
+        <a href="http://fernieadventure.com/category/fernie/nonstop-ski-instructors-course/" title="View all posts filed under Nonstop Ski Instructors Course">
+         Nonstop Ski Instructors Course
+        </a>
+       </li>
+       <li class="cat-item cat-item-12">
+        <a href="http://fernieadventure.com/category/random-thoughts/" title="View all posts filed under Random Thoughts">
+         Random Thoughts
+        </a>
+       </li>
+       <li class="cat-item cat-item-4">
+        <a href="http://fernieadventure.com/category/reviews/" title="I usually read allot, but I am expecting to read even more during the time we will be in Fernie. So I will post reviews of the books and other toys here:">
+         Reviews
+        </a>
+       </li>
+       <li class="cat-item cat-item-21">
+        <a href="http://fernieadventure.com/category/fernie/season-2/" title="View all posts filed under Season 2">
+         Season 2
+        </a>
+       </li>
+       <li class="cat-item cat-item-10">
+        <a href="http://fernieadventure.com/category/settling-in/" title="View all posts filed under Settling in">
+         Settling in
+        </a>
+       </li>
+       <li class="cat-item cat-item-14">
+        <a href="http://fernieadventure.com/category/sport/ski-resorts/" title="View all posts filed under Ski Resorts">
+         Ski Resorts
+        </a>
+       </li>
+       <li class="cat-item cat-item-24">
+        <a href="http://fernieadventure.com/category/sport/" title="View all posts filed under Sports">
+         Sports
+        </a>
+       </li>
+       <li class="cat-item cat-item-20">
+        <a href="http://fernieadventure.com/category/coding/starter-league/" title="View all posts filed under Starter League">
+         Starter League
+        </a>
+       </li>
+       <li class="cat-item cat-item-17">
+        <a href="http://fernieadventure.com/category/reviews/book-reviews/startup-books/" title="View all posts filed under Startup Books">
+         Startup Books
+        </a>
+       </li>
+       <li class="cat-item cat-item-5">
+        <a href="http://fernieadventure.com/category/reviews/tech-toys/" title="View all posts filed under Tech Toys">
+         Tech Toys
+        </a>
+       </li>
+       <li class="cat-item cat-item-23">
+        <a href="http://fernieadventure.com/category/chicago/things-to-do-in-chicago/" title="View all posts filed under Things to do in Chicago">
+         Things to do in Chicago
+        </a>
+       </li>
+       <li class="cat-item cat-item-1">
+        <a href="http://fernieadventure.com/category/uncategorized/" title="View all posts filed under Uncategorized">
+         Uncategorized
+        </a>
+       </li>
+      </ul>
+     </aside>
+     <aside class="widget widget_wp_insert_ad_widget" id="wp_insert_ad_widget-3">
+      <div class="wpInsert wpInsertAdWidget" style="margin: 15px; padding: 10px; border:solid 1px #000;">
+       <script type="text/javascript">
+        &lt;!--
+google_ad_client = "ca-pub-6574885451969993";
+/* Fernie new with border */
+google_ad_slot = "8104129932";
+google_ad_width = 200;
+google_ad_height = 200;
+//--&gt;
+       </script>
+       <script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+       </script>
+      </div>
+     </aside>
+     <aside class="widget acx-social-icons-desc" id="acx-social-icons-widget-3">
+      <h3 class="widget-title">
+       Follow us on Social Media
+      </h3>
+      <style>
+       .widget-acx-social-icons-widget-3-widget img 
+{
+width:48px; 
+ }
+      </style>
+      <div align="center" class="acx_smw_float_fix widget-acx-social-icons-widget-3-widget" id="acurax_si_widget_simple">
+       <a href="http://www.twitter.com/@justinusA" target="_blank" title="Visit Us On Twitter">
+        <img alt="Visit Us On Twitter" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/twitter.png"/>
+       </a>
+       <a href="http://www.facebook.com/FernieAdventure" target="_blank" title="Visit Us On Facebook">
+        <img alt="Visit Us On Facebook" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/facebook.png"/>
+       </a>
+       <a href="http://www.pinterest.com/fernieadventure" target="_blank" title="Visit Us On Pinterest">
+        <img alt="Visit Us On Pinterest" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/pinterest.png"/>
+       </a>
+       <a href="https://www.youtube.com/fernieadventure" target="_blank" title="Visit Us On Youtube">
+        <img alt="Visit Us On Youtube" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/youtube.png"/>
+       </a>
+       <a href="http://fernieadventure.com/feed/" target="_blank" title="Check Our Feed">
+        <img alt="Check Our Feed" border="0" src="http://fernieadventure.com/wp-content/plugins/acurax-social-media-widget/images/themes/8/feed.png"/>
+       </a>
+      </div>
+     </aside>
+    </div>
+    <!-- #secondary -->
+   </div>
+   <!-- #main .wrapper -->
+   <footer id="colophon" role="contentinfo">
+    <div class="site-info">
+     <a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">
+      Proudly powered by WordPress
+     </a>
+    </div>
+    <!-- .site-info -->
+   </footer>
+   <!-- #colophon -->
+  </div>
+  <!-- #page -->
+  <script src="http://fernieadventure.com/wp-content/themes/twentytwelve/js/navigation.js?ver=1.0" type="text/javascript">
+  </script>
+  <!-- Facebook Comments for WordPress: http://3doordigital.com/wordpress/plugins/facebook-comments/ -->
+  <div id="fb-root">
+  </div>
+  <script>
+   (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&amp;appId=278117508975838";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+  </script>
+ </body>
+</html>

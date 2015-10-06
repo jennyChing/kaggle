@@ -1,0 +1,920 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>
+   OpenZFS Feature Flags Compatibility Matrix - VX weblog
+  </title>
+  <script src="/templates/jquery.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   jQuery.noConflict();
+  </script>
+  <script type="text/javascript">
+   var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-15365053-2']);
+  _gaq.push(['_gat._anonymizeIp']);  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+  })();
+  </script>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="Serendipity v.1.7.2" name="Powered-By"/>
+  <link href="http://blog.vx.sk/feeds/index.rss2" rel="alternate" title="VX weblog RSS feed" type="application/rss+xml"/>
+  <link href="http://blog.vx.sk/feeds/atom.xml" rel="alternate" title="VX weblog Atom feed" type="application/x.atom+xml"/>
+  <link href="http://blog.vx.sk/comment.php?type=pingback&amp;entry_id=44" rel="pingback"/>
+  <!-- uncomment the line below if your site uses a favicon -->
+  <!--   &lt;link rel="shortcut icon" href="http://blog.vx.sk/favicon.ico" /&gt; -->
+  <!-- base styles needed for bulletproof -->
+  <link href="/templates/bulletproof/base.css" rel="stylesheet" type="text/css"/>
+  <!-- style.css -->
+  <link href="http://blog.vx.sk/serendipity.css" rel="stylesheet" type="text/css"/>
+  <!--[if IE 5]&gt;
+            &lt;link rel="stylesheet" type="text/css" href="/templates/bulletproof/ie5.css" /&gt;
+        &lt;![endif]-->
+  <!--[if IE 6]&gt;
+            &lt;link rel="stylesheet" type="text/css" href="/templates/bulletproof/ie6.css" /&gt;
+        &lt;![endif]-->
+  <!--[if IE 7]&gt;
+            &lt;link rel="stylesheet" type="text/css" href="/templates/bulletproof/ie7.css" /&gt;
+        &lt;![endif]-->
+  <!-- additional colorset stylesheet -->
+  <link href="/templates/bulletproof/default_style.css" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+   #serendipity_banner {
+            background-image: url(/uploads/site/vx.png);
+            background-position: right center;
+                            background-repeat: no-repeat;
+            }
+  </style>
+  <!-- print media stylesheet -->
+  <link href="/templates/bulletproof/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <!-- additional user stylesheet: this can be used to override selected styles -->
+ </head>
+ <body>
+  <!-- #skiplinks: these are links used to navigate quickly in text-based browsers -->
+  <!--             they are of little use in modern graphical browsers, so the are -->
+  <!--             hidden using CSS                                                -->
+  <div id="skiplinks">
+   <ul>
+    <li lang="en">
+     <a href="#sitenav">
+      Skip to site navigation
+     </a>
+    </li>
+    <li lang="en">
+     <a href="#content">
+      Skip to blog entries
+     </a>
+    </li>
+    <li lang="en">
+     <a href="">
+      Skip to archive page
+     </a>
+    </li>
+    <li lang="en">
+     <a href="#serendipityRightSideBar">
+      Skip to right sidebar
+     </a>
+    </li>
+   </ul>
+  </div>
+  <!-- #wrapper: this wrapper div holds the actual blog content; it can be used to -->
+  <!--           give the blog a width in px or % plus an additional max-width in  -->
+  <!--           order to limit the width in high resolutions to limit the length  -->
+  <!--           of a line                                                         -->
+  <div id="wrapper">
+   <div id="wrapper_top">
+   </div>
+   <!-- #serendipity_banner: this is the header area. it holds the blog title and   -->
+   <!--                      description headlines                                  -->
+   <div id="serendipity_banner">
+    <h1>
+     <span class="visible">
+      <a class="homelink1" href="http://blog.vx.sk/">
+       OpenZFS Feature Flags Compatibility Matrix
+      </a>
+     </span>
+    </h1>
+    <h2>
+     <span class="visible">
+      <a class="homelink2" href="http://blog.vx.sk/">
+       VX weblog
+      </a>
+     </span>
+    </h2>
+   </div>
+   <div id="serendipity_below_banner">
+   </div>
+   <!-- #sitenav: this holds a list of navigational links which can be customized   -->
+   <!--           in the theme configurator                                         -->
+   <div class="snbelow" id="sitenav">
+    <ul>
+     <li class=" navlink_first">
+      <a href="https://github.com/mmatuska" title="GitHub">
+       GitHub
+      </a>
+     </li>
+     <li class="">
+      <a href="http://mfsbsd.vx.sk" title="mfsBSD">
+       mfsBSD
+      </a>
+     </li>
+     <li class=" navlink_last">
+      <a href="http://connectbot.vx.sk" title="VX ConnectBot">
+       VX ConnectBot
+      </a>
+     </li>
+    </ul>
+    <!-- quicksearch option in the navigational link menu bar only when navbar is    -->
+    <!-- above or below the banner                                                   -->
+    <form action="/index.php" id="searchform" method="get">
+     <input name="serendipity[action]" type="hidden" value="search"/>
+     <input alt="Quicksearch" id="serendipityQuickSearchTermField" name="serendipity[searchTerm]" onblur="if(this.value=='')value='Quicksearch...';" onfocus="if(this.value=='Quicksearch...')value=''" type="text" value="Quicksearch..."/>
+     <div id="LSResult" style="display: none;">
+      <div id="LSShadow">
+      </div>
+     </div>
+    </form>
+   </div>
+   <!-- this is the actual content of the blog, entries column plus one or two      -->
+   <!-- sidebars, depending on how users configure their sidebar plugins            -->
+   <!-- case 5: 2 columns, right sidebar only -->
+   <div class="twomain layout2bs_content hfeed" id="content">
+    <!-- CONTENT START -->
+    <div class="serendipity_content_message">
+    </div>
+    <!-- ENTRIES START -->
+    <div class="hentry serendipity_Entry_Date">
+     <h3 class="serendipity_date">
+      <abbr class="published" title="2014-12-30T14:00:00CET">
+       Tuesday, 30. December 2014
+      </abbr>
+     </h3>
+     <h4 class="entry-title serendipity_title">
+      <a href="/archives/44-OpenZFS-Feature-Flags-Compatibility-Matrix.html" rel="bookmark">
+       OpenZFS Feature Flags Compatibility Matrix
+      </a>
+     </h4>
+     <div class="serendipity_entry serendipity_entry_author_Martin-Matuska ">
+      <span class="serendipity_entryIcon">
+       <a href="http://blog.vx.sk/categories/1-FreeBSD">
+        <img alt="FreeBSD" class="serendipity_entryIcon" src="/uploads/category/freebsd.png" title="FreeBSD: The FreeBSD operating system"/>
+       </a>
+       <a href="http://blog.vx.sk/categories/3-OpenZFS">
+        <img alt="OpenZFS" class="serendipity_entryIcon" src="/uploads/category/openzfs.png" title="OpenZFS: OpenZFS"/>
+       </a>
+      </span>
+      <div class="entry-content serendipity_entry_body">
+       With the introduction of ZFS feature flags many users have experienced compatibility problems working with ZFS pools on different operating systems or operating system versions. In this article I am providing a table comparing the ZFS Feature Flag support on FreeBSD, Linux (zfsonlinux), Mac OSX (OpenZFS OSX) and illumos (OmniOS).
+      </div>
+      <div class="serendipity_entry_extended">
+       <a id="extended">
+       </a>
+       <br/>
+       OpenZFS Feature Flags Compatibility Matrix:
+       <table border="1">
+        <tr>
+         <th rowspan="2">
+          Feature Flag
+         </th>
+         <th align="center" colspan="5">
+          FreeBSD RELEASE
+         </th>
+         <th align="center">
+          OpenZFS OSX
+         </th>
+         <th align="center">
+          zfsonlinux
+         </th>
+         <th align="center">
+          OmniOS
+         </th>
+        </tr>
+        <tr>
+         <th>
+          8.4
+         </th>
+         <th>
+          9.2
+         </th>
+         <th>
+          9.3
+         </th>
+         <th>
+          10.0
+         </th>
+         <th>
+          10.1
+         </th>
+         <th>
+          1.3.1
+         </th>
+         <th>
+          0.6.4
+         </th>
+         <th>
+          r151014
+         </th>
+        </tr>
+        <tr>
+         <td>
+          async_destroy
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          empty_bpobj
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          lz4_compress
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          multi_vdev_crash_dump
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          spacemap_histogram
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          enabled_txg
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          hole_birth
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          extensible_dataset
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          embedded_data
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          bookmarks
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          filesystem_limits
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+        <tr>
+         <td>
+          large_blocks
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td>
+          no
+         </td>
+         <td bgcolor="lightgreen">
+          yes
+         </td>
+        </tr>
+       </table>
+       A detailed description of the feature flags is in the
+       <a href="https://www.freebsd.org/cgi/man.cgi?query=zpool-features&amp;apropos=0&amp;sektion=7&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html" onclick="_gaq.push(['_trackPageview', '/extlink/www.freebsd.org/cgi/man.cgi?query=zpool-features&amp;apropos=0&amp;sektion=7&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html']);">
+        <b>
+         zpool-features(7)
+        </b>
+       </a>
+       manual page.
+       <br/>
+       FreeBSD releases up to 8.3 and including 9.0 and 9.1 do not support feature flags.
+       <br/>
+       <br/>
+       <b>
+        UPDATE 16.01.2015:
+       </b>
+       fixed unavailable embedded_data on FreeBSD 9.3, thanks to Dmitry Kononov
+       <br/>
+       <b>
+        UPDATE 12.04.2015:
+       </b>
+       updated zfsonlinux from 0.6.3 to 0.6.4, OpenZFS OSX from 1.3.0 to 1.3.1, OmniOS from r151012 to r151014
+       <br/>
+       <br/>
+       If you plan to access your ZFS pools from earlier operating system versions (or other operating systems) you have to consider that if you enable any unsupported features the pool may become read-only or unreadable, depending on the specific feature. Features supported by all systems above are async_destroy, empty_bpobj and lz4_compress.
+       <br/>
+       <br/>
+       To create a ZFS pool that is compatible with all operating system versions in the matrix above, use the
+       <a href="https://www.freebsd.org/cgi/man.cgi?query=zpool&amp;apropos=0&amp;sektion=8&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html" onclick="_gaq.push(['_trackPageview', '/extlink/www.freebsd.org/cgi/man.cgi?query=zpool&amp;apropos=0&amp;sektion=8&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html']);">
+        <b>
+         zpool(8)
+        </b>
+       </a>
+       command with following syntax:
+       <br/>
+       <b>
+        zpool create -d -o feature@async_destroy=enabled -o feature@empty_bpobj=enabled -o feature@lz4_compress=enabled [device(s)]
+       </b>
+       <br/>
+       <br/>
+       More information:
+       <br/>
+       <a href="https://www.freebsd.org/cgi/man.cgi?query=zpool-features&amp;apropos=0&amp;sektion=7&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html" onclick="_gaq.push(['_trackPageview', '/extlink/www.freebsd.org/cgi/man.cgi?query=zpool-features&amp;apropos=0&amp;sektion=7&amp;manpath=FreeBSD+10.1-stable&amp;arch=default&amp;format=html']);">
+        zpool-features(7)
+       </a>
+       manual page with detailed description of all supported features.
+       <br/>
+       <a href="http://www.open-zfs.org" onclick="_gaq.push(['_trackPageview', '/extlink/www.open-zfs.org']);">
+        OpenZFS Homepage
+       </a>
+       <br/>
+       <a href="http://zfsonlinux.org/" onclick="_gaq.push(['_trackPageview', '/extlink/zfsonlinux.org/']);">
+        ZFS on Linux
+       </a>
+       <br/>
+       <a href="https://openzfsonosx.org/" onclick="_gaq.push(['_trackPageview', '/extlink/openzfsonosx.org/']);">
+        OpenZFS on OSX
+       </a>
+      </div>
+      <div class="serendipity_entryFooter belowentry">
+       Posted by
+       <address class="author">
+        <a href="http://blog.vx.sk/authors/1-Martin-Matuska">
+         Martin Matuka
+        </a>
+       </address>
+       in
+       <a href="http://blog.vx.sk/categories/1-FreeBSD">
+        FreeBSD
+       </a>
+       ,
+       <a href="http://blog.vx.sk/categories/3-OpenZFS">
+        OpenZFS
+       </a>
+       at
+       <a href="/archives/44-OpenZFS-Feature-Flags-Compatibility-Matrix.html">
+        14:00
+       </a>
+      </div>
+     </div>
+     <!--
+        &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                 xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+                 xmlns:dc="http://purl.org/dc/elements/1.1/"&gt;
+        &lt;rdf:Description
+                 rdf:about="http://blog.vx.sk/feeds/ei_44.rdf"
+                 trackback:ping="http://blog.vx.sk/comment.php?type=trackback&amp;entry_id=44"
+                 dc:title="OpenZFS Feature Flags Compatibility Matrix"
+                 dc:identifier="http://blog.vx.sk/archives/44-OpenZFS-Feature-Flags-Compatibility-Matrix.html" /&gt;
+        &lt;/rdf:RDF&gt;
+        -->
+     <div class="serendipity_comments serendipity_section_trackbacks">
+      <a id="trackbacks">
+      </a>
+      <div class="serendipity_commentsTitle">
+       Trackbacks
+      </div>
+      <div class="serendipity_center">
+       <a href="http://blog.vx.sk/comment.php?type=trackback&amp;entry_id=44" onclick="alert('This link is not meant to be clicked. It contains the trackback URI for this entry. You can use this URI to send ping- &amp; trackbacks from your own blog to this entry. To copy the link, right click and select &quot;Copy Shortcut&quot; in Internet Explorer or &quot;Copy Link Location&quot; in Mozilla.'); return false;" rel="nofollow" style="font-weight: normal" title='This link is not meant to be clicked. It contains the trackback URI for this entry. You can use this URI to send ping- &amp; trackbacks from your own blog to this entry. To copy the link, right click and select "Copy Shortcut" in Internet Explorer or "Copy Link Location" in Mozilla.'>
+        Trackback specific URI for this entry
+       </a>
+      </div>
+      <div id="serendipity_trackbacklist">
+       <div class="serendipity_center">
+        No Trackbacks
+       </div>
+      </div>
+     </div>
+     <div class="serendipity_comments serendipity_section_comments">
+      <a id="comments">
+      </a>
+      <div class="serendipity_commentsTitle">
+       Comments
+      </div>
+      <div class="serendipity_center">
+       Display comments as
+                                            (
+       <a href="/index.php?url=archives/44-OpenZFS-Feature-Flags-Compatibility-Matrix.html&amp;serendipity[cview]=linear#comments" rel="nofollow">
+        Linear
+       </a>
+       | Threaded)
+      </div>
+      <div id="serendipity_commentlist">
+       <div class="serendipity_center nocomments">
+        No comments
+       </div>
+      </div>
+      <a id="feedback">
+      </a>
+      <div class="serendipity_center serendipity_msg_important">
+       The author does not allow comments to this entry
+      </div>
+     </div>
+    </div>
+    <div class="serendipity_pageFooter" style="text-align: center">
+    </div>
+    <!-- ENTRIES END -->
+    <!-- CONTENT END -->
+   </div>
+   <div class="twoside layout2bs_right" id="serendipityRightSideBar">
+    <!-- do nothing thereby supressing quicksearch in the sidebar when enabled in  -->
+    <!-- navigation menu bar and ONLY when navigation bar is above or below header -->
+    <div class="serendipitySideBarItem container_serendipity_archives_plugin">
+     <h3 class="serendipitySideBarTitle serendipity_archives_plugin">
+      Archives
+     </h3>
+     <div class="serendipitySideBarContent">
+      <ul class="plainList">
+       <li>
+        <a href="/index.php?frontpage">
+         Recent...
+        </a>
+       </li>
+       <li>
+        <a href="http://blog.vx.sk/archive">
+         Older...
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="serendipitySideBarFooter">
+     </div>
+    </div>
+    <div class="serendipitySideBarItem container_serendipity_categories_plugin">
+     <h3 class="serendipitySideBarTitle serendipity_categories_plugin">
+      Categories
+     </h3>
+     <div class="serendipitySideBarContent">
+      <ul id="serendipity_categories_list" style="list-style: none; margin: 0px; padding: 0px">
+       <li class="category_depth0 category_6" style="display: block;">
+        <a class="serendipity_xml_icon" href="/feeds/categories/6-Android.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/categories/6-Android" style="padding-left: 0px" title="Android-related">
+         Android
+        </a>
+       </li>
+       <li class="category_depth0 category_1" style="display: block;">
+        <a class="serendipity_xml_icon" href="/feeds/categories/1-FreeBSD.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/categories/1-FreeBSD" style="padding-left: 0px" title="The FreeBSD operating system">
+         FreeBSD
+        </a>
+       </li>
+       <li class="category_depth0 category_5" style="display: block;">
+        <a class="serendipity_xml_icon" href="/feeds/categories/5-Linux.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/categories/5-Linux" style="padding-left: 0px" title="Linux">
+         Linux
+        </a>
+       </li>
+       <li class="category_depth0 category_3" style="display: block;">
+        <a class="serendipity_xml_icon" href="/feeds/categories/3-OpenZFS.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/categories/3-OpenZFS" style="padding-left: 0px" title="OpenZFS">
+         OpenZFS
+        </a>
+       </li>
+       <li class="category_depth0 category_4" style="display: block;">
+        <a class="serendipity_xml_icon" href="/feeds/categories/4-Security.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/categories/4-Security" style="padding-left: 0px" title="Security">
+         Security
+        </a>
+       </li>
+      </ul>
+      <div class="category_link_all">
+       <br/>
+       <a href="/index.php?frontpage" title="All categories">
+        All categories
+       </a>
+      </div>
+     </div>
+     <div class="serendipitySideBarFooter">
+     </div>
+    </div>
+    <div class="serendipitySideBarItem container_serendipity_syndication_plugin">
+     <h3 class="serendipitySideBarTitle serendipity_syndication_plugin">
+      Syndicate This Blog
+     </h3>
+     <div class="serendipitySideBarContent">
+      <ul class="plainList">
+       <li>
+        <a class="serendipity_xml_icon" href="/feeds/index.rss">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/feeds/index.rss">
+         RSS 0.91 feed
+        </a>
+       </li>
+       <li>
+        <a class="serendipity_xml_icon" href="/feeds/index.rss1">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/feeds/index.rss1">
+         RSS 1.0 feed
+        </a>
+       </li>
+       <li>
+        <a class="serendipity_xml_icon" href="/feeds/index.rss2">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/feeds/index.rss2">
+         RSS 2.0 feed
+        </a>
+       </li>
+       <li>
+        <a class="serendipity_xml_icon" href="/feeds/atom10.xml">
+         <img alt="ATOM/XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/feeds/atom10.xml">
+         ATOM 1.0 feed
+        </a>
+       </li>
+       <li>
+        <a class="serendipity_xml_icon" href="/feeds/comments.rss2">
+         <img alt="XML" src="/templates/bulletproof/img/xml.gif" style="border: 0px"/>
+        </a>
+        <a href="/feeds/comments.rss2">
+         <span style="white-space: nowrap">
+          RSS 2.0 Comments
+         </span>
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="serendipitySideBarFooter">
+     </div>
+    </div>
+    <div class="serendipitySideBarItem container_serendipity_plugin_multilingual">
+     <h3 class="serendipitySideBarTitle serendipity_plugin_multilingual">
+      Choose Language
+     </h3>
+     <div class="serendipitySideBarContent">
+      <form action="/index.php?/archives/44-OpenZFS-Feature-Flags-Compatibility-Matrix.html" id="language_chooser" method="post">
+       <div>
+        <select name="user_language" onchange="document.getElementById('language_chooser').submit();" style="font-size: 12px">
+         <option selected="selected" value="en">
+          English
+         </option>
+         <option value="de">
+          German
+         </option>
+         <option value="sk">
+          Slovak
+         </option>
+        </select>
+       </div>
+      </form>
+     </div>
+     <div class="serendipitySideBarFooter">
+     </div>
+    </div>
+   </div>
+   <!-- #footer: the page footer can be used for additional information             -->
+   <div id="footer">
+    <!-- ************************************************************** -->
+    <!-- The image and link below must remain if you use this template  -->
+    <!-- or create your own template based on the bulletproof framework -->
+    <!-- ************************************************************** -->
+    <div id="serendipity_bulletproof_button">
+     <a href="http://s9y-bulletproof.com" title="Based on the s9y Bulletproof template framework">
+      <img alt="Based on the s9y Bulletproof template framework" height="28" src="/templates/bulletproof/img/bulletproof_button.png" width="100"/>
+     </a>
+    </div>
+    <!-- ************************************************************** -->
+    <!-- Feel free to insert your own "Template by" name and link below -->
+    <!-- if you create a custom template based on bulletproof.          -->
+    <!-- ************************************************************** -->
+    <div id="serendipity_credit_line">
+     Powered by
+     <a href="http://www.s9y.org">
+      s9y
+     </a>
+      Template by
+     <a href="http://s9y-bulletproof.com">
+      Bulletproof development team
+     </a>
+     .
+     <br/>
+    </div>
+    <!-- option to display navigation links in the footer                            -->
+    <div id="footer_sitenav">
+     <ul>
+      <li>
+       <a href="https://github.com/mmatuska" title="GitHub">
+        GitHub
+       </a>
+      </li>
+      <li>
+       <a href="http://mfsbsd.vx.sk" title="mfsBSD">
+        mfsBSD
+       </a>
+      </li>
+      <li>
+       <a href="http://connectbot.vx.sk" title="VX ConnectBot">
+        VX ConnectBot
+       </a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div id="wrapper_footer">
+   </div>
+  </div>
+  <!--PLUGIN API-->
+ </body>
+</html>

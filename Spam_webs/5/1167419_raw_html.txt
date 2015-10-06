@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html itemscope="" itemtype="http://schema.org/Article">
+ <head>
+  <meta charset="utf-8"/>
+  <link href="https://plus.google.com/100292833634918081724" rel="publisher"/>
+  <title>
+   Stupid Geek Tricks: Find the Secret Messages in Web Site Headers
+  </title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="65878196434" property="fb:page_id"/>
+  <meta content="WiU7236KQY8e6jcxePbZscPXDuMvJ3b9ydseGd4G5AE=" name="verify-v1"/>
+  <meta content="INDEX, FOLLOW" name="ROBOTS"/>
+  <meta content="1 DAYS" name="REVISIT-AFTER"/>
+  <link href="http://feeds.howtogeek.com/HowToGeek" rel="alternate" title="How-To Geek RSS Feed" type="application/rss+xml"/>
+  <meta content="Stupid Geek Tricks: Find the Secret Messages in Web Site Headers" itemprop="name" name="title" property="og:title"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Todays stupid geek trick takes us to the unseen technical world beneath the surface of your favorite websites, and shows us how real geeks hide secret messages in the HTTP protocol headers. Were talking Serious geek cred here." itemprop="og:description" name="og:description" property="og:description"/>
+  <meta content="http://cdn5.howtogeek.com/thumbcache/280/160/5d4e5f127215630fea6eca3f8cdbe2f6/wp-content/uploads/2009/11/image58.png" property="og:image"/>
+  <link href="http://cdn5.howtogeek.com/thumbcache/280/160/5d4e5f127215630fea6eca3f8cdbe2f6/wp-content/uploads/2009/11/image58.png" rel="image_src"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="@howtogeeksite" name="twitter:site"/>
+  <meta content="Stupid Geek Tricks: Find the Secret Messages in Web Site Headers" name="twitter:title"/>
+  <meta content="Todays stupid geek trick takes us to the unseen technical world beneath the surface of your favorite websites, and shows us how real geeks hide secret messages in the HTTP protocol headers. Were talking Serious geek cred here." name="twitter:description"/>
+  <meta content="http://cdn5.howtogeek.com/thumbcache/280/160/5d4e5f127215630fea6eca3f8cdbe2f6/wp-content/uploads/2009/11/image58.png" name="twitter:image:src"/>
+  <link href="http://cdn5.howtogeek.com/public/css/A.howtogeek.css,q1428025148.pagespeed.cf.RwNj_sCLVT.css" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" type="text/css"/>
+  <link href="http://cdn5.howtogeek.com/public/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var statsUrl='/public/stats.php?id=6499&amp;1436820576';
+  </script>
+  <script src="http://cdn5.howtogeek.com/public/js/howtogeek.js,qupd=1428022159.pagespeed.jm._B1j8J9j8A.js" type="text/javascript">
+  </script>
+  <link href="http://www.howtogeek.com/?p=6499" rel="shortlink"/>
+  <link href="http://www.howtogeek.com/howto/6499/stupid-geek-tricks-find-hidden-messages-in-web-site-headers/" rel="canonical"/>
+  <meta content="http://www.howtogeek.com/howto/6499/stupid-geek-tricks-find-hidden-messages-in-web-site-headers/" property="og:url"/>
+  <script src="http://ads.servebom.com/tmnhead.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   tmntag.account('/10518929/tmnp.howtogeek');tmntag.adunit({'sizes':[[300,250],[300,600],[300,1050]],'div':'div-gpt-ad-1342044737928-1'});tmntag.adunit({'sizes':[[728,90]],'div':'div-gpt-ad-1342044737928-2'});tmntag.adunit({'account':'/10518929/tmnp.howtogeek-btf','sizes':[[160,600],[120,600]],'div':'div-gpt-ad-1342044737928-12'});tmntag.adunit({'account':'/10518929/tmnp.howtogeek-btf','sizes':[[728,90],[970,66],[970,90],[970,250]],'div':'div-gpt-ad-1342044737928-14'});tmntag.adunit({'sizes':[650,141],'div':'div-1342-1','targeting':{'adsense1':'adsense1'}});tmntag.adunit({'sizes':[650,140],'div':'div-1342-2','targeting':{'adsense2':'adsense2'}});tmntag.adunit({'account':'/10518929/tmnp.howtogeek-btf','sizes':[300,250],'div':'div-1342-3','targeting':{'adsense3':'adsense3'}});var isiPad=navigator.userAgent.match(/iPad/i)!=null;if(isiPad){}else{tmntag.adunit({account:'/10518929/tmnp.howtogeek','div':'ad_skin'});}
+tmntag.start();
+  </script>
+ </head>
+ <body class="v3">
+  <div class="yui-t7" id="doc4">
+   <div id="hd">
+    <div id="htgHeader">
+     <div class="logo">
+      <h1 id="printH1">
+       How-To Geek
+      </h1>
+      <a class="home" href="http://www.howtogeek.com/">
+       <img alt="How-To Geek" src="/public/images/blank.gif.pagespeed.ce.Ulei5-zhiK.gif"/>
+      </a>
+      <div class="logo2">
+       <div id="div-gpt-ad-1342044737928-2">
+        <script type="text/javascript">
+         tmntag.adTag('div-gpt-ad-1342044737928-2');
+        </script>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="bd">
+    <div class="yui-g" id="htgNavBar2" style="min-height:37px;">
+     <div id="htgNavBar">
+      <a href="/" id="home" title="How-To Geek Home">
+      </a>
+      <ul id="mnuMainul">
+       <li>
+        <a class="arrow" href="#" id="mnuMainMenu">
+         ARTICLES
+        </a>
+        <div class="subMenu">
+         <div class="subMenuSection">
+          <h4>
+           SECTIONS
+          </h4>
+          <ul style="width:100px;">
+           <li>
+            <h2>
+             <a href="/t/windows/">
+              WINDOWS
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/t/linux/">
+              LINUX
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/t/office/">
+              OFFICE
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/t/gadgets/">
+              GADGETS
+             </a>
+            </h2>
+           </li>
+          </ul>
+          <ul>
+           <li>
+            <h2>
+             <a href="/t/mobile/">
+              MOBILE
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/t/hardware/">
+              HARDWARE
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/t/apple/">
+              APPLE
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/school/">
+              GEEK SCHOOL
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+         <div class="subMenuSection" style="margin-left:20px;">
+          <div class="submenudetail sm300" onclick="window.location='/t/features'">
+           <div id="ftquest">
+           </div>
+           <span>
+            FEATURED ARTICLES
+           </span>
+           <p>
+            Read just our best, feature-length articles without all the extra stuff.
+           </p>
+           <div style="clear:both;">
+           </div>
+          </div>
+          <div style="clear:both;">
+          </div>
+          <div class="submenudetail sm300" onclick="window.location='http://www.howtogeek.com/howto/6499/stupid-geek-tricks-find-hidden-messages-in-web-site-headers/'">
+           <div id="gtquest">
+           </div>
+           <span>
+            GEEK TRIVIA
+           </span>
+           <p>
+            Stupid Geek Tricks: Find the Secret Messages in Web Site Headers
+           </p>
+           <div style="clear:both;">
+           </div>
+          </div>
+          <div style="clear:both;">
+          </div>
+         </div>
+         <div class="subMenuSection" style="margin-left:30px;">
+          <!--&lt;div class="submenudetail sm330" onclick="window.location='/books/windows-8/'"&gt;
+								&lt;img src="http://www.howtogeek.com/geekers/up/sshot51103afc72508.png"&gt;
+								&lt;span&gt;HOW-TO GEEK BOOKS&lt;/span&gt;&lt;p&gt;Read our first book, the HTG Guide to Windows 8, or check our upcoming books.&lt;/p&gt;
+								&lt;div style="clear:both;"&gt;&lt;/div&gt;
+							&lt;/div&gt;-->
+          <ul style="margin-top:0px;">
+           <li>
+            <h2>
+             <a href="/about/" rel="nofollow" style="color:#CCC;">
+              ABOUT
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a href="/contact/" rel="nofollow" style="color:#CCC;">
+              CONTACT
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <ul>
+       <li>
+        <a class="mnuMainItem" href="http://discuss.howtogeek.com">
+         DISCUSSION
+        </a>
+       </li>
+      </ul>
+      <ul id="mnuMainul2">
+       <li>
+        <a class="mnuMainItem arrow" href="#" id="mnuSubNow">
+         SUBSCRIBE
+        </a>
+        <div class="subMenu" style="padding-bottom:10px">
+         <div class="subMenuSection" style="margin-left:20px;">
+          <h4>
+           FOLLOW US
+          </h4>
+          <ul style="width:100px;">
+           <li>
+            <h2>
+             <a class="icon-twitter" href="https://twitter.com/intent/user?original_referer=http://www.howtogeek.com&amp;region=following&amp;screen_name=howtogeeksite&amp;tw_p=followbutton&amp;variant=2.0" target="_blank">
+              TWITTER
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a class="icon-google-plus" href="http://plus.google.com/+howtogeek">
+              GOOGLE+
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+         <div class="subMenuSection" style="margin-left:0px;">
+          <h4>
+          </h4>
+          <ul style="width:100px;">
+           <li>
+            <h2>
+             <a class="icon-facebook" href="http://facebook.com/thehowtogeek" rel="nofollow">
+              FACEBOOK
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+         <div class="subMenuSection" style="margin-left:20px;">
+          <div class="submenudetail sm400 noclick" id="subemsub" style="padding-bottom:20px">
+           <div id="emquest">
+            <div aria-hidden="true" class="fs1" data-icon="">
+            </div>
+           </div>
+           <span>
+            GET UPDATES BY EMAIL
+           </span>
+           <form action="/em/subscribe" method="get">
+            <input name="list" type="hidden" value="weekday"/>
+            <input name="tr" type="hidden" value="topmenu"/>
+            <input id="fromaddress" name="emailaddress" style="z-index:-9;left:-1500;top:-1500;height:1px;width:1px;position:absolute;" type="text"/>
+            <p>
+             Enter your email below to get exclusive access to our best articles and tips before everybody else.
+            </p>
+            <p>
+             <input id="from" name="email" style="width:200px;color:#BBB;margin-left:59px;" type="text" value="Enter Your Email Here"/>
+             <input id="sub1" name="sub1" style="background:#55A8DF;margin-left:59px;width:212px;margin-top:6px;" type="submit" value="Get Your Newsletter Now"/>
+            </p>
+            <div style="clear:both;">
+            </div>
+           </form>
+          </div>
+         </div>
+         <div class="subMenuSection" style="margin-left:20px;">
+          <h4>
+           RSS
+          </h4>
+          <ul style="width:130px;">
+           <li>
+            <h2>
+             <a class="icon-feed" href="http://feeds.howtogeek.com/howtogeek">
+              ALL ARTICLES
+             </a>
+            </h2>
+           </li>
+           <li>
+            <h2>
+             <a class="icon-feed" href="http://www.howtogeek.com/t/features/feed/" rel="nofollow">
+              FEATURES ONLY
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+         <div class="subMenuSection" style="margin-left:0px;">
+          <h4>
+          </h4>
+          <ul style="width:150px;">
+           <li>
+            <h2>
+             <a class="icon-feed" href="http://www.howtogeek.com/trivia/feed/" rel="nofollow">
+              TRIVIA
+             </a>
+            </h2>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+      <div class="searchinactive" id="searchwrapper">
+       <span id="searchhover">
+        SEARCH
+       </span>
+       <form action="/search/" id="sea" method="get">
+        <input id="s" name="q" type="text" value=""/>
+        <input id="searchsubmit" style="" type="submit" value=""/>
+       </form>
+      </div>
+      <div style="clear:both">
+      </div>
+     </div>
+     <div style="clear:both">
+     </div>
+    </div>
+    <div class="yui-g" id="headerpanel">
+    </div>
+    <div class="yui-ge">
+     <div class="yui-u first">
+      <div class="content" id="htgArticle">
+       <h1 id="printHeader" style="display:none">
+        How-To Geek
+       </h1>
+       <!-- abovepost -->
+       <div class="thepost" id="post-6499">
+        <div style="max-width:650px;width:100%;margin-bottom:0px;margin-top:-10px;min-height:24px;">
+         <div style="clear:both;">
+         </div>
+        </div>
+        <h2>
+         <a href="http://www.howtogeek.com/howto/6499/stupid-geek-tricks-find-hidden-messages-in-web-site-headers/" rel="bookmark" title="Stupid Geek Tricks: Find the Secret Messages in Web Site Headers">
+          Stupid Geek Tricks: Find the Secret Messages in Web Site Headers
+         </a>
+        </h2>
+        <div class="thecontent">
+         <!-- google_ad_section_start -->
+         <p>
+          Todays stupid geek trick takes us to the unseen technical world beneath the surface of your favorite websites, and shows us how real geeks hide secret messages in the HTTP protocol headers. Were talking
+          <em>
+           Serious
+          </em>
+          geek cred here.
+         </p>
+         <p>
+          <img alt="Slashdot's Hidden Message" border="0" height="340" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image58.png" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px" title="Slashdot's Hidden Message" width="615"/>
+         </p>
+         <p>
+          <strong>
+           What Are You Talking About?
+          </strong>
+         </p>
+         <div id="div-1342-1" style="margin-top:10px;padding-top:10px;border-top:1px solid #CCC;margin-bottom:10px;border-bottom:1px solid #CCC;">
+          <script type="text/javascript">
+           tmntag.adTag('div-1342-1');
+          </script>
+         </div>
+         <p>
+          The thing you probably dont realize is that behind the scenes, your web browser sends a request to the web server using the
+          <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">
+           HTTP protocol
+          </a>
+          , which is nothing more than a pre-defined set of commands in text format so the browser and web server can communicate.
+         </p>
+         <p>
+          but thats really boring. Which is why the geeks that run various web sites decided to hide messages in those headers just to see if anybody would notice. And some of them are rather fun.
+         </p>
+         <p>
+          <strong>
+           How to See the Hidden Headers
+          </strong>
+         </p>
+         <p>
+          Theres a number of ways to access these headers, the easiest for real geeks is to pop open the command prompt and use the curl utility, available on Linux, Mac OS X, or even Windowsif you dont mind
+          <a href="http://curl.haxx.se/download.html">
+           downloading an additional utility.
+          </a>
+         </p>
+         <p>
+          The other way to view them is with the
+          <a href="https://addons.mozilla.org/en-US/firefox/addon/3829">
+           Live HTTP Headers
+          </a>
+          add-on for Firefox.
+         </p>
+         <p>
+          If you are using the curl method, you can simply type in the following command (thats a dash and capital i, not an L)
+         </p>
+         <blockquote>
+          <p>
+           curl I sitename.com
+          </p>
+         </blockquote>
+         <p>
+          For instance, if you type in curl I slashdot.org, youll see that they embed random quotes from Futurama into the headers:
+         </p>
+         <p>
+          <img alt="image" border="0" height="212" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image59.png" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px" title="image" width="620"/>
+         </p>
+         <p>
+          The blogging platform
+          <a href="http://wordpress.com">
+           WordPress
+          </a>
+          uses the header for a useful purposethey recommend contacting them about a job if youve been able to locate the headers:
+         </p>
+         <blockquote>
+          <p>
+           curl I wordpress.com
+          </p>
+         </blockquote>
+         <p>
+          <img alt="image" border="0" height="153" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image60.png" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px" title="image" width="500"/>
+         </p>
+         <p>
+          My buddy Ross over at
+          <a href="http://www.simplehelp.net/">
+           SimpleHelp.net
+          </a>
+          expresses his music taste in his header by now Im sure you can figure out the command.
+         </p>
+         <p>
+          <img alt="image" border="0" height="224" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image61.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="image" width="405"/>
+         </p>
+         <p>
+          Over at the
+          <a href="http://www.online-tech-tips.com">
+           Online Tech Tips
+          </a>
+          site, theyve got a very important tip for you:
+         </p>
+         <p>
+          <img alt="image" border="0" height="212" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image62.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="image" width="473"/>
+         </p>
+         <p>
+          The
+          <a href="http://cybernetnews.com">
+           CybernetNews
+          </a>
+          blog tells us that you should tape your thumbs to your hands. I mean, everyone is doing it!
+         </p>
+         <p>
+          <img alt="image" border="0" height="243" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image63.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="image" width="518"/>
+         </p>
+         <p>
+          <a href="http://mattiasgeniar.be/">
+           Mattias Geniar
+          </a>
+          wants everybody to know who rocks. Turns out, its him!
+         </p>
+         <p>
+          <img alt="image" border="0" height="159" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image64.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="image" width="455"/>
+         </p>
+         <p>
+          The
+          <a href="http://www.tuxgames.com/">
+           Tux Games
+          </a>
+          site is using subliminal advertising. BUY MORE GAMES!
+         </p>
+         <p>
+          <img alt="image" border="0" height="155" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image65.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="image" width="526"/>
+         </p>
+         <p>
+          <strong>
+           Add a Hidden Message To Your Own Web Site
+          </strong>
+         </p>
+         <p>
+          For those of you rocking a blog running on an Apache web server, and using a .htaccess file, you can actually add your own secret hidden message to your own HTTP headers.
+         </p>
+         <p>
+          Just open up your .htaccess file, and add the following line (near the beginning for best effect).
+         </p>
+         <blockquote>
+          <p>
+           Header set X-Nerd Something Here
+          </p>
+         </blockquote>
+         <p>
+          You can change whatever is after the X- to anything you want, like X-Yay or X-SecretStuff, and you can also put whatever message you want between the quotesthough I would keep it nice and short.
+         </p>
+         <p>
+          <strong>
+           Added Bonus: Pull a Random Futurama Quote from Slashdot
+          </strong>
+         </p>
+         <p>
+          So now weve figured out how to see the quoteswith a little more command-line magic you can make a script that pulls a random quote from the Slashdot servers. Yes, this script is pretty useless, but its fun!
+         </p>
+         <blockquote>
+          <p>
+           curl -sI slashdot.org | grep -E X-(B|L|F)
+          </p>
+         </blockquote>
+         <p>
+          <img alt="image" border="0" height="119" src="http://cdn5.howtogeek.com/wp-content/uploads/2009/11/image66.png" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px" title="image" width="500"/>
+         </p>
+         <p>
+          Theres lots of other sites with hidden messages in the headers
+         </p>
+         <!-- google_ad_section_end -->
+        </div>
+        <div style="clear:both;height:0px;">
+        </div>
+        <!-- discourse comments begin -->
+        <style>
+         #discusslink {color:#585858;text-decoration:none;}#discusslink:hover{color:blue;text-decoration:none;}.commenttext img{max-width: 618px;}
+        </style>
+        <div style="max-width:650px;width:100%;padding-top:10px;">
+         <span style="font-family:bebas_neueregular;font-size:19px;position:relative;top:-9px;padding-right: 10px;float: left;background-color:#FFF;font-weight:normal;color: #868686;">
+          <a href="http://discuss.howtogeek.com" id="discusslink">
+           JOIN THE DISCUSSION
+          </a>
+         </span>
+         <div style="border-top:4px solid #CCC;">
+         </div>
+        </div>
+        <div style="clear:both;height:0px;">
+        </div>
+        <div style="margin-top:0px;/* margin-bottom:10px; */padding: 10px;background: #DDD;max-width: 630px;width:630px;border: 1px solid #CCC;border-bottom: none;">
+         <!-- Place this tag where you want the +1 button to render. -->
+         <div class="g-plusone" data-annotation="inline" data-width="300">
+         </div>
+         <!-- Place this tag after the last +1 button tag. -->
+         <script type="text/javascript">
+          (function(){var po=document.createElement('script');po.type='text/javascript';po.async=true;po.src='https://apis.google.com/js/plusone.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(po,s);})();
+         </script>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div id="postiddiv" post="6499">
+        </div>
+        <div style="clear:both;">
+        </div>
+        <div class="articleExtras" style="background: #FEFEFE;border-top:none;">
+         <div id="authorinfobox" style="width:450px;float:left;">
+          <p style="font-weight:normal;color:#333;">
+           <a href="http://www.howtogeek.com/author/thegeek/">
+            <strong>
+             Lowell Heddings
+            </strong>
+           </a>
+           , better known online as the How-To Geek, spends all his free time bringing you fresh geekery on a daily basis. You can follow him on
+           <a href="https://plus.google.com/115673881208416151793/?rel=author" rel="author">
+            Google+
+           </a>
+           if you'd like.
+          </p>
+         </div>
+         <div style="width:130px;float:right;">
+          <ul class="normul" style="margin-bottom:6px;">
+           <li>
+            Published 11/19/09
+           </li>
+           <!--&lt;li&gt;&lt;span id="pv3"&gt;&lt;/span&gt;&lt;/li&gt;-->
+          </ul>
+          <div style="margin-left:-14px;">
+           <a class="twitter-follow-button" data-show-count="false" href="https://twitter.com/howtogeek">
+           </a>
+          </div>
+         </div>
+         <div style="clear:both">
+         </div>
+        </div>
+        <div style="clear:both;">
+        </div>
+        <div class="below-post-features" style="">
+         <div id="outbrain-below-article" style="min-height:500px;">
+          <div class="OUTBRAIN" data-ob-template="How-ToGeek" data-src="http://www.howtogeek.com/howto/6499/stupid-geek-tricks-find-hidden-messages-in-web-site-headers/" data-widget-id="AR_1">
+          </div>
+          <script async="async" src="http://widgets.outbrain.com/outbrain.js" type="text/javascript">
+          </script>
+         </div>
+        </div>
+        <div style="clear:both;height:20px;">
+        </div>
+        <div style="width:100%;max-width:650px;margin-bottom:0px;">
+         <div id="div-1342-2">
+          <script type="text/javascript">
+           tmntag.adTag('div-1342-2');
+          </script>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear:both;">
+        </div>
+        <div class="showcomments" id="showcomments" style="">
+         <a href="?showcomments=1#comments" id="sc1">
+          SHOW ARCHIVED READER COMMENTS (12)
+         </a>
+        </div>
+        <div id="commentsWrap" post="6499" replyto="0">
+         <div id="sc2">
+          <!-- You can start editing here. -->
+          <h3 id="comments">
+           Comments
+           <span id="commentnumber">
+            (12)
+           </span>
+          </h3>
+          <ol class="commentlist">
+           <li class="comment-def" id="comment-80257">
+            <div class="commentmetadata date">
+             <a href="#comment-80257" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Adrian
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              On windows it probably easier to use Fiddler HTTP debugging proxy than curl  that way you can browse at the same time
+             </p>
+             <p>
+              Do i win the prize about Dexter?
+             </p>
+             <p>
+              X-Geek: Dexter is the Dark Defender.
+              <br/>
+              X-Winner: The first person that leaves a comment on that article with the Dexter message gets a $50 Amazon gift card.
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-alt" id="comment-80261">
+            <div class="commentmetadata date">
+             <a href="#comment-80261" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Kelvin
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              Dexter is the Dark Defender.
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-def" id="comment-80267">
+            <div class="commentmetadata date">
+             <a href="#comment-80267" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Corey
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              Dexter is the Dark Defender.
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-alt" id="comment-80270">
+            <div class="commentmetadata date">
+             <a href="#comment-80270" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Ken
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              Dexter is the Dark Defender.
+             </p>
+             <p>
+              No way. Am I really first?
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="geekcomment" id="comment-80272">
+            <div class="commentmetadata date">
+             <a href="#comment-80272" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              The Geek
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              @Adrian
+             </p>
+             <p>
+              You found the hidden prize! A gift card for $50 should now be in your email inbox. Congrats!
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-def" id="comment-80275">
+            <div class="commentmetadata date">
+             <a href="#comment-80275" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Adrian
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              cool!
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-alt" id="comment-80277">
+            <div class="commentmetadata date">
+             <a href="#comment-80277" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              John
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              WordPress is going to get a lot of job applications
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-def" id="comment-80304">
+            <div class="commentmetadata date">
+             <a href="#comment-80304" title="">
+              November 19, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Thomas Eaton
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              If your not using firefox, dont wish to install the plugin, or dont want to download a program/ know how to use it. Try:
+              <a href="http://www.onlinewebcheck.com/check.php" rel="nofollow">
+               http://www.onlinewebcheck.com/check.php
+              </a>
+              Type in the url, and scroll paste all the listed errors and at the bottom is the http header.
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-alt" id="comment-80425">
+            <div class="commentmetadata date">
+             <a href="#comment-80425" title="">
+              November 22, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              wandersick
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              curl -sI slashdot.org | grep -E X-(B|L|F)
+             </p>
+             <p>
+              Grep is not there on windows machines, but users can use findstr /r instead:
+             </p>
+             <p>
+              curl -sI slashdot.org | findstr -r X-[B|L|F]
+             </p>
+             <p>
+              (the metacharacters are slightly different though)
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-def" id="comment-82307">
+            <div class="commentmetadata date">
+             <a href="#comment-82307" title="">
+              December 29, 2009
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Milke
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              Its a funny trick !
+              <br/>
+              I think i will do it !
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-alt" id="comment-83119">
+            <div class="commentmetadata date">
+             <a href="#comment-83119" title="">
+              January 13, 2010
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              Andrea
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              nice trick I try it :)
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+           <li class="comment-def" id="comment-83364">
+            <div class="commentmetadata date">
+             <a href="#comment-83364" title="">
+              January 18, 2010
+             </a>
+            </div>
+            <div class="commentauthor">
+             <div class="ca2">
+              factotron
+             </div>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div class="commenttext">
+             <p>
+              A quick a ubiquitous way of finding the header info is to use a bookmarklet called quix. Quix was written by WordPress Guru Yoast and makes a whole bunch of stuff easier but it real quick for this.
+             </p>
+             <p>
+              If you want to install Quix go to quixapp.com or drag
+              <a href="//quixapp.com/go/?c='+e(c)+'&amp;t='+(document.title?e(document.title):'')+'&amp;s='+'&amp;v=076'+'&amp;u='+(document.location?e(document.location):'');d=''+document.location;if(d.substr(0,4)!='http'){window.location=u+'&amp;mode=direct';}else{heads=document.getElementsByTagName('head');if%20(heads.length==0){window.location=u+'&amp;mode=direct';}else{q=document.getElementById('quix');if(q){q.parentNode.removeChild(q);}sc=document.createElement('script');sc.src=u;sc.id='quix';sc.type='text/javascript';void(heads[0].appendChild(sc));}}}}" rel="nofollow">
+               this
+              </a>
+              to your bookmarks bar.
+             </p>
+             <p>
+              Give the link a click and then to get the header info you just type h in the box and enter.
+             </p>
+            </div>
+           </li>
+           <!-- #comment-## -->
+          </ol>
+          <div style="clear:both;">
+          </div>
+         </div>
+         <div id="respond">
+         </div>
+        </div>
+        <div style="clear:both;">
+        </div>
+        <div class="contsep">
+        </div>
+        <div class="contsep">
+        </div>
+       </div>
+       <div style="clear:both;">
+       </div>
+      </div>
+     </div>
+     <div class="yui-u">
+      <div class="sidebar">
+       <div class="triviahomebox" onclick="window.location='http://www.howtogeek.com/trivia/what-animal-is-relative-to-its-size-the-fastest-runner-on-earth/'" style="margin-top:20px;">
+        <h4>
+         GEEK TRIVIA
+        </h4>
+        <a class="title" href="http://www.howtogeek.com/trivia/what-animal-is-relative-to-its-size-the-fastest-runner-on-earth/" rel="bookmark">
+         What Animal Is, Relative To Its Size, The Fastest Runner On Earth?
+        </a>
+       </div>
+       <div class="sidebar-glossary">
+        <h4 class="sidebarh4">
+         DID YOU KNOW?
+        </h4>
+        <div class="glossaryhomebox" style="padding:10px;">
+         <p>
+          To break free from Earths gravitational field, objects need to achieve a speed of 25,000 miles per hour.
+         </p>
+        </div>
+       </div>
+       <div id="side78">
+        <!-- tmnp.howtogeek 300x250 ATF -->
+        <div id="div-gpt-ad-1342044737928-1">
+         <script type="text/javascript">
+          tmntag.adTag('div-gpt-ad-1342044737928-1');
+         </script>
+        </div>
+       </div>
+       <div class="sidebar-glossary lazyloaddiv">
+        <h4 class="sidebarh4">
+         BEST OF HOW-TO GEEK
+        </h4>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/177790/why-you-cant-use-cpu-clock-speed-to-compare-computer-performance/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/a8bf47de5b7bca7971ebe11c841f820a/wp-content/uploads/2013/12/xcpu-close-up.jpg.pagespeed.ic.D9hRxrETbH.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/177790/why-you-cant-use-cpu-clock-speed-to-compare-computer-performance/" rel="bookmark">
+           Why You Cant Use CPU Clock Speed to Compare Computer Performance
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <script async="" class="bt-script" src="http://cdn.bttrack.com/js/infeed/1.1/5ffc6f78-a277-43dd-8b7b-5fdfa1483100/34320547/infeed.min.js" type="text/javascript">
+        </script>
+        <img border="0" height="1" src="//bttrack.com/Pixel/Check/34320547?%%CACHEBUSTER%%" width="1"/>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/137896/how-to-place-your-speakers-to-maximize-your-home-theater-experience/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/8e229336c858c1e4a72512d414ca1cb2/wp-content/uploads/2013/02/x2013-02-13_120508.jpg.pagespeed.ic.uoe1vGaaDb.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/137896/how-to-place-your-speakers-to-maximize-your-home-theater-experience/" rel="bookmark">
+           How to Place Your Speakers to Maximize Your Home Theater Experience
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/190998/the-htg-guide-to-using-a-physical-keyboard-with-your-ipad-or-iphone/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/09b0881ae53128043e2b1d6c7c69d7ae/wp-content/uploads/2014/06/xuse-physical-keyboard-with-ipad-or-iphone.jpg.pagespeed.ic.iSi-6xr_3P.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/190998/the-htg-guide-to-using-a-physical-keyboard-with-your-ipad-or-iphone/" rel="bookmark">
+           The HTG Guide to Using a Physical Keyboard With Your iPad or iPhone
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <script async="" class="bt-script" src="http://cdn.bttrack.com/js/infeed/1.1/5ffc6f78-a277-43dd-8b7b-5fdfa1483100/34320549/infeed.min.js" type="text/javascript">
+        </script>
+        <img border="0" height="1" src="//bttrack.com/Pixel/Check/34320549?%%CACHEBUSTER%%" width="1"/>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/167013/how-to-optimize-windows-8.1-for-a-desktop-pc/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/b598a0cb3606073176d24be0283eeb8f/wp-content/uploads/2013/07/xwindows-8.1-navigation-options-and-start.png.pagespeed.ic.T4s6EuEpcr.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/167013/how-to-optimize-windows-8.1-for-a-desktop-pc/" rel="bookmark">
+           How to Optimize Windows 8.1 For a Desktop PC
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/220033/how-to-make-your-windows-10-pc-boot-faster/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/4b49aa5c8d93bf06fcc975ca2549ace8/wp-content/uploads/2015/06/ximg_5582080ee3b6e.png.pagespeed.ic.w0aPuN1ntN.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/220033/how-to-make-your-windows-10-pc-boot-faster/" rel="bookmark">
+           How to Make Your Windows 10 PC Boot Faster
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/217010/how-to-generate-a-battery-health-report-on-windows-8-or-windows-10/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/e5aa7418c8d37ef0ee93da104f3c7098/wp-content/uploads/2015/05/xlaptop-battery.jpg.pagespeed.ic.tjhYrnkLMc.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/217010/how-to-generate-a-battery-health-report-on-windows-8-or-windows-10/" rel="bookmark">
+           How to Generate a Battery Health Report on Windows 8 or Windows 10
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div class="sfpost">
+         <div class="sfp2">
+          <a class="title" href="http://www.howtogeek.com/212445/how-to-use-a-time-machine-drive-for-both-file-storage-and-backups/" rel="bookmark">
+           <span>
+            <img src="http://cdn5.howtogeek.com/thumbcache/60/40/9c3eaf2a262538950c4fbb5c229ed998/wp-content/uploads/2015/03/xmac-external-drive.jpg.pagespeed.ic.d7Lq-_tpQ2.jpg"/>
+           </span>
+          </a>
+         </div>
+         <div class="sfp3">
+          <a class="title" href="http://www.howtogeek.com/212445/how-to-use-a-time-machine-drive-for-both-file-storage-and-backups/" rel="bookmark">
+           How to Use a Time Machine Drive for Both File Storage and Backups
+          </a>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+       </div>
+       <div style="clear:both;">
+       </div>
+       <div style="width:300px;min-height:20px;margin-top:30px;">
+        <div style="width:160px;text-align:center;margin-left:auto;margin-right:auto;">
+         <!-- tmnp.howtogeek 160x600 BTF -->
+         <div id="div-gpt-ad-1342044737928-12">
+          <script type="text/javascript">
+           tmntag.adTag('div-gpt-ad-1342044737928-12');
+          </script>
+         </div>
+         <div style="padding-top:10px;">
+         </div>
+        </div>
+        <div id="sidebar-float-widget">
+         <div class="sidebar-float-widget-internal">
+          <div class="adSystem_ads">
+           <div class="html">
+            <div style="margin-bottom:0px">
+            </div>
+            <div class="g-page" data-href="//plus.google.com/100292833634918081724" data-layout="landscape" data-rel="publisher" data-width="320">
+            </div>
+            <div style="margin-top:8px;">
+             <a class="twitter-follow-button" data-show-count="true" data-size="large" href="https://twitter.com/howtogeeksite">
+              Follow @howtogeeksite
+             </a>
+             <script>
+              !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');
+             </script>
+            </div>
+            <div id="fb-root">
+            </div>
+            <script>
+             (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/sdk.js#xfbml=1&amp;appId=391129387654171&amp;version=v2.0";fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+            </script>
+            <div style="margin-bottom:10px">
+            </div>
+            <div class="fb-like" data-action="like" data-href="https://www.facebook.com/thehowtogeek" data-layout="standard" data-share="true" data-show-faces="true" data-width="300">
+            </div>
+            <div style="margin-bottom:15px">
+            </div>
+           </div>
+           <div style="clear:both">
+           </div>
+          </div>
+          <div style="clear:both;margin-bottom:20px;">
+          </div>
+          <div style="clear:both;">
+          </div>
+          <div id="div-1342-3">
+           <script type="text/javascript">
+            tmntag.adTag('div-1342-3',false);
+           </script>
+          </div>
+          <div style="clear:both;">
+          </div>
+         </div>
+         <div style="clear:both;">
+         </div>
+        </div>
+        <div style="clear:both;">
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="yui-g" id="sb2">
+     <div id="sb3">
+      <div id="ns_ad8">
+       <div id="sb4">
+        <!-- tmnp.howtogeek 728x90 BTF -->
+        <div id="div-gpt-ad-1342044737928-14">
+         <script type="text/javascript">
+          tmntag.adTag('div-gpt-ad-1342044737928-14');
+         </script>
+        </div>
+       </div>
+       <div style="clear:both;">
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="yui-g" style="">
+    </div>
+   </div>
+   <div class="footer" id="ft">
+    <div class="ftdiv" style="width:18%;">
+     <div class="ftsection" style="">
+      ABOUT
+     </div>
+     <ul class="bottomul">
+      <li>
+       <a href="/about/" rel="nofollow">
+        About Us
+       </a>
+      </li>
+      <li>
+       <a href="/contact/" rel="nofollow">
+        Contact Us
+       </a>
+      </li>
+      <li>
+       <a href="http://purch.com/" rel="nofollow">
+        Advertising
+       </a>
+      </li>
+      <li>
+       <a href="/privacy-policy/" rel="nofollow">
+        Privacy Policy
+       </a>
+      </li>
+     </ul>
+    </div>
+    <div class="ftdiv" style="width: 45%;">
+     <div class="ftsection" style="color:#FF9854">
+      GET ARTICLES BY EMAIL
+     </div>
+     <p id="ftemp">
+      Enter your email address to get our daily newsletter.
+     </p>
+     <p>
+     </p>
+     <form action="/em/subscribe" method="get">
+      <input name="list" type="hidden" value="weekday"/>
+      <input name="tr" type="hidden" value="footer"/>
+      <input id="fromaddress2" name="emailaddress" style="z-index:-9;left:-1500;top:-1500;height:1px;width:1px;position:absolute;" type="text"/>
+      <input id="ftemtxt" name="email" style="color:#BBB" type="text" value="Enter Your Email Here"/>
+      <input id="ftemsub" style="background:#55A8DF;" type="submit" value="Get Articles by Email"/>
+     </form>
+     <div style="clear:both;">
+     </div>
+    </div>
+    <div style="width:280px;float:left;">
+     <div class="ftsection">
+      FOLLOW US
+     </div>
+     <ul class="ftsub" style="float: left;">
+      <li class="icon-twitter">
+       <a href="https://twitter.com/intent/user?original_referer=http://www.howtogeek.com&amp;region=following&amp;screen_name=howtogeeksite&amp;tw_p=followbutton&amp;variant=2.0">
+        Twitter
+       </a>
+      </li>
+      <li class="icon-facebook">
+       <a href="http://facebook.com/thehowtogeek" rel="nofollow">
+        Facebook
+       </a>
+      </li>
+     </ul>
+     <ul class="ftsub" style="float: left;margin-left: 20px;">
+      <li class="icon-google-plus">
+       <a href="http://plus.google.com/+howtogeek">
+        Google+
+       </a>
+      </li>
+      <li class="icon-feed">
+       <a href="http://feeds.howtogeek.com/howtogeek">
+        RSS Feed
+       </a>
+      </li>
+     </ul>
+     <div style="clear:both">
+     </div>
+    </div>
+    <div style="clear:both">
+    </div>
+    <div style="font-style:italic;font-size:11px;text-align:center;">
+     Disclaimer: Most of the pages on the internet include affiliate links, including some on this site.
+    </div>
+    <br/>
+    <div class="copyright" style="font-size: 11px;">
+     Copyright  2006-2015 How-To Geek, LLC All Rights Reserved
+    </div>
+   </div>
+  </div>
+  <div id="ad_skin">
+   <script type="text/javascript">
+    tmntag.adTag('ad_skin',false);
+   </script>
+  </div>
+  <style>
+   #subscribeoverlay { background: url(/public/images/emailoverlay4.jpg) no-repeat;}
+    #emailoverlaylist { color: #222; }
+    #emailoverlayformbutton {background:#6FC6FF}
+    #emailoverlayformbutton:hover {background:#29A7FA}
+    #emfh2 {color:#000;top:100px;}
+  </style>
+  <div class="overlay-bg">
+   <div id="subscribeoverlay">
+    <a href="#" id="ovclose">
+    </a>
+    <h2 id="emfh2">
+    </h2>
+    <div id="emftag">
+    </div>
+    <ul id="emailoverlaylist">
+     <li>
+      Get exclusive articles before everybody else.
+     </li>
+     <li>
+      Get downloadable ebooks for free!
+     </li>
+     <li>
+      Get geeky trivia, fun facts, and much more.
+     </li>
+    </ul>
+    <form action="/em/subscribe" id="emailoverlayform" method="GET">
+     <p>
+      <input name="list" type="hidden" value="weekday"/>
+      <input name="tr" type="hidden" value="overlay1"/>
+     </p>
+     <p id="emoflbl" style="
+            position: absolute;
+            left: 20px;
+            top: 240px;font-weight:bold;font-size:120%;
+            color: #000;
+        ">
+      Enter Your Email Here to Get Access for Free:
+     </p>
+     <input id="overlayfrom" name="email" style="color:#BBB;" type="text" value="Enter Your Email Here"/>
+     <input id="emailoverlayformbutton" style="" type="submit" value="Get Free Content Now"/>
+    </form>
+    <div id="overlayformsuccess">
+     Go check your email!
+    </div>
+    <img id="overlayimage" src="http://cdn5.howtogeek.com/public/images/xemailoverlay4.jpg.pagespeed.ic.bdAMUqnBuz.jpg" style="position:absolute;left:-9000px;top:-9000px;"/>
+   </div>
+  </div>
+  <script type="text/javascript">
+   $('.sfp2 a, .sfp3 a').on('click',function(){ga('send','event','nav','click','sidebar-bestof');});$('.sidebar .triviahomebox, .sidebar .triviahomebox a').on('click',function(){ga('send','event','nav','click','sidebar-trivia');});$('.relateditemwrap a').on('click',function(){ga('send','event','nav','click','article-relatedbox');});$('.pf2 a, .pf3 a').on('click',function(){ga('send','event','nav','click','article-bestof');});
+  </script>
+  <script async="async" data-client-id="FOZJhmJOqPyDmWV" src="//d3avqv6zaxegeu.cloudfront.net/tie.js" type="text/javascript">
+  </script>
+  <!-- Begin comScore Tag -->
+  <script>
+   var _comscore=_comscore||[];_comscore.push({c1:"2",c2:"6035753"});(function(){var s=document.createElement("script"),el=document.getElementsByTagName("script")[0];s.async=true;s.src=(document.location.protocol=="https:"?"https://sb":"http://b")+".scorecardresearch.com/beacon.js";el.parentNode.insertBefore(s,el);})();
+  </script>
+  <noscript>
+   <img src="http://b.scorecardresearch.com/p?c1=2&amp;c2=6035753&amp;cv=2.0&amp;cj=1"/>
+  </noscript>
+  <!-- End comScore Tag -->
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-1113647-1','howtogeek.com');ga('send','pageview');
+  </script>
+  <!-- Quantcast Tag -->
+  <script type="text/javascript">
+   var _qevents=_qevents||[];(function(){var elem=document.createElement('script');elem.src=(document.location.protocol=="https:"?"https://secure":"http://edge")+".quantserve.com/quant.js";elem.async=true;elem.type="text/javascript";var scpt=document.getElementsByTagName('script')[0];scpt.parentNode.insertBefore(elem,scpt);})();_qevents.push({qacct:"p-e1gWzoEHleH1I"});
+  </script>
+  <noscript>
+   <div style="display:none;">
+    <img alt="Quantcast" height="1" src="//pixel.quantserve.com/pixel/p-e1gWzoEHleH1I.gif" width="1"/>
+   </div>
+  </noscript>
+  <!-- End Quantcast tag -->
+ </body>
+</html>

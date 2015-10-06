@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   anatomyEXPERT - Temporal - Structure Detail
+  </title>
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet"/>
+  <link href="/static/css/main.css" rel="stylesheet"/>
+  <link href="/static/css/print.css" media="print" rel="stylesheet"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+  </script>
+  <script src="/static/js/bootstrap.min.js" type="text/javascript">
+  </script>
+  <link href="/static/css/jquery.autocomplete.css" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet" type="text/css"/>
+  <link href="/static/scripts/jcarousel/lib/jquery.jcarousel.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/scripts/jcarousel/skins/tango/skin.css" rel="stylesheet" type="text/css"/>
+  <script src="/static/scripts/jcarousel/lib/jquery.jcarousel.pack.js" type="text/javascript">
+  </script>
+  <script src="/static/scripts/jquery.autocomplete.pack.js" type="text/javascript">
+  </script>
+  <script>
+   jQuery(document).ready(function()
+        {
+            
+
+                var initial_search_terms_value = jQuery("#searchfield").val();
+                jQuery("#searchfield").focus(function()
+                {
+                    if (initial_search_terms_value == jQuery(this).val())
+                    {
+                        jQuery(this).val('');
+                    }
+                });
+
+                jQuery("#searchfield").autocomplete("/app/complete/",
+                        {
+                            minChars:2,
+                            cacheLength:1
+                        }).result(function (evt, data, formatted)
+                        {
+                            if (data[1] != "0")
+                            {
+                                self.location.href="/app/structure/" + data[1] + "/";
+                            }
+                            else
+                            {
+                                jQuery("#searchfield").val("");
+                            }
+                        });
+
+
+            
+			
+			
+			
+		});
+  </script>
+  <meta content="AnatomyEXPERT: Temporal - Structure Detail" property="og:title"/>
+  <meta content="website" property="og:type"/>
+  <meta content="http://c0018279.cdn1.cloudfiles.rackspacecloud.com/bn104.jpg" property="og:image"/>
+  <script language="javascript" src="/static/scripts/image_zoomer.js">
+  </script>
+  <script language="javascript" src="/static/scripts/structure_images.js">
+  </script>
+  <script language="javascript" src="/static/scripts/soundmanager2-nodebug-jsmin.js">
+  </script>
+  <script>
+   var params = {}
+        params["menu"] = "false";
+
+        var attributes = {};
+        var labels = {};
+
+        var current_image_id = 983;
+        var current_structure_id = 4;
+        var current_structure_name = "Temporal";
+        var background_color = "#FFFFFF";
+
+        var csrf_token = "&lt;input type='hidden' name='csrfmiddlewaretoken' value='aTRnolkO6pnUH1Fa8FWFjKC7QDPUK8vL' /&gt;";
+
+        $(document).ready(function () {
+
+            $('.browse-carousel').each(function () {
+                $(this).jcarousel(
+                        {
+                            scroll: 1
+                        }
+                );
+            });
+
+
+            $(".jcarousel-prev").hide();
+            $(".jcarousel-next").hide();
+
+            $(".jcarousel-container").hover(function()
+            {
+                // only show if we have more than N items:
+                var my_slides = $(this).find("li");
+
+                if (my_slides.length &gt; 4)
+                {
+                    $(this).find(".jcarousel-prev").show();
+                    $(this).find(".jcarousel-next").show();
+                }
+            },function(){
+                $(".jcarousel-prev").hide();
+                $(".jcarousel-next").hide();
+
+            });
+
+            soundManager.setup({
+                useFlashBlock: true,
+                url: '/static/swf/',
+                flashVersion: 9, // optional: shiny features (default = 8)
+              // optional: ignore Flash where possible, use 100% HTML5 mode
+              // preferFlash: false,
+              onready: function() {
+                // Ready to use; soundManager.createSound() etc. can now be called.
+                structure_sound = soundManager.createSound({
+                    url: '/static/sounds/00004.mp3'
+                });
+              }
+            });
+
+
+            $('#play_disabled').hover(function () {
+                $('#upgrade_tip').fadeIn(100);
+            }, function () {
+                $('#upgrade_tip').fadeOut(100);
+            });
+            $('#structure_name').hover(function () {
+                $('#structure_name_trip').fadeIn(100);
+            }, function () {
+                $('#structure_name_trip').fadeOut(100);
+            });
+
+            $("a[data-toggle='dropdown']").hover(function()
+            {
+                $(".structure_menu").css({left:$("a[data-toggle='dropdown']").position().left});
+            });
+
+            $("a[data-toggle='dropdown']").click(function(){
+                $(".disease_menu").css({left:$("a[data-toggle='dropdown']").position().left});
+            });
+
+            $("#mesh_search").click(function(){
+
+                window.open("http://www.ncbi.nlm.nih.gov/pubmed/?term=%22" + current_structure_name + "%22%5BMeSH+Terms%5D");
+
+            });
+
+            $("#structure_diseases").click(function(){
+                self.location.href = $(this).attr("href");
+            });
+
+            $(".btn_layer_up").click(function(){
+                self.location.href = $(this).attr("href");
+            });
+            $(".btn_layer_down").click(function(){
+                self.location.href = $(this).attr("href");
+            });
+
+            $(".btn_vocalize").click(function()
+            {
+                console.log("playing audio");
+                //$("#audio_player").play();
+                structure_sound.play();
+            });
+
+            $(".btn_print").click(function()
+            {
+                //window.open($(this).attr("href"));
+
+                //var image_data = $("#photo_canvas")[0].toDataURL();
+                //$("#image_data").val(image_data);
+                $("#print_form").submit();
+
+            });
+
+            $(".btn_download").click(download);
+            $(".btn_purchase").click(function()
+            {
+                var frame_id = frame_id_list[current_image_offset];
+                self.location.href = "/app/cart/add/" + frame_id + "/";
+            });
+
+            $(".btn_upvote").click(function()
+            {
+                self.location.href = "/app/image_vote/" + $(this).attr("structure") + "/" + $(this).attr("image") + "/up/";
+            });
+
+            $(".btn_downvote").click(function()
+            {
+                self.location.href = "/app/image_vote/" + $(this).attr("structure") + "/" + $(this).attr("image") + "/down/";
+            });
+
+            
+
+            $(".btn_labels_on").click(showLabels);
+            $(".btn_labels_off").click(hideLabels);
+            $(".btn_labels_edit").click(function()
+            {
+                
+                    self.location.href = "/app/accounts/login/?next=" + window.location.pathname;
+                
+
+            });
+
+            $(".btn_add_label").click(addLabel);
+            $(".btn_reset_labels").click(resetLabels);
+            $(".btn_clear_labels").click(clearLabels);
+            $(".btn_unclear_labels").click(unclearLabels);
+            $(".btn_done_label").click(doneEditingLabels);
+
+            $("#finish_label").click(function(){
+
+                $('#structure_popup_modal').modal('hide');
+
+                label_x = $('#structure_popup_modal').attr("label_x");
+                label_y = $('#structure_popup_modal').attr("label_y");
+                x = $('#structure_popup_modal').attr("x");
+                y = $('#structure_popup_modal').attr("y");
+                structure_id = $('#label_structure').val();
+
+
+                // save it on the server
+                $.post("/app/add_label/",{ "frame_id": frame_id_list[current_image_offset], "structure_id": structure_id, "image_id":current_image_id,"point_x":x,"point_y":y,"label_x":label_x,"label_y":label_y },function(data, the_result)
+                {
+                    //alert("done");
+                    if(the_result == "success")
+                    {
+                        console.log(data);
+
+                        temp_marker.label_id = data["id"];
+                    	temp_marker.label_text = data["label"];
+                        console.log(temp_marker);
+
+                        marker_array[frame_id_list[current_image_offset]].push(temp_marker);
+
+                        updateRendering();
+                    }
+                    else
+                    {
+                        //console.log("label NOT added");
+                    }
+                },"json");
+
+
+            });
+
+            $("#rename_label").click(function(){
+
+                label_id = $('#label_edit_modal').attr("label_id");
+
+                label_text = $('#label_override_text').val();
+
+                $.post("/app/set_label_text/",{ "label_id": label_id,"label_text":label_text },function(data)
+                {
+                    console.log(data);
+
+                    $('#label_edit_modal').modal('hide');
+
+                    frame_key = data.frame_id;
+
+                    // update the label
+                    for (var this_marker_num in marker_array[frame_key])
+                    {
+                        this_marker = marker_array[frame_key][this_marker_num];
+
+                        if (this_marker["label_id"] == label_id)
+                        {
+                            this_marker["label_text"] = data.label;
+                            updateRendering();
+                            break;
+                        }
+                    }
+                },"json");
+
+            });
+
+            $(".btn_enlarge").click(show_overlay);
+
+
+    
+            
+            init_canvas();
+            
+
+
+
+        });
+
+        var label_overrides = {};
+        
+
+        // image frames
+        
+            image_src_list.push("http://c0018279.cdn1.cloudfiles.rackspacecloud.com/bn104.jpg");
+            frame_id_list.push(975)
+            marker_array[975] = [];
+            labels[975] = [];
+
+            
+        
+
+
+        $.fn.center = function () {
+            this.css("position", "absolute");
+            this.css("top", ( $(window).height() - this.height() ) / 2 + $(window).scrollTop() + "px");
+            this.css("left", ( $(window).width() - this.width() ) / 2 + $(window).scrollLeft() + "px");
+            return this;
+        }
+
+
+        
+            function show_overlay()
+            {
+            }
+        
+
+        var current_frame_offset = 0;
+        
+            function download() {
+                
+            }
+        
+
+
+        function newFrame(frame_num) {
+            //alert("now on frame " + frame_num);
+            current_frame_offset = frame_num;
+            //console.log("now on frame " + current_frame_offset);
+        }
+  </script>
+  <link href="/static/css/structure_styles.css" rel="stylesheet"/>
+ </head>
+ <body style="background-color: #E5E5E5;">
+  <div id="fb-root">
+  </div>
+  <script>
+   (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&amp;appId=140394752678611";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <div class="container" style="width: 1000px; min-width: 1000px; background-color: #FFFFFF; box-shadow: 0px 0px 4px #B5B5B5;">
+   <div class="row main_banner">
+    <div class="col-md-12 text-center" style="">
+     <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+     <!-- AE Header Ad -->
+     <ins class="adsbygoogle" data-ad-client="ca-pub-4462350523257467" data-ad-slot="7476948630" style="display:inline-block;width:728px;height:90px">
+     </ins>
+     <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12 menu-main-nav-container" style="">
+     <header class="site-header" id="masthead" role="banner">
+      <nav class="main-navigation" id="site-navigation" role="navigation">
+       <div class="menu-main-nav-container" id="top_site_navigation_area">
+        <ul class="menu nav-menu" id="menu-main-nav">
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11" id="menu-item-11">
+          <a href="/">
+           Home
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11" id="menu-item-11">
+          <a href="/app/media_browser/">
+           Media Browser
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11" id="menu-item-11">
+          <a href="/app/a_to_z/">
+           A-Z Index
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11" id="menu-item-11">
+          <a href="/quiz/">
+           Quiz
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11" id="menu-item-11">
+          <a href="/app/forum/">
+           Discussions
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div id="shopping_cart">
+        <span>
+         0
+        </span>
+       </div>
+       <div class="menu-login-sign-up-container">
+        <ul class="menu" id="menu-login-sign-up">
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12" id="menu-item-12">
+          <a href="/app/accounts/login/" id="login_logout_nav">
+           Login
+          </a>
+         </li>
+         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13" id="menu-item-13">
+          <a href="/app/register/" id="signup_profile_nav">
+           Signup
+          </a>
+         </li>
+        </ul>
+       </div>
+      </nav>
+      <script>
+       new_page = 0;
+    $("#shopping_cart").click(function(){
+
+       self.location = "/app/cart/";
+    });
+      </script>
+     </header>
+    </div>
+   </div>
+   <div class="row search_row" style="padding:6px 0 6px 0">
+    <div class="col-md-12 text-center" style="">
+     <img alt="" src="http://new.anatomyexpert.com/wp-content/themes/anatomy_expert_custom/img/single-page-logo.png"/>
+     <form action="/app/search_results/" id="structure_search" method="get" name="search" style="display:inline;">
+      <input autocomplete="off" class="inner ac_input" id="searchfield" name="search_terms" type="text"/>
+      <button type="submit">
+       search
+      </button>
+     </form>
+    </div>
+   </div>
+   <div class="modal fade" id="structure_popup_modal">
+    <div class="modal-dialog">
+     <div class="modal-content">
+      <div class="modal-header">
+       <h4 class="modal-title">
+        Select Structure
+       </h4>
+      </div>
+      <div class="modal-body">
+       <select id="label_structure" name="label_structure">
+        <option value="1625">
+         Anterior fontanelle
+        </option>
+        <option value="130">
+         Axial skeleton
+        </option>
+        <option value="15058">
+         Cranial joints and ligaments
+        </option>
+        <option value="1649">
+         Cranial sutures
+        </option>
+        <option value="6">
+         Ethmoid
+        </option>
+        <option value="140">
+         Fetal skull
+        </option>
+        <option value="3">
+         Frontal
+        </option>
+        <option value="535">
+         Frontal tuber
+        </option>
+        <option value="11">
+         Lacrimal
+        </option>
+        <option value="1630">
+         Lateral portion
+        </option>
+        <option value="10">
+         Mandible
+        </option>
+        <option value="1632">
+         Mastoid fontanelle
+        </option>
+        <option value="556">
+         Mastoid process
+        </option>
+        <option value="8">
+         Maxilla
+        </option>
+        <option value="7">
+         Nasal
+        </option>
+        <option value="1">
+         Occipital
+        </option>
+        <option value="2">
+         Parietal
+        </option>
+        <option value="525">
+         Parietal tuber
+        </option>
+        <option value="1626">
+         Posterior fontanelle
+        </option>
+        <option value="122">
+         Skull
+        </option>
+        <option value="5">
+         Sphenoid
+        </option>
+        <option value="1622">
+         Sphenoidal fontanelle
+        </option>
+        <option value="1697">
+         Squamous suture
+        </option>
+        <option value="4">
+         Temporal
+        </option>
+        <option value="582">
+         Tympanic annulus
+        </option>
+        <option value="1700">
+         Tympanomastoid fissure on the skull
+        </option>
+        <option value="9">
+         Zygomatic
+        </option>
+       </select>
+      </div>
+      <div class="modal-footer">
+       <button class="btn btn-primary" id="finish_label" type="button">
+        Done
+       </button>
+      </div>
+     </div>
+     <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+   <div class="modal fade" id="label_edit_modal">
+    <div class="modal-dialog">
+     <div class="modal-content">
+      <div class="modal-header">
+       <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+        
+       </button>
+       <h4 class="modal-title">
+        Rename Label
+       </h4>
+      </div>
+      <div class="modal-body">
+       <p>
+        <input id="label_override_text" placeholder="New Label Text" type="text" value=""/>
+       </p>
+      </div>
+      <div class="modal-footer">
+       <button class="btn btn-default" data-dismiss="modal" type="button">
+        Cancel
+       </button>
+       <button class="btn btn-primary" id="rename_label" type="button">
+        Save changes
+       </button>
+      </div>
+     </div>
+     <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+   <div id="larger_viewer">
+    <div id="viewer_bar" style="text-align: right;">
+     <a href="javascript:hide_overlay();">
+      [X]
+     </a>
+     <br/>
+    </div>
+    <div id="viewer_div">
+     <canvas class="image_zoom_holder" drag="false" height="600" id="photo_canvas2" style="cursor: move;" width="800">
+     </canvas>
+     <div class="nav_panel">
+      <table style="float: left;">
+       <tr>
+        <td>
+         <img class="image_zoom_zoom_in" height="18" src="/static/images/zoom_in.png" width="19"/>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <img class="image_zoom_zoom_out" height="18" src="/static/images/zoom_out.png" width="19"/>
+        </td>
+       </tr>
+      </table>
+      <table style="float: right;">
+       <tr>
+        <td>
+        </td>
+        <td>
+         <img class="image_zoom_pan_up" height="15" src="/static/images/arrow_up.png" width="15"/>
+        </td>
+        <td>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <img class="image_zoom_pan_left" height="15" src="/static/images/arrow_left.png" width="15"/>
+        </td>
+        <td>
+         <img class="image_zoom_reset" height="15" src="/static/images/reset_btn.png" width="15"/>
+        </td>
+        <td>
+         <img class="image_zoom_pan_right" height="15" src="/static/images/arrow_right.png" width="15"/>
+        </td>
+       </tr>
+       <tr>
+        <td>
+        </td>
+        <td>
+         <img class="image_zoom_pan_down" height="15" src="/static/images/arrow_down.png" width="15"/>
+        </td>
+        <td>
+        </td>
+       </tr>
+      </table>
+     </div>
+     <div class="rotate_panel">
+      <table border="0" cellpadding="0" cellspacing="0" style="width:100%; padding-top:2px;">
+       <tr>
+        <td align="center">
+         <img class="image_zoom_decrement_image" height="11" src="/static/images/rotate_left.png" width="11"/>
+        </td>
+        <td align="center" class="image_zoom_frame_number">
+         01
+        </td>
+        <td align="center">
+         <img class="image_zoom_increment_image" height="11" src="/static/images/rotate_right.png" width="11"/>
+        </td>
+       </tr>
+      </table>
+     </div>
+    </div>
+    <div id="viewer_bar">
+     <a href="javascript:hide_overlay();">
+      close large viewer
+     </a>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-xs-12" style="">
+     <div class="dropdown pseudo_h2">
+      Illustration - Newborn cranium (skull) 
+      <a data-toggle="dropdown" href="#">
+       Temporal
+      </a>
+      <ul aria-labelledby="dLabel" class="dropdown-menu structure_menu" role="menu">
+       <li role="presentation">
+        <a href="/app/structure/1625/983/" role="menuitem" tabindex="-1">
+         Anterior fontanelle
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/130/983/" role="menuitem" tabindex="-1">
+         Axial skeleton
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/15058/983/" role="menuitem" tabindex="-1">
+         Cranial joints and ligaments
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1649/983/" role="menuitem" tabindex="-1">
+         Cranial sutures
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/6/983/" role="menuitem" tabindex="-1">
+         Ethmoid
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/140/983/" role="menuitem" tabindex="-1">
+         Fetal skull
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/3/983/" role="menuitem" tabindex="-1">
+         Frontal
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/535/983/" role="menuitem" tabindex="-1">
+         Frontal tuber
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/11/983/" role="menuitem" tabindex="-1">
+         Lacrimal
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1630/983/" role="menuitem" tabindex="-1">
+         Lateral portion
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/10/983/" role="menuitem" tabindex="-1">
+         Mandible
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1632/983/" role="menuitem" tabindex="-1">
+         Mastoid fontanelle
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/556/983/" role="menuitem" tabindex="-1">
+         Mastoid process
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/8/983/" role="menuitem" tabindex="-1">
+         Maxilla
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/7/983/" role="menuitem" tabindex="-1">
+         Nasal
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1/983/" role="menuitem" tabindex="-1">
+         Occipital
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/2/983/" role="menuitem" tabindex="-1">
+         Parietal
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/525/983/" role="menuitem" tabindex="-1">
+         Parietal tuber
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1626/983/" role="menuitem" tabindex="-1">
+         Posterior fontanelle
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/122/983/" role="menuitem" tabindex="-1">
+         Skull
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/5/983/" role="menuitem" tabindex="-1">
+         Sphenoid
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1622/983/" role="menuitem" tabindex="-1">
+         Sphenoidal fontanelle
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1697/983/" role="menuitem" tabindex="-1">
+         Squamous suture
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/4/983/" role="menuitem" tabindex="-1">
+         Temporal
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/582/983/" role="menuitem" tabindex="-1">
+         Tympanic annulus
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/1700/983/" role="menuitem" tabindex="-1">
+         Tympanomastoid fissure on the skull
+        </a>
+       </li>
+       <li role="presentation">
+        <a href="/app/structure/9/983/" role="menuitem" tabindex="-1">
+         Zygomatic
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+   <div class="row" id="main_info">
+    <div class="col-xs-12 text-center" style="">
+     <div id="viewer">
+      <div class="image_zoom_holder" id="canvas_holder">
+       <div id="label_hud">
+        Click on the structure to specify the target of your label
+       </div>
+       <canvas class="" drag="false" height="500" id="photo_canvas" style="cursor: move;" width="500">
+       </canvas>
+       <div class="nav_panel" style="">
+        <table style="float: left">
+         <tr>
+          <td>
+           <img class="image_zoom_zoom_in" height="18" src="/static/images/zoom_in.png" width="19"/>
+          </td>
+         </tr>
+         <tr>
+          <td>
+           <img class="image_zoom_zoom_out" height="18" src="/static/images/zoom_out.png" width="19"/>
+          </td>
+         </tr>
+        </table>
+        <table class="pan_table" style="float: left;">
+         <tr>
+          <td>
+          </td>
+          <td>
+           <img class="image_zoom_pan_up" height="15" src="/static/images/arrow_up.png" width="15"/>
+          </td>
+          <td>
+          </td>
+         </tr>
+         <tr>
+          <td>
+           <img class="image_zoom_pan_left" height="15" src="/static/images/arrow_left.png" width="15"/>
+          </td>
+          <td>
+           <img class="image_zoom_reset" height="15" src="/static/images/reset_btn.png" width="15"/>
+          </td>
+          <td>
+           <img class="image_zoom_pan_right" height="15" src="/static/images/arrow_right.png" width="15"/>
+          </td>
+         </tr>
+         <tr>
+          <td>
+          </td>
+          <td>
+           <img class="image_zoom_pan_down" height="15" src="/static/images/arrow_down.png" width="15"/>
+          </td>
+          <td>
+          </td>
+         </tr>
+        </table>
+       </div>
+       <div class="rotate_panel" style="">
+        <table border="0" cellpadding="0" cellspacing="0" style="">
+         <tr>
+          <td align="center">
+           <img class="image_zoom_decrement_image" height="11" src="/static/images/rotate_left.png" width="11"/>
+          </td>
+          <td align="center" class="image_zoom_frame_number">
+           01
+          </td>
+          <td align="center">
+           <img class="image_zoom_increment_image" height="11" src="/static/images/rotate_right.png" width="11"/>
+          </td>
+         </tr>
+        </table>
+       </div>
+       <div id="buttonpanel">
+        <div id="manage_image_buttons">
+         <ul class="button_bar">
+          <li>
+          </li>
+          <li>
+          </li>
+          <li class="btn_label_labels">
+           labels
+          </li>
+          <li class="btn_labels_on">
+           <a href="#">
+           </a>
+          </li>
+          <li class="btn_labels_off active">
+           <a href="#">
+           </a>
+          </li>
+          <li class="btn_labels_edit">
+           <a href="#">
+           </a>
+          </li>
+          <li class="btn_vocalize">
+          </li>
+          <li class="btn_print" href="/app/print/4/983/">
+           <form action="/app/print/4/983/" id="print_form" method="post" style="display:inline;" target="_blank">
+            <input name="csrfmiddlewaretoken" type="hidden" value="aTRnolkO6pnUH1Fa8FWFjKC7QDPUK8vL"/>
+            <input id="image_data" name="image_data" type="hidden"/>
+           </form>
+          </li>
+          <li class="btn_purchase">
+          </li>
+          <li class="btn_upvote" image="983" structure="4">
+          </li>
+          <li class="btn_downvote" image="983" structure="4">
+          </li>
+         </ul>
+        </div>
+        <div id="edit_label_buttons">
+         <ul class="label_edit_bar">
+          <li class="btn_add_label">
+          </li>
+          <li class="btn_reset_labels">
+          </li>
+          <li class="btn_clear_labels">
+          </li>
+          <li class="btn_unclear_labels">
+          </li>
+          <li class="btn_done_label">
+          </li>
+         </ul>
+        </div>
+       </div>
+       <div id="audio_player">
+       </div>
+      </div>
+     </div>
+     <div class="info_box">
+      <!-- style="padding: 10px; border: 1px solid black; background-color: white;" -->
+      <h2 class="details" id="structure_name">
+       Temporal
+      </h2>
+      <div class="textblock_detail">
+       Other Terms:
+                        
+                            Os temporale,
+                        
+                            Os temporal
+      </div>
+      <div style="padding-top:6px;">
+      </div>
+      <div class="iteminfo">
+       <div class="structure_texts" style="margin-top: 30px; height: 400px; overflow: auto;">
+        <div align="center" style="padding-top: 16px;">
+         <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+         </script>
+         <!-- detail_page_ads -->
+         <ins class="adsbygoogle" data-ad-client="ca-pub-4462350523257467" data-ad-slot="9872011838" style="display:inline-block;width:200px;height:90px">
+         </ins>
+         <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+         </script>
+        </div>
+        <hr/>
+        <h3 class="textblock_head">
+         Type
+        </h3>
+        <div class="textblock_detail">
+         irregular
+        </div>
+        <h3 class="textblock_head">
+         Description
+        </h3>
+        <div class="textblock_detail">
+         The temporal bone has an interesting developmental history. This bone is actually four separate bones that have, over evolutionary time, become a single bone in the adult mammal. The four parts of the human temporal bone are the squamous, tympanic, petromastoid, and styloid. The squamous part of the bone is the thin lateral plate contributing to the lateral wall of the cranium. It projects anteriorly as the zygomatic process. Antero-inferiorly it forms the mandibular fossa for the temporomandibular joint.  The squamous part is similar to other flat membrane bones of the skull. It has outer compact lamellae with an inner core of cancellous bone. The styloid part is represented by the styloid process. This projection of bone derives from the upper elements of the hyoid branchial arch. The petrous and mastoid regions form the thick pyramidal base that projects anteromedially. It begins posterior to the external acoustic meatus and ends where it forms a junction with the basi-occipital and greater wing of the sphenoid. The name petrous describes its rock like appearance. This is the thickest part of the temporal bone. It arises from the otic capsules that stabilize the delicate internal ear structures. The mastoid is the posterolateral protuberance of the petrous portion that is easily palpable just posterior to the ear. The styloid and petrous portions are endochondral in formation containing more compact bone. The compact bone of the petrous has internal cavities and labyrinths to house the middle and inner ear anatomy. The mastoid, a secondary outgrowth of the petrous portion has many pneumatic spaces that connect to the middle ear region. A tympanic part of the temporal bone is the ring-like plate that forms the walls of the external acoustic meatus. The tympanic part forms intramembranously as a new addition of bone or possibly as a homologue of the post-dentary angular bone of earlier vertebrates.
+        </div>
+        <h3 class="textblock_head">
+         Etymology
+        </h3>
+        <div class="textblock_detail">
+         The term temporal arises from the Latin tempus meaning time. The word time was used for this region because it is typically on the sides of the skull where hair first becomes gray, showing the ravages of time.
+        </div>
+        <h3 class="textblock_head">
+         Articulations
+        </h3>
+        <div class="textblock_detail">
+         The temporal bone articulates with five bones: the parietal, occipital, sphenoid, mandible, and zygomatic. The temporoparietal suture is a squamous suture formed between the superior margin of the squamous temporal bone and the inferior border of the parietal bone. The temporal bone is beveled internally and overlaps the parietal bone forming a lap joint. The posterior borders of the squamous and mastoid parts of the temporal bone form a serrate suture with the squama of the occipital bone. Medially the mastoid margin articulates with the jugular process of the occipital bone. The anterior margin of the squamous temporal bone articulates with the posterosuperior margin of the greater wing of the sphenoid. The petrous temporal bone articulates with the postero-inferior part of the greater wing of the sphenoid near the sphenoid spine. A mandibular fossa, formed inferiorly on the squamous temporal bone forms a concave surface for the condyle of the mandible. This forms the synovial temporomandibular joint. The zygomatic process of the squamous temporal bone forms a serrate suture with the corresponding process of the zygomatic bone. This union forms the zygomatic arch that bridges the tendon of the temporalis muscle.
+        </div>
+        <h3 class="textblock_head">
+         Ossification
+        </h3>
+        <div class="textblock_detail">
+         The ontogenetic ossification patterns of the temporal bone reflect its phylogenetic origins. The four parts of the bone each ossify as separate centers. The petromastoid part forms from many centers that correspond with the cartilaginous otic capsules. These appear during the fifth fetal month and are fully ossified by the seventh month. The squamous part of the temporal bone ossifies from a single center that arises during the end of the second embryonic month. This center appears at the root of the zygomatic process and spreads radially from this point. The petromastoid and squamous parts join during the first postnatal year. The styloid ossifies in cartilage at the superior end of the hyoid branchial arch. It forms from two centers corresponding to the tympanohyal and stylohyal. The tympanohyal is the more proximal center. It appears in late fetal life and is completely ossified soon after birth. It joins the petromastoid and squamous portions during the first postnatal year. The stylohyal is the more distal center, forming the tip of the process. It does not begin to ossify until after birth. It does not fuse with the tympanohyal until puberty. Sometimes it never fuses with the base of the styloid, in this case it connects with the base by cartilage. This is the reason many prepared skulls lack complete styloid processes. The tympanic part ossifies from a single center intramembranously. It appears during the third intrauterine month. At birth it forms an incomplete ring that has just united with the squamous part of the bone. After birth it grows rapidly to form the greater part of the elongated external acoustic canal.
+        </div>
+        <h3 class="textblock_head">
+         Latin
+        </h3>
+        <div class="textblock_detail">
+         Os temporale
+        </div>
+        <h3 class="textblock_head">
+         French
+        </h3>
+        <div class="textblock_detail">
+         Os temporal
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-xs-7" style="">
+     <h2>
+      Comments
+     </h2>
+     <div class="fb-comments" data-colorscheme="light" data-href="http://new.anatomyexpert.com/app/structure/4/983/" data-numposts="5">
+     </div>
+    </div>
+    <div class="col-xs-5" style="">
+     <div class="browse_column">
+      <div style="float: left">
+       <h2 class="details">
+        Related Images
+       </h2>
+      </div>
+      <div style="float: left;">
+       <a class="view_all" href="/app/media_browser/4/">
+        View All
+       </a>
+      </div>
+      <br style="clear: both;"/>
+      <div id="related_images">
+       <div class="browsebox " style="padding-bottom: 4px;" type="1">
+        <ul class="browse-carousel jcarousel-skin-tango">
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            3-D
+           </div>
+          </div>
+          <a href="/app/structure/4/43/">
+           <img alt="3D - Skull" foo="full/1/122_0001.jpg" height="90" image_id="43" src="/media/cache/81/64/8164f5f9998f43ffa5f8747601e6c89a.jpg" title="3D - Skull" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            3-D
+           </div>
+          </div>
+          <a href="/app/structure/4/44/">
+           <img alt="3D - Skull with muscle attachments" foo="full/1/122ma_0001.jpg" height="90" image_id="44" src="/media/cache/3d/ca/3dca42c64455a3337cef400d8a0cfdba.jpg" title="3D - Skull with muscle attachments" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            3-D
+           </div>
+          </div>
+          <a href="/app/structure/4/291/">
+           <img alt="3D - Temporal" foo="full/1/4_0001.jpg" height="90" image_id="291" src="/media/cache/5d/6d/5d6d896d7b025c848c15881d7378008a.jpg" title="3D - Temporal" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            3-D
+           </div>
+          </div>
+          <a href="/app/structure/4/239/">
+           <img alt="3D - Muscles of the foot and ankle region" foo="full/1/25481_0001.jpg" height="90" image_id="239" src="/media/cache/44/e6/44e6f1b475c967a258835e4972eeff78.jpg" title="3D - Muscles of the foot and ankle region" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            3-D
+           </div>
+          </div>
+          <a href="/app/structure/4/240/">
+           <img alt="3D - Muscles of the foot and ankle - layer 2" foo="full/1/25482_0001.jpg" height="90" image_id="240" src="/media/cache/7d/80/7d804bf2810cef7e9ca67ceed654429a.jpg" title="3D - Muscles of the foot and ankle - layer 2" width="90"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="browsebox " style="padding-bottom: 4px;" type="2">
+        <ul class="browse-carousel jcarousel-skin-tango">
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Art
+           </div>
+          </div>
+          <a href="/app/structure/4/22279/">
+           <img alt="The nerves and vessels of the posterior and external walls of the pharynx." foo="full/c/SB693c.jpg" height="90" image_id="22279" src="/media/cache/e0/f3/e0f3a3a439f6e12372291d2c6a478bf0.jpg" title="The nerves and vessels of the posterior and external walls of the pharynx." width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Art
+           </div>
+          </div>
+          <a href="/app/structure/4/22324/">
+           <img alt="A frontal section of the external auditory meatus, of the tympanic cavity, and the labyrinth. (Enlarged two times.)" foo="full/c/SB813c.jpg" height="90" image_id="22324" src="/media/cache/31/ed/31ed33343202e164e2dc38f53b048229.jpg" title="A frontal section of the external auditory meatus, of the tympanic cavity, and the labyrinth. (Enlarged two times.)" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Art
+           </div>
+          </div>
+          <a href="/app/structure/4/22271/">
+           <img alt="A frontal section of the head in the region of the anterior portion of the sagittal suture." foo="full/c/SB681c.jpg" height="90" image_id="22271" src="/media/cache/39/ac/39ac476c555149ea489fefa1ef5a3d47.jpg" title="A frontal section of the head in the region of the anterior portion of the sagittal suture." width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Art
+           </div>
+          </div>
+          <a href="/app/structure/4/899/">
+           <img alt="Illustration - Temporomandibular joint" foo="full/9/asl189.jpg" height="90" image_id="899" src="/media/cache/11/12/11120b6ca177acaf0c01ecd6a8359426.jpg" title="Illustration - Temporomandibular joint" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Art
+           </div>
+          </div>
+          <a href="/app/structure/4/900/">
+           <img alt="Illustration - Temperomandibular joint" foo="full/0/asl190.jpg" height="90" image_id="900" src="/media/cache/e0/86/e0867f60091685ba58265469c6ef66eb.jpg" title="Illustration - Temperomandibular joint" width="90"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="browsebox " style="padding-bottom: 4px;" type="3">
+        <ul class="browse-carousel jcarousel-skin-tango">
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Photo
+           </div>
+          </div>
+          <a href="/app/structure/4/1444/">
+           <img alt="Photo - Fetal Skull" foo="full/t/fsant.jpg" height="90" image_id="1444" src="/media/cache/7b/c2/7bc2b8a7e8e7ae9d00914efc0a8b8174.jpg" title="Photo - Fetal Skull" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Photo
+           </div>
+          </div>
+          <a href="/app/structure/4/1446/">
+           <img alt="Photo - Fetal Skull" foo="full/t/fslat.jpg" height="90" image_id="1446" src="/media/cache/fe/29/fe292659129e9609760000a731d7154d.jpg" title="Photo - Fetal Skull" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Photo
+           </div>
+          </div>
+          <a href="/app/structure/4/1848/">
+           <img alt="Photo - Skull" foo="full/t/skullant.jpg" height="90" image_id="1848" src="/media/cache/f9/87/f98796f6f4e0cffbd728bc5a8893e0c2.jpg" title="Photo - Skull" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Photo
+           </div>
+          </div>
+          <a href="/app/structure/4/1850/">
+           <img alt="Photo - Skull" foo="full/t/skullinfant.jpg" height="90" image_id="1850" src="/media/cache/33/db/33db351794a74e103016c0497ef9a552.jpg" title="Photo - Skull" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Photo
+           </div>
+          </div>
+          <a href="/app/structure/4/1851/">
+           <img alt="Photo - Skull with mandible" foo="full/d/skullinfwmand.jpg" height="90" image_id="1851" src="/media/cache/80/df/80dfae3737519ba4b1379a507c50d2f1.jpg" title="Photo - Skull with mandible" width="90"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="browsebox " style="padding-bottom: 4px;" type="4">
+        <ul class="browse-carousel jcarousel-skin-tango">
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Cross Section
+           </div>
+          </div>
+          <a href="/app/structure/4/1255/">
+           <img alt="Cross section of head - level 6" foo="full/m/cx11m.jpg" height="90" image_id="1255" src="/media/cache/4d/c7/4dc7b14b4cc86fd51ec51809c294174a.jpg" title="Cross section of head - level 6" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Cross Section
+           </div>
+          </div>
+          <a href="/app/structure/4/1299/">
+           <img alt="Cross section of head - level 4" foo="full/m/cx7m.jpg" height="90" image_id="1299" src="/media/cache/45/6c/456c1ae53e537b4544b9bdb61cf275a6.jpg" title="Cross section of head - level 4" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Cross Section
+           </div>
+          </div>
+          <a href="/app/structure/4/1311/">
+           <img alt="Cross section of head - level 5" foo="full/m/cx9m.jpg" height="90" image_id="1311" src="/media/cache/a2/36/a2365c7ea35bc47e1e911fe70f25b8aa.jpg" title="Cross section of head - level 5" width="90"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="browsebox " style="padding-bottom: 4px;" type="5">
+        <ul class="browse-carousel jcarousel-skin-tango">
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Histology
+           </div>
+          </div>
+          <a href="/app/structure/4/1622/">
+           <img alt="Decalcified bone" foo="full/b/midb.jpg" height="90" image_id="1622" src="/media/cache/e4/03/e403614bd26e0b5a94b3b8c1873ba7e2.jpg" title="Decalcified bone" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Histology
+           </div>
+          </div>
+          <a href="/app/structure/4/1623/">
+           <img alt="Ground bone - Compact bone" foo="full/b/migb.jpg" height="90" image_id="1623" src="/media/cache/7e/3a/7e3a9a7a5a2da24c72045c4bcb417e34.jpg" title="Ground bone - Compact bone" width="90"/>
+          </a>
+         </li>
+         <li>
+          <div style="position: relative;">
+           <div style="position: absolute;background-color: white; width:90px;opacity: .8;top:75px; font-size:11px;text-align: center;">
+            Histology
+           </div>
+          </div>
+          <a href="/app/structure/4/1624/">
+           <img alt="Intramembranous bone" foo="full/b/miib.jpg" height="90" image_id="1624" src="/media/cache/1c/64/1c642b2c98f787eb95a6fd932811b7f3.jpg" title="Intramembranous bone" width="90"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div id="related_models">
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12 menu-main-nav-container text-center" style="margin-top: 40px; padding-top: 40px; padding-bottom: 40px;">
+     <a href="/app/about/">
+      About Us
+     </a>
+     |
+     <a href="/app/terms/">
+      Terms of Use
+     </a>
+     |
+     <a href="/app/licensing/">
+      Licensing
+     </a>
+     |
+     <a href="/app/disclaimer/">
+      Disclaimer Us
+     </a>
+     |
+     <a href="/app/contact/">
+      Contact Us
+     </a>
+    </div>
+   </div>
+  </div>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-17456083-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+ </body>
+</html>

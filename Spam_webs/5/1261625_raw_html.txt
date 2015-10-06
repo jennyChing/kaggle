@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   crire son systme d'exploitation - Partie 1 : prparer le terrain - LinuxFr.org
+  </title>
+  <link href="/assets/application-15a82ce5aca66c547cef426ef924fae9cb6c4acbe8a022528f1bf804300aafc0.css" rel="stylesheet"/>
+  <link href="/favicon.png" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/opensearch.xml" rel="search" title="Recherche de contenus sur LinuxFr.org" type="application/opensearchdescription+xml"/>
+  <meta content="width=device-width" name="viewport"/>
+  <meta content="maxb" name="author"/>
+  <meta content="crire son systme d'exploitation - Partie 1 : prparer le terrain" name="description"/>
+  <meta content="systeme_d_exploitation, openocd, crosscompilation, arm" name="keywords"/>
+  <!--[if IE]&gt;&lt;script src="/assets/html5-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.js"&gt;&lt;/script&gt;&lt;![endif]-->
+  <!--[if lt IE 9]&gt;&lt;script src="/assets/IE9-8198a331fa0d04da5372c356605155b6a11589c6c7daf7fa5d5c6cf129deedc2.js"&gt;&lt;/script&gt;&lt;![endif]-->
+  <link href="/nodes/104863/comments.atom" rel="alternate" title="Flux Atom des commentaires crire son systme d'exploitation - Partie 1 : prparer le terrain" type="application/atom+xml"/>
+ </head>
+ <body class="" id="news-show">
+  <div id="top">
+  </div>
+  <nav id="site">
+   <div class="go_to_content">
+    <a href="#contents">
+     Aller au contenu
+    </a>
+    <a href="#sidebar">
+     Aller au menu
+    </a>
+   </div>
+   <ul>
+    <li>
+     <a href="/" title="Page d'accueil du site, personnalisable">
+      Accueil
+     </a>
+    </li>
+    <li class="active">
+     <a href="/news" title="Actualits, vnements et autres nouveauts">
+      Dpches
+     </a>
+    </li>
+    <li>
+     <a href="/journaux" title="Journaux personnels de nos visiteurs">
+      Journaux
+     </a>
+    </li>
+    <li>
+     <a href="/forums" title="Questions/rponses, petites annonces">
+      Forums
+     </a>
+    </li>
+    <li>
+     <a href="/sondages" title="Sondages proposes aux visiteurs du site">
+      Sondages
+     </a>
+    </li>
+    <li>
+     <a href="/wiki" title="Pages wiki">
+      Wiki
+     </a>
+    </li>
+    <li>
+     <a href="/suivi" title="Suivi des suggestions et des bugs du site">
+      Suivi
+     </a>
+    </li>
+    <li>
+     <a href="/plan" title="Plan du site, aide, flux Atom, etc.">
+      Plan
+     </a>
+    </li>
+   </ul>
+   <form accept-charset="UTF-8" action="/recherche" method="get">
+    <input name="utf8" type="hidden" value=""/>
+    <label for="query" id="label_query">
+     Recherche :
+    </label>
+    <input id="query" name="q" placeholder="Rechercher" type="search"/>
+    <input id="search_submit" title="Lancer la recherche sur le site" type="submit" value="Rechercher"/>
+   </form>
+  </nav>
+  <aside id="sidebar">
+   <header id="branding">
+    <h1 style="background-image: url('/images/logos/logo-linuxfr-cadre-ombre-hd.png');" title="Le logo de LinuxFr.org">
+     <a href="/">
+      LinuxFr.org
+     </a>
+    </h1>
+   </header>
+   <div class="login box">
+    <h1>
+     Se connecter
+    </h1>
+    <script>
+     if (location.protocol == 'http:') {
+    document.write('&lt;a class="insecure" title="Accs en clair, non scuris" href="https://' + location.hostname + location.pathname + '"&gt;Accs en clair (http)&lt;/a&gt;');
+  } else {
+    document.write('&lt;a class="secure" title="Accs scuris"&gt;Accs scuris (https)&lt;/a&gt;');
+  }
+    </script>
+    <div class="new_content">
+     <a href="/proposer-un-contenu">
+      Proposer un contenu
+     </a>
+    </div>
+    <form accept-charset="UTF-8" action="/compte/connexion" class="new_account" id="new_account_sidebar" method="post">
+     <input name="utf8" type="hidden" value=""/>
+     <p>
+      <label for="account_login_sidebar">
+       Identifiant
+      </label>
+      <input id="account_login_sidebar" name="account[login]" placeholder="Identifiant" required="required" size="20" type="text"/>
+     </p>
+     <p>
+      <label for="account_password_sidebar">
+       Mot de passe
+      </label>
+      <input id="account_password_sidebar" name="account[password]" placeholder="Mot de passe" required="required" size="20" type="password"/>
+     </p>
+     <p>
+      <input name="account[remember_me]" type="hidden" value="0"/>
+      <input id="account_remember_me_sidebar" name="account[remember_me]" type="checkbox" value="1"/>
+      <label for="account_remember_me_sidebar">
+       Connexion automatique
+      </label>
+     </p>
+     <p>
+      <input id="account_submit_sidebar" name="commit" type="submit" value="Se connecter"/>
+     </p>
+    </form>
+    <ul>
+     <li>
+      <a href="/compte/inscription">
+       Pas de compte? S'inscrire!
+      </a>
+     </li>
+    </ul>
+   </div>
+  </aside>
+  <section id="container">
+   <main id="contents" role="main">
+    <article class="node hentry score8 news" itemscope="" itemtype="http://schema.org/Article">
+     <header>
+      <h1 class="entry-title" itemprop="name">
+       <a href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain">
+        crire son systme d'exploitation - Partie 1 : prparer le terrain
+       </a>
+      </h1>
+      <div class="meta">
+       Post par
+       <a href="/users/maxb" rel="author">
+        maxb
+       </a>
+       <time class="updated" datetime="2015-02-19T17:26:25+01:00">
+        <span class="date">
+         le 19/02/15
+        </span>
+        <span class="time">
+          17:26
+        </span>
+       </time>
+       . dit par
+       <span class="edited_by">
+        <a href="/users/oumph">
+         Benot Sibaud
+        </a>
+        et
+        <a href="/users/tankey">
+         Yvan Munoz
+        </a>
+       </span>
+       . Modr par
+       <a href="/users/tankey">
+        Yvan Munoz
+       </a>
+       .
+       <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.fr" rel="license">
+        Licence CC by-sa
+       </a>
+       <div class="tags">
+        Tags :
+        <ul class="tag_cloud" itemprop="keywords">
+         <li>
+          <a href="/tags/systeme_d_exploitation/public" rel="tag">
+           systeme_d_exploitation
+          </a>
+         </li>
+         <li>
+          <a href="/tags/openocd/public" rel="tag">
+           openocd
+          </a>
+         </li>
+         <li>
+          <a href="/tags/crosscompilation/public" rel="tag">
+           crosscompilation
+          </a>
+         </li>
+         <li>
+          <a href="/tags/arm/public" rel="tag">
+           arm
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </header>
+     <div class="figures">
+      <meta content="UserLikes:41" itemprop="interactionCount"/>
+      <figure class="score" title="Note de ce contenu">
+       41
+      </figure>
+      <figure class="datePourCss">
+       <div class="jour">
+        19
+       </div>
+       <div class="mois">
+        fv.
+       </div>
+       <div class="annee">
+        2015
+       </div>
+      </figure>
+      <figure class="image" itemprop="image">
+       <a href="/sections/technologie">
+        <img alt="Technologie" src="/images/sections/50.png" title="Technologie"/>
+       </a>
+      </figure>
+     </div>
+     <div class="content entry-content" itemprop="articleBody">
+      <p>
+       L'auteur du journal  l'origine de la dpche vous propose de vous raconter un peu les diffrentes tapes de son projet du moment : crire un petit systme d'exploitation pour un microcontrleur STM32. Cet premier pisode prsente le matriel possd, la documentation collecte, les outils rassembls et le dpt de code utilis.
+      </p>
+      <ul class="links">
+       <li class="link" data-url="/redaction/links/93177/modifier" id="link_93177" lang="fr">
+        <a class="hit_counter" data-hit="93177" href="http://linuxfr.org/users/maxb/journaux/ecrire-son-os-partie-1-preparer-le-terrain" hreflang="fr" title="http://linuxfr.org/users/maxb/journaux/ecrire-son-os-partie-1-preparer-le-terrain">
+         Journal  l'origine de la dpche
+        </a>
+        (500 clics)
+       </li>
+      </ul>
+      <h2 id="de-quoi-a-sagit">
+       De quoi a s'agit?
+      </h2>
+      <p>
+       J'ai rcupr une carte de dveloppement construite autour d'un STM32F103RBT6. C'est un microcontrleur bas sur un cur ARM
+       <a href="http://fr.wikipedia.org/wiki/ARM_Cortex-M">
+        Cortex-M3
+       </a>
+       . Il est un peu dat mais bon, on fait avec ce qu'on a (surtout quand c'est gratuit :). Pour situer un peu le bousin, c'est un micro 32 bits qui embarque 20Ko de SRAM et 128Ko de Flash, plus un certain nombre de priphriques habituels (UART, SPI, IC).
+      </p>
+      <p>
+       La carte de dveloppement est une MCBSTM32 de chez Keil. Le but du jeu c'est donc d'crire un petit noyau capable de faire tourner une application sur cette puce.
+      </p>
+      <p>
+       Il ne s'agit pas de faire un truc de dingue (
+       <em>
+        nothing big and professional like GNU
+       </em>
+       ), mais vraiment d'apprendre en faisant le plus simple et clair possible.
+      </p>
+      <h2 id="rcuprer-de-la-doc">
+       Rcuprer de la doc
+      </h2>
+      <p>
+       Bon allez c'est parti, la premire des choses  faire c'est de rcuprer toute la documentation susceptible de nous servir :
+      </p>
+      <ul>
+       <li>
+        le
+        <a href="http://www.keil.com/mcbstm32/mcbstm32-schematics.pdf">
+         schma de la carte
+        </a>
+       </li>
+       <li>
+        le
+        <a href="http://www.st.com/web/en/resource/technical/document/programming_manual/CD00228163.pdf">
+         programming manual
+        </a>
+        du cur Cortex-M3
+       </li>
+       <li>
+        la
+        <a href="http://www.st.com/web/en/resource/technical/document/reference_manual/CD00171190.pdf">
+         datasheet
+        </a>
+        de la "famille" de la puce (STM32F10xxx)
+       </li>
+       <li>
+        la
+        <a href="http://www.st.com/web/en/resource/technical/document/datasheet/CD00161566.pdf">
+         datasheet
+        </a>
+        du chip en lui-mme
+       </li>
+       <li>
+        le
+        <a href="http://www.st.com/web/en/resource/technical/document/programming_manual/CD00283419.pdf">
+         Flash programming manual
+        </a>
+        . Celui-l nous servira plus tard, une fois le dveloppement un peu avanc, pour crire du code capable de reprogrammer la Flash du micro (ceci afin de pouvoir mettre  jour le programme sans devoir sortir le JTAG).
+       </li>
+      </ul>
+      <p>
+       Ensuite? Ben y'a plus qu' lire tout a a devrait vous occuper un certain temps. On lit jusqu' ce qu'on ait une ide claire du boulot qui nous attend pour crire un code qui dmarre sur cette carte.
+      </p>
+      <h2 id="prparer-la-bote--outils">
+       Prparer la bote  outils
+      </h2>
+      <p>
+       Une fois qu'on a bien digr la doc, reste une tape avant de se lancer comme un dingue dans le code : prparer ses outils de dveloppement.
+       <br/>
+       Les ingrdients pour bien russir cette recette sont :
+      </p>
+      <ul>
+       <li>
+        une chane d'outils de compilation croise pour notre cible (
+        <em>
+         arm-none-eabi
+        </em>
+        ). Chez moi a revient 
+        <code>
+         sudo apt-get install gcc-arm-none-eabi binutils-arm-none-eabi
+        </code>
+        .
+       </li>
+       <li>
+        un
+        <em>
+         cross debugger
+        </em>
+        (
+        <code>
+         sudo apt-get install gdb-arm-none-eabi
+        </code>
+        )
+       </li>
+       <li>
+        une sonde JTAG qui nous servira  programmer et dboguer le programme sur la puce. Sans vouloir faire de pub, j'ai opt pour
+        <a href="https://www.olimex.com/Products/ARM/JTAG/ARM-USB-TINY-H/">
+         un Olimex ARM-USB-TINY-H
+        </a>
+        . a fonctionne bien sous Linux et c'est un poil moins cher qu'une sonde Lauterbach  3000;)
+       </li>
+       <li>
+        enfin, un OpenOCD, un programme sympa qui fait le traducteur entre votre sonde JTAG et GDB (
+        <code>
+         sudo apt-get install openocd
+        </code>
+        )
+       </li>
+      </ul>
+      <p>
+       Ah et il nous faudra aussi un peu de
+       <em>
+        make
+       </em>
+       , du
+       <em>
+        git
+       </em>
+       et un diteur de texte, mais je suppose que vous avez dj tout a
+      </p>
+      <p>
+       Voil, c'est tout pour cette fois, on se retrouve bientt pour parler de la configuration des outils et commencer  crire du code!
+      </p>
+      <h4 id="ps-il-est-o-le-code">
+       PS: il est o le code?
+      </h4>
+      <p>
+       Pour ceux que a intresse, le code est libre (licence BSD) et hberg sur
+       <a href="https://github.com/maxbernelas/MOS">
+        Github
+       </a>
+       (pour faire plaisir aux trolls). videmment c'est un travail en cours, qui progresse suivant mes envies et mon temps libre.
+      </p>
+     </div>
+     <footer class="actions">
+      <meta content="UserComments:14" itemprop="interactionCount"/>
+      <span class="anonymous_reader">
+       (
+       <span class="nb_comments">
+        14 commentaires
+       </span>
+       ).
+      </span>
+      <div class="formats">
+       <a class="action" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain.md" title="Tlcharger ce contenu au format markdown">
+        Markdown
+       </a>
+       <a class="action" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain.epub" title="Tlcharger ce contenu au format epub">
+        Epub
+       </a>
+      </div>
+     </footer>
+    </article>
+    <div id="comments">
+     <ul class="threads">
+      <li class="comment odd score6" id="comment-1589927">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589927" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1589927">
+         Bibliographie
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/anarky" rel="author">
+         Julien
+        </a>
+        <time class="updated" datetime="2015-02-19T22:25:43+01:00">
+         <span class="date">
+          le 19/02/15
+         </span>
+         <span class="time">
+           22:25
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         6
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Avant le 1: choix des outils, j'aurais bien vu un 0: bibliographie.
+        </p>
+        <p>
+         Dans cette partie, je ne peux que citer les superbes
+         <a href="http://sos.enix.org/fr/PagePrincipale" title="SOS">
+          articles
+         </a>
+         publis par David Decotigny &amp; Thomas Petazzoni dans Linux Magazine sur un mini OS: SOS. C'est didactique, c'est clair, c'est limpide.
+         <br/>
+         Bon, c'est pour x86, mais a mrite d'tre lu, ainsi que pas mal des
+         <a href="http://sos.enix.org/fr/SOSRelated">
+          ressources
+         </a>
+         qu'ils rfrencent.
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+      </li>
+      <li class="comment even score3" id="comment-1589932">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589932" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1589932">
+         Bon plan, mais ...
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/ancalagontotof" rel="author">
+         AncalagonTotof
+        </a>
+        <time class="updated" datetime="2015-02-19T22:59:58+01:00">
+         <span class="date">
+          le 19/02/15
+         </span>
+         <span class="time">
+           22:59
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         3
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Pas mal, je souhaite russite et courage.
+        </p>
+        <p>
+         Mais 
+        </p>
+        <p>
+         C'est pas pour dcourager, au contraire! J'avoue que moi-mme, j'aurais beaucoup  apprendre en appliquant cette dmarche.
+        </p>
+        <p>
+         Hors donc : je commence  connaitre les cartes de dv. ST. Au taff, j'ai du STM32F0 et du STM32F4 (discovery). C'est pas trs cher non plus, et le gros avantage, c'est que a peut se programmer sans JTAG en plus. Il suffit de dgoter stlink, et c'est tout bon.
+        </p>
+        <p>
+         Je me suis fait des environnements de dv sous Windows/Cygwin et Linux, avec QtCreator pour l'dition du code.
+        </p>
+        <p>
+         Pour les librairies, avant, il y avait les StLibraries (un truc du genre, je me rappelle plus le nom exact). C'tait un peu galre, fallait recopier pas mal de tartines de code d'init, toujours plus ou moins identique. Mais a, c'tait avant 
+        </p>
+        <p>
+         Le bon plan maintenant, c'est CubeMX qui permet de gnrer du code bas sur de nouvelles HAL (Hardware Abstraction Layers). C'est du clickdrome plutt sympa : on choisi son proco ou la dev board, on configure et on gnre. Il ne se mets pas trop en travers du chemin; je veux dire qu'on garde la main sur le code  99%. Et les HAL sont bien foutues.
+        </p>
+        <p>
+         Et pour revenir  l'OS, il inclut, d'un clic toujours, FreeRTOS. Alors l, par contre, je connais moins, je commence juste  pratiquer un peu ce truc. A priori, y'a du bon avec le multithreading (facile de se crer plusieurs tches parallles), mais je me mfie de la gestion du temps (quelques surprise  confirmer ). A suivre.
+        </p>
+        <p>
+         Quoi qu'il en soit, rien  voir avec le monde CSR (les puces Bluetooth de 70% du march)! CSR est ferm, google n'est pas ton ami, et mme quand tu as pay 4000 boules le kit de dv, le forum priv de CSR n'est pas non plus ton ami! Le support est, euh, bof.
+         <br/>
+         Et aprs a, pas tonnant que tous les produits bass sur ces puces BT se ressemblent : tout le monde part du seul et unique exemple fourni et l'adapte  ses besoins, le plus vite possible parce que a doit arriver au magasin hier 
+         <br/>
+         Je crois qu'il ne viendrait  l'ide de personne de refaire une appli from scratch. OK, le BT n'est pas simple, y'a des tiroirs partout, mais quand mme.
+        </p>
+        <p>
+         Euh, bon, stop, j'arrte de me dfouler, quittons nous sur un "aimez les puces ST, c'est presque gratuit"!
+        </p>
+        <p>
+         (Non, je ne bosse ni pour l'un, ni pour l'autre, j'ai juste gout au deux, et l'un des deux m'est rest en travers de la gorge )
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+       <ul>
+        <li class="comment odd score3" id="comment-1589933">
+         <h2>
+          <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589932" title="Aller au commentaire parent">
+           [^]
+          </a>
+          <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589933" title="Lien direct vers ce commentaire">
+           #
+          </a>
+          <a class="title" href="/nodes/104863/comments/1589933">
+           Re: Bon plan, mais ...
+          </a>
+         </h2>
+         <p class="meta">
+          Post par
+          <a href="/users/renault" rel="author">
+           Renault
+          </a>
+          (
+          <a href="http://blog.fedora-fr.org/renault">
+           page perso
+          </a>
+          )
+          <time class="updated" datetime="2015-02-19T23:15:09+01:00">
+           <span class="date">
+            le 19/02/15
+           </span>
+           <span class="time">
+             23:15
+           </span>
+          </time>
+          .
+valu 
+          <span class="score">
+           3
+          </span>
+          .
+         </p>
+         <figure class="image">
+          <img alt="" class="avatar" height="64" src="//img.linuxfr.org/avatars/791/047/000/avatar.png" width="64"/>
+         </figure>
+         <div class="content">
+          <p>
+           Je te rassure, dans les puces Texas Instrument et Broadcom tu as du lourd aussi. :)
+           <br/>
+           Entre la doc, la qualit du code et des commentaires, il y en a pour tous les gots!
+          </p>
+         </div>
+         <footer class="actions">
+         </footer>
+        </li>
+       </ul>
+      </li>
+      <li class="comment odd score3" id="comment-1589947">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589947" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1589947">
+         Bonne ide, comme tuto !
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/xapon" rel="author">
+         xavier philippon
+        </a>
+        <time class="updated" datetime="2015-02-20T06:51:57+01:00">
+         <span class="date">
+          le 20/02/15
+         </span>
+         <span class="time">
+           06:51
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         3
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Super ide!
+        </p>
+        <p>
+         Je vais suivre a au fur et  mesure et tenter une adaptation sur PIC32 qui possde une architecture MIPS.
+         <br/>
+         Cela m'obligera  m'y mettre.
+         <br/>
+         D'ailleurs,  ce propos, je cherche quelques bonnes mes comptentes sur le sujet, histoire de me sentir mois seul.
+        </p>
+        <p>
+         A+
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+      </li>
+      <li class="comment even score2" id="comment-1589979">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589979" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1589979">
+         bon courage.
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/bizulk" rel="author">
+         Selso
+        </a>
+        (
+        <a href="http://selso.liberado.free.fr">
+         page perso
+        </a>
+        )
+        <time class="updated" datetime="2015-02-20T10:59:34+01:00">
+         <span class="date">
+          le 20/02/15
+         </span>
+         <span class="time">
+           10:59
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         2
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         bonjour,
+        </p>
+        <p>
+         Tout d'abord merci de partager ton "aventure". J'espre que tu iras jusqu'au bout. Nanmoins, je me demande  si le projet a dmarr sur un coup de tte ou si tu as dj abord des sous-lments de la structure d'un sou-noyau.
+        </p>
+        <p>
+         J'ai regard la description sommaire de la carte Keil, effectivement ce n'est pas trs costaud mais je travaille sur de l'ARM7TDMI avec une licence Keil, et j'ai commenc avec la carte d'val MCB2300 pour a.  Ce n'est pas mon choix, j'aurai prfr prendre du Cortex avec quelques instructions DSP. Malgr tout nous faisons de la rgulation  100 us en virgule flottante avec a!
+         <br/>
+         J'utilise tous les outils KEIL v4 (IDE, toolchain, debugger, uNoyau RTX, stack rseau) donc je suis un peu "conditionn", ta dmarche utilise une alternative qui m'intresse :). Je pense qu'en terme de puissance ce cortex est comparable  l'ARM7 mais malgr tout j'ai des limitations :
+         <br/>
+         - gnration thumb, l'ARM7 c'est thumb1 et trs pnalisant en terme de perf
+         <br/>
+         - pas de couche de configuration comme STMCube (jamais utilis) =&gt; on a utilis le wizard Keil pour une configuration "user friendly"
+         <br/>
+         - pas de lib "driver" (CMSIS,etc) =&gt; tout fait nous mme, et l, bien oblig de lire  fond le user manual du uC :)
+         <br/>
+         - niveau debug et profiling c'est trs limit (deux point d'arrts).
+        </p>
+        <p>
+         J'ai rapidement survol la structure du code :
+         <br/>
+         - code startup absent?
+         <br/>
+         - makefile : gnration "thumb", apparement du  "Thumb-2" donc tu ne devrais pas tre pnalis en terme de performance, mais a serait intressant de pouvoir constater la diffrence avec des instructions ARM.
+         <br/>
+         - peut-tre pourrais tu galement comparer le comportement avec une gnration par RVDS (Keil/Arm).
+        </p>
+        <p>
+         Pour l'exprience mais aussi en terme de pdagogie je pense qu'il est intressant d'aborder l'valuation de performances d'un uC (temps de latence, consommation CPU, empreinte mmoire flash et RAM). C'est toujours les questions que l'on se pose lorsque l'on intgre un uNoyau, et mme tout autre type de bibliothque.
+         <br/>
+         ```
+        </p>
+        <pre>
+         <code>
+         </code>
+        </pre>
+       </div>
+       <footer class="actions">
+       </footer>
+       <ul>
+        <li class="comment odd score2" id="comment-1590217">
+         <h2>
+          <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1589979" title="Aller au commentaire parent">
+           [^]
+          </a>
+          <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590217" title="Lien direct vers ce commentaire">
+           #
+          </a>
+          <a class="title" href="/nodes/104863/comments/1590217">
+           Re: bon courage.
+          </a>
+         </h2>
+         <p class="meta">
+          Post par
+          <a href="/users/maxb" rel="author">
+           maxb
+          </a>
+          <time class="updated" datetime="2015-02-22T15:16:32+01:00">
+           <span class="date">
+            le 22/02/15
+           </span>
+           <span class="time">
+             15:16
+           </span>
+          </time>
+          .
+valu 
+          <span class="score">
+           2
+          </span>
+          .
+         </p>
+         <figure class="image">
+          <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+         </figure>
+         <div class="content">
+          <p>
+           En ce qui concerne le code startup (je pense que tu parles de la mise en place des stacks), il n'y en a tout simplement pas besoin dans un Cortex-M. En fait ARM a fait un effort pour que tout (ou presque) puisse tre fait en C.
+           <br/>
+           Tu verras donc que le vecteur de reset (cpu/vectors.c) contient l'adresse de base de la stack  l'adresse 0 et l'adresse du point d'entre en C  l'offset 0x4. Avec a, le processeur charge le stack pointer et saute au point d'entre directement au reset. Donc pas besoin de glue en assembleur pour le dmarrage contrairement aux ARM7/ARM9!
+          </p>
+         </div>
+         <footer class="actions">
+         </footer>
+        </li>
+       </ul>
+      </li>
+      <li class="comment odd score1" id="comment-1590009">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590009" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1590009">
+         ChibiOS/Nil
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/piezo" rel="author">
+         Piezo
+        </a>
+        <time class="updated" datetime="2015-02-20T14:35:41+01:00">
+         <span class="date">
+          le 20/02/15
+         </span>
+         <span class="time">
+           14:35
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         1
+        </span>
+        .
+        <span class="update">
+         Dernire modification le 20/02/15  14:36.
+        </span>
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         ChibiOS
+         <a href="http://www.chibios.org/dokuwiki/doku.php?id=chibios:community:plans:chibios_rt_concepts_and_ideas">
+          dans sa version 3
+         </a>
+         , introduit NilRTOS, un OS avec des spcifications minimales. Le code (
+         <a href="https://github.com/ChibiOS/ChibiOS/blob/master/os/nil/include/nil.h">
+          nil.h
+         </a>
+         ,
+         <a href="https://github.com/ChibiOS/ChibiOS/blob/master/os/nil/src/nil.c">
+          nil.c
+         </a>
+         ,
+         <a href="https://github.com/ChibiOS/ChibiOS/blob/master/os/nil/ports/ARMCMx/nilcore_v7m.h">
+          nilcore_v7m.h
+         </a>
+         ,
+         <a href="https://github.com/ChibiOS/ChibiOS/blob/master/os/nil/ports/ARMCMx/nilcore_v7m.c">
+          nilcore_v7m.c
+         </a>
+         ) est plutt simple et donc assez pdagogique.
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+      </li>
+      <li class="comment even score2" id="comment-1590018">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590018" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1590018">
+         En version plus lgre
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/benoar" rel="author">
+         benoar
+        </a>
+        <time class="updated" datetime="2015-02-20T15:09:21+01:00">
+         <span class="date">
+          le 20/02/15
+         </span>
+         <span class="time">
+           15:09
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         2
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Je connais encore mal le domaine, mais il me semble que des OS pour STM32 (ou autre micro-contrleur), on en trouve  la pelle Le tiens a-t-il quelque-chose de spcial en dehors de ce qui existe dj? Ou c'est juste pour s'amuser?
+        </p>
+        <p>
+         En passant, je mets un rfrence vers un OS un peu diffrent, bas galement sur un STM32F103, qui ne gre que l'ordonnancement de threads et c'est tout: Chopstx
+         <a href="https://gitorious.org/chopstx/">
+          https://gitorious.org/chopstx/
+         </a>
+         <br/>
+         Il a t crit pour le projet GnuK
+         <a href="http://www.fsij.org/gnuk/">
+          http://www.fsij.org/gnuk/
+         </a>
+         , qui utilisait auparavant ChibiOS/RT
+         <a href="http://www.chibios.org/">
+          http://www.chibios.org/
+         </a>
+         , un truc un peu plus lourd. Je le trouve intressant car il n'essaye pas de rinventer une couche d'abstraction.
+        </p>
+        <p>
+         1:
+         <a href="http://en.wikipedia.org/wiki/List_of_real-time_operating_systems">
+          http://en.wikipedia.org/wiki/List_of_real-time_operating_systems
+         </a>
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+       <ul>
+        <li class="comment odd score3" id="comment-1590218">
+         <h2>
+          <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590018" title="Aller au commentaire parent">
+           [^]
+          </a>
+          <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590218" title="Lien direct vers ce commentaire">
+           #
+          </a>
+          <a class="title" href="/nodes/104863/comments/1590218">
+           Re: En version plus lgre
+          </a>
+         </h2>
+         <p class="meta">
+          Post par
+          <a href="/users/maxb" rel="author">
+           maxb
+          </a>
+          <time class="updated" datetime="2015-02-22T15:31:21+01:00">
+           <span class="date">
+            le 22/02/15
+           </span>
+           <span class="time">
+             15:31
+           </span>
+          </time>
+          .
+valu 
+          <span class="score">
+           3
+          </span>
+          .
+         </p>
+         <figure class="image">
+          <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+         </figure>
+         <div class="content">
+          <blockquote>
+           <p>
+            Je connais encore mal le domaine, mais il me semble que des OS pour STM32 (ou autre micro-contrleur), on en trouve  la pelle  Le tiens a-t-il quelque-chose de spcial en dehors de ce qui existe dj? Ou c'est juste pour s'amuser?
+           </p>
+          </blockquote>
+          <p>
+           En fait, je n'ai pas suffisamment insist l-dessus dans l'intro, mais je remettrai un petit mot sur le sujet dans le prochain article, promis. Cet OS n'a rien de plus que les autres, c'est vraiment un projet pour le fun. a rinvente la roue et c'est fait exprs! Mon but c'est de me confronter  toutes les tapes du dveloppement pour apprendre. Il s'agit de se faire une exprience, pas de faire quelque chose de stable et qu'on pourrait mettre en production. D'ailleurs il n'y a pas de plan de tests ou d'intgration continue, parce que j'ai pas envie de me prendre la tte avec a.
+           <br/>
+           C'est pour a aussi que j'ai choisi de ne pas rutiliser de code existant.
+          </p>
+          <p>
+           Donc ceux qui recherchent un OS pour mettre en production, passez votre chemin! Il y a comme tu le dis des tas de RTOS pour microcontrleur qui sont tout  fait prouvs. Le but de ces articles c'est plutt de faire de la pdagogie, pour ceux qui veulent dcouvrir avec moi ce qu'est un OS et comment a marche sous le capot. Sachant qu'il s'agit d'avoir des fonctionnalits de base (gestion mmoire, gestion de threads, sparation user/kernel, et quelques drivers), pour que a soit simple  comprendre. Je ne cherche pas  faire un concurrent  Linux :)
+          </p>
+         </div>
+         <footer class="actions">
+         </footer>
+        </li>
+       </ul>
+      </li>
+      <li class="comment odd score2" id="comment-1590181">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590181" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1590181">
+         Bibliographie ?
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/gbetous" rel="author">
+         gUI
+        </a>
+        <time class="updated" datetime="2015-02-22T08:36:23+01:00">
+         <span class="date">
+          le 22/02/15
+         </span>
+         <span class="time">
+           08:36
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         2
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//img.linuxfr.org/avatars/350/050/000/avatar.jpg" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Excellente ide cette srie de journaux. J'aime!
+        </p>
+        <p>
+         Sinon dans ta premire partie de rcupration des docs, tu pourrais peut-tre mettre une bibliographie? Quelques bouquins/sites web incontournables?
+        </p>
+        <p>
+         Je suppose que tu vas pas te lancer l-dedans sans un minimum de connaissances thoriques?
+        </p>
+        <p>
+         Merci!
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+       <ul>
+        <li class="comment odd score2" id="comment-1590219">
+         <h2>
+          <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590181" title="Aller au commentaire parent">
+           [^]
+          </a>
+          <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590219" title="Lien direct vers ce commentaire">
+           #
+          </a>
+          <a class="title" href="/nodes/104863/comments/1590219">
+           Re: Bibliographie ?
+          </a>
+         </h2>
+         <p class="meta">
+          Post par
+          <a href="/users/maxb" rel="author">
+           maxb
+          </a>
+          <time class="updated" datetime="2015-02-22T15:38:42+01:00">
+           <span class="date">
+            le 22/02/15
+           </span>
+           <span class="time">
+             15:38
+           </span>
+          </time>
+          .
+valu 
+          <span class="score">
+           2
+          </span>
+          .
+         </p>
+         <figure class="image">
+          <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+         </figure>
+         <div class="content">
+          <p>
+           C'est vrai que a serait bien, mais malheureusement je n'ai pas fait de recherche de documentation formelle en vue de ce projet, ce qui fait que je n'ai pas vraiment de bibliographie  proposer
+          </p>
+          <p>
+           Je ne pars videmment pas sans connaissances thoriques, mais ce sont des connaissances acquises sur le tas sur plusieurs annes (je travaille dans l'embarqu donc je trempe dj dans le sujet). Il y a un mlange d'exprience professionnelle, et d'autodidacte  coup de recherches sur le Web, mais je n'ai pas vraiment not tout a quelque part. Mais effectivement j'ai dj une bonne ide de ce qui m'attend, je ne pars pas la fleur au fusil!
+          </p>
+         </div>
+         <footer class="actions">
+         </footer>
+        </li>
+        <li class="comment even score3" id="comment-1590221">
+         <h2>
+          <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590181" title="Aller au commentaire parent">
+           [^]
+          </a>
+          <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590221" title="Lien direct vers ce commentaire">
+           #
+          </a>
+          <a class="title" href="/nodes/104863/comments/1590221">
+           Re: Bibliographie ?
+          </a>
+         </h2>
+         <p class="meta">
+          Post par
+          <a href="/users/xcomcmdr" rel="author">
+           xcomcmdr
+          </a>
+          <time class="updated" datetime="2015-02-22T15:50:34+01:00">
+           <span class="date">
+            le 22/02/15
+           </span>
+           <span class="time">
+             15:50
+           </span>
+          </time>
+          .
+valu 
+          <span class="score">
+           3
+          </span>
+          .
+         </p>
+         <figure class="image">
+          <img alt="" class="avatar" height="64" src="//img.linuxfr.org/avatars/605/057/000/avatar.jpg" width="64"/>
+         </figure>
+         <div class="content">
+          <blockquote>
+           <p>
+            Sinon dans ta premire partie de rcupration des docs, tu pourrais peut-tre mettre une bibliographie? Quelques bouquins/sites web incontournables?
+           </p>
+          </blockquote>
+          <p>
+           <em>
+            Systmes d'exploitation
+           </em>
+           d'Andrew Tanenbaum
+          </p>
+          <p class="signature">
+           "Quand certains rlent contre systemd, d'autres s'attaquent aux vrais problmes." (merci Sinma !)
+          </p>
+         </div>
+         <footer class="actions">
+         </footer>
+         <ul>
+          <li class="comment odd score2" id="comment-1590284">
+           <h2>
+            <a class="parent" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590221" title="Aller au commentaire parent">
+             [^]
+            </a>
+            <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590284" title="Lien direct vers ce commentaire">
+             #
+            </a>
+            <a class="title" href="/nodes/104863/comments/1590284">
+             Re: Bibliographie ?
+            </a>
+           </h2>
+           <p class="meta">
+            Post par
+            <a href="/users/gbetous" rel="author">
+             gUI
+            </a>
+            <time class="updated" datetime="2015-02-23T11:46:08+01:00">
+             <span class="date">
+              le 23/02/15
+             </span>
+             <span class="time">
+               11:46
+             </span>
+            </time>
+            .
+valu 
+            <span class="score">
+             2
+            </span>
+            .
+           </p>
+           <figure class="image">
+            <img alt="" class="avatar" height="64" src="//img.linuxfr.org/avatars/350/050/000/avatar.jpg" width="64"/>
+           </figure>
+           <div class="content">
+            <p>
+             Incontournable en effet!
+            </p>
+            <p>
+             Un site web :
+             <a href="http://wiki.osdev.org/Main_Page">
+              http://wiki.osdev.org/Main_Page
+             </a>
+            </p>
+           </div>
+           <footer class="actions">
+           </footer>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="comment even score1" id="comment-1590324">
+       <h2>
+        <a class="anchor" href="/news/ecrire-son-systeme-d-exploitation-partie-1-preparer-le-terrain#comment-1590324" title="Lien direct vers ce commentaire">
+         #
+        </a>
+        <a class="title" href="/nodes/104863/comments/1590324">
+         Carte de dev alternative  bas sur le STM32F10xxx  bas cot, le Leaf Maple Mini
+        </a>
+       </h2>
+       <p class="meta">
+        Post par
+        <a href="/users/zyphos" rel="author">
+         zyphos
+        </a>
+        <time class="updated" datetime="2015-02-23T15:39:38+01:00">
+         <span class="date">
+          le 23/02/15
+         </span>
+         <span class="time">
+           15:39
+         </span>
+        </time>
+        .
+valu 
+        <span class="score">
+         1
+        </span>
+        .
+       </p>
+       <figure class="image">
+        <img alt="" class="avatar" height="64" src="//linuxfr.org/images/default-avatar.png" width="64"/>
+       </figure>
+       <div class="content">
+        <p>
+         Pour ceux d'entre-vous qui voudraient galement tester le code ou dvelopper sur un STM32F103RCBT6,
+         <br/>
+         il y a ce module, pas cher, pour commencer le dveloppement:
+        </p>
+        <p>
+         Leaf Maple Mini
+         <br/>
+         Wiki:
+         <a href="http://leaflabs.com/docs/hardware/maple-mini.html">
+          http://leaflabs.com/docs/hardware/maple-mini.html
+         </a>
+         <br/>
+         Prix: environs 4 (chez Ali)
+        </p>
+        <p>
+         Avec connectique Mini-USB, c'est assez rapide pour la programmation (upload) et trs peu onreux.
+        </p>
+        <p>
+         Ce qui est bien c'est qu'il peut se faire programmer comme un Arduino (avec un GUI, presque le mme).
+         <br/>
+         On peut tester directement le programme en RAM (sans crire sur la mmoire flash), pratique pour les petits tests.
+        </p>
+        <p>
+         Mais attention beaucoup des GPIO ne sont pas compatible 5v. C'est presque du 3,3v partout.
+        </p>
+       </div>
+       <footer class="actions">
+       </footer>
+      </li>
+     </ul>
+     <p id="follow-feed">
+      <a href="/nodes/104863/comments.atom">
+       Suivre le flux des commentaires
+      </a>
+     </p>
+     <p>
+      <strong>
+       Note :
+      </strong>
+      les commentaires appartiennent  ceux qui les ont posts. Nous n'en sommes pas responsables.
+     </p>
+    </div>
+   </main>
+   <footer>
+    <p>
+     <a class="scroll" href="#top">
+      Revenir en haut de page
+     </a>
+    </p>
+   </footer>
+  </section>
+  <footer id="bigfooter">
+   <nav id="last_comments">
+    <h1>
+     Derniers commentaires
+    </h1>
+    <ul>
+     <li>
+      <a href="/users/alenvers/journaux/petit-jeu-de-pentest-xss#comment-1612794">
+       Re: Dur dur
+      </a>
+     </li>
+     <li>
+      <a href="/users/patrick_g/journaux/libreoffice-vs-apache-openoffice#comment-1612793">
+       Re: les deux
+      </a>
+     </li>
+     <li>
+      <a href="/news/histoire-mondiale-2-0#comment-1612792">
+       Re: Gnial
+      </a>
+     </li>
+     <li>
+      <a href="/users/antistress/journaux/tester-facilement-la-version-gtk-3-de-firefox#comment-1612791">
+       Re: Fedora 22
+      </a>
+     </li>
+     <li>
+      <a href="/users/antistress/journaux/tester-facilement-la-version-gtk-3-de-firefox#comment-1612790">
+       Re: Firefox Android
+      </a>
+     </li>
+     <li>
+      <a href="/forums/linux-debutant/posts/probleme-installation-openuse-sur-raspbery-pi2#comment-1612789">
+       Re: Piste
+      </a>
+     </li>
+     <li>
+      <a href="/forums/linux-debutant/posts/probleme-installation-openuse-sur-raspbery-pi2#comment-1612788">
+       Re: Piste
+      </a>
+     </li>
+     <li>
+      <a href="/forums/linux-debutant/posts/probleme-installation-openuse-sur-raspbery-pi2#comment-1612787">
+       Re: Piste
+      </a>
+     </li>
+     <li>
+      <a href="/users/nedflanders/journaux/sequence-gastronomie#comment-1612786">
+       Re: Quand...
+      </a>
+     </li>
+     <li>
+      <a href="/forums/programmation-perl/posts/besoin-d-aide-pour-mon-premier-script-en-perl-parser-un-fichier-bind#comment-1612785">
+       Re: En AWK
+      </a>
+     </li>
+     <li>
+      <a href="/users/antistress/journaux/tester-facilement-la-version-gtk-3-de-firefox#comment-1612784">
+       Fedora 22
+      </a>
+     </li>
+     <li>
+      <a href="/forums/linux-debutant/posts/probleme-installation-openuse-sur-raspbery-pi2#comment-1612783">
+       Re: Piste
+      </a>
+     </li>
+    </ul>
+   </nav>
+   <nav id="popular_tags">
+    <h1>
+     Tags populaires
+    </h1>
+    <ul class="tag_cloud">
+     <li>
+      <a href="/tags/debian/public">
+       debian
+      </a>
+     </li>
+     <li>
+      <a href="/tags/linux/public">
+       linux
+      </a>
+     </li>
+     <li>
+      <a href="/tags/xmpp/public">
+       xmpp
+      </a>
+     </li>
+     <li>
+      <a href="/tags/spam/public">
+       spam
+      </a>
+     </li>
+     <li>
+      <a href="/tags/scurit/public">
+       scurit
+      </a>
+     </li>
+     <li>
+      <a href="/tags/franglais/public">
+       franglais
+      </a>
+     </li>
+     <li>
+      <a href="/tags/revue_de_presse/public">
+       revue_de_presse
+      </a>
+     </li>
+     <li>
+      <a href="/tags/serveur/public">
+       serveur
+      </a>
+     </li>
+     <li>
+      <a href="/tags/rmll2015/public">
+       rmll2015
+      </a>
+     </li>
+     <li>
+      <a href="/tags/dlfp/public">
+       dlfp
+      </a>
+     </li>
+     <li>
+      <a href="/tags/programmation/public">
+       programmation
+      </a>
+     </li>
+     <li>
+      <a href="/tags/diy/public">
+       diy
+      </a>
+     </li>
+    </ul>
+   </nav>
+   <section id="friends">
+    <h1>
+     Sites amis
+    </h1>
+    <ul>
+     <li>
+      <a href="http://www.april.org/">
+       April
+      </a>
+     </li>
+     <li>
+      <a href="http://www.agendadulibre.org/">
+       Agenda du libre
+      </a>
+     </li>
+     <li>
+      <a href="http://www.framasoft.net/">
+       Framasoft
+      </a>
+     </li>
+     <li>
+      <a href="http://fr.lolix.org/">
+       Lolix
+      </a>
+     </li>
+     <li>
+      <a href="http://www.jesuislibre.org/">
+       JeSuisLibre
+      </a>
+     </li>
+     <li>
+      <a href="http://boutique.ed-diamond.com/">
+       ditions Diamond
+      </a>
+     </li>
+     <li>
+      <a href="http://www.venividilibri.org/">
+       Veni, Vedi, Libri
+      </a>
+     </li>
+     <li>
+      <a href="http://www.linuxgraphic.org/">
+       LinuxGraphic
+      </a>
+     </li>
+     <li>
+      <a href="http://www.editions-eni.fr/livres/open-source/.12659ab71294b44082200c97a40710bc.html">
+       ditions ENI
+      </a>
+     </li>
+     <li>
+      <a href="http://www.laquadrature.net/">
+       La Quadrature du Net
+      </a>
+     </li>
+     <li>
+      <a href="http://www.gp3.fr/">
+       Grafik Plus
+      </a>
+     </li>
+     <li>
+      <a href="http://lea-linux.org">
+       Lea-Linux
+      </a>
+     </li>
+     <li>
+      <a href="http://tuxfamily.org">
+       TuxFamily
+      </a>
+     </li>
+     <li>
+      <a href="http://www.editions-eyrolles.com/Recherche/?q=linux">
+       ditions Eyrolles
+      </a>
+     </li>
+    </ul>
+   </section>
+   <nav id="about_us">
+    <h1>
+      propos de LinuxFr.org
+    </h1>
+    <ul>
+     <li>
+      <a href="/mentions_legales">
+       Mentions lgales
+      </a>
+     </li>
+     <li>
+      <a href="/faire_un_don">
+       Faire un don
+      </a>
+     </li>
+     <li>
+      <a href="/team">
+       Team LinuxFr.org
+      </a>
+     </li>
+     <li>
+      <a href="/informations">
+       Informations sur le site
+      </a>
+     </li>
+     <li>
+      <a href="/aide">
+       Aide / Foire aux questions
+      </a>
+     </li>
+     <li>
+      <a href="/regles_de_moderation">
+       Rgles de modration
+      </a>
+     </li>
+     <li>
+      <a href="/statistiques">
+       Statistiques
+      </a>
+     </li>
+     <li>
+      <a href="/developpeur">
+       API pour les dveloppeurs
+      </a>
+     </li>
+     <li>
+      <a href="/code_source_du_site">
+       Code source du site
+      </a>
+     </li>
+     <li>
+      <a href="/plan">
+       Plan du site
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </footer>
+  <script src="/assets/application-a8be99e9dd37e68469ca50b5992aed5a49a87f54a033cfb60d5dc5e7ae7436a8.js">
+  </script>
+ </body>
+</html>

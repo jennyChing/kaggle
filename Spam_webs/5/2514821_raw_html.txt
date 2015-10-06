@@ -1,0 +1,526 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <title>
+   bpchesney.org  Finding the Chorus of a Song Using Auto-correlation
+  </title>
+  <link href="http://bpchesney.org/wp-content/themes/bito/style.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+  <link href="http://bpchesney.org/feed/" rel="alternate" title="RSS 2.0" type="application/rss+xml"/>
+  <link href="http://bpchesney.org/feed/rss/" rel="alternate" title="RSS .92" type="text/xml"/>
+  <link href="http://bpchesney.org/feed/atom/" rel="alternate" title="Atom 0.3" type="application/atom+xml"/>
+  <link href="http://bpchesney.org/xmlrpc.php" rel="pingback"/>
+  <script type="text/javascript">
+   window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"wpemoji":"http:\/\/bpchesney.org\/wp-includes\/js\/wp-emoji.js?ver=4.2.2","twemoji":"http:\/\/bpchesney.org\/wp-includes\/js\/twemoji.js?ver=4.2.2"}};
+			( function( window, document, settings ) {
+	var src, ready;
+
+	/**
+	 * Detect if the browser supports rendering emoji or flag emoji. Flag emoji are a single glyph
+	 * made of two characters, so some browsers (notably, Firefox OS X) don't support them.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param type {String} Whether to test for support of "simple" or "flag" emoji.
+	 * @return {Boolean} True if the browser can render emoji, false if it cannot.
+	 */
+	function browserSupportsEmoji( type ) {
+		var canvas = document.createElement( 'canvas' ),
+			context = canvas.getContext &amp;&amp; canvas.getContext( '2d' );
+
+		if ( ! context || ! context.fillText ) {
+			return false;
+		}
+
+		/*
+		 * Chrome on OS X added native emoji rendering in M41. Unfortunately,
+		 * it doesn't work when the font is bolder than 500 weight. So, we
+		 * check for bold rendering support to avoid invisible emoji in Chrome.
+		 */
+		context.textBaseline = 'top';
+		context.font = '600 32px Arial';
+
+		if ( type === 'flag' ) {
+			/*
+			 * This works because the image will be one of three things:
+			 * - Two empty squares, if the browser doesn't render emoji
+			 * - Two squares with 'G' and 'B' in them, if the browser doesn't render flag emoji
+			 * - The British flag
+			 *
+			 * The first two will encode to small images (1-2KB data URLs), the third will encode
+			 * to a larger image (4-5KB data URL).
+			 */
+			context.fillText( String.fromCharCode( 55356, 56812, 55356, 56807 ), 0, 0 );
+			return canvas.toDataURL().length &gt; 3000;
+		} else {
+			/*
+			 * This creates a smiling emoji, and checks to see if there is any image data in the
+			 * center pixel. In browsers that don't support emoji, the character will be rendered
+			 * as an empty square, so the center pixel will be blank.
+			 */
+			context.fillText( String.fromCharCode( 55357, 56835 ), 0, 0 );
+			return context.getImageData( 16, 16, 1, 1 ).data[0] !== 0;
+		}
+	}
+
+	function addScript( src ) {
+		var script = document.createElement( 'script' );
+
+		script.src = src;
+		script.type = 'text/javascript';
+		document.getElementsByTagName( 'head' )[0].appendChild( script );
+	}
+
+	settings.supports = {
+		simple: browserSupportsEmoji( 'simple' ),
+		flag:   browserSupportsEmoji( 'flag' )
+	};
+
+	settings.DOMReady = false;
+	settings.readyCallback = function() {
+		settings.DOMReady = true;
+	};
+
+	if ( ! settings.supports.simple || ! settings.supports.flag ) {
+		ready = function() {
+			settings.readyCallback();
+		};
+
+		if ( document.addEventListener ) {
+			document.addEventListener( 'DOMContentLoaded', ready, false );
+			window.addEventListener( 'load', ready, false );
+		} else {
+			window.attachEvent( 'onload', ready );
+			document.attachEvent( 'onreadystatechange', function() {
+				if ( 'complete' === document.readyState ) {
+					settings.readyCallback();
+				}
+			} );
+		}
+
+		src = settings.source || {};
+
+		if ( src.concatemoji ) {
+			addScript( src.concatemoji );
+		} else if ( src.wpemoji &amp;&amp; src.twemoji ) {
+			addScript( src.twemoji );
+			addScript( src.wpemoji );
+		}
+	}
+
+} )( window, document, window._wpemojiSettings );
+  </script>
+  <style type="text/css">
+   img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+  </style>
+  <!-- This site uses the Google Analytics by Yoast plugin v5.4.2 - Universal enabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+  <script type="text/javascript">
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-4202022-4', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('send','pageview');
+  </script>
+  <!-- / Google Analytics by Yoast -->
+  <link href="http://bpchesney.org/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="http://bpchesney.org/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <link href="http://bpchesney.org/collapsing-content/" rel="prev" title="Collapsing Content"/>
+  <link href="http://bpchesney.org/projections-and-eigenvectors/" rel="next" title="Projections and Eigenvectors"/>
+  <meta content="WordPress 4.2.2" name="generator"/>
+  <link href="http://bpchesney.org/finding-the-chorus-of-a-song-using-auto-correlation/" rel="canonical"/>
+  <link href="http://bpchesney.org/?p=715" rel="shortlink"/>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+ </head>
+ <body>
+  <div class="doublecol" id="container">
+   <div id="header">
+    <form action="http://bpchesney.org/" id="searchform" method="get">
+     <div>
+      <input id="s" name="s" value=""/>
+      <input id="searchsubmit" type="submit" value="Search"/>
+     </div>
+    </form>
+    <div id="headerimg">
+     <h1>
+      <a href="http://bpchesney.org/">
+       bpchesney.org
+      </a>
+     </h1>
+     <div class="description">
+      A blog by Brian Chesney
+     </div>
+    </div>
+   </div>
+   <div id="navigation">
+    <ul>
+     <li>
+      <a href="http://bpchesney.org" title="Home">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="http://bpchesney.org/about/">
+       About
+      </a>
+     </li>
+    </ul>
+   </div>
+   <div id="navigationline">
+   </div>
+   <div class="column" id="content">
+    <div class="post-715 post type-post status-publish format-standard hentry category-uncategorized tag-alphabet tag-chorus tag-content-collapsing tag-correlation tag-signal tag-symbol" id="post-715">
+     <h2 class="pagetitle">
+      <a href="http://bpchesney.org/finding-the-chorus-of-a-song-using-auto-correlation/" title="Permalink">
+       Finding the Chorus of a Song Using Auto-correlation
+      </a>
+     </h2>
+     <div class="titleinfo">
+      Wednesday, March 9th, 2011 @ 10:09 am
+      <!-- by brian-->
+     </div>
+     <div class="entry single">
+      <p>
+       Correlation is useful for finding commonality between two signals. This commonality can also be considered redundancy.
+      </p>
+      <p>
+       The auto-correlation is defined as,
+      </p>
+      <p>
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/rxx.png">
+        <img alt="" height="38" src="http://bpchesney.org/wp-content/uploads/2011/03/rxx.png" title="rxx" width="216"/>
+       </a>
+      </p>
+      <p>
+       For a message, the auto-correlation sequence describes how well a message matches up with a shifted version of itself. When the message is not shifted at all, it matches up very well with itself. For non-repetitive, random or otherwise unpredictable messages, there is little in common with a shifted version of itself. The auto-correlation for a random message of 15 symbols is shown in the following plot.
+      </p>
+      <p>
+      </p>
+      <p>
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/rxx_plot.png">
+        <img alt="" class="alignleft size-full wp-image-725" height="208" src="http://bpchesney.org/wp-content/uploads/2011/03/rxx_plot.png" title="rxx_plot" width="518"/>
+       </a>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+       The auto-correlation can be generalized to the cross-correlation between two messages.
+      </p>
+      <p style="text-align: left;">
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/rxy.png">
+        <img alt="" class="size-full wp-image-717" height="38" src="http://bpchesney.org/wp-content/uploads/2011/03/rxy.png" title="rxy" width="210"/>
+       </a>
+      </p>
+      <p>
+       Both are represented by a sequence of values of the number of matches at each shift position. For the purpose of calculation, shifts are barrel shifts, meaning the part that is shifted off the end is prepended back to the beginning.
+      </p>
+      <p>
+       A plot of cross-correlation between two random messages follows. Notice that even if the two messages each dont match up very well when compared with a shifted version of themselves, they may still correlate when compared with each other at the appropriate shift amount.
+      </p>
+      <p>
+      </p>
+      <p>
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/rxy_plot.png">
+        <img alt="" class="alignleft size-full wp-image-727" height="413" src="http://bpchesney.org/wp-content/uploads/2011/03/rxy_plot.png" title="rxy_plot" width="530"/>
+       </a>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+      </p>
+      <p>
+       Under an appropriate signaling alphabet (i.e. closed, finite set of unique symbols), the atomic portion of the autocorrelation calculation, x[n] * x[n+i] is simply a compare between two symbols at different points in the message.
+      </p>
+      <p>
+       Some example Python code for the correlation function is given below. Rxy is the calculated cross-correlation sequence between messages a and b, each length N.
+      </p>
+      <div>
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/corr1.png">
+        <img alt="" class="size-full wp-image-724 aligncenter" height="152" src="http://bpchesney.org/wp-content/uploads/2011/03/corr1.png" title="corr" width="388"/>
+       </a>
+      </div>
+      <p>
+       Notice the nested loops. There may be a better way of doing this in Python, a better way to code it or a better solution, such as using lower-level routines like Numpy does, but this illustrates what makes correlation computationally expensive. For two sequences, each N long, it takes N
+       <sup>
+        2
+       </sup>
+       operations to calculate the cross-correlation between the two. This is the drawback of using a serial machine, which for all intents and purposes is how most processors approach it. You would probably enjoy a significant speed up by using a highly-parallelized machine like a graphics processor, at the expense of some very low-level coding to trick it into calculating correlation for you, something it was probably not designed to do.
+      </p>
+      <div>
+       <p>
+        Even though it can take a while to calculate for long sequences, the auto-correlation function can be very useful, especially when analyzing a message of symbols. In a graph of the correlation function, the peaks are instances of repetition. Repetition occurs, for instance in the chorus of a song. Consider an entire song a message  a sequences of symbols. Consider only the lyrics to the song, stripping it entirely of its musical content. Each word of the song is a symbol; the specific order and collection of these symbols uniquely identifies the lyrics of the song.
+       </p>
+      </div>
+      <div>
+       <p>
+        Take, for example, the lyrics to Michael Jacksons 1982 smash hit Beat It. The start of the chorus is recognizable by the oft-repeated title of the song. However, this is not the entire chorus. Can we find the chorus of the using auto-correlation? In fact we can; the autocorrelation function does a good job of finding the chorus in this example. The compare part of the auto-correlation calculation is a simple string compare: do the two words being compared match exactly or not?
+       </p>
+      </div>
+      <div>
+       Heres the algorithm:
+      </div>
+      <div>
+       <ol>
+        <li>
+         Flatten the song into a sequence of words.
+        </li>
+        <li>
+         Calculate the auto-correlation for the sequence
+        </li>
+        <li>
+         Find the index (not 0) of the auto-correlation that has the biggest value.
+        </li>
+        <li>
+         Find the longest run of consecutive matches for the index found in step 3.
+        </li>
+        <li>
+         Therein lies your chorus!
+        </li>
+       </ol>
+       <p>
+        For Beat It, I plotted the auto-correlation.
+       </p>
+       <p>
+       </p>
+       <p>
+        <a href="http://bpchesney.org/wp-content/uploads/2011/03/rxx_plot_beatit1.png">
+         <img alt="" class="size-full wp-image-729 aligncenter" height="343" src="http://bpchesney.org/wp-content/uploads/2011/03/rxx_plot_beatit1.png" title="rxx_plot_beatit" width="600"/>
+        </a>
+       </p>
+      </div>
+      <div>
+       The auto-correlation peaks at a shift of 28 (Rxx[28] =0.184343434343). There are several words that match when you take the lyrics of Beat It, shift them by 28 words and compare it to an unshifted version of itself. Several of them are stray individual words matching. However, when I looked at position 278, there is a long string of consecutive matches
+      </div>
+      <div>
+       <a href="http://bpchesney.org/wp-content/uploads/2011/03/beatit_matches.png">
+        <img alt="" class="size-full wp-image-730 aligncenter" height="353" src="http://bpchesney.org/wp-content/uploads/2011/03/beatit_matches.png" title="beatit_matches" width="91"/>
+       </a>
+      </div>
+      <div>
+       <p>
+        In fact, it keeps going to index 333. The auto-correlation method finds two consecutive instances of the chorus, which is:
+       </p>
+      </div>
+      <blockquote>
+       <div>
+        Just beat it! Beat it!
+       </div>
+       <div>
+        No one wants to be defeated
+       </div>
+       <div>
+        Show them how funky and strong is your fight
+       </div>
+       <div>
+        It doesnt matter whos wrong or right
+       </div>
+      </blockquote>
+      <div>
+       <p>
+        Notice that it finds the whole chorus, not just the oft-repeated Beat or Beat It. Other methods might focus on the most frequently appearing word or diagram (two words together) and miss the rest of the chorus, which actually contains much more thematic content. In this example, the most oft-repeated phrase, Beat It, is just part of the reason for the high-degree of correlation. The rest of the chorus, probably the less easily remembered (but equally important) part, No one wants to be defeated. whos wrong or right, matches as well when the message is shifted by the appropriate amount (28 words) and compared with itself. With other methods it can be difficult to tell that No one wants to be defeated is part of the chorus and not the next verse.
+       </p>
+      </div>
+     </div>
+     <p class="info">
+      Tags:
+      <a href="http://bpchesney.org/tag/alphabet/" rel="tag">
+       alphabet
+      </a>
+      ,
+      <a href="http://bpchesney.org/tag/chorus/" rel="tag">
+       chorus
+      </a>
+      ,
+      <a href="http://bpchesney.org/tag/content-collapsing/" rel="tag">
+       content collapsing
+      </a>
+      ,
+      <a href="http://bpchesney.org/tag/correlation/" rel="tag">
+       correlation
+      </a>
+      ,
+      <a href="http://bpchesney.org/tag/signal/" rel="tag">
+       signal
+      </a>
+      ,
+      <a href="http://bpchesney.org/tag/symbol/" rel="tag">
+       symbol
+      </a>
+      <br/>
+      Posted in
+      <a href="http://bpchesney.org/category/uncategorized/" rel="category tag">
+       Uncategorized
+      </a>
+      |
+      <span>
+       Comments Off
+       <span class="screen-reader-text">
+        on Finding the Chorus of a Song Using Auto-correlation
+       </span>
+      </span>
+     </p>
+    </div>
+    <!-- You can start editing here. -->
+    <!-- If comments are closed. -->
+    <p class="nocomments">
+     Comments are closed.
+    </p>
+   </div>
+   <div class="column" id="subcontent">
+    <ul>
+     <li>
+      <h2>
+       Find me on:
+      </h2>
+      <div class="textwidget">
+       <table>
+        <tr>
+         <td>
+          <a class="twitter-follow-button" data-show-count="false" href="https://twitter.com/bpchesney" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://twitter.com/bpchesney', 'Follow @bpchesney');">
+           Follow @bpchesney
+          </a>
+          <script>
+           !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+          </script>
+         </td>
+        </tr>
+       </table>
+       <a class="twitter-follow-button" data-show-count="false" href="https://twitter.com/chesneyresearch" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://twitter.com/chesneyresearch', 'Follow @chesneyresearch');">
+        Follow @chesneyresearch
+       </a>
+       <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+       </script>
+       <span class="quora-follow-button" data-name="Brian-Chesney">
+        Follow
+        <a href="http://www.quora.com/Brian-Chesney" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.quora.com/Brian-Chesney', 'Brian Chesney');">
+         Brian Chesney
+        </a>
+        on
+        <a href="http://www.quora.com" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.quora.com', 'Quora');">
+         Quora
+        </a>
+        <script src="http://www.quora.com/widgets/follow?embed_code=yGTPCx1" type="text/javascript">
+        </script>
+       </span>
+      </div>
+     </li>
+     <li>
+      <h2>
+       License
+      </h2>
+      <div class="textwidget">
+       <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://creativecommons.org/licenses/by-nc-nd/3.0/us/', '');" rel="license">
+        <img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-nd/3.0/us/88x31.png" style="border-width:0"/>
+       </a>
+       <br/>
+       <span property="dc:title" xmlns:dc="http://purl.org/dc/elements/1.1/">
+        bpchesney.org
+       </span>
+       by
+       <a href="http://bpchesney.org" property="cc:attributionName" rel="cc:attributionURL" xmlns:cc="http://creativecommons.org/ns#">
+        Brian Chesney
+       </a>
+       is licensed under a
+       <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://creativecommons.org/licenses/by-nc-nd/3.0/us/', 'Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 United States License');" rel="license">
+        Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 United States License
+       </a>
+       .
+      </div>
+     </li>
+    </ul>
+   </div>
+   <div id="footer">
+    <p>
+     <strong>
+       Copyright 2015 bpchesney.org. All rights reserved.
+     </strong>
+     <br/>
+     <a href="http://blogs.gaixie.org/tommy/">
+      <strong>
+       Bito
+      </strong>
+     </a>
+     theme.  Powered by
+     <a href="http://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">
+      <strong>
+       WordPress
+      </strong>
+     </a>
+     4.2.2, valid
+     <a href="http://validator.w3.org/check?uri=referer">
+      XHTML 1.1
+     </a>
+     and
+     <a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">
+      CSS 3
+     </a>
+     .
+     <a href="http://bpchesney.org/wp-login.php">
+      Log in
+     </a>
+    </p>
+   </div>
+   <div class="clear">
+   </div>
+  </div>
+ </body>
+</html>
+<!-- Dynamic page generated in 1.017 seconds. -->

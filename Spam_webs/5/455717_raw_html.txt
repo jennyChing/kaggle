@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en-us">
+ <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <!-- Enable responsiveness on mobile devices-->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport"/>
+  <title>
+   Introducing Linux Network Namespaces  Scott's Weblog  The weblog of an IT pro specializing in virtualization, networking, open source, and cloud computing
+  </title>
+  <!-- Metadata -->
+  <meta content="Scott Lowe" name="author"/>
+  <meta content="CLI, Linux, Networking" name="keywords"/>
+  <meta content="Offering technical posts and how-to articles from an IT pro specializing in virtualization, networking, open source, &amp; cloud computing" name="description"/>
+  <meta content="Introducing Linux Network Namespaces - Scott's Weblog - The weblog of an IT pro specializing in virtualization, networking, open source, and cloud computing" property="og:title"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Offering technical posts and how-to articles from an IT pro specializing in virtualization, networking, open source, &amp; cloud computing" property="og:description"/>
+  <meta content="Scott's Weblog" property="og:site_name"/>
+  <!-- CSS -->
+  <link href="/public/css/poole.css" rel="stylesheet"/>
+  <link href="/public/css/syntax.css" rel="stylesheet"/>
+  <link href="/public/css/lanyon.css" rel="stylesheet"/>
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" rel="stylesheet"/>
+  <link href="/public/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+  <!-- Icons -->
+  <link href="/public/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144"/>
+  <link href="/public/favicon.ico" rel="shortcut icon"/>
+  <!-- RSS -->
+  <link href="http://blog.scottlowe.org/feed/" rel="alternate" title="Scott's Weblog" type="application/rss+xml"/>
+ </head>
+ <body class="theme-base-0d">
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59044101-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+  <input class="sidebar-checkbox" id="sidebar-checkbox" type="checkbox"/>
+  <!-- Toggleable sidebar -->
+  <div class="sidebar" id="sidebar">
+   <div class="sidebar-item">
+    <p>
+     <img alt="Orbits" height="128" src="http://blog.scottlowe.org/public/img/orbits-thumb.gif" width="128"/>
+    </p>
+    <p>
+     Offering technical posts and how-to articles from an IT pro specializing in virtualization, networking, open source, &amp; cloud computing
+    </p>
+   </div>
+   <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">
+     Home
+    </a>
+    <a class="sidebar-nav-item" href="/about/">
+     About
+    </a>
+    <a class="sidebar-nav-item" href="/archives/">
+     Site Archives
+    </a>
+    <a class="sidebar-nav-item" href="/categories/">
+     Post Categories
+    </a>
+    <a class="sidebar-nav-item" href="/learning-nvp-nsx/">
+     Learning NVP/NSX
+    </a>
+    <a class="sidebar-nav-item" href="/tags/">
+     Content Tags
+    </a>
+   </nav>
+   <div class="sidebar-item">
+    <p>
+     <a href="https://github.com/lowescott">
+      <i class="fa fa-github fa-3x">
+      </i>
+     </a>
+     <a href="https://twitter.com/scott_lowe">
+      <i class="fa fa-twitter fa-3x">
+      </i>
+     </a>
+     <a href="https://www.linkedin.com/in/scottslowe">
+      <i class="fa fa-linkedin-square fa-3x">
+      </i>
+     </a>
+     <a href="http://blog.scottlowe.org/feed/">
+      <i class="fa fa-rss fa-3x">
+      </i>
+     </a>
+    </p>
+   </div>
+   <div class="sidebar-item">
+    <p>
+      2015. All rights reserved.
+    </p>
+   </div>
+  </div>
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+   <div class="masthead">
+    <div class="container">
+     <h3 class="masthead-title">
+      <a href="/" title="Home">
+       Scott's Weblog
+      </a>
+      <small>
+       The weblog of an IT pro specializing in virtualization, networking, open source, and cloud computing
+      </small>
+     </h3>
+    </div>
+   </div>
+   <div class="container content">
+    <div class="post">
+     <h1 class="post-title">
+      Introducing Linux Network Namespaces
+     </h1>
+     <span class="post-date">
+      4 September 2013
+     </span>
+     <p>
+      In this post, Im going to introduce you to the concept of Linux network namespaces. While it might seem a bit esoteric right now, trust me that there is a reason why Im introducing you to network namespacesif you, like me, are on a journey to better understand OpenStack, youll almost certainly run into network namespaces again.
+     </p>
+     <p>
+      So what are network namespaces? Generally speaking, an installation of Linux shares a single set of network interfaces and routing table entries. You can modify the routing table entries using policy routing (
+      <a href="/2013/05/29/a-quick-introduction-to-linux-policy-routing/">
+       heres
+      </a>
+      an introduction I wrote and
+      <a href="/2013/05/30/a-use-case-for-policy-routing-with-kvm-and-open-vswitch/">
+       heres
+      </a>
+      a write-up on a potential use case for policy routing), but that doesnt fundamentally change the fact that the set of network interfaces and routing tables/entries are shared across the entire OS. Network namespaces change that fundamental assumption. With network namespaces, you can have different and separate instances of network interfaces and routing tables that operate independent of each other.
+     </p>
+     <p>
+      This concept is probably best illustrated through some examples. Along the way, Ill introduce a few new ideas as well. First, though, I need to provide some assumptions.
+     </p>
+     <h2 id="assumptions">
+      Assumptions
+     </h2>
+     <p>
+      Throughout these examples, Im using Ubuntu Server 12.04.3 LTS. Please note that support for network namespaces varies between Linux distributions; Ubuntu supports them but Red Hat doesnt. (Im not sure about Fedora. If you know, speak up in the comments.) If youre thinking about using network namespaces, be sure your Linux distribution includes support.
+     </p>
+     <p>
+      Further, Ill assume that youre either running as root, or that you will prepend
+      <code>
+       sudo
+      </code>
+      to the commands listed here as necessary.
+     </p>
+     <h2 id="creating-and-listing-network-namespaces">
+      Creating and Listing Network Namespaces
+     </h2>
+     <p>
+      Creating a network namespace is actually quite easy. Just use this command:
+     </p>
+     <pre>
+      <code>
+       ip netns add &lt;new namespace name&gt;
+      </code>
+     </pre>
+     <p>
+      For example, lets say you wanted to create a namespace called blue. Youd use this command:
+     </p>
+     <pre>
+      <code>
+       ip netns add blue
+      </code>
+     </pre>
+     <p>
+      To verify that the network namespace has been created, use this command:
+     </p>
+     <pre>
+      <code>
+       ip netns list
+      </code>
+     </pre>
+     <p>
+      You should see your network namespace listed there, ready for you to use.
+     </p>
+     <h2 id="assigning-interfaces-to-network-namespaces">
+      Assigning Interfaces to Network Namespaces
+     </h2>
+     <p>
+      Creating the network namespace is only the beginning; the next part is to assign interfaces to the namespaces, and then configure those interfaces for network connectivity. One thing that threw me off early in my exploration of network namespaces was that you couldnt assign physical interfaces to a namespace. How in the world were you supposed to use them, then?
+     </p>
+     <p>
+      It turns out you can only assign virtual Ethernet (veth) interfaces to a network namespace. Virtual Ethernet interfaces are an interesting construct; they always come in pairs, and they are connected like a tubewhatever comes in one veth interface will come out the other peer veth interface. As a result, you can use veth interfaces to connect a network namespace to the outside world via the default or global namespace where physical interfaces exist.
+     </p>
+     <p>
+      Lets see how thats done. First, youd create the veth pair:
+     </p>
+     <pre>
+      <code>
+       ip link add veth0 type veth peer name veth1
+      </code>
+     </pre>
+     <p>
+      I found a few sites that repeated this command to create
+      <code>
+       veth1
+      </code>
+      and link it to
+      <code>
+       veth0
+      </code>
+      , but my tests showed that both interfaces were created and linked automatically using this command listed above. Naturally, you could substitute other names for
+      <code>
+       veth0
+      </code>
+      and
+      <code>
+       veth1
+      </code>
+      , if you wanted.
+     </p>
+     <p>
+      You can verify that the veth pair was created using this command:
+     </p>
+     <pre>
+      <code>
+       ip link list
+      </code>
+     </pre>
+     <p>
+      You should see a pair of veth interfaces (using the names you assigned in the command above) listed there. Right now, they both belong to the default or global namespace, along with the physical interfaces.
+     </p>
+     <p>
+      Lets say that you want to connect the global namespace to the blue namespace. To do that, youll need to move one of the veth interfaces to the blue namespace using this command:
+     </p>
+     <pre>
+      <code>
+       ip link set veth1 netns blue
+      </code>
+     </pre>
+     <p>
+      If you then run the
+      <code>
+       ip link list
+      </code>
+      command again, youll see that the veth1 interface has disappeared from the list. Its now in the blue namespace, so to see it youd need to run this command:
+     </p>
+     <pre>
+      <code>
+       ip netns exec blue ip link list
+      </code>
+     </pre>
+     <p>
+      Whoa! Thats a bit of a complicated command. Lets break it down:
+     </p>
+     <ul>
+      <li>
+       <p>
+        The first part,
+        <code>
+         ip netns exec
+        </code>
+        , is how you execute commands in a different network namespace.
+       </p>
+      </li>
+      <li>
+       <p>
+        Next is the specific namespace in which the command should be run (in this case, the blue namespace).
+       </p>
+      </li>
+      <li>
+       <p>
+        Finally, you have the actual command to be executed in the remote namespace. In this case, you want to see the interfaces in the blue namespace, so you run
+        <code>
+         ip link list
+        </code>
+        .
+       </p>
+      </li>
+     </ul>
+     <p>
+      When you run that command, you should see a loopback interface and the veth1 interface you moved over earlier.
+     </p>
+     <h2 id="configuring-interfaces-in-network-namespaces">
+      Configuring Interfaces in Network Namespaces
+     </h2>
+     <p>
+      Now that veth1 has been moved to the blue namespace, we need to actually configure that interface. Once again, well use the
+      <code>
+       ip netns exec
+      </code>
+      command, this time to configure the veth1 interface in the blue namespace:
+     </p>
+     <pre>
+      <code>
+       ip netns exec blue ifconfig veth1 10.1.1.1/24 up
+      </code>
+     </pre>
+     <p>
+      As before, the format this command follows is:
+     </p>
+     <pre>
+      <code>
+       ip netns exec &lt;network namespace&gt; &lt;command to run against that namespace&gt;
+      </code>
+     </pre>
+     <p>
+      In this case, youre using
+      <code>
+       ifconfig
+      </code>
+      to assign an IP address to the veth1 interface and bring that interface up. (Note: you could use the
+      <code>
+       ip addr
+      </code>
+      ,
+      <code>
+       ip route
+      </code>
+      , and
+      <code>
+       ip link
+      </code>
+      commands to accomplish the same thing.)
+     </p>
+     <p>
+      Once the veth1 interface is up, you can verify that the network configuration of the blue namespace is completely separate by just using a few different commands. For example, lets assume that your global namespace has physical interfaces in the 172.16.1.0/24 range, and your veth1 interface is in a separate namespace and assigned something from the 10.1.1.0/24 range. You could verify how network namespaces keep the network configuration separate using these commands:
+     </p>
+     <ul>
+      <li>
+       <p>
+        <code>
+         ip addr list
+        </code>
+        in the global namespace will not show
+        <em>
+         any
+        </em>
+        10.1.1.0/24-related interfaces or addresses.
+       </p>
+      </li>
+      <li>
+       <p>
+        <code>
+         ip netns exec blue ip addr list
+        </code>
+        will show
+        <em>
+         only
+        </em>
+        the 10.1.1.0/24-related interfaces and addresses, and will not show any interfaces or addresses from the global namespace.
+       </p>
+      </li>
+      <li>
+       <p>
+        Similarly,
+        <code>
+         ip route list
+        </code>
+        in each namespace will show different routing table entries, including different default gateways.
+       </p>
+      </li>
+     </ul>
+     <h2 id="connecting-network-namespaces-to-the-physical-network">
+      Connecting Network Namespaces to the Physical Network
+     </h2>
+     <p>
+      This part of it threw me for a while. I cant really explain why, but it did. Once Id figured it out, it was obvious. To connect a network namespace to the physical network,
+      <em>
+       just use a bridge.
+      </em>
+      In my case, I used an Open vSwitch (OVS) bridge, but a standard Linux bridge would work as well. Place one or more physical interfaces as well as one of the veth interfaces in the bridge, andbam!there you go. Naturally, if you had different namespaces, youd probably want/need to connect them to different physical networks or different VLANs on the physical network.
+     </p>
+     <p>
+      So there you goan introduction to Linux network namespaces. Its quite likely Ill build on this content later, so while it seems a bit obscure right now just hang on to this knowledge. In the meantime, if you have questions, clarifications, or other information worth sharing with other readers, please feel free to speak up in the comments.
+     </p>
+     <span class="post-date">
+      Tags:
+      <a href="http://blog.scottlowe.org/tags/#CLI">
+       CLI
+      </a>
+      
+      <a href="http://blog.scottlowe.org/tags/#Linux">
+       Linux
+      </a>
+      
+      <a href="http://blog.scottlowe.org/tags/#Networking">
+       Networking
+      </a>
+     </span>
+     <span class="post-date">
+      <i class="fa fa-arrow-circle-left">
+      </i>
+      Previous Post:
+      <a href="/2013/09/03/technology-short-take-35/">
+       Technology Short Take #35
+      </a>
+     </span>
+     <span class="post-date">
+      Next Post:
+      <a href="/2013/09/05/vendor-meetings-at-vmworld-2013/">
+       Vendor Meetings at VMworld 2013
+      </a>
+      <i class="fa fa-arrow-circle-right">
+      </i>
+     </span>
+     <span class="post-sharing">
+      <p>
+       Be social and share this post!
+       <br/>
+       <a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/" title="Share on Facebook">
+        <i class="fa fa-facebook-square fa-2x">
+        </i>
+       </a>
+       <a href="https://twitter.com/intent/tweet?url=http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/&amp;text=Introducing Linux Network Namespaces" title="Share on Twitter">
+        <i class="fa fa-twitter-square fa-2x">
+        </i>
+       </a>
+       <a href="https://plus.google.com/share?url=http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/" title="Share on Google Plus">
+        <i class="fa fa-google-plus-square fa-2x">
+        </i>
+       </a>
+      </p>
+     </span>
+    </div>
+    <div class="related">
+     <h2>
+      Recent Posts
+     </h2>
+     <ul class="related-posts">
+      <li>
+       <h3>
+        <a href="http://blog.scottlowe.org/2015/07/14/technology-short-take-52/">
+         Technology Short Take #52
+         <small>
+          14 Jul 2015
+         </small>
+        </a>
+       </h3>
+      </li>
+      <li>
+       <h3>
+        <a href="http://blog.scottlowe.org/2015/07/02/vlan-trunking-mikrotik-routeros/">
+         VLAN Trunking with Mikrotik RouterOS
+         <small>
+          02 Jul 2015
+         </small>
+        </a>
+       </h3>
+      </li>
+      <li>
+       <h3>
+        <a href="http://blog.scottlowe.org/2015/06/30/fix-for-ubuntu-caching-network-configuration/">
+         A Fix for Ubuntu Apparently Caching Network Configuration
+         <small>
+          30 Jun 2015
+         </small>
+        </a>
+       </h3>
+      </li>
+     </ul>
+    </div>
+   </div>
+  </div>
+  <label class="sidebar-toggle" for="sidebar-checkbox">
+  </label>
+  <script>
+   (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+  </script>
+ </body>
+</html>

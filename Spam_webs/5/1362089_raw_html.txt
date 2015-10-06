@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Frankfurt, The German City That Doesn't Drink Beer  || Jaunted
+  </title>
+  <meta content="Frankfurt, The German City That Doesn't Drink Beer  || Jaunted" name="description"/>
+  <meta content="travel, culture, pop culture" name="keywords"/>
+  <link href="http://www.cdn.sfomedia.com/css_network/jaunted/local.php?v1.0.41" media="screen" rel="stylesheet"/>
+  <link href="http://www.cdn.sfomedia.com/css_network/colorbox.css" media="screen" rel="stylesheet"/>
+  <!--[if lt IE 7]&gt;
+&lt;link rel="stylesheet" href="http://www.cdn.sfomedia.com/css_network/ie6_master.css" media="screen" /&gt;
+&lt;![endif]-->
+  <!--[if IE 7]&gt;&lt;style&gt;
+#content {position:relative;top:40px !important}
+#branding {margin-top: 0px !important}
+&lt;/style&gt;&lt;![endif]-->
+  <link href="http://www.cdn.sfomedia.com/css_network/print.css" media="print" rel="stylesheet"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+  </script>
+  <script src="http://www.sfomedia.com/js-network/global.js">
+  </script>
+  <script src="http://www.cdn.sfomedia.com/js-network/jquery.colorbox-min.js">
+  </script>
+  <script src="http://www.cdn.sfomedia.com/js-network/jquery.validate.min.js">
+  </script>
+  <!--[if lt IE 7]&gt;
+&lt;script src="http://www.cdn.sfomedia.com/js-network/ie6.js"&gt;&lt;/script&gt;
+&lt;![endif]-->
+  <!--LIGHTBOX-->
+  <script>
+   $(document).ready(function(){
+
+	function remove_lb_body_classes(){
+		$("body").removeClass("login-lb-active register-lb-active twitter-lb-active facebook-lb-active foursquare-lb-active");
+	}
+
+	// error response
+	if(false){
+		window.location.hash = "login-error";
+		$.fn.colorbox({ 
+			open: true,
+			href: "/login-lightbox", 
+			scrolling:false, 
+			onComplete:function(){
+				$("#user-login-options .header h2")
+					.text("Login Error")
+					.css({
+						color:'#f00',
+						'text-align':'left'
+					});
+					
+				$("#user-login-options .header p")
+					.text("Your username or password was incorrect.")
+					.css({
+						'font-weight': 'bold',
+						color: '#000',
+						'text-align': 'left',
+						'margin-left': '0 !important'
+					});
+			}
+		});
+	}
+
+	$("#user-login-options a[rel~=popup]").live('click', {
+		width: 950, 
+		height: 640, 
+		scrollbars: 'yes',
+		resizable: 'no', 
+		status: 'no', 
+		location: 'no',
+		toolbar: 'no', 
+		menubar: 'no'
+	}, function(e){
+		e.preventDefault();
+		var prop_str = '';
+		for( prop in e.data ){ prop_str = prop_str + prop + '=' + e.data[prop] + ','; }
+		prop_str = prop_str.substr( 0, prop_str.length - 1 );
+		var newWindow = window.open( e.target.href, '_blank', prop_str );
+		if( newWindow ){ 
+			if( newWindow.focus ) newWindow.focus();
+		}
+	});
+	
+	// register clicked	
+	$("#register.login-lightbox")
+		.bind('click', function(){
+			$("body")
+				.removeClass("login-lb-active register-lb-active")
+				.addClass("register-lb-active");
+			window.location.hash = "register";
+		})
+		.colorbox({
+			href: "/newuser-lightbox", 
+			scrolling:false, 
+			onClosed:function(){
+		    	remove_lb_body_classes();
+		    	window.location.hash = "";
+		  	}
+		});
+	
+	// login clicked
+	$("#login.login-lightbox")
+		.bind('click', function(){
+			$("body")
+				.removeClass("login-lb-active register-lb-active")
+				.addClass("login-lb-active");
+			window.location.hash = "login";
+		})
+		.colorbox({ 
+			href: "/login-lightbox", 
+			scrolling:false, 
+			onClosed:function(){
+			    remove_lb_body_classes();
+			    window.location.hash = "";
+		  	},
+		  	onComplete:function(){
+				$("#forgot-password").colorbox({
+					href: "/accountrecovery-lightbox",
+					iframe: true, width:334, height:334 
+				});
+			}
+		});
+	
+	$().bind('cbox_closed', function(){
+			remove_lb_body_classes();
+		    window.location.hash = "";
+    	});
+	
+	// setup return lightbox for external logins
+	var anchor = self.document.location.hash.substring(1);
+
+	if (anchor === "newuser-twitter") {
+			$("body").addClass("twitter-lb-active");
+			$.fn.colorbox({ open: true,href:"/newuser-lightbox", scrolling:false, onComplete:function(){
+				$("#user-login-options .header h2").text("Twitter Registration");
+				$("#user-login-options .header p").text("We need a valid email account in order to log you in via Twitter. Please enter an email in below and hit submit.");
+				var navInput = $('#user-login-options input[type="text"]');
+				
+		    	if ( navInput.val() === '') {
+		    		 navInput.focus();
+		    		 return false;
+		   		}
+			}});
+		} else if (anchor === "newuser-facebook") {
+			$("body").addClass("facebook-lb-active");
+			$.fn.colorbox({ open: true,href:"/newuser-lightbox", scrolling:false});
+		} else if (anchor === "newuser-foursquare") {
+			$("body").addClass("foursquare-lb-active");
+			$.fn.colorbox({ open: true,href:"/newuser-lightbox", scrolling:false});
+		} else {
+	};
+	
+	$("#local-login").live('click', function(){
+		$('#local-login a').addClass("active");
+		$.fn.colorbox({ open: true,href:"/login-lightbox", scrolling:false});
+			$('body').removeClass('facebook-lb-active twitter-lb-active foursquare-lb-active');
+		});				
+	
+	// form validation
+	$("#registration-form").validate({
+		rules: {
+			email: {
+				required: true,
+				email: true
+			}
+		},
+		messages: {
+			email: {
+				required: "Please enter a valid email address"
+			}
+		}
+	});
+	
+	// what?
+	$('#user-login-options form').submit(function(){
+				
+				var navInput = $('#user-login-options input[type="text"]');
+				var navInput = $('#user-login-options input[type="text"]:first-child');
+				
+		    	if ( navInput.val() === '') {
+		    		 navInput.focus();
+		    		 return false;
+		   		}
+		});
+
+	});
+  </script>
+  <!--/lightbox-->
+  <!--DART Ordinal Creation-->
+  <script>
+   ord=Math.random()*10000000000000000;
+  </script>
+  <!--/DART Ordinal Creation-->
+  <!-- Start Engage Web Tracking Code -->
+  <meta content="www.pages02.net,sfomedia.mkt6770.com,www.hotelchatter.com,www.jaunted.com,www.vegaschatter.com" name="com.silverpop.brandeddomains"/>
+  <script src="http://contentz.mkt922.com/lp/static/js/iMAWebCookie.js?4aa245ac-1482367e8de-1973771dea71da7e4c551ed9f05528be&amp;h=www.pages02.net" type="text/javascript">
+  </script>
+  <!-- End Engage Web Tracking Code -->
+  <script src="http://www.sfomedia.com/vogue_ads/js/cn.js">
+  </script>
+  <script src="http://www.sfomedia.com/vogue_ads/js/cn.dart.js">
+  </script>
+  <script>
+   document.domain = 'jaunted.com';
+CN.dart.init({site:'sfo.jaunted', zone: 'jaunted', kws:[]});
+  </script>
+  <link href="http://www.jaunted.com/favicon.ico" rel="Shortcut Icon" type="image/x-icon"/>
+  <link href="http://www.jaunted.com/story/2013/8/21/15470/2650/travel/Frankfurt%2C+The+German+City+That+Doesn%27t+Drink+Beer+" rel="canonical"/>
+  <meta content="OCsxp9GGoJeJZraqlYv/bWRhphFr8qrP+aRvtaqjGJU=" name="verify-v1"/>
+  <link href="/backend.rdf" rel="alternate" title="Jaunted - The Pop Culture Travel Guide RDF Feed" type="application/rss+xml"/>
+  <meta content="45347958207" property="fb:app_id"/>
+  <meta content="Germany" property="og:country-name"/>
+  <meta content="http://www.jaunted.com/pages/upload/cropped/thumbnail-2013-8-21-15470-2650.jpg" property="og:image"/>
+  <meta content="Frankfurt" property="og:locality"/>
+  <meta content="http://www.jaunted.com/story/2013/8/21/15470/2650" property="og:url"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Frankfurt, The German City That Doesn't Drink Beer " property="og:title"/>
+  <meta content="Jaunted" property="og:site_name"/>
+  <!-- Start of Google Stats Code -->
+  <script type="text/javascript">
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   var pageTracker = _gat._getTracker("UA-100197-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+  </script>
+  <!-- End of Google Stats Code -->
+  <!-- Place this tag in your head or just before your close body tag -->
+  <script src="https://apis.google.com/js/plusone.js" type="text/javascript">
+  </script>
+ </head>
+ <body class="archive" id="story_template">
+  <!-- /// Start Facebook OpenGraph \\\ -->
+  <div id="fb-root">
+  </div>
+  <script>
+   window.fbAsyncInit = function() {
+    FB.init({appId: '45347958207',
+	status: true, cookie: true, xfbml: true});
+
+    $('.fb-comment-post').live('click',function(e) {
+      var cid=e.target.id.substring(11);
+      var sid=e.target.rel;
+      FB.getLoginStatus(function(response) {
+        if (response.session) {
+          $.ajax({ url: "/fbwallpost", data: {sid: sid,cid: cid} , 
+            success: function(){ alert("Your comment was posted to Facebook!"); },
+            error: function(r,txterr){ alert("Facebook Wall Post Failure: '"+txterr+"'\nPlease report this message to help@jaunted.com"); }
+          });
+        } else {
+          FB.Event.unsubscribe('auth.login', function(response) {
+            window.location = "/opengraph/?redirect="+window.location.pathname;
+          });
+          FB.login(function(response) {
+            if (response. authResponse) {
+                window.location = "/opengraph/?auto_post=off&amp;redirect=/fbwallpost/"+sid+"/"+cid;
+            } else {
+              alert("You must first login to Facebook to post this comment to your wall.");
+              // Re-subscribe to the login event if we're skipping the wall post
+              FB.Event.subscribe('auth.login', function(response) {
+                window.location = "/opengraph/?redirect="+window.location.pathname;
+              });
+            }
+          },{scope: 'email,publish_stream'});
+        }
+      });
+    });
+
+    $('#fb-auth-logout, #fb-auth-logout-comments').live('click',function() {
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          FB.logout(function(response) {
+            window.location = "/logout/?redirect="+window.location.pathname;
+          });
+        } else if (response.status === 'not_authorized') {
+          window.location = "/logout/?redirect="+window.location.pathname;
+        } else {   // the user isn't even logged in to Facebook.
+          window.location = "/logout/?redirect="+window.location.pathname;
+        }
+      });
+    });
+
+    $('#fb-auth, #fb-auth-comments, #fb-auth-connect, #facebook-connect-login').live('click',function() {
+      FB.login(function(response) {
+	if(response. authResponse.perms){
+        	window.location = "/opengraph/?redirect="+window.location.pathname;
+	}
+      },{scope: 'email,publish_stream'});
+    });
+    
+    FB.Event.subscribe('auth.login', function(response) {
+      window.location = "/opengraph/?redirect="+window.location.pathname;
+    });
+    FB.Event.subscribe('auth.logout', function(response) {
+      window.location = "/logout/?redirect="+window.location.pathname;
+    });
+    FB.Event.subscribe('edge.create', function(response) {
+      pageTracker._trackEvent('Facebook', 'Like', window.location.pathname);
+    });
+  };
+
+  (function() {
+    var e = document.createElement('script'); e.async = true;
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+  }());
+  </script>
+  <!-- /// End Facebook OpenGraph \\\ -->
+  <div class="topbar">
+   <div class="format">
+    <form action="/alerts" method="post" title="Travel alerts straight to your inbox">
+     <ul class="h">
+      <li>
+       <a class="login-lightbox" href="/login" id="login">
+        Log In (Jaunted)
+       </a>
+      </li>
+      <li>
+       <a class="login-lightbox" href="/newuser" id="register">
+        Register
+       </a>
+      </li>
+      <li class="follow">
+       <ul>
+        <li class="rss">
+         <a href="/backend.rdf">
+          RSS
+         </a>
+        </li>
+        <li class="twitter">
+         <a href="http://www.twitter.com/jaunted">
+          Twitter
+         </a>
+        </li>
+        <li class="facebook">
+         <a href="http://www.facebook.com/Jaunted">
+          Facebook
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </form>
+    <div id="cnt-bar">
+     <ul>
+      <li id="cnt-bar-cntraveler">
+       <a href="http://www.cntraveler.com?mbid=cnt_nav">
+        CN Traveler
+       </a>
+      </li>
+      <li id="cnt-bar-jaunted">
+       <a href="http://www.jaunted.com?mbid=cnt_nav">
+        Jaunted
+       </a>
+      </li>
+      <li id="cnt-bar-hotelchatter">
+       <a href="http://www.hotelchatter.com?mbid=cnt_nav">
+        HotelChatter
+       </a>
+      </li>
+      <li id="cnt-bar-vegaschatter">
+       <a href="http://www.vegaschatter.com?mbid=cnt_nav">
+        VegasChatter
+       </a>
+      </li>
+      <li id="cnt-bar-concierge">
+       <a href="http://www.concierge.com?mbid=cnt_nav">
+        Concierge.com
+       </a>
+      </li>
+      <li id="cnt-bar-echo">
+       Cond Nast Traveler Network
+      </li>
+     </ul>
+    </div>
+   </div>
+   <!--/format-->
+  </div>
+  <!--/topbar-->
+  <div id="container">
+   <div id="branding">
+    <b>
+    </b>
+   </div>
+   <div id="content">
+    <div id="header">
+     <h1>
+      <a href="/" rel="home" title="Jaunted">
+       Jaunted
+      </a>
+     </h1>
+     <div class="leaderboard">
+      <!-- begin ad tag (tile=1) -->
+      <script language="JavaScript" type="text/javascript">
+       /* ord=Math.random()*10000000000000000; */
+
+document.write('&lt;script language="JavaScript1.1" src="http://ad.doubleclick.net/adj/sfo.jaunted/jaunted;kw=sfo;kw=jaunted;kw=de;kw=frankfurt;kw=Germany_Travel;kw=Frankfurt_Travel;kw=Festival_Travel;kw=Drinking_Travel_;u=sfo|jaunted|de|frankfurt|Germany_Travel|Frankfurt_Travel|Festival_Travel|Drinking_Travel_;tile=1;dcopt=ist;sz=728x90;ord=' + ord + '?" type="text/javascript"&gt;&lt;\/script&gt;');
+      </script>
+      <script language="JavaScript" type="text/javascript">
+       if ((!document.images &amp;&amp; navigator.userAgent.indexOf('Mozilla/2.') &gt;= 0) || navigator.userAgent.indexOf("WebTV") &gt;= 0) 
+
+{document.write('&lt;a href="http://ad.doubleclick.net/jump/sfo.jaunted/jaunted;kw=sfo;kw=jaunted;kw=de;kw=frankfurt;kw=Germany_Travel;kw=Frankfurt_Travel;kw=Festival_Travel;kw=Drinking_Travel_;u=sfo|jaunted|de|frankfurt|Germany_Travel|Frankfurt_Travel|Festival_Travel|Drinking_Travel_;tile=1;sz=728x90;ord=123456789?" target="_blank"&gt;&lt;img src="http://ad.doubleclick.net/ad/sfo.jaunted/jaunted;kw=sfo;kw=jaunted;kw=de;kw=frankfurt;kw=Germany_Travel;kw=Frankfurt_Travel;kw=Festival_Travel;kw=Drinking_Travel_;u=sfo|jaunted|de|frankfurt|Germany_Travel|Frankfurt_Travel|Festival_Travel|Drinking_Travel_;tile=1;sz=728x90;ord=123456789?" width="728" height="90" border="0" alt=""&gt;&lt;\/a&gt;');}
+      </script>
+      <noscript>
+       <a href="http://ad.doubleclick.net/jump/sfo.jaunted/jaunted;kw=sfo;kw=jaunted;kw=de;kw=frankfurt;kw=Germany_Travel;kw=Frankfurt_Travel;kw=Festival_Travel;kw=Drinking_Travel_;u=sfo|jaunted|de|frankfurt|Germany_Travel|Frankfurt_Travel|Festival_Travel|Drinking_Travel_;tile=1;sz=728x90;ord=123456789?" target="_blank">
+        <img alt="" border="0" height="90" src="http://ad.doubleclick.net/ad/sfo.jaunted/jaunted;kw=sfo;kw=jaunted;kw=de;kw=frankfurt;kw=Germany_Travel;kw=Frankfurt_Travel;kw=Festival_Travel;kw=Drinking_Travel_;u=sfo|jaunted|de|frankfurt|Germany_Travel|Frankfurt_Travel|Festival_Travel|Drinking_Travel_;tile=1;sz=728x90;ord=123456789?" width="728"/>
+       </a>
+      </noscript>
+      <!-- End ad tag -->
+     </div>
+    </div>
+    <ul id="nav">
+     <li class="sections">
+      <span>
+       <a class="toggleDropNav" href="javascript://" title="Sections">
+        Sections
+       </a>
+      </span>
+      <ul>
+       <li>
+        <a href="/tag/Travel%20News" rel="tag" title="Travel News">
+         Travel News
+        </a>
+       </li>
+       <li>
+        <a href="/maps" rel="tag" title="Travel Maps">
+         Travel Maps
+        </a>
+       </li>
+       <li>
+        <a href="/tag/Airline%20Reviews" rel="tag" title="Airline Reviews">
+         Airline Reviews
+        </a>
+       </li>
+       <li>
+        <a href="/tag/Embedded%20Travel%20Guides" rel="tag" title="Embedded Travel Guidess">
+         Embedded Travel Guides
+        </a>
+       </li>
+       <li>
+        <a href="/tag/Celeb%20Travel" rel="tag" title="Celeb Travel">
+         Celeb Travel
+        </a>
+       </li>
+       <li class="view-all">
+        <a href="/tags">
+         View All Tags 
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="map">
+      <span>
+       <a class="toggleDropNav" href="/browse" title="Search the World">
+        Search the World
+       </a>
+      </span>
+      <ul>
+       <li>
+        <h4>
+         Select a Destination:
+        </h4>
+       </li>
+       <li>
+        <a href="/browse/Africa and Middle East">
+         Africa
+         <span class="amp">
+          &amp;
+         </span>
+         Middle East
+        </a>
+       </li>
+       <li>
+        <a href="/browse/Asia">
+         Asia
+        </a>
+       </li>
+       <li>
+        <a href="/browse/Australia And South Pacific">
+         Australia
+         <span class="amp">
+          &amp;
+         </span>
+         South Pacific
+        </a>
+       </li>
+       <li>
+        <a href="/browse/Central America and Caribbean">
+         Central America
+         <span class="amp">
+          &amp;
+         </span>
+         Caribbean
+        </a>
+       </li>
+       <li>
+        <a href="/browse/Europe">
+         Europe
+        </a>
+       </li>
+       <li>
+        <a href="/browse/South America">
+         South America
+        </a>
+       </li>
+       <li>
+        <a href="/browse/North America">
+         North America
+        </a>
+       </li>
+       <li>
+        <a href="/browse/North America/us">
+         United States
+        </a>
+       </li>
+       <li>
+        <form action="#">
+         <select onchange="javascript:document.location=options[selectedIndex].value;">
+          <option value="#">
+           View All Alphabetically
+          </option>
+          <option value="#">
+           ---------------------
+          </option>
+          <optgroup>
+           <option value="/browse/Africa and Middle East/af">
+            Afghanistan
+           </option>
+           <option value="/browse/Europe/al">
+            Albania
+           </option>
+           <option value="/browse/Australia And South Pacific/as">
+            American Samoa
+           </option>
+           <option value="/browse/Central America and Caribbean/ai">
+            Anguilla
+           </option>
+           <option value="/browse/South America/ar">
+            Argentina
+           </option>
+           <option value="/browse/Europe/am">
+            Armenia
+           </option>
+           <option value="/browse/Central America and Caribbean/aw">
+            Aruba
+           </option>
+           <option value="/browse/Australia And South Pacific/au">
+            Australia
+           </option>
+           <option value="/browse/Europe/at">
+            Austria
+           </option>
+           <option value="/browse/Central America and Caribbean/bs">
+            Bahamas
+           </option>
+           <option value="/browse/Asia/bh">
+            Bahrain
+           </option>
+           <option value="/browse/Asia/bd">
+            Bangladesh
+           </option>
+           <option value="/browse/Central America and Caribbean/bb">
+            Barbados
+           </option>
+           <option value="/browse/Asia/by">
+            Belarus
+           </option>
+           <option value="/browse/Europe/be">
+            Belgium
+           </option>
+           <option value="/browse/Central America and Caribbean/bz">
+            Belize
+           </option>
+           <option value="/browse/Africa and Middle East/bj">
+            Benin
+           </option>
+           <option value="/browse/Central America and Caribbean/bm">
+            Bermuda
+           </option>
+           <option value="/browse/Asia/bt">
+            Bhutan
+           </option>
+           <option value="/browse/South America/bo">
+            Bolivia
+           </option>
+           <option value="/browse/Europe/ba">
+            Bosnia and Herzegovina
+           </option>
+           <option value="/browse/South America/br">
+            Brazil
+           </option>
+           <option value="/browse/Australia And South Pacific/bn">
+            Brunei Darussalam
+           </option>
+           <option value="/browse/Europe/bg">
+            Bulgaria
+           </option>
+           <option value="/browse/Asia/kh">
+            Cambodia
+           </option>
+           <option value="/browse/North America/ca">
+            Canada
+           </option>
+           <option value="/browse/Africa and Middle East/cv">
+            Cape Verde
+           </option>
+           <option value="/browse/Central America and Caribbean/ky">
+            Cayman Islands
+           </option>
+           <option value="/browse/South America/cl">
+            Chile
+           </option>
+           <option value="/browse/Asia/cn">
+            China
+           </option>
+           <option value="/browse/Australia And South Pacific/cc">
+            Cocos (Keeling) Islands
+           </option>
+           <option value="/browse/South America/co">
+            Colombia
+           </option>
+           <option value="/browse/Africa and Middle East/cd">
+            Congo
+           </option>
+           <option value="/browse/Central America and Caribbean/cr">
+            Costa Rica
+           </option>
+           <option value="/browse/Africa and Middle East/ci">
+            Cote D'Ivoire
+           </option>
+           <option value="/browse/Europe/hr">
+            Croatia
+           </option>
+           <option value="/browse/Central America and Caribbean/cu">
+            Cuba
+           </option>
+           <option value="/browse/Africa and Middle East/cy">
+            Cyprus
+           </option>
+           <option value="/browse/Europe/cz">
+            Czech Republic
+           </option>
+           <option value="/browse/Europe/dk">
+            Denmark
+           </option>
+           <option value="/browse/Central America and Caribbean/dm">
+            Dominica
+           </option>
+           <option value="/browse/Central America and Caribbean/do">
+            Dominican Republic
+           </option>
+           <option value="/browse/Central America and Caribbean/ec">
+            Ecuador
+           </option>
+           <option value="/browse/Africa and Middle East/eg">
+            Egypt
+           </option>
+           <option value="/browse/Central America and Caribbean/sv">
+            El Salvador
+           </option>
+           <option value="/browse/Europe/ee">
+            Estonia
+           </option>
+           <option value="/browse/Australia And South Pacific/fj">
+            Fiji
+           </option>
+           <option value="/browse/Europe/fi">
+            Finland
+           </option>
+           <option value="/browse/Europe/fr">
+            France
+           </option>
+           <option value="/browse/ Metropolitan/fx">
+            France
+           </option>
+           <option value="/browse/Australia And South Pacific/pf">
+            French Polynesia
+           </option>
+           <option value="/browse/Australia And South Pacific/tf">
+            French Southern
+           </option>
+           <option value="/browse/Africa and Middle East/ge">
+            Georgia
+           </option>
+           <option value="/browse/Europe/de">
+            Germany
+           </option>
+           <option value="/browse/Africa and Middle East/gh">
+            Ghana
+           </option>
+           <option value="/browse/Europe/gr">
+            Greece
+           </option>
+           <option value="/browse/Europe/gl">
+            Greenland
+           </option>
+           <option value="/browse/Central America and Caribbean/gd">
+            Grenada
+           </option>
+           <option value="/browse/Central America and Caribbean/gp">
+            Guadeloupe
+           </option>
+           <option value="/browse/Central America and Caribbean/gu">
+            Guam
+           </option>
+           <option value="/browse/Central America and Caribbean/gt">
+            Guatemala
+           </option>
+           <option value="/browse/South America/gy">
+            Guyana
+           </option>
+           <option value="/browse/Central America and Caribbean/ht">
+            Haiti
+           </option>
+           <option value="/browse/Central America and Caribbean/hn">
+            Honduras
+           </option>
+           <option value="/browse/Asia/hk">
+            Hong Kong
+           </option>
+           <option value="/browse/Europe/hu">
+            Hungary
+           </option>
+           <option value="/browse/Europe/is">
+            Iceland
+           </option>
+           <option value="/browse/Asia/in">
+            India
+           </option>
+           <option value="/browse/Australia And South Pacific/id">
+            Indonesia
+           </option>
+           <option value="/browse/Africa and Middle East/ir">
+            Iran
+           </option>
+           <option value="/browse/Africa and Middle East/iq">
+            Iraq
+           </option>
+           <option value="/browse/Europe/ie">
+            Ireland
+           </option>
+           <option value="/browse/Africa and Middle East/il">
+            Israel
+           </option>
+           <option value="/browse/Europe/it">
+            Italy
+           </option>
+           <option value="/browse/Central America and Caribbean/jm">
+            Jamaica
+           </option>
+           <option value="/browse/Asia/jp">
+            Japan
+           </option>
+           <option value="/browse/Africa and Middle East/jo">
+            Jordan
+           </option>
+           <option value="/browse/Asia/kz">
+            Kazakhstan
+           </option>
+           <option value="/browse/Africa and Middle East/ke">
+            Kenya
+           </option>
+           <option value="/browse/Australia And South Pacific/ki">
+            Kiribati
+           </option>
+           <option value="/browse/Asia/kp">
+            Korea
+           </option>
+           <option value="/browse/Africa and Middle East/kw">
+            Kuwait
+           </option>
+           <option value="/browse/Asia/kg">
+            Kyrgyzstan
+           </option>
+           <option value="/browse/Asia/la">
+            Laos
+           </option>
+           <option value="/browse/Europe/lv">
+            Latvia
+           </option>
+           <option value="/browse/Africa and Middle East/lb">
+            Lebanon
+           </option>
+           <option value="/browse/Africa and Middle East/ly">
+            Libyan
+           </option>
+           <option value="/browse/Europe/lt">
+            Lithuania
+           </option>
+           <option value="/browse/Europe/lu">
+            Luxembourg
+           </option>
+           <option value="/browse/Australia And South Pacific/mo">
+            Macau
+           </option>
+           <option value="/browse/Europe/mk">
+            Macedonia
+           </option>
+           <option value="/browse/Africa and Middle East/mg">
+            Madagascar
+           </option>
+           <option value="/browse/Africa and Middle East/mw">
+            Malawi
+           </option>
+           <option value="/browse/Asia/my">
+            Malaysia
+           </option>
+           <option value="/browse/Asia/mv">
+            Maldives
+           </option>
+           <option value="/browse/Africa and Middle East/ml">
+            Mali
+           </option>
+           <option value="/browse/Europe/mt">
+            Malta
+           </option>
+           <option value="/browse/Central America and Caribbean/mq">
+            Martinique
+           </option>
+           <option value="/browse/Asia/mu">
+            Mauritius
+           </option>
+           <option value="/browse/North America/mx">
+            Mexico
+           </option>
+           <option value="/browse/Asia/md">
+            Moldova
+           </option>
+           <option value="/browse/Europe/mc">
+            Monaco
+           </option>
+           <option value="/browse/Africa and Middle East/mn">
+            Mongolia
+           </option>
+           <option value="/browse/Africa and Middle East/ma">
+            Morocco
+           </option>
+           <option value="/browse/Africa and Middle East/mz">
+            Mozambique
+           </option>
+           <option value="/browse/Asia/mm">
+            Myanmar
+           </option>
+           <option value="/browse/Africa and Middle East/na">
+            Namibia
+           </option>
+           <option value="/browse/Asia/np">
+            Nepal
+           </option>
+           <option value="/browse/Europe/nl">
+            Netherlands
+           </option>
+           <option value="/browse/Europe/an">
+            Netherlands Antilles
+           </option>
+           <option value="/browse/Australia And South Pacific/nc">
+            New Caledonia
+           </option>
+           <option value="/browse/Australia And South Pacific/nz">
+            New Zealand
+           </option>
+           <option value="/browse/Central America and Caribbean/ni">
+            Nicaragua
+           </option>
+           <option value="/browse/Africa and Middle East/ng">
+            Nigeria
+           </option>
+           <option value="/browse/Asia/kr">
+            North Korea
+           </option>
+           <option value="/browse/Europe/no">
+            Norway
+           </option>
+           <option value="/browse/Africa and Middle East/om">
+            Oman
+           </option>
+           <option value="/browse/Africa and Middle East/pk">
+            Pakistan
+           </option>
+           <option value="/browse/Asia/pw">
+            Palau
+           </option>
+           <option value="/browse/Central America and Caribbean/pa">
+            Panama
+           </option>
+           <option value="/browse/Australia And South Pacific/pg">
+            Papua New Guinea
+           </option>
+           <option value="/browse/South America/py">
+            Paraguay
+           </option>
+           <option value="/browse/South America/pe">
+            Peru
+           </option>
+           <option value="/browse/Asia/ph">
+            Philippines
+           </option>
+           <option value="/browse/Europe/pl">
+            Poland
+           </option>
+           <option value="/browse/Europe/pt">
+            Portugal
+           </option>
+           <option value="/browse/Central America and Caribbean/pr">
+            Puerto Rico
+           </option>
+           <option value="/browse/Africa and Middle East/qa">
+            Qatar
+           </option>
+           <option value="/browse/Europe/ro">
+            Romania
+           </option>
+           <option value="/browse/Europe/ru">
+            Russian Federation
+           </option>
+           <option value="/browse/Africa and Middle East/rw">
+            Rwanda
+           </option>
+           <option value="/browse/Central America and Caribbean/kn">
+            Saint Kitts and Nevis
+           </option>
+           <option value="/browse/Central America and Caribbean/lc">
+            Saint Lucia
+           </option>
+           <option value="/browse/Africa and Middle East/sa">
+            Saudi Arabia
+           </option>
+           <option value="/browse/Australia And South Pacific/sc">
+            Seychelles
+           </option>
+           <option value="/browse/Asia/sg">
+            Singapore
+           </option>
+           <option value="/browse/Europe/sk">
+            Slovakia
+           </option>
+           <option value="/browse/Europe/si">
+            Slovenia
+           </option>
+           <option value="/browse/Australia And South Pacific/sb">
+            Solomon Islands
+           </option>
+           <option value="/browse/Africa and Middle East/so">
+            Somalia
+           </option>
+           <option value="/browse/Africa and Middle East/za">
+            South Africa
+           </option>
+           <option value="/browse/Europe/es">
+            Spain
+           </option>
+           <option value="/browse/Asia/lk">
+            Sri Lanka
+           </option>
+           <option value="/browse/Africa and Middle East/sd">
+            Sudan
+           </option>
+           <option value="/browse/South America/sr">
+            Suriname
+           </option>
+           <option value="/browse/Europe/se">
+            Sweden
+           </option>
+           <option value="/browse/Europe/ch">
+            Switzerland
+           </option>
+           <option value="/browse/Africa and Middle East/sy">
+            Syrian Arab Republic
+           </option>
+           <option value="/browse/Asia/tw">
+            Taiwan
+           </option>
+           <option value="/browse/Africa and Middle East/tz">
+            Tanzania
+           </option>
+           <option value="/browse/Asia/th">
+            Thailand
+           </option>
+           <option value="/browse/Central America and Caribbean/tt">
+            Trinidad and Tobago
+           </option>
+           <option value="/browse/Africa and Middle East/tn">
+            Tunisia
+           </option>
+           <option value="/browse/Africa and Middle East/tr">
+            Turkey
+           </option>
+           <option value="/browse/Africa and Middle East/tm">
+            Turkmenistan
+           </option>
+           <option value="/browse/Central America and Caribbean/tc">
+            Turks and Caicos
+           </option>
+           <option value="/browse/Australia And South Pacific/tv">
+            Tuvalu
+           </option>
+           <option value="/browse/Africa and Middle East/ug">
+            Uganda
+           </option>
+           <option value="/browse/Europe/ua">
+            Ukraine
+           </option>
+           <option value="/browse/Africa and Middle East/ae">
+            United Arab Emirates
+           </option>
+           <option value="/browse/Europe/gb">
+            United Kingdom
+           </option>
+           <option value="/browse/North America/us">
+            United States
+           </option>
+           <option value="/browse/South America/uy">
+            Uruguay
+           </option>
+           <option value="/browse/Asia/uz">
+            Uzbekistan
+           </option>
+           <option value="/browse/Australia And South Pacific/vu">
+            Vanuatu
+           </option>
+           <option value="/browse/Europe/va">
+            Vatican City
+           </option>
+           <option value="/browse/South America/ve">
+            Venezuela
+           </option>
+           <option value="/browse/Asia/vn">
+            Vietnam
+           </option>
+           <option value="/browse/ U.S./vi">
+            Virgin Islands
+           </option>
+           <option value="/browse/ British/vg">
+            Virgin Islands
+           </option>
+           <option value="/browse/Europe/yu">
+            Yugoslavia
+           </option>
+           <option value="/browse/Africa and Middle East/zm">
+            Zambia
+           </option>
+           <option value="/browse/Africa and Middle East/zw">
+            Zimbabwe
+           </option>
+          </optgroup>
+         </select>
+        </form>
+       </li>
+      </ul>
+     </li>
+     <li class="search">
+      <form action="/special/search" id="searchbox_000880140035110026912:lp95katfzbq">
+       <input class="text" maxlength="255" name="q" placeholder="Search Jaunted" size="30" type="text"/>
+       <input name="cx" type="hidden" value="000880140035110026912:lp95katfzbq"/>
+       <input name="cof" type="hidden" value="FORID:11"/>
+       <input alt="Search Jaunted" border="0" class="button" src="http://www.sfomedia.com/images_network/blank.gif" type="image" value="Search"/>
+       <script src="http://www.google.com/coop/cse/brand?form=searchbox_000880140035110026912:lp95katfzbq=en" type="text/javascript">
+       </script>
+       <!-- &lt;script type="text/javascript" src="/pages/google_watermark.js"&gt;&lt;/script&gt; -->
+      </form>
+     </li>
+    </ul>
+    <div id="chaos">
+     <div id="section1">
+      <div class="hfeed">
+       <div class="hentry entry">
+        <h3 class="tags">
+         <a href="/tag/Germany%20Travel" rel="tag" title="Germany Travel">
+          Germany Travel
+         </a>
+         /
+         <a href="/tag/Frankfurt%20Travel" rel="tag" title="Frankfurt Travel">
+          Frankfurt Travel
+         </a>
+         /
+         <a href="/tag/Festival%20Travel" rel="tag" title="Festival Travel">
+          Festival Travel
+         </a>
+         /
+         <a href="/tag/Drinking%20Travel%20" rel="tag" title="Drinking Travel ">
+          Drinking Travel
+         </a>
+         /
+         <a href="/tags" rel="tag" title="View all tags">
+           All Tags
+         </a>
+        </h3>
+        <h2 class="entry-title">
+         Frankfurt, The German City That Doesn't Drink Beer
+        </h2>
+        <div id="where">
+         <b>
+          Where:
+         </b>
+         <a href="/city/Frankfurt">
+          Frankfurt
+         </a>
+         ,
+         <a href="/country/de">
+          Germany
+         </a>
+        </div>
+        <div class="date">
+         <abbr class="updated published">
+          August 23, 2013 at 2:32 PM
+         </abbr>
+         |
+         <span class="vcard">
+          by
+          <a class="url fn n author" href="/user/wakeandwander" rel="author" title="View all posts by wakeandwander">
+           wakeandwander
+          </a>
+         </span>
+         |
+         <a href="/story/2013/8/21/15470/2650#comment-block">
+          Comments (0)
+         </a>
+        </div>
+        <p class="entry-summary">
+        </p>
+        <p>
+         <img class="top" src="http://www.jaunted.com/files/113893/IMG_5040.JPG"/>
+        </p>
+        <p>
+         The city of Frankfurt boasts the largest skyline in Europe (shown above in all its modesty), but that's not why it stands out amongst the crowd. No,
+         <strong>
+          this Germany city has an even bigger secret: It doesn't drink beer.
+         </strong>
+        </p>
+        <p>
+         We know what you're thinking. A German city that doesn't drink beer? Blasphemy! But no, seriously, it's true. In Frankfurt, it's
+         <a href="http://en.wikipedia.org/wiki/Apfelwein">
+          apfelwein
+         </a>
+         (apple wine) that fills the glasses of the locals.
+        </p>
+        <p>
+         Apfelwein is  made in the same way as wine -- by pressing apples and adding yeast -- but it tastes more like a cider and it drinks like a beer with an alcohol content of 4 to 7 percent. It is served to patrons in what's called a bembel (that blue and white pitcher in the photo below) and drank from a special glass called a
+         <a href="https://www.google.com/search?q=geripptes&amp;rlz=1C1CHFX_enUS521US521&amp;tbm=isch&amp;tbo=u&amp;source=univ&amp;sa=X&amp;ei=azkWUtbLMYqqyQHG64HADg&amp;ved=0CCwQsAQ&amp;biw=1241&amp;bih=567">
+          geripptes
+         </a>
+         , which has ridges cut into it to prevent it from slipping out of your hand (back in the day, the Germans ate pork and sausage with their hands while they drank, which made them greasy).
+        </p>
+       </div>
+       <div class="story-body">
+        <p>
+         <img class="top" src="http://www.jaunted.com/files/113893/applewine2.jpg"/>
+        </p>
+        <p>
+         The traditional varietal isn't sweet like Magner's or plain apple juice/cider. It's actually a little tart, very light and very easy to drink. Like wine and grapes, the different types of apples produce different styles of apfelwein, and so it's possible to find versions that have a higher sugar content.
+        </p>
+        <p>
+         An apfelwein festival is held every year in the beginning of August, which is obviously a great time to pass through town. Producers come from the surrounding villages and rural areas to put their product on display, and there are of course the traditional food vendors slinging bratwurst and the like. If you aren't able to time your trip with the festival, head on over to the neighborhood of Sachsenhausen anytime of year for an apfelwein hall crawl. There are a lot apfelwein pubs amongst the small streets and half-timbered houses.
+        </p>
+        <p>
+         Another option is to take a 20-minute ride outside the city limits and visit an actual apfelwien orchard --
+         <strong>
+          a beer garden that serves apfelwein
+         </strong>
+         , if you will. We visited
+         <a href="http://translate.google.com/translate?hl=en&amp;sl=de&amp;u=http://www.obsthof-am-steinberg.de/&amp;prev=/search%3Fq%3DObsthof%2Bam%2BSteinberg%26rlz%3D1C1CHFX_enUS521US521">
+          <strong>
+           Obsthof am Steinberg
+          </strong>
+         </a>
+         and enjoyed the picnic-table seating under the trees, the apples just above our heads.
+        </p>
+        <p>
+         Who would have thought... cider in Germany!
+        </p>
+        <p>
+         <img class="top" src="http://www.jaunted.com/files/113893/applewine.jpg"/>
+        </p>
+        <p>
+        </p>
+        <p>
+         <em>
+          Photos: [Will McGough/Guestaurant]
+         </em>
+        </p>
+       </div>
+      </div>
+      <div class="clearfix" id="services">
+       <ul>
+        <li class="facebook-like-button">
+         <div id="social-facebook-like">
+          <div id="fb-root">
+          </div>
+          <fb:like font="lucida grande" href="http://www.jaunted.com/story/2013/8/21/15470/2650" send="true" show_faces="false" width="225">
+          </fb:like>
+         </div>
+        </li>
+        <li class="google-plus-one-wrapper">
+         <div class="google-plus-one">
+          <g:plusone size="medium">
+          </g:plusone>
+         </div>
+        </li>
+        <li class="share-this">
+         <script>
+          var switchTo5x=true;
+         </script>
+         <script src="http://w.sharethis.com/button/buttons.js">
+         </script>
+         <script>
+          stLight.options({publisher:'63c44d92-48b5-48ef-8765-be42e2eb7e6c', doNotHash: true, doNotCopy: false, hashAddressBar: false});
+         </script>
+         <span class="st_sharethis_button" displaytext="ShareThis" st_username="jaunted" st_via="jaunted">
+         </span>
+         <span class="st_twitter_button" displaytext="Tweet" st_username="jaunted" st_via="jaunted">
+         </span>
+        </li>
+       </ul>
+      </div>
+      <script language="JavaScript">
+       var OutbrainPermaLink='http://www.jaunted.com/story/2013/8/21/15470/2650';
+	var OB_Template = "jaunted";
+	var OB_demoMode = false;
+	var OBITm = "1264442416867";
+	var OB_langJS ='http://widgets.outbrain.com/lang_en.js';
+	if ( typeof(OB_Script)!='undefined' )
+		OutbrainStart();
+	else {
+		var OB_Script = true;
+		var str = '&lt;script src="http://widgets.outbrain.com/OutbrainRater.js" type="text/javascript"&gt;&lt;\/script&gt;';
+		document.write(str);
+	}
+      </script>
+      <div id="comments-container">
+       <a name="comment-block">
+       </a>
+       <div id="comment-count-bar">
+        <h3>
+         Comments (0)
+        </h3>
+        <a href="#postform" id="post-a-comment">
+         Post a Comment
+        </a>
+       </div>
+       <!-- block, story_info -->
+       <p class="story_info">
+        Return to 
+        <a href="/story/2013/8/21/15470/2650">
+         Frankfurt, The German City That Doesn't Drink Beer
+        </a>
+       </p>
+       <!-- x story_info -->
+       <div class="advert">
+        <div class="ad_protect_format">
+         <!-- begin ad tag (tile=4) -->
+         <script language="JavaScript" type="text/javascript">
+          /* ord=Math.random()*10000000000000000; */
+
+document.write('&lt;script language="JavaScript1.1" src="http://ad.doubleclick.net/adj/sfo.hotel/hotel;kw=spot_c;kw=sfo;kw=hotel;tile=4;sz=300x250;ord=' + ord + '?" type="text/javascript"&gt;&lt;\/script&gt;');
+         </script>
+         <script language="JavaScript" type="text/javascript">
+          if ((!document.images &amp;&amp; navigator.userAgent.indexOf('Mozilla/2.') &gt;= 0) || navigator.userAgent.indexOf("WebTV") &gt;= 0) 
+
+{document.write('&lt;a href="http://ad.doubleclick.net/jump/sfo.hotel/hotel;kw=spot_c;kw=sfo;kw=hotel;tile=4;sz=300x250;ord=123456789?" target="_blank"&gt;&lt;img src="http://ad.doubleclick.net/ad/sfo.hotel/hotel;kw=spot_c;kw=sfo;kw=hotel;tile=4;sz=300x250;ord=123456789?" width="300" height="250" border="0" alt=""&gt;&lt;\/a&gt;');}
+         </script>
+         <noscript>
+          <a href="http://ad.doubleclick.net/jump/sfo.hotel/hotel;kw=spot_c;kw=sfo;kw=hotel;tile=4;sz=300x250;ord=123456789?" target="_blank">
+           <img alt="" border="0" height="250" src="http://ad.doubleclick.net/ad/sfo.hotel/hotel;kw=spot_c;kw=sfo;kw=hotel;tile=4;sz=300x250;ord=123456789?" width="300"/>
+          </a>
+         </noscript>
+         <!-- End ad tag -->
+        </div>
+       </div>
+       <div id="comment-login">
+        <a name="postform">
+        </a>
+        <h3>
+         Join the conversation!
+        </h3>
+        <div class="buttons-wrapper">
+         <a class="login-lightbox button blue" href="/login" id="login">
+          Log In to comment.
+         </a>
+         Not a member?
+         <a class="login-lightbox" href="/newuser" id="register">
+          Register
+         </a>
+         .
+        </div>
+       </div>
+      </div>
+      <!--/#comments-container-->
+     </div>
+     <!--/#section1-->
+     <div id="sidebar">
+      <div id="send-tip-container">
+       <p class="send-tip">
+        <a href="mailto:tips@jaunted.com">
+         Send us a tip
+        </a>
+       </p>
+      </div>
+      <!-- begin ad tag (tile=2) -->
+      <div class="dynamic-ad-wrap-b advert clearfix">
+       <div class="dynamic-ad-b ad_protect_format">
+        <a class="close" href="javascript://">
+         
+        </a>
+        <div class="ad-inner" id="topBanner300x250_frame">
+        </div>
+        <script>
+         CN.dart.call('topBanner', {sz:'300x250', kws:['spot_a'], collapse: true});
+        </script>
+       </div>
+      </div>
+      <!-- end ad tag -->
+      <style>
+       .dynamic-ad-wrap-b {
+		position: relative;
+		float: right;
+		border-top: 1px solid #ccc;
+		width: 333px;
+		height: 315px;
+		z-index: 10;
+		overflow: hidden
+	}
+	.big-ad .dynamic-ad-wrap-b {
+		overflow: visible;
+	}
+	.dynamic-ad-b {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 333px;
+		height: 627px;
+	}
+.ad-inner {
+padding: 17px 0 3px 16px;
+}
+	.close {
+position: absolute !important;
+display: none;
+top: 3px;
+right: 3px;
+padding-right: 3px;
+text-align: right;
+	}
+	.big-ad .close {
+		display: block;
+	}
+&lt;/style&gt;
+&lt;script&gt;
+	$(function(){
+		$('.close').click( function(){
+$(this).hide();
+		});
+	});
+&lt;/script&gt;
+
+&lt;div class="popular-stories" style="clear: both"&gt;
+
+&lt;div id="grv-personalization-13"&gt;&lt;/div&gt;
+&lt;script&gt;
+    (function(){
+    window.gravityInsightsParams = {
+      'type': 'content',
+      'action': '',
+      'site_guid': '706e4ffac2020b2de94b458350e2e8c7'
+    };
+    var b,c,d,e,f,g,h,i,j;f=(c=!0===gravityInsightsParams.useGravityUserGuid?1:0)?"":gravityInsightsParams.user_guid||(null!=(h=/grvinsights=([^;]+)/.exec(document.cookie))?h[1]:void 0)||"";g=(d=(null!=(i=window.jQuery)?null!=(j=i.fn)?j.jquery:void 0:void 0)||"",b=gravityInsightsParams.ad||"","http://rma-api.gravity.com/v1/api/intelligence/wl?jq="+d+"&amp;sg="+gravityInsightsParams.site_guid+"&amp;ug="+f+"&amp;ugug="+c+"&amp;pl=13&amp;id=grv-personalization-13&amp;type=iframe&amp;ad="+b);
+    window.grvMakeScript=function(k){var a;a=document.createElement("script");a.type="text/javascript";a.async=!0;a.src=k;return a};e=document.getElementsByTagName("script")[0];g&amp;&amp;e.parentNode.insertBefore(window.grvMakeScript(g),e);})();
+&lt;/script&gt;
+
+	
+		&lt;div class="header"&gt;
+			&lt;h2&gt;Popular Stories&lt;/h2&gt;
+		&lt;/div&gt;
+		&lt;ul&gt;
+							&lt;li class="hentry entry"&gt;
+&lt;span class="m-figure"&gt;
+					&lt;a class="window" href="/story/2015/4/20/151611/736/travel/Heathrow%27s+Brand+New+%27Transportation+Screens%27+Have+Instantly+Become+Our+Favorite+Airport+Amenity++" rel="bookmark" title="Permanent Link: Heathrow's Brand New 'Transportation Screens' Have Instantly Become Our Favorite Airport Amenity  "&gt;&lt;/a&gt;
+					&lt;span class="crop"&gt;&lt;img src="/pages/upload/cropped/thumbnail-2015-4-20-151611-736.jpg" alt="" /&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;span class="m-content"&gt;
+					&lt;h3 class="tags"&gt;
+						&lt;a 
+href="/tag/Travel%20Tips" title="Tag: Travel Tips" rel="category tag"&gt;Travel Tips&lt;/a&gt;
+					&lt;/h3&gt;
+					
+					&lt;h2 class="entry-title"&gt;&lt;a href="/story/2015/4/20/151611/736/travel/Heathrow%27s+Brand+New+%27Transportation+Screens%27+Have+Instantly+Become+Our+Favorite+Airport+Amenity++" rel="bookmark" title="Permanent Link: Heathrow's Brand New 'Transportation Screens' Have Instantly Become Our Favorite Airport Amenity  "&gt;Heathrow's Brand New 'Transportation Screens' Have Instantly Become Our Favorite Airport Amenity  &lt;/a&gt;&lt;/h2&gt;
+	&lt;/span&gt;				
+					&lt;a class="comments" href="/story/2015/4/20/151611/736/travel/Heathrow%27s+Brand+New+%27Transportation+Screens%27+Have+Instantly+Become+Our+Favorite+Airport+Amenity++#comment-block"&gt;4&lt;/a&gt;
+
+				&lt;/li&gt;				&lt;li class="hentry entry"&gt;
+&lt;span class="m-figure"&gt;
+					&lt;a class="window" href="/story/2015/4/14/112127/472/travel/United+Got+Us+to+Montego+Bay+Safely%2C+Albeit+Without+WiFi+or+Custom+Forms" rel="bookmark" title="Permanent Link: United Got Us to Montego Bay Safely, Albeit Without WiFi or Custom Forms"&gt;&lt;/a&gt;
+					&lt;span class="crop"&gt;&lt;img src="/pages/upload/cropped/thumbnail-2015-4-14-112127-472.jpg" alt="" /&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;span class="m-content"&gt;
+					&lt;h3 class="tags"&gt;
+						&lt;a 
+href="/tag/Flight%20Reviews" title="Tag: Flight Reviews" rel="category tag"&gt;Flight Reviews&lt;/a&gt;
+					&lt;/h3&gt;
+					
+					&lt;h2 class="entry-title"&gt;&lt;a href="/story/2015/4/14/112127/472/travel/United+Got+Us+to+Montego+Bay+Safely%2C+Albeit+Without+WiFi+or+Custom+Forms" rel="bookmark" title="Permanent Link: United Got Us to Montego Bay Safely, Albeit Without WiFi or Custom Forms"&gt;United Got Us to Montego Bay Safely, Albeit Without WiFi or Custom Forms&lt;/a&gt;&lt;/h2&gt;
+	&lt;/span&gt;				
+					&lt;a class="comments" href="/story/2015/4/14/112127/472/travel/United+Got+Us+to+Montego+Bay+Safely%2C+Albeit+Without+WiFi+or+Custom+Forms#comment-block"&gt;4&lt;/a&gt;
+
+				&lt;/li&gt;				&lt;li class="hentry entry"&gt;
+&lt;span class="m-figure"&gt;
+					&lt;a class="window" href="/story/2015/3/9/132513/4197/travel/Your+Short+%28But+Not+Too+Short%29+Introduction+to+The+Phallic+Travel+Trail+" rel="bookmark" title="Permanent Link: Your Short (But Not Too Short) Introduction to The Phallic Travel Trail "&gt;&lt;/a&gt;
+					&lt;span class="crop"&gt;&lt;img src="/pages/upload/cropped/thumbnail-2015-3-9-132513-4197.jpg" alt="" /&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;span class="m-content"&gt;
+					&lt;h3 class="tags"&gt;
+						&lt;a 
+href="/tag/Phallic%20Travel" title="Tag: Phallic Travel" rel="category tag"&gt;Phallic Travel&lt;/a&gt;
+					&lt;/h3&gt;
+					
+					&lt;h2 class="entry-title"&gt;&lt;a href="/story/2015/3/9/132513/4197/travel/Your+Short+%28But+Not+Too+Short%29+Introduction+to+The+Phallic+Travel+Trail+" rel="bookmark" title="Permanent Link: Your Short (But Not Too Short) Introduction to The Phallic Travel Trail "&gt;Your Short (But Not Too Short) Introduction to The Phallic Travel Trail &lt;/a&gt;&lt;/h2&gt;
+	&lt;/span&gt;				
+					&lt;a class="comments" href="/story/2015/3/9/132513/4197/travel/Your+Short+%28But+Not+Too+Short%29+Introduction+to+The+Phallic+Travel+Trail+#comment-block"&gt;2&lt;/a&gt;
+
+				&lt;/li&gt;				&lt;li class="hentry entry"&gt;
+&lt;span class="m-figure"&gt;
+					&lt;a class="window" href="/story/2015/3/2/10155/83286/travel/Wait%2C+What%3F+Tickets+for+Disney+World+and+Disneyland+Now+Cost+How+Much%3F+" rel="bookmark" title="Permanent Link: Wait, What? Tickets for Disney World and Disneyland Now Cost How Much? "&gt;&lt;/a&gt;
+					&lt;span class="crop"&gt;&lt;img src="/pages/upload/cropped/thumbnail-2015-3-2-10155-83286.jpg" alt="" /&gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;span class="m-content"&gt;
+					&lt;h3 class="tags"&gt;
+						&lt;a 
+href="/tag/Disney" title="Tag: Disney" rel="category tag"&gt;Disney&lt;/a&gt;
+					&lt;/h3&gt;
+					
+					&lt;h2 class="entry-title"&gt;&lt;a href="/story/2015/3/2/10155/83286/travel/Wait%2C+What%3F+Tickets+for+Disney+World+and+Disneyland+Now+Cost+How+Much%3F+" rel="bookmark" title="Permanent Link: Wait, What? Tickets for Disney World and Disneyland Now Cost How Much? "&gt;Wait, What? Tickets for Disney World and Disneyland Now Cost How Much? &lt;/a&gt;&lt;/h2&gt;
+	&lt;/span&gt;				
+					&lt;a class="comments" href="/story/2015/3/2/10155/83286/travel/Wait%2C+What%3F+Tickets+for+Disney+World+and+Disneyland+Now+Cost+How+Much%3F+#comment-block"&gt;6&lt;/a&gt;
+
+				&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/div&gt;
+
+			
+
+
+&lt;div id="follow-us"&gt;
+&lt;div class="header"&gt;
+	&lt;h2&gt;Follow Us&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class="wrapper"&gt;
+	&lt;ul&gt;
+		&lt;li class="twitter"&gt;&lt;a href="http://www.twitter.com/jaunted" title="Twitter"&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+		&lt;li class="facebook"&gt;&lt;a href="http://www.facebook.com/pages/Jaunted/47127764082?ref=ts" title-"Facebook"&gt;Facebook&lt;/a&gt;&lt;/li&gt;
+		&lt;li class="rss"&gt;&lt;a href="/backend.rdf" title="RSS"&gt;RSS&lt;/a&gt;&lt;/li&gt;
+		&lt;li class="foursquare"&gt;&lt;a href="http://foursquare.com/jaunted" title="Foursquare"&gt;Foursquare&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+		&lt;/div&gt;&lt;!-- End Sidebar --&gt;
+    &lt;/div&gt;&lt;!--/#chaos--&gt;
+    &lt;div id="paper"&gt;&lt;/div&gt;
+	&lt;div id="footer"&gt;
+		&lt;p class="publications"&gt;
+			&lt;h4&gt;Our Publications:&lt;/h4&gt;
+			&lt;a href="http://www.jaunted.com" title="Jaunted: The Pop Culture Travel Guide" rel="home"&gt;Jaunted&lt;/a&gt; | 
+			&lt;a href="http://www.hotelchatter.com" title="HotelChatter: Where to Stay when You Leave" rel="friend colleague" rev="vote-for"&gt;HotelChatter&lt;/a&gt; | 
+			&lt;a href="http://www.vegaschatter.com" title="VegasChatter: So Bright You Can See It From Space" rel="friend colleague" rev="vote-for"&gt;VegasChatter&lt;/a&gt;
+		&lt;/p&gt;
+		&lt;div id="sub_footer"&gt;
+			&lt;a href="/special/about" title="About Jaunted"&gt;About&lt;/a&gt; | &lt;a href="/special/contact" title="Contact Jaunted"&gt;Contact&lt;/a&gt; | &lt;a href="http://www.jaunted.com/special/site_credits"&gt;Full Masthead&lt;/a&gt; | &lt;a href="/special/press"&gt;Press&lt;/a&gt; | &lt;a href="/special/advertise"&gt;Advertise on Jaunted&lt;/a&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;&lt;!--/footer--&gt;
+&lt;/div&gt;&lt;!--/content --&gt;
+&lt;div class="global-footer-copyright"&gt;
+      &lt;div class="copy"&gt;
+         Use of this Site constitutes acceptance of our &lt;a href="http://www.condenast.com/services/privacy/" onclick="window.open(this.href);return false;"&gt;User Agreement &lt;/a&gt; (effective 3/21/12) and &lt;a href=" http://www.condenast.com/privacy-policy#privacypolicy" onclick="window.open(this.href);return false;"&gt;Privacy Policy&lt;/a&gt; &lt;span class="revision-date"&gt; (effective 3/21/12)&lt;/span&gt;.  &lt;spring:message code="siteMagName" /&gt; &copy; &lt;script&gt;now = new Date; theYear=now.getYear(); if (theYear &lt; 1900) { theYear=theYear+1900 } document.write(theYear);&lt;/script&gt;  Cond&eacute; Nast.  Your &lt;a href="http://www.condenast.com/privacy-policy#privacypolicy-california"&gt;California Privacy Rights&lt;/a&gt;. All rights reserved.   The material on this site may not be reproduced, distributed, transmitted, cached or otherwise used, except with the prior written permission of Cond&eacute; Nast.
+	&lt;/div&gt;
+    &lt;div class="add-choice"&gt;
+    	&lt;a href="http://www.condenast.com/privacy-policy#privacypolicy-optout" onclick="window.open(this.href);return false;"&gt;Ad Choices&lt;/a&gt;
+    	&lt;a href="http://www.condenast.com/privacy-policy#privacypolicy-optout" onclick="window.open(this.href);return false;"&gt;&lt;img src="http://www.sfomedia.com/images_network/ico_ad_choices_arrow.png" alt="" /&gt;&lt;/a&gt;
+	&lt;/div&gt;
+&lt;/div&gt;&lt;!--/copyright--&gt;
+&lt;/div&gt;&lt;!--/container --&gt;
+&lt;!-- Start of StatCounter Code --&gt;
+&lt;script type="text/javascript" language="javascript"&gt;
+var sc_project=707603; 
+var sc_partition=5; 
+var sc_security="d2ffb1fd"; 
+var sc_invisible=1; 
+&lt;/script&gt;
+
+&lt;script type="text/javascript" language="javascript" src="http://www.statcounter.com/counter/counter.js"&gt;&lt;/script&gt;&lt;noscript&gt;&lt;a href="http://www.statcounter.com/" target="_blank"&gt;&lt;img  src="http://c6.statcounter.com/counter.php?sc_project=707603&amp;java=0&amp;security=d2ffb1fd&amp;invisible=1" alt="web statistics" border="0"&gt;&lt;/a&gt; &lt;/noscript&gt;
+&lt;!-- End of StatCounter Code --&gt;
+&lt;!-- Begin comScore Tag --&gt;
+&lt;script&gt;
+    document.write(unescape("%3Cscript src='" + (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js' %3E%3C/script%3E"));
+&lt;/script&gt;
+
+&lt;script&gt;
+  COMSCORE.beacon({
+    c1:2,
+    c2:6035094,
+    c3:"",
+    c4:"",
+    c5:"",
+    c6:"",
+    c15:""
+  });
+&lt;/script&gt;
+&lt;noscript&gt;
+  &lt;img src="http://b.scorecardresearch.com/p?c1=2&amp;c2=6035094&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c15=&amp;cj=1" /&gt;
+&lt;/noscript&gt;
+&lt;!-- End comScore Tag --&gt;
+&lt;script type="text/javascript"&gt;
+/* var _sf_async_config={uid:6785,domain:"jaunted.com"}; */
+
+var _sf_async_config={uid:6785,domain:"jaunted.com",sections:"displaystory,Germany Travel, Frankfurt Travel, Festival Travel, Drinking Travel ",authors:"wakeandwander"};
+
+
+    (function(){
+      function loadChartbeat() {
+        window._sf_endpt=(new Date()).getTime();
+        var e = document.createElement('script');
+        e.setAttribute('language', 'javascript');
+        e.setAttribute('type', 'text/javascript');
+        e.setAttribute('src',
+           (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+           'js/chartbeat.js');
+        document.body.appendChild(e);
+      }
+      var oldonload = window.onload;
+      window.onload = (typeof window.onload != 'function') ?
+         loadChartbeat : function() { oldonload(); loadChartbeat(); };
+    })();
+
+&lt;/script&gt;
+&lt;script language="JavaScript" type="text/javascript"&gt;&lt;!--
+var s_account = "conde-concierge";
+var s_linkInternalFilters="javascript:,concierge.com,advancemags.com,cntraveler.com,hotelchatter.com,jaunted.com,vegaschatter.com";
+var s_trackingServer="stats.concierge.com";
+var s_trackingServerSecure="sstats.concierge.com";
+//--&gt;
+&lt;/script&gt;
+&lt;script language="JavaScript" type="text/javascript" src="http://www.concierge.com/scripts/s_code.js"&gt;&lt;/script&gt;
+&lt;script language="JavaScript" type="text/javascript"&gt;&lt;!--
+/* You may give each page an identifying name, server, and channel on
+the next lines. */
+s.pageName=""
+s.prop6="sfo"
+s.prop7="sfo/jaunted"
+/* Conversion Variables */
+s.events="event2"
+/* Hierarchy Variables */
+s.hier1="sfo,jaunted"
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//--&gt;&lt;/script&gt;
+&lt;script language="JavaScript" type="text/javascript"&gt;&lt;!--
+if(navigator.appVersion.indexOf('MSIE')&gt;=0)document.write(unescape('%3C')+'\!-'+'-')
+//--&gt;&lt;/script&gt;&lt;noscript&gt;&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img
+src="http://condenast.112.2o7.net/b/ss/conde-concierge/1/H.22.1--NS/0"
+height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;&lt;/noscript&gt;&lt;!--/DO NOT REMOVE/--&gt;
+
+&lt;!-- End SiteCatalyst code version: H.22.1. --&gt;
+
+&lt;script type='text/javascript'&gt;
+  //&lt;![CDATA[
+    (function(){
+    window.gravityInsightsParams = {
+      'type': 'content',
+      'action': '',
+      'site_guid': '706e4ffac2020b2de94b458350e2e8c7'
+    };
+    var b,c;b="https:"===document.location.protocol?"https://b-ssl.grvcdn.com/moth-min.js":"http://b.grvcdn.com/moth-min.js";window.grvMakeScript=function(d){var a;a=document.createElement("script");a.type="text/javascript";a.async=!0;a.src=d;return a};c=document.getElementsByTagName("script")[0];b&amp;&amp;c.parentNode.insertBefore(window.grvMakeScript(b),c);})();
+  //]]&gt;
+&lt;/script&gt;
+&lt;!-- START Parse.ly Include: Standard --&gt;
+    &lt;div id="parsely-root" style="display: none"&gt;
+      &lt;div id="parsely-cfg" data-parsely-site="jaunted.com"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+    (function(s, p, d) {
+      var h=d.location.protocol, i=p+"-"+s, 
+          e=d.getElementById(i), r=d.getElementById(p+"-root"),
+          u=h==="https:"?"d1z2jf7jlzjs58.cloudfront.net"
+          :"static."+p+".com";
+      if (e) return;
+      e = d.createElement(s); e.id = i; e.async = true; 
+      e.src = h+"//"+u+"/p.js"; r.appendChild(e);
+    })("script", "parsely", document);
+    &lt;/script&gt;
+    &lt;!-- END Parse.ly Include --&gt; 
+
+
+&lt;script src="http://tags.crwdcntrl.net/c/315/cc_af.js"&gt;&lt;/script&gt;
+    
+&lt;script type="text/javascript"&gt;
+pageTracker._trackPageview('/authorstats/2013/8/wakeandwander/Frankfurt%2C+The+German+City+That+Doesn%27t+Drink+Beer+');
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+      </style>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

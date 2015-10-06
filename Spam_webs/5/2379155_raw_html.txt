@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html class="client-nojs" dir="ltr" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   dm-crypt - ArchWiki
+  </title>
+  <meta content="MediaWiki 1.25.1" name="generator"/>
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <link href="/opensearch_desc.php" rel="search" title="ArchWiki (en)" type="application/opensearchdescription+xml"/>
+  <link href="https://wiki.archlinux.org/api.php?action=rsd" rel="EditURI" type="application/rsd+xml"/>
+  <link href="/index.php/Dm-crypt" hreflang="x-default" rel="alternate"/>
+  <link href="http://www.gnu.org/copyleft/fdl.html" rel="copyright"/>
+  <link href="/index.php?title=Special:RecentChanges&amp;feed=atom" rel="alternate" title="ArchWiki Atom feed" type="application/atom+xml"/>
+  <link href="/index.php/Dm-crypt" rel="canonical"/>
+  <link href="https://wiki.archlinux.org/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.content.externallinks%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cskins.archlinux.styles&amp;only=styles&amp;skin=archlinux&amp;*" rel="stylesheet"/>
+  <!--[if IE 6]&gt;&lt;link rel="stylesheet" href="/skins/ArchLinux/IE60Fixes.css?303" media="screen" /&gt;&lt;![endif]-->
+  <!--[if IE 7]&gt;&lt;link rel="stylesheet" href="/skins/ArchLinux/IE70Fixes.css?303" media="screen" /&gt;&lt;![endif]-->
+  <meta content="" name="ResourceLoaderDynamicStyles"/>
+  <link href="https://wiki.archlinux.org/load.php?debug=false&amp;lang=en&amp;modules=site&amp;only=styles&amp;skin=archlinux&amp;*" rel="stylesheet"/>
+  <style>
+  </style>
+  <script src="https://wiki.archlinux.org/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=archlinux&amp;*">
+  </script>
+  <script>
+   if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Dm-crypt","wgTitle":"Dm-crypt","wgCurRevisionId":379508,"wgRevisionId":379508,"wgArticleId":2625,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Encryption","File systems"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Dm-crypt","wgRelevantArticleId":2625,"wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgRedirectedFrom":"System_Encryption_with_LUKS_for_dm-crypt","wgInternalRedirectTargetUrl":"/index.php/Dm-crypt"});
+}
+  </script>
+  <script>
+   if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\"});});
+/* cache key: archwiki:resourceloader:filter:minify-js:7:a5c52c063dc436c1ca7c9f456936a5e9 */
+}
+  </script>
+  <script>
+   if(window.mw){
+mw.loader.load(["mediawiki.action.view.redirect","mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax"]);
+}
+  </script>
+ </head>
+ <body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Dm-crypt skin-archlinux action-view">
+  <div id="archnavbar">
+   <!-- Arch Linux global navigation bar -->
+   <div id="archnavbarlogo">
+    <p>
+     <a href="https://www.archlinux.org/" id="logo">
+     </a>
+    </p>
+   </div>
+   <div id="archnavbarmenu">
+    <ul id="archnavbarlist">
+     <li id="anb-home">
+      <a href="https://www.archlinux.org/">
+       Home
+      </a>
+     </li>
+     <li id="anb-packages">
+      <a href="https://www.archlinux.org/packages/">
+       Packages
+      </a>
+     </li>
+     <li id="anb-forums">
+      <a href="https://bbs.archlinux.org/">
+       Forums
+      </a>
+     </li>
+     <li class="anb-selected" id="anb-wiki">
+      <a href="https://wiki.archlinux.org/">
+       Wiki
+      </a>
+     </li>
+     <li id="anb-bugs">
+      <a href="https://bugs.archlinux.org/">
+       Bugs
+      </a>
+     </li>
+     <li id="anb-aur">
+      <a href="https://aur.archlinux.org/">
+       AUR
+      </a>
+     </li>
+     <li id="anb-download">
+      <a href="https://www.archlinux.org/download/">
+       Download
+      </a>
+     </li>
+    </ul>
+   </div>
+  </div>
+  <!-- #archnavbar -->
+  <div id="globalWrapper">
+   <div id="column-content">
+    <div class="mw-body" id="content" role="main">
+     <a id="top">
+     </a>
+     <div class="mw-indicators">
+     </div>
+     <h1 class="firstHeading" id="firstHeading" lang="en">
+      dm-crypt
+     </h1>
+     <div class="mw-body-content" id="bodyContent">
+      <div id="siteSub">
+       From ArchWiki
+      </div>
+      <div id="contentSub">
+       <span class="mw-redirectedfrom">
+        (Redirected from
+        <a href="/index.php?title=System_Encryption_with_LUKS_for_dm-crypt&amp;redirect=no" title="System Encryption with LUKS for dm-crypt">
+         System Encryption with LUKS for dm-crypt
+        </a>
+        )
+       </span>
+      </div>
+      <div class="mw-jump" id="jump-to-nav">
+       Jump to:
+       <a href="#column-one">
+        navigation
+       </a>
+       ,
+       <a href="#searchInput">
+        search
+       </a>
+      </div>
+      <!-- start content -->
+      <div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en">
+       <p>
+        <span>
+        </span>
+       </p>
+       <div style="float:right; clear:right; width:25%; margin: 0 0 0.5em 0.5em;">
+        <p style="background:#333; color:white; padding:0.2em; border-bottom:5px #08c solid; margin:0; text-align:center; font-weight:bold;">
+         Related articles
+        </p>
+        <ul style="list-style-type:none; margin:0; padding:0.3em;">
+         <li style="padding:0.4em 0; line-height:1;">
+          <a href="/index.php/Disk_encryption" title="Disk encryption">
+           Disk encryption
+          </a>
+         </li>
+         <li style="padding:0.4em 0; line-height:1;">
+          <a href="/index.php/Removing_System_Encryption" title="Removing System Encryption">
+           Removing System Encryption
+          </a>
+         </li>
+        </ul>
+       </div>
+       <p>
+        From the cryptsetup project's
+        <a class="external text" href="https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt" rel="nofollow">
+         wiki
+        </a>
+        :
+       </p>
+       <dl>
+        <dd>
+         Device-mapper is infrastructure in the Linux 2.6 and 3.x kernel that provides a generic way to create virtual layers of block devices. Device-mapper crypt target provides transparent encryption of block devices using the kernel crypto API. The user can basically specify one of the symmetric ciphers, an encryption mode, a key (of any allowed size), an iv generation mode and then the user can create a new block device in /dev. Writes to this device will be encrypted and reads decrypted. You can mount your filesystem on it as usual or stack dm-crypt device with another device like RAID or LVM volume. Basic documentation of dm-crypt mapping table comes with kernel source and the latest version is available in git repository.
+        </dd>
+       </dl>
+       <div class="toc" id="toc">
+        <div id="toctitle">
+         <h2>
+          Contents
+         </h2>
+        </div>
+        <ul>
+         <li class="toclevel-1 tocsection-1">
+          <a href="#Common_scenarios">
+           <span class="tocnumber">
+            1
+           </span>
+           <span class="toctext">
+            Common scenarios
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-2">
+          <a href="#Drive_preparation">
+           <span class="tocnumber">
+            2
+           </span>
+           <span class="toctext">
+            Drive preparation
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-3">
+          <a href="#Device_encryption">
+           <span class="tocnumber">
+            3
+           </span>
+           <span class="toctext">
+            Device encryption
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-4">
+          <a href="#System_configuration">
+           <span class="tocnumber">
+            4
+           </span>
+           <span class="toctext">
+            System configuration
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-5">
+          <a href="#Swap_device_encryption">
+           <span class="tocnumber">
+            5
+           </span>
+           <span class="toctext">
+            Swap device encryption
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-6">
+          <a href="#Specialties">
+           <span class="tocnumber">
+            6
+           </span>
+           <span class="toctext">
+            Specialties
+           </span>
+          </a>
+         </li>
+         <li class="toclevel-1 tocsection-7">
+          <a href="#See_also">
+           <span class="tocnumber">
+            7
+           </span>
+           <span class="toctext">
+            See also
+           </span>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <h2>
+        <span class="mw-headline" id="Common_scenarios">
+         Common scenarios
+        </span>
+       </h2>
+       <p>
+        This section introduces common scenarios to employ
+        <i>
+         dm-crypt
+        </i>
+        to encrypt a system or individual filesystem mount points. The scenarios cross-link to the other subpages where needed. It is meant as starting point to familiarize with different practical encryption procedures.
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Encrypting_a_non-root_file_system" title="Dm-crypt/Encrypting a non-root file system">
+         Dm-crypt/Encrypting a non-root file system
+        </a>
+        if you need to encrypt a device that is not used for booting a system, like a
+        <a href="/index.php/Dm-crypt/Encrypting_a_non-root_file_system#Partition" title="Dm-crypt/Encrypting a non-root file system">
+         partition
+        </a>
+        or a
+        <a href="/index.php/Dm-crypt/Encrypting_a_non-root_file_system#Loop_device" title="Dm-crypt/Encrypting a non-root file system">
+         loop device
+        </a>
+        .
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Encrypting_an_entire_system" title="Dm-crypt/Encrypting an entire system">
+         Dm-crypt/Encrypting an entire system
+        </a>
+        if you want to encrypt an entire system, in particular a root partition. Several scenarios are covered, including the use of
+        <i>
+         dm-crypt
+        </i>
+        with the
+        <i>
+         LUKS
+        </i>
+        extension,
+        <i>
+         plain
+        </i>
+        mode encryption and encryption and
+        <i>
+         LVM
+        </i>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="Drive_preparation">
+         Drive preparation
+        </span>
+       </h2>
+       <p>
+        This step will deal with operations like
+        <a href="/index.php/Dm-crypt/Drive_preparation#Secure_erasure_of_the_hard_disk_drive" title="Dm-crypt/Drive preparation">
+         securely erasing the drive
+        </a>
+        and
+        <i>
+         dm-crypt
+        </i>
+        specific points for
+        <a href="/index.php/Dm-crypt/Drive_preparation#Partitioning" title="Dm-crypt/Drive preparation">
+         partitioning it
+        </a>
+        .
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Drive_preparation" title="Dm-crypt/Drive preparation">
+         Dm-crypt/Drive preparation
+        </a>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="Device_encryption">
+         Device encryption
+        </span>
+       </h2>
+       <p>
+        This section covers how to manually utilize dm-crypt to encrypt a system through the
+        <a href="/index.php/Dm-crypt/Device_encryption#Cryptsetup_usage" title="Dm-crypt/Device encryption">
+         cryptsetup
+        </a>
+        command. It covers examples of the
+        <a href="/index.php/Dm-crypt/Device_encryption#Encryption_options_with_dm-crypt" title="Dm-crypt/Device encryption">
+         Encryption options with dm-crypt
+        </a>
+        , deals with the creation of
+        <a href="/index.php/Dm-crypt/Device_encryption#Keyfiles" title="Dm-crypt/Device encryption">
+         keyfiles
+        </a>
+        , LUKS specific commands for
+        <a href="/index.php/Dm-crypt/Device_encryption#Key_management" title="Dm-crypt/Device encryption">
+         key management
+        </a>
+        as well as for
+        <a href="/index.php/Dm-crypt/Device_encryption#Backup_and_restore" title="Dm-crypt/Device encryption">
+         Backup and restore
+        </a>
+        .
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Device_encryption" title="Dm-crypt/Device encryption">
+         Dm-crypt/Device encryption
+        </a>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="System_configuration">
+         System configuration
+        </span>
+       </h2>
+       <p>
+        This page illustrates how to configure
+        <a href="/index.php/Dm-crypt/System_configuration#mkinitcpio" title="Dm-crypt/System configuration">
+         mkinitcpio
+        </a>
+        , the
+        <a href="/index.php/Dm-crypt/System_configuration#Boot_loader" title="Dm-crypt/System configuration">
+         boot loader
+        </a>
+        and the
+        <a href="/index.php/Dm-crypt/System_configuration#crypttab" title="Dm-crypt/System configuration">
+         crypttab
+        </a>
+        file when encrypting a system.
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/System_configuration" title="Dm-crypt/System configuration">
+         Dm-crypt/System configuration
+        </a>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="Swap_device_encryption">
+         Swap device encryption
+        </span>
+       </h2>
+       <p>
+        A swap partition may be added to an encrypted system, if required. The swap partition must be encrypted as well to protect any data swapped out by the system. This part details methods
+        <a class="mw-redirect" href="/index.php/Dm-crypt_with_LUKS/Swap_Encryption#Without_suspend-to-disk_support" title="Dm-crypt with LUKS/Swap Encryption">
+         without
+        </a>
+        and
+        <a class="mw-redirect" href="/index.php/Dm-crypt_with_LUKS/Swap_Encryption#With_suspend-to-disk_support" title="Dm-crypt with LUKS/Swap Encryption">
+         with
+        </a>
+        suspend-to-disk support.
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Swap_encryption" title="Dm-crypt/Swap encryption">
+         Dm-crypt/Swap encryption
+        </a>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="Specialties">
+         Specialties
+        </span>
+       </h2>
+       <p>
+        This part deals with special operations like
+        <a href="/index.php/Dm-crypt/Specialties#Securing_the_unencrypted_boot_partition" title="Dm-crypt/Specialties">
+         securing the unencrypted boot partition
+        </a>
+        ,
+        <a href="/index.php/Dm-crypt/Specialties#Using_GPG_or_OpenSSL_Encrypted_Keyfiles" title="Dm-crypt/Specialties">
+         using GPG or OpenSSL encrypted keyfiles
+        </a>
+        , a method to
+        <a href="/index.php/Dm-crypt/Specialties#Remote_unlocking_of_the_root_.28or_other.29_partition" title="Dm-crypt/Specialties">
+         boot and unlock via the network
+        </a>
+        , another for
+        <a href="/index.php/Dm-crypt/Specialties#Discard.2FTRIM_support_for_solid_state_drives_.28SSD.29" title="Dm-crypt/Specialties">
+         setting up discard/TRIM for a SSD
+        </a>
+        , and sections dealing with
+        <a href="/index.php/Dm-crypt/Specialties#The_encrypt_hook_and_multiple_disks" title="Dm-crypt/Specialties">
+         the encrypt hook and multiple disks
+        </a>
+        .
+       </p>
+       <p>
+        See
+        <a href="/index.php/Dm-crypt/Specialties" title="Dm-crypt/Specialties">
+         Dm-crypt/Specialties
+        </a>
+        .
+       </p>
+       <h2>
+        <span class="mw-headline" id="See_also">
+         See also
+        </span>
+       </h2>
+       <ul>
+        <li>
+         <a class="external text" href="https://gitlab.com/cryptsetup/cryptsetup/wikis/DMCrypt" rel="nofollow">
+          dm-crypt
+         </a>
+         - The project homepage
+        </li>
+        <li>
+         <a class="external text" href="https://gitlab.com/cryptsetup/cryptsetup" rel="nofollow">
+          cryptsetup
+         </a>
+         - The LUKS homepage and
+         <a class="external text" href="https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions" rel="nofollow">
+          FAQ
+         </a>
+         - the main and foremost help resource.
+        </li>
+        <li>
+         <a class="external text" href="https://git.kernel.org/cgit/utils/cryptsetup/cryptsetup.git/" rel="nofollow">
+          cryptsetup repository
+         </a>
+         and
+         <a class="external text" href="https://www.kernel.org/pub/linux/utils/cryptsetup/" rel="nofollow">
+          release
+         </a>
+         archive.
+        </li>
+        <li>
+         <a class="external text" href="https://github.com/t-d-k/doxbox" rel="nofollow">
+          DOXBOX
+         </a>
+         - Supports unlocking LUKS encrypted volumes in Microsoft Windows.
+        </li>
+       </ul>
+       <!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 62/1000000
+Preprocessor generated node count: 175/1000000
+Postexpand include size: 761/2097152 bytes
+Template argument size: 57/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+       <!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.357      1 - -total
+ 36.86%    2.343      1 - Template:Related_articles_start
+ 21.21%    1.348      1 - Template:Lowercase_title
+ 19.89%    1.264      2 - Template:Related
+ 19.52%    1.241      1 - Template:META_Related_articles_start
+ 16.08%    1.022      1 - Template:Related_articles_end
+-->
+       <!-- Saved in parser cache with key archwiki:pcache:idhash:2625-0!*!0!!en!*!* and timestamp 20150713151600 and revision id 379508
+ -->
+      </div>
+      <div class="printfooter">
+       Retrieved from "
+       <a dir="ltr" href="https://wiki.archlinux.org/index.php?title=Dm-crypt&amp;oldid=379508">
+        https://wiki.archlinux.org/index.php?title=Dm-crypt&amp;oldid=379508
+       </a>
+       "
+      </div>
+      <div class="catlinks" id="catlinks">
+       <div class="mw-normal-catlinks" id="mw-normal-catlinks">
+        <a href="/index.php/Special:Categories" title="Special:Categories">
+         Categories
+        </a>
+        :
+        <ul>
+         <li>
+          <a href="/index.php/Category:Encryption" title="Category:Encryption">
+           Encryption
+          </a>
+         </li>
+         <li>
+          <a href="/index.php/Category:File_systems" title="Category:File systems">
+           File systems
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <!-- end content -->
+      <div class="visualClear">
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="column-one">
+    <h2>
+     Navigation menu
+    </h2>
+    <div class="portlet" id="p-cactions" role="navigation">
+     <h3>
+      Views
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li class="selected" id="ca-nstab-main">
+        <a accesskey="c" href="/index.php/Dm-crypt" title="View the content page [c]">
+         Page
+        </a>
+       </li>
+       <li id="ca-talk">
+        <a accesskey="t" href="/index.php/Talk:Dm-crypt" title="Discussion about the content page [t]">
+         Discussion
+        </a>
+       </li>
+       <li id="ca-viewsource">
+        <a accesskey="e" href="/index.php?title=Dm-crypt&amp;action=edit" title="This page is protected.
+You can view its source [e]">
+         View source
+        </a>
+       </li>
+       <li id="ca-history">
+        <a accesskey="h" href="/index.php?title=Dm-crypt&amp;action=history" title="Past revisions of this page [h]">
+         History
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="portlet" id="p-personal" role="navigation">
+     <h3>
+      Personal tools
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li id="pt-createaccount">
+        <a href="/index.php?title=Special:UserLogin&amp;returnto=Dm-crypt&amp;type=signup" title="You are encouraged to create an account and log in; however, it is not mandatory">
+         Create account
+        </a>
+       </li>
+       <li id="pt-login">
+        <a accesskey="o" href="/index.php?title=Special:UserLogin&amp;returnto=Dm-crypt" title="You are encouraged to log in; however, it is not mandatory [o]">
+         Log in
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="portlet" id="p-logo" role="banner">
+     <a class="mw-wiki-logo" href="/index.php/Main_page" title="Visit the main page">
+     </a>
+    </div>
+    <div class="generated-sidebar portlet" id="p-navigation" role="navigation">
+     <h3>
+      Navigation
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li id="n-mainpage-description">
+        <a accesskey="z" href="/index.php/Main_page" title="Visit the main page [z]">
+         Main page
+        </a>
+       </li>
+       <li id="n-categories">
+        <a href="/index.php/Table_of_contents">
+         Categories
+        </a>
+       </li>
+       <li id="n-portal">
+        <a href="/index.php/Getting_involved" title="Various ways Archers can contribute to the community">
+         Getting involved
+        </a>
+       </li>
+       <li id="n-currentevents">
+        <a href="/index.php/ArchWiki:News" title="The latest lowdown on the wiki">
+         Wiki news
+        </a>
+       </li>
+       <li id="n-randompage">
+        <a accesskey="x" href="/index.php/Special:Random" title="Load a random page [x]">
+         Random page
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="portlet" id="p-search" role="search">
+     <h3>
+      <label for="searchInput">
+       Search
+      </label>
+     </h3>
+     <div class="pBody" id="searchBody">
+      <form action="/index.php" id="searchform">
+       <input name="title" type="hidden" value="Special:Search"/>
+       <input accesskey="f" id="searchInput" name="search" placeholder="Search" title="Search ArchWiki [f]" type="search"/>
+       <input class="searchButton" id="searchGoButton" name="go" title="Go to a page with this exact name if exists" type="submit" value="Go"/>
+       <input class="searchButton" id="mw-searchButton" name="fulltext" title="Search the pages for this text" type="submit" value="Search"/>
+      </form>
+     </div>
+    </div>
+    <div class="generated-sidebar portlet" id="p-interaction" role="navigation">
+     <h3>
+      interaction
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li id="n-help">
+        <a href="/index.php/Category:Help" title="Wiki navigation, reading, and editing help">
+         Help
+        </a>
+       </li>
+       <li id="n-Contributing">
+        <a href="/index.php/ArchWiki:Contributing">
+         Contributing
+        </a>
+       </li>
+       <li id="n-recentchanges">
+        <a accesskey="r" href="/index.php/Special:RecentChanges" title="A list of recent changes in the wiki [r]">
+         Recent changes
+        </a>
+       </li>
+       <li id="n-Recent-talks">
+        <a href="https://wiki.archlinux.org/index.php/Special:RecentChanges?namespace=0&amp;invert=1" rel="nofollow">
+         Recent talks
+        </a>
+       </li>
+       <li id="n-newpages">
+        <a href="/index.php/Special:NewPages">
+         New pages
+        </a>
+       </li>
+       <li id="n-Statistics">
+        <a href="/index.php/ArchWiki:Statistics">
+         Statistics
+        </a>
+       </li>
+       <li id="n-Reports">
+        <a href="/index.php/ArchWiki:Reports">
+         Reports
+        </a>
+       </li>
+       <li id="n-Requests">
+        <a href="/index.php/ArchWiki:Requests">
+         Requests
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="portlet" id="p-tb" role="navigation">
+     <h3>
+      Tools
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li id="t-whatlinkshere">
+        <a accesskey="j" href="/index.php/Special:WhatLinksHere/Dm-crypt" title="A list of all wiki pages that link here [j]">
+         What links here
+        </a>
+       </li>
+       <li id="t-recentchangeslinked">
+        <a accesskey="k" href="/index.php/Special:RecentChangesLinked/Dm-crypt" title="Recent changes in pages linked from this page [k]">
+         Related changes
+        </a>
+       </li>
+       <li id="t-specialpages">
+        <a accesskey="q" href="/index.php/Special:SpecialPages" title="A list of all special pages [q]">
+         Special pages
+        </a>
+       </li>
+       <li id="t-print">
+        <a accesskey="p" href="/index.php?title=Dm-crypt&amp;printable=yes" rel="alternate" title="Printable version of this page [p]">
+         Printable version
+        </a>
+       </li>
+       <li id="t-permalink">
+        <a href="/index.php?title=Dm-crypt&amp;oldid=379508" title="Permanent link to this revision of the page">
+         Permanent link
+        </a>
+       </li>
+       <li id="t-info">
+        <a href="/index.php?title=Dm-crypt&amp;action=info" title="More information about this page">
+         Page information
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="portlet" id="p-lang" role="navigation">
+     <h3>
+      In other languages
+     </h3>
+     <div class="pBody">
+      <ul>
+       <li class="interlanguage-link interwiki-de">
+        <a href="https://wiki.archlinux.de/title/ArchLinux_mit_verschl%C3%BCsseltem_LVM_und_Systemd" hreflang="de" lang="de" title="ArchLinux mit verschlsseltem LVM und Systemd  Deutsch">
+         Deutsch
+        </a>
+       </li>
+       <li class="interlanguage-link interwiki-es">
+        <a href="https://wiki.archlinux.org/index.php/Dm-crypt_(Espa%C3%B1ol)" hreflang="es" lang="es" title="Dm-crypt  espaol">
+         Espaol
+        </a>
+       </li>
+       <li class="interlanguage-link interwiki-fr">
+        <a href="http://wiki.archlinux.fr/LUKS" hreflang="fr" lang="fr" title="LUKS  franais">
+         Franais
+        </a>
+       </li>
+       <li class="interlanguage-link interwiki-ja">
+        <a href="https://archlinuxjp.kusakata.com/wiki/Dm-crypt" hreflang="ja" lang="ja" title="Dm-crypt  ">
+         
+        </a>
+       </li>
+       <li class="interlanguage-link interwiki-ru">
+        <a href="https://wiki.archlinux.org/index.php/System_Encryption_with_LUKS_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)" hreflang="ru" lang="ru" title="System Encryption with LUKS  ">
+         
+        </a>
+       </li>
+       <li class="interlanguage-link interwiki-zh-cn">
+        <a href="https://wiki.archlinux.org/index.php/Dm-crypt_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" hreflang="zh-CN" lang="zh-CN" title="Dm-crypt  ">
+         
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+   <!-- end of the left (by default at least) column -->
+   <div class="visualClear">
+   </div>
+   <div id="footer" role="contentinfo">
+    <ul id="f-list">
+     <li id="lastmod">
+      This page was last modified on 20 June 2015, at 01:04.
+     </li>
+     <li id="copyright">
+      Content is available under
+      <a class="external" href="http://www.gnu.org/copyleft/fdl.html" rel="nofollow">
+       GNU Free Documentation License 1.3 or later
+      </a>
+      unless otherwise noted.
+     </li>
+     <li id="privacy">
+      <a href="/index.php/ArchWiki:Privacy_policy" title="ArchWiki:Privacy policy">
+       Privacy policy
+      </a>
+     </li>
+     <li id="about">
+      <a href="/index.php/ArchWiki:About" title="ArchWiki:About">
+       About ArchWiki
+      </a>
+     </li>
+     <li id="disclaimer">
+      <a href="/index.php/ArchWiki:General_disclaimer" title="ArchWiki:General disclaimer">
+       Disclaimers
+      </a>
+     </li>
+    </ul>
+   </div>
+  </div>
+  <script>
+   if(window.jQuery)jQuery.ready();
+  </script>
+  <script>
+   if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}
+  </script>
+  <script>
+   if(window.mw){
+mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest"],null,true);
+}
+  </script>
+  <script>
+   if(window.mw){
+document.write("\u003Cscript src=\"https://wiki.archlinux.org/load.php?debug=false\u0026amp;lang=en\u0026amp;modules=site\u0026amp;only=scripts\u0026amp;skin=archlinux\u0026amp;*\"\u003E\u003C/script\u003E");
+}
+  </script>
+  <script>
+   if(window.mw){
+mw.config.set({"wgBackendResponseTime":22});
+}
+  </script>
+ </body>
+</html>

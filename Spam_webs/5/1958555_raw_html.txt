@@ -1,0 +1,1566 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+ <head>
+  <meta content="text/html;charset=utf-8" http-equiv="content-type"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="/3box2.css" rel="stylesheet"/>
+  <link href="http://feeds2.feedburner.com/Pantzorg-TechnicalReferenceSite" rel="alternate" title="Pantz.org RSS Feed" type="application/rss+xml"/>
+  <link href="/images/favicon.png" rel="icon" type="image/png"/>
+  <title>
+   Pantz.org Technical Reference Site
+  </title>
+ </head>
+ <body>
+  <div class="boxtop">
+   <a href="http://www.pantz.org">
+    <img alt="pantz.org banner" src="/images/banner.png"/>
+   </a>
+  </div>
+  <!-- google_ad_section_start -->
+  <div class="title">
+   Netflix streaming playback speed and hidden menus
+   <div style="font: italic 400 12px Times, mono; padding:10px 0px 0px 0px;">
+    Posted on 05-16-2015 19:41:47 UTC | Updated on 05-17-2015 17:35:20 UTC
+    <br/>
+    <a href="/software/chrome/">
+     Section: /software/chrome/
+    </a>
+    |
+    <a href="/software/chrome/netflix_streaming_playback_speed_and_hidden_menus.html">
+     Permanent Link
+    </a>
+   </div>
+   <hr/>
+  </div>
+  <div class="boxcenter">
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Text&amp;Display -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="8987276818" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <h3>
+    Netflix and playback speed
+   </h3>
+   <p>
+    I have always been interested in Netflix streaming, but I could not get over not being able to adjust the playback 
+speed. That and the movie selection stinks (out of 159 titles in my queue only 40 are available to be streamed). I still
+tried streaming for 30 days and really liked some of the original content Netflix had. During that time I did not find any
+native way to adjust the playback speed in their html5 player. This really stinks as I am used to
+watching video with Vlc, YouTube, and MythTV all of which allow for playback speed adjustment up to 2x. It is hard to
+watch anything at lower speeds anymore. After a bit more searching I finally found a way to change the playback speed in
+Netflix streaming video.
+   </p>
+   <h3>
+    Chrome extension Video Speed Controller
+   </h3>
+   <p>
+    After much searching I found an Google Chrome extension called
+    <a href="https://chrome.google.com/webstore/detail/video-speed-controller/nffaoalbilbmmfgbnbgppjihopabppdk?hl=en">
+     Video Speed Controller
+    </a>
+    ,
+which allows for the speedup of html5 video streams in the browser. Netflix has an html5 player so this works with
+Netflix streams. Hooray!! The speedup stream does not have any buffering issues and I've watched many things on
+with 2x playback without issue. Unfortunately you can't use this anywhere other than the browser. Come on Netflix
+please add playback speed adjust to all of your players on all platforms!!!
+   </p>
+   <h3>
+    Performance at higher speeds
+   </h3>
+   <p>
+    Beware that when speeding up video you will need to make sure your video card can handle the higher frame rates.
+When I stream a video file from local storage with a local program like Vlc at 2x, it is very smooth, without much
+jitter or video tearing. When streaming content from Netflix or YouTube or other sites using this browser plugin 
+you are using the browser as the video player, and it might not be as clean of an experience. You might notice some more
+jitter in the video and some frame tearing on fast moving scenes. This usually happens if your hardware can't keep up
+rendering the video or if hardware acceleration is not enabled.
+   </p>
+   <h3>
+    Chrome hardware acceleration
+   </h3>
+   <p>
+    My testing for this is being done on Linux with Google Chrome using the accelerated Nvidia Drivers with a GeForce
+GT 520 a video card from 2011. What I had to do to get rid of the jitter and tearing is turn hardware acceleration
+on in Chrome. Google seems to be very careful about whether or not they turn on hardware acceleration. They usually don't
+turn it on unless they know for sure it will work. Mine was not turned on even though I had a video card that supported
+acceleration and the correct drivers. Chromes detection of this might not be the best or Google did not think the 
+drivers for this were stable enough. What is great is you can turn this on anyways and it works great.
+   </p>
+   <h3>
+    Turn on hardware acceleration in Chrome
+   </h3>
+   <p>
+    To see if your hardware acceleration is already turned on or not type "chrome://gpu" in your Chrome URL bar. If it's
+turned off you will likely see lots of red text indicating so. Look for "Video decode" and see if it says "Disabled". 
+If so you will need to turn it on. If it says "Hardware accelerated" then your good and can skip the rest of this
+paragraph. To turn on the hardware acceleration in the Chrome URL bar type "chrome://flags". The first setting says
+"Override software rendering list". Click the "Enable" to turn on the override. Then restart Chrome. Go back to
+"chrome://gpu" and see if it says "Video decode: Hardware accelerated". If so go try to watch a movie again or a 
+YouTube video and it should be much smoother and likely have less tearing. If you don't have less tearing, go into
+your video driver config and make sure you have Sync to VBlank enabled. Mine is in my Nvidia X server settings manager
+then under "OpenGL settings"-&gt; Performance. Check the box "Sync to VBlank".
+   </p>
+   <h3>
+    Other neat Netflix streaming things
+   </h3>
+   <p>
+    Netflix provides some hidden menus for stats and changing bit rates of your streams. Here are some different ones
+to try.I tried these using Chrome on Linux. They all worked for me.
+   </p>
+   <ul>
+    <li>
+     Stream Manager -
+     <b>
+      Control+Alt+Shift+S
+     </b>
+     <ul>
+      <li>
+       Here you will be able to choose the maximum bit rate at which you will stream. Highlighting multiple selections
+ will give Netflix a maximum/minimum bit rate at which it will stream at.
+      </li>
+      <li>
+       This menu also gives you the option to select from which CDN you will receive your stream from. Tweak with it
+a bit, you might get better performance with some of them than the others.
+      </li>
+     </ul>
+    </li>
+    <li>
+     AV Stats -
+     <b>
+      Control+Alt+Shift+D
+     </b>
+     <ul>
+      <li>
+       On this screen you will see a lot of "stats for nerds" sort of things, you might want to have this open
+ when you're tweaking with the CDN to see which servers are actually giving you better speeds.
+      </li>
+     </ul>
+    </li>
+    <li>
+     Log Screen -
+     <b>
+      Control+Alt+Shift+L
+     </b>
+    </li>
+   </ul>
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Links_Only -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="9126877610" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <p>
+    <a href="http://del.icio.us/post?url=http://www.pantz.org/software/chrome/netflix_streaming_playback_speed_and_hidden_menus.html&amp;title=Netflix streaming playback speed and hidden menus" title="Bookmark this post on del.icio.us.">
+     Del.icio.us!
+    </a>
+    |
+    <a href="http://www.digg.com/submit?phase=2&amp;url=http://www.pantz.org/software/chrome/netflix_streaming_playback_speed_and_hidden_menus.html&amp;title=Netflix streaming playback speed and hidden menus" title="Digg my post on digg.com.">
+     Digg Me!
+    </a>
+    |
+    <a href="http://reddit.com/submit?url=http://www.pantz.org/software/chrome/netflix_streaming_playback_speed_and_hidden_menus.html&amp;title=Netflix streaming playback speed and hidden menus" title="Submit this post to reddit.com.">
+     Reddit!
+    </a>
+   </p>
+   <h4>
+    Related stories
+   </h4>
+   <ul>
+    <li>
+     <a href="/software/linux/fedora4kernelbuild.html" title="shared tags: linux">
+      Building kernel from RedHat source rpms on Fedora 4
+     </a>
+    </li>
+    <li>
+     <a href="/software/apache/apachephpmysqlsslinstall.html" title="shared tags: linux">
+      Install of Apache, PHP, SSL, MySQL in linux
+     </a>
+    </li>
+    <li>
+     <a href="/software/snort/snortsyslogproblem.html" title="shared tags: linux">
+      Sending Snort logs to a remote log server
+     </a>
+    </li>
+    <li>
+     <a href="/software/cpufreq/usingcpufreqonlinux.html" title="shared tags: linux">
+      CPU frequency scaling in Linux with cpufreq
+     </a>
+    </li>
+    <li>
+     <a href="/software/xfsfilesystem/centos5xfskernelmodule.html" title="shared tags: linux">
+      CentOS 5 and the XFS kernel module
+     </a>
+    </li>
+    <li>
+     <a href="/software/idl/idllicensingserver.html" title="shared tags: linux">
+      IDL licensing server (flexlm) function
+     </a>
+    </li>
+    <li>
+     <a href="/software/linux/centos5arecahbakernelmodule.html" title="shared tags: linux">
+      Areca kernel module insert problem on CentOS 5
+     </a>
+    </li>
+   </ul>
+  </div>
+  <!-- google_ad_section_end -->
+  <!-- google_ad_section_start -->
+  <div class="title">
+   Disabling GNU Screen lock screen
+   <div style="font: italic 400 12px Times, mono; padding:10px 0px 0px 0px;">
+    Posted on 03-28-2015 20:05:10 UTC | Updated on 04-01-2015 23:30:01 UTC
+    <br/>
+    <a href="/software/screen/">
+     Section: /software/screen/
+    </a>
+    |
+    <a href="/software/screen/disabling_gnu_screen_lock_screen.html">
+     Permanent Link
+    </a>
+   </div>
+   <hr/>
+  </div>
+  <div class="boxcenter">
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Text&amp;Display -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="8987276818" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <h3>
+    Lock screen
+   </h3>
+   <p>
+    For the impatient or TLDR ... Put:
+    <b>
+     export LOCKPRG='/bin/true'
+    </b>
+    in your .bashrc. Kill all screen 
+sessions and start a new one. Ctrl-a x should now do nothing. Also, a nice fellow named Brian suggested
+I just unbind the x key. I thought it was a good idea. Just put "bind ^x" and "bind x" in your .screenrc.
+Lot's of different ways to do the same thing. Re-binding is the better way though.
+   </p>
+   <p>
+    I have been using
+    <a href="https://www.gnu.org/software/screen/manual/screen.html">
+     GNU Screen
+    </a>
+    for a while now.
+I usually create multiple new windows (Ctrl-a c) every day. Then I flip back and forth between the multiple 
+screens (Ctrl-a n) or just toggle between the last 2 windows used (Ctrl-a a). Sometimes my finger slips and I hit 
+Ctrl-a x which provides you with a password prompt. This is GNU Screen's lockscreen function.
+   </p>
+   <h3>
+    Normal and not so normal
+   </h3>
+   <p>
+    Normally you just enter your user password and the screen will unlock. Screen is using /local/bin/lck or 
+/usr/bin/lock by default. This is all fine and dandy if you have a user account password to enter. If you have 
+servers that only use SSH keys and don't use passwords you will have no valid password to enter. In other words
+you are stuck at this lock screen. One way around it is to login to the same machine and re-attach to the same 
+screen session (normally "screen -r" if you have only 1 session open). Then kill the session with the lock screen.
+This is annoying to have to do.
+   </p>
+   <h3>
+    Disabling lock screen
+   </h3>
+   <p>
+    I wanted to be able to just disable the lockscreen setting and be done with this. Looking at the man page it shows
+there is no option to turn this off. So you have to go around it in a way. The way I found to do this on machines without
+user passwords is to disable the terminal lock program by setting the environment variable LOCKPRG  to "/bin/true".
+For BASH put
+    <b>
+     export LOCKPRG='/bin/true'
+    </b>
+    in your .bashrc. Kill all screen sessions and start a new one.
+Ctrl-a x should now do nothing.
+   </p>
+   <h3>
+    Warning about disabling LOCKPRG
+   </h3>
+   <p>
+    For security sake be careful about disabling your LOCKPRG. /bin/true disables all terminal screen locking,
+so if you use some program that uses whatever is in the LOCKPRG variable it essentially disables it.
+   </p>
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Links_Only -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="9126877610" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <p>
+    <a href="http://del.icio.us/post?url=http://www.pantz.org/software/screen/disabling_gnu_screen_lock_screen.html&amp;title=Disabling GNU Screen lock screen" title="Bookmark this post on del.icio.us.">
+     Del.icio.us!
+    </a>
+    |
+    <a href="http://www.digg.com/submit?phase=2&amp;url=http://www.pantz.org/software/screen/disabling_gnu_screen_lock_screen.html&amp;title=Disabling GNU Screen lock screen" title="Digg my post on digg.com.">
+     Digg Me!
+    </a>
+    |
+    <a href="http://reddit.com/submit?url=http://www.pantz.org/software/screen/disabling_gnu_screen_lock_screen.html&amp;title=Disabling GNU Screen lock screen" title="Submit this post to reddit.com.">
+     Reddit!
+    </a>
+   </p>
+   <h4>
+    Related stories
+   </h4>
+   <ul>
+    <li>
+     <a href="/software/expect/expect_examples_and_tips.html" title="shared tags: bash">
+      Expect examples and tips
+     </a>
+    </li>
+   </ul>
+  </div>
+  <!-- google_ad_section_end -->
+  <!-- google_ad_section_start -->
+  <div class="title">
+   Pantz.org now with https
+   <div style="font: italic 400 12px Times, mono; padding:10px 0px 0px 0px;">
+    Posted on 11-10-2014 00:26:04 UTC | Updated on 11-10-2014 00:39:02 UTC
+    <br/>
+    <a href="/software/http/">
+     Section: /software/http/
+    </a>
+    |
+    <a href="/software/http/pantz.org_now_with_https.html">
+     Permanent Link
+    </a>
+   </div>
+   <hr/>
+  </div>
+  <div class="boxcenter">
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Text&amp;Display -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="8987276818" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <p>
+    It is my pleasure to announce that
+    <a href="https://www.pantz.org">
+     Pantz.org
+    </a>
+    can now be accessed in a more secure manner. Why add this now? What needed to happen
+to make this a viable option? Why can't some users access the secure site?
+Read on to find out.
+   </p>
+   <h3>
+    Why not offer secure connections sooner?
+   </h3>
+   <p>
+    The major reason I did not switch over to https sooner was that
+Google needed to support secure connections to their Ad servers. Late
+last year Google finally added the ability to serve up their Ads via
+SSL/TLS. I was not going to offer access to my site while the Ads 
+could only be served up via standard http.
+   </p>
+   <p>
+    If you try to serve up external content (Ads) from your secure site, 
+and that content is unencrypted you get nasty messages from browsers
+about the site having mixed content. The messages are very intrusive and
+ugly. By Google switching Adsense to https that ugliness goes away. All
+connections from the site could now go out securely via SSL/TLS.
+   </p>
+   <p>
+    The second reason I decided to do it was
+    <a href="http://googlewebmastercentral.blogspot.com/2014/08/https-as-ranking-signal.html">
+     Google starting to use HTTPS as a ranking signal
+    </a>
+    . I know these reasons 
+are very Google centric, but the Ads pay for the site.
+   </p>
+   <h3>
+    What type of cert did you get?
+   </h3>
+   <p>
+    I wanted to choose one of the most secure types of certs I could for 
+use on Pantz.org. This lead me to choose a ECDSA (Elliptic Curve 
+Digital Signature Algorithm) with a SHA-256 certificate signing request.
+I got the cert from Comodo. Comodo offers ECDSA certificates signed by 
+the Elliptical Curve DSA all the way up to the built in, browser trusted,
+Comodo ECC Root Certificate. This makes Comodo one the only CA's to offer
+a pure ECC certificate chain.
+   </p>
+   <h3>
+    How did you get this whole mess configured?
+   </h3>
+   <p>
+    That was the easy part. Our friends over at
+    <a href="https://calomel.org">
+     Calomel.org
+    </a>
+    have a great
+    <a href="https://calomel.org/nginx.html">
+     tutorial
+    </a>
+    on the how to perform the whole process. It's so indepth I don't 
+even need to do a tutorial here like normal.
+   </p>
+   <h3>
+    Why can't I get to your secure site
+   </h3>
+   <p>
+    https has evolved over the years. SSL v2 came out in 1995. V3 came
+out in 1996. The successor to SSL is TLS. TLS 1.0 was 
+defined in RFC 2246 in January 1999. TLS 1.1 was defined in 2006. TLS 1.2
+was defined in 2008. Over the years weakness have shown up in the early SSL 
+v2-3 protocols. These weaknesses make attacks more viable. Because of 
+these weaknesses I have decided to disable SSL connections to Pantz.org.
+   </p>
+   <p>
+    Ciphers have also had attacks levied against them over the years. Some of
+cipher types have shown up with weaknesses are RC4 and DES. Because of these
+weaknesses I have disabled the use of DES and RC4 on Pantz.org.
+   </p>
+   <p>
+    By turning off SSL connections and not using RC4 or DES as an encryption type
+there are some people that will not be able to get to the secure Pantz.org site.
+The majority of people that will have this issue are people are using old 
+Operating Systems and old browsers. Mainly this will likely be people trying
+to use Internet Explorer 6 to access the secure site or people trying to 
+access the site with Windows XP on certain configurations. There are a few 
+combinations of Windows XP and some browsers that work with TLS 1.0 (IE 8 
+and WinXP SP3), but many combos just don't. Even MS does not support XP anymore
+so upgrade.
+   </p>
+   <h3>
+    Don't worry you still have http
+   </h3>
+   <p>
+    There is nothing on Pantz.org needs a secure connection, so if you have 
+issues connecting to the secure site just use the http version. It's as simple
+as that.
+   </p>
+   <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+   <!-- AutoResponsive_Links_Only -->
+   <ins class="adsbygoogle" data-ad-client="ca-pub-8796103469637220" data-ad-format="auto" data-ad-slot="9126877610" style="display:block">
+   </ins>
+   <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+   <p>
+    <a href="http://del.icio.us/post?url=http://www.pantz.org/software/http/pantz.org_now_with_https.html&amp;title=Pantz.org now with https" title="Bookmark this post on del.icio.us.">
+     Del.icio.us!
+    </a>
+    |
+    <a href="http://www.digg.com/submit?phase=2&amp;url=http://www.pantz.org/software/http/pantz.org_now_with_https.html&amp;title=Pantz.org now with https" title="Digg my post on digg.com.">
+     Digg Me!
+    </a>
+    |
+    <a href="http://reddit.com/submit?url=http://www.pantz.org/software/http/pantz.org_now_with_https.html&amp;title=Pantz.org now with https" title="Submit this post to reddit.com.">
+     Reddit!
+    </a>
+   </p>
+   <h4>
+    Related stories
+   </h4>
+   <ul>
+    <li>
+     <a href="/software/squid/squidsshtunnel.html" title="shared tags: http">
+      Install and configure a squid proxy
+     </a>
+    </li>
+    <li>
+     <a href="/software/openssl/opensslfileencryption.html" title="shared tags: ssl">
+      Encrypt any file with OpenSSL
+     </a>
+    </li>
+    <li>
+     <a href="/software/apache/signingyourownsslkeys.html" title="shared tags: ssl">
+      Signing your own SSl keys
+     </a>
+    </li>
+    <li>
+     <a href="/software/apache/webservertuningtips.html" title="shared tags: ssl">
+      Apache and other webserver tuning tips
+     </a>
+    </li>
+    <li>
+     <a href="/software/squid/paranoidsquidsettings.html" title="shared tags: http">
+      Paranoid squid proxy settings
+     </a>
+    </li>
+    <li>
+     <a href="/software/html/google_web_performance_best_practices.html" title="shared tags: http">
+      Google Web Performance Best Practices
+     </a>
+    </li>
+    <li>
+     <a href="/software/http/httptelnet.html" title="shared tags: http">
+      Check http with telnet
+     </a>
+    </li>
+   </ul>
+  </div>
+  <!-- google_ad_section_end -->
+  <div id="boxleft">
+   <!-- SiteSearch Google -->
+   <form action="https://www.google.com/cse" id="cse-search-box">
+    <input name="cx" type="hidden" value="partner-pub-8796103469637220:us9w1q-nw8a"/>
+    <input name="ie" type="hidden" value="ISO-8859-1"/>
+    <input name="q" size="10" type="text"/>
+    <input name="sa" type="submit" value="Search Site"/>
+   </form>
+   <br/>
+   <!-- SiteSearch Google -->
+   <a href="http://feeds2.feedburner.com/Pantzorg-TechnicalReferenceSite">
+    RSS Feed
+   </a>
+   <img alt="RSS feed logo" height="13" src="/images/icon_rss.jpg" title="Pantz.org 1.0 RSS Feed" width="13"/>
+   <br/>
+   <a href="/extra/about.html">
+    About
+   </a>
+   <p>
+   </p>
+   <hr/>
+   <!-- google_ad_section_start(weight=ignore) -->
+   <a href="/tags/3com.html">
+    3com
+   </a>
+   <br/>
+   <a href="/tags/3ware.html">
+    3ware
+   </a>
+   <br/>
+   <a href="/tags/alsa.html">
+    alsa
+   </a>
+   <br/>
+   <a href="/tags/alsactl.html">
+    alsactl
+   </a>
+   <br/>
+   <a href="/tags/alsamixer.html">
+    alsamixer
+   </a>
+   <br/>
+   <a href="/tags/amd.html">
+    amd
+   </a>
+   <br/>
+   <a href="/tags/android.html">
+    android
+   </a>
+   <br/>
+   <a href="/tags/apache.html">
+    apache
+   </a>
+   <br/>
+   <a href="/tags/areca.html">
+    areca
+   </a>
+   <br/>
+   <a href="/tags/arm.html">
+    arm
+   </a>
+   <br/>
+   <a href="/tags/ati.html">
+    ati
+   </a>
+   <br/>
+   <a href="/tags/auditd.html">
+    auditd
+   </a>
+   <br/>
+   <a href="/tags/awk.html">
+    awk
+   </a>
+   <br/>
+   <a href="/tags/badblocks.html">
+    badblocks
+   </a>
+   <br/>
+   <a href="/tags/bash.html">
+    bash
+   </a>
+   <br/>
+   <a href="/tags/bind.html">
+    bind
+   </a>
+   <br/>
+   <a href="/tags/bios.html">
+    bios
+   </a>
+   <br/>
+   <a href="/tags/bonnie.html">
+    bonnie
+   </a>
+   <br/>
+   <a href="/tags/cable.html">
+    cable
+   </a>
+   <br/>
+   <a href="/tags/carp.html">
+    carp
+   </a>
+   <br/>
+   <a href="/tags/cat5.html">
+    cat5
+   </a>
+   <br/>
+   <a href="/tags/cdrom.html">
+    cdrom
+   </a>
+   <br/>
+   <a href="/tags/cellphone.html">
+    cellphone
+   </a>
+   <br/>
+   <a href="/tags/centos.html">
+    centos
+   </a>
+   <br/>
+   <a href="/tags/chart.html">
+    chart
+   </a>
+   <br/>
+   <a href="/tags/chrome.html">
+    chrome
+   </a>
+   <br/>
+   <a href="/tags/cifs.html">
+    cifs
+   </a>
+   <br/>
+   <a href="/tags/cisco.html">
+    cisco
+   </a>
+   <br/>
+   <a href="/tags/cloudera.html">
+    cloudera
+   </a>
+   <br/>
+   <a href="/tags/comcast.html">
+    comcast
+   </a>
+   <br/>
+   <a href="/tags/commands.html">
+    commands
+   </a>
+   <br/>
+   <a href="/tags/comodo.html">
+    comodo
+   </a>
+   <br/>
+   <a href="/tags/compiz-fusion.html">
+    compiz-fusion
+   </a>
+   <br/>
+   <a href="/tags/corsair.html">
+    corsair
+   </a>
+   <br/>
+   <a href="/tags/cpufreq.html">
+    cpufreq
+   </a>
+   <br/>
+   <a href="/tags/cpufrequtils.html">
+    cpufrequtils
+   </a>
+   <br/>
+   <a href="/tags/cpuspeed.html">
+    cpuspeed
+   </a>
+   <br/>
+   <a href="/tags/cron.html">
+    cron
+   </a>
+   <br/>
+   <a href="/tags/crontab.html">
+    crontab
+   </a>
+   <br/>
+   <a href="/tags/crossover.html">
+    crossover
+   </a>
+   <br/>
+   <a href="/tags/cu.html">
+    cu
+   </a>
+   <br/>
+   <a href="/tags/cups.html">
+    cups
+   </a>
+   <br/>
+   <a href="/tags/cvs.html">
+    cvs
+   </a>
+   <br/>
+   <a href="/tags/database.html">
+    database
+   </a>
+   <br/>
+   <a href="/tags/dbus.html">
+    dbus
+   </a>
+   <br/>
+   <a href="/tags/dd.html">
+    dd
+   </a>
+   <br/>
+   <a href="/tags/dd_rescue.html">
+    dd_rescue
+   </a>
+   <br/>
+   <a href="/tags/ddclient.html">
+    ddclient
+   </a>
+   <br/>
+   <a href="/tags/debian.html">
+    debian
+   </a>
+   <br/>
+   <a href="/tags/decimal.html">
+    decimal
+   </a>
+   <br/>
+   <a href="/tags/dhclient.html">
+    dhclient
+   </a>
+   <br/>
+   <a href="/tags/dhcp.html">
+    dhcp
+   </a>
+   <br/>
+   <a href="/tags/diagnostic.html">
+    diagnostic
+   </a>
+   <br/>
+   <a href="/tags/diskexplorer.html">
+    diskexplorer
+   </a>
+   <br/>
+   <a href="/tags/disks.html">
+    disks
+   </a>
+   <br/>
+   <a href="/tags/dns.html">
+    dns
+   </a>
+   <br/>
+   <a href="/tags/dos.html">
+    dos
+   </a>
+   <br/>
+   <a href="/tags/dovecot.html">
+    dovecot
+   </a>
+   <br/>
+   <a href="/tags/drac.html">
+    drac
+   </a>
+   <br/>
+   <a href="/tags/dsniff.html">
+    dsniff
+   </a>
+   <br/>
+   <a href="/tags/dvdauthor.html">
+    dvdauthor
+   </a>
+   <br/>
+   <a href="/tags/e-mail.html">
+    e-mail
+   </a>
+   <br/>
+   <a href="/tags/echo.html">
+    echo
+   </a>
+   <br/>
+   <a href="/tags/editor.html">
+    editor
+   </a>
+   <br/>
+   <a href="/tags/emerald.html">
+    emerald
+   </a>
+   <br/>
+   <a href="/tags/ethernet.html">
+    ethernet
+   </a>
+   <br/>
+   <a href="/tags/expect.html">
+    expect
+   </a>
+   <br/>
+   <a href="/tags/ext3.html">
+    ext3
+   </a>
+   <br/>
+   <a href="/tags/ext4.html">
+    ext4
+   </a>
+   <br/>
+   <a href="/tags/fat32.html">
+    fat32
+   </a>
+   <br/>
+   <a href="/tags/fedora.html">
+    fedora
+   </a>
+   <br/>
+   <a href="/tags/fetchmail.html">
+    fetchmail
+   </a>
+   <br/>
+   <a href="/tags/fiber.html">
+    fiber
+   </a>
+   <br/>
+   <a href="/tags/filesystems.html">
+    filesystems
+   </a>
+   <br/>
+   <a href="/tags/firefox.html">
+    firefox
+   </a>
+   <br/>
+   <a href="/tags/firewall.html">
+    firewall
+   </a>
+   <br/>
+   <a href="/tags/flac.html">
+    flac
+   </a>
+   <br/>
+   <a href="/tags/flexlm.html">
+    flexlm
+   </a>
+   <br/>
+   <a href="/tags/floppy.html">
+    floppy
+   </a>
+   <br/>
+   <a href="/tags/flowtools.html">
+    flowtools
+   </a>
+   <br/>
+   <a href="/tags/fonts.html">
+    fonts
+   </a>
+   <br/>
+   <a href="/tags/format.html">
+    format
+   </a>
+   <br/>
+   <a href="/tags/freebsd.html">
+    freebsd
+   </a>
+   <br/>
+   <a href="/tags/ftp.html">
+    ftp
+   </a>
+   <br/>
+   <a href="/tags/gdm.html">
+    gdm
+   </a>
+   <br/>
+   <a href="/tags/gnome.html">
+    gnome
+   </a>
+   <br/>
+   <a href="/tags/greasemonkey.html">
+    greasemonkey
+   </a>
+   <br/>
+   <a href="/tags/greylisting.html">
+    greylisting
+   </a>
+   <br/>
+   <a href="/tags/growisofs.html">
+    growisofs
+   </a>
+   <br/>
+   <a href="/tags/grub.html">
+    grub
+   </a>
+   <br/>
+   <a href="/tags/hacking.html">
+    hacking
+   </a>
+   <br/>
+   <a href="/tags/hadoop.html">
+    hadoop
+   </a>
+   <br/>
+   <a href="/tags/harddrive.html">
+    harddrive
+   </a>
+   <br/>
+   <a href="/tags/hba.html">
+    hba
+   </a>
+   <br/>
+   <a href="/tags/hex.html">
+    hex
+   </a>
+   <br/>
+   <a href="/tags/hfsc.html">
+    hfsc
+   </a>
+   <br/>
+   <a href="/tags/html.html">
+    html
+   </a>
+   <br/>
+   <a href="/tags/html5.html">
+    html5
+   </a>
+   <br/>
+   <a href="/tags/http.html">
+    http
+   </a>
+   <br/>
+   <a href="/tags/https.html">
+    https
+   </a>
+   <br/>
+   <a href="/tags/idl.html">
+    idl
+   </a>
+   <br/>
+   <a href="/tags/ie.html">
+    ie
+   </a>
+   <br/>
+   <a href="/tags/ilo.html">
+    ilo
+   </a>
+   <br/>
+   <a href="/tags/intel.html">
+    intel
+   </a>
+   <br/>
+   <a href="/tags/ios.html">
+    ios
+   </a>
+   <br/>
+   <a href="/tags/iperf.html">
+    iperf
+   </a>
+   <br/>
+   <a href="/tags/ipmi.html">
+    ipmi
+   </a>
+   <br/>
+   <a href="/tags/iptables.html">
+    iptables
+   </a>
+   <br/>
+   <a href="/tags/ipv6.html">
+    ipv6
+   </a>
+   <br/>
+   <a href="/tags/irix.html">
+    irix
+   </a>
+   <br/>
+   <a href="/tags/javascript.html">
+    javascript
+   </a>
+   <br/>
+   <a href="/tags/kde.html">
+    kde
+   </a>
+   <br/>
+   <a href="/tags/kernel.html">
+    kernel
+   </a>
+   <br/>
+   <a href="/tags/kickstart.html">
+    kickstart
+   </a>
+   <br/>
+   <a href="/tags/kmail.html">
+    kmail
+   </a>
+   <br/>
+   <a href="/tags/kprinter.html">
+    kprinter
+   </a>
+   <br/>
+   <a href="/tags/krecord.html">
+    krecord
+   </a>
+   <br/>
+   <a href="/tags/kubuntu.html">
+    kubuntu
+   </a>
+   <br/>
+   <a href="/tags/kvm.html">
+    kvm
+   </a>
+   <br/>
+   <a href="/tags/lame.html">
+    lame
+   </a>
+   <br/>
+   <a href="/tags/ldap.html">
+    ldap
+   </a>
+   <br/>
+   <a href="/tags/linux.html">
+    linux
+   </a>
+   <br/>
+   <a href="/tags/logfile.html">
+    logfile
+   </a>
+   <br/>
+   <a href="/tags/lp.html">
+    lp
+   </a>
+   <br/>
+   <a href="/tags/lpq.html">
+    lpq
+   </a>
+   <br/>
+   <a href="/tags/lpr.html">
+    lpr
+   </a>
+   <br/>
+   <a href="/tags/maradns.html">
+    maradns
+   </a>
+   <br/>
+   <a href="/tags/matlab.html">
+    matlab
+   </a>
+   <br/>
+   <a href="/tags/memory.html">
+    memory
+   </a>
+   <br/>
+   <a href="/tags/mencoder.html">
+    mencoder
+   </a>
+   <br/>
+   <a href="/tags/mhdd.html">
+    mhdd
+   </a>
+   <br/>
+   <a href="/tags/mkinitrd.html">
+    mkinitrd
+   </a>
+   <br/>
+   <a href="/tags/mkisofs.html">
+    mkisofs
+   </a>
+   <br/>
+   <a href="/tags/moinmoin.html">
+    moinmoin
+   </a>
+   <br/>
+   <a href="/tags/motherboard.html">
+    motherboard
+   </a>
+   <br/>
+   <a href="/tags/mouse.html">
+    mouse
+   </a>
+   <br/>
+   <a href="/tags/movemail.html">
+    movemail
+   </a>
+   <br/>
+   <a href="/tags/mplayer.html">
+    mplayer
+   </a>
+   <br/>
+   <a href="/tags/multitail.html">
+    multitail
+   </a>
+   <br/>
+   <a href="/tags/mutt.html">
+    mutt
+   </a>
+   <br/>
+   <a href="/tags/myodbc.html">
+    myodbc
+   </a>
+   <br/>
+   <a href="/tags/mysql.html">
+    mysql
+   </a>
+   <br/>
+   <a href="/tags/mythtv.html">
+    mythtv
+   </a>
+   <br/>
+   <a href="/tags/nagios.html">
+    nagios
+   </a>
+   <br/>
+   <a href="/tags/nameserver.html">
+    nameserver
+   </a>
+   <br/>
+   <a href="/tags/netflix.html">
+    netflix
+   </a>
+   <br/>
+   <a href="/tags/netflow.html">
+    netflow
+   </a>
+   <br/>
+   <a href="/tags/nginx.html">
+    nginx
+   </a>
+   <br/>
+   <a href="/tags/nic.html">
+    nic
+   </a>
+   <br/>
+   <a href="/tags/ntfs.html">
+    ntfs
+   </a>
+   <br/>
+   <a href="/tags/ntp.html">
+    ntp
+   </a>
+   <br/>
+   <a href="/tags/nvidia.html">
+    nvidia
+   </a>
+   <br/>
+   <a href="/tags/odbc.html">
+    odbc
+   </a>
+   <br/>
+   <a href="/tags/openbsd.html">
+    openbsd
+   </a>
+   <br/>
+   <a href="/tags/openntpd.html">
+    openntpd
+   </a>
+   <br/>
+   <a href="/tags/openoffice.html">
+    openoffice
+   </a>
+   <br/>
+   <a href="/tags/openssh.html">
+    openssh
+   </a>
+   <br/>
+   <a href="/tags/openssl.html">
+    openssl
+   </a>
+   <br/>
+   <a href="/tags/opteron.html">
+    opteron
+   </a>
+   <br/>
+   <a href="/tags/parted.html">
+    parted
+   </a>
+   <br/>
+   <a href="/tags/partimage.html">
+    partimage
+   </a>
+   <br/>
+   <a href="/tags/patch.html">
+    patch
+   </a>
+   <br/>
+   <a href="/tags/perl.html">
+    perl
+   </a>
+   <br/>
+   <a href="/tags/pf.html">
+    pf
+   </a>
+   <br/>
+   <a href="/tags/pfflowd.html">
+    pfflowd
+   </a>
+   <br/>
+   <a href="/tags/pfsync.html">
+    pfsync
+   </a>
+   <br/>
+   <a href="/tags/photorec.html">
+    photorec
+   </a>
+   <br/>
+   <a href="/tags/php.html">
+    php
+   </a>
+   <br/>
+   <a href="/tags/pop3.html">
+    pop3
+   </a>
+   <br/>
+   <a href="/tags/pop3s.html">
+    pop3s
+   </a>
+   <br/>
+   <a href="/tags/ports.html">
+    ports
+   </a>
+   <br/>
+   <a href="/tags/postfix.html">
+    postfix
+   </a>
+   <br/>
+   <a href="/tags/power.html">
+    power
+   </a>
+   <br/>
+   <a href="/tags/procmail.html">
+    procmail
+   </a>
+   <br/>
+   <a href="/tags/proftpd.html">
+    proftpd
+   </a>
+   <br/>
+   <a href="/tags/proxy.html">
+    proxy
+   </a>
+   <br/>
+   <a href="/tags/pulseaudio.html">
+    pulseaudio
+   </a>
+   <br/>
+   <a href="/tags/putty.html">
+    putty
+   </a>
+   <br/>
+   <a href="/tags/pxe.html">
+    pxe
+   </a>
+   <br/>
+   <a href="/tags/python.html">
+    python
+   </a>
+   <br/>
+   <a href="/tags/qemu.html">
+    qemu
+   </a>
+   <br/>
+   <a href="/tags/r-studio.html">
+    r-studio
+   </a>
+   <br/>
+   <a href="/tags/raid.html">
+    raid
+   </a>
+   <br/>
+   <a href="/tags/recovery.html">
+    recovery
+   </a>
+   <br/>
+   <a href="/tags/redhat.html">
+    redhat
+   </a>
+   <br/>
+   <a href="/tags/router.html">
+    router
+   </a>
+   <br/>
+   <a href="/tags/rpc.html">
+    rpc
+   </a>
+   <br/>
+   <a href="/tags/rsync.html">
+    rsync
+   </a>
+   <br/>
+   <a href="/tags/samba.html">
+    samba
+   </a>
+   <br/>
+   <a href="/tags/schedule.html">
+    schedule
+   </a>
+   <br/>
+   <a href="/tags/screen.html">
+    screen
+   </a>
+   <br/>
+   <a href="/tags/scsi.html">
+    scsi
+   </a>
+   <br/>
+   <a href="/tags/seagate.html">
+    seagate
+   </a>
+   <br/>
+   <a href="/tags/seatools.html">
+    seatools
+   </a>
+   <br/>
+   <a href="/tags/sed.html">
+    sed
+   </a>
+   <br/>
+   <a href="/tags/sendmail.html">
+    sendmail
+   </a>
+   <br/>
+   <a href="/tags/sgi.html">
+    sgi
+   </a>
+   <br/>
+   <a href="/tags/shell.html">
+    shell
+   </a>
+   <br/>
+   <a href="/tags/siw.html">
+    siw
+   </a>
+   <br/>
+   <a href="/tags/smtp.html">
+    smtp
+   </a>
+   <br/>
+   <a href="/tags/snort.html">
+    snort
+   </a>
+   <br/>
+   <a href="/tags/solaris.html">
+    solaris
+   </a>
+   <br/>
+   <a href="/tags/soundcard.html">
+    soundcard
+   </a>
+   <br/>
+   <a href="/tags/sox.html">
+    sox
+   </a>
+   <br/>
+   <a href="/tags/spam.html">
+    spam
+   </a>
+   <br/>
+   <a href="/tags/spamd.html">
+    spamd
+   </a>
+   <br/>
+   <a href="/tags/sql.html">
+    sql
+   </a>
+   <br/>
+   <a href="/tags/sqlite.html">
+    sqlite
+   </a>
+   <br/>
+   <a href="/tags/squid.html">
+    squid
+   </a>
+   <br/>
+   <a href="/tags/ssh.html">
+    ssh
+   </a>
+   <br/>
+   <a href="/tags/ssh.com.html">
+    ssh.com
+   </a>
+   <br/>
+   <a href="/tags/ssl.html">
+    ssl
+   </a>
+   <br/>
+   <a href="/tags/su.html">
+    su
+   </a>
+   <br/>
+   <a href="/tags/subnet.html">
+    subnet
+   </a>
+   <br/>
+   <a href="/tags/subversion.html">
+    subversion
+   </a>
+   <br/>
+   <a href="/tags/sudo.html">
+    sudo
+   </a>
+   <br/>
+   <a href="/tags/sun.html">
+    sun
+   </a>
+   <br/>
+   <a href="/tags/supermicro.html">
+    supermicro
+   </a>
+   <br/>
+   <a href="/tags/switches.html">
+    switches
+   </a>
+   <br/>
+   <a href="/tags/symbols.html">
+    symbols
+   </a>
+   <br/>
+   <a href="/tags/syslinux.html">
+    syslinux
+   </a>
+   <br/>
+   <a href="/tags/syslog.html">
+    syslog
+   </a>
+   <br/>
+   <a href="/tags/systemrescuecd.html">
+    systemrescuecd
+   </a>
+   <br/>
+   <a href="/tags/t1.html">
+    t1
+   </a>
+   <br/>
+   <a href="/tags/tcpip.html">
+    tcpip
+   </a>
+   <br/>
+   <a href="/tags/tcpwrappers.html">
+    tcpwrappers
+   </a>
+   <br/>
+   <a href="/tags/telnet.html">
+    telnet
+   </a>
+   <br/>
+   <a href="/tags/terminal.html">
+    terminal
+   </a>
+   <br/>
+   <a href="/tags/testdisk.html">
+    testdisk
+   </a>
+   <br/>
+   <a href="/tags/tftp.html">
+    tftp
+   </a>
+   <br/>
+   <a href="/tags/thttpd.html">
+    thttpd
+   </a>
+   <br/>
+   <a href="/tags/thunderbird.html">
+    thunderbird
+   </a>
+   <br/>
+   <a href="/tags/timezone.html">
+    timezone
+   </a>
+   <br/>
+   <a href="/tags/ting.html">
+    ting
+   </a>
+   <br/>
+   <a href="/tags/tls.html">
+    tls
+   </a>
+   <br/>
+   <a href="/tags/tools.html">
+    tools
+   </a>
+   <br/>
+   <a href="/tags/tr.html">
+    tr
+   </a>
+   <br/>
+   <a href="/tags/trac.html">
+    trac
+   </a>
+   <br/>
+   <a href="/tags/tuning.html">
+    tuning
+   </a>
+   <br/>
+   <a href="/tags/tunnel.html">
+    tunnel
+   </a>
+   <br/>
+   <a href="/tags/ubuntu.html">
+    ubuntu
+   </a>
+   <br/>
+   <a href="/tags/vi.html">
+    vi
+   </a>
+   <br/>
+   <a href="/tags/wget.html">
+    wget
+   </a>
+   <br/>
+   <a href="/tags/wiki.html">
+    wiki
+   </a>
+   <br/>
+   <a href="/tags/windows.html">
+    windows
+   </a>
+   <br/>
+   <a href="/tags/windowsxp.html">
+    windowsxp
+   </a>
+   <br/>
+   <a href="/tags/wireless.html">
+    wireless
+   </a>
+   <br/>
+   <a href="/tags/wpa_supplicant.html">
+    wpa_supplicant
+   </a>
+   <br/>
+   <a href="/tags/x.html">
+    x
+   </a>
+   <br/>
+   <a href="/tags/xauth.html">
+    xauth
+   </a>
+   <br/>
+   <a href="/tags/xfree86.html">
+    xfree86
+   </a>
+   <br/>
+   <a href="/tags/xfs.html">
+    xfs
+   </a>
+   <br/>
+   <a href="/tags/xinearama.html">
+    xinearama
+   </a>
+   <br/>
+   <a href="/tags/xmms.html">
+    xmms
+   </a>
+   <br/>
+   <a href="/tags/youtube.html">
+    youtube
+   </a>
+   <br/>
+   <a href="/tags/zdump.html">
+    zdump
+   </a>
+   <br/>
+   <a href="/tags/zic.html">
+    zic
+   </a>
+   <br/>
+   <a href="/tags/zlib.html">
+    zlib
+   </a>
+   <br/>
+   <!-- google_ad_section_end -->
+  </div>
+ </body>
+</html>

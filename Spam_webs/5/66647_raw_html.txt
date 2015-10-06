@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>
+   How to create image sprites to optimise your website for speed
+  </title>
+  <meta content="How to create image sprites to optimise the loading speed of your website. Part of the website speed tutorial from Wight Hat" name="description"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="/css/frame.css" rel="stylesheet" type="text/css"/>
+  <!--[if IE 7]&gt;&lt;link rel="stylesheet" type="text/css" href="/css/frameIE.css" /&gt;&lt;![endif]-->
+  <link href="/favicon.ico" rel="shortcut icon" type="image/ico"/>
+  <link href="/favicon.ico" rel="icon" type="image/ico"/>
+ </head>
+ <body>
+  <div id="page">
+   <div id="content">
+    <div class="whimage logoPos">
+    </div>
+    <div id="menu">
+     <p class="whimage home" id="homeLink" onclick="document.location='/'">
+     </p>
+     <p class="whimage software" id="softwareLink" onclick="document.location='/software.html'">
+     </p>
+     <p class="whimage webServices" id="servicesLink" onclick="document.location='/webservices.html'">
+     </p>
+     <p class="whimage company" id="companyLink" onclick="document.location='/companyinfo.html'">
+     </p>
+    </div>
+    <div id="submenu">
+     <p align="center">
+      <a href="/guides/website-speed6.html">
+       &lt;&lt; positioning HTML references
+      </a>
+      ::
+      <a href="/guides/website-speed8.html">
+       online speed analysis tools &gt;&gt;
+      </a>
+     </p>
+    </div>
+    <div id="mainBody">
+     <h1>
+      how to create image sprites
+     </h1>
+     <h2>
+      Part of the
+      <a href="/guides/website-speed.html">
+       guide to website speed optimisation
+      </a>
+     </h2>
+     <div style="display:block;position:relative;top:30px;">
+      <p style="line-height:20px;">
+       Back in the third section
+       <a href="/guides/website-speed3.html">
+        making fewer DNS and HTTP requests
+       </a>
+       we talked about combining CSS and Script files. This can also be done with images using a technique called "sprites".
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        What is an image sprite?
+       </b>
+       A sprite is a collection of images all put together as one image and, thus, one file. If we pool all the images of a website into one image this means that only one http request will be made 
+					for many images on a page. Yes the one image will be much bigger... but remember that the http requests normally take more time than the downloading itself? Then this is how to use this to your advantage. In addition, remember that we can force the browser to 
+					cache content discussed in the forth section:
+       <a href="/guides/website-speed4.html">
+        making browsers cache your page content
+       </a>
+       ? We can make the browser cache the one image which can contain all the images on your website.
+      </p>
+      <div class="whimage webdevelopment2">
+       <h3>
+        In Firefox, right click this box and select 'View Background Image'
+       </h3>
+      </div>
+      <p style="line-height:20px;">
+       Many designers pre-load images, especially for roll overs to eliminate delay for the user... this becomes unnecessary too since all the images are loaded eliminating the need for more javascript. In firefox, right click the 
+					feature box on the right-hand side titled 'website development' and select 'View backgroud image'. This displays the whole image... but we use CSS to only show the particular subimage required for the feature box. Obviously you may not want to put every image on 
+					the site into a sprite but putting all the logos, buttons, roll overs etc. into one file can drastically increase the loading speed.
+      </p>
+      <p style="line-height:20px;">
+       Now for the bad part... this can be a real pain to set up, especially if you already have a site created. For a new site it is not quite so bad. The method I use is as follows:
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        1) Put images into css backgrounds
+       </b>
+       For each image that you wish to add to the sprite, make a style with a background image of the image and replace the html with a div or span and give it the class of the style.
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        2) Make a big image of the small images
+       </b>
+       Take each image and add them to a big image. For optimum size, try to make the big image as square as possible. I find that by adding the largest images first and then filling in 
+					the gaps with the smaller images you can usually make it fairly square.
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        3) Make a sprite image class
+       </b>
+       Make a CSS class with the background image set to the big image that you have just created.
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        4) Alter the CSS image classes
+       </b>
+       For each of the classes that you created in CSS, remove the background image and add a background-position, width and height. The width and height are the dimensions of the image and the 
+					background position is the coordinates in pixels for the top left corner of the required image within the big image.
+      </p>
+      <p style="line-height:20px;">
+       Here's an example:
+      </p>
+      <p style="line-height:20px;">
+       .whimage {
+       <br/>
+       background-image:url("/img/wighthat.png");
+       <br/>
+       background-repeat: no-repeat;
+       <br/>
+       }
+      </p>
+      <p style="line-height:20px;">
+       .webdevelopment {
+       <br/>
+       display:block;
+       <br/>
+       width:245px;
+       <br/>
+       height:138px;
+       <br/>
+       background-position: -0px -223px;
+       <br/>
+       }
+      </p>
+      <p style="line-height:20px;">
+       ... and in the html, to display the image...
+      </p>
+      <p style="line-height:20px;">
+       &lt;div class="whimage webdevelopment"&gt;&lt;/div&gt;
+      </p>
+      <p style="line-height:20px;">
+       As I say, it can be a real pain but it can really speed up the website dramatically which will get you more visitors.
+      </p>
+      <p style="line-height:20px;">
+       Now, to get the image cached in the browser, put a date on the end of the big image file name, change the big image class to that file name (now can you see why we put the image reference in a class of its own?) and change the 
+					.htaccess to cache images of that image type. One little trick- if you do not want to sprite all of your images (and do not want the browser to cache all of your images) you can use an extension like .jpeg for the big image, add just jpeg to the .htaccess file 
+					and use .jpg for all of your non-caching images.
+      </p>
+      <p style="line-height:20px;">
+       <b>
+        Next section:
+        <a href="/guides/website-speed8.html">
+         speed optimisation tools and further reading &gt;&gt;
+        </a>
+       </b>
+      </p>
+     </div>
+    </div>
+    <div id="footer" style="top:0px;">
+     <p align="center" style="top:0px;left:-40px;width:800px;float:left;padding:10px 0 0 0;">
+      <a href="/sitemap.html">
+       site map
+      </a>
+      ::
+      <span class="vcard">
+       <span class="org">
+        Wight Hat Isle of Wight web development, website hosting and SEO
+       </span>
+       <br/>
+       <span class="adr">
+        <span class="street-address">
+         Clarendon House, 7 East Cliff Road
+        </span>
+        ,
+        <span class="locality">
+         Shanklin
+        </span>
+        ,
+        <span class="region">
+         Isle of Wight
+        </span>
+        ,
+        <span class="postal-code">
+         PO37 6AA
+        </span>
+        ,
+        <span class="country-name">
+         UK
+        </span>
+       </span>
+       Tel:
+       <span class="tel">
+        +441983861990
+       </span>
+       <span class="geo">
+        <span class="latitude">
+         <span class="value-title" title="50.626954">
+         </span>
+        </span>
+        <span class="longitude">
+         <span class="value-title" title="-1.178046">
+         </span>
+        </span>
+       </span>
+      </span>
+      <br/>
+      Company No: 06216288 ::
+      <a href="javascript:gotoPage('companyinfo');">
+        Wight Hat Ltd.
+      </a>
+      2007-
+      <script type="text/javascript">
+       var d = new Date();document.write(d.getFullYear());
+      </script>
+      ::
+      <a href="#" onclick="javascript:gotoExt('http://www.aaronrudd.co.uk');">
+       Site Design: Aaron Rudd
+      </a>
+     </p>
+    </div>
+    <div style="position:absolute;top:320px;">
+     <script src="http://w.sharethis.com/button/sharethis.js#publisher=78dc07b7-9023-4ad6-bddb-3215c829f4fd&amp;type=website&amp;style=horizontal" type="text/javascript">
+     </script>
+    </div>
+   </div>
+  </div>
+  <input id="random" name="random" type="hidden" value="0"/>
+  <script src="/util/goto.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+   try {
+	var pageTracker = _gat._getTracker("UA-15523157-1");
+	pageTracker._trackPageview();
+	} catch(err) {}
+  </script>
+ </body>
+</html>

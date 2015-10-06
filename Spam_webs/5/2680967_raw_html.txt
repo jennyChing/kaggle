@@ -1,0 +1,2600 @@
+<!-- Article: URL Malformed. Action logged. -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <base href="http://www.tlife.gr"/>
+  <title>
+                 !      TLIFE! - Tlife.gr
+  </title>
+  <!-- tmplitem itemname="pageTitle"&gt;pageTitle&lt;/tmplitem -->
+  <meta content=" , , , " name="keywords"/>
+  <link href="/templates/default/template.css" media="screen" rel="stylesheet" type="text/css"/>
+  <!-- link href="templates/default/master.css" rel="stylesheet" type="text/css" / -->
+  <link href="/templates/default/print.css" media="print" rel="stylesheet" type="text/css"/>
+  <link href="/templates/default/menu.css" rel="stylesheet" type="text/css"/>
+  <script src="/scripts/jquery-1.4.2.min.js" type="text/javascript">
+  </script>
+  <script src="/scripts/swfobject.js" type="text/javascript">
+  </script>
+  <link href="/templates/default/js/nyroModal-1.6.2/styles/nyroModal.css" media="screen" rel="stylesheet" type="text/css"/>
+  <script src="/templates/default/js/nyroModal-1.6.2/js/jquery.nyroModal-1.6.2.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   $(function() {
+		$.nyroModalSettings({
+			minWidth: 965,
+			minHeight: 614,
+			resizable: false,
+			width: 960, 
+  			autoSizable: true
+  		});
+	});
+	
+	function goLeft(){
+		if(offset&gt;0){
+			$("#thumbscroller").animate({"left": "+="+goOffset+"px"}, "slow");
+			offset=offset-4;
+		}
+	}
+	
+	function goRight(){
+		if(offset&lt;maxoffset){
+			$("#thumbscroller").animate({"left": "-="+goOffset+"px"}, "slow");
+			offset=offset+4;
+		}
+	}
+	
+	function rateHighlight(id){
+		$('#ratingOn'+id).show();
+		$('#ratingOff'+id).hide();
+	}
+	
+	function rateDarken(id){
+		$('#ratingOn'+id).hide();
+		$('#ratingOff'+id).show();
+	}
+	
+	function rateReset(id){
+		value = $('#ratingStatus'+id).html();
+		if(value == 1){
+			$('#ratingOn'+id).show();
+			$('#ratingOff'+id).hide();
+		}else{
+			$('#ratingOn'+id).hide();
+			$('#ratingOff'+id).show();
+		}
+	}
+	
+	function HighlightRating(value){
+		for(i=1;i&lt;6;i++){
+			if(i&lt;=value){
+				rateHighlight(i);
+			}else{
+				rateDarken(i);
+			}
+		}
+	}
+	
+	function resetAllRatings(){
+		for(i=1;i&lt;6;i++){
+			value = $('#ratingStatus'+i).html();
+			if(value==1){
+				rateHighlight(i);
+			}else{
+				rateDarken(i);
+			}
+		}
+	}
+	
+	function submitRating(sectionid,id,rating){
+		var dataString = 'section='+sectionid+'&amp;art_id='+id+'&amp;rating='+rating;
+		$.ajax({  
+			type: "POST",  
+			url: "default.php?pname=AjaxRating",  
+			data: dataString,  
+			success: function(msg) {  
+				$('#ratingContainer').html(msg);
+			}  
+		});
+	}
+
+	function createCookie(name,value,days) {
+		if (days) {
+			var date = new Date();
+			date.setTime(date.getTime()+(days*24*60*60*1000));
+			var expires = "; expires="+date.toGMTString();
+		}
+		else var expires = "";
+		document.cookie = name+"="+value+expires+"; path=/";
+	}
+	
+	function readCookie(name) {
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0;i &lt; ca.length;i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+		return null;
+	}
+	
+	function eraseCookie(name) {
+		createCookie(name,"",-1);
+	}
+	
+	function encode_utf8( s ){
+		return unescape( encodeURIComponent( s ) );
+	}
+	
+	function decode_utf8( s ){
+		return decodeURIComponent( escape( s ) );
+	}
+	
+	function mail_click() {
+		ume=location.href;
+		tme=document.title;
+		if(tme.length==0) tme="www.tlife.gr";
+		window.open('mailto:?subject='+encodeURIComponent(tme)+'&amp;body='+encodeURIComponent(ume),'sharer','toolbar=0,status=0,width=626,height=436');
+		//return false;
+	}
+	
+	function facebook_click() {
+		ume=location.href;
+		tme=document.title;
+		if(tme.length==0) tme="www.tlife.gr";
+		window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent(ume)+'&amp;t='+encodeURIComponent(tme),'sharer','toolbar=0,status=0,width=626,height=436');
+		//return false;
+	}
+	
+	function twitter_click() {
+		ume=location.href;
+		tme=document.title;
+		if(tme.length==0) tme="www.tlife.gr";
+		window.open('http://twitter.com/share?text='+encodeURIComponent(tme)+'&amp;url'+ encodeURIComponent(ume),'sharer','toolbar=0,status=0,width=626,height=436');
+		
+		//return false;
+	}
+
+	function getSelect(type,target,id,selected){
+		var dataString = 'type='+type+'&amp;id='+id+'&amp;selected='+selected;
+		$.ajax({  
+			type: "POST",  
+			url: "default.php?pname=AjaxMisc",  
+			data: dataString,  
+			success: function(msg) {  
+				$('#'+target).html(msg);
+			}  
+		});
+	}
+	
+	function getBrands(id){
+		selected=$('#brand').val();
+		getSelect('brands','brand',id,selected);
+	}
+	
+	function getTypes(id){
+		selected=$('#type').val();
+		getSelect('types','type',id,selected);
+	}
+	
+	function resetFinder(){
+		getSelect('types','type',0,0);
+		getSelect('brands','brand',0,0);
+	}
+	
+	function getCities(id){
+		selected=$('#city').val();
+		getSelect('cities','city',id,selected);
+	}
+	
+	function getCategories(id){
+		selected=$('#category').val();
+		getSelect('categories','category',id,selected);
+	}
+	
+	function resetBBFinder(){
+		getSelect('cities','city',0,0);
+		getSelect('categories','category',0,0);
+	}
+  </script>
+  <!-- PUT THIS TAG IN THE head SECTION -->
+  <script src="http://partner.googleadservices.com/gampad/google_service.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   if (typeof GS_googleAddAdSenseService === 'undefined') {
+} else {
+  GS_googleAddAdSenseService("ca-pub-0371477852356965");
+}
+
+if (typeof GS_googleEnableAllServices === 'undefined') {
+} else {
+  GS_googleEnableAllServices();
+}
+  </script>
+  <script type="text/javascript">
+   if (typeof GA_googleAddSlot === 'undefined') {
+} else {
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-728x90-NEWS-TOP");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-728x90-NEWS-HOME-TOP");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-300x250-RIGHT-TOP");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-SKIN");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-HOME-300x250-RIGHT-TOP");
+ // GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-HOLE-SKIN");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-MEDIA-300x250-RIGHT-TOP");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-965x100-NEWS-HOME");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-bookmark");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-300x600-RUN-OF-SITE");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-300x250-RIGHT-MIDDLE");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-NEWS-300x250-ROS-RIGHT-TOP");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-FASHION-TRENDS-SKIN");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-TEXT-NEWS");
+  GA_googleAddSlot("ca-pub-0371477852356965", "TLIFE-965x250-NEWS");
+  	
+}
+  </script>
+  <script type="text/javascript">
+   if (typeof GA_googleFetchAds === 'undefined') {
+} else {
+  GA_googleFetchAds();
+}
+  </script>
+  <!-- END OF TAG FOR head SECTION -->
+  <meta content="              !      TLIFE!" property="og:title"/>
+  <meta content="tlife.gr" property="og:site_name"/>
+  <meta content="http://www.tlife.gr/files/Image/NEWS/2014/MAIOS/21-05/resized/flash1_630_450.jpg" property="og:image"/>
+  <meta content="               !" property="og:description"/>
+  <link href="http://www.tlife.gr/Article/news-voygiouklaki/0-68-62221.html" rel="canonical"/>
+  <!-- base href="http://www.tlife.gr/Article/news-voygiouklaki/0-68-62221.html" / -->
+  <link href="https://plus.google.com/112734446349155679410" rel="author"/>
+  <script src="/templates/default/tlife/jquery.colorbox.js" type="text/javascript">
+  </script>
+  <link href="/templates/default/tlife/colorbox.css" media="screen" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   $(function() {
+// Contact Form
+	//$("#contact").colorbox({width:"500",height:"300px", inline:true, href:"#contactForm"});
+	$("#contact").colorbox({width:"820px", height:"520px", iframe:true, scrolling: false});
+	$("#contact4").colorbox({width:"820px", height:"520px", iframe:true, scrolling: false});
+	$("#akatsaiti").colorbox({width:"820px", height:"520px", iframe:true, scrolling: false});
+});
+  </script>
+  <script type="text/javascript">
+   if(top != self) top.location.replace(location);
+  </script>
+ </head>
+ <body>
+  <!--search_noindex-->
+  <div id="fb-root">
+  </div>
+  <script>
+   window.fbAsyncInit = function() {
+        FB.init({appId: '172614982757563', status: true, cookie: true,
+                 xfbml: true});
+      };
+      (function() {
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.src = document.location.protocol +
+          '//connect.facebook.net/en_US/all.js';
+        e.async = true;
+        document.getElementById('fb-root').appendChild(e);
+      }());
+  </script>
+  <div id="top_wrapper">
+   <div class="banner">
+    <script type="text/javascript">
+     GA_googleFillSlot("TLIFE-728x90-NEWS-TOP");
+    </script>
+   </div>
+  </div>
+  <div id="outer_wrapper">
+   <!--&lt;div id="sponsor"&gt;&lt;span style="background: url(templates/default/images/sponsors/ny_no_fade.png) no-repeat top center; height: 2000px; display:block;"&gt;&lt;/span&gt;&lt;/div&gt;-->
+   <script type="text/javascript">
+    $(document).ready(function(){
+
+ $(window).load(function(){  
+  var windw = this;
+
+$.fn.followTo = function ( pos ) {
+    var $this = this,
+        $window = $(windw);
+    
+    $window.scroll(function(e){
+        if ($window.scrollTop() &gt; pos) {
+            $this.css({
+                position: 'absolute',
+                top: pos
+            });
+        } else {
+            $this.css({
+                position: 'fixed',
+                top: 0
+            });
+        }
+    });
+};
+
+fooheight = $(document).height()-1500;
+
+$('#summary').followTo(fooheight);
+$('#summary2').followTo(fooheight);     
+});
+});
+   </script>
+   <script type="text/javascript">
+    GA_googleFillSlot("TLIFE-FASHION-TRENDS-SKIN");
+   </script>
+   <div class="inner" id="wrapper">
+    <!-- HEADER -->
+    <h1>
+     <a href="/default.php">
+      <span>
+       TLife | The female side of life
+      </span>
+     </a>
+    </h1>
+    <ul id="site_actions">
+     <!--&lt;li&gt;&lt;a href="#"&gt;&lt;/a&gt;&lt;/li&gt;
+        	&lt;li&gt;&lt;a href="#"&gt;&lt;/a&gt;&lt;/li&gt;-->
+     <div style="display:none">
+      <div id="contactForm" style="padding:10px; background:#fff;">
+      </div>
+     </div>
+     <li>
+      <a href="Contact.html" id="contact">
+       
+      </a>
+     </li>
+    </ul>
+    <style>
+     #search {
+
+                         margin-top:114px;
+
+                       padding:0;
+
+                         width:207px;
+
+                         background:none;
+
+             }
+
+             #search div {
+
+                        float:right;
+
+                         clear:both;
+
+                        padding:2px 3px 3px;
+
+                         width:152px;
+
+                         height:18px;
+
+                         overflow:hidden;
+
+                         background:#888888
+ url('http://www.tlife.gr/templates/default/tlife/images/search_bg.png');
+
+             }
+    </style>
+    <form action="default.php" id="search" method="get">
+     <!-- a href="http://www.11888.gr/" target="_blank"&gt;&lt;img src="/templates/default/images/tlife-11888-search.png" width="207" height="37"/&gt;&lt;/a -->
+     <br/>
+     <div>
+      <input name="keywords" onclick="this.value=''" type="text" value=""/>
+      <input name="pname" type="hidden" value="Search"/>
+      <input type="submit" value="GO"/>
+     </div>
+    </form>
+    <!-- END OF HEADER -->
+    <!-- NAVIGATION -->
+    <ul id="nav">
+     <li>
+      <a href="/fashion.html">
+       FASHION
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/Fashion/0-6.html">
+            FASHION NEWS
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-15.html">
+            FASHION TRENDS
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/alexkatsaiti.html">
+            ALEXANDRA'S BLOG
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=PhotoGalleryList&amp;page=1&amp;cat_id=6&amp;tag=HOWTO">
+              ;
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=PhotoGalleryList&amp;page=1&amp;cat_id=89">
+               STAR!
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=PhotoGalleryList&amp;page=1&amp;cat_id=65">
+            TL!FE 
+           </a>
+          </li>
+          <li>
+           <a href="/VideoGallery/tlifetvfashion/28-6-0.html">
+            FASHION VIDEOS
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="http://www.tlife.gr/Article/fashion-shopping/0-6-79876.html">
+             , t-shirts, sneakers:   hot items       shopping!
+            </a>
+           </li>
+           <li>
+            <a href="http://www.tlife.gr/Article/fashion-how-to/0-6-79823.html">
+             STYLING TIPS: 12 stylish        !!
+            </a>
+           </li>
+           <li>
+            <a href="Article/fashion-celebrities/0-64-72616.html">
+              star  :  celebrities    cold weather outfits!
+            </a>
+           </li>
+           <li>
+            <a href="Article/fashion-celebrities/0-64-74871.html">
+             CELEBRITY INSPIRATION:    stylish    - 20,  30,  40...
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/shopping.html">
+       SHOPPING
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/GroupsList.html?cat_id=103">
+            OI HOT A
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=ProductFinder&amp;type=0&amp;brand=0&amp;x=35&amp;y=8">
+            TLIFE Product Finder
+           </a>
+          </li>
+          <li>
+           <a href="/GroupsList.html?cat_id=104">
+            SMART BUYS
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=ProductFinder&amp;type=55&amp;x=41&amp;y=6">
+              !
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="/default.php?pname=Group&amp;group_id=956&amp;tid=0&amp;item_id=">
+              boho!
+            </a>
+           </li>
+           <li>
+            <a href="/default.php?pname=Group&amp;group_id=940&amp;tid=0&amp;item_id=">
+             rmy look:    !
+            </a>
+           </li>
+           <li>
+            <a href="/default.php?pname=Group&amp;group_id=953&amp;tid=0&amp;item_id=">
+             Sexy !   100
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/beauty.html">
+       BEAUTY
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/Beauty/0-8.html">
+            BEAUTY NEWS
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-17.html">
+            BEAUTY TRENDS
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList//0-19.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList//0-18.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList//0-20.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/VideoGallery/tlifetvbeauty /28-8-0.html">
+            BEAUTY VIDEOS
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/BeautySchool.html">
+            BEAUTY SCHOOL
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <a href="/KeratinColor.html" style="padding: 0px;">
+           <img border="0" src="/flash/banners/2015/06/Keratin_menu-banner.jpg"/>
+          </a>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/news.html">
+       NEWS
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/News/0-9.html">
+            , 
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-4.html">
+            TL!FE 
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-40.html">
+            MEDIA NEWS
+           </a>
+          </li>
+          <li>
+           <a href="/VideoGallery.html">
+            NEWS VIDEOS
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="/Article/news-tlife-social-media/0-9-81704.html">
+                TLIFE  social media;
+            </a>
+           </li>
+           <li>
+            <a href="/Article/news-vasilis-xaralampopoulos-axarnhs-aristofanh/0-123-84792.html">
+                TLIFE:     , ,     
+            </a>
+           </li>
+           <li>
+            <a href="/ArticleList/exclusive /0-68.html">
+               TL!FE
+            </a>
+           </li>
+           <li>
+            <a href="/Article/news-ex-girlfriends-perfume-robbie-williams/0-68-82555.html">
+             Ex-Girlfriend's Perfume:         Robbie Williams   TLIFE!
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/fitness.html">
+       HEALTH &amp; FITNESS
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/Healthandfitness/0-10.html">
+            , 
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-80.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=PhotoGalleryList&amp;page=1&amp;cat_id=10&amp;tag=HOWTO">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-110.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-58.html">
+               CELEBRITIES
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-105.html">
+              
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/health/0-57.html">
+             
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="Article/fitness-diaita-xase-kila/0-80-84846.html">
+             :    8    ...
+            </a>
+           </li>
+           <li>
+            <a href="Article/healthandfitness-kathysterisi-periodou-aities/0-57-84693.html">
+             :     (   );      ;
+            </a>
+           </li>
+           <li>
+            <a href="photoGallery/fitness-zesto-nero-me-lemoni-adynatisma/41-37-63446.html">
+                      !
+            </a>
+           </li>
+           <li>
+            <a href="photoGallery/fitness-gymnastiki-plagioi-koiliakoi-yoga/41-5347-63430.html">
+              ! 5     ...
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/deco.html">
+       DECO
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="http://www.tlife.gr/ArticleList/Design-News/0-128.html">
+            DESIGN NEWS
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/ArticleList/Home-Trends/0-126.html">
+            HOME TRENDS
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/ArticleList/Smart-Moves/0-127.html">
+            SMART MOVES
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="Article/FN/0-126-76578.html">
+                 ""  !  !
+            </a>
+           </li>
+           <li>
+            <a href="Article/deco-sea/0-127-49988.html">
+                 !  !
+            </a>
+           </li>
+           <li>
+            <a href="Article/deco-alfavitos-diakosmisis/0-126-83910.html">
+             :     2015 (part 1)
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/relationships.html">
+        &amp; 
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/FN/0-52.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-102.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-82.html">
+            OI   
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/default.php?pname=Search&amp;keywords=%CE%B6%CF%8E%CE%B4%CE%B9%CE%B1&amp;page=1">
+                
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/lovequiz/0-53.html">
+            LOVE QUIZ
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/sxeseis/0-48.html">
+            
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="Article/sxeseis-sex-giati-den-exeis-orgasmo/0-49-84709.html">
+              : 10    ...
+            </a>
+           </li>
+           <li>
+            <a href="Article/sxeseis-test-proswpikotitas/0-53-84641.html">
+             !       ;
+            </a>
+           </li>
+           <li>
+            <a href="Article/relationships-liar/0-48-20510.html">
+             Liar Detector! 10+1       !
+            </a>
+           </li>
+           <li>
+            <a href="Article/sxesi-apo-apostasi-symvoules-na-epiviwseis/0-48-84574.html">
+               : 10       ...
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/family.html">
+       
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/ArticleList/MYMOM/0-41.html">
+            H MAMA
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/MYDAD/0-42.html">
+             
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/ME/0-43.html">
+             
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-45.html">
+              ;
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-44.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/FN/0-47.html">
+            FUN FUN FUN
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="Article/family-mpampades-gia-vraveio/0-42-83577.html">
+             10+1    ... !
+            </a>
+           </li>
+           <li>
+            <a href="Article/family-pos-na-vgaleis-tin-agida/0-45-83621.html">
+                      !
+            </a>
+           </li>
+           <li>
+            <a href="Article/family-emvolia/0-12-82301.html">
+             :       ;
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/recipe_main.html">
+       
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="http://www.tlife.gr/RecipeList.html">
+               ;
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=PhotoGalleryList&amp;page=1&amp;cat_id=13&amp;tag=HOWTO">
+             
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=RecipeList&amp;cat_id=85&amp;cat_friendly_name=StarRecipes">
+             STAR 
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=RecipeList&amp;cat_id=86&amp;cat_friendly_name=ChefRecipes">
+               CHEF
+           </a>
+          </li>
+          <li>
+           <a href="/ArticleList/lowbudget/0-134.html">
+            LOW BUDGET RECIPES
+           </a>
+          </li>
+          <li>
+           <a href="http://www.tlife.gr/ArticleList/menu/0-13.html">
+               
+           </a>
+          </li>
+         </ul>
+         <div class="quick_links">
+          <h3>
+           Quick Links
+          </h3>
+          <ul>
+           <li>
+            <a href="RecipeView/FN/0-25-2750.html">
+                
+            </a>
+           </li>
+           <li>
+            <a href="RecipeView/FN/0-28-2137.html">
+               
+            </a>
+           </li>
+           <li>
+            <a href="RecipeView/FN/0-28-2749.html">
+              
+            </a>
+           </li>
+           <li>
+            <a href="RecipeView/FN/0-23-2744.html">
+                -
+            </a>
+           </li>
+          </ul>
+         </div>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="http://tastro.tlife.gr/">
+       
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="http://tastro.tlife.gr//astrologia/astrologikos-xarths.html">
+             
+           </a>
+          </li>
+          <li>
+           <a href="http://tastro.tlife.gr/astrologia/synastria-zwdia.html">
+            ;
+           </a>
+          </li>
+          <li>
+           <a href="http://tastro.tlife.gr/oneirokritis.html#result">
+            
+           </a>
+          </li>
+          <li>
+           <a href="http://tastro.tlife.gr/astrologoi.html">
+            
+           </a>
+          </li>
+          <li>
+           <a href="http://tastro.tlife.gr/content/zodia-humour.html">
+              
+           </a>
+          </li>
+         </ul>
+        </div>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="/VideoGallery.html">
+       TL!FE TV
+      </a>
+      <ul>
+       <li>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="http://www.tshopping.gr/" style="background-color: #1ed87f;" target="_blank">
+       T-SHOP
+      </a>
+      <ul>
+       <li>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="#">
+       BLOGS
+      </a>
+      <ul>
+       <li>
+        <div class="submenu">
+         <ul class="nav_sub">
+          <li>
+           <a href="/default.php?pname=TatianaBlog">
+            Tatiana's Blog
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=EditorsBlog">
+            Editor's Blog
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=BerenatasBlog">
+            Berenata's Blog
+           </a>
+          </li>
+          <li>
+           <a href="/alexkatsaiti.html">
+            Alexandra's Blog
+           </a>
+          </li>
+         </ul>
+        </div>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <!-- END OF NAVIGATION -->
+    <script type="text/javascript">
+     GA_googleFillSlot("TLIFE-965x250-NEWS");
+    </script>
+    <div class="content">
+     <ul id="path">
+      <li>
+       <a class="home" href="/default.php">
+        Home
+       </a>
+      </li>
+      <li>
+       <a href="news.html">
+        NEWS
+       </a>
+      </li>
+      <li>
+       <a href="/ArticleList/exclusive /0-68.html">
+          TLIFE!
+       </a>
+      </li>
+     </ul>
+     <div>
+      <!-- a href="http://www.tlife.gr/Oscars2013.html"&gt;
+&lt;img src="http://www.tlife.gr/flash/banners/2013/02/promo_box_news_655px.jpg" border="0"&gt;&lt;/a&gt;
+&lt;img src="http://bold.adman.gr/banner?webspace=1348&amp;auto=1" width="1" height="1" border="0" -->
+     </div>
+     <div class="ticker">
+      <a class="ticker-left" href="/Article/deco-soli/0-126-62030.html">
+       <img src="templates/default/images/ticker-left.gif"/>
+      </a>
+      <a class="ticker-right" href="/Article/family-paixnidi/0-43-62549.html">
+       <img src="templates/default/images/ticker-right.gif"/>
+      </a>
+      <p class="left">
+       <a href="/Article/deco-soli/0-126-62030.html">
+            ... !
+       </a>
+      </p>
+      <p class="right">
+       <a href="/Article/family-paixnidi/0-43-62549.html">
+                ;
+       </a>
+      </p>
+     </div>
+     <div class="mainarticle">
+      <!--/search_noindex-->
+      <div class="date">
+       22.05.2014 | 15:21
+      </div>
+      <span class="author">
+          Tweet me @mroumeliotou
+      </span>
+      <h1 class="mainarticle-title01">
+                     !      TLIFE!
+      </h1>
+      <div class="main-photo">
+       <img src="/files/Image/NEWS/2014/MAIOS/21-05/resized/flash1_633_451.jpg"/>
+       <span class="photosource">
+        :   Omega Entertainment/  
+       </span>
+      </div>
+      <p style="margin-bottom:5px; margin-top:5px;">
+      </p>
+      <div style="border: 0px solid;display: block; float: right;width: 280px;height: 60px;margin-right: 5px;">
+       <script language="JavaScript">
+        &lt;!--
+var google_adnum = 0; /* only insert this line for your first ad unit */
+function google_ad_request_done(google_ads) {
+	var s = '';
+	var i;
+	if (google_ads.length == 0) {
+		return;
+	}
+	if (google_ads[0].type == "html") {
+		s += '&lt;a href=\"' +
+		google_info.feedback_url + '\" style="color:000000;"  target="_blank"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;' +
+		google_ads[0].snippet;
+	} else {
+		if (google_ads.length == 1) {
+			s += '&lt;div style="border-top: 1px dotted #eee;border-bottom: 1px dotted #eee;width: 240px;padding-left: 2px;padding-bottom: 0px;margin: 0px;"&gt;';
+			s += '&lt;a href=\"' + google_info.feedback_url + '\" style="font-color:#000000;font-size:9px!important;color: black;display: block;float:right;"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;';
+			s += ' &lt;a style="text-decoration:none;font-size:12px!important;color:#000000;" href="' +
+			google_ads[0].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+			google_ads[0].visible_url + '\';return true" target="_blank"&gt; &lt;span style="text-decoration:underline;font-size:14pxcolor: black;"&gt; &lt;b&gt;' +
+			google_ads[0].line1 + '&lt;/b&gt;&lt;br&gt;&lt;/span&gt;&lt;/a&gt; &lt;span style="color:#000000;font-size:11px!important;"&gt;' +
+			google_ads[0].line2 + '&nbsp;' +
+			google_ads[0].line3 + '&lt;br&gt;&lt;/span&gt; &lt;a style="color:#008000;font-size:12px!important;text-decoration:none" href="' +
+			google_ads[0].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+			google_ads[0].visible_url + '\';return true"  target="_blank"&gt;&lt;span&gt;' +
+			google_ads[0].visible_url + '&lt;/span&gt;&lt;/a&gt;&lt;br&gt;';
+			s += "&lt;/div&gt;";
+		} else if (google_ads.length &gt; 1) {
+			s += '&lt;div style="border-top: 1px dotted #eee;border-bottom: 1px dotted #eee;width: 600px;padding-left: 10px;padding-bottom: 10px;margin: 10px;"&gt;&lt;a href=\"' + google_info.feedback_url + '\" style="font-color:#000000;color: black;"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;';
+			for(i = 0; i &lt; google_ads.length; ++i) {
+				s += '&lt;br&gt;&lt;a style="text-decoration:none;font-size:14px!important;color:#000000;" href="' +
+				google_ads[i].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+				google_ads[i].visible_url + '\';return true"  target="_blank"&gt; &lt;span style="text-decoration:underline;color: black;"&gt; &lt;b&gt;' +
+				google_ads[i].line1 + '&lt;/b&gt;&lt;br&gt;&lt;/span&gt;&lt;/a&gt; &lt;span style="color:#000000"&gt;' +
+				google_ads[i].line2 + " " +
+				google_ads[i].line3 + '&lt;br&gt;&lt;/span&gt; &lt;a style="color:#008000;font-size:14px!important;text-decoration:none!important;" href="' +
+				google_ads[i].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+				google_ads[i].visible_url + '\';return true"  target="_blank"&gt;&lt;span&gt;' +
+				google_ads[i].visible_url + '&lt;/span&gt;&lt;/a&gt;&lt;br&gt;';
+			}
+			s += "&lt;/div&gt;";
+		}
+    }
+	if (google_ads[0].bidtype == "CPC") { /* insert this snippet for each ad call */
+		google_adnum = google_adnum + google_ads.length;
+	}
+    document.write(s);
+    return;
+}
+
+google_ad_client = 'pub-0371477852356965'; /* substitute your client_id (pub-#) */
+google_ad_channel = '12345678';
+google_ad_region= "test";
+google_ad_output = 'js';
+google_max_num_ads = '1';
+google_ad_type = 'text_html';
+//google_image_size = '728x90';
+google_feedback = 'on';
+google_skip = google_adnum; /* to skip for multiple units, insert this snippet for each ad call */
+// --&gt;
+       </script>
+       <script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+       </script>
+      </div>
+      <img src="/templates/default/images/tlife_like.png"/>
+      <script src="http://w.sharethis.com/button/buttons.js" type="text/javascript">
+      </script>
+      <script type="text/javascript">
+       stLight.options({publisher: "0270820f-9662-4d4e-afc0-72132420d9d3"});
+      </script>
+      <span class="st_facebook_vcount" displaytext="Facebook">
+      </span>
+      <!-- span class='st_twitter_vcount' displayText='Tweet'&gt;&lt;/span -->
+      <div class="mainarticle-inner">
+       <ul class="extras">
+       </ul>
+       <div class="articletext">
+        <!--intext_content_tag_start-->
+        <div id="intext_content_tag">
+              '60...    
+         <a href="http://www.tlife.gr/default.php?keywords=%CE%B2%CE%BF%CF%85%CE%B3%CE%B9%CE%BF%CF%85%CE%BA%CE%BB%CE%AC%CE%BA%CE%B7&amp;pname=Search" target="_blank">
+           
+         </a>
+              ,    .     ""       ,       ,           ,          .  ,  ,      facebook   
+         <a href="https://www.facebook.com/nico.mastorakis" target="_blank">
+          ( facebook.com/nico.mastorakis)
+         </a>
+                 ,      1965,      ,    . ...              !
+         <br/>
+         <br/>
+         <img alt="" height="672" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora.jpg" width="600"/>
+         <br/>
+         <br/>
+          TLIFE,               ,         ,       ...
+         <br/>
+         <br/>
+         <img alt="" height="663" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora2.jpg" width="600"/>
+         <br/>
+         <u>
+          <em>
+           <strong>
+                   ...     !
+           </strong>
+          </em>
+         </u>
+         <br/>
+         <br/>
+                        .
+         <br/>
+         <br/>
+         <img alt="" height="659" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora3.jpg" width="600"/>
+         <br/>
+         <br/>
+         <strong>
+                TLIFE:
+         </strong>
+         <br/>
+         <br/>
+         "M    ,           ,   ,    .    glorious   60s       .    ,   .          .
+         <strong>
+          ,         ,   ,           . ,   (    )   .   (              )     , ,   , , ,             ,  ,  .     ;          .
+          <br/>
+          <br/>
+         </strong>
+         <div>
+          <img alt="" height="825" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora1.jpg" width="600"/>
+         </div>
+         <div>
+          <div>
+           "                 Grollywood,   Sounds,  ,    ( ), ,       .
+           <strong>
+             : Surprise Party.      ,  .  ,  ,  , , ,  (      )      .           ()  ,       (    )  
+           </strong>
+           <br/>
+           <br/>
+           (         (,      )                 ).
+           <br/>
+           <br/>
+           <img alt="" height="658" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora5.jpg" width="600"/>
+          </div>
+          <div>
+           <u>
+            <em>
+             <strong>
+              <br/>
+                       
+             </strong>
+            </em>
+           </u>
+          </div>
+          <div>
+          </div>
+         </div>
+         <div>
+          <img alt="" height="803" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora6.jpg" width="600"/>
+          <br/>
+          <br/>
+                 .
+          <br/>
+          <img alt="" height="401" src="/files/Image/NEWS/2014/MAIOS/21-05/mastora4.jpg" width="600"/>
+          <br/>
+          <br/>
+         </div>
+         <div style="width: 620px;height: 300px;display:block;float:left;text-align: center;margin-top:10px;">
+          <script type="text/javascript">
+           google_ad_client = "ca-pub-0371477852356965";
+	    google_ad_slot = "4982708973";
+	    google_ad_width = 300;
+	    google_ad_height = 250;
+		google_ad_region= "test";
+          </script>
+          <!-- Tlife_300x250_Article_Ros -->
+          <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+          </script>
+         </div>
+        </div>
+        <!--intext_content_tag_end-->
+        <div class="tags" style="float: left;width:620px;margin-bottom: 10px;margin-top: 10px;border: 1px solid grey;padding: 5px;">
+         <strong>
+          Tags:
+         </strong>
+         <a href="/default.php?pname=Tags&amp;tag= " style="color: #9D9A9A;">
+           
+         </a>
+         ,
+         <a href="/default.php?pname=Tags&amp;tag= " style="color: #9D9A9A;">
+           
+         </a>
+         ,
+         <a href="/default.php?pname=Tags&amp;tag= " style="color: #9D9A9A;">
+           
+         </a>
+         ,
+         <a href="/default.php?pname=Tags&amp;tag= " style="color: #9D9A9A;">
+           
+         </a>
+        </div>
+        <ul class="links">
+         <li>
+           :
+          <a href="/Article/news-mastorakis/0-9-61316.html">
+           N :  ,      !
+          </a>
+         </li>
+         <li>
+           :
+          <a href="/Article/news-daphne/0-9-51430.html">
+               .      Youtube   video  !
+          </a>
+         </li>
+         <li>
+           :
+          <a href="http://tastro.tlife.gr/zwdia/shmera.html">
+                 .
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div style="float: left; margin: 10px 10px 10px 50px;">
+        <table border="0" cellpadding="0" cellspacing="0">
+         <tr>
+          <th>
+           <style type="text/css">
+            #sponsored_links {
+		width: 498px;
+		background-color: #FFF;
+		padding: 8px;
+		border: 1px solid #CCC;
+		font-family: Tahoma;
+		font-size: 13px;
+		line-height: 15px;
+		color: #FFF;
+		text-align: left;
+	}
+	
+	#sponsored_title {
+		font-weight: bold;
+		padding: 5px;
+		background-color: #000;
+		color: #FFF;
+		width: 488px;
+		margin-bottom: 10px;
+	}
+	
+	#sponsored_links a {
+		color: #000!important;
+		text-decoration: none;
+                font-weight: normal;
+	}
+
+	#sponsored_links a:hover {
+		color: #C00!important;
+	}
+           </style>
+           <div id="sponsored_links">
+            <div id="sponsored_title">
+              
+             <div style="float: right; font-size: 10px; color: #CCC; font-weight: normal;">
+              
+             </div>
+            </div>
+            <script type="text/javascript">
+             GA_googleFillSlot("TLIFE-TEXT-NEWS");
+            </script>
+           </div>
+           <br/>
+          </th>
+         </tr>
+        </table>
+       </div>
+       <div class="rating" id="ratingContainer">
+         
+        <ul class="stars">
+         <li id="rating1">
+          <a href="javascript:submitRating('11007','62221','1');" onmouseout="resetAllRatings();" onmouseover="HighlightRating('1');">
+           <span id="ratingOn1">
+            <img src="templates/default/images/star-green.gif"/>
+           </span>
+           <span id="ratingOff1" style="display:none;">
+            <img src="templates/default/images/star-grey.gif"/>
+           </span>
+          </a>
+          <span id="ratingStatus1" style="display:none;">
+           1
+          </span>
+         </li>
+         <li id="rating2">
+          <a href="javascript:submitRating('11007','62221','2');" onmouseout="resetAllRatings();" onmouseover="HighlightRating('2');">
+           <span id="ratingOn2">
+            <img src="templates/default/images/star-green.gif"/>
+           </span>
+           <span id="ratingOff2" style="display:none;">
+            <img src="templates/default/images/star-grey.gif"/>
+           </span>
+          </a>
+          <span id="ratingStatus2" style="display:none;">
+           1
+          </span>
+         </li>
+         <li id="rating3">
+          <a href="javascript:submitRating('11007','62221','3');" onmouseout="resetAllRatings();" onmouseover="HighlightRating('3');">
+           <span id="ratingOn3">
+            <img src="templates/default/images/star-green.gif"/>
+           </span>
+           <span id="ratingOff3" style="display:none;">
+            <img src="templates/default/images/star-grey.gif"/>
+           </span>
+          </a>
+          <span id="ratingStatus3" style="display:none;">
+           1
+          </span>
+         </li>
+         <li id="rating4">
+          <a href="javascript:submitRating('11007','62221','4');" onmouseout="resetAllRatings();" onmouseover="HighlightRating('4');">
+           <span id="ratingOn4">
+            <img src="templates/default/images/star-green.gif"/>
+           </span>
+           <span id="ratingOff4" style="display:none;">
+            <img src="templates/default/images/star-grey.gif"/>
+           </span>
+          </a>
+          <span id="ratingStatus4" style="display:none;">
+           1
+          </span>
+         </li>
+         <li id="rating5">
+          <a href="javascript:submitRating('11007','62221','5');" onmouseout="resetAllRatings();" onmouseover="HighlightRating('5');">
+           <span id="ratingOn5" style="display:none;">
+            <img src="templates/default/images/star-green.gif"/>
+           </span>
+           <span id="ratingOff5">
+            <img src="templates/default/images/star-grey.gif"/>
+           </span>
+          </a>
+          <span id="ratingStatus5" style="display:none;">
+           0
+          </span>
+         </li>
+        </ul>
+       </div>
+       <script language="JavaScript">
+        &lt;!--
+
+//var google_adnum = 0; /* only insert this line for your first ad unit */
+
+function google_ad_request_done(google_ads) {
+
+/*
+* This function is required and is used to display
+* the ads that are returned from the JavaScript
+* request. You should modify the document.write
+* commands so that the HTML they write out fits
+* with your desired ad layout.
+*/
+
+var s = '';
+var i;
+
+/*
+* Verify that there are actually ads to display.
+*/
+
+if (google_ads.length == 0) {
+return;
+}
+
+/*
+* If an image, flash or html ad is returned, display that ad.
+* Otherwise, build a string containing all of the ads and
+* then use a document.write() command to print that string.
+*/
+
+if (google_ads[0].type == "html") {
+
+   s += '&lt;a href=\"' +
+google_info.feedback_url + '\" style="color:000000;"  target="_blank"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;' +
+google_ads[0].snippet;
+
+} else {
+
+if (google_ads.length == 1) {
+
+/*
+* Partners should adjust text sizes
+* so ads occupy the majority of ad space.
+*/
+   s += '&lt;div style="border-top: 1px dotted #eee;border-bottom: 1px dotted #eee;width: 600px;padding-left: 10px;padding-bottom: 10px;margin: 10px;"&gt;&lt;a href=\"' + google_info.feedback_url + '\" style="font-color:#000000;color: black;"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;'
+
+   s += '&lt;br&gt; &lt;a style="text-decoration:none;font-size:14px!important;color:#000000;" href="' +
+google_ads[0].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+google_ads[0].visible_url + '\';return true" target="_blank"&gt; &lt;span style="text-decoration:underline;font-size:14pxcolor: black;"&gt; &lt;b&gt;' +
+google_ads[0].line1 + '&lt;/b&gt;&lt;br&gt;&lt;/span&gt;&lt;/a&gt; &lt;span style="color:#000000;font-size:14px!important;"&gt;' +
+google_ads[0].line2 + '&nbsp;' +
+google_ads[0].line3 + '&lt;br&gt;&lt;/span&gt; &lt;a style="color:#008000;font-size:14px!important;text-decoration:none" href="' +
+google_ads[0].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+google_ads[0].visible_url + '\';return true"  target="_blank"&gt;&lt;span&gt;' +
+google_ads[0].visible_url + '&lt;/span&gt;&lt;/a&gt;&lt;br&gt;';
+s += "&lt;/div&gt;";
+
+} else if (google_ads.length &gt; 1) {
+
+   s += '&lt;div style="border-top: 1px dotted #eee;border-bottom: 1px dotted #eee;width: 600px;padding-left: 10px;padding-bottom: 10px;margin: 10px;"&gt;&lt;a href=\"' + google_info.feedback_url + '\" style="font-color:#000000;color: black;"&gt;Ads by Google&lt;/a&gt;&lt;br&gt;'
+
+  /*
+  * For text ads, append each ad to the string.
+  */
+
+for(i = 0; i &lt; google_ads.length; ++i) {
+
+s += '&lt;br&gt;&lt;a style="text-decoration:none;font-size:14px!important;color:#000000;" href="' +
+google_ads[i].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+google_ads[i].visible_url + '\';return true"  target="_blank"&gt; &lt;span style="text-decoration:underline;color: black;"&gt; &lt;b&gt;' +
+google_ads[i].line1 + '&lt;/b&gt;&lt;br&gt;&lt;/span&gt;&lt;/a&gt; &lt;span style="color:#000000"&gt;' +
+google_ads[i].line2 + " " +
+google_ads[i].line3 + '&lt;br&gt;&lt;/span&gt; &lt;a style="color:#008000;font-size:14px!important;text-decoration:none!important;" href="' +
+google_ads[i].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
+google_ads[i].visible_url + '\';return true"  target="_blank"&gt;&lt;span&gt;' +
+google_ads[i].visible_url + '&lt;/span&gt;&lt;/a&gt;&lt;br&gt;';
+}
+s += "&lt;/div&gt;";
+}
+    }
+
+if (google_ads[0].bidtype == "CPC") { /* insert this snippet for each ad call */
+google_adnum = google_adnum + google_ads.length;
+}
+
+    document.write(s);
+    return;
+  }
+
+google_ad_client = 'pub-0371477852356965'; /* substitute your client_id (pub-#) */
+google_ad_channel = '12345678';
+google_ad_region= "test";
+google_ad_output = 'js';
+google_max_num_ads = '4';
+google_ad_type = 'text_html';
+//google_image_size = '728x90';
+google_feedback = 'on';
+google_skip = google_adnum; /* to skip for multiple units, insert this snippet for each ad call */
+// --&gt;
+       </script>
+       <!--
+/*
+* The JavaScript returned from the following page uses
+* the parameter values assigned above to populate an array
+* of ad objects. Once that array has been populated,
+* the JavaScript will call the google_ad_request_done
+* function to display the ads.
+*/
+-->
+       <script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+       </script>
+       <!-- tmplitem itemname="compCount"&gt;compCount&lt;/tmplitem -->
+       <!--search_noindex-->
+       <p>
+        <img src="/templates/default/images/tlife_like.png"/>
+        <span class="st_facebook_vcount" displaytext="Facebook">
+        </span>
+        <span class="st_twitter_vcount" displaytext="Tweet">
+        </span>
+        <span class="st_pinterest_vcount" displaytext="Pinterest">
+        </span>
+        <span class="st_email_vcount" displaytext="Email">
+        </span>
+       </p>
+       <div class="options">
+        <div class="optionsleft">
+         <a class="email" href="javascript:mail_click();">
+          e-mail
+         </a>
+         <a class="print" href="javascript:print();">
+          
+         </a>
+        </div>
+        <div class="optionsright">
+         <a class="facebook" href="javascript:facebook_click();">
+          <img src="templates/default/images/facebook.gif"/>
+         </a>
+         <a class="twitter" href="javascript:twitter_click();">
+          <img src="templates/default/images/twitter.gif"/>
+         </a>
+        </div>
+       </div>
+       <!-- a href="/CompetitionForm.html" style="display: block; width: 100%; text-align: center;"&gt;&lt;img src="/templates/default/competition/sex_and_the_city/article_bottom.jpg"&gt;&lt;/a -->
+       <div class="ticker">
+        <a class="ticker-left" href="/Article/deco-soli/0-126-62030.html">
+         <img src="templates/default/images/ticker-left.gif"/>
+        </a>
+        <a class="ticker-right" href="/Article/family-paixnidi/0-43-62549.html">
+         <img src="templates/default/images/ticker-right.gif"/>
+        </a>
+        <p class="left">
+         <a href="/Article/deco-soli/0-126-62030.html">
+              ... !
+         </a>
+        </p>
+        <p class="right">
+         <a href="/Article/family-paixnidi/0-43-62549.html">
+                  ;
+         </a>
+        </p>
+       </div>
+       <script type="text/javascript">
+        function getPage(url){
+	$("#AjaxComments").load(url);
+}
+function goAnchor(anchor){
+	anchorthis='#' + anchor;
+	gourl=location.href.replace(anchorthis,'') + anchorthis;
+	document.location = gourl;
+}
+       </script>
+       <div id="AjaxComments">
+        <!-- loading... -->
+       </div>
+       <script type="text/javascript">
+        $(document).ready(function() {
+    getPage('/AjaxComments.html?page=1&amp;art_id=62221&amp;section=11007');
+});
+       </script>
+       <script type="text/javascript">
+        function showcaptcha() {
+	var chtml = '&lt;label&gt; &lt;/label&gt;&lt;img src="http://217.19.72.230:8089/captcha" /&gt;';
+	chtml = chtml  + '&lt;input name="code" id="code" type="text" class="textfield" /&gt;';
+	$('#jcap').html(""+chtml+""); 
+	return false;
+}
+       </script>
+       <a name="addcomment">
+       </a>
+       <div class="contactform">
+        <form action="" method="post">
+         <div class="contactformleft">
+          <input id="issubmit" name="issubmit" type="hidden" value="1"/>
+          <div>
+           <label>
+            
+           </label>
+           <input class="textfield" id="name" name="name" onfocus="showcaptcha();" type="text" value=""/>
+          </div>
+          <div>
+           <label>
+            E-MAIL
+           </label>
+           <input class="textfield" id="email" name="email" type="text" value=""/>
+          </div>
+          <div>
+           <label>
+            
+           </label>
+           <textarea cols="" name="comment" rows="">
+           </textarea>
+          </div>
+          <div id="jcap">
+          </div>
+          <div>
+           <input class="send" name="submit" src="templates/default/images/send.gif" type="image"/>
+          </div>
+         </div>
+         <div class="contactformright">
+          <h2>
+            ...
+          </h2>
+          <p>
+            ,   ,  ,   .        
+           <br/>
+            L!fe...
+          </p>
+         </div>
+        </form>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="sidebar">
+     <!-- tmplitem itemname="BannerModuleHole" id="2"&gt;BannerModuleHole&lt;/tmplitem -->
+     <!-- a href="/ipad2sms.html"&gt;&lt;img src="http://www.newsit.gr/flash/banners/ipad2sms/square_banner_all_sites_ipad_final.jpg" border=0 style="margin:10px 0 10px 0;"/&gt;&lt;/a -->
+     <div class="entertain">
+      <h2>
+       LATEST NEWS
+      </h2>
+      <ul>
+       <li>
+        <span>
+         08:00
+        </span>
+        <a href="/Article/fashion-news-tshopping/0-9-83465.html" title=" :   must-have  !">
+          :   must-have  !
+        </a>
+       </li>
+       <li>
+        <span>
+         07:22
+        </span>
+        <a href="/Article/news-maria-iliaki/0-9-84992.html" title="M :      ! ">
+         M :      ! 
+        </a>
+       </li>
+       <li>
+        <span>
+         07:20
+        </span>
+        <a href="/Article/vicky-xatzivasileiou-metallio-minima-sumfonia/0-9-84995.html" title=" :      beach volley            !">
+          :      beach volley            !
+        </a>
+       </li>
+       <li>
+        <span>
+         07:02
+        </span>
+        <a href="/Article/athina-oikonomakou-mukonos-vouties/0-9-85011.html" title=" :         ! ">
+          :         ! 
+        </a>
+       </li>
+       <li>
+        <span>
+         07:00
+        </span>
+        <a href="/Article/news-kwnstantina-spiropoulou-mykonos/0-99-85002.html" title=" :         ! ">
+          :         ! 
+        </a>
+       </li>
+       <li>
+        <span>
+         23:00
+        </span>
+        <a href="/Article/sylvester-stalone-venetia-kori/0-9-85031.html" title="Sylvester Stalone:  17           !">
+         Sylvester Stalone:  17           !
+        </a>
+       </li>
+       <li>
+        <span>
+         22:30
+        </span>
+        <a href="/Article/news-emu-livaniou-mukonos-paidia/0-72-84990.html" title=" :      ! ">
+          :      ! 
+        </a>
+       </li>
+       <li>
+        <span>
+         22:10
+        </span>
+        <a href="/Article/MEDIA-GERMANOU-EPSILON/0-40-85034.html" title="           !">
+                    !
+        </a>
+       </li>
+       <li>
+        <span>
+         22:00
+        </span>
+        <a href="/Article/lady-gaga-proklitikes-fotografies-idiotiko-jet/0-9-85030.html" title="Lady Gaga:        jet!">
+         Lady Gaga:        jet!
+        </a>
+       </li>
+       <li>
+        <span>
+         21:30
+        </span>
+        <a href="/Article/news-thanatos-17xronou-dimitri-evoia/0-9-84969.html" title="     17    ">
+              17    
+        </a>
+       </li>
+      </ul>
+      <p>
+        : 8:0
+      </p>
+     </div>
+     <div>
+      <!-- tmplitem itemname="AdArticleRightTop"&gt;AdArticleRightTop&lt;/tmplitem -->
+     </div>
+     <!--
+&lt;a href="http://ad-emea.doubleclick.net/click;h=v2|3E94|0|0|%2a|t;248854614;0-0;0;74412700;31-1|1;45054202|45071990|1;;%3fhttp://www.tlife.gr/default.php?pname=KerastaseFibreArchitecteProduct" style="float: left; margin-bottom: 10px; margin-top: 10px;"&gt;
+&lt;img src="/flash/banners/2011/11/300x60_kerastase_banner.jpg" /&gt;&lt;/a&gt;
+&lt;img src="http://ad-emea.doubleclick.net/imp;v1;f;248854614;0-0;0;74412700;1|1;45054202|45071990|1;;cs=h;%3fhttp://ad.gr.doubleclick.net/dot.gif?[timestamp]" border="0" width="1" height="1"&gt;
+
+-->
+     <!-- div&gt;&lt;a href="http://www.loveradio.gr/index.php"&gt;&lt;img src="/flash/banners/2012/02/lovevalentines300x250.jpg" border=0 style="margin:10px 0 10px 0;"/&gt;&lt;/a&gt;&lt;/div -->
+     <div style="margin: 10px 0 10px 0px;float: left;">
+      <div style="display: block;float: left;">
+       <script type="text/javascript">
+        GA_googleFillSlot("TLIFE-NEWS-300x250-ROS-RIGHT-TOP");
+       </script>
+       <a href="http://194.219.47.98/link/ps" style="display: block; float: left; margin-top: 10px;" target="_blank">
+        <img border="0" src="http://www.tlife.gr/flash/banners/2015/01/caremarket_favourites_tlife_300x150.jpg"/>
+       </a>
+       <!-- a href="/giftlist.html"&gt;&lt;img src="/flash/banners/xmas_gift_300x250.jpg" style="margin: 10px 0 0 0;"&gt;&lt;/a -->
+      </div>
+     </div>
+     <div style="background: url(/flash/banners/2013/11/igloo_social_B.jpg) no-repeat scroll left top transparent; position: relative;width: 350px; height: 150px; float:left;margin-top:10px;">
+      <a href="http://twitter.com/tlifegr" id="facebook" style="position: absolute; left: 20px; top: 70px; width: 62px; height: 62px;" target="_blank">
+      </a>
+      <a href="http://instagram.com/tlifegr" id="twitter" style="position: absolute; left: 120px; top: 70px; width: 62px; height: 62px;" target="_blank">
+      </a>
+      <a href="http://www.facebook.com/tlifegr" id="rss" style="position: absolute; left: 218px; top: 70px; width: 62px; height: 62px;" target="_blank">
+      </a>
+      <!-- a href="/flash/rss.php" target="_blank" id="rss" style="position: absolute; left: 195px; top: 69px; width: 48px; height: 52px;"&gt;&lt;/a -->
+     </div>
+     <div style="margin: 10px 0 10px 0px;float: left;">
+      <div style="float: left; margin-bottom: 0px; margin-top: 10px;">
+       <link href="http://downloads.newsitgr.edgesuite.net/www.newsit.gr/static/smartairtoptlife/style.css" rel="stylesheet"/>
+       <script language="javascript" src="http://188.138.57.163/fly/front_gui/live_banners/newsit-top/js/deals_data.js" type="text/javascript">
+       </script>
+       <script language="javascript" src="http://downloads.newsitgr.edgesuite.net/www.newsit.gr/static/smartairtoptlife/top-banner2.js" type="text/javascript">
+       </script>
+       <div id="sma-top-box" style="width:300px; height:150px; display:block;margin-bottom:0px;">
+        <div class="boxHead_TopBar" style="display:block">
+        </div>
+       </div>
+      </div>
+      <div style="display: block;float: left;">
+       <script type="text/javascript">
+        GA_googleFillSlot("TLIFE-NEWS-300x250-RIGHT-MIDDLE");
+	&lt;/script&gt;
+
+&lt;/div&gt; 
+	    &lt;/div&gt;
+            
+            &lt;div style="float: left; margin-bottom: 5px; margin-top: 10px;"&gt;
+
+
+&lt;a href="http://194.219.47.98/link/9"&gt;&lt;img src="http://tastro.tlife.gr/banners/dTbBwaRqTJwRMDmqU5MZ.gif"/&gt;&lt;/a&gt;
+&lt;!-- a href="/sos-villages.html"&gt;&lt;img src="/flash/banners/2011/04/sos_newbanner.gif"/&gt;&lt;/a --&gt;
+&lt;!-- object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6" width="300" height="250" &gt;
+&lt;param name="movie" value="http://www.tlife.gr/flash/banners/social_banner_avec_border2.swf" /&gt;
+&lt;param name="quality" value="high" /
+&gt;&lt;param name="menu" value="false" /&gt;
+&lt;param name="scale" value="exactfit" /&gt;
+&lt;param name="wmode" value="transparent"&gt; 
+&lt;embed  src="http://www.tlife.gr/flash/banners/social_banner_avec_border2.swf" width="300" height="250" wmode="transparent" menu="false" scale="exactfit" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"  /&gt;
+&lt;/object --&gt;
+&lt;/div&gt;
+             
+            &lt;!-- a href="http://www.facebook.com/pages/ZappIT/102126013193327?v=app_7146470109" target="_blank" &gt;&lt;img src="http://www.zappit.gr/jobs/flash/banners/home_cinema_small.jpg" border=0 style="margin:10px 0 10px 0;"/&gt;&lt;/a --&gt;
+	     &lt;!-- a href="http://www.zappit.gr/default.php?pname=Category&amp;cat_id=29" target="_blank" &gt;&lt;img src="http://www.zappit.gr/files/flash/banners/greek_idol/idol_square_banner_geniko.jpg" border=0 style="margin:10px 0 10px 0;"/&gt;&lt;/a --&gt; 
+	     
+	     &lt;!-- tmplitem itemname="RealTrip_banner"&gt;RealTrip_banner&lt;/tmplitem --&gt;
+	     
+            &lt;!-- table&gt;&lt;tr&gt;&lt;td --&gt;
+            
+	    &lt;!-- /td&gt;&lt;/tr&gt;&lt;/table --&gt;
+            
+            &lt;a href="/?pname=TatianaBlog" style="float: left; margin-bottom: 5px; margin-top: 10px;"&gt;&lt;img src="/flash/banners/2013/10/tat_blog_magazine_autumn13_300x60.jpg" /&gt;&lt;/a&gt;
+
+&lt;a href="/fitness.html" style="float: left; margin-bottom: 5px;"&gt;&lt;img src="/flash/banners/fitness_300x60.jpg" /&gt;&lt;/a&gt;
+
+&lt;a href="/fashion.html" style="float: left;"&gt;&lt;img src="/flash/banners/fashion_300x60.jpg" /&gt;&lt;/a&gt;
+            
+            	&lt;!-- tmplitem itemname="groupon_box"&gt;groupon_box&lt;/tmplitem --&gt;
+            	
+        	
+        	
+        	
+            &lt;script type="text/javascript"&gt;
+
+	function showPopular(){
+		$('#popular_posts').show();
+		$('#most_commented_posts').hide();
+		$('#most_rated_posts').hide();
+		$('#popular').addClass('active');
+		$('#most_commented').removeClass('active');
+		$('#most_rated_star').removeClass('active');
+	}
+	
+	function showCommented(){
+		$('#popular_posts').hide();
+		$('#most_commented_posts').show();
+		$('#most_rated_posts').hide();
+		$('#most_commented').addClass('active');
+		$('#popular').removeClass('active');
+		$('#most_rated_star').removeClass('active');
+	}
+	function showStarRated(){
+		$('#popular_posts').hide();
+		$('#most_commented_posts').hide();
+		$('#most_rated_posts').show();
+		$('#most_rated_star').addClass('active');
+		$('#popular').removeClass('active');
+		$('#most_commented').removeClass('active');
+	}
+       </script>
+       <div id="popular_box">
+        <h2>
+         <span>
+          Top5
+         </span>
+        </h2>
+        <div class="tabs">
+         <a class="active" href="javascript:showPopular();" id="popular">
+          
+         </a>
+         <a href="javascript:showCommented();" id="most_commented">
+           
+         </a>
+         <a href="javascript:showStarRated();" id="most_rated_star">
+          <img src="/templates/default/images/star_most_rated.png" style="margin: 0;"/>
+         </a>
+        </div>
+        <div id="popular_posts">
+         <div class="most">
+          <div class="image0">
+           <img src="/files/Image/SxeseisKaiSex/KaluteroSex/2010/06/resized/Sex_sea_h_140_100.jpg"/>
+           <span class="first_number">
+            <span>
+             01
+            </span>
+           </span>
+          </div>
+          <a href="/Article/sexsea/0-49-2590.html" title="  ;      ">
+             ;      
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           02
+          </span>
+          <a href="/Article/relastionships-flirt/0-48-3000.html" title="10 tips       ">
+           10 tips       
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           03
+          </span>
+          <a href="/Article/lovefeelings/0-49-4346.html" title=" :      ;">
+            :      ;
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           04
+          </span>
+          <a href="/Article/deco-allages/0-127-38429.html" title=":      !">
+           :      !
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           05
+          </span>
+          <a href="/Article/relationships-liar/0-48-20510.html" title="Liar Detector! 10+1       !">
+           Liar Detector! 10+1       !
+          </a>
+         </div>
+        </div>
+        <div id="most_commented_posts" style="display: none;">
+         <div class="most">
+          <div class="image0">
+           <img src="/files/Image/SxeseisKaiSex/2010/07/resized/10tips_h_140_100.jpg"/>
+           <span class="first_number">
+            <span>
+             01
+            </span>
+           </span>
+          </div>
+          <a href="/Article/relastionships-flirt/0-48-3000.html" title="10 tips       ">
+           10 tips       
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           02
+          </span>
+          <a href="/Article/sxeseis-lovestory/0-82-84874.html" title=".:    52 , ,   24     ">
+           .:    52 , ,   24     
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           03
+          </span>
+          <a href="/Article/sexsea/0-49-2590.html" title="  ;      ">
+             ;      
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           04
+          </span>
+          <a href="/Article/news-kim-karsahian-sexy-fotografisi-nude-body/0-9-84837.html" title="Kim Kardashian:      ,     !">
+           Kim Kardashian:      ,     !
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           05
+          </span>
+          <a href="/Article/news-vasilis-xaralabopoulos,epidavros-krisi/0-76-84904.html" title=" :           ... !">
+            :           ... !
+          </a>
+         </div>
+        </div>
+        <div id="most_rated_posts" style="display: none;">
+         <div class="most">
+          <div class="image0">
+           <img src="/files/Image/NEWS/2015/IOULIOS/13-07/resized/eleni_foureira_h_140_100.jpg"/>
+           <span class="first_number">
+            <span>
+             01
+            </span>
+           </span>
+          </div>
+          <a href="/Article/news-foureira-xwris-makeup-selfie/0-9-84973.html" title=" :           ! ">
+            :           ! 
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           02
+          </span>
+          <a href="/Article/news-maria-konstantaki/0-9-84993.html" title="       !">
+                  !
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           03
+          </span>
+          <a href="/Article/news-anna-maria-papaxaralabous/0-9-84947.html" title="  :     ,      !">
+             :     ,      !
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           04
+          </span>
+          <a href="/Article/news-sissy-christidou/0-9-84950.html" title=" :       ,   !">
+            :       ,   !
+          </a>
+         </div>
+         <div>
+          <span class="number">
+           05
+          </span>
+          <a href="/Article/news-christina-gourdain/0-9-85001.html" title="To              !">
+           To              !
+          </a>
+         </div>
+        </div>
+       </div>
+       <!-- comment tmplitem itemname="social_flash_banner"&gt;social_flash_banner&lt;/tmplitem -->
+       <script>
+        function getShoppingItems(item_position)
+{
+	$.ajax({
+		url : 'default.php?pname=AjaxZoneModule&amp;la=1&amp;ztitle=test-Products-WeeklyOffer&amp;ztpl=AjaxrightShopping_tpl&amp;current_element='+item_position,
+		type: 'GET',
+		timeout: 4000,
+		error: function(){
+				//alert('Error loading');
+		},
+		success : function (data) {
+				jQuery('#tlifeshop').html(data);
+		}
+	});
+}
+       </script>
+       <div class="tlifeshop" id="tlifeshop">
+        <h2>
+         TLife Shopping
+        </h2>
+        <div class="shopholder">
+         <a class="ticker-left" href="javascript:void(0);" onclick="getShoppingItems(3);">
+          <img src="templates/default/images/ticker-left.gif"/>
+         </a>
+         <a class="ticker-right" href="javascript:void(0);" onclick="getShoppingItems(1);">
+          <img src="templates/default/images/ticker-right.gif"/>
+         </a>
+         <a href="/default.php?pname=Product&amp;item_id=21924&amp;friendly=shopping-shoes">
+          <span style="display: block; text-align: center; font-weight: bold; font-family: Arial,sans-serif; font-size: 13px;">
+           <strong style="color: #1ed87f;">
+             -  
+           </strong>
+           <br/>
+            H&amp;M
+          </span>
+          <span style="display: block; text-align: center; width: 100%">
+           <img src="/files/Image/Shopping/SOFIA/2014/SMARTBUYS/CELINE/resized/59-95hm_120_120.jpg" style="float: none!important;"/>
+          </span>
+         </a>
+        </div>
+       </div>
+       <style>
+        #newsletter_box .textfield {
+  background-attachment:initial;
+  background-clip:initial;
+  background-color:initial;
+  background-image:url(http://origin.tlife.gr/templates/default/images/textfield.gif);
+  background-origin:initial;
+  background-position:0 0;
+  background-repeat:no-repeat repeat;
+  border-bottom-color:#4D4D4D;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
+  border-left-color:#4D4D4D;
+  border-left-style:solid;
+  border-left-width:1px;
+  border-right-color:#4D4D4D;
+  border-right-style:solid;
+  border-right-width:1px;
+  border-top-color:#4D4D4D;
+  border-top-style:solid;
+  border-top-width:1px;
+  height:18px;
+  margin-bottom:0;
+  margin-left:0;
+  margin-right:4px;
+  margin-top:0;
+  width:220px;
+}
+#newsletter_box input {
+  background-attachment:initial;
+  background-clip:initial;
+  background-color:initial;
+  background-image:none;
+  background-origin:initial;
+  background-position:initial initial;
+  background-repeat:initial initial;
+  color:#FFFFFF;
+  float:left;
+}
+       </style>
+       <script type="text/javascript">
+        function submitNewsletter(){
+	var email = $("#user_email").val();
+	
+	var issubmit = $("#issubmit").val();
+	var dataString = 'email='+ email +'&amp;issubmit='+ issubmit;  
+ $.ajax({  
+	type: "POST",  
+	url: "AjaxnewsletterBox.html",  
+	data: dataString,  
+	success: function(msg) {  
+			$('#newletterBOX').html(""+msg+"");  
+	}  
+	});  
+	return false;  	
+}
+       </script>
+       <div id="newletterBOX">
+        <div id="newsletter_box">
+         <h2>
+          TLife NewsLetter
+         </h2>
+         <form action="" method="post">
+          <input id="issubmit" name="issubmit" type="hidden" value="1"/>
+          <input class="textfield" id="user_email" name="email" onfocus="this.value='';" type="text" value=" e-mail  ..."/>
+          <input name="submit" onclick="javascript:submitNewsletter();return false;" src="templates/default/images/submit.gif" type="image"/>
+         </form>
+        </div>
+       </div>
+       <!-- a href="/alexkatsaiti.html"&gt;&lt;img src="/flash/banners/2012/03/blog_katsaiti_300x250.jpg" border="0" style="margin:10px 0 0px 0;"/&gt;&lt;/a -->
+       <!-- a href="http://www.iatropedia.gr/" target="_blank"&gt;&lt;img src="http://www.newsit.gr/flash/banners/2011/09/iatropedia2_300x250.jpg" border=0 style="margin:10px 0 0px 0;"/&gt;&lt;/a -->
+       <!-- tmplitem itemname="Right_Middle_banner"&gt;Right_Middle_banner&lt;/tmplitem -->
+       <!-- tmplitem itemname="newsit_Banner"&gt;newsit_Banner&lt;/tmplitem -->
+       <iframe frameborder="0" height="400" scrolling="no" src="http://www.newsit.gr/default.php?pname=newscy_widget&amp;site=5&amp;q=01" style="float: left; display: block;margin-top: 10px;" width="300">
+        <p>
+         Your browser does not support iframes.
+        </p>
+       </iframe>
+       <!-- a href="/jobs.html" style="display: block; float: left; margin-top: 10px;"&gt;&lt;img src="/flash/banners/ergasia300x250.jpg" border="0" /&gt;&lt;/a -->
+       <!-- tmplitem itemname="BannerModuleHole" id="6"&gt;BannerModuleHole&lt;/tmplitem -->
+       <div style="margin-top:10px;float: left;">
+        <script type="text/javascript">
+         google_ad_client = "ca-pub-0371477852356965";
+    google_ad_slot = "6512827777";
+    google_ad_width = 300;
+    google_ad_height = 250;
+ google_ad_region= "test";
+        </script>
+        <!-- Tlife_300x250_Ros_3 -->
+        <script src="//pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+        </script>
+       </div>
+      </div>
+      <div class="latest">
+       <h2>
+        , 
+       </h2>
+       <ul>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/fashion-news-tshopping/0-9.html">
+           NEWS
+          </a>
+         </p>
+         <a href="/Article/fashion-news-tshopping/0-9-83465.html">
+          <img src="/files/Image/fashion/2015/JUNE/17-6/resized/28369-thickbox_v_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/fashion-news-tshopping/0-9-83465.html">
+            :   must-have  !
+          </a>
+         </p>
+        </li>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/news-maria-iliaki/0-9.html">
+           NEWS
+          </a>
+         </p>
+         <a href="/Article/news-maria-iliaki/0-9-84992.html">
+          <img src="/files/Image/NEWS/2015/IOULIOS/13-07/resized/MARIA1_V_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/news-maria-iliaki/0-9-84992.html">
+           M :      ! 
+          </a>
+         </p>
+        </li>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/vicky-xatzivasileiou-metallio-minima-sumfonia/0-9.html">
+           NEWS
+          </a>
+         </p>
+         <a href="/Article/vicky-xatzivasileiou-metallio-minima-sumfonia/0-9-84995.html">
+          <img src="/files/Image/NEWS/2015/IOULIOS/13-07/resized/xatzivasileiou3_v_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/vicky-xatzivasileiou-metallio-minima-sumfonia/0-9-84995.html">
+            :      beach volley            !
+          </a>
+         </p>
+        </li>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/athina-oikonomakou-mukonos-vouties/0-9.html">
+           NEWS
+          </a>
+         </p>
+         <a href="/Article/athina-oikonomakou-mukonos-vouties/0-9-85011.html">
+          <img src="/files/Image/NEWS/2015/IOULIOS/13-07/resized/oikonomakou_new5_v_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/athina-oikonomakou-mukonos-vouties/0-9-85011.html">
+            :         ! 
+          </a>
+         </p>
+        </li>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/news-kwnstantina-spiropoulou-mykonos/0-99.html">
+           CELEBRITY
+          </a>
+         </p>
+         <a href="/Article/news-kwnstantina-spiropoulou-mykonos/0-99-85002.html">
+          <img src="/files/Image/NEWS/2015/IOULIOS/13-07/resized/spiropoulouv_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/news-kwnstantina-spiropoulou-mykonos/0-99-85002.html">
+            :         ! 
+          </a>
+         </p>
+        </li>
+        <li>
+         <p class="latesttitle">
+          <a href="/ArticleList/beauty-giambattistavalliformac/0-16.html">
+           NEWS
+          </a>
+         </p>
+         <a href="/Article/beauty-giambattistavalliformac/0-16-84989.html">
+          <img src="/files/Image/BEAUTY/2015/BEAUTY_NEWS/JULY/13_7/resized/GIAMBATTISTA VALLI_LIPSTICK_BIANCA B_300_V_135_160.jpg"/>
+         </a>
+         <p class="latestdesc">
+          <a href="/Article/beauty-giambattistavalliformac/0-16-84989.html">
+                        Giambattista Valli   MAC!
+          </a>
+         </p>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div id="footer_wrapper">
+      <script type="text/javascript">
+       //function showExpert(id){
+//	$('#expert_container').html($('#experts'+id).html());
+//}
+
+$(document).ready(function(){
+//Experts
+
+jQuery('.experts_menu ul li a').hover(function() {
+			
+			pos_experts=jQuery('.experts_menu ul li a').index(this);
+			jQuery('.experts_content:visible').css({display:'none'});
+			jQuery('.experts_menu ul li a[class=on]').removeClass('on');
+			jQuery('.experts_content:eq('+pos_experts+')').css({display:'block'});
+			jQuery('.experts_menu ul li a:eq('+pos_experts+')').addClass('on');		   	
+		 });
+});
+      </script>
+      <div id="footer">
+       <div id="experts">
+        <h2>
+         <span>
+          TLife Experts
+         </span>
+        </h2>
+        <!-- div class="experts_content" id="expert_container"&gt;
+				&lt;span id="expert"&gt;
+					&lt;div style="width: 80px; height: 80px; overflow: hidden;"&gt;
+												&lt;img src="/files/Image/Fitness/2015/DIATROFI/resized/thalis_80_80.jpg" /&gt;
+											&lt;/div&gt;
+					&lt;h3&gt; &lt;/h3&gt;
+				&lt;p style="width: 90px!important;"&gt;&lt;/p&gt;
+				&lt;/span&gt;
+				&lt;span class="article"&gt;
+					&lt;div class="pic_border"&gt;
+											&lt;img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/Fitness/2015/DIET/7/resized/dtp1_200_110.jpg" /&gt;
+										&lt;/div&gt;
+					&lt;h3&gt;:    8    ... &lt;/h3&gt;
+					&lt;p&gt;&lt;/p&gt;
+					&lt;a href="/Article/fitness-diaita-xase-kila/0-80-84846.html" class="more"&gt; &lt;/a&gt;
+				&lt;/span&gt;
+			&lt;/div -->
+        <div class="experts_content" id="experts377" style="display: block;">
+         <span id="expert">
+          <div style="width: 80px; height: 80px; overflow: hidden;">
+           <img src="/files/Image/Fitness/2015/DIATROFI/resized/thalis_80_80.jpg"/>
+          </div>
+          <h3>
+             
+          </h3>
+          <p style="width: 90px!important;">
+             &amp; Personal Trainer
+          </p>
+         </span>
+         <span class="article">
+          <div class="pic_border">
+           <img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/Fitness/2015/DIET/7/resized/dtp1_200_110.jpg"/>
+          </div>
+          <h3>
+           :    8    ...
+          </h3>
+          <p>
+          </p>
+          <a class="more" href="/Article/fitness-diaita-xase-kila/0-80-84846.html">
+            
+          </a>
+         </span>
+        </div>
+        <div class="experts_content" id="experts60" style="display: none;">
+         <span id="expert">
+          <div style="width: 80px; height: 80px; overflow: hidden;">
+           <img src="/files/Image/Experts/Psuxologoi/resized/Ntora_Minou_s_80_80.jpg"/>
+          </div>
+          <h3>
+            
+          </h3>
+          <p style="width: 90px!important;">
+            -  
+          </p>
+         </span>
+         <span class="article">
+          <div class="pic_border">
+           <img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/SxeseisKaiSex/KaluteroSex/2010/08/resized/love_feeling_h_200_110.jpg"/>
+          </div>
+          <h3>
+            :      ;
+          </h3>
+          <p>
+          </p>
+          <a class="more" href="/Article/lovefeelings/0-49-4346.html">
+            
+          </a>
+         </span>
+        </div>
+        <div class="experts_content" id="experts73" style="display: none;">
+         <span id="expert">
+          <div style="width: 80px; height: 80px; overflow: hidden;">
+           <img src="/files/Image/Experts/resized/Theodoros Gynecologist_80_80.JPG"/>
+          </div>
+          <h3>
+            
+          </h3>
+          <p style="width: 90px!important;">
+            - 
+          </p>
+         </span>
+         <span class="article">
+          <div class="pic_border">
+           <img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/SxeseisKaiSex/KaluteroSex/2010/06/resized/Sex_sea_h_200_110.jpg"/>
+          </div>
+          <h3>
+             ;      
+          </h3>
+          <p>
+          </p>
+          <a class="more" href="/Article/sexsea/0-49-2590.html">
+            
+          </a>
+         </span>
+        </div>
+        <div class="experts_content" id="experts292" style="display: none;">
+         <span id="expert">
+          <div style="width: 80px; height: 80px; overflow: hidden;">
+           <img src="/files/Image/Editors/resized/anna_vasilaki_80_80.jpg"/>
+          </div>
+          <h3>
+             
+          </h3>
+          <p style="width: 90px!important;">
+             , , visual merchandiser
+          </p>
+         </span>
+         <span class="article">
+          <div class="pic_border">
+           <img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/DECO/Smart_moves/2014/07/pop/resized/1_200_110.jpg"/>
+          </div>
+          <h3>
+            pop:     ... !
+          </h3>
+          <p>
+          </p>
+          <a class="more" href="/Article/diakosmisi-pop/0-127-64729.html">
+            
+          </a>
+         </span>
+        </div>
+        <div class="experts_content" id="experts39" style="display: none;">
+         <span id="expert">
+          <div style="width: 80px; height: 80px; overflow: hidden;">
+           <img src="/files/Image/Experts/resized/Mazanis_s_80_80.jpg"/>
+          </div>
+          <h3>
+           .  
+          </h3>
+          <p style="width: 90px!important;">
+            - 
+          </p>
+         </span>
+         <span class="article">
+          <div class="pic_border">
+           <img src="http://images.watchit.gr/?w=200&amp;h=110&amp;src=http://www.tlife.gr/files/Image/FAMILY/2015/GIATROS/07/resized/shutterstock_1846162_200_110.jpg"/>
+          </div>
+          <h3>
+              TLIFE, .  , !
+          </h3>
+          <p>
+          </p>
+          <a class="more" href="/Article/paidi-mazanis/0-46-84885.html">
+            
+          </a>
+         </span>
+        </div>
+        <div class="experts_menu">
+         <ul>
+          <li>
+           <a href="/default.php?pname=Experts_bio&amp;edi_id=377" id="expert1">
+            <img border="0" src="/files/Image/Fitness/2015/DIATROFI/resized/thalis_80_80.jpg"/>
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=Experts_bio&amp;edi_id=60" id="expert2">
+            <img border="0" src="/files/Image/Experts/Psuxologoi/resized/Ntora_Minou_s_80_80.jpg"/>
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=Experts_bio&amp;edi_id=73" id="expert3">
+            <img border="0" src="/files/Image/Experts/resized/Theodoros Gynecologist_80_80.JPG"/>
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=Experts_bio&amp;edi_id=292" id="expert4">
+            <img border="0" src="/files/Image/Editors/resized/anna_vasilaki_80_80.jpg"/>
+           </a>
+          </li>
+          <li>
+           <a href="/default.php?pname=Experts_bio&amp;edi_id=39" id="expert5">
+            <img border="0" src="/files/Image/Experts/resized/Mazanis_s_80_80.jpg"/>
+           </a>
+          </li>
+          <a class="more" href="Experts.html" style="clear: both; margin-top: 30px;">
+           <img src="/templates/default/tlife/images/all_experts.png"/>
+          </a>
+         </ul>
+        </div>
+       </div>
+       <a href="Contact.html?sbj_id=1" id="contact4">
+        <img src="/templates/default/images/experts_send_your_questions.png" style="float: right; clear: both; margin-bottom: -100px; margin-top: -140px; margin-right: 20px;"/>
+       </a>
+       <div class="footer00">
+        <div class="left00">
+         Copyright  2010
+        </div>
+        <div class="right">
+         <a class="netvolutiona" href="http://www.atcom.gr" target="_blank">
+          powered by
+          <img align="bottom" border="0" height="7" hspace="3" src="templates/default/images/net.gif" vspace="0" width="13"/>
+          NETVOLUTION
+         </a>
+        </div>
+       </div>
+       <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-16320312-1', 'auto');
+  ga('send', 'pageview');
+       </script>
+       <!-- NPiwik -->
+       <script type="text/javascript">
+        document.write(unescape("%3Cscript src='http://www.tlife.gr/flash/scripts/piwik.js' type='text/javascript'%3E%3C/script%3E"));
+       </script>
+       <script type="text/javascript">
+        try {
+var piwikTracker = Piwik.getTracker("http://217.19.72.228:9001/piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {
+document.write('&lt;img src="http://217.19.72.228:9001/piwik.php?idsite=1&amp;nojs=1&amp;action_name=no_JS" style="border:0" alt="" /&gt;');
+}
+       </script>
+       <noscript>
+        <p>
+         <img alt="" src="http://217.19.72.228:9001/piwik.php?idsite=1&amp;nojs=1&amp;action_name=no_JS" style="border:0"/>
+        </p>
+       </noscript>
+       <!-- End Piwik Tag -->
+       <div id="nugg.ad">
+        <script type="text/javascript">
+         var nuggAIArray = '';
+var nuggrid= encodeURIComponent(top.location.href);
+var nuggtg = encodeURIComponent('PLACEHOLDER');
+document.write('&lt;scr'+'ipt type=\"text/javascript\" src=\"http://jip.nuggad.net/rc?nuggn=7375908&amp;nuggsid=417573967&amp;nuggrid='+nuggrid+'&amp;nuggtg='+nuggtg+'"&gt;&lt;\/scr'+'ipt&gt;');
+        </script>
+       </div>
+       <div id="analyzer">
+        <script type="text/javascript">
+         &lt;!--
+xtnv = document; 
+xtdmc = ".tlife.gr"; 	// current domain and extension: ".domain.ext"
+xtsite = "528446";     // your AT Internet site ID
+xt_xtcpath = "www.tlife.gr/xtcore1.js";      //xtcore.js path location (without http://)
+xtcustom = nuggAIArray;
+//--&gt;
+        </script>
+        <script type="text/javascript">
+         &lt;!--
+(function(){      
+  var at=document.createElement('script'); 
+  at.type='text/javascript';   
+  at.async=true;  
+  at.src= (('https:' == document.location.protocol) ? 'https://': 'http://')+xt_xtcpath; 
+  (document.getElementById('nugg.ad')||document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]||document.getElementsByTagName('script')[0].parentNode).insertBefore(at,null);
+})();
+//--&gt;
+        </script>
+       </div>
+      </div>
+     </div>
+    </div>
+    <script type="text/javascript">
+     GA_googleFillSlot("TLIFE-bookmark");
+    </script>
+    <script type="text/javascript">
+     &lt;!--
+//swfobject.registerObject("FlashID");
+//swfobject.registerObject("FlashID");
+//--&gt;
+    </script>
+    <script>
+     function getBanners(){
+
+	
+}
+    </script>
+    <!-- bubblebox -->
+    <!--/search_noindex-->
+   </div>
+  </div>
+ </body>
+</html>
+<!--&lt;br&gt;&lt;font color=green class=text&gt;Page generated in: 0.23596811294556 sec (TPL_COMPILE_CHECK:1,CMS_PAGE_COMPILING:,CMS_PAGE_OUTPUT_CACHING:)&lt;/font&gt;-->
+<!--Generated by atcom content management and e-commerce system.-->

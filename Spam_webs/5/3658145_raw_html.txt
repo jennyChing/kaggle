@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript">
+  </script>
+  <script src="/foundation/js/vendor/fastclick.js">
+  </script>
+  <link href="/foundation/css/foundation.css?v=1" rel="stylesheet"/>
+  <script src="/foundation/js/vendor/modernizr.js">
+  </script>
+  <script src="/foundation/js/foundation.min.js">
+  </script>
+  <link href="/css/main.css?v=1" rel="stylesheet"/>
+  <!--&lt;link rel="shortcut icon" href="http://www.dropsend.com/images/favicon.ico" type="image/x-icon" /&gt;-->
+  <link href="/favicons/apple-touch-icon-57x57.png" rel="apple-touch-icon" sizes="57x57"/>
+  <link href="/favicons/apple-touch-icon-60x60.png" rel="apple-touch-icon" sizes="60x60"/>
+  <link href="/favicons/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"/>
+  <link href="/favicons/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76"/>
+  <link href="/favicons/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"/>
+  <link href="/favicons/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120"/>
+  <link href="/favicons/apple-touch-icon-144x144.png" rel="apple-touch-icon" sizes="144x144"/>
+  <link href="/favicons/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152"/>
+  <link href="/favicons/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="/favicons/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="/favicons/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+  <link href="/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+  <link href="/favicons/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+  <link href="/favicons/manifest.json" rel="manifest"/>
+  <meta content="#da532c" name="msapplication-TileColor"/>
+  <meta content="/favicons/mstile-144x144.png" name="msapplication-TileImage"/>
+  <meta content="#ffffff" name="theme-color"/>
+  <!--[if IE 8]&gt;
+&lt;link rel="stylesheet" type="text/css" href="/css/ie8.css" media="all" /&gt;
+&lt;![endif]-->
+  <link href="/fonts/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <meta content="u32yplh1diolk3rmxkmaww8yu-9yabw7h-grzu6buofodybfrrdwa5iby5eld7rshpmt3soy2dxzbav1n-0a9h7fuo9ruhixna1ktsxakzmr9po-i9x90m3lottp53bl" name="norton-safeweb-site-verification"/>
+  <title>
+   DropSend - Email large files and send large files
+  </title>
+  <meta content="send big files email large files send large files send large files free send large file transfer large files" name="keywords"/>
+  <meta content="Email large files up to 8GB, send big files, it is easy and secure to email using DropSend, Store files on line access your files on line share your files with others  archive your data using dropsend" name="description"/>
+  <script src="/js/cycle.js" type="text/javascript">
+  </script>
+  <script src="/js/jquery.formstyler.min.js" type="text/javascript">
+  </script>
+  <link href="/css/jquery.formstyler.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">
+   (function ($) {
+            $(function () {
+                $('#home-slider').cycle({
+                    timeout: 5,
+                    speed: 1
+                });
+                var $inptfile = $('#registration-form input[type="file"]');
+                $inptfile.styler({
+                    fileBrowse: 'Select a File',
+                    filePlaceholder: 'File is not selected'
+                })
+                $inptfile.on('change', function () {
+                    $('#selected-file').html($('.jq-file__name').html());
+                });
+            });
+        })(jQuery)
+  </script>
+  <script>
+   function submit_form(form) {
+            openModalIfNotSupportFileApi();
+            var errors = [];
+            if ($('#doit').val() == 0) {
+                var emailXists = 0;
+                var accountC = 0;
+
+                $.ajaxSetup({async: false});
+
+                $.post("userExists.php", {
+                        email: $('#from').val()
+                    }, function (data) {
+                        if (data == 1) {
+                            emailXists = 1;
+                        } else {
+                            emailXists = 0;
+                        }
+                    }
+                );
+
+                if (emailXists == 1) {
+                    //openFBLogin();
+                    setTimeout('delayit()', 5000);
+                    errors[errors.length] = 'This email already exists, please login to send your file.';
+                    return false;
+                }
+                var password ='';
+                if (emailXists == 0) {
+                    $.ajaxSetup({async: false});
+                    $.post("fcheck.php", {
+                            from_email: $('#from').val(),
+                            to_email: $('#to').val(),
+                            message: $('#message').val(),
+                            blcker: $('#blcker').val(),
+                            subject: $('#subject').val()
+                        }, function (data) {
+                            console.log(data)
+                            var k = $.trim(data);
+                            if (k.charAt(0) == 1) {
+                                $('#doit').val(k);
+                                var uid_arr = k.split('_(@)_');
+                                var uid = uid_arr[1];
+                                password = uid_arr[2];
+                                var recipientfill = $('#to').val();
+                                $('#recipients').val(recipientfill);
+                                $('#upload_id').val(uid);
+                                $('#uid').val(uid);
+                                $('#UPLOAD_IDENTIFIER').val(uid);
+                                accountC = 1;
+                                //openFB();
+                            } else if (data == 2) {
+                                accountC = 0;
+                                errors[errors.length] = 'Seems there is already an account that exists with that info.';
+                            } else if (data == -1) {
+                                accountC = 0;
+                                errors[errors.length] = 'Your security code is invalid.';
+                            } else if (data == -2) {
+                                errors[errors.length] = 'Your IP address is currently blocked from being able to create a Dropsend account.';
+                            } else {
+                                accountC = 0;
+                                errors[errors.length] = 'We were not able to create an account for you, please contact us for help to resolve this matter.';
+                            }
+                        }
+                    );
+                }
+
+            }
+            //alert(errors.length)
+            if (errors.length) {
+                //$.fancybox.close();
+                errors[errors.length] = 'if you think you received this message in error please contact happytohelp@dropsend.com';
+                var msg = 'Please check the following:\n- ' + errors.join('\n- ');
+                alert(msg);
+                return false;
+            }
+            var urladd = $('#upload_id').val();
+            var urlS = 'https://myaccount.dropsend.com/send_fromhome.plm?uid=' + urladd;
+            var sws = 810;
+            var shs = 497;
+            var slefts = (screen.width / 2) - (sws / 2);
+            var stops = (screen.height / 2) - (shs / 2);
+
+            openTermsWindow({
+                name: $('#from').val(),
+                password: password,
+                url: '/eeee/deed/',
+                fname:$('#selected-file').text()
+            }, function () {
+                window.open(urlS, 'Processing...', 'width=' + sws + ',height=' + shs + ',left=' + slefts + ',top=200,resizable=no,scrollbars=yes,toolbar=no,location=no');
+            });
+            return false;
+        }
+        var openTermsWindow = function (user, callback) {
+            $('body').addClass('modalin');
+            $('#termsModalWindow').fadeIn();
+            $('#account-ready-user-name').html(user.name||'');
+                        $('#account-ready-user-fname').attr('placeholder',user.fname||'');
+            $('#account-ready-user-password').html(user.password);
+            if (typeof callback == 'function') {
+                $('#account-ready-submit').off().on('click', function () {
+                    var $btn = $(this);
+                    if(!$btn.attr('disabled')){
+                        closeTermsWindow();
+                        $('#registration-form').attr('onsubmit','return true').submit();
+                        callback();
+                    }
+                })
+            }
+            $('#account-ready-cancel').off().on('click', function () {
+                closeTermsWindow();
+            })
+        };
+        var closeTermsWindow = function () {
+            $('#termsModalWindow').fadeOut();
+            $('body').removeClass('modalin');
+        }
+  </script>
+  <link href="/favicons/apple-touch-icon-57x57.png" rel="apple-touch-icon" sizes="57x57"/>
+  <link href="/favicons/apple-touch-icon-60x60.png" rel="apple-touch-icon" sizes="60x60"/>
+  <link href="/favicons/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"/>
+  <link href="/favicons/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76"/>
+  <link href="/favicons/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"/>
+  <link href="/favicons/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120"/>
+  <link href="/favicons/apple-touch-icon-144x144.png" rel="apple-touch-icon" sizes="144x144"/>
+  <link href="/favicons/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152"/>
+  <link href="/favicons/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="/favicons/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+  <link href="/favicons/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+  <link href="/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+  <link href="/favicons/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+  <link href="/favicons/manifest.json" rel="manifest"/>
+  <meta content="#da532c" name="msapplication-TileColor"/>
+  <meta content="/favicons/mstile-144x144.png" name="msapplication-TileImage"/>
+  <meta content="#ffffff" name="theme-color"/>
+ </head>
+ <body id="homepage">
+  <div class="row">
+   <div class="top-bar-bg contain-to-grid">
+    <nav class="top-bar small-12 large-10 xlarge-8 large-centered columns" data-topbar="" role="navigation">
+     <ul class="title-area">
+      <li class="name">
+       <a href="/">
+        <img alt="" src="/css/img/logo.png"/>
+       </a>
+      </li>
+      <li class="toggle-topbar menu-icon ">
+       <a href="#">
+        <span>
+        </span>
+       </a>
+      </li>
+     </ul>
+     <section class="top-bar-section">
+      <ul class="right">
+       <li>
+        <a class="orange" href="https://myaccount.dropsend.com/login">
+         Log In
+        </a>
+       </li>
+       <li>
+        <a href="https://myaccount.dropsend.com/register?plan_id=1">
+         Try for FREE!
+        </a>
+       </li>
+      </ul>
+      <ul class="left">
+       <li>
+        <a href="/tour" id="tournav">
+         Tour
+        </a>
+       </li>
+       <li>
+        <a href="/uploadtools.php">
+         Apps
+        </a>
+       </li>
+       <li>
+        <a href="/pricingsignup.php">
+         Plans
+        </a>
+       </li>
+       <li>
+        <a href="/multiuser.php">
+         Enterprise
+        </a>
+       </li>
+       <li>
+        <a href="/help" id="supportfaqnav">
+         Help
+        </a>
+       </li>
+      </ul>
+     </section>
+    </nav>
+   </div>
+  </div>
+  <div class="row">
+   <div class="large-12 columns">
+    <section class="home-slider show-for-medium-up" data-sliders="/imgs/slide-1.jpg;/imgs/slide-2.jpg" id="home-slider">
+     <div class="row">
+      <div class="small-4 small-offset-2 medium-offset-1 large-offset-2 columns">
+       <img alt="" class="layer" src="/imgs/slider-layer.png"/>
+      </div>
+      <div class="small-5 medium-6 large-5 columns">
+       <img alt="Send Large files instantly" class="text" src="/imgs/slider-text.png"/>
+       <a class="btn-send-your-file send-button" href="#send_file">
+        Send Your File
+       </a>
+      </div>
+      <div class="small-1 columns">
+      </div>
+     </div>
+    </section>
+    <div class="home-slider show-for-small-only mobile-slide">
+     <div class="row">
+      <div class="small-10 small-offset-1 columns text-center margin-bottom">
+       <img alt="Send Large files instantly" class="text" src="/imgs/slider-text.png"/>
+       <a class="btn-send-your-file send-button" href="#send_file">
+        Send Your File
+       </a>
+      </div>
+      <div class="small-1 columns">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="row blocks">
+   <div class="large-12 columns">
+    <div class="panel white">
+     <h1>
+      Want to send large files? We've got the answer.
+     </h1>
+     <p>
+      Over
+      <span id="counter">
+       102339264
+      </span>
+      large files securely sent
+     </p>
+     <div class="row">
+      <div class="small-12 xlarge-8 xlarge-offset-2">
+       <div class="small-12 medium-4 columns">
+        <img alt="Files too big to send by email?" src="/img/compressed-file.png"/>
+        <h3>
+         Files too big to send by email?
+        </h3>
+       </div>
+       <div class="small-12 medium-4 columns">
+        <img alt="256 AES-Security Encryption" src="/img/padlock.png"/>
+        <h3>
+         256 AES-Security Encryption
+        </h3>
+       </div>
+       <div class="small-12 medium-4 columns">
+        <img alt="No Software to install - try it now!" src="/img/software.png"/>
+        <h3>
+         No need to install any software - try it now!
+        </h3>
+       </div>
+      </div>
+      <div class="xlarge-2">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="row form">
+   <div class="large-12 columns">
+    <div class="panel orange">
+     <form action="https://myaccount.dropsend.com/send" class="registration-form" data-abide="" enctype="multipart/form-data" id="registration-form" method="post" onsubmit="return submit_form(this);">
+      <input id="plan_id" name="plan_id" type="hidden" value="1"/>
+      <input id="landing" name="landing" type="hidden" value="1"/>
+      <input id="doit" name="doit" type="hidden" value="0"/>
+      <input id="upload_id" name="upload_id" type="hidden" value="0"/>
+      <input id="uid" name="uid" type="hidden" value="0"/>
+      <input id="UPLOAD_IDENTIFIER" name="UPLOAD_IDENTIFIER" type="hidden" value="0"/>
+      <input id="recipients" name="recipients" type="hidden" value="1"/>
+      <div class="row">
+       <div class="small-12 xlarge-8 xlarge-offset-2">
+        <div class="small-12 medium-5 large-4 columns text-center">
+         <div class="send-file">
+          <a name="send_file">
+          </a>
+          <h2 style="font-size: 27px;">
+           Send A File Now!
+          </h2>
+          <div class="input-row">
+           <label for="from">
+            From:
+           </label>
+           <input id="from" name="from" required="" size="27" type="email"/>
+           <small class="error">
+            Valid e-mail is required
+           </small>
+          </div>
+          <p class="descr">
+           (Use a comma to separate addresses)
+          </p>
+          <div class="input-row">
+           <label for="to">
+            To:
+           </label>
+           <input id="to" name="to" required="" size="27" type="email"/>
+           <small class="error">
+            Valid e-mail is required
+           </small>
+          </div>
+         </div>
+        </div>
+        <div class="small-12 medium-3 large-2 columns">
+         <div class="input-file">
+          <input id="file0" maxlength="1" name="send_file0" onchange="filename_h.value = this.value" required="" type="file"/>
+          <div id="selected-file" style="color: #fff;padding-top: 10px;word-wrap: break-word;">
+          </div>
+         </div>
+         <input name="filename_h" type="hidden"/>
+        </div>
+        <div class="small-12 medium-4 large-2 columns link-rows">
+         <div class="link-row">
+          <a href="javascript:void(0)" onclick="$('#subject').toggle();">
+           <img alt="" src="/css/img/home_plus.png"/>
+           <label>
+            <strong>
+             Subject
+            </strong>
+            (Optional):
+           </label>
+          </a>
+         </div>
+         <input id="subject" name="subject" size="27" style="display: none;" type="text"/>
+         <div class="link-row">
+          <a href="javascript:void(0)" onclick="$('#message').toggle();">
+           <img alt="" src="/css/img/home_plus.png"/>
+           <label>
+            <strong>
+             Message
+            </strong>
+            (Optional):
+           </label>
+          </a>
+         </div>
+         <textarea cols="21" id="message" name="message" rows="3" style="display: none;">
+         </textarea>
+        </div>
+        <div class="small-12 medium-12 large-4 columns text-center">
+         <input class="submit" name="Submit" src="/css/img/btn-send-your-file.png" type="image" value="Send Your File"/>
+        </div>
+       </div>
+       <div class="small-12 xlarge-2">
+       </div>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+  <script id="previewVideoTemplate" type="text/template">
+   &lt;div  class="reveal-modal" data-reveal="" style="width: 610px;visibility: visible; display: block;top: 30px; opacity: 1;"&gt;
+        &lt;h4&gt;Send Large Files Easily&lt;/h4&gt;
+        &lt;div class="flex-video widescreen vimeo" style="display: block;"&gt;
+          &lt;iframe width="1280" height="720" title="Send Large Files Easily" src="//www.youtube.com/embed/VicS0_BBb9w?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+        &lt;/div&gt;
+        &lt;a class="close-reveal-modal" href="javascript:void(0);" onclick="var e=$('#previewVideoModal').fadeOut(function(){e.html('')});"&gt;&#215;&lt;/a&gt;
+      &lt;/div&gt;
+  </script>
+  <div class="row info">
+   <div class="large-12 columns">
+    <div class="panel grey">
+     <div class="row">
+      <div class="xlarge-8 xlarge-offset-2">
+       <div class="medium-4 large-4 columns margin-bottom">
+        <div class="video-widget" id="tour-video">
+         <div class="show-for-medium-up">
+          <a href="javascript:void(0);" onclick="$('#previewVideoModal').html($('#previewVideoTemplate').html()).fadeIn();">
+           <img alt="" src="/imgs/banner_video_home.png"/>
+          </a>
+         </div>
+         <div class="show-for-small-only">
+          <a href="javascript:void(0);" onclick="$('#previewVideoMobile').fadeIn();$(this).hide();">
+           <img alt="" src="/imgs/banner_video_home.png"/>
+          </a>
+         </div>
+        </div>
+        <div id="previewVideoMobile" style="display: none;">
+         <div class="show-for-small-only flex-video widescreen vimeo">
+          <iframe allowfullscreen="" frameborder="0" height="720" src="//www.youtube.com/embed/VicS0_BBb9w?rel=0&amp;controls=0&amp;showinfo=0" title="Send Large Files Easily" width="1280">
+          </iframe>
+         </div>
+        </div>
+        <div class="reveal-modal-bg" id="previewVideoModal">
+        </div>
+       </div>
+       <div class="medium-3 large-4 columns margin-bottom">
+        <div class="info-block">
+         <h3>
+          File too big for email?
+         </h3>
+         <ul class="list">
+          <li>
+           Send large files of up to 8GB
+          </li>
+          <li>
+           Ideal for sending JPGs, PFs, MP3s
+          </li>
+          <li>
+           Send important large files to clients
+          </li>
+          <li>
+           Fast, simple and secure to use
+          </li>
+          <li>
+           Available with 256-bit AES Security
+          </li>
+          <li>
+           No software to install
+          </li>
+          <li>
+           Try it now for
+           <a class="link" href="/freesignup.php">
+            FREE
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+       <div class="medium-5 large-4 columns margin-bottom">
+        <div class="info-block">
+         <h3>
+          Your secure hard drive in the Cloud. Use it to...
+         </h3>
+         <ul class="list">
+          <li>
+           Back up all your files online
+          </li>
+          <li>
+           Store important information and access it from anywhere
+          </li>
+          <li>
+           Share your stored files with others
+          </li>
+          <li>
+           Back up your website and other projects
+          </li>
+          <li>
+           Archive all your critical data
+          </li>
+          <li>
+           Business plan available for group file sharing
+          </li>
+          <li>
+           Try it now for
+           <a class="link" href="/freesignup.php">
+            FREE
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <div class="xlarge-2">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="row footer">
+   <div class="large-12 columns">
+    <footer>
+     <div class="panel">
+      <div class="row" style="max-width: 120em;">
+       <div class="small-12 large-10 xlarge-8 large-centered columns">
+        <div class="small-12 medium-8 large-7 columns">
+         <div class="row">
+          <div class="small-12 medium-3 columns margin-bottom">
+           <ul>
+            <li>
+             <h4>
+              Basic
+             </h4>
+            </li>
+            <li>
+             <a href="/index.php">
+              Home
+             </a>
+            </li>
+            <li>
+             <a href="/tour.php">
+              Tour
+             </a>
+            </li>
+            <!--&lt;li&gt;&lt;a href="/uploadtools.php"&gt;Apps&lt;/a&gt;&lt;/li&gt;-->
+            <li>
+             <a href="/pricingsignup.php">
+              Pricing
+             </a>
+            </li>
+            <li>
+             <a href="/multiuser.php">
+              Enterprise
+             </a>
+            </li>
+           </ul>
+          </div>
+          <div class="small-12 medium-4 columns margin-bottom">
+           <ul>
+            <li>
+             <h4>
+              Support
+             </h4>
+            </li>
+            <li>
+             <a href="/blog">
+              News
+             </a>
+            </li>
+            <!--&lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;-->
+            <li>
+             <a href="/help/">
+              Help
+             </a>
+            </li>
+            <li>
+             <a href="/privacy.php">
+              Privacy Policy
+             </a>
+            </li>
+            <li>
+             <a href="/termsconditions.php">
+              Terms of Service
+             </a>
+            </li>
+           </ul>
+          </div>
+          <div class="small-12 medium-5 columns">
+           <ul>
+            <li>
+             <h4>
+              Apps
+             </h4>
+            </li>
+            <li>
+             <a href="/uploadtools.php">
+              MS Outlook Plug-in
+             </a>
+            </li>
+            <li>
+             <a href="/uploadtools.php">
+              DropSend Direct
+             </a>
+            </li>
+            <!--&lt;li&gt;&lt;a href="/tour.php"&gt;Screenshots&lt;/a&gt;&lt;/li&gt;-->
+           </ul>
+          </div>
+         </div>
+        </div>
+        <div class="small-12 medium-4 large-5 columns">
+         <div class="copyright text-right">
+          <p class="socials">
+           <a href="http://facebook.com/dropsend" target="_blank">
+            <i class="fa fa-facebook">
+            </i>
+           </a>
+           <a href="http://twitter.com/dropsend" target="_blank">
+            <i class="fa fa-twitter">
+            </i>
+           </a>
+          </p>
+          <p>
+           DropSend is a product of DropSend Ltd.
+          </p>
+          <p>
+           2015 Registered in England.
+          </p>
+          <p>
+           Company No. 06682965.
+          </p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </footer>
+   </div>
+  </div>
+  <script type="text/javascript">
+   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+&lt;/script&gt;
+
+&lt;script&gt;
+  $(function() {
+    $(document).foundation();
+  });
+  </script>
+  <script type="text/javascript">
+   try {
+    var pageTracker = _gat._getTracker("UA-6753654-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+  </script>
+  <img border="0" height="1" src="http://myaccount.dropsend.com/user_referer" style="display: none;" width="1"/>
+  <script language="JavaScript" type="text/javascript">
+   function calculateNewValue() {
+        var str = $('#counter').html();
+        var count = parseInt(str.replace(/,/g, ''));
+        if (count == 'NaN') {
+            return;
+        }
+        count += Math.floor(Math.random() * incrementPerSecond);
+        $('#counter').html(addCommas(count + ''));
+        setTimeout(calculateNewValue, 5000);
+    }
+    ;
+
+    var incrementPerSecond = 4;
+    calculateNewValue();
+
+    function addCommas(strv) {
+        var len = strv.length;
+        var result = '';
+        while (len &gt; 3) {
+            len = len - 3;
+            result = ',' + strv.substr(len) + result;
+            strv = strv.substr(0, len);
+        }
+        result = strv + result;
+        return result;
+    }
+    function supportFileApi() {
+        // Checking all the possible window objects needed for file api
+        if (window.File &amp;&amp; window.FileReader &amp;&amp; window.FileList &amp;&amp; window.Blob) {
+            return true;// Browser is fully supportive.
+        } else {
+            return false;// Browser not supported. Try normal file upload
+        }
+    }
+    function openModalIfNotSupportFileApi() {
+        var isSupport = supportFileApi();
+        if (!isSupport) {
+            $('#browserSupportError').fadeIn();
+        }
+        return isSupport;
+    }
+  </script>
+  <div class="reveal-modal-bg" id="browserSupportError" style="display: none;">
+   <div class="reveal-modal " style="padding: 0;max-width: 700px;visibility: visible;display: block;">
+    <div class="alert-box alert " style="margin: 0;">
+     <h3 style="color:#fff">
+      Oops, Old Browser Detected!
+     </h3>
+    </div>
+    <div style="padding: 25px;background-color: #F5F5F5">
+     <div class="row">
+      <div class="columns small-12 medium-4 text-center">
+       <img src="/imgs/browser_alert.png"/>
+      </div>
+      <div class="columns small-12 medium-8">
+       DropSend was unable to send your file(s) due to your use of an
+                    outdated browser. Please update your current browser or use another newer one.
+       <div class="text-center" style="padding: 10px 0;">
+        <a href="http://www.google.com/chrome/" target="_blank">
+         <img height="50" src="/imgs/browser_chrome.gif" width="50"/>
+        </a>
+        <a href="http://www.mozilla.com/firefox/" target="_blank">
+         <img height="50" src="/imgs/browser_firefox.gif" width="50"/>
+        </a>
+        <a href="http://windows.microsoft.com/en-us/internet-explorer/" target="_blank">
+         <img height="50" src="/imgs/browser_msie.gif" width="50"/>
+        </a>
+        <a href="http://www.opera.com/download/" target="_blank">
+         <img height="50" src="/imgs/browser_opera.gif" width="50"/>
+        </a>
+        <a href="http://www.apple.com/safari/" target="_blank">
+         <img height="50" src="/imgs/browser_safari.gif" width="50"/>
+        </a>
+       </div>
+       Some older browsers dont work with HTML5 code which is required to by our tool to send files.
+      </div>
+     </div>
+    </div>
+    <a class="close-reveal-modal" onclick="$('#browserSupportError').fadeOut()" style="color:#fff;text-decoration: none;">
+     x
+    </a>
+   </div>
+  </div>
+  <div class="reveal-modal-bg" id="termsModalWindow" style="display: none;">
+   <div class="reveal-modal " style="padding: 0;max-width: 700px;visibility: visible;display: block;">
+    <div class="alert-box" style="margin: 0;height: 70px;background-color: #F79321;border-color: #F79321;">
+     <h3 style="color:#fff">
+      Your DropSend Account is Ready!
+     </h3>
+    </div>
+    <div style="padding: 25px;">
+     <div id="accountready_page">
+      <h2 class="text-center">
+       Account Login Information
+      </h2>
+      <div class="row">
+       <div class="small-12 medium-6 columns">
+        <label class="right-medium-up">
+         Username:
+        </label>
+       </div>
+       <div class="small-12 medium-6 columns">
+        <label class="blue" id="account-ready-user-name">
+        </label>
+       </div>
+      </div>
+      <div class="row margin-bottom">
+       <div class="small-12 medium-6 columns">
+        <label class="right-medium-up">
+         Password:
+        </label>
+       </div>
+       <div class="small-12 medium-6 columns">
+        <label class="blue" id="account-ready-user-password">
+        </label>
+       </div>
+      </div>
+      <div class="row margin-bottom">
+       <div class="small-12 medium-6 columns">
+        <label class="right-medium-up inline" style="font-size: 21px;padding: 0;">
+         Your file is ready to
+                send:
+        </label>
+       </div>
+       <div class="small-12 medium-6 columns">
+        <input disabled="" id="account-ready-user-fname" placeholder="{$filename}" style="background-color: #fff;" type="text"/>
+       </div>
+      </div>
+      <div class="row margin-bottom">
+       <div class="small-12 columns">
+        <div id="termsandcond">
+         <h2>
+          TERMS &amp; CONDITIONS
+         </h2>
+         <p>
+          <strong>
+           NOTICE TO USER: PLEASE READ THIS AGREEMENT CAREFULLY. BY USING AND/OR PAYING FOR THE
+        SERVICE(S) SET OUT HEREIN YOU ACCEPT THE FOLLOWING TERMS. YOU AGREE TO BE BOUND BY ALL THE TERMS
+        AND CONDITIONS OF THIS AGREEMENT AND YOU AGREE THAT IT IS ENFORCEABLE AS IF IT WERE A WRITTEN
+        NEGOTIATED AGREEMENT SIGNED BY DROPSEND LIMITED ("DROPSEND") AND YOU. IF YOU USE THE SERVICES ON
+        BEHALF OF YOUR EMPLOYER, YOU WARRANT THAT YOU ARE AUTHORISED TO ENTER INTO LEGALLY BINDING
+        CONTRACTS ON BEHALF OF YOUR EMPLOYER. THE SAME RIGHTS, LIMITATIONS AND RESTRICTIONS APPLY TO
+        YOUR EMPLOYER. YOU AGREE THAT IT IS ENFORCEABLE AS IF IT WERE A WRITTEN NEGOTIATED AGREEMENT
+        SIGNED BY YOUR EMPLOYER. IF YOU AND/OR YOUR EMPLOYER DO NOT AGREE TO THE TERMS OF THIS
+        AGREEMENT, OR IF YOU ARE NOT AUTHORISED TO ENTER INTO LEGALLY BINDING CONTRACTS ON BEHALF OF
+        YOUR EMPLOYER, YOU MUST NOT USE THE SERVICE(S) OR MAKE ANY PAYMENT.
+          </strong>
+         </p>
+         <ol>
+          <li>
+           <h3>
+            DEFINITIONS
+           </h3>
+           <p>
+            <span>
+             1.1
+            </span>
+            "Effective Date" means the date which you commence using the Services.
+           </p>
+           <p>
+            <span>
+             1.2
+            </span>
+            "Services" means the provision of the following services as selected by you
+            during the ordering process and confirmed by email from DropSend:
+           </p>
+           <p>
+            FREE: 5 file sends per calendar month and 250 MB of storage space
+           </p>
+           <p>
+            BASIC: 15 file sends per calendar month and 1 GB of storage space
+           </p>
+           <p>
+            STANDARD: 45 file sends per calendar month and 10 GB of storage space
+           </p>
+           <p>
+            PRO: Unlimited file sends per calendar month and 25 GB of storage space
+           </p>
+           <p>
+            <span>
+             1.3
+            </span>
+            "Subscription Fee" means the monthly fee payable by you in advance in
+            respect of the provision of the Services, as specified at url:
+            <a href="http://www.dropsend.com/pricingsignup.php" target="_blank">
+             www.dropsend.com/pricingsignup.php
+            </a>
+            and
+            as may be varied by DropSend on notice to you from time to time.
+           </p>
+           <p>
+            <span>
+             1.4
+            </span>
+            "Subscription Period" means the period from the Effective Date until this
+            Agreement is terminated in accordance with the provisions herein.
+           </p>
+          </li>
+          <li>
+           <h3>
+            GRANT OF RIGHTS; RESTRICTIONS
+           </h3>
+           <p>
+            <span>
+             2.1
+            </span>
+            Subject to all the terms and conditions of this Agreement, DropSend shall
+            supply the Services to you and grant you a personal, non-transferable, terminable licence to
+            use the Services from the Effective Date for the Subscription Period.
+           </p>
+           <p>
+            <span>
+             2.2
+            </span>
+            You may request and DropSend may agree to upgrade or downgrade the Services
+            provided to you and the Subscription Fee payable will be amended accordingly for the next
+            monthly payment.
+           </p>
+           <p>
+            <span>
+             2.3
+            </span>
+            DropSend shall use all reasonable endeavours to ensure that access to the
+            Services is available at all times subject to planned and emergency downtime as set out at
+            clause 2.5.
+           </p>
+           <p>
+            <span>
+             2.3
+            </span>
+            You hereby agree not to use the Services for any use that is:
+           </p>
+           <p>
+            <span class="subsub">
+             2.3.1
+            </span>
+            obscene, libellous, blasphemous, defamatory, inciting
+            hatred, terrorism or any similar offence ;
+           </p>
+           <p>
+            <span class="subsub">
+             2.3.2
+            </span>
+            unlawful or misleading;
+           </p>
+           <p>
+            <span class="subsub">
+             2.3.3
+            </span>
+            for any use that breaches third party copyright, including,
+            without limitation, storing or sharing copyrighted music or other copyrighted material that
+            has not been legally obtained;
+           </p>
+           <p>
+            <span class="subsub">
+             2.3.4
+            </span>
+            undertaken on behalf of third parties;
+           </p>
+           <p>
+            <span class="subsub">
+             2.3.5
+            </span>
+            in contravention of any applicable local, state, national
+            and foreign laws, treatises and regulations;
+           </p>
+           <p>
+            In the event that you are in breach of this clause 2.3 or in DropSend's opinion, reasonably
+            likely to become in breach, DropSend may suspend the Services forthwith without notice and
+            you hereby indemnify DropSend in full for any loss or damage suffered by DropSend as a
+            result of your breach.
+           </p>
+           <p>
+            <span>
+             2.4
+            </span>
+            Your use of the Service is subject to DropSend's fair use policy as set out
+            more particularly
+            <a href="http://www.dropsend.com/fairuse.php" target="_blank">
+             www.dropsend.com/fairuse.php
+            </a>
+            .
+            You hereby acknowledge and agree that if, within any month, your usage materially exceeds
+            more than the average level of monthly usage of DropSend's customers for the same Services
+            then DropSend reserves the right to terminate or suspend your account without notice.
+           </p>
+           <p>
+            <span>
+             2.5
+            </span>
+            DropSend shall use all reasonable endeavours to notify you of planned
+            downtime and unavailability of the Service however notwithstanding such obligation, DropSend
+            shall not be liable for any Service unavailability which arises as a result of emergency
+            downtime and Service unavailability.
+           </p>
+           <p>
+            <span>
+             2.6
+            </span>
+            Unauthorized use of the Service, and/or the resale of the Services without
+            DropSend's prior written consent, is expressly prohibited.
+           </p>
+           <p>
+            <span>
+             2.7
+            </span>
+            The free trial offer entitles new, registered users to a one-time free trial
+            usage of the Services. Free trial terms vary by promotional offer. At the end of the trial
+            period you will be automatically subscribed and DropSend will bill your credit card for the
+            fees for the Services you selected at registration or otherwise for default Services
+            designated by DropSend. If you wish to terminate the trial and do not wish to subscribe to
+            the Services, you must cancel before the end of your trial period.
+           </p>
+          </li>
+          <li>
+           <h3>
+            PROPRIETARY RIGHTS
+           </h3>
+           <p>
+            <span>
+             3.1
+            </span>
+            DropSend has sole and exclusive ownership of all right, title, and interest
+            in and to the Services and any software included in the Services, including all copyright
+            and any other intellectual property rights therein. This Agreement conveys a limited right
+            and license to use the Services and any software made available to you and shall not be
+            construed to convey title to or ownership of the Services or the software contained therein
+            to you. All rights in and to the Services not expressly granted to you are reserved by
+            DropSend.
+           </p>
+           <p>
+            <span>
+             3.2
+            </span>
+            The password and log-on details provided to you are confidential to you and
+            you hereby agree that you shall not share such information with any third parties. You shall
+            notify DropSend forthwith if you are aware of any third party having access to such
+            information.
+           </p>
+          </li>
+          <li>
+           <h3>
+            FEE
+           </h3>
+           <p>
+            <span>
+             4.1
+            </span>
+            In consideration for the provision of the Services, you shall pay DropSend
+            the nonrefundable Subscription Fee.
+           </p>
+           <p>
+            <span>
+             4.2
+            </span>
+            DropSend shall issue invoices in respect of the Subscription Fee and shall
+            collect the Subscription Fee from your credit card monthly in advance. Both parties agree
+            that no refunds shall be given in any circumstances.
+           </p>
+           <p>
+            <span>
+             4.3
+            </span>
+            The Subscription Fee is exclusive of VAT or other sales tax which, if
+            applicable to you, shall be payable by you at the then prevailing rate.
+           </p>
+           <p>
+            <span>
+             4.4
+            </span>
+            In the event that the Subscription Fee, as appropriate, is not collected in
+            accordance with the provisions herein, DropSend may deny you access to the Services without
+            notice.
+           </p>
+          </li>
+          <li>
+           <h3>
+            TERM AND TERMINATION
+           </h3>
+           <p>
+            <span>
+             5.1
+            </span>
+            This Agreement shall commence on the Effective Date and shall continue in
+            effect for the Subscription Period.
+           </p>
+           <p>
+            <span>
+             5.2
+            </span>
+            If either party breaches this Agreement in any material respect, the other
+            party may give written notice to the breaching party of its intent to terminate, and if such
+            breach is not cured within thirty (30) days after the breaching party's receipt of such
+            notice, this Agreement shall terminate without any further notice required. Without
+            prejudice to the foregoing, in the event that you breach the provisions of clause 2,
+            DropSend may suspend and/or terminate the Services forthwith without notice.
+           </p>
+           <p>
+            <span>
+             5.3
+            </span>
+            If you do not access your account for a period of one hundred and twenty
+            (120) days or more, DropSend may at its own discretion remove and/or purge your data and
+            account from the system and terminate the Services forthwith without notice.
+           </p>
+           <p>
+            <span>
+             5.4
+            </span>
+            Upon any termination of this Agreement, (a)the rights and licenses granted
+            to you herein shall terminate; (b)you shall cease all use of the Services; and (c) DropSend
+            shall at its own discretion remove and/or purge your data and account from the system.
+           </p>
+          </li>
+          <li>
+           <h3>
+            WARRANTIES AND LIABILITY
+           </h3>
+           <p>
+            <span>
+             6.1
+            </span>
+            DropSend does not represent or warrant that: (i) the use of the Services
+            will be timely, uninterrupted or error-free or operate in combination with any other
+            hardware, software, system or data, (ii) the Services will meet your requirements or
+            expectations, (iii) errors or defects will be corrected, (iv) the Services or the server(s)
+            that make the Services available are free of viruses or other harmful components. The
+            Services are provided to you strictly on an "as is" basis. All conditions,
+            representations and warranties, whether express, implied, statutory or otherwise, including,
+            without limitation, any implied warranty of merchantability, fitness for a particular
+            purpose, or non-infringement of third party rights, are hereby disclaimed to the maximum
+            extent permitted by applicable law.
+           </p>
+           <p>
+            <span>
+             6.2
+            </span>
+            Your sole remedy with respect to any claims arising out of this Agreement
+            shall be limited in the aggregate to the monies paid by you to DropSend under this Agreement
+            during the twelve (12) month period preceding the event giving rise to such liability.
+           </p>
+           <p>
+            <span>
+             6.3
+            </span>
+            In no event shall DropSend be liable for:
+           </p>
+           <p>
+            <span class="subsub">
+             (a)
+            </span>
+            any special, indirect, incidental or consequential damages,
+            including loss of profits and goodwill, business or business benefit, or the cost of
+            procurement of substitute products or services by you even if advised of the possibility of
+            such damages;
+           </p>
+           <p>
+            <span class="subsub">
+             (b)
+            </span>
+            any delay or failure to provide the Services that is due to
+            third parties, including, without limitation, internet service providers, data centres,
+            server hosting companies and telecommunications companies;
+           </p>
+           <p>
+            <span class="subsub">
+             (c)
+            </span>
+            credit card fraud committed against you by any third party
+            provider of credit card services.
+           </p>
+          </li>
+          <li>
+           <h3>
+            GENERAL
+           </h3>
+           <p>
+            <span>
+             7.1
+            </span>
+            You shall not assign this Agreement, in whole or in part, without the prior
+            written consent of DropSend.
+           </p>
+           <p>
+            <span>
+             7.2
+            </span>
+            You consent to the use by DropSend of your name in customer lists and other
+            publicity, including interviews, case studies, and conference discussions, provided that
+            such publicity accurately describes the nature of the relationship between you and DropSend.
+           </p>
+           <p>
+            <span>
+             7.3
+            </span>
+            This Agreement and its performance shall be governed by and construed in
+            accordance with and the parties hereby submit to the exclusive jurisdiction of the laws of
+            England and Wales.
+           </p>
+           <p>
+            <span>
+             7.4
+            </span>
+            You agree that because of the unique nature of the Services and DropSend'
+            proprietary rights therein, a demonstrated breach of this Agreement by you would irreparably
+            harm DropSend and monetary damages would be inadequate compensation. Therefore, you agree
+            that DropSend shall be entitled to preliminary and permanent injunctive relief, as
+            determined by any court of competent jurisdiction to enforce the provisions of this
+            Agreement.
+           </p>
+           <p>
+            <span>
+             7.5
+            </span>
+            If any provision of this Agreement or the Services thereof is declared void,
+            illegal, or unenforceable, the remainder of this Agreement will be valid and enforceable to
+            the extent permitted by applicable law. In such event, the parties agree to use their best
+            efforts to replace the invalid or unenforceable provision by a provision that, to the extent
+            permitted by the applicable law, achieves the purposes intended under the invalid or
+            unenforceable provision.
+           </p>
+           <p>
+            <span>
+             7.6
+            </span>
+            Any failure by any party to this Agreement to enforce at any time any term
+            or condition under this Agreement will not be considered a waiver of that party's right
+            thereafter to enforce each and every term and condition of this Agreement.
+           </p>
+           <p>
+            <span>
+             7.7
+            </span>
+            Neither party will be responsible for delays resulting from circumstances
+            beyond the reasonable control of such party, provided that the nonperforming party uses
+            reasonable efforts to avoid or remove such causes of nonperformance and continues
+            performance hereunder with reasonable dispatch whenever such causes are removed.
+           </p>
+           <p>
+            <span>
+             7.8
+            </span>
+            This Agreement (i)constitutes the entire agreement and understanding between
+            the parties with respect to the subject matter hereof and supersedes all prior agreements,
+            oral and written, made with respect to the subject matter hereof, and (ii)cannot be altered
+            except by agreement in writing executed by an authorised representative of each party. No
+            purchase order and/or standard terms of purchase provided by you shall supersede this
+            Agreement.
+           </p>
+           <p>
+            <span>
+             7.9
+            </span>
+            Nothing in this Agreement shall give, directly or indirectly, any third
+            party any enforceable benefit or any right of action against DropSend and such third parties
+            shall not be entitled to enforce any term of this Agreement against DropSend.
+           </p>
+          </li>
+         </ol>
+         <p>
+          If you have any questions regarding this Agreement or if you wish to discuss the terms and conditions
+    contained herein please contact us using the contact details at
+          <a href="http://www.dropsend.com/" target="_blank">
+           www.dropsend.com
+          </a>
+          .
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="row margin-bottom">
+       <div class="small-12 columns">
+        <label>
+         <input id="ihaveread" onchange="if($(this).is(':checked')) $('#account-ready-submit').removeAttr('disabled');else $('#account-ready-submit').attr('disabled',true)" type="checkbox"/>
+         I have read and agree to tha DropSend Terms and
+                Conditions
+        </label>
+       </div>
+      </div>
+      <div class="text-center">
+       <a class="button margin0" disabled="true" id="account-ready-submit">
+        Send File
+       </a>
+       <a class="button margin0" id="account-ready-cancel">
+        Cancel
+       </a>
+      </div>
+     </div>
+    </div>
+    <a class="close-reveal-modal" onclick="closeTermsWindow()" style="color:#fff;text-decoration: none;">
+     x
+    </a>
+   </div>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+ <head>
+  <title>
+   Lights, Camera, Action - 3D in iOS 8 with Scene Kit |Xamarin Blog
+  </title>
+  <meta charset="utf-8"/>
+  <meta content="width=1240" name="viewport"/>
+  <link href="//xamarin.com/content/css/screen.css?v=11" rel="stylesheet" type="text/css"/>
+  <link href="//xamarin.com/content/css/pages/login.css?v=11" rel="stylesheet" type="text/css"/>
+  <link href="//xamarin.com/content/css/legacy/modal.css?v=11" rel="stylesheet" type="text/css"/>
+  <link href="http://gmpg.org/xfn/11" rel="profile"/>
+  <link href="https://blog.xamarin.com/wp-content/themes/xamarin/style.css?v=9 " rel="stylesheet" type="text/css"/>
+  <link href="https://blog.xamarin.com/xmlrpc.php" rel="pingback"/>
+  <link href="//blog.xamarin.com/wp-content/themes/xamarin/css/rsvp-and-tweet.css?v=1" rel="stylesheet"/>
+  <link href="//xamarin.com/favicon.ico?2" rel="shortcut icon"/>
+  <!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.4 - https://yoast.com/wordpress/plugins/seo/ -->
+  <link href="https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" rel="canonical"/>
+  <link href="https://plus.google.com/b/101300081691995092351/101300081691995092351/posts" rel="publisher"/>
+  <meta content="en_US" property="og:locale"/>
+  <meta content="article" property="og:type"/>
+  <meta content="Lights, Camera, Action - 3D in iOS 8 with Scene Kit |" property="og:title"/>
+  <meta content="Scene Kit is a powerful 3D graphics API that makes working with 3D a snap. It was first introduced in OS X 10.8, and has now come to iOS 8. With Scene Kit, creating immersive 3D visualizations and casual 3D games no longer requires expertise in OpenGL. Building on common scene graph concepts, Scene Kit " property="og:description"/>
+  <meta content="https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" property="og:url"/>
+  <meta content="Xamarin Blog" property="og:site_name"/>
+  <meta content="https://www.facebook.com/xamarinhq" property="article:publisher"/>
+  <meta content="iOS" property="article:section"/>
+  <meta content="2014-06-26T08:00:08+00:00" property="article:published_time"/>
+  <meta content="2015-01-08T16:24:01+00:00" property="article:modified_time"/>
+  <meta content="2015-01-08T16:24:01+00:00" property="og:updated_time"/>
+  <meta content="9302408" property="fb:admins"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/earth.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/nodetree.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/sphere1.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/sphere2.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/sphere3.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/sphere4.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/sphere5.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/psychmonkey.gif" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/rotation.png" property="og:image"/>
+  <meta content="https://blog.xamarin.com/wp-content/uploads/2014/06/shininess.png" property="og:image"/>
+  <!-- / Yoast WordPress SEO plugin. -->
+  <link href="https://blog.xamarin.com/feed/" rel="alternate" title="Xamarin Blog  Feed" type="application/rss+xml"/>
+  <link href="https://blog.xamarin.com/comments/feed/" rel="alternate" title="Xamarin Blog  Comments Feed" type="application/rss+xml"/>
+  <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.css?ver=4.1.5" id="jquery-ui-style-css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="https://blog.xamarin.com/wp-content/plugins/subscribe2-widget-pro/includes/style/s2w-style.css?ver=4.1.5" id="s2w-widget-css" media="all" rel="stylesheet" type="text/css"/>
+  <script src="https://blog.xamarin.com/wp-includes/js/jquery/jquery.js?ver=1.11.1" type="text/javascript">
+  </script>
+  <script src="https://blog.xamarin.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   /* &lt;![CDATA[ */
+var s2w_params = {"ajax_url":"https:\/\/blog.xamarin.com\/wp-admin\/admin-ajax.php"};
+/* ]]&gt; */
+  </script>
+  <script src="https://blog.xamarin.com/wp-content/plugins/subscribe2-widget-pro/includes/js/subscribe2-widget-pro.js?ver=4.1.5" type="text/javascript">
+  </script>
+  <link href="https://blog.xamarin.com/xmlrpc.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+  <link href="https://blog.xamarin.com/wp-includes/wlwmanifest.xml" rel="wlwmanifest" type="application/wlwmanifest+xml"/>
+  <meta content="WordPress 4.1.5" name="generator"/>
+  <link href="https://blog.xamarin.com/?p=12064" rel="shortlink"/>
+  <script type="text/javascript">
+   var _sf_startpt=(new Date()).getTime()&lt;/script&gt;
+&lt;style type="text/css"&gt;	.ssba {
+										}
+										.ssba img
+										{
+											width: 35px !important;
+											padding: 6px;
+											border:  0;
+											box-shadow: none !important;
+											display: inline !important;
+											vertical-align: middle;
+										}
+										.ssba, .ssba a
+										{
+											text-decoration:none;
+											background: none;
+											font-size: 	20px;
+											color: 		#555753!important;
+										}&lt;/style&gt;&lt;style type="text/css" id="syntaxhighlighteranchor"&gt;&lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body class="single single-post postid-12064 single-format-standard"&gt;
+        &lt;!-- Google Tag Manager --&gt;
+        &lt;noscript&gt;&lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-57C4Z7"
+        height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;&lt;/noscript&gt;
+        &lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-57C4Z7');
+  </script>
+ </head>
+ <body>
+  <div id="top-container">
+   <div id="global-header">
+    <div class="global-bar">
+     <div class="wrapper">
+      <h1 class="xamarin logo">
+       <a href="https://xamarin.com/">
+        Xamarin
+       </a>
+      </h1>
+      <div class="navigation">
+       <a class="label">
+        <span class="menu">
+         Menu
+        </span>
+        <span class="close icon">
+        </span>
+       </a>
+       <ul>
+        <li class="dropdown ">
+         <a data-toggle="dropdown" href="https://xamarin.com/products">
+          Products
+         </a>
+         <script type="text/javascript">
+          var preloadProductsIcons = new Image(); preloadProductsIcons.src = "//xamarin.com/content/images/structure/header/products-icons.svg";
+         </script>
+         <ul class="products-list" role="menu">
+          <li>
+           <ul>
+            <li class="platfrom">
+             <a href="https://xamarin.com/platform">
+              Xamarin Platform
+              <small>
+               C# on iOS, Android, Mac &amp; Windows
+              </small>
+             </a>
+            </li>
+            <li class="test-cloud">
+             <a href="https://xamarin.com/test-cloud">
+              Xamarin Test Cloud
+              <small>
+               Test any app on hundreds of devices
+              </small>
+             </a>
+            </li>
+            <li class="university">
+             <a href="https://xamarin.com/university">
+              Xamarin University
+              <small>
+               Unlimited, live mobile development training
+              </small>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li>
+           <ul>
+            <li class="all">
+             <a href="https://xamarin.com/products">
+              All Products
+             </a>
+            </li>
+           </ul>
+          </li>
+         </ul>
+        </li>
+        <li class="dropdown">
+         <a href="https://xamarin.com/customers">
+          Customers
+         </a>
+         <ul role="menu">
+          <li>
+           <a href="https://xamarin.com/resources/case-studies">
+            Success Stories
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/enterprise">
+            Enterprise
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="">
+         <a href="https://store.xamarin.com/">
+          Pricing
+         </a>
+        </li>
+        <li class="">
+         <a href="http://developer.xamarin.com">
+          Developers
+         </a>
+        </li>
+        <li class="dropdown ">
+         <a href="https://xamarin.com/support">
+          Support
+         </a>
+         <ul role="menu">
+          <li>
+           <a href="https://xamarin.com/support">
+            Developer Support
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/partners">
+            Consulting Partners
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/partners/services">
+            Consulting Services
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="hide-on-mobile dropdown ">
+         <a data-toggle="dropdown" href="https://xamarin.com/resources">
+          Resources
+         </a>
+         <ul role="menu">
+          <li>
+           <a href="http://blog.xamarin.com">
+            Blog
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/faq">
+            FAQ
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/partners">
+            Partners
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/resources/webinars">
+            Webinars
+           </a>
+          </li>
+          <li>
+           <a href="https://xamarin.com/about">
+            About Xamarin
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="show-on-mobile">
+         <a href="http://blog.xamarin.com">
+          Blog
+         </a>
+        </li>
+        <li class="show-on-mobile">
+         <a href="https://xamarin.com/about">
+          About Xamarin
+         </a>
+        </li>
+        <li class="user" data-hover="dropdown">
+         <a href="https://xamarin.com/account/login">
+          Sign In
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="covering" id="container">
+   <div class="main-page" id="blog-page">
+    <div class="content flush-padding">
+     <div class="columns with-sidebar">
+      <div class="first cell column-body">
+       <div class="blog-posts single">
+        <article class="post-12064 post type-post status-publish format-standard hentry category-ios" id="post-12064">
+         <hgroup>
+          <aside class="avatar">
+           <img alt="" class="avatar avatar-200 wp-user-avatar wp-user-avatar-200 photo avatar-default" height="200" src="https://secure.gravatar.com/avatar/eb7046aac742abfd3d160267b3353808?s=200&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D200&amp;r=G" width="200"/>
+          </aside>
+          <span class="date">
+           June 26, 2014
+          </span>
+          <h1>
+           <a href="https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" rel="bookmark" title="Permalink to Lights, Camera, Action  3D in iOS 8 with Scene Kit">
+            Lights, Camera, Action  3D in iOS 8 with Scene Kit
+           </a>
+          </h1>
+          <span class="author">
+           By
+           <a href="https://blog.xamarin.com/" rel="author" title="Posts by Mike Bluestein">
+            Mike Bluestein
+           </a>
+          </span>
+         </hgroup>
+         <div class="entry-content rich-content">
+          <p>
+           <strong>
+            Scene Kit
+           </strong>
+           is a powerful 3D graphics API that makes working with 3D a snap. It was first introduced in OS X 10.8, and has now come to iOS 8. With Scene Kit, creating immersive 3D visualizations and casual 3D games no longer requires expertise in
+           <a href="http://www.opengl.org/" target="_blank" title="opengl.org">
+            OpenGL
+           </a>
+           . Building on common scene graph concepts, Scene Kit abstracts away the complexities of OpenGL and OpenGL ES, making it very easy to add 3D content to an application. However, if you are an OpenGL expert, Scene Kit has great support for tying in directly with OpenGL as well. It also includes numerous features that complement 3D graphics, such as physics, and integrates very well with several other Apple frameworks, such as Core Animation, Core Image and Sprite Kit.
+          </p>
+          <p>
+           <img alt="3D earth" class="aligncenter size-full wp-image-12071" height="542" src="/wp-content/uploads/2014/06/earth.png" width="258"/>
+          </p>
+          <p>
+           Scene Kit is extremely easy to work with. It is a declarative API that takes care of rendering. You simply set up a scene, add properties to it, and the magic of Scene Kit brings it all to life.
+          </p>
+          <p>
+           To work with Scene Kit you create a scene graph using the
+           <strong>
+            SCNScene
+           </strong>
+           class. A scene contains a hierarchy of nodes, represented by instances of
+           <strong>
+            SCNNode
+           </strong>
+           , defining locations in 3D space. Each node has properties such as geometry, lighting and materials that affect its appearance.
+          </p>
+          <p>
+           <img alt="node tree" class="aligncenter size-full wp-image-12073" height="324" src="/wp-content/uploads/2014/06/nodetree.png" width="432"/>
+          </p>
+          <p>
+           To make a scene appear on screen, you add it to an
+           <strong>
+            SCNView
+           </strong>
+           by assigning it to the views
+           <strong>
+            Scene
+           </strong>
+           property. Additionally, if you make any changes to the scene,
+           <strong>
+            SCNView
+           </strong>
+           will update itself to display the changes.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           scene = SCNScene.Create ();
+sceneView = new SCNView (View.Frame);
+sceneView.Scene = scene;
+          </pre>
+          <p>
+           Scenes can be populated from files exported via a 3d modeling tool, or programmatically from geometric primitives. For example, this is how to create a sphere and add it to the scene:
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           sphere = SCNSphere.Create (10.0f);
+sphereNode = SCNNode.FromGeometry (sphere);
+sphereNode.Position = new SCNVector3 (0, 0, 0);
+scene.RootNode.AddChildNode (sphereNode);
+          </pre>
+          <h2>
+           Let There Be Light
+          </h2>
+          <p>
+           At this point the sphere wont display anything because there is no light in the scene. Lights in Scene Kit are created by attaching
+           <strong>
+            SCNLight
+           </strong>
+           instances to nodes. There are several types of lights ranging from various forms of directional lighting to ambient lighting. For example the following code creates an omni directional light on the side of the sphere.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           // omni-directional light
+var light = SCNLight.Create ();
+var lightNode = SCNNode.Create ();
+light.LightType = SCNLightType.Omni;
+light.Color = UIColor.Blue;
+lightNode.Light = light;
+lightNode.Position = new SCNVector3 (-40, 40, 60);
+scene.RootNode.AddChildNode (lightNode);
+          </pre>
+          <p>
+           Omni directional lighting produces a diffuse reflection resulting in an even lighting, sort of like shining a flashlight. Creating ambient light is similar, although it has no direction as it shines equally in all directions. Think of it like mood lighting
+           <img alt=":)" class="wp-smiley" src="https://blog.xamarin.com/wp-includes/images/smilies/icon_smile.gif"/>
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           // ambient light
+ambientLight = SCNLight.Create ();
+ambientLightNode = SCNNode.Create ();
+ambientLight.LightType = SCNLightType.Ambient;
+ambientLight.Color = UIColor.Purple;
+ambientLightNode.Light = ambientLight;
+scene.RootNode.AddChildNode (ambientLightNode);
+          </pre>
+          <p>
+           With the lights in place, the sphere is now visible in the scene.
+          </p>
+          <p>
+           <img alt="sphere" class="aligncenter size-full wp-image-12075" height="542" src="/wp-content/uploads/2014/06/sphere1.png" width="258"/>
+          </p>
+          <h2>
+           Adding a Camera
+          </h2>
+          <p>
+           Adding a camera (
+           <strong>
+            SCNCamera
+           </strong>
+           ) to the scene changes the point of view. The pattern to add the camera is similar. Create the camera, attach it to a node and add the node to the scene.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           // camera
+camera = new SCNCamera {
+	XFov = 80,
+	YFov = 80
+};
+cameraNode = new SCNNode {
+	Camera = camera,
+	Position = new SCNVector3 (0, 0, 40)
+};
+scene.RootNode.AddChildNode (cameraNode);
+          </pre>
+          <p>
+           As you can see from the code above, Scene Kit objects can be created using constructors or from the
+           <strong>
+            Create
+           </strong>
+           factory method. The former allows using C# initializer syntax, but which one to use is largely a matter of preference.
+          </p>
+          <p>
+           With the camera in place, the entire sphere is visible to the user.
+          </p>
+          <p>
+           <img alt="sphere" class="aligncenter size-full wp-image-12077" height="542" src="/wp-content/uploads/2014/06/sphere2.png" width="258"/>
+          </p>
+          <p>
+           You can add additional lights to the scene as well. Here is what it looks like with a few more omni-directional lights:
+          </p>
+          <p>
+           <img alt="sphere" class="aligncenter size-full wp-image-12079" height="542" src="/wp-content/uploads/2014/06/sphere3.png" width="258"/>
+          </p>
+          <p>
+           Additionally, by setting
+           <code>
+            sceneView.AllowsCameraControl = true
+           </code>
+           , the user can change the point of view with a touch gesture.
+          </p>
+          <h2>
+           Materials
+          </h2>
+          <p>
+           Materials are created with the
+           <strong>
+            SCNMaterial
+           </strong>
+           class. For example to add an image onto the spheres surface, set the image to the materials diffuse contents.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           material = SCNMaterial.Create ();
+material.Diffuse.Contents = UIImage.FromFile ("monkey.png");
+sphere.Materials = new SCNMaterial[] { material };
+          </pre>
+          <p>
+           This layers the image onto the node as shown below.
+          </p>
+          <p>
+           <img alt="sphere" class="aligncenter size-full wp-image-12081" height="542" src="/wp-content/uploads/2014/06/sphere4.png" width="258"/>
+          </p>
+          <p>
+           A material can be set to respond to other types of lighting too. For example, the object can be made shiny and have a its specular contents set to display specular reflection, resulting in a bright spot on the surface.
+          </p>
+          <p>
+           <img alt="sphere" class="aligncenter size-full wp-image-12083" height="542" src="/wp-content/uploads/2014/06/sphere5.png" width="258"/>
+          </p>
+          <p>
+           Materials are very flexible, allowing you to achieve a lot with very little code. For example, instead of setting the image to the diffuse contents, set it to the reflective contents instead.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           material.Reflective.Contents = UIImage.FromFile ("monkey.png");
+          </pre>
+          <p>
+           Now the monkey sits visually within the sphere, independent of the point of view, creating a monkey in a psychedelic 1960s sphere so to speak.
+          </p>
+          <p>
+           <img alt="spinning monkey" class="aligncenter size-full wp-image-12091" height="279" src="/wp-content/uploads/2014/06/psychmonkey.gif" width="155"/>
+          </p>
+          <h2>
+           Animation
+          </h2>
+          <p>
+           Scene Kit is designed to work well with Core Animation. You can create both implicit or explicit animations. When creating an implicit animation, Scene Kit provides its own transition class,
+           <strong>
+            SCNTransaction
+           </strong>
+           .
+          </p>
+          <p>
+           Heres a example that rotates the sphere:
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           SCNTransaction.Begin ();
+SCNTransaction.AnimationDuration = 2.0;
+sphereNode.Rotation = new SCNVector4 (0, 1, 0, (float)Math.PI * 4);
+SCNTransaction.Commit ();
+          </pre>
+          <p>
+           <img alt="rotation" class="aligncenter size-full wp-image-12087" height="542" src="/wp-content/uploads/2014/06/rotation.png" width="536"/>
+          </p>
+          <p>
+           You can animate much more than rotation though. Many properties of Scene Kit are animatable. For example, the following code animates the materials
+           <strong>
+            Shininess
+           </strong>
+           to increase the specular reflection.
+          </p>
+          <pre class="brush: csharp; title: ; notranslate" title="">
+           SCNTransaction.Begin ();
+SCNTransaction.AnimationDuration = 2.0;
+material.Shininess = 0.1f;
+SCNTransaction.Commit ();
+          </pre>
+          <p>
+           <img alt="shininess" class="aligncenter size-full wp-image-12088" height="542" src="/wp-content/uploads/2014/06/shininess.png" width="536"/>
+          </p>
+          <p>
+           As you can see, Scene Kit is incredibly easy to use. This post just scratches the surface though. There are a wealth of additional features including constraints, physics, declarative actions, 3D text, depth of field support, Sprite Kit integration and Core Image integration to name just a few. Its exciting to see this API come to iOS 8.
+          </p>
+          <p>
+           The source code from this post is available
+           <a href="https://gist.github.com/mikebluestein/8d8486c200dd6d0f8d06" target="_blank" title="Hello Scene Kit">
+            here
+           </a>
+           .
+          </p>
+          <p>
+           <a href="http://forums.xamarin.com/discussion/19229" target="_blank" title="Discuss in Forums">
+            <em>
+             Discuss this blog post in the Xamarin Forums
+            </em>
+           </a>
+          </p>
+          <p>
+          </p>
+          <!-- Simple Share Buttons Adder (5.6) simplesharebuttons.com -->
+          <div class="ssba">
+           <div style="text-align:left">
+            <a class="ssba_twitter_share" href="http://twitter.com/share?url=https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/&amp;text=Lights%2C+Camera%2C+Action+%E2%80%93+3D+in+iOS+8+with+Scene+Kit+" target="_blank">
+             <img alt="Tweet about this on Twitter" class="ssba" src="https://blog.xamarin.com/wp-content/plugins/simple-share-buttons-adder/buttons/somacro/twitter.png" title="Twitter"/>
+            </a>
+            <a class="ssba_facebook_share" href="http://www.facebook.com/sharer.php?u=https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" target="_blank">
+             <img alt="Share on Facebook" class="ssba" src="https://blog.xamarin.com/wp-content/plugins/simple-share-buttons-adder/buttons/somacro/facebook.png" title="Facebook"/>
+            </a>
+            <a class="ssba_google_share" href="https://plus.google.com/share?url=https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" target="_blank">
+             <img alt="Share on Google+" class="ssba" src="https://blog.xamarin.com/wp-content/plugins/simple-share-buttons-adder/buttons/somacro/google.png" title="Google+"/>
+            </a>
+            <a class="ssba_linkedin_share ssba_share_link" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/" target="_blank">
+             <img alt="Share on LinkedIn" class="ssba" src="https://blog.xamarin.com/wp-content/plugins/simple-share-buttons-adder/buttons/somacro/linkedin.png" title="LinkedIn"/>
+            </a>
+            <a class="ssba_email_share" href="mailto:?subject=Lights, Camera, Action  3D in iOS 8 with Scene Kit&amp;body=%20https://blog.xamarin.com/3d-in-ios-8-with-scene-kit/">
+             <img alt="Email this to someone" class="ssba" src="https://blog.xamarin.com/wp-content/plugins/simple-share-buttons-adder/buttons/somacro/email.png" title="Email"/>
+            </a>
+           </div>
+          </div>
+         </div>
+        </article>
+       </div>
+      </div>
+      <div class="cell column-sidebar" style="padding: 20px;">
+       <div class="widget-area" id="secondary" role="complementary">
+        <aside class="widget widget_search" id="search-4">
+         <form action="https://blog.xamarin.com/" id="searchform" method="get">
+          <input id="s" name="s" placeholder="Search" type="text" value=""/>
+         </form>
+        </aside>
+        <aside class="widget widget_subscribe2_widget" id="subscribe2_widget-2">
+         <h3 class="widget-title">
+          Subscribe
+         </h3>
+         <div class="s2w-widget-pro subscribe2-widget-pro" data-unsubscribe-message="Please check your email to confirm your subscription removal from Xamarin Blog. We are sorry to see you go!" data-validation-error="Ooops. Please type your email below." data-validation-success="Thank you for signing up! Please check your email to confirm your subscription.">
+          <p>
+           Enter your email address below to receive Xamarin blog posts in your inbox.
+          </p>
+          <form action="" class="s2w-form" method="post">
+           <input class="s2w-user-up" name="ip" type="hidden" value="103.225.221.202"/>
+           <label for="s2email">
+            Your email:
+           </label>
+           <br/>
+           <input class="s2w-email" name="email" onblur="if (this.value == '') {this.value = 'email address';}" onfocus="if (this.value == 'email address') {this.value = '';}" type="text" value="email address"/>
+           <input class="s2w-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+           <span style="display:none !important">
+            <label for="name">
+             Leave Blank:
+            </label>
+            <input class="s2w-name" name="name" type="text"/>
+            <label for="uri">
+             Don't Change:
+            </label>
+            <input class="s2w-uri" name="uri" type="text" value="http://"/>
+           </span>
+          </form>
+         </div>
+        </aside>
+        <aside class="widget widget_text" id="text-3">
+         <div class="textwidget">
+          <a class="rss" href="http://blog.xamarin.com/feed/">
+           RSS
+          </a>
+         </div>
+        </aside>
+        <aside class="widget widget_text" id="text-4">
+         <h3 class="widget-title">
+          Elsewhere
+         </h3>
+         <div class="textwidget">
+          <div class="elsewhere">
+           <a class="facebook" href="https://www.facebook.com/pages/Xamarin/283148898401104">
+            Facebook
+           </a>
+           <a class="twitter" href="https://twitter.com/xamarinhq">
+            Twitter
+           </a>
+           <a class="github" href="https://github.com/xamarin">
+            Github
+           </a>
+           <a class="googleplus" href="https://plus.google.com/101300081691995092351">
+            Google+
+           </a>
+           <a class="youtube" href="https://www.youtube.com/user/XamarinVideos">
+            YouTube
+           </a>
+          </div>
+         </div>
+        </aside>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="global-footer">
+    <div class="wrapper">
+     <a class="hexagon" href="https://xamarin.com/">
+     </a>
+     <div class="social-icons show-on-mobile">
+      <a class="facebook" href="#">
+       Facebook
+      </a>
+      <a class="twitter" href="https://twitter.com/xamarinhq">
+       Twitter
+      </a>
+      <a class="github" href="#">
+       GitHub
+      </a>
+     </div>
+     <div class="navigation hide-on-mobile">
+      <ul>
+       <li>
+        Products
+        <ul>
+         <li>
+          <a href="//xamarin.com/platform">
+           Xamarin Platform
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/test-cloud">
+           Xamarin Test Cloud
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/insights">
+           Xamarin Insights
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/university">
+           Xamarin University
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/studio">
+           Xamarin Studio
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/visual-studio">
+           Xamarin for Visual Studio
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/forms">
+           Xamarin.Forms
+          </a>
+         </li>
+         <li>
+          <a href="http://scan.xamarin.com">
+           .NET Mobility Scanner
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/prebuilt-apps">
+           Pre-built apps
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/licensing">
+           Mono Commercial Licensing
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        Company
+        <ul>
+         <li>
+          <a href="//xamarin.com/about">
+           About Us
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/customers">
+           Customers
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/consulting-partners">
+           Partners
+          </a>
+         </li>
+         <li>
+          <a href="//blog.xamarin.com">
+           Blog
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/jobs">
+           Jobs
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/press">
+           Press
+          </a>
+         </li>
+         <li>
+          <a href="https://store.xamarin.com">
+           Pricing
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        Developer Center
+        <ul>
+         <li>
+          <a href="//developer.xamarin.com">
+           Get Started
+          </a>
+         </li>
+         <li>
+          <a href="//developer.xamarin.com/guides">
+           Guides
+          </a>
+         </li>
+         <li>
+          <a href="//developer.xamarin.com/recipes">
+           Recipes
+          </a>
+         </li>
+         <li>
+          <a href="//iosapi.xamarin.com/">
+           Xamarin.iOS APIs
+          </a>
+         </li>
+         <li>
+          <a href="//androidapi.xamarin.com/">
+           Xamarin.Android APIs
+          </a>
+         </li>
+         <li>
+          <a href="//macapi.xamarin.com/">
+           Xamarin.Mac APIs
+          </a>
+         </li>
+         <li>
+          <a href="//forums.xamarin.com">
+           Forums
+          </a>
+         </li>
+         <li>
+          <a href="http://planet.xamarin.com">
+           Community Blogs
+          </a>
+         </li>
+         <li>
+          <a href="//components.xamarin.com">
+           Components
+          </a>
+         </li>
+         <li>
+          <a href="http://developer.xamarin.com/videos/">
+           Videos
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        Support
+        <ul>
+         <li>
+          <a href="//xamarin.com/support">
+           Developer Support
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/resources">
+           Resources
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/consulting-partners/services">
+           Consulting Services
+          </a>
+         </li>
+         <li>
+          <a href="//xamarin.com/contact-us">
+           Contact Us
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        Elsewhere
+        <ul>
+         <li>
+          <a href="https://twitter.com/xamarinhq">
+           Twitter
+          </a>
+         </li>
+         <li>
+          <a href="https://github.com/xamarin">
+           GitHub
+          </a>
+         </li>
+         <li>
+          <a href="https://www.facebook.com/xamarinhq">
+           Facebook
+          </a>
+         </li>
+         <li>
+          <a href="https://plus.google.com/101300081691995092351/posts">
+           Google+
+          </a>
+         </li>
+         <li>
+          <a href="https://www.youtube.com/user/XamarinVideos">
+           YouTube
+          </a>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <footer>
+     <div class="wrapper">
+      <div class="contact">
+       <span class="tel">
+        +1 (855) 926-2746
+       </span>
+       <a class="email" href="mailto:hello@xamarin.com">
+        hello@xamarin.com
+       </a>
+      </div>
+      <div class="legal">
+       <a href="//xamarin.com/privacy">
+        Privacy policy
+       </a>
+       <span>
+        
+        <noscript>
+         2015
+        </noscript>
+        <script>
+         document.write(new Date().getFullYear())
+        </script>
+        Xamarin Inc.
+       </span>
+      </div>
+     </div>
+    </footer>
+   </div>
+   <script type="text/javascript">
+    $ = jQuery;
+   </script>
+   <script src="//xamarin.com/content/js/libraries/fastclick.js" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/content/js/libraries/bootstrap.min.js" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/content/js/libraries/hisrc.js" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/content/js/structure/template.js" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/js/janky.post.js?v=1" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/content/js/legacy/login.js" type="text/javascript">
+   </script>
+   <script src="//xamarin.com/content/js/structure/mobile.js" type="text/javascript">
+   </script>
+   <!-- /// LOAD CHARTBEAT /// -->
+   <script type="text/javascript">
+    var _sf_async_config={};
+		_sf_async_config.uid = 44884;
+		_sf_async_config.useCanonical = true;
+		(function(){
+		  function loadChartbeat() {
+			window._sf_endpt=(new Date()).getTime();
+			var e = document.createElement('script');
+			e.setAttribute('language', 'javascript');
+			e.setAttribute('type', 'text/javascript');
+			e.setAttribute('src',
+			   (("https:" == document.location.protocol) ? "https://" : "http://") +
+			   "static.chartbeat.com/js/chartbeat.js");
+			document.body.appendChild(e);
+		  }
+		  var oldonload = window.onload;
+		  window.onload = (typeof window.onload != 'function') ?
+			 loadChartbeat : function() { try { oldonload(); } catch (e) { loadChartbeat(); throw e} loadChartbeat(); };
+		})();
+   </script>
+   <script type="text/javascript">
+    (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myUser@email.com"; // OPTIONAL: include your user's email address or order ID
+    // _pa.revenue = "19.99"; // OPTIONAL: include dynamic purchase value for the conversion
+    // _pa.onLoadEvent = "sign_up"; // OPTIONAL: name of segment/conversion to be fired on script load
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.perfectaudience.com/serve/5244a493c9b752f600000087.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+   </script>
+   <script type="text/javascript">
+    //&lt;![CDATA[
+var s2jQuery = jQuery.noConflict();
+s2jQuery(document).ready(function() {
+	var dialog = s2jQuery('&lt;div&gt;&lt;/div&gt;');
+	if (s2jQuery('a.s2popup').attr('id') === 'unsubscribe') {
+		dialog.html('&lt;form method="post" action="https://blog.xamarin.com/unsubscribe/"&gt;&lt;input type="hidden" name="ip" value="103.225.221.202" /&gt;&lt;span style="display:none !important"&gt;&lt;label for="name"&gt;Leave Blank:&lt;/label&gt;&lt;input type="text" id="name" name="name" /&gt;&lt;label for="uri"&gt;Do Not Change:&lt;/label&gt;&lt;input type="text" id="uri" name="uri" value="http://" /&gt;&lt;/span&gt;&lt;p&gt;&lt;label for="s2email"&gt;Your email:&lt;/label&gt;&lt;br /&gt;&lt;input type="text" name="email" id="s2email" value="" size="20" /&gt;&lt;/p&gt;&lt;p&gt;&lt;input type="submit" name="subscribe" value="Subscribe" /&gt;&lt;/p&gt;&lt;/form&gt;');
+	} else if (s2jQuery('a.s2popup').attr('id') === 'subscribe') {
+		dialog.html('&lt;form method="post" action="https://blog.xamarin.com/unsubscribe/"&gt;&lt;input type="hidden" name="ip" value="103.225.221.202" /&gt;&lt;span style="display:none !important"&gt;&lt;label for="name"&gt;Leave Blank:&lt;/label&gt;&lt;input type="text" id="name" name="name" /&gt;&lt;label for="uri"&gt;Do Not Change:&lt;/label&gt;&lt;input type="text" id="uri" name="uri" value="http://" /&gt;&lt;/span&gt;&lt;p&gt;&lt;label for="s2email"&gt;Your email:&lt;/label&gt;&lt;br /&gt;&lt;input type="text" name="email" id="s2email" value="" size="20" /&gt;&lt;/p&gt;&lt;p&gt;&lt;input type="submit" name="unsubscribe" value="Unsubscribe" /&gt;&lt;/p&gt;&lt;/form&gt;');
+	} else {
+		dialog.html('&lt;form method="post" action="https://blog.xamarin.com/unsubscribe/"&gt;&lt;input type="hidden" name="ip" value="103.225.221.202" /&gt;&lt;span style="display:none !important"&gt;&lt;label for="name"&gt;Leave Blank:&lt;/label&gt;&lt;input type="text" id="name" name="name" /&gt;&lt;label for="uri"&gt;Do Not Change:&lt;/label&gt;&lt;input type="text" id="uri" name="uri" value="http://" /&gt;&lt;/span&gt;&lt;p&gt;&lt;label for="s2email"&gt;Your email:&lt;/label&gt;&lt;br /&gt;&lt;input type="text" name="email" id="s2email" value="" size="20" /&gt;&lt;/p&gt;&lt;p&gt;&lt;input type="submit" name="subscribe" value="Subscribe" /&gt;&nbsp;&lt;input type="submit" name="unsubscribe" value="Unsubscribe" /&gt;&lt;/p&gt;&lt;/form&gt;');
+	}
+	dialog.dialog({autoOpen: false, modal: true, zIndex: 10000, title: 'Subscribe to this blog'});
+	s2jQuery('a.s2popup').click(function(){
+		dialog.dialog('open');
+		return false;
+	});
+});
+//]]&gt;
+   </script>
+   <!-- Powered by WPtouch: 3.7.3 -->
+   <script src="https://blog.xamarin.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9b" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCSharp.js?ver=3.0.9b" type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    (function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "https://blog.xamarin.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "https://blog.xamarin.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/core.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/button.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/position.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+   <script src="https://blog.xamarin.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.2" type="text/javascript">
+   </script>
+  </div>
+  <div style="position: absolute; left: -9999px; bottom: 0">
+   <!-- Google remarketing -->
+   <script type="text/javascript">
+    /* &lt;![CDATA[ */
+                var google_conversion_id = 1015730972;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "j0fWCOywugIQnKar5AM";
+                var google_conversion_value = 0;
+                /* ]]&gt; */
+   </script>
+   <script src="//www.googleadservices.com/pagead/conversion.js" type="text/javascript">
+   </script>
+   <noscript>
+    <div style="display:inline;">
+     <img alt="" height="1" src="//www.googleadservices.com/pagead/conversion/1015730972/?label=j0fWCOywugIQnKar5AM&amp;guid=ON&amp;script=0" style="border-style:none;" width="1"/>
+    </div>
+   </noscript>
+   <script type="text/javascript">
+    (function() {
+                window._pa = window._pa || {};
+                // _pa.orderId = "myCustomer@email.com"; // OPTIONAL: attach user email or order ID to conversions
+                // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+                var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+                pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.perfectaudience.com/serve/5244a493c9b752f600000087.js";
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+              })();
+   </script>
+   <!-- Marketo -->
+   <script type="text/javascript">
+    (function() {
+              var didInit = false;
+              function initMunchkin() {
+                if(didInit === false) {
+                  didInit = true;
+                  Munchkin.init('975-JOX-769');
+                }
+              }
+              var s = document.createElement('script');
+              s.type = 'text/javascript';
+              s.async = true;
+              s.src = document.location.protocol + '//munchkin.marketo.net/munchkin.js';
+              s.onreadystatechange = function() {
+                if (this.readyState == 'complete' || this.readyState == 'loaded') {
+                  initMunchkin();
+                }
+              };
+              s.onload = initMunchkin;
+              document.getElementsByTagName('head')[0].appendChild(s);
+            })();
+   </script>
+   <script type="text/javascript">
+    var analytics=analytics||[];(function(){var e=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group"],t=function(e){return function(){analytics.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var n=0;n&lt;e.length;n++)analytics[e[n]]=t(e[n])})(),analytics.load=function(e){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+e+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n)};
+              analytics.load("7iordhccdt");
+   </script>
+   <script type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    // Identify the user from store
+              jQuery.ajax('https://store.xamarin.com/xamIdent?t=' + (new Date().getTime()) , {
+                 cache: false,
+                 data: { 'url': window.location.href },
+                 type: 'post',
+                 xhrFields: { withCredentials: true },
+                 dataType: 'json',
+                 success: function(data) {
+                   if (data.success &amp;&amp; data.loggedIn &amp;&amp; typeof analytics !== 'undefined') {
+                     analytics.identify (data.email, { firstName: data.firstName, lastName: data.lastName, 'Last Visited Blog': new Date () });
+                   }
+                   analytics.track ('Visited Blog Post', { 'Post': 'Lights, Camera, Action &#8211; 3D in iOS 8 with Scene Kit' });                 },
+                 error: function (jqXHR, textStatus, errorThrown) {
+                   console.log ("error identifying: " + errorThrown);
+                 }
+              });
+   </script>
+   <script type="text/javascript">
+    // Forgive me for what I do here
+              jQuery (document).ajaxComplete (function (evt, xhr, settings) {
+                var url = settings.url; var type = settings.type;
+                if (url == "http://blog.xamarin.com/wp-admin/admin-ajax.php" &amp;&amp; type == "POST") {
+                  // OK, we're subscribing...
+                  if (typeof analytics !== 'undefined') {
+                    var subEmail = $ ('.s2w-email').val ();
+                    analytics.identify (subEmail);
+                    analytics.track ('Subscribed To Blog');
+                  }
+                }
+              });
+   </script>
+   <script src="//blog.xamarin.com/wp-content/themes/xamarin/js/rsvp-and-tweet.js?v=1">
+   </script>
+  </div>
+ </body>
+</html>
+<!-- Dynamic page generated in 0.184 seconds. -->

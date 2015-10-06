@@ -1,0 +1,2633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" lang="en-gb">
+ <head>
+  <title>
+   The definitive guide to developing with Cocos2d-x, by Cowboy Games - Microsoft UK Developers
+  </title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <link href="//www.microsoft.com/favicon.ico?v2" rel="shortcut icon"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta id="ctl00_ctl00_WtCampaignId" name="DCSext.wt_linkid"/>
+  <meta id="ctl00_ctl00_WtTarget" name="DCSext.wt_target"/>
+  <meta id="ctl00_ctl00_WtSp" name="WT.sp"/>
+  <meta content="no-track" name="DCSdir.gTrackExceptions"/>
+  <link href="//ukcdn.azurewebsites.net/assets.ashx?s=oneMscomCss&amp;t=text/css&amp;v=1.0.1" rel="stylesheet" type="text/css"/>
+  <link href="//ukcdn.azurewebsites.net/assets.ashx?s=dimensionCssPx&amp;t=text/css&amp;v=1.0.1" rel="stylesheet" type="text/css"/>
+  <link href="//ukcdn.azurewebsites.net/assets.ashx?s=dimensionCssP&amp;t=text/css&amp;v=1.0.1" rel="stylesheet" type="text/css"/>
+  <link href="/uk/style/fonts.css" rel="stylesheet" type="text/css"/>
+  <script src="//ukcdn.azurewebsites.net/wtoptimize/wt_capi.js" type="text/javascript">
+  </script>
+  <script src="//ukcdn.azurewebsites.net/scripts/webfx/core/head.js" type="text/javascript">
+  </script>
+  <script src="//www.microsoft.com/uk/privacycookie/defaultWebFX.js" type="text/javascript">
+   &lt;/script&gt;
+        
+&lt;meta name="og:site_name" content="Microsoft Developers"&gt;
+	&lt;meta name="fb:app_id" content="526576754129505"&gt;
+	&lt;meta name="og:title" content="The definitive guide to developing with Cocos2d-x, by Cowboy Games"&gt;
+	&lt;meta name="og:description" content="Want to know where to start with game development using Cocos2d-x? Guy Kogus of Cowboy games talks about his experience using it, and includes some handy code snippets you might find useful."&gt;
+	&lt;meta name="og:url" content="www.microsoft.com/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games/default.aspx"&gt;
+	&lt;meta name="og:type" content="article"&gt;
+	&lt;meta name="og:image" content="/en-gb/developers/images/articles/600x350/A2_600x350_497.jpg"&gt;
+	&lt;meta name="article:author" content="https://twitter.com/guykogus"&gt;
+	&lt;meta name="article:tag" content="Microsoft, developers"&gt;
+
+&lt;meta name="twitter:card" content="summary" &gt;
+	&lt;meta name="twitter:domain" content="www.microsoft.com"&gt;
+	&lt;meta name="twitter:site" content="@msdevUK"&gt;
+	&lt;meta name="twitter:title" content="The definitive guide to developing with Cocos2d-x, by Cowboy Games"&gt;
+	&lt;meta name="twitter:description" content="Want to know where to start with game development using Cocos2d-x? Guy Kogus of Cowboy games talks about his experience using it, and includes some handy code snippets you might find useful."&gt;
+
+&lt;meta name="Description" content="Want to know where to start with game development using Cocos2d-x? Guy Kogus of Cowboy games talks about his experience using it, and includes some handy code snippets you might find useful."  /&gt;
+&lt;meta name="Keywords" content="Microsoft, developers"  /&gt;
+
+        	&lt;link rel="stylesheet" type="text/css" href="//ukcdn.azurewebsites.net/assets.ashx?s=ukWebFXArticleCss&amp;t=text/css&amp;v=1.6.0" &gt;
+	&lt;link rel="stylesheet" type="text/css" href="/en-gb/developers/templates/components/ukWebFXArticle/ukWebFXArticle.css?v=1.6.0" &gt;
+
+        
+&lt;style type="text/css"&gt;
+            
+            body {
+                color: #000;
+                background-color: #ececec;
+            }
+            body, input {
+                font-size: 100%;
+            }
+            body, select {
+                font-family: Segoe UI,Arial,Verdana,Tahoma,sans-serif;
+            }
+            .png-img span {
+                left: -9999px;
+            }
+            div.form-bottom-inner {
+                background-color: #ececec;
+                left: 0;
+            }
+            div.stage-bg-top {
+                background-color: #fff;
+                left: 0;
+            }
+            div.stage-bg-mid {
+                background-color: #fff;
+                left: 0;
+            }
+            div.stage-bg-bot {
+                background-color: #fff;
+                left: 0;
+            }
+            div.main-brand div {
+                float: left;
+            }
+            div.main-brand div.brandLogoText a {
+                color: #4f4f4f;
+                font-size: 188%;
+            }
+            div.main-brand div.brandTagLineText a {
+                color: #4f4f4f;
+                font-size: 80%;
+            }
+             div.stage {  padding: 0px 40px; width: 916px; }  div.stage-content {  padding: 0px; }  body   { background-color: #FFFFFF; }  div.form-bottom-inner   { background-color: #FFFFFF; }  div.stage-bg-top   { background-color: #fff; _padding: 0 40px;   }  div.stage-bg-mid   { background-color: #fff; _padding: 0 40px;   }  div.stage-bg-bot   { background-color: #fff; _padding: 0 40px;   } 
+        &lt;/style&gt;
+
+        &lt;!--[if !IE 7]&gt;
+        &lt;style type="text/css"&gt;
+            .png-img div {
+                left: 0;
+            }
+        &lt;/style&gt;
+        &lt;![endif]--&gt;
+
+        &lt;script type="text/javascript"&gt;
+            if (typeof $ != "undefined") {
+                $(function () {
+                    if ($("body").attr("bi:type") == undefined) {
+                        $("body").attr("bi:type", "oneMscomMaster");
+                    }
+                });
+            }
+  </script>
+ </head>
+ <body bi:type="oneMscomMaster" class="mstNonJs mstResponsive">
+  <form action="default.aspx" id="aspnetForm" method="post" name="aspnetForm">
+   <div>
+    <input id="__VIEWSTATE" name="__VIEWSTATE" type="hidden" value="/wEPDwUKLTgxNzU2NTYxNmRkg3yLa5/Zo3UiArSZK0XMHX0A1+k="/>
+   </div>
+   <div>
+    <input id="__VIEWSTATEGENERATOR" name="__VIEWSTATEGENERATOR" type="hidden" value="DDE9D77B"/>
+    <input id="__EVENTVALIDATION" name="__EVENTVALIDATION" type="hidden" value="/wEWBALM7LT/DAK0x7PiBQLF3brKDQLo1svpClvfM+gXUfeELAgtlQO7S1NFVJb2"/>
+   </div>
+   <script src="//ukcdn.azurewebsites.net/assets.ashx?s=oneMscomJs&amp;t=text/javascript&amp;v=15" type="text/javascript">
+   </script>
+   <div id="oneMscomJsCssLoader">
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomLoadedComponent" style="display: none;">
+     oneMscomBlade,oneMscomSearch,oneMsomNav,oneMscomFooter,
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomComponentDynamicStyle">
+     <style type="text/css">
+      .mstHdrV3 {border-bottom-color:#EEEEEE;}.mstHdrV3 .mstHdr_MenuItemSiteIdentity a,.mstHdrV3 .mstHdr_MenuItemSiteIdentity a:link,.mstHdrV3 .mstHdr_MenuItemSiteIdentity a:visited,.mstHdrV3 .mstHdr_MenuItemSiteIdentity a:active {color:#333333;font-size:30px;}.mstHdrV3 .mstHdr_MenuItemAccountViewOne a,.mstHdrV3 .mstHdr_MenuItemAccountViewOne a:link,.mstHdrV3 .mstHdr_MenuItemAccountViewOne a:visited,.mstHdrV3 .mstHdr_MenuItemAccountViewOne a:active,.mstHdrV3 .mstHdr_MenuItemAccount a,.mstHdrV3 .mstHdr_MenuItemAccount a:link,.mstHdrV3 .mstHdr_MenuItemAccount a:visited,.mstHdrV3 .mstHdr_MenuItemAccount a:active {font-size:13px;color:#0072C6;}.mstHdrV3 .mstHdr_SignInOut #idPPScarab{font-size:13px;color:#0072C6;}.mstHdrV3 .mstHdr_MenuItemsAccount .selected .mstHdr_MenuItemAccountText{border-color:#E0E0E0;}.mstHdrV3 .mstHdr_AccountViewOneItem a {background: #1570a6;color: #FFFFFF;}.mstHdrV3 .mstHdr_AccountViewOneItem a:hover,.mstHdrV3 .mstHdr_AccountViewOneItem a:focus {background: #083047;}.mstHdrV3 .mstHdr_MenuItemsAccount .selected .mstHdr_MenuItemAccountText{border-color:#E0E0E0;}.mstHdrV3 .mstHdr_Flyout{border: 1px solid #E0E0E0;}.mstHdrV3 .mstHdr_MenuItemAccountFlyoutLinkText{margin-right:8px;}.mstHdrV3 .mstHdr_MenuItemSignIn{margin-left:10px;} .mstHdrV3 .mstHdr_SignInOut .mstHdr_UserProfileTileImage { margin-left: 12px; }@media screen and (min-width: 540px){.mstResponsive .mstHdrV3 .mstHdr_StaticSec22Item{float:right;}}.mstNonResponsive .mstHdrV3 .mstHdr_StaticSec22Item{float:right;}.mstHdrV3 .mstHdr_Searchtogglerlink{background-image: url('//i.s-microsoft.com/global/onemscomsettings/publishingimages/searchimages/searchv3.ltr.png');}.mstHdrV3 .mstHdr_Navtogglerlink{background-image: url('//i.s-microsoft.com/global/onemscomsettings/publishingimages/navimages/navtoggler.png');}div.mstSrc {color:#000;}.mstSrc, .mstSrc input {font-size:100%;}.mstSrc input.mstSrc_WaterMark {color:505050;font-family:Segoe UI,Arial,Verdana,Tahoma,sans-serif;*left:0;_left:0;}.mstSrc, .mstSrc select {font-family:Segoe UI,Arial,Verdana,Tahoma,sans-serif;}.mstSrc .mstSrc_InnerBrand,.mstSrc input.mstSrc_Button,.mstSrc .mstSrc_OuterBrand,.mstSrc .mstSrc_Sources li.currentScope .mstSrc_Check,.mstSrc .mstSrc_DropdownArrow {background-image: url('//i.s-microsoft.com/global/onemscomsettings/publishingimages/searchimages/searchv3.ltr.png');}.mstSrc .mstSrc_Sources li a,.mstSrc .mstSrc_Suggestions li a{padding-left: 10px;}.mstSrc.mstSrc_BrandOutside {margin-left:0;}.mstSrc input.mstSrc_TextBox,.mstSrc input.mstSrc_WaterMark {margin-left: 3px;}.mstSrc.mstSrc_BrandOutside input.mstSrc_TextBox,.mstSrc.mstSrc_BrandOutside input.mstSrc_WaterMark {padding-right: 0;}.mstSrc .mstSrc_OuterBrand {margin-left: 9px;}.mstSrc input.mstSrc_Button {margin-left: 5px;}.mstSrc .mstSrc_Dropdown {left: 0;}.mstSrc .mstSrc_Sources,.mstSrc .mstSrc_Suggestions{left: -1px;_left: 0px;}.mstSrc .mstSrc_Sources li a:link,.mstSrc .mstSrc_Sources li a:visited{color:#333;}.mstSrc .mstSrc_Suggestions li a:link,.mstSrc .mstSrc_Suggestions li a:visited{color:#333;}.mstSrc .mstSrc_Suggestions li a:hover,.mstSrc .mstSrc_Suggestions li a:focus,.mstSrc .mstSrc_Suggestions li a:active,.mstSrc .mstSrc_Suggestions li a.selected,.mstSrc .mstSrc_Sources li a:hover,.mstSrc .mstSrc_Sources li a:focus,.mstSrc .mstSrc_Sources li a:active{background-color:blue;color:white;}.mstSrc .mstSrc_Sources li.currentScope .mstSrc_Check{background-position: -20px -24px;}.mstSrc .mstSrc_Sources li.currentScope a:hover .mstSrc_Check,.mstSrc .mstSrc_Sources li.currentScope a:focus .mstSrc_Check{background-position: 0px -24px;}.mstSrc .mstSrc_DropdownPositioner{left:0;}.mstSrc .mstSrc_DropdownArrow {margin-left:0px;}.mstSrc .mstSrc_Sources li .mstSrc_Check {margin-right:4px;}.mstSrc .mstSrc_Sources li .mstSrc_Text {padding-right:12px;}.mstSrc .mstSrc_FloatDirWidth {float:left;margin-top:5px;}.mstResponsive .mstSrcV3 .mstSrc_FloatDir{margin-right:50px;}.mstResponsive .mstSrcV3 input.mstSrc_Button{right:2px;}.mstNonJs .mstSrcV3 input.mstSrc_Button{right:16px;}.mstResponsive .mstSrcV3 .mstSrc_FloatDirWidth{right:2px;}.oneMscomNavV3 .mstNavNavItem {float:left;padding-right:2px;}.oneMscomNavV3 .mstNavNavItemMiddle{padding-left: 2px;}.oneMscomNavV3 .mstNavNavItem .mstNavNavItemTabText, .oneMscomNavV3 .mstNavNavItem .mstNavNavItemTabTextLink  {padding-right:18px;}.oneMscomNavV3 .mstNavNavItemMiddle .mstNavNavItemTabText, .oneMscomNavV3 .mstNavNavItemMiddle .mstNavNavItemTabTextLink  {padding-left: 18px;}.oneMscomNavV3 .mstNavNavItemFlyout {left: 0px;}.mstNonResponsive .oneMscomNavV3 .mstNav4ColMiddle {padding-left: 20px;}.oneMscomNavV3 .mstNav4ColFlyoutList {float:left;}.oneMscomNavV3 .mstNavMenuLinks {float:left;}.oneMscomNavV3 .mstNavMenuImgs {float:left;}.oneMscomNavV3 .mstNavMenuListItem  a, .oneMscomNavV3 .mstNavMenuListItem2 a{font-size:13px;color:#1570a6;}.oneMscomNavV3 .mstNavMenuListTitle {font-size:16px;color:#000000;}.oneMscomNavV3 .mstNavNavItemTabTextLink, .oneMscomNavV3 .mstNavNavItemTabText {font-size:13px;font-weight:500;color:#000000;}.oneMscomNavV3 .mstNavNavItemTabText .selected{font-size:13px;font-weight:500;color:#1570a6;}.oneMscomNavV3 .mstNavMenuListImgNoPadding {padding-left: 0px;}.oneMscomNavV3 .mstNavNavItemFlyout, .oneMscomNavV3 .selected, .oneMscomNavV3 .mstNavNavFirstItem {background-color:#EEEEEE;}.mstResponsive .oneMscomNavV3 .mstNavViewOne .mstNavViewOneSecLevel, .mstResponsive .oneMscomNavV3 .mstNavViewOne .mstNavViewOneThirdLevel {border-left: 0.5em solid #083047;}.mstResponsive .oneMscomNavV3 .mstNavViewOne a:hover, .mstResponsive .oneMscomNavV3 .mstNavViewOne a:focus {background: #083047;}.mstResponsive .oneMscomNavV3 .mstNavViewOne a {background: #1570a6;color: #FFFFFF;}.mstResponsive .oneMscomNavV3 .mstNavViewOne .mstNavViewOne1stLvlItem &gt; a::after, .mstResponsive .oneMscomNavV3 .mstNavViewOne .mstNavViewOne2ndLvlItem &gt; a::after {margin-left: 0.35em;} @media screen and (min-width: 540px) {.mstResponsive .column-3-2 .colspan-2 .grid-unit:last-child {margin-left: 0%;}.mstResponsive .column-6-5 .colspan-5 .colspan-2 {margin-left: 0;}} @media screen and (min-width: 900px) { .mstResponsive .column-3-2 .colspan-2 {margin-left: 2%;}.mstResponsive .column-3-2 .colspan-2 .grid-unit:last-child {margin-left: 3.33%;}.mstResponsive .column-6-5 .colspan-5 .colspan-2 {margin-left: 1.2%;}.mstResponsive .column-6-5 .colspan-5 .colspan-2 .grid-unit:last-child {margin-left: 2.8%;}}.mstFooterDestLinkListOdd, .mstFooterDestLinkListEven {float:left;margin-left: 20px;}.mstFooterMsLinkItemText {margin-left: 10px;}.mstFooterMsLink, .mstFooterMsLinkItemLink, .mstFooterMsLinkItemText, .mstFooterDestLink, .mstFooterPopRes {float:left;}.msFooterCorpLinkLi {margin-right:20px;}.mstFooterLocale {float: left;}.mstFooterLogo, .mstFooterCorpLink{float:right;}.mstFooterCopyRight {}.mstFooterMoreCorpLink {float:right;}.oneMscomFooterV3 {background-color:#EEEEEE;}.mstFooterLocFlyoutContainer {background-color:#EEEEEE;}.mstFooterMsLinkListTitle {color:#000000;font-size:1em;}.mstFooterMsLinkItemText {font-size:1em;}.mstFooterMsLinkItemText a {color:#000000;}.mstFooterDestLinkListTitle {color:#000000;font-size:1em;}.mstFooterDestLinkListItem {font-size:0.813em;}.mstFooterDestLinkListItem a {color:#0060a6;}.mstFooterPopResListTitle {color:#000000;font-size:1em;}.mstFooterPopResListItem {font-size:0.813em;}.mstFooterPopResListItem a {color:#0060a6;}.mstFooterCorpLinkCopyright {font-size:.833em;}.mstFooterCorpLinkCopyright a {color:#0060a6;}.mstFooterCopyRight {color:#000000;font-size:100%;}.mstLcpMenuText {margin-left: 10px;float:left;font-size:.833em;font-weight:normal;color:#000000;}.mstLcpMenuImg {float:left;}.mstLcpFlyout {background-color:#EEEEEE;}.mstLcpLangSiteText {font-size:1.825em;color:#000000;}.mstLcpClose1 {right:20px;}.mstLcpClose2 {float:right;margin-right:20px;}.mstLcpList {float:left;}.mstLcpAllSitesText {font-size:1.825em;color:#000000;}.mstLcpSearch {right:20px;}.mstLcpAllSitesList {float:left;}.mstLcpSiteSites li a {font-size:1em;color:#0060a6;}.mstLcpAllSitesLinks li a {font-size:1em;color:#0060a6;}.mstLcpListNotLast {margin-right:20px;}.mstLcpSearchImg {background-image: url('//i.s-microsoft.com/global/onemscomsettings/publishingimages/searchimages/searchv3.ltr.png');}.mstLcpSearchBorder {border: 1px solid #DDDDDD;}.mstLcpSearchText {font-size:0.813em;}@media screen and (max-width: 899px){.mstFooterLogo {float:left;}.mstFooterCorpLink{float:left;}}.mstResponsive .oneMscomFooterV3 .mstFooterDestLinkListOdd, .mstResponsive .oneMscomFooterV3 .mstFooterDestLinkListEven, .mstResponsive .oneMscomFooterV3 .mstFooterPopRes {margin-left: 0px;} .mstNonResponsive .oneMscomFooterV3 .grid-row .grid-unit-IE6 {margin-left: 0;}.mstNonResponsive .oneMscomFooterV3 .grid-row .grid-unit-IE6-fDestLink {margin-left: 16px;} .mst-floatLeft {float:left;} .mst-floatRight {float:right;} .mst-primaryFontFamily { font-family:Segoe UI,Arial,Verdana,Tahoma,sans-serif;} .mstResponsive .grid-container{margin-left:auto;margin-right:auto;} .mstResponsive .grid-row .grid-unit {margin-left: 0;float: left;} .mstResponsive .grid-row, .mstResponsive .grid-row .grid-unit {float:left;} @media screen and (min-width: 540px) { .mstResponsive .grid-row .grid-unit {margin-left: 2%;} .mstResponsive .grid-row .grid-unit:first-child {margin-left: 0;} .mstResponsive .column-3 .colspan-1,.mstResponsive .column-3 .colspan-2,.mstResponsive .column-4 .colspan-1,.mstResponsive .column-4 .colspan-2,.mstResponsive .column-4 .colspan-3 {margin-left: 0;} .mstResponsive .column-2 .colspan-2 .grid-unit,.mstResponsive .column-2 .colspan-3 .grid-unit,.mstResponsive .column-3 .colspan-3 .grid-unit,.mstResponsive .column-4 .colspan-3 .grid-unit {margin-left: 0;margin-right: 0;} .mstResponsive .column-2 .colspan-2 .grid-unit:first-child,.mstResponsive .column-3 .colspan-2 .grid-unit:first-child,.mstResponsive .column-4 .colspan-2 .grid-unit:first-child,.mstResponsive .column-4 .colspan-3 .grid-unit:first-child,.mstResponsive .column-6 .colspan-2 .grid-unit:first-child {margin-left: 0;} .mstResponsive .column-4 .grid-unit:nth-of-type(2n+3) {margin-left: 0;} .mstResponsive .column-3 .colspan-2+.grid-unit,.mstResponsive .column-4 .colspan-2+.grid-unit {margin-left: 0;margin-right: 2%;} .mstResponsive .column-6 .grid-unit:nth-of-type(2n+3) {margin-left: 0;} .mstNonResponsive .grid-container .grid-right, .mstResponsive .grid-container .grid-right {float:right;}} @media screen and (min-width: 680px) { .mstResponsive .column-2 .colspan-3 .grid-unit,.mstResponsive .column-3 .colspan-3 .grid-unit,.mstResponsive .column-4 .colspan-3 .grid-unit {margin-left: 2.555%;margin-right: 0;} .mstResponsive .column-6 .grid-unit:nth-of-type(2n+3) {margin-left: 2%;} .mstResponsive .column-6 .grid-unit:nth-of-type(4n) {margin-left: 0;} .mstResponsive .column-6 .colspan-2:nth-of-type(2n+3) {margin-left: 0;}} @media screen and (min-width: 900px) {  .mstResponsive .column-3 .colspan-2 .grid-unit,.mstResponsive .column-4 .colspan-2 .grid-unit,.mstResponsive .column-6 .colspan-2 .grid-unit {margin-left: 3.333%;margin-right: 0;} .mstResponsive .column-3 .colspan-2 {margin-left: 2%} .mstResponsive .column-4 .colspan-2 {margin-left: 2%;} .mstResponsive .column-4 .colspan-3 {margin-left: 2%;} .mstResponsive .column-4 .colspan-1 {margin-left: 2%;} .mstResponsive .column-2 .colspan-2 .grid-unit {margin-left: 3.333%;margin-right: 0;} .mstResponsive .column-3 .colspan-2+.grid-unit,.mstResponsive .column-4 .colspan-2+.grid-unit,.mstResponsive .column-6 .colspan-2+.grid-unit {margin-right: 0;} .mstResponsive .column-4 .colspan-3 .grid-unit:nth-of-type(2n+3),.mstResponsive .column-4 .colspan-3 .colspan-2+.grid-unit {margin-left: 2.555%;} .mstResponsive .column-3 .colspan-2+.grid-unit,.mstResponsive .column-4 .colspan-2+.grid-unit,.mstResponsive .column-3 .colspan-2+.grid-unit,.mstResponsive .column-4 .grid-unit:nth-of-type(2n+3) {margin-left: 2%;} .mstResponsive .column-6 .grid-unit:nth-of-type(4n) {margin-left: 2%;} .mstResponsive .column-6 .colspan-2 {margin-left: 2%;} .mstResponsive .column-6 .colspan-2:nth-of-type(2n+3) {margin-left: 2%;}} .mstNonResponsive .grid-row .grid-unit {float:left;} .mstNonResponsive .grid-container {width:916px;} .mstNonResponsive .grid-row .grid-unit { margin-left:18px; } .mstNonResponsive .grid-row .grid-unit:first-child {margin-left: 0;} .mstNonResponsive .grid-container {width:916px;} .mstNonResponsive .column-1 .grid-unit {width:916px; } .mstNonResponsive .column-2 .grid-unit {width:449px; }.mstNonResponsive .column-3 .grid-unit {width:293.333333333333px;}.mstNonResponsive .column-4 .grid-unit {width:215.5px;}.mstNonResponsive .column-6 .grid-unit {width:137.666666666667px;}.mstNonResponsive .column-2 .colspan-2 .grid-unit {width:215.5px;} .mstNonResponsive .column-2 .colspan-3 .grid-unit,.mstNonResponsive .column-3 .colspan-3 .grid-unit,.mstNonResponsive .column-4 .colspan-3 .grid-unit,.mstNonResponsive .column-4 .colspan-2 .grid-unit {width:215.5px;} .mstNonResponsive .column-3 .colspan-2 .grid-unit {width:293.333333333333px;} .mstNonResponsive .column-3 .colspan-2 {width:604.666666666666px;} .mstNonResponsive .column-4 .colspan-2 {width:449px;} .mstNonResponsive .column-4 .colspan-3 {width:682.5px;} .mstNonResponsive .column-4 .colspan-3 .colspan-2 {width:449px;} .mstNonResponsive .column-6 .colspan-2 {width:293.333333333334px;} .mstNonResponsive .column-6 .colspan-2  .grid-unit {width:137.666666666667px;}
+     </style>
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomGlobalSettings" style="display: none;">
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomThemeSettings" style="display: none;">
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomLocaleSettings" style="display: none;">
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomSiteSettings" style="display: none;">
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomSettings" style="display: none;">
+    </div>
+    <div id="ctl00_ctl00_JsCssLoaderCtl_oneMscomComponentDynamicScript">
+     <script type="text/javascript">
+      if (typeof $ != "undefined") {
+                $(function () {
+                    if (Mst &amp;&amp; Mst.JsCssLoader) {
+                        var Loader = new Mst.JsCssLoader();
+                    }
+                });
+            }
+            if (typeof $ != "undefined") {$(function () {if (Mst &amp;&amp; Mst.JsCssLoader.OpenGraphMetaTags) { var openGraphMetaTags = [{'property' : 'og%3atype' , 'content' : 'testSite'} , {'property' : 'og%3asite_name' , 'content' : 'OG%20site%20name'}]; var objopenGraphMetaTags = new Mst.JsCssLoader.OpenGraphMetaTags(openGraphMetaTags);}});}
+     </script>
+    </div>
+   </div>
+   <div class="header">
+    <div bi:type="oneMscomBlade" class="oneMscomComp mstHdrV3 mstHdrV3-&lt;%= Direction %&gt; mst-nonResponsiveMinWidth mst-primaryFontFamily" dir="&lt;%= Direction %&gt;" id="ctl00_ctl00_Header_oneMscomBlade_mstHdrV3">
+     <div class="grid-container ">
+      <div class="grid-row show-grid column-1">
+       <div class="grid-unit mstHdr_StaticSec1">
+        <div class="mstHdr_StaticSec11 mst-floatLeft">
+         <div bi:type="oneMscomMsLogo" class="mstHdr_MenuLinkMsLogo HideStaticSec21MsLogo" id="ctl00_ctl00_Header_oneMscomBlade_ctl00_MenuLink">
+          <a class="mstHdr_MenuLinkAnchor" href="http://www.microsoft.com/en-gb" id="ctl00_ctl00_Header_oneMscomBlade_ctl00_MenuLinkAnchor" title="Microsoft">
+           <img alt="Microsoft" class="mstHdr_MsLogoImageSmall" id="ctl00_ctl00_Header_oneMscomBlade_ctl00_MenuImage" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/headerimages/microsoftlogov3.png"/>
+          </a>
+         </div>
+        </div>
+        <div class="mstHdr_StaticSec12 mst-floatRight ">
+         <div bi:type="oneMscomAccount" class="mstHdr_MenuItemsAccount mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccount" style="display:none;">
+          <div class="mstHdr_MenuItemAccountViewOne mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAcoountViewOneItem">
+           <div class="mstHdr_MenuItemAccountText">
+            <a class="mstHdr_MenuItemAccountFlyoutViewOneLink" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountFlyoutViewOneLink">
+             <div class="mstHdr_MenuItemAccountFlyoutLinkText mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountFlyoutViewOneLinkText">
+              Account
+             </div>
+             <div class="mstHdr_MenuItemAccountFlyoutLinkArrow mst-floatLeft">
+              <img id="ctl00_ctl00_Header_oneMscomBlade_ctl01_AccountDownViewOneArrowImage" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/headerimages/downarrow.png"/>
+             </div>
+             <div class="cssClear">
+             </div>
+            </a>
+           </div>
+          </div>
+          <div class="mstHdr_MenuItemAccount mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAcoountItem">
+           <div class="mstHdr_MenuItemAccountText">
+            <a class="mstHdr_MenuItemAccountFlyoutLink" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountFlyoutLink">
+             <div class="mstHdr_MenuItemAccountFlyoutLinkText mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountFlyoutLinkText">
+              Account
+             </div>
+             <div class="mstHdr_MenuItemAccountFlyoutLinkArrow mst-floatLeft" id="divAccountFlyoutLinkImage">
+              <img id="ctl00_ctl00_Header_oneMscomBlade_ctl01_AccountDownArrowImage" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/headerimages/downarrow.png"/>
+             </div>
+             <div class="cssClear">
+             </div>
+            </a>
+           </div>
+           <div class="mstHdr_FlyoutPos">
+            <div class="mstHdr_Flyout" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountFlyout">
+             <div class="mstHdr_AccountItems" id="ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccountItems">
+              <ul>
+              </ul>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <script type="text/javascript">
+          if (typeof $ != "undefined") {
+        $(function () {
+            if (Mst &amp;&amp; Mst.AccountFlyout) {
+                var AccountClick;
+                var AccountClose;
+                if ($.bi &amp;&amp; $.bi.dataRetrievers.structure) { }
+
+                var accountFlyout = new Mst.AccountFlyout('ctl00_ctl00_Header_oneMscomBlade_ctl01_divAccount', AccountClick, AccountClose);
+            }
+        });
+    }
+         </script>
+        </div>
+       </div>
+      </div>
+      <div class="grid-row show-grid column-1">
+       <div class="grid-unit mstHdr_StaticSec2">
+        <div class="mstHdr_StaticSec21 mst-floatLeft">
+         <div class="mst-floatLeft ">
+          <div bi:type="oneMscomSiteIdentity" class="mstHdr_MenuItemSiteIdentity" id="ctl00_ctl00_Header_oneMscomBlade_ctl03_divSiteIdentity">
+           <a bi:surveyid="BrandLogo" href="/en-gb/developers">
+            <span>
+             UK Developers
+            </span>
+           </a>
+          </div>
+          <div bi:type="oneMscomMsLogo" class="mstHdr_MenuLinkMsLogo HideStaticSec21MsLogo" id="ctl00_ctl00_Header_oneMscomBlade_ctl04_MenuLink">
+           <a class="mstHdr_MenuLinkAnchor" href="http://www.microsoft.com/en-gb" id="ctl00_ctl00_Header_oneMscomBlade_ctl04_MenuLinkAnchor" title="Microsoft">
+            <img alt="Microsoft" class="mstHdr_MsLogoImageSmall" id="ctl00_ctl00_Header_oneMscomBlade_ctl04_MenuImage" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/headerimages/microsoftlogov3.png"/>
+           </a>
+          </div>
+         </div>
+         <div class="mstHdr_StaticSec212">
+          <div class="mst-floatRight">
+           <div bi:type="oneMscomNavView1" class="mstHdr_Navtoggler mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_mstHdr_Navtoggler">
+            <a bi:track="false" class="mstHdr_Navtogglerlink" href="/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games/default.aspx?showNav=true" id="ctl00_ctl00_Header_oneMscomBlade_mstHdrNavtogglerlink">
+            </a>
+           </div>
+           <div bi:type="oneMscomSearchView1" class="mstHdr_Searchtoggler mst-floatLeft" id="ctl00_ctl00_Header_oneMscomBlade_mstHdr_Searchtoggler">
+            <a bi:track="false" class="mstHdr_Searchtogglerlink" href="/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games/default.aspx?showSearch=true" id="ctl00_ctl00_Header_oneMscomBlade_mstHdrSearchtoggler">
+            </a>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="mstHdr_StaticSec23" id="ctl00_ctl00_Header_oneMscomBlade_divStaticSec23">
+         <div bi:type="oneMscomAccount" class="mstHdr_AccountViewOneItems" id="ctl00_ctl00_Header_oneMscomBlade_mstHdr_AccountViewOneItems">
+         </div>
+        </div>
+        <div class="mstHdr_StaticSec22" id="ctl00_ctl00_Header_oneMscomBlade_divStaticSec22">
+         <div class="mstHdr_StaticSec22Item">
+          <div bi:type="oneMscomSearch" class="oneMscomComp mstSrc mstSrcV3" dir="ltr" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchControl">
+           <span class="mstSrc_Border" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchBox" style="background-color:#FFF;">
+            <div class="mstSrc_FloatDir">
+             <input autocomplete="off" class="mstSrc_TextBox" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchTextBox" name="ctl00$ctl00$Header$oneMscomBlade$ctl05$SearchTextBox" style="color:#000;" title="Search Microsoft.com" type="text"/>
+             <span class="mstSrc_InnerBrand" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_Brand_Inner">
+             </span>
+             <input class="mstSrc_Button" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchInsideButton" name="ctl00$ctl00$Header$oneMscomBlade$ctl05$SearchInsideButton" title="Search Microsoft.com" type="submit" value=""/>
+            </div>
+            <div class="mstSrc_FloatDirWidth" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_FloatDirectionWidth">
+             <a class="mstSrc_DropdownSection" href="/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games/default.aspx?Search=true" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_NonJsDropdown">
+              <div class="mstSrc_DropdownArrow">
+              </div>
+             </a>
+            </div>
+            <div class="mstSrc_DropdownPositioner" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_DropdownPositioner">
+             <div class="mstSrc_Dropdown" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchDropDown">
+              <div class="mstSrc_Suggestions">
+               <ul>
+               </ul>
+               <div class="mstSrc_Fade">
+               </div>
+              </div>
+              <div class="mstSrc_Sources" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchSource">
+               <ul>
+                <li class="currentScope" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SourceRepeater_ctl00_ListItem">
+                 <a href="javascript:void(0)" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SourceRepeater_ctl00_ListItemLink" tabindex="-1">
+                  <div class="mstSrc_Text">
+                   <span class="mstSrc_Check">
+                   </span>
+                   Search Microsoft.com
+                  </div>
+                 </a>
+                </li>
+                <li id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SourceRepeater_ctl01_ListItem">
+                 <a href="javascript:void(0)" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_SourceRepeater_ctl01_ListItemLink" tabindex="-1">
+                  <div class="mstSrc_Text">
+                   <span class="mstSrc_Check">
+                   </span>
+                   Search the Web
+                  </div>
+                 </a>
+                </li>
+               </ul>
+               <input class="mstSrc_Source" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_Src_Source" name="ctl00$ctl00$Header$oneMscomBlade$ctl05$Src_Source" type="hidden" value="0"/>
+              </div>
+             </div>
+            </div>
+           </span>
+           <span class="mstSrc_OuterBrand" id="ctl00_ctl00_Header_oneMscomBlade_ctl05_Brand_Outer">
+           </span>
+           <script type="text/javascript">
+            if (typeof $ != 'undefined') {$(function (){if (Mst){var search = new Mst.Search('ctl00_ctl00_Header_oneMscomBlade_ctl05_SearchControl', 'ctl00_ctl00_Header_oneMscomBlade_ctl05_FloatDirectionWidth', 0, 'en-gb','V3',[{"WatermarkText":"Search Microsoft.com","AutoSuggest":{"ServiceUrlFormat":"http://search.microsoft.com/shared/templates/master/smcPage/AutoSuggestHandler.ashx?q={0}&amp;site=smc&amp;locale=en-us","JsonpCallbackName":"cb","ResultType":"smcUnmarkedArray","MinChars":1},"SearchScopeType":1,"IsDefault":true,"SearchUrlFormat":"http://search.microsoft.com/results.aspx?form=MSHOME&amp;mkt=en-GB&amp;setlang=en-GB&amp;q={0}","SearchUrlFormatIfNoTextIsEntered":"http://search.microsoft.com/?mkt=en-GB"},{"WatermarkText":"Search the Web","AutoSuggest":{"ServiceUrlFormat":"http://api.bing.com/qsonhs.aspx?FORM=MSHPLS&amp;mkt={1}&amp;type=cb&amp;q={0}&amp;o=s+p+a+l+h","JsonpCallbackName":"cb","ResultType":"bingJSON","MinChars":1},"SearchScopeType":2,"IsDefault":false,"SearchUrlFormat":"http://www.bing.com/search?form=MSHPLS&amp;q={0}&amp;mkt=en-GB","SearchUrlFormatIfNoTextIsEntered":"http://www.bing.com"}]);}});}
+           </script>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="mstHdr_StaticSec31 grid-container" id="ctl00_ctl00_Header_oneMscomBlade_divStaticSec31">
+      <div bi:type="oneMscomNav" class="oneMscomNavV3">
+       <div class="mstNavMenu" id="ctl00_ctl00_Header_oneMscomBlade_ctl06_ctl00_mstNavMenu">
+        <ul class="mstNav1stLvl" id="ctl00_ctl00_Header_oneMscomBlade_ctl06_ctl00_mstNav1stLvl">
+         <li class="mstNavNavItem ">
+          <div bi:type="oneMscomNavMenu" class="mstNavNavItemTab">
+           <a class=" mstNavNavItemTabTextLink" href="/en-gb/developers">
+            <span class="mstNavNavItemText ">
+             Home
+            </span>
+           </a>
+          </div>
+          <div class="mstNavNavFirstItem">
+          </div>
+          <div class="mstNavNavItemFlyout">
+           <div class="grid-container">
+            <div class="grid-row column-4-4">
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="mstNavNavItem mstNavNavItemMiddle">
+          <div bi:type="oneMscomNavMenu" class="mstNavNavItemTab">
+           <a class=" mstNavNavItemTabTextLink" href="/en-gb/developers/blogs/microsoft-evangelists#/">
+            <span class="mstNavNavItemText ">
+             Tech Evangelist Blogs
+            </span>
+           </a>
+          </div>
+          <div class="mstNavNavItemFlyout">
+           <div class="grid-container">
+            <div class="grid-row column-4-4">
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="mstNavNavItem mstNavNavItemMiddle">
+          <div bi:type="oneMscomNavMenu" class="mstNavNavItemTab">
+           <a class=" mstNavNavItemTabTextLink" href="/en-gb/developers/articles/meet-the-team">
+            <span class="mstNavNavItemText ">
+             Meet the team
+            </span>
+           </a>
+          </div>
+          <div class="mstNavNavItemFlyout">
+           <div class="grid-container">
+            <div class="grid-row column-4-4">
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+             <div class="grid-unit">
+              <ul class="mstNav4ColFlyoutList mstNav4ColMiddle">
+               <li>
+               </li>
+              </ul>
+             </div>
+            </div>
+           </div>
+          </div>
+         </li>
+        </ul>
+       </div>
+       <div bi:type="oneMscomNavViewOne">
+        <div class="mstNavViewOne" id="ctl00_ctl00_Header_oneMscomBlade_ctl06_ctl00_mstNavViewOne">
+         <ul>
+          <li>
+           <a href="/en-gb/developers">
+            <span>
+             Home
+            </span>
+           </a>
+          </li>
+          <li>
+           <a href="/en-gb/developers/blogs/microsoft-evangelists#/">
+            <span>
+             Tech Evangelist Blogs
+            </span>
+           </a>
+          </li>
+          <li>
+           <a href="/en-gb/developers/articles/meet-the-team">
+            <span>
+             Meet the team
+            </span>
+           </a>
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <script type="text/javascript">
+       if (typeof $ != "undefined") {
+        $(function () {
+            if (Mst &amp;&amp; Mst.FlyoutNavigationMenuV3) {
+                var NavigationMenuV3 = new Mst.FlyoutNavigationMenuV3('ctl00_ctl00_Header_oneMscomBlade_ctl06_ctl00', '916', '');
+            }
+
+        });
+    }
+      </script>
+      <style type="text/css">
+       /* these styles are set in ascx control in order to overwrite settings from nav css file */
+    
+    .oneMscomNavV3 .mstNavViewOne
+    {
+        display:none;    
+    }
+      </style>
+      <style type="text/css">
+       @media screen and (max-width: 539px)
+        {
+            .oneMscomNavV3 .mstNavViewOne
+            {
+                display: block;    
+            }    
+    
+            .oneMscomNavV3 .mstNavMenu
+            {
+                display: none;    
+            }
+    
+        }
+      </style>
+     </div>
+    </div>
+    <script type="text/javascript">
+     if (typeof $ != "undefined") {
+        $(function () {
+            if (Mst &amp;&amp; Mst.HeaderV3) {
+
+                var blade3V = new Mst.HeaderV3('ctl00_ctl00_Header_oneMscomBlade_mstHdrV3');
+            }
+        });
+    }
+    </script>
+   </div>
+   <div class="main-content grid-container">
+    <div id="fb-root">
+    </div>
+    <script type="text/javascript">
+     (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&amp;appId=363647877104234";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <script type="text/javascript">
+     $(".mstNavNavItem a.mstNavNavItemTabText").attr("href", "#");
+    </script>
+    <span id="ctl00_ctl00_Content_ContentSection_gateway_lblGateway">
+     <script type="text/javascript">
+      WebFX.temp.Settings.guid = "";
+          WebFX.temp.Settings.appUrl = "/en-gb/developers/";
+          WebFX.temp.Settings.relativeUrl = "/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games/default.aspx";
+          WebFX.temp.Settings.url = "http://microsoft.com";
+          WebFX.temp.Settings.title = "The definitive guide to developing with Cocos2d-x, by Cowboy Games";
+          WebFX.temp.Settings.Tracking.pageGroup = "Articles";
+          WebFX.temp.Settings.Tracking.campaignGuid = "000XXX00000";
+          WebFX.temp.Settings.Tracking.locale = "gb";
+          WebFX.temp.Settings.Tracking.language = "en";
+          WebFX.temp.Settings.Tracking.autoWT = "true";
+          WebFX.temp.Settings.Tracking.autoWedCS = "true";
+     </script>
+     <section class="article-wrapper">
+      <div class="article-content">
+       <div class="article-heading">
+        <h1>
+         The definitive guide to developing with Cocos2d-x, by Cowboy Games
+        </h1>
+       </div>
+       <article>
+        <div class="inlineBlock maxWidth50 marginRight15 marginBottom5 left">
+         <img alt="Guy Kogus" src="/en-gb/developers/images/articles/authors/guy-kogus.jpg"/>
+        </div>
+        <div class="inlineBlock">
+         <p class="paddingTop0 paddingBottom0">
+          <span class="article-date coolGray7 block">
+           8 October 2014
+          </span>
+         </p>
+         <p class="paddingTop0">
+          <a href="https://twitter.com/guykogus" target="_blank">
+           Guy Kogus
+          </a>
+          , Lead Game Developer,
+          <a href="http://cowboygames.co/play" target="_blank">
+           Cowboy Games
+          </a>
+         </p>
+        </div>
+        <div class="clear">
+        </div>
+        <h5>
+         <a class="themeForeColor themeHoverForeColor" href="/en-gb/developers" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Back to Articles - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Back to Articles - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="" title="Back to Articles">
+          <span class="icon-previous-circle fontSize1813em">
+          </span>
+          <span>
+           Back to Articles
+          </span>
+         </a>
+        </h5>
+        <img alt="Article Image" class="marginBottom15" src="/en-gb/developers/images/articles/600x350/A2_600x350_497.jpg?v=0.0" style=""/>
+        <p>
+         Our game,
+         <a class="" href="http://cowboygames.co/play" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Ready Steady Bang - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Ready Steady Bang - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Ready Steady Bang">
+          Ready Steady Bang
+         </a>
+         , was written in
+         <span class="italic">
+          cocos2d-iphone
+         </span>
+         , which we were considering using again until I remembered
+         <a class="" href="http://www.cocos2d-x.org/" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - cocos2d phone - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - cocos2d phone - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="cocos2d phone">
+          <span class="italic">
+           cocos2d-x
+          </span>
+         </a>
+         and its promise of cross-platform compilation. It is also a C++ library and I wanted to get my hands dirty with that wonderful, complex language.
+        </p>
+        <p>
+         <span class="bold">
+          Development
+         </span>
+        </p>
+        <p>
+         The following is a breakdown of how I developed the game using
+         <span class="italic">
+          cocos2d-x
+         </span>
+         . I used v2.2.x, but most of this should be applicable for v3.x. I wanted to write this as a lesson to any budding (or even experienced) game developers to show them how to start and what might be the major pitfalls along the way. It's a comprehensive guide but by no means covers every step of the design and development process.
+        </p>
+        <p>
+         If you don't want to delve into C++ you can always opt for something like
+         <span class="italic">
+          cocos2d-js
+         </span>
+         , where you can make a
+         <span class="italic">
+          cocos2d-x
+         </span>
+         game using only JavaScript APIs. This guide is for
+         <span class="italic">
+          cocos2d-x
+         </span>
+         projects only.
+        </p>
+        <p>
+         <span class="bold">
+          Prerequisites
+         </span>
+        </p>
+        <p>
+         The following prerequisites are not really required but highly recommended. A basic understanding of programming is good enough to get started:
+        </p>
+        <ul>
+         <li>
+          Intermediate level of object-oriented programming and C/C++. I went and revisited the first few chapters of
+          <span class="italic">
+           The C++ Programming Language
+          </span>
+          by
+          <span class="italic">
+           Bjarne Stroustrup
+          </span>
+          before getting too deep into development.
+         </li>
+         <li>
+          Understanding of run loops.
+         </li>
+         <li>
+          Beginner level of shell scripting and understanding of Makefiles.
+         </li>
+         <li>
+          Experience using IDEs and looking up documentation. The
+          <span class="italic">
+           cocos2d-x
+          </span>
+          documentation is lacking, but there are enough guides out there to help you with any specific problems.
+         </li>
+         <li>
+          Beginner level using
+          <span class="italic">
+           git
+          </span>
+          or other source control management (SCM) systems.
+         </li>
+        </ul>
+        <p>
+         <span class="bold">
+          Setting up the project
+         </span>
+        </p>
+        <ul>
+         <li>
+          Create an empty git repository in the root folder.
+         </li>
+         <li>
+          Submodule
+          <span class="italic">
+           cocos2d-x
+          </span>
+          using the latest tag/release. I ended up
+          <a class="" href="https://github.com/guykogus/cocos2d-x" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - forking the project - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - forking the project - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="forking the project">
+           forking the project
+          </a>
+          so that I could make adjustments that suited Ready Steady Play.
+         </li>
+         <li>
+          Take the C++ project template and copy it into the root folder (there is actually a better way to do this by using the
+          <span class="bold">
+           create_project.py
+          </span>
+          script in the
+          <span class="bold">
+           tools/project-creator
+          </span>
+          folder.)
+         </li>
+        </ul>
+        <p>
+         This initial setup creates the folders required to develop the game. The contents of your root folder should be:
+        </p>
+        <ul>
+         <li>
+          <span class="bold">
+           Classes
+          </span>
+         </li>
+         <li>
+          <span class="bold">
+           cocos2d-x
+          </span>
+         </li>
+         <li>
+          <span class="bold">
+           proj.android/ios/mac/...
+          </span>
+         </li>
+         <li>
+          <span class="bold">
+           Resources
+          </span>
+         </li>
+        </ul>
+        <p>
+         <span class="bold">
+          Classes
+         </span>
+         contains all the game logic files that you will be writing.
+        </p>
+        <p>
+         <span class="bold">
+          cocos2d-x
+         </span>
+         is the submodule created in step two.
+        </p>
+        <p>
+         <span class="bold">
+          Resources
+         </span>
+         is where all the assets such as sound files, images, fonts, etc. are placed.
+        </p>
+        <p>
+         The
+         <span class="bold">
+          .proj
+         </span>
+         folders are set up for you by
+         <span class="italic">
+          cocos2d-x
+         </span>
+         so that you can focus on creating the game and not on porting. That doesn't mean that it's an effortless process, but you're off to an easy start.
+        </p>
+        <p>
+         <span class="bold">
+          Running the game
+         </span>
+        </p>
+        <p>
+         I come from an iOS development background, so the majority of the coding work I did was using the
+         <span class="bold">
+          proj.ios
+         </span>
+         folder. I know my way around
+         <a class="" href="https://developer.apple.com/xcode/" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Xcode - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Xcode - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Xcode">
+          Xcode
+         </a>
+         like the back of my hand, it has the fastest build time of all the other development environments I've used for the project (the others being
+         <a class="" href="https://www.eclipse.org/" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Eclipse - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Eclipse - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Eclipse">
+          Eclipse
+         </a>
+         and
+         <a class="" href="http://msdn.microsoft.com/en-US/vstudio?WT.mc_id=Blog_Developer_Vue+Sit_Awareness_Discover_Sep+14_VisualStudio_View+Internal+Website" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Visual Studio Express 2013 - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Visual Studio Express 2013 - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Visual Studio Express 2013">
+          Visual Studio Express 2013
+         </a>
+         ) and the simulator is perfect for quick and easy testing.
+        </p>
+        <p>
+         <span class="bold">
+          Understanding
+          <span class="italic">
+           cocos2d-x
+          </span>
+         </span>
+        </p>
+        <p>
+         The
+         <span class="italic">
+          cocos2d-x
+         </span>
+         system is fairly complex, yet thankfully most of it should be running in the background without you needing to delve into it. A lot of the structure is taken from iOS development, so thankfully I could get my head around it quickly. If you come from an Android or
+         <a class="" href="http://dev.windows.com/en-us?WT.mc_id=Blog_Developer_Vue+Sit_Awareness_Discover_Sep+14_WindowsPhone8_View+Internal+Website" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Windows Phone 8 - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Windows Phone 8 - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Windows Phone 8">
+          Windows Phone 8
+         </a>
+         background, it probably won't take you too long either.
+        </p>
+        <p>
+         To start an application running you'll come across the following classes:
+        </p>
+        <p>
+         <span class="bold">
+          CCDirector
+         </span>
+         - this is the big boss of your application. The director is responsible for passing along render calls, user interaction events, and much more. Most of the time you will only be using the director to present different scenes in your game.
+        </p>
+        <p>
+         <span class="bold">
+          CCEGLView
+         </span>
+         - the view is responsible for rendering the game on to the device screen. Other than the initial setup you probably won't ever need to worry about it.
+        </p>
+        <p>
+         <span class="bold">
+          CCFileUtils
+         </span>
+         - every operating system has its own way of storing and managing files. This is what you use if you want to perform any kind of file handling operations, although more often than not this is transparent to you. When the app starts you provide it with the
+         <span class="italic">
+          search paths
+         </span>
+         , which I'll explain shortly.
+        </p>
+        <p>
+         <span class="bold">
+          CCScene
+         </span>
+         - this is the base node that the director will display. I'll describe it in more detail in
+         <span class="italic">
+          node hierarchy
+          <span class="bold">
+           .
+          </span>
+         </span>
+        </p>
+        <p>
+         <span class="bold">
+          Design Resolution and Policy
+         </span>
+        </p>
+        <p>
+         When you start a
+         <span class="italic">
+          cocos2d-x
+         </span>
+         game, one of the first calls you need to make are:
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         CCEGLView::sharedOpenGLView()-&gt;setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, designPolicy);
+        </pre>
+        <p>
+         Ready Steady Play was designed for an iPad retina screen, which means that all images and sizing were based on a
+         <span class="italic">
+          design resolution
+         </span>
+         of 1536x2048 pixels. On its own that doesn't really matter, because the important part is the
+         <span class="italic">
+          design policy
+         </span>
+         . The policy dictates how the game is displayed on screens of varying aspect ratios. The following are the definitions of the different design policies, taken from
+         <span class="bold">
+          CCEGLViewProtocol.h:
+         </span>
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         enum ResolutionPolicy
+        {
+        // The entire application is visible in the specified area without trying to
+        // preserve the original aspect ratio.
+        // Distortion can occur, and the application may appear stretched or
+        // compressed.
+        kResolutionExactFit,
+        // The entire application fills the specified area, without distortion but
+        // possibly with some cropping, while maintaining the original aspect ratio of
+        // the application.
+        kResolutionNoBorder,
+        // The entire application is visible in the specified area without distortion
+        // while maintaining the original aspect ratio of the application. Borders can
+        // appear on two sides of the application.
+        kResolutionShowAll,
+        // The application takes the height of the design resolution size and modifies
+        // the width of the internal canvas so that it fits the aspect ratio of the
+        // device no distortion will occur however you must make sure your application
+        // works on different aspect ratios
+        kResolutionFixedHeight,
+        // The application takes the width of the design resolution size and modifies
+        // the height of the internal canvas so that it fits the aspect ratio of the
+        // device no distortion will occur however you must make sure your application
+        // works on different aspect ratios
+        kResolutionFixedWidth,
+        kResolutionUnKnown,
+        };
+        </pre>
+        <p>
+         When designing for mobile phones of varying sizes, the first three options are not ideal. You don't want your game being squashed (
+         <span class="italic">
+          Exact Fit
+         </span>
+         ), cropped (
+         <span class="italic">
+          No Border
+         </span>
+         ) or having black borders (
+         <span class="italic">
+          Show All
+         </span>
+         ). We opted for
+         <span class="italic">
+          Fixed Height
+         </span>
+         as it is far less drastic having a wider screen than a shorter one, especially considering that we use both portrait and landscape modes. Take the second game in Ready Steady Play, Hobby
+         <img alt="The definitive guide to developing with Cocos2d-x, by Cowboy Games" class="" src="file:///C:\Users\v-jodubi\AppData\Local\Temp\msohtmlclip1\01\clip_image001.png?v=0.0" style=""/>
+         <img alt="The definitive guide to developing with Cocos2d-x, by Cowboy Games" class="" src="file:///C:\Users\v-jodubi\AppData\Local\Temp\msohtmlclip1\01\clip_image002.png?v=0.0" style=""/>
+         Hurdles, as an example when played on an iPhone 5 screen:
+        </p>
+        <p>
+         <img alt="The definitive guide to developing with Cocos2d-x, by Cowboy Games" class="" src="/en-gb/developers/images/articles/content/497-01.png?v=0.0" style=""/>
+        </p>
+        <p>
+         Fixed Height
+        </p>
+        <p>
+         <img alt="The definitive guide to developing with Cocos2d-x, by Cowboy Games" class="" src="/en-gb/developers/images/articles/content/497-02.png?v=0.0" style=""/>
+        </p>
+        <p>
+         Fixed Width
+        </p>
+        <p>
+         In
+         <span class="italic">
+          Fixed Width
+         </span>
+         mode it becomes almost impossible to fit anything on the screen, while in
+         <span class="italic">
+          Fixed Height
+         </span>
+         the game is slightly zoomed out. When compared between devices it might look a bit strange, but most players will just use one device and they won't know the difference.
+        </p>
+        <p>
+         <span class="bold">
+          Content Scale Factor
+         </span>
+        </p>
+        <p>
+         Once the design resolution and policy are set up, you need to tell
+         <span class="italic">
+          cocos2d-x
+         </span>
+         which image resources you intend to use, which will define the content scale factor. The standard setup for
+         <span class="italic">
+          cocos2d-x
+         </span>
+         is to have 3 different sizes for images: HDR (High Definition Retina), HD and SD (Standard Definition). As mentioned before we designed Ready Steady Play for a retina iPad screen, so our size definitions are:
+        </p>
+        <p>
+         <span class="bold">
+          HDR
+         </span>
+         : 1536x2048
+        </p>
+        <p>
+         <span class="bold">
+          HD
+         </span>
+         : 768x1024
+        </p>
+        <p>
+         <span class="bold">
+          SD
+         </span>
+         : 384x512
+        </p>
+        <p>
+         When the app starts we choose the appropriate images resource folder, based on screen size, and we calculate the content scale factor by calling:
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         director-&gt;setContentScaleFactor(resource.size.width/designResolutionSize.width);
+        </pre>
+        <p>
+         <span class="bold">
+          Search Paths
+         </span>
+        </p>
+        <p>
+         The search paths are used by
+         <span class="bold">
+          CCFileUtils
+         </span>
+         to find the required resources, particularly images and sound files. The
+         <span class="bold">
+          Resources
+         </span>
+         folder (described earlier) should have one folder for each of your resource definitions (HDR/HD/SD), where each one has identical images resized accordingly. E.g. If we have an image whose path is
+         <span class="bold">
+          Resources/HDR/Button.png
+         </span>
+         whose size is 100x100 pixels, then there will be an image at
+         <span class="bold">
+          Resources/HD/Button.png
+         </span>
+         sized 50x50 and another at
+         <span class="bold">
+          Resources/SD/Button.png
+         </span>
+         sized 25x25.
+        </p>
+        <p>
+         When the application begins you provide
+         <span class="bold">
+          CCFileUtils
+         </span>
+         with the paths to search in the
+         <span class="bold">
+          Resources
+         </span>
+         folder. Using the above example, if you provide it with
+         <span class="bold">
+          "HD"
+         </span>
+         and then make a call to:
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         CCTextureCache::sharedTextureCache()-&gt;addImage("Button.png")
+        </pre>
+        <p>
+         ...and you will get back a texture using the image at
+         <span class="bold">
+          Resources/HD/Button.png
+         </span>
+         .
+        </p>
+        <p>
+         <span class="bold">
+          Node hierarchy
+         </span>
+        </p>
+        <p>
+         If you don't understand tree structures then you need to do some homework as I'm not going to go into much detail here. The general idea is that every element that is displayed on the screen is of type
+         <span class="bold">
+          CCNode
+         </span>
+         , and multiple nodes can be grouped together by them as 'children' of a parent node.
+        </p>
+        <p>
+         Every
+         <span class="bold">
+          CCScene
+         </span>
+         object should have a
+         <span class="bold">
+          CCLayer
+         </span>
+         child, and all other nodes in the scene will be added on top of the layer. This again inherits from iOS by using the Model-View-Controller (MVC) design paradigm, where the scene is the
+         <span class="italic">
+          controller
+         </span>
+         that is responsible for communicating between the
+         <span class="italic">
+          models
+         </span>
+         (game logic) and
+         <span class="italic">
+          views
+         </span>
+         (layer and its child nodes).
+        </p>
+        <p>
+         As mentioned before,
+         <span class="bold">
+          CCDirector
+         </span>
+         will present one
+         <span class="bold">
+          CCScene
+         </span>
+         object at a time. A scene represents different screens that will appear during the lifetime of your application. The scene navigation for Ready Steady Play looks like this:
+        </p>
+        <p>
+         <img alt="The definitive guide to developing with Cocos2d-x, by Cowboy Games" class="" src="/en-gb/developers/images/articles/content/497-03.jpg?v=0.0" style=""/>
+        </p>
+        <p>
+         <span class="bold">
+          Sprite sheets
+         </span>
+        </p>
+        <p>
+         The basic idea of a sprite sheet is that, if you have an animation of 50 images, you don't want to load 50 files from disk, as disk reading/writing are
+         <span class="italic">
+          very
+         </span>
+         slow operations. Sprite sheets allow you to load one large
+         <span class="bold">
+          <span class="italic">
+           texture
+          </span>
+         </span>
+         (image) containing all the frames in the animation, along with a corresponding
+         <span class="bold">
+          <span class="italic">
+           data
+          </span>
+         </span>
+         file that defines the positions of each frame.
+        </p>
+        <p>
+         Most of the animations in Ready Steady Play are done using sprite sheets. Each animation is created in
+         <a class="" href="http://www.adobe.com/uk/products/aftereffects.html" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - After Effects - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - After Effects - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="After Effects">
+          After Effects
+         </a>
+         , exported as a sequence of PNG images at 25 frames per second, imported into a life-saving tool called
+         <a class="" href="https://www.codeandweb.com/texturepacker" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - TexturePacker - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - TexturePacker - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="TexturePacker">
+          TexturePacker
+         </a>
+         , which subsequently exports it back out as corresponding
+         <span class="bold">
+          <span class="italic">
+           data
+          </span>
+         </span>
+         (
+         <span class="bold">
+          .plist
+         </span>
+         ) and
+         <span class="bold">
+          <span class="italic">
+           texture
+          </span>
+         </span>
+         (
+         <span class="bold">
+          .pvr.ccz
+         </span>
+         ) files.
+        </p>
+        <p>
+         TexturePacker has predefined settings for
+         <span class="italic">
+          cocos2d
+         </span>
+         projects, where it will automatically export the sprite sheets in
+         <span class="bold">
+          HDR
+         </span>
+         ,
+         <span class="bold">
+          HD
+         </span>
+         and
+         <span class="bold">
+          SD
+         </span>
+         sizes to correlate with the folders in your
+         <span class="bold">
+          Resources
+         </span>
+         folder. TexturePacker has great documentation, so I won't go into more detail here.
+        </p>
+        <p>
+         <span class="bold">
+          Porting to iOS
+         </span>
+        </p>
+        <p>
+         From the early stages (about a month into development) I made sure that the game ran on both iOS and Android. Having the 2 projects running side-by-side meant that the code was being written with cross-platform compatibility in mind. For example I originally used arc4random for generating random numbers, until I tried to compile for Android and realised that I had to use drand48 instead.
+        </p>
+        <p>
+         Certain parts of the program needed to be written specifically for different operating systems. The simplest example is localisation. While
+         <span class="italic">
+          cocos2d-x
+         </span>
+         will tell you the language the device is using, it doesn't provide any other localisation tools like number or date formatting. To handle localisation I created 3 files to define the
+         <span class="bold">
+          Localization
+         </span>
+         class:
+        </p>
+        <p>
+         <span class="bold">
+          Localization.h
+         </span>
+        </p>
+        <p>
+         <span class="bold">
+          Localization.cpp
+         </span>
+        </p>
+        <p>
+         <span class="bold">
+          Localization.mm
+         </span>
+        </p>
+        <p>
+         If you've ever written any C++ code then you probably know that
+         <span class="bold">
+          .h
+         </span>
+         is the interface file and
+         <span class="bold">
+          .cpp
+         </span>
+         is the C++ implementation file, but you may be wondering, "what is the
+         <span class="bold">
+          .mm
+         </span>
+         file?" It's actually an Objective-C++ implementation file. One of the most frustrating challenges of writing cross-platform code is cross-language interoperability. Communicating between C++ and Objective-C code is thankfully very easy. The iOS version of Ready Steady Play does not even compile
+         <span class="bold">
+          Localization.cpp
+         </span>
+         to define the
+         <span class="bold">
+          Localization
+         </span>
+         class, it only needs to use
+         <span class="bold">
+          Localization.mm
+         </span>
+         . The following is a modified excerpt from that file:
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         #include "Localization.h"
+        #import &lt;Foundation/Foundation.h&gt;
+        std::string Localization::localizedString(const char* key)
+        {
+        return [[[NSBundle mainBundle] localizedStringForKey:[NSString stringWithCString:key
+        encoding:NSUTF8StringEncoding]
+        value:@
+        table:nil] UTF8String];
+        }
+        std::string Localization::formattedInteger(long number)
+        {
+        static NSNumberFormatter *formatter;
+        static dispatch_once_t onceToken;
+        dispatch_once(&amp;onceToken, ^{
+        formatter = [[NSNumberFormatter alloc] init];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [formatter setMaximumFractionDigits:0];
+        [formatter setMinimumIntegerDigits:1];
+        [formatter setLocale:[NSLocale autoupdatingCurrentLocale]];
+        });
+        return [[formatter stringFromNumber:[NSNumber numberWithLong:number]] UTF8String];
+        }
+        </pre>
+        <p>
+         It might seem strange to see C++ and Objective-C intertwined like that, but it's all perfectly legal. The one pitfall that might catch you is that the
+         <span class="bold">
+          .h
+         </span>
+         file can't mix the two languages. It has to be either a C++ header
+         <span class="italic">
+          or
+         </span>
+         an Objective-C header.
+        </p>
+        <p>
+         <span class="bold">
+          Porting to Android
+         </span>
+        </p>
+        <p>
+         The first major headache I encountered with the Android port was the build script. When you (finally) set up the project in Eclipse and try to build it, the first thing it does is try to run
+         <span class="bold">
+          proj.android/build_native.sh
+         </span>
+         . The script uses the Android NDK to build the project, which references the Makefile
+         <span class="bold">
+          proj.android/jni/Android.mk
+         </span>
+         . This needs to be customised to reference all the source files that need to be compiled for the Android project. Initially it has the template source files, but adding files one-by-one is a massive headache. I opted for the
+         <span class="italic">
+          wildcard
+         </span>
+         approach, so I use this:
+        </p>
+        <p>
+         LOCAL_SRC_FILES:= $(wildcard $(LOCAL_PATH)/../../Classes/*.cpp)
+        </p>
+        <p>
+         LOCAL_SRC_FILES:= $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
+        </p>
+        <p>
+         Unfortunately this means that all my source files are thrown into a single folder, but since Xcode organises everything for me that wasn't a problem.
+        </p>
+        <p>
+         The Makefile also needs to know of any external headers being referenced. E.g. I use
+         <span class="italic">
+          rapidjson
+         </span>
+         in parts of my code, so I had to add the following line:
+        </p>
+        <p>
+         LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../cocos2d-x/extensions/CocoStudio/Json/rapidjson
+        </p>
+        <p>
+         The second major headache when porting to Android is JNI. As mentioned in the iOS section, interoperating between languages is tricky. How are you meant to convert a C string (const char*) to a Java string (java.lang.String)? This is where JNI comes in to play. JNI allows you to make calls from C++ to Java, but not the other way around, which means you may have to do polling to retrieve values asynchronously.
+        </p>
+        <p>
+         Generally I tried to delve as little as possible into JNI, so to keep the JNI code simple I call static methods from one big Java file. It is by no means the recommended way to do it, but the less JNI code you have to write the better, believe me.
+        </p>
+        <p>
+         The general data types that you'll want to use are fairly straightforward, such as jint, jlong, jboolean, jsize, etc. However the trickiest one of all is jstring. Consider the
+         <span class="bold">
+          Localization
+         </span>
+         class explained earlier.
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         #include "platform/android/jni/JniHelper.h"
+        #include "JNIString.h"
+        USING_NS_CC;
+        using namespace std;
+        string Localization::localizedString(const char* key)
+        {
+        JniMethodInfo t;
+        string ret("");
+        if (JniHelper::getStaticMethodInfo(
+        t,
+        "io/hoverstud/readysteadyplay/ReadySteadyPlay",
+        "localizedStringJNI",
+        "(Ljava/lang/String;)Ljava/lang/String;""))
+        {
+        jstring jKey = t.env-&gt;NewStringUTF(key);
+        jstring jstr = (jstring)t.env-&gt;CallStaticObjectMethod(t.classID, t.methodID, jKey);
+        jstringToString(t.env, jstr, &amp;ret);
+        t.env-&gt;DeleteLocalRef(t.classID);
+        t.env-&gt;DeleteLocalRef(jKey);
+        t.env-&gt;DeleteLocalRef(jstr);
+        }
+        return ret;
+        }
+        </pre>
+        <p>
+         As you can see, it is easy to get a jstring object from a C string or as a return value, however converting a jstring back into a C string is not so easy. At first you might be tempted to use JniHelper::jstring2string, which calls the JNI method GetStringUTFChars. You must never use this method! What you really want is something that returns an array of
+         <span class="bold">
+          <span class="italic">
+           UTF-8
+          </span>
+         </span>
+         characters, yet for some ungodly reason GetStringUTFChars returns an array of
+         <span class="bold">
+          <span class="italic">
+           modified UTF-8
+          </span>
+         </span>
+         characters, which appear as jumbled letters when displayed in a label.
+        </p>
+        <p>
+         Instead, I used my own jstringTostring method to call GetStringChars (not GetStringUTFChars), which returns an array of
+         <span class="italic">
+          UTF-16
+         </span>
+         characters that I pass through to an open source
+         <a class="" href="http://www.codeproject.com/Articles/14637/UTF-With-C-in-a-Portable-Way" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - UTF-8 converter from Nemanja Trifunovic - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - UTF-8 converter from Nemanja Trifunovic - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="UTF-8 converter from Nemanja Trifunovic">
+          UTF-8 converter from Nemanja Trifunovic
+         </a>
+         to convert it to a valid C string.
+        </p>
+        <p>
+         <span class="bold">
+          Porting to Windows Phone 8
+         </span>
+        </p>
+        <p>
+         Support for Windows Phone 8 was introduced in
+         <span class="italic">
+          cocos2d-x
+         </span>
+         v2.2.3, but Ready Steady Play was built using v2.2. Therefore, the first stage of porting to WP8 was upgrading
+         <span class="italic">
+          cocos2d-x
+         </span>
+         . The problem was that I forked
+         <span class="italic">
+          cocos2d-x
+         </span>
+         so that we could adapt the code to suit our game, so I couldn't simply swap to the latest git tag; I had to manually merge the code. This proved to be a painfully slow process, since I didn't want to either
+         <span class="bold">
+          <span class="italic">
+           git merge
+          </span>
+         </span>
+         or
+         <span class="bold">
+          <span class="italic">
+           rebase
+          </span>
+         </span>
+         the code and risk losing my changes. For any of you working off v2.2.3 or later, be very thankful.
+        </p>
+        <p>
+         The second stage was getting the project set up. This was when I discovered the project creation script
+         <span class="bold">
+          cocos2d-x/tools/project-creator/create_project.py
+         </span>
+         . This script creates a project in
+         <span class="bold">
+          cocos2d-x/projects
+         </span>
+         , which is not where I wanted it to be. Unfortunately, when I moved the
+         <span class="bold">
+          proj.wp8-xaml
+         </span>
+         to the root folder, all the search paths were out of sync. I've never worked with a Visual Studio project, especially one as interweaved as
+         <span class="italic">
+          cocos2d-x
+         </span>
+         , so finding exactly which search paths needed to be updated and how was a laborious task, to say the least.
+        </p>
+        <p>
+         After combing through the project for a few days I eventually got the game running. Our test device in the office is a Nokia Lumia 520, which is recommended as the lowest-end device for testing. The biggest challenge with this device is the memory limit of 150MB. I hope you don't think that that's a lot, because it's not.
+        </p>
+        <p>
+         Remember how I mentioned that
+         <span class="italic">
+          cocos2d-x
+         </span>
+         images have HDR, HD and SD versions? Forget about it. WP8 gets SD (sprite sheets) only. Are you planning on using music and sound with stereo channels? Forget about it. Mono-only for WP8 (and Android too, if you want the game to run smoothly).
+        </p>
+        <p>
+         Thankfully WP8 allows you to check the device's memory capability. You simply need to call
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         ((long)DeviceExtendedProperties.GetValue("ApplicationWorkingSetLimit") &lt;= 188743680L)
+        </pre>
+        <p>
+         to check whether or not it is a low-end device, in which case you can limit the resources.
+        </p>
+        <p>
+         Once the game was running without expending memory, the next stage was to get the localisation working, which meant once again getting into cross-language interoperability. WP8 XAML projects use "Managed C++", where you can use C#-esque objects in your C++ code. Let's go back to our good friend
+         <span class="bold">
+          Localization
+         </span>
+         .
+        </p>
+        <pre class="xml" id="" name="code" style="">
+         #include "LocalizationComponent.h"
+        #include "CCWinRTUtils.h"
+        static inline std::string winRTStringToString(Platform::String^ str)
+        {
+        std::string ret(cocos2d::CCUnicodeToUtf8(str-&gt;Data()));
+        // Replace \r\n with \n
+        size_t pos;
+        while ((pos = ret.find('\r\n')) != std::string::npos)
+        ret.replace(pos, 2, '\n');
+        return ret;
+        }
+        std::string Localization::localizedString(const char* key)
+        {
+        // Convert the key to a wstring
+        std::wstring keyString = cocos2d::CCUtf8ToUnicode(key);
+        // Convert the key to a Platform::String
+        Platform::String^ str = ref new Platform::String(keyString.data(), keyString.length());
+        // Get localized string
+        str = PhoneDirect3DXamlAppComponent::LocalizationComponent::Instance
+        -&gt;GetLocalizedString(str);
+        return winRTStringToString(str);
+        }
+        std::string Localization::formattedInteger(long number)
+        {
+        // Get localized string
+        Platform::String^ str = PhoneDirect3DXamlAppComponent::LocalizationComponent::Instance
+        -&gt;GetFormattedNumber(number);
+        return winRTStringToString(str);
+        }
+        </pre>
+        <p>
+         There are a couple of important things to note here:
+        </p>
+        <p>
+         <span class="bold">
+          CCWinRTUtils.h
+         </span>
+         provides you with the basic methods you need for converting between C# strings and C strings, which is great. Unfortunately they add a '\r' before a '\n', so you need to remove that, otherwise little white boxes appear before a new line in your
+         <span class="bold">
+          CCLabel
+         </span>
+         s.
+        </p>
+        <p>
+         Like with Objective-C++ vs C++, the header files cannot be a mix of the two languages. This means you need to use an intermediary Managed C++ class to communicate between C++ and C#, which in the above example is PhoneDirect3DXamlAppComponent::LocalizationComponent.
+        </p>
+        <p>
+         The last hurdle was an unexpected one. I started preparing the screenshots for submission to the Windows Phone Store, which is time-consuming but wonderfully easy thanks to the WP8 simulator, and everything seemed fine until I got to Asian languages. Suddenly all my labels were printing out boxes instead of characters.
+        </p>
+        <p>
+         I thought at first there was a problem with my conversion of C# strings to C strings, but that wasn't the case. Eventually I dug into
+         <span class="bold">
+          platform/winrt/CCFreeTypeFont.cpp
+         </span>
+         and discovered the problem. You see, when iOS and Android try to draw a glyph - what we normally call a 'character' in an alphabet - that can't be found in the supplied font, they fall back to a system font that contains the glyph. The WP8 OS normally does this too, but
+         <span class="italic">
+          cocos2d-x
+         </span>
+         creates labels for WP8 using
+         <span class="bold">
+          CCFreeTypeFont
+         </span>
+         , which doesn't perform the fallback.
+        </p>
+        <p>
+         At first I thought to add a font file that contained all the required characters, but such a font file is approximately 22MB (there are a
+         <span class="italic">
+          lot
+         </span>
+         of Unicode characters out there) and not something that should be added manually.
+        </p>
+        <p>
+         After plenty of research, I discovered the following to solve my problem:
+        </p>
+        <ol>
+         <li>
+          <span class="bold">
+           CCFreeTypeFont
+          </span>
+          has a method called loadSystemFont, which returns nullptr for WP8 by default but can actually be used. I found the solution on
+          <a class="" href="http://www.cocos2d-x.org/forums/6/topics/37224" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - this cocos2d-x forum topic - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - this cocos2d-x forum topic - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="this cocos2d-x forum topic">
+           this cocos2d-x forum topic
+          </a>
+          .
+         </li>
+         <li>
+          The available system fonts for WP8 can be found
+          <a class="" href="http://msdn.microsoft.com/en-US/library/windows/apps/hh202920(v=vs.105).aspx#BKMK_SupportedUIFontsinWindowsPhone" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - here - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - here - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="here">
+           here
+          </a>
+          . Passing the right font name to your code is not straightforward. E.g. If you want to load the Yu Gothic font (for Japanese) then you pass to loadSystemFont("YuGothic"), but if you want to load Microsoft Mhei (for Traditional Chinese) you need to pass in "MSMhei".
+         </li>
+         <li>
+          The
+          <span class="italic">
+           FreeType
+          </span>
+          library informs the code when a glyph is not found. At this point of the code I set up the fallback mechanism to go through the pre-loaded system fonts until it finds one with the required glyph.
+         </li>
+        </ol>
+        <p>
+         <span class="bold">
+          Publishing
+         </span>
+        </p>
+        <p>
+         To date we have released Ready Steady Play (at a premium price of 1.49GBP / $1.99USD) to iOS, Android and Windows Phone 8, with at least some kind of a feature on the Apple, Google Play and WP8 stores.
+        </p>
+        <p>
+         <span class="bold">
+          iOS App Store
+         </span>
+        </p>
+        <p>
+         For the iOS App Store we were listed in the
+         <span class="bold">
+          <span class="italic">
+           Best New Games
+          </span>
+         </span>
+         section, which is manually curated in each country for iPhone and iPad separately. E.g. in China we were listed for both iPhone and iPad, but in the US only for iPad. This makes a significant difference, but we were pretty thrilled either way as it resulted in a lot of downloads.
+        </p>
+        <p>
+         <span class="bold">
+          Google Play
+         </span>
+        </p>
+        <p>
+         A friend of mine, who is a big fan of the game and has been featured himself by Apple and Google, e-mailed his contacts to consider us for a feature. Shortly after we got an e-mail from the Google Play editorial team asking us to make some changes to fix the game. Once they were happy with the update they featured Ready Steady Play in their
+         <span class="bold">
+          <span class="italic">
+           New + Updated Games
+          </span>
+         </span>
+         section.
+        </p>
+        <p>
+         <span class="bold">
+          Windows Phone Store
+         </span>
+        </p>
+        <p>
+         Microsoft have been phenomenal in helping to get our game published to their store and featured. We didn't initially intend to port the game for Windows Phone, but a fortuitous meeting with their technical evangelist, Lee Stott, put us on the path. We were showing off Ready Steady Play at the
+         <a class="" href="http://www.developconference.com/" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Develop games conference - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Develop games conference - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Develop games conference">
+          Develop games conference
+         </a>
+         in Brighton when we met him. When we told him that the game was made using
+         <span class="italic">
+          cocos2d-x
+         </span>
+         he gave us the links that we needed to port the game over, and provided technical assistance throughout the procedure.
+        </p>
+        <p>
+         In addition to the technical support, he also put us in touch with Microsoft's marketing department, who gave us invaluable advice and also offered to nominate the game once it was released.
+        </p>
+        <p>
+         The Windows Phone Store features are not like the others. They do daily listings and for set groups of countries. How they choose these countries is seemingly random, but the results are very rewarding.
+        </p>
+        <p>
+         <span class="bold">
+          Summary
+         </span>
+        </p>
+        <p>
+         It took about 7 months to create the first release of Ready Steady Play.
+         <span class="italic">
+          cocos2d-x
+         </span>
+         has proven to be a great tool to use for developing a 2D mobile game, and it would take a lot to convince me to use something else. Being an open source project means that developers can cater it to their needs, and the project has hundreds of contributors helping to make it better with each iteration
+        </p>
+        <p>
+         I really hope that this article helps anybody interested in game development to dive right in to using
+         <span class="italic">
+          cocos2d-x
+         </span>
+         . Remember that you're not alone in using this tool or any of the others out there (and there are many), with each having its own fast-growing community ready and willing to help you along the way.
+        </p>
+        <div data-id="983DF610-BC58-4DCC-A21B-5AF749AE330C" id="comments">
+         <div class=" marginTop5 marginBottom5 comment-counter">
+          <span aria-hidden="true" class="icon-comment cyanDark fontSize2em marginLeft0i">
+          </span>
+          <span aria-hidden="true" class="lineHeight40px comments-count-983DF610-BC58-4DCC-A21B-5AF749AE330C">
+           Comments
+          </span>
+         </div>
+         <div class="comments">
+         </div>
+         <div class="marginTop20 marginBottom20">
+          <a class="none" data-notracking="true" href="#" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-more" onclick="return false;">
+           view more
+          </a>
+          <a class="none" data-notracking="true" href="#" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-less" onclick="Helper.scrollTo('comments'); return false;">
+           view less
+          </a>
+         </div>
+         <div class="bgCoolGray paddingTop5 paddingBottom5 paddingLeft10 paddingRight10 overflowHidden height38" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-form">
+          <div class="pointer marginBottom5" onclick="$(this).parent().toggleClass('height38').find('span[class*=icon-]').toggleClass('icon-expand');">
+           <h5 class="inlineBlock paddingTop7">
+            Post a comment
+           </h5>
+           <span class="icon-expand icon-collapse cyanDark fontSize25em right">
+           </span>
+          </div>
+          <div class="form">
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+             Your Screen Name
+            </span>
+            <input class="width200 height27 border0 noOutline" maxlength="20" name="nickname" type="text"/>
+           </div>
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+            </span>
+            <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 red" data-error="501">
+            </span>
+           </div>
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+             Your Email Address
+            </span>
+            <input class="width200 height27 border0 noOutline" name="email" placeholder="" type="text"/>
+           </div>
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+            </span>
+            <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 red" data-error="502">
+            </span>
+           </div>
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 top coolGray9">
+             Your Comment
+            </span>
+            <textarea class="border0 noOutline" cols="20" maxlength="400" name="message" placeholder=" (400 characters max)" rows="6">
+            </textarea>
+           </div>
+           <div class="paddingBottom8">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+            </span>
+            <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 red" data-error="503">
+            </span>
+           </div>
+           <div class="paddingBottom15">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 top">
+            </span>
+            <a class="button white bgCyanDark hoverWhite hoverBgCyanLight" href="#" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-post" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Post a comment - Local','WT.z_ea_actionoffer','Shr-SMS','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sms','ms.ea_action','shr','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Post a comment - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb'); return false;" target="" title="Post a comment">
+             Post
+            </a>
+            <div id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-post-preloader">
+            </div>
+           </div>
+           <div class="paddingBottom15">
+            <a href="#" onclick="LightBox.open('restore_nickname'); return false;" title="Forgot your Screen Name?">
+             Forgot your Screen Name?
+            </a>
+           </div>
+          </div>
+          <div class="paddingBottom15">
+           <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 red" data-error="500">
+           </span>
+           <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 green" data-error="500">
+           </span>
+          </div>
+         </div>
+         <div class="lightbox bgCoolGray" data-lightbox-id="restore_nickname">
+          <div class="form-restore" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-form-restore">
+           <div class="paddingBottom8 restore-by-email">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 coolGray9">
+             Your Email Address
+            </span>
+            <input class="width200 height27 border0 noOutline" name="restore_by_email" placeholder="" type="text"/>
+           </div>
+           <div class="paddingBottom15">
+            <span class="tableCell noWrap width130 inlineBlock marginRight20 top">
+            </span>
+            <a class="button white bgCyanDark hoverWhite hoverBgCyanLight" href="#" id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-restore" onclick="return false;" target="" title="Restore Screen Name">
+             Send
+            </a>
+            <div id="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-restore-preloader">
+            </div>
+           </div>
+           <div class="paddingBottom8">
+            <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 red" data-error="502">
+            </span>
+            <span class="comments-983DF610-BC58-4DCC-A21B-5AF749AE330C-response width200 green" data-error="502">
+            </span>
+           </div>
+          </div>
+         </div>
+        </div>
+       </article>
+       <div class="article-middle">
+        <section class="social">
+         <div class=" marginTop5 marginBottom5">
+          <span class="hoverCyan">
+           <span aria-hidden="true" class="icon-comment pointer cyanDark fontSize2em" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - View comments - Local','WT.z_ea_actionoffer','Vue-SMS','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sms','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - View comments - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb'); Helper.scrollTo('comments');">
+           </span>
+           <span aria-hidden="true" class="pointer lineHeight40px comments-count-983DF610-BC58-4DCC-A21B-5AF749AE330C" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - View comments - Local','WT.z_ea_actionoffer','Vue-SMS','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sms','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - View comments - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb'); Helper.scrollTo('comments')">
+            Comments
+           </span>
+          </span>
+         </div>
+         <hr/>
+         <script class="scriptTwitterPlaceholder" type="text/javascript">
+          var twitterHtml = '&lt;div class="marginTop15 marginBottom5 paddingLeft10 twitterHtml"&gt;&lt;iframe allowtransparency="true" frameborder="0" scrolling="no" src="https://platform.twitter.com/widgets/tweet_button.html?url=http://www.microsoft.com/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games&amp;text=The definitive guide to developing with Cocos2d-x, by Cowboy Games&amp;related=&amp;count=&amp;lang=&amp;counturl=&amp;hashtags=&amp;size=&amp;dnt=" style="width:130px; height:30px;"&gt;&lt;/iframe&gt;&lt;/div&gt;';
+
+      $(window).load(function(){
+      $("script.scriptTwitterPlaceholder").replaceWith(twitterHtml);
+      });
+         </script>
+         <hr/>
+         <div class="marginTop15 marginBottom15 paddingLeft10">
+          <div class="fb-share-button" data-href="http://www.microsoft.com/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games" data-type="button_count">
+          </div>
+         </div>
+         <hr/>
+         <script class="scriptLinkedInPlaceholder" type="text/javascript">
+          var linkedinHtml = '&lt;div class="marginTop15 marginBottom15 childBottom paddingLeft10"&gt;&lt;script src="\//platform.linkedin.com/in.js" type="text/javascript"&gt;&lt;\/script&gt;&lt;script type="IN/Share" data-url="http://www.microsoft.com/en-gb/developers/articles/week02oct14/the-definitive-guide-to-developing-with-cocos2d-x-by-cowboy-games" data-counter="right"&gt;&lt;\/script&gt;&lt;/div&gt;';
+
+      $(window).load(function(){
+      $("script.scriptLinkedInPlaceholder").replaceWith(linkedinHtml);
+      });
+         </script>
+         <hr/>
+         <div class="marginTop15 marginBottom15 paddingLeft10">
+          <div class="g-plus" data-action="share" data-annotation="bubble">
+          </div>
+          <script class="scriptGPlusPlaceholder" src="https://apis.google.com/js/platform.js">
+           {lang: 'en-GB'}
+          </script>
+         </div>
+         <hr class="marginBottom15"/>
+         <section class="highlight bgCoolGray9 marginBottom15">
+          <img alt="Get started with Windows Phone 8" class="block center" src="/en-gb/developers/images/articles/cta/winphone8.png?v=0.0" style=""/>
+          <div class="padding10">
+           <p class="white paddingTop0">
+            <span class="bold block marginBottom5">
+             Get started with Windows Phone 8
+            </span>
+            <span>
+             Get the tools you need, create your own apps, and publish them in the Windows Store.
+            </span>
+           </p>
+           <a class="button white bgCyanDark hoverBgCyan white center block textLeftI padding6i" href="http://create.msdn.com/en-us" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - Get started with Windows Phone 8 - Local','WT.z_ea_actionoffer','Vue-Sit','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Awareness','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','sit','ms.ea_action','vue','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Middle - Get started with Windows Phone 8 - Unknown - Awareness - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Get started with Windows Phone 8">
+            Get started with Windows Phone 8
+           </a>
+          </div>
+         </section>
+         <section class="marginBottom20 paddingLeft10 paddingBottom15 white bgCyan">
+          <div>
+           <h3 class="paddingTop5">
+            Let the news come to you!
+           </h3>
+           <a class="marginLeft-5" href="https://profile.microsoft.com/RegSysProfileCenter/wizardnp.aspx?wizid=c62b266b-82bb-4c7e-9cb3-3f9965ed52f3&amp;lcid=2057" id="" onclick="dcsSetVar('WT.z_ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Sign Up - Local','WT.z_ea_actionoffer','Sub-New','WT.z_ea_msproduct','Unknown','WT.z_ea_group','Articles','WT.z_ea_funnel','Conversion','WT.z_ea_targetcampaign','000XXX00000');MscomCustomEvent('ms.ea_offer','new','ms.ea_action','sub','ms.ea_name','The definitive guide to developing with Cocos2d-x, by Cowboy Games - Body - Sign Up - Unknown - Conversion - Local','ms.cpgnguid','000XXX00000','ms.lang','en','ms.loc','gb');  " target="_blank" title="Sign Up">
+            <span class="icon-next-circle fontSize23px inlineBlock top">
+            </span>
+            <span class="inlineBlock width70p fontSize15px">
+             Sign up to
+             <br/>
+             our newsletter
+            </span>
+           </a>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <div class="article-navigation relative">
+       <div class="article-prev relative">
+        <div class="width30 marginRight1p inlineBlock">
+         <span class="icon-previous-circle cyanDark fontSize29px relative top10 margin0i">
+         </span>
+        </div>
+        <div class="width85p inlineBlock">
+         <span class="cyanDark fontSize14px">
+          previous
+         </span>
+         <p>
+          Agile and the concept of Multi-skilled Teams
+         </p>
+        </div>
+        <a class="black boxLink" href="/en-gb/developers/articles/week01oct14/agile-and-the-concept-of-multi-skilled-teams">
+         <span class="boxLinkSpanner">
+         </span>
+        </a>
+       </div>
+       <hr/>
+       <div class="article-next relative textRight">
+        <div class="width85p inlineBlock">
+         <span class="cyanDark fontSize14px">
+          next
+         </span>
+         <p>
+          The right tools for the job for a .NET programmer
+         </p>
+        </div>
+        <div class="width30 marginLeft1p inlineBlock">
+         <span class="icon-next-circle cyanDark fontSize29px relative top10 margin0i">
+         </span>
+        </div>
+        <a class="black boxLink" href="/en-gb/developers/articles/week02oct14/the-right-tools-for-the-job-for-a-net-programmer">
+         <span class="boxLinkSpanner">
+         </span>
+        </a>
+       </div>
+       <div class="article-related">
+        <h5 class="padding10 bgCyanDark hoverBgCyan white relative">
+         <span aria-hidden="true" class="expand-icon icon-collapse-circle fontSize15em marginLeft0i marginRight10i boxLink">
+          <span class="boxLinkSpanner">
+          </span>
+         </span>
+         Related
+        </h5>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_634.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           19 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week03jun15/oculus-rift-partners-with-the-xbox-one-virtual-reality-opportunities-for-developers" title="Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Gaming talks from Build 2015" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_611.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Gaming talks from Build 2015
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           7 May 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week01may15/gaming-talks-from-build-2015" title="Gaming talks from Build 2015">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Tips and advice for game development with The Triforce of Game Design" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_595.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Tips and advice for game development with The Triforce of Game Design
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           11 April 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week02apr15/tips-and-advice-for-game-development-with-the-triforce-of-game-design" title="Tips and advice for game development with The Triforce of Game Design">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="How Puzzles Killed Gameplay, a talk by Dom Camus" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_587.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           How Puzzles Killed Gameplay, a talk by Dom Camus
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           19 March 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week03mar15/how-puzzles-killed-gameplay-a-talk-by-dom-camus" title="How Puzzles Killed Gameplay, a talk by Dom Camus">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Kinect hacks and inspirational projects" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_573.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Kinect hacks and inspirational projects
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           4 March 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week01mar15/kinect-hacks-and-inspirational-projects" title="Kinect hacks and inspirational projects">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+       </div>
+       <div class="article-recent">
+        <h5 class="padding10 bgCyanDark hoverBgCyan white relative">
+         <span aria-hidden="true" class="expand-icon icon-expand-circle fontSize15em marginLeft0i marginRight10i boxLink">
+          <span class="boxLinkSpanner">
+          </span>
+         </span>
+         Recent
+        </h5>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="How to securely store passwords and beat the hackers" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_638.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           How to securely store passwords and beat the hackers
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           24 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week04jun15/how-to-securely-store-passwords-and-beat-the-hackers" title="How to securely store passwords and beat the hackers">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="The Commodore 64 and Amiga software developer legacy" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_637.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           The Commodore 64 and Amiga software developer legacy
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           23 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week04jun15/the-commodore-64-and-amiga-software-developer-legacy" title="The Commodore 64 and Amiga software developer legacy">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Using the Windows Bluetooth Generic Attribute API with SensorTag" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_635.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Using the Windows Bluetooth Generic Attribute API with SensorTag
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           22 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week04jun15/using-the-windows-bluetooth-generic-attribute-api-with-sensortag" title="Using the Windows Bluetooth Generic Attribute API with SensorTag">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_634.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           19 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week03jun15/oculus-rift-partners-with-the-xbox-one-virtual-reality-opportunities-for-developers" title="Oculus Rift partners with the Xbox One  Virtual reality opportunities for developers?">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <div class="article-thumbs paddingTop15 paddingBottom15 relative hoverBgCoolGray">
+         <div class="thumb-image inlineBlock maxWidth50i marginRight5 marginLeft10">
+          <img alt="Marketing for technologists: social media" class="marginTop5" src="/en-gb/developers/images/articles/100x100/100x100_633.jpg"/>
+         </div>
+         <div class="thumb-content inlineBlock maxWidth70p">
+          <h5 class="padding0 bold">
+           Marketing for technologists: social media
+          </h5>
+          <span class="article-date coolGray7 block fontSize14px marginTop5">
+           18 June 2015
+          </span>
+         </div>
+         <a class="boxLink" href="/en-gb/developers/articles/week03jun15/marketing-for-technologists-social-media" title="Marketing for technologists: social media">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+       </div>
+       <div class="sticky-rhn">
+        <div class="article-prev relative">
+         <div class="width30 marginRight1p inlineBlock">
+          <span class="icon-previous-circle cyanDark fontSize29px relative top10 margin0i">
+          </span>
+         </div>
+         <div class="width85p inlineBlock">
+          <span class="cyanDark fontSize14px">
+           previous
+          </span>
+          <p>
+           Agile and the concept of Multi-skilled Teams
+          </p>
+         </div>
+         <a class="black boxLink" href="/en-gb/developers/articles/week01oct14/agile-and-the-concept-of-multi-skilled-teams">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+        <hr/>
+        <div class="article-next relative textRight">
+         <div class="width85p inlineBlock">
+          <span class="cyanDark fontSize14px">
+           next
+          </span>
+          <p>
+           The right tools for the job for a .NET programmer
+          </p>
+         </div>
+         <div class="width30 marginLeft1p inlineBlock">
+          <span class="icon-next-circle cyanDark fontSize29px relative top10 margin0i">
+          </span>
+         </div>
+         <a class="black boxLink" href="/en-gb/developers/articles/week02oct14/the-right-tools-for-the-job-for-a-net-programmer">
+          <span class="boxLinkSpanner">
+          </span>
+         </a>
+        </div>
+       </div>
+      </div>
+      <div class="backToTop">
+       <a class="icon-up-flyout-circle center block paddingBottom20 paddingTop20 cyanDark hoverCyan" data-notracking="true" href="#" onclick="Helper.scrollTo(0,0)">
+        Back to top
+       </a>
+      </div>
+     </section>
+    </span>
+   </div>
+   <div class="footer">
+    <div bi:type="oneMscomFooter" class="oneMscomFooterV3 mstFooterV3Backround mst-nonResponsiveMinWidth" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterV3Ctl">
+     <div class="mstFooterTop grid-container">
+      <div class="grid-row column-4">
+       <!--grid-unit-IE6 is an IE6/7 fix for setting margin-left zero for first grid unit-->
+       <div class="grid-unit">
+        <div bi:type="oneMscomFooterMsLink" class="mstFooterMsLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink">
+         <ul class="mstFooterMsLinkList">
+          <li>
+           <div class="mstFooterMsLinkListTitle" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLinkListTitle">
+            Other Microsoft sites
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl00_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://windows.microsoft.com/en-GB/windows/home" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl00_mstFooterMsLinkItemLink">
+             <div title="Windows">
+              <img alt="Windows" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/windowslogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl00_mstFooterMsLinkItemText">
+             <a href="http://windows.microsoft.com/en-GB/windows/home">
+              <span>
+               Windows
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl01_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://office.microsoft.com/en-GB" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl01_mstFooterMsLinkItemLink">
+             <div title="Office">
+              <img alt="Office" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/officelogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl01_mstFooterMsLinkItemText">
+             <a href="http://office.microsoft.com/en-GB">
+              <span>
+               Office
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl02_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.microsoft.com/surface/en-gb" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl02_mstFooterMsLinkItemLink">
+             <div title="Surface">
+              <img alt="Surface" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/fallpromo_bug_black.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl02_mstFooterMsLinkItemText">
+             <a href="http://www.microsoft.com/surface/en-gb">
+              <span>
+               Surface
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl03_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.windowsphone.com/" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl03_mstFooterMsLinkItemLink">
+             <div title="Windows Phone">
+              <img alt="Windows Phone" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/phonelogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl03_mstFooterMsLinkItemText">
+             <a href="http://www.windowsphone.com/">
+              <span>
+               Windows Phone
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl04_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.microsoft.com/en-gb/mobile/" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl04_mstFooterMsLinkItemLink">
+             <div title="Mobile devices">
+              <img alt="Mobile devices" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/nokialogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl04_mstFooterMsLinkItemText">
+             <a href="http://www.microsoft.com/en-gb/mobile/">
+              <span>
+               Mobile devices
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl05_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.xbox.com/en-GB/" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl05_mstFooterMsLinkItemLink">
+             <div title="Xbox">
+              <img alt="Xbox" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/xboxlogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl05_mstFooterMsLinkItemText">
+             <a href="http://www.xbox.com/en-GB/">
+              <span>
+               Xbox
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl06_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.skype.com/go/skype/?cm_mmc=MSFT|TRAF_B1-_-mscom-hero-gb" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl06_mstFooterMsLinkItemLink">
+             <div title="Skype">
+              <img alt="Skype" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/skypelogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl06_mstFooterMsLinkItemText">
+             <a href="http://www.skype.com/go/skype/?cm_mmc=MSFT|TRAF_B1-_-mscom-hero-gb">
+              <span>
+               Skype
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl07_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.msn.com/en-gb/?OCID=MicroHP" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl07_mstFooterMsLinkItemLink">
+             <div title="MSN">
+              <img alt="MSN" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/msn_symbol_clr_52x52.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl07_mstFooterMsLinkItemText">
+             <a href="http://www.msn.com/en-gb/?OCID=MicroHP">
+              <span>
+               MSN UK
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl08_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.bing.co.uk/" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl08_mstFooterMsLinkItemLink">
+             <div title="Bing">
+              <img alt="Bing" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/binglogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl08_mstFooterMsLinkItemText">
+             <a href="http://www.bing.co.uk/">
+              <span>
+               Bing
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+          <li class="mstFooterMsLinkItemLi">
+           <div class="mstFooterMsLinkItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl09_mstFooterMsLinkItem">
+            <a class="mstFooterMsLinkItemLink" href="http://www.microsoftstore.com/store/msuk/en_GB/home/ThemeID.30273200?WT.mc_id=MSCOM_en_gb_MSTemp_Footer_Store" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl09_mstFooterMsLinkItemLink">
+             <div title="Microsoft Store">
+              <img alt="Microsoft Store" height="100%" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/storelogo.png" width="100%"/>
+             </div>
+            </a>
+            <div class="mstFooterMsLinkItemText" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterMsLink_Repeater_ctl09_mstFooterMsLinkItemText">
+             <a href="http://www.microsoftstore.com/store/msuk/en_GB/home/ThemeID.30273200?WT.mc_id=MSCOM_en_gb_MSTemp_Footer_Store">
+              <span>
+               Microsoft Store
+              </span>
+             </a>
+            </div>
+           </div>
+          </li>
+         </ul>
+        </div>
+       </div>
+       <div class="grid-unit grid-right">
+        <div bi:type="oneMscomFooterPopResLink" class="mstFooterPopRes" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes">
+         <ul class="mstFooterPopResList">
+          <li>
+           <div class="mstFooterPopResListTitle" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopResListTitle">
+            Popular Resources
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl00_mstFooterPopResListItem">
+            <a href="http://msdn.microsoft.com/windows">
+             <span>
+              Windows
+             </span>
+            </a>
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl01_mstFooterPopResListItem">
+            <a href="http://dev.windowsphone.com/">
+             <span>
+              Windows Phone
+             </span>
+            </a>
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl02_mstFooterPopResListItem">
+            <a href="http://msdn.microsoft.com/office">
+             <span>
+              Office
+             </span>
+            </a>
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl03_mstFooterPopResListItem">
+            <a href="http://www.windowsazure.com/en-us/documentation/">
+             <span>
+              Windows Azure
+             </span>
+            </a>
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl04_mstFooterPopResListItem">
+            <a href="http://msdn.microsoft.com/vstudio">
+             <span>
+              Visual Studio
+             </span>
+            </a>
+           </div>
+          </li>
+          <li>
+           <div class="mstFooterPopResListItem" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterPopRes_Repeater_ctl05_mstFooterPopResListItem">
+            <a href="http://msdn.microsoft.com/aa937802">
+             <span>
+              More...
+             </span>
+            </a>
+           </div>
+          </li>
+         </ul>
+        </div>
+       </div>
+       <div class="grid-unit colspan-2">
+        <!--grid-unit-IE6 is an IE6/7 fix for setting margin-left zero for first grid unit-->
+        <div class="grid-unit">
+         <div class="mstFooterDestLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterDestLinkOdd">
+          <div bi:type="oneMscomFooterDestLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterDestLinkTemplateOdd">
+           <ul class="mstFooterDestLinkListOdd">
+            <li>
+             <ul class="mstFooterDestLinkCatList">
+              <li class="mstFooterDestLinkListTitle">
+               <div>
+                Learning Resources
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a bi:parenttitlestructure="ghghg" bi:surveyversion="dsfdsf" href="http://www.microsoftvirtualacademy.com/">
+                 <span>
+                  Microsoft Virtual Academy
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a bi:parenttitlestructure="ghghg" bi:surveyversion="dsfdsf" href="http://channel9.msdn.com/">
+                 <span>
+                  Channel 9
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://www.interoperabilitybridges.com/">
+                 <span>
+                  Interoperability Bridges
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a bi:parenttitlestructure="ghghg" bi:surveyversion="dsfdsf" href="http://msdn.microsoft.com/magazine/">
+                 <span>
+                  MSDN Magazine
+                 </span>
+                </a>
+               </div>
+              </li>
+             </ul>
+            </li>
+            <li>
+             <ul class="mstFooterDestLinkCatList">
+              <li class="mstFooterDestLinkListTitle">
+               <div>
+                Programs
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://www.microsoft.com/bizspark/">
+                 <span>
+                  BizSpark (for startups)
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="https://www.dreamspark.com/">
+                 <span>
+                  DreamSpark
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="https://www.microsoft.com/faculty">
+                 <span>
+                  Faculty Connection
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://www.microsoft.com/student/">
+                 <span>
+                  Microsoft Student
+                 </span>
+                </a>
+               </div>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+        <div class="grid-unit">
+         <div class="mstFooterDestLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterDestLinkEven">
+          <div bi:type="oneMscomFooterDestLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterDestLinkTemplateEven">
+           <ul class="mstFooterDestLinkListEven">
+            <li>
+             <ul class="mstFooterDestLinkCatList">
+              <li class="mstFooterDestLinkListTitle">
+               <div>
+                Community
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://social.msdn.microsoft.com/forums/en-us/home">
+                 <span>
+                  Forums
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://blogs.msdn.com/b/developer-tools/">
+                 <span>
+                  Blogs
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://www.codeplex.com/">
+                 <span>
+                  Codeplex
+                 </span>
+                </a>
+               </div>
+              </li>
+             </ul>
+            </li>
+            <li>
+             <ul class="mstFooterDestLinkCatList">
+              <li class="mstFooterDestLinkListTitle">
+               <div>
+                Support
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://msdn.microsoft.com/hh361695">
+                 <span>
+                  Self support
+                 </span>
+                </a>
+               </div>
+              </li>
+              <li class="mstFooterDestLinkListItem">
+               <div>
+                <a href="http://support.microsoft.com/">
+                 <span>
+                  Other support options
+                 </span>
+                </a>
+               </div>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="mstFooterBottom grid-container">
+      <div class="grid-row column-3">
+       <div bi:type="oneMscomFooterLocaleLogo" class="mstFooterLocaleLogo" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterLocaleLogo">
+        <div class="grid-unit colspan-1">
+         <div class="mstFooterLocale">
+          <div class="mstFooterLocaleMenu" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterLocaleMenu">
+           <a bi:surveyversion="dsfdsf" href="/oneMscom/locale.aspx" id="mstLocPickerCtl">
+            <img class="mstLcpMenuImg" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/footerimages/footer_globe.png"/>
+            <span class="mstLcpMenuText">
+             United Kingdom
+            </span>
+           </a>
+          </div>
+         </div>
+        </div>
+        <div class="grid-unit colspan-2">
+         <div class="mstFooterLogo" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterLogo">
+          <a href="http://www.microsoft.com/en/gb/default.aspx" title="Microsoft">
+           <span>
+            <img alt="Microsoft" src="//i.s-microsoft.com/global/onemscomsettings/publishingimages/microsoft_logo_footer_v3.png"/>
+           </span>
+          </a>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="mstFooterCorpLinkCopyright">
+       <div bi:type="oneMscomFooterCorpLink" class="mstFooterCorpLink" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterCorpLink">
+        <ul>
+         <li class="msFooterCorpLinkLi">
+         </li>
+         <li class="msFooterCorpLinkLi">
+         </li>
+         <li class="msFooterCorpLinkLi">
+          <a href="http://support.microsoft.com/contactus/?ws=support#tab0">
+           <span>
+            Contact Us
+           </span>
+          </a>
+         </li>
+         <li class="msFooterCorpLinkLi">
+          <a href="http://www.microsoft.com/en-us/legal/intellectualproperty/copyright/default.aspx">
+           <span>
+            Terms of Use
+           </span>
+          </a>
+         </li>
+         <li class="msFooterCorpLinkLi">
+          <a href="http://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/en-us.aspx">
+           <span>
+            Trademarks
+           </span>
+          </a>
+         </li>
+         <li class="msFooterCorpLinkLi">
+          <a href="http://go.microsoft.com/fwlink/?LinkId=248681">
+           <span>
+            Privacy &amp; Cookies
+           </span>
+          </a>
+         </li>
+         <li class="msFooterCorpLinkLi">
+          <a href="http://go.microsoft.com/fwlink/?LinkID=286759">
+           <span>
+            About our ads
+           </span>
+          </a>
+         </li>
+         <li class="mstFooterCopyRight">
+          <div>
+           2015 Microsoft
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+     <div class="mstFooterLocFlyoutContainer" id="ctl00_ctl00_Footer_oneMscomFooter_mstFooterLocFlyoutContainer">
+     </div>
+    </div>
+    <script type="text/javascript">
+     if (typeof $ != "undefined") {
+            $(function () {
+                if (Mst &amp;&amp; Mst.FooterV3) {
+                    var footerV3 = new Mst.FooterV3('ctl00_ctl00_Footer_oneMscomFooter', '916', '', 'true');
+                }
+            });
+        }
+    </script>
+    <script src="/en-gb/developers/templates/components/ukWebFXArticle/ukWebFXArticle.js?v=1.6.0" type="text/javascript">
+    </script>
+    <script src="//ukcdn.azurewebsites.net/assets.ashx?s=ukWebFXArticleJs&amp;t=text/javascript&amp;v=1.6.0" type="text/javascript">
+    </script>
+    <!-- WebTrends code-->
+    <script type="text/javascript">
+     var gDomain = "m.webtrends.com";
+            var gDcsId = "dcsjwb9vb00000c932fd0rjc7_5p3t";
+            var gTrackEvents = "1";
+            var gFpc = "WT_FPC";
+    </script>
+    <noscript>
+     <img alt="" border="0" height="1" name="DCSIMG" src="//m.webtrends.com/dcsjwb9vb00000c932fd0rjc7_5p3t/njs.gif?dcsuri=/nojavascript&amp;WT.js=No" width="1"/>
+    </noscript>
+    <!-- End WebTrends code -->
+    <!-- WedCS code-->
+    <script type="text/javascript">
+     var varSegmentation = 1;
+            var varClickTracking = 1;
+            var varCustomerTracking = 1;
+            var varAutoFirePV = 1;
+            document.write("&lt;script type='text/javascript' src='" + (window.location.protocol) + "//c.microsoft.com/ms.js'" + "&gt;&lt;\/script&gt;");
+    </script>
+    <noscript>
+     <img alt="" height="1" src="//c.microsoft.com/trans_pixel.aspx" width="1"/>
+    </noscript>
+    <!-- End WedCS code-->
+    <script type="text/javascript">
+     $(function () { $.event.trigger({ type: "finally" }); });//obsolete
+            $(function () { setTimeout(function () { $.event.trigger({ type: "WebFX.finally" }); }, 2000) });
+    </script>
+   </div>
+   <div class="cssClear">
+   </div>
+  </form>
+  <!--ADD BIPROXY and BISupporting SCRIPT-->
+  <script src="//ukcdn.azurewebsites.net/assets.ashx?s=oneMscomBiJs&amp;t=text/javascript&amp;v=1.0.0" type="text/javascript">
+  </script>
+  <!--ADD WEBTRENDS SCRIPT-->
+  <script src="//ukcdn.azurewebsites.net/assets.ashx?s=oneMscomWT&amp;t=text/javascript&amp;v=1.0.0" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   var $biSettings={"webtrends":{"interactionTypeMap":{"0":"0","1":"4","2":"1","3":"2","4":"9","5":"10","6":"11","7":"12","8":"13","9":"14","10":"15","11":"16","12":"17","13":"18","14":"19","15":"20","16":"21","17":"22","18":"23","19":"24","20":"25"},"parameterMap":{"DCS.dcssip":[{"bi":"uridomain"}],"DCS.dcsuri":[{"bi":"uripath"}],"DCS.dcsqry":[{"bi":"uriquery"}],"WT.dl":[{"bi":"interactiontype"}],"WT.TriggerType":[{"bi":"triggertype"}],"WT.z_Initial":[{"bi":"initial"}],"WT.ti":[{"bi":"title"}],"WT.ParentTitleStructure":[{"bi":"parenttitlestructure"}],"WT.Type":[{"bi":"type"}],"WT.ParentTypeStructure":[{"bi":"parenttypestructure"}],"WT.Index":[{"bi":"index"}],"WT.ParentIndexStructure":[{"bi":"parentindexstructure"}],"WT.GridStructure":[{"bi":"gridstructure"}],"WT.SearchType":[{"bi":"searchtype"}],"WT.SearchQuery":[{"bi":"searchquery"}],"DCSext.wt_linkId":[{"bi":"linkid"}],"WT.z_locale":[{"bi":"locale"}],"WT.pa":[{"bi":"primaryaudience"}],"WT.z_ea_name":[{"bi":"endactionname"}],"WT.z_ea_action":[{"bi":"endaction"}],"WT.z_ea_actionoffer":[{"bi":"endactionoffer"}],"WT.z_ea_targetcampaign":[{"bi":"campaignguid"}],"DCSext.vp_evt":[{"bi":"vpevent"}],"DCSext.vp_uuid":[{"bi":"vpuuid"}],"WT.SurveyId":[{"bi":"surveyid"}],"WT.SurveyVersion":[{"bi":"surveyversion"}],"WT.SurveyQuestions":[{"bi":"surveyquestions"}],"WT.SurveyComments":[{"bi":"surveycomments"}]}},"wedcs":{"interactionTypeMap":{"0":"0","1":"4","2":"1","3":"2","4":"9","5":"10","6":"11","7":"12","8":"13","9":"14","10":"15","11":"16","12":"17","13":"18","14":"19","15":"20","16":"21","17":"22","18":"23","19":"24","20":"25"},"parameterMap":{"ms.UriDomain":[{"bi":"uridomain"}],"ms.UriPath":[{"bi":"uripath"}],"ms.UriQuery":[{"bi":"uriquery"}],"ms.InteractionType":[{"bi":"interactiontype"}],"ms.TriggerType":[{"bi":"triggertype"}],"ms.Initial":[{"bi":"initial"}],"ms.Title":[{"bi":"title"}],"ms.ParentTitleStructure":[{"bi":"parenttitlestructure"}],"ms.Type":[{"bi":"type"}],"ms.ParentTypeStructure":[{"bi":"parenttypestructure"}],"ms.Index":[{"bi":"index"}],"ms.ParentIndexStructure":[{"bi":"parentindexstructure"}],"ms.GridStructure":[{"bi":"gridstructure"}],"ms.SearchType":[{"bi":"searchtype"}],"ms.SearchQuery":[{"bi":"searchquery"}],"cot":[{"bi":"cot"}],"ms.linkid":[{"bi":"linkid"}],"ms.linktype":[{"bi":"linktype"}],"ms.cpgnguid":[{"bi":"campaignguid"}],"ms.rioctc":[{"bi":"rioctc"}],"ms.z_locale":[{"bi":"locale"}],"ms.lang":[{"bi":"lang"}],"ms.loc":[{"bi":"loc"}],"ms.sitename":[{"bi":"sitename"}],"ms.pa":[{"bi":"primaryaudience"}],"ms.serp.link_type":[{"bi":"serplinktype"}],"ms.serp.link_position":[{"bi":"serplinkposition"}],"ms.ea_name":[{"bi":"endactionname"}],"ms.ea_action":[{"bi":"endaction"}],"ms.ea_offer":[{"bi":"endactionoffer"}],"ms.vp_site":[{"bi":"vpsite"}],"ms.vp_evt":[{"bi":"vpevent"}],"ms.vp_duration":[{"bi":"vpduration"}],"ms.vp_channel":[{"bi":"vpchannel"}],"ms.vp_uuid":[{"bi":"vpuuid"}],"ms.vp_origin":[{"bi":"vporigin"}],"ms.vp_pos":[{"bi":"vpposition"}],"ms.Order_ID":[{"bi":"orderid"}],"ms.Order_Revenue":[{"bi":"orderrevenue"}],"ms.Currency":[{"bi":"currency"}],"ms.MS_Sales_Part_Number":[{"bi":"msssalespartnumber"}],"ms.MS_Sales_Part_Quantity":[{"bi":"mssalespartquantity"}],"ms.dwntype":[{"bi":"downloadtype"}],"ms.ActiveDwellTime":[{"bi":"activedwelltime"}],"route":[{"bi":"route"}],"ctrl":[{"bi":"ctrl"}],"ms.sitesec":[{"bi":"sitesec"}],"ms.pagetype":[{"bi":"pagetype"}],"ms.pgtemp":[{"bi":"pagetemplate"}],"ms.SurveyId":[{"bi":"surveyid"}],"ms.SurveyVersion":[{"bi":"surveyversion"}],"ms.SurveyQuestions":[{"bi":"surveyquestions"}],"ms.SurveyComments":[{"bi":"surveycomments"}]}}};
+  </script>
+  <script type="text/javascript">
+   if ($ &amp;&amp; $.bi)
+{
+$('html').attr('xmlns:bi', 'urn:schemas-microsoft-com:mscom:bi');
+$.bi.init(window.$biSettings);
+$.bi.dataConsumers.webtrends.WebTrends.dcsid = "dcsjwb9vb00000c932fd0rjc7_5p3t";
+$.bi.dataConsumers.webtrends.WebTrends.dcsGetId();
+}
+  </script>
+ </body>
+</html>
