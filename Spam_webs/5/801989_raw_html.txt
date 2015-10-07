@@ -1,967 +1,0 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
- <head>
-  <title>
-   Search for Traffic Violations
-  </title>
-  <link href="images/styletag.css" rel="stylesheet" type="text/css"/>
-  <script language="javascript" src="../scripts/validate.js">
-  </script>
-  <script language="javascript">
-   //function for validating all the controls
-function fnvalidate()
-{
-	//var strMobile=window.document.all["mobileTxt"].value;
-	if(window.document.all["rdRegNo"].checked==true)
-	{
-		if((window.document.all["txtRegNumber1"].value.length&lt;=1)||(window.document.all["txtRegNumber1"].value.length&gt;2))
-		{
-			alert("Please Enter Only Two Alphabets");
-			window.document.all["txtRegNumber1"].focus();
-			return false;
-		}
-		else if((window.document.all["txtRegNumber2"].value.length&lt;=1)||(window.document.all["txtRegNumber2"].value.length&gt;2))
-		{
-			alert("Please Enter Atleast Two Numbers");
-			window.document.all["txtRegNumber2"].focus();
-			return false;
-		}
-		else if(window.document.all["txtRegNumber3"].value.length&gt;2)
-		{
-			alert("More than 2 Alphabets are not Allowed");
-			window.document.all["txtRegNumber3"].focus();
-			return false;
-		}
-		else if((window.document.all["txtRegNumber4"].value.length&lt;1))
-		{
-			alert("Please Enter Atleast One Number");
-			window.document.all["txtRegNumber4"].focus();
-			return false;
-		}
-		else if(window.document.all["txtRegNumber4"].value.length&gt;4)
-		{
-			alert("More than 4 Numbers are not Allowed");
-			window.document.all["txtRegNumber4"].focus();
-			return false;
-		}
-		else if((window.document.all["txtRegNumber1"].value=="")||(window.document.all["txtRegNumber2"].value=="")||(window.document.all["txtRegNumber4"].value==""))
-		{
-			alert("Please Enter New Registration No");
-			window.document.all["txtRegNumber1"].focus();
-			return false;
-		}
-	}
-	else if(window.document.all["rdOldRegNo"].checked==true)
-	{
-		if((window.document.all["txtOldRegNumber1"].value.length&lt;1)||(window.document.all["txtOldRegNumber1"].value.length&gt;3))
-		{
-			alert("Please Enter Only One To Three Alphabets");
-			window.document.all["txtOldRegNumber1"].focus();
-			return false;
-		}
-		else if((window.document.all["txtOldRegNumber2"].value.length&lt;1)||(window.document.all["txtOldRegNumber2"].value.length&gt;4))
-		{
-			alert("Please Enter Only One To Four Numbers");
-			window.document.all["txtOldRegNumber2"].focus();
-			return false;
-		}
-		else if((window.document.all["txtOldRegNumber1"].value=="")&amp;&amp;(window.document.all["txtOldRegNumber2"].value==""))
-		{
-			alert("Please Enter Old Registration No");
-			window.document.all["txtRegNumber"].focus();
-			return false;
-		}
-	}
-	/*if(window.document.all["firstNameTxt"].value=="")
-	{
-		alert("Please Enter Name");
-		window.document.all["firstNameTxt"].focus();
-		return false;
-	}
-	else if(window.document.all["emailTxt"].value=="")
-	{
-		alert("Please Enter Your Email Id");
-		window.document.all["emailTxt"].focus();
-		return false;
-	}
-	else if(window.document.all["mobileTxt"].value=="")
-	{
-		alert("Please Enter Phone Number");
-		window.document.all["mobileTxt"].focus();
-		return false;
-	}
-	else 
-	if(window.document.all["mobileTxt"].value!="")
-	{
-		if(strMobile.length&lt;10)
-		{
-			alert("Please Give Valid Phone Number");
-			window.document.all["mobileTxt"].focus();
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}*/
-}
-
-//function to check for whitespace excluding null
-function noSpacesonlyNull(obj)
-{
-	obj.value = RTrim(obj.value);
-	obj.value = LTrim(obj.value);
-}
-//end function 
-
-//the right trim function
-function RTrim(VALUE)
-{
-	var w_space = String.fromCharCode(32);
-	var v_length = VALUE.length;
-	var strTemp = "";
-	if(v_length &lt; 0)
-	{
-		return"";
-	}
-	var iTemp = v_length -1;
-
-	while(iTemp &gt; -1)
-	{
-		if(VALUE.charAt(iTemp) == w_space)
-		{
-		}
-		else
-		{
-			strTemp = VALUE.substring(0,iTemp +1);
-			break;
-		}
-		iTemp = iTemp-1;
-
-	} //End While
-	return strTemp;
-
-} //End Function
-//The left trim function
-function LTrim(VALUE)
-{
-	var w_space = String.fromCharCode(32);
-	if(v_length &lt; 1)
-	{
-		return"";
-	}
-	var v_length = VALUE.length;
-	var strTemp = "";
-
-	var iTemp = 0;
-
-	while(iTemp &lt; v_length)
-	{
-		if(VALUE.charAt(iTemp) == w_space)
-		{
-		}
-		else
-		{
-			strTemp = VALUE.substring(iTemp,v_length);
-			break;
-		}
-		iTemp = iTemp + 1;
-	} //End While
-	return strTemp;
-} //End Function
-
-//end noWhiteSpace function
-  </script>
-  <script>
-   //**This function used for allowing entering only numbers and dots. 
-function numOnly()
-{
-    if(!((event.keyCode&gt;=48)&amp;&amp;(event.keyCode&lt;=57)))
-    {
-        event.keyCode=0;
-    }
-    else event.keyCode = event.keyCode;
-}
-function noSpace()
-{
-    if((event.keyCode==32))
-    {
-        event.keyCode=0;
-    }
-    else event.keyCode = event.keyCode;
-}
-
-function numCharsOnly()
-{
-    if(event.keyCode &gt;=97 &amp;&amp; event.keyCode&lt;=122)
-		event.keyCode = event.keyCode;
-		if((event.keyCode&gt;=48)&amp;&amp;(event.keyCode&lt;=57)||(event.keyCode&gt;=65)&amp;&amp;(event.keyCode&lt;=90)
-		||(event.keyCode&gt;=97)&amp;&amp;(event.keyCode&lt;=122)||(event.keyCode==95)||(event.keyCode==32)) 
-		event.keyCode = event.keyCode;
-		else
-		event.keyCode=0;
-}
-//validates the email id
-function fnvalidEmail()
-{
-	if(document.all["emailTxt"].value=="")
-	{
-		document.getElementById("divMsg").innerHTML="";
-		return false;
-	}
-	objMail = document.all["emailTxt"].value;
-	var posAtTheRate,varMailLen,bEmailIsOk,k,nCount,nDot,varMail,userid,nDomain,nUserId,domain;
-	nDomain=0;
-	nUserId=0;
-	nDot=0;
-	varMail="";
-	nCount=0; 
-	varMail=objMail; 
-	varMailLen = varMail.length;
-	if(varMailLen==0)
-	{
-		return true;
-	}
-	posAtTheRate = varMail.indexOf("@");
-	var strMail=objMail;
-	//var indexAt=strMail.indexOf("@");
-	//document.all["txtUserId"].value = userid;
-	userid = strMail.substring(0,posAtTheRate);
-	domain = strMail.substring(posAtTheRate+1,strMail.length)
-	bEmailIsOk=true;
-    
-	if(posAtTheRate==0)
-		bEmailIsOk=false;
-	else
-	{
-		if (posAtTheRate &gt; 0)
-		{
-			//if((varMail.charAt(varMailLen-4)=="." || varMail.charAt(varMailLen-3)==".") &amp;&amp; (varMail.charAt(posAtTheRate+1)!=".") )
-				bEmailIsOk = true;
-			//else
-				//bEmailIsOk = false;
-		}
-		else
-			bEmailIsOk=false;
-	}
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)=="@")
-		{
-			nCount=nCount+1;
-		}	    		
-	}
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)==" ")
-		{
-			bEmailIsOk=false;	    	
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{   	
-		if(varMail.charAt(k)=="(")
-		{
-			bEmailIsOk=false;    	
-		}
-	    	
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)==")")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)==";")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="!")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="$")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="%")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="^")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="&amp;")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="*")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="|")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="\\")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="/")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="?")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="&gt;")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="&lt;")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)=="~")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-  		if(varMail.charAt(k)==";")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)=="#")
-		{
-			bEmailIsOk=false;
-		}
-	}	
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)=="`")
-		{
-			bEmailIsOk=false;
-		}
-	}
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)==",")
-		{
-			bEmailIsOk=false;
-		}
-	}
-	for(k=0;k&lt;varMail.length;k++)
-	{
-		if(varMail.charAt(k)==".")
-		{
-			nDot=nDot+1;
-		}
-	}
-	for(k=0;k&lt;userid.length;k++)
-	{
-		if(userid.charAt(k)==".")
-		{
-			nUserId=nUserId+1;
-		}
-	}
-	for(k=0;k&lt;domain.length;k++)
-	{
-		if(domain.charAt(k)==".")
-		{
-			nDomain=nDomain+1;
-		}
-	}	
-	if(varMail.indexOf("0")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("1")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("2")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("3")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("4")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("5")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("6")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("7")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("8")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(varMail.indexOf("9")==0)
-	{
-		bEmailIsOk=false;
-	}    
-	if(varMail.indexOf(" ")&gt;0)
-	{
-		bEmailIsOk=false;
-	}		
-	if(varMail.indexOf(".")==0)
-	{
-		bEmailIsOk=false;
-	}
-	if(userid.indexOf(".")==(userid.length-1))
-	{
-		bEmailIsOk=false;
-	}
-	if(userid.indexOf("-")==(userid.length-1))
-	{
-		bEmailIsOk=false;
-	}
-	if(userid.indexOf("_")==(userid.length-1))
-	{
-		bEmailIsOk=false;
-	}
-	if(domain.charAt(domain.length-1)==".")
-	{		
-		bEmailIsOk=false;
-	}
-
-	if(nUserId!=0)
-		bEmailIsOk=false;
-
-	if(nDomain&gt;2)
-		bEmailIsOk=false;
-	    
-	if((nCount == 0) || (nCount == 2))
-		bEmailIsOk=false;
-    
-    
-	if (bEmailIsOk == false)
-	{
-		document.getElementById("divMsg").innerText="E-mail Id is not in Correct Format!";
-		return false; 
-	}
-	else
-	{
-		document.getElementById("divMsg").innerText="";
-		return true;
-	}
-}
-  </script>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
- </head>
- <body leftmargin="0" topmargin="0">
-  <div id="WidthSet">
-   <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-   <link href="../Images/BangaloreOneStyle.css" rel="stylesheet" type="text/css"/>
-   <link rel="stylesheet" type="">
-    =   "   t   e   x   t   /   c   s   s   "       h   r   e   f   =   "   .   .   /   I   m   a   g   e   s   /   M   e   n   u   S   t   y   l   e   .   c   s   s   "       /   &gt;      
-   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   m   a   i   n   m   e   n   u   .   j   s   "   &gt;   /   s   c   r   i   p   t   &gt;      
-   l   i   n   k       r   e   l   =   "   s   h   o   r   t   c   u   t       i   c   o   n   "       h   r   e   f   =   "   .   .   /   I   m   a   g   e   s   /   f   a   v   i   c   o   n   .   i   c   o   "       /   &gt;      
-   !   -   -   [   i   f       l   t   e       I   E       6   ]   &gt;          
-   	                   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   u   n   i   t   p   n   g   f   i   x   .   j   s   "   &gt;   /   s   c   r   i   p   t   &gt;      
-                   !   [   e   n   d   i   f   ]   -   -   &gt;      
-   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   j   q   u   e   r   y   -   1   .   3   .   2   .   m   i   n   .   j   s   "   &gt;   /   s   c   r   i   p   t   &gt;      
-   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   j   q   u   e   r   y   -   u   i   .   m   i   n   .   j   s   "   &gt;   /   s   c   r   i   p   t   &gt;      
-   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "   &gt;      
-                                   $   (   d   o   c   u   m   e   n   t   )   .   r   e   a   d   y   (   f   u   n   c   t   i   o   n   (   )   {      
-   	                                   $   (   "   #   f   e   a   t   u   r   e   d       &gt;       u   l   "   )   .   t   a   b   s   (   {   f   x   :   {   o   p   a   c   i   t   y   :       "   t   o   g   g   l   e   "   }   }   )   .   t   a   b   s   (   "   r   o   t   a   t   e   "   ,       1   0   0   0   0   ,       t   r   u   e   )   ;      
-                                   }   )   ;      
-                                      
-                                   f   u   n   c   t   i   o   n       M   M   _   r   e   l   o   a   d   P   a   g   e   (   i   n   i   t   )       {           /   /   r   e   l   o   a   d   s       t   h   e       w   i   n   d   o   w       i   f       N   a   v   4       r   e   s   i   z   e   d      
-           i   f       (   i   n   i   t   =   =   t   r   u   e   )       w   i   t   h       (   n   a   v   i   g   a   t   o   r   )       {   i   f       (   a   p   p   N   a   m   e   =   =   "   N   e   t   s   c   a   p   e   "   )       {      
-                   d   o   c   u   m   e   n   t   .   M   M   _   p   g   W   =   i   n   n   e   r   W   i   d   t   h   ;       d   o   c   u   m   e   n   t   .   M   M   _   p   g   H   =   i   n   n   e   r   H   e   i   g   h   t   ;       o   n   r   e   s   i   z   e   =   M   M   _   r   e   l   o   a   d   P   a   g   e   ;       }   }      
-           e   l   s   e       i   f       (   i   n   n   e   r   W   i   d   t   h   !   =   d   o   c   u   m   e   n   t   .   M   M   _   p   g   W       |   |       i   n   n   e   r   H   e   i   g   h   t   !   =   d   o   c   u   m   e   n   t   .   M   M   _   p   g   H   )       l   o   c   a   t   i   o   n   .   r   e   l   o   a   d   (   )   ;      
-   }      
-      
-   /   s   c   r   i   p   t   &gt;      
-   d   i   v       i   d   =   "   H   e   a   d   e   r   "   &gt;      
-   /   d   i   v   &gt;      
-   d   i   v       i   d   =   "   N   a   v   "   &gt;      
-   	   t   a   b   l   e       c   l   a   s   s   =   "   T   a   b   l   e   W   i   d   t   h   "       s   t   y   l   e   =   "   h   e   i   g   h   t   :       1   6   p   x   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   t   r   &gt;      
-   	   	   	   t   d   &gt;      
-   	   	   	   	   t   a   b   l   e       s   t   y   l   e   =   "   w   i   d   t   h   :       9   5   0   p   x   ;       p   a   d   d   i   n   g   -   l   e   f   t   :       1   0   p   x   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   t   d   &gt;      
-   	   	   	   	   	   	   	   d   i   v       c   l   a   s   s   =   "   m   e   n   u   "   &gt;      
-   	   	   	   	   	   	   	   	   u   l       i   d   =   "   m   a   i   n   m   e   n   u   "   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   d   e   f   a   u   l   t   .   a   s   p   x   "   &gt;   H   o   m   e   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   l   o   g   i   n   .   a   s   p   x   "   &gt;   L   o   g   i   n   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   r   e   g   i   s   t   r   a   t   i   o   n   .   a   s   p   x   "   &gt;   R   e   g   i   s   t   e   r   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   b   O   n   e   H   e   l   p   /   H   e   l   p   _   m   a   i   n   .   a   s   p   x   "   &gt;   H   e   l   p   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   u   s   i   t   o   C   t   z   n   L   i   n   k   s   .   a   s   p   x   "   &gt;   B       2       C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   G   o   v   t   o   C   i   t   i   z   e   n   L   i   n   k   s   .   a   s   p   x   "   &gt;   G       2       C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   S   i   t   e   M   a   p   .   a   s   p   x   "   &gt;   S   i   t   e       M   a   p   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   l   o   g   i   n   .   a   s   p   x   "   &gt;   L   o   g   i   n   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   u   s   i   t   o   C   t   z   n   L   i   n   k   s   .   a   s   p   x   "   &gt;   B       2       C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   A   i   r   t   e   l   -   i   n   f   o   .   a   s   p   x   "   &gt;   A   i   r   t   e   l   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   i   n   g   v   y   s   y   a   -   i   n   f   o   .   a   s   p   x   "   &gt;   E   x   i   d   e       L   i   f   e       I   n   s   u   r   a   n   c   e   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   t   t   l   -   i   n   f   o   .   a   s   p   x   "   &gt;   T   a   t   a       T   e   l   e       S   e   r   v   i   c   e   s   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   V   o   d   a   f   o   n   e   -   i   n   f   o   .   a   s   p   x   "   &gt;   V   o   d   a   f   o   n   e       P   o   s   t   p   a   i   d       B   i   l   l   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   A   C   T   -   i   n   f   o   .   a   s   p   x   "   &gt;   A   C   T       B   r   o   a   d   b   a   n   d   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   N   M   S   -   i   n   f   o   .   a   s   p   x   "   &gt;   N   M   S   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   R   e   l   i   a   n   c   e   -   i   n   f   o   .   a   s   p   x   "   &gt;   R   e   l   i   a   n   c   e   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   S   p   i   c   e   -   i   n   f   o   .   a   s   p   x   "   &gt;   I   d   e   a   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   V   y   a   s   a   r   a   j   a   -   i   n   f   o   .   a   s   p   x   "   &gt;   V   y   a   s   a   r   a   j   a       M   a   t   t   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   A   i   r   c   e   l   -   i   n   f   o   .   a   s   p   x   "   &gt;   A   i   r   c   e   l   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   M   T   S   _   i   n   f   o   .   a   s   p   x   "   &gt;   M   T   S   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   /   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   G   o   v   t   o   C   i   t   i   z   e   n   L   i   n   k   s   .   a   s   p   x   "   &gt;   G       2       C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   b   w   s   s   b   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   W   S   S   B   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   b   e   s   c   o   m   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   E   S   C   O   M   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   b   m   p   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   B   M   P   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   b   p   s   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   P   S   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   b   s   n   l   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   S   N   L   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   r   t   o   -   i   n   f   o   .   a   s   p   x   "   &gt;   R   T   O   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   C   e   l   l   O   n   e   -   i   n   f   o   .   a   s   p   x   "   &gt;   C   e   l   l   O   n   e   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   R   p   o   a   r   n   -   i   n   f   o   .   a   s   p   x   "   &gt;   R   P   O                    G   e   n   e   r   a   t   e       A   R   N   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   K   S   R   T   C   _   i   n   f   o   .   a   s   p   x   "   &gt;   K   S   R   T   C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   H   o   m   e   D   e   p   t   -   i   n   f   o   .   a   s   p   x   "   &gt;   H   O   M   E   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   W   F   D   -   i   n   f   o   .   a   s   p   x   "   &gt;   K   a   r   n   a   t   a   k   a       B   u   i   l   d   i   n   g       a   n   d       o   t   h   e   r       C   o   n   s   t   r   u   c   t   i   o   n       W   o   r   k   e   r   s          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   W   e   l   f   a   r   e       B   o   a   r   d       /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   P   U   C   -   i   n   f   o   .   a   s   p   x   "   &gt;   P   U   C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   U   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   a   n   g   a   l   o   r   e       U   n   i   v   e   r   s   i   t   y   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   P   V   S   -   i   n   f   o   .   a   s   p   x   "   &gt;   P   o   l   i   c   e       V   e   r   i   f   i   c   a   t   i   o   n   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   E   P   r   o   c   -   i   n   f   o   .   a   s   p   x   "   &gt;   E   -   P   r   o   c   u   r   e   m   e   n   t   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   M   T   C   -   i   n   f   o   .   a   s   p   x   "   &gt;   B   M   T   C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   K   t   s   -   i   n   f   o   .   a   s   p   x   "   &gt;   E   n   d   o   w   m   e   n   t       D   e   p   a   r   t   m   e   n   t   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   C   a   l   a   m   i   t   y   -   i   n   f   o   .   a   s   p   x   "   &gt;   C   a   l   a   m   i   t   y       R   e   l   i   e   f       F   u   n   d   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   U   i   d   a   i   _   i   n   f   o   .   a   s   p   x   "   &gt;   U   I   D   A   I   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   e   p   i   c   .   a   s   p   x   "   &gt;   E   P   I   C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   s   r   o   -   i   n   f   o   .   a   s   p   x   "   &gt;   S   t   a   m   p       a   n   d       R   e   g   i   s   t   r   a   t   i   o   n   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   D   o   l   -   i   n   f   o   .   a   s   p   x   "   &gt;   D   e   p   a   r   t   m   e   n   t       O   f       L   a   b   o   u   r   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   D   A   _   i   n   f   o   .   a   s   p   x   "   &gt;   B   D   A   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   R   a   t   i   o   n   C   a   r   d   _   i   n   f   o   .   a   s   p   x   "   &gt;   F   o   o   d       a   n   d       C   i   v   i   l       S   u   p   p   l   i   e   s   -   R   a   t   i   o   n       C   a   r   d   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   C   S   C   _   i   n   f   o   .   a   s   p   x   "   &gt;   C   S   C   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   K   H   B   _   i   n   f   o   .   a   s   p   x   "   &gt;   K   H   B   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   b   O   n   e   H   e   l   p   /   H   e   l   p   _   m   a   i   n   .   a   s   p   x   "   &gt;   H   e   l   p   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   S   i   t   e   M   a   p   .   a   s   p   x   "   &gt;   S   i   t   e       M   a   p   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   l   i       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   9   p   x   ;       b   o   r   d   e   r   -   l   e   f   t   :       s   o   l   i   d       1   p   x       #   9   3   C   8   F   D   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   #   "   &gt;   C   o   n   t   a   c   t   s   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   B   1   c   o   n   t   a   c   t   l   i   n   k   s   .   a   s   p   x   "   &gt;   K   e   y       C   o   n   t   a   c   t   s   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   L   e   g   a   l   C   o   n   t   e   n   t   s   .   a   s   p   x   "   &gt;   L   e   g   a   l       C   o   n   t   e   n   t   s   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   S   e   c   u   r   i   t   y   C   o   n   t   e   n   t   s   .   a   s   p   x   "   &gt;   S   e   c   u   r   i   t   y       C   o   n   t   e   n   t   s   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   u   l   &gt;      
-   	   	   	   	   	   	   	   	   	   /   l   i   &gt;      
-   	   	   	   	   	   	   	   	   /   u   l   &gt;      
-   	   	   	   	   	   	   	   /   d   i   v   &gt;      
-   	   	   	   	   	   	   	   s   c   r   i   p   t       t   y   p   e   =   "   t   e   x   t   /   j   s   c   r   i   p   t   "   &gt;      
-                                                                                                                                   i   r   m   e   n   u   (   )   ;      
-   	   	   	   	   	   	   	   /   s   c   r   i   p   t   &gt;      
-   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   t   d       a   l   i   g   n   =   "   c   e   n   t   e   r   "       s   t   y   l   e   =   "   w   i   d   t   h   :       1   5   0   p   x   ;       h   e   i   g   h   t   :       3   6   p   x   "   &gt;      
-   	   	   	   	   	   	   	   d   i   v   &gt;      
-   	   	   	   	   	   	   	   	   t   a   b   l   e       s   t   y   l   e   =   "   W   I   D   T   H   :       1   0   0   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   t   d       c   o   l   s   p   a   n   =   "   3   "       h   e   i   g   h   t   =   "   3   "   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   t   d       a   l   i   g   n   =   "   c   e   n   t   e   r   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   h   t   t   p   :   /   /   w   w   w   .   f   a   c   e   b   o   o   k   .   c   o   m   /   p   a   g   e   s   /   B   a   n   g   a   l   o   r   e   -   O   n   e   -   O   n   e   -   S   t   o   p   -   N   o   n   -   S   t   o   p   -   C   i   t   i   z   e   n   -   S   e   r   v   i   c   e   s   /   3   9   4   1   3   3   4   6   7   3   1   0   8   6   5   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   i   m   g       a   l   t   =   "   F   a   c   e   b   o   o   k   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   f   B   o   o   k   _   i   c   o   n   .   g   i   f   "       s   t   y   l   e   =   "   B   O   R   D   E   R   -   T   O   P   -   W   I   D   T   H   :       0   p   x   ;       B   O   R   D   E   R   -   L   E   F   T   -   W   I   D   T   H   :       0   p   x   ;       B   O   R   D   E   R   -   B   O   T   T   O   M   -   W   I   D   T   H   :       0   p   x   ;       B   O   R   D   E   R   -   R   I   G   H   T   -   W   I   D   T   H   :       0   p   x   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   t   d       a   l   i   g   n   =   "   l   e   f   t   "       c   o   l   s   p   a   n   =   "   2   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   a       h   r   e   f   =   "   h   t   t   p   s   :   /   /   t   w   i   t   t   e   r   .   c   o   m   /   s   h   a   r   e   "   &gt;   i   m   g       a   l   t   =   "   T   w   i   t   t   e   r   "       s   r   c   =   "   .   .   /   I   m   a   g   e   s   /   t   w   i   t   t   e   r   _   i   c   o   n   .   g   i   f   "       s   t   y   l   e   =   "   b   o   r   d   e   r   :       0   "       /   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   a   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   /   d   i   v   &gt;      
-   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   /   t   d   &gt;      
-   	   	   /   t   r   &gt;      
-   	   /   t   a   b   l   e   &gt;      
-   /   d   i   v   &gt;      
-   d   i   v       a   l   i   g   n   =   "   c   e   n   t   e   r   "   &gt;      
-   	   t   a   b   l   e       s   t   y   l   e   =   "   w   i   d   t   h   :       9   8   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   t   r       s   t   y   l   e   =   "   v   e   r   t   i   c   a   l   -   a   l   i   g   n   :       t   o   p   "   &gt;      
-   	   	   	   t   d       a   l   i   g   n   =   "   l   e   f   t   "   &gt;      
-   	   	   	   	   a       h   r   e   f   =   "   j   a   v   a   s   c   r   i   p   t   :   w   i   n   d   o   w   .   h   i   s   t   o   r   y   .   b   a   c   k   (   )   "       c   l   a   s   s   =   "   H   y   p   e   r   L   i   n   k   "   &gt;   B   a   c   k       /   a   &gt;      
-   	   	   	   /   t   d   &gt;      
-   	   	   	   t   d       a   l   i   g   n   =   "   r   i   g   h   t   "   &gt;      
-   	   	   	   	   a       c   l   a   s   s   =   "   H   y   p   e   r   L   i   n   k   "       i   d   =   "   s   e   s   s   L   o   g   "       h   r   e   f   =   "   /   l   o   g   i   n   .   a   s   p   x   "   &gt;      
-   	   	   	   	   	   L   o   g   i   n      
-   	   	   	   	   /   a   &gt;   /   A   &gt;      
-   	   	   	   /   t   d   &gt;      
-   	   	   /   t   r   &gt;      
-   	   /   t   a   b   l   e   &gt;      
-   /   d   i   v   &gt;      
-      
-   	   	   !   -   -       T   h   e       l   i   n   k       h   e   a   d   e   r       u   s   e   r       c   o   n   t   r   o   l       i   s       p   l   a   c   e   d       h   e   r   e       (   s   t   a   r   t   )       /   /   -   -   &gt;      
-   	   	   !   -   -       T   h   e       l   i   n   k       h   e   a   d   e   r       u   s   e   r       c   o   n   t   r   o   l       i   s       p   l   a   c   e   d       h   e   r   e       (   e   n   d   )       /   /   -   -   &gt;      
-   	   	   t   a   b   l   e       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   1   0   0   %   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   t   r   &gt;      
-   	   	   	   	   t   d       v   A   l   i   g   n   =   "   t   o   p   "       h   e   i   g   h   t   =   "   1   0   0   %   "   &gt;      
-   	   	   	   	   	   t   a   b   l   e       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   1   0   0   %   "       b   g   C   o   l   o   r   =   "   #   5   c   8   e   d   1   "       b   o   r   d   e   r   =   "   0   "       &gt;      
-   	   	   	   	   	   	   !   -   -       T   h   e       i   m   a   g   e       h   e   a   d   e   r       u   s   e   r       c   o   n   t   r   o   l       i   s       p   l   a   c   e   d       h   e   r   e       (   s   t   a   r   t   )       /   /   -   -   &gt;      
-   	   	   	   	   	   	   !   -   -       T   h   e       i   m   a   g   e       h   e   a   d   e   r       u   s   e   r       c   o   n   t   r   o   l       i   s       p   l   a   c   e   d       h   e   r   e       (   e   n   d   )       /   /   -   -   &gt;      
-   	   	   	   	   	   	   t   r       b   g   C   o   l   o   r   =   "   #   f   f   f   f   f   f   "   &gt;      
-   	   	   	   	   	   	   	   t   d       v   A   l   i   g   n   =   "   t   o   p   "       c   o   l   S   p   a   n   =   "   3   "   &gt;      
-   	   	   	   	   	   	   	   	   t   a   b   l   e       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   1   0   0   %   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   t   d       w   i   d   t   h   =   "   1   0   0   %   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   t   a   b   l   e       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   1   0   0   %   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   t   r       v   A   l   i   g   n   =   "   t   o   p   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   a   b   l   e       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   1   0   0   %   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       v   A   l   i   g   n   =   "   t   o   p   "       w   i   d   t   h   =   "   1   0   0   %   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   f   o   r   m       n   a   m   e   =   "   F   o   r   m   1   "       m   e   t   h   o   d   =   "   p   o   s   t   "       a   c   t   i   o   n   =   "   B   P   S   F   i   n   e   D   e   t   a   i   l   s   .   a   s   p   x   "       i   d   =   "   F   o   r   m   1   "       o   n   s   u   b   m   i   t   =   "   r   e   t   u   r   n       f   n   v   a   l   i   d   a   t   e   (   )   ;   "   &gt;      
-   i   n   p   u   t       t   y   p   e   =   "   h   i   d   d   e   n   "       n   a   m   e   =   "   _   _   E   V   E   N   T   T   A   R   G   E   T   "       v   a   l   u   e   =   "   "       /   &gt;      
-   i   n   p   u   t       t   y   p   e   =   "   h   i   d   d   e   n   "       n   a   m   e   =   "   _   _   E   V   E   N   T   A   R   G   U   M   E   N   T   "       v   a   l   u   e   =   "   "       /   &gt;      
-   i   n   p   u   t       t   y   p   e   =   "   h   i   d   d   e   n   "       n   a   m   e   =   "   _   _   V   I   E   W   S   T   A   T   E   "       v   a   l   u   e   =   "   d   D   w   t   N   D   g   3   O   D   A   z   M   D   U   w   O   3   Q   8   O   2   w   8   a   T   w   z   P   j   s   +   O   2   w   8   d   D   w   7   b   D   x   p   P   D   E   +   O   2   k   8   M   j   4   7   a   T   w   z   P   j   t   p   P   D   Q   +   O   2   k   8   N   T   4   7   P   j   t   s   P   H   Q   8   c   D   x   w   P   G   w   8   Q   2   h   l   Y   2   t   l   Z   D   s   +   O   2   w   8   b   z   x   0   P   j   s   +   P   j   s   +   O   z   s   +   O   3   Q   8   c   D   x   w   P   G   w   8   Q   m   F   j   a   0   N   v   b   G   9   y   O   1   J   l   Y   W   R   P   b   m   x   5   O   1   8   h   U   0   I   7   P   j   t   s   P   D   I   8   V   2   h   p   d   G   U   +   O   2   8   8   Z   j   4   7   a   T   w   4   P   j   s   +   P   j   s   +   O   z   s   +   O   3   Q   8   c   D   x   w   P   G   w   8   Q   m   F   j   a   0   N   v   b   G   9   y   O   1   J   l   Y   W   R   P   b   m   x   5   O   1   8   h   U   0   I   7   P   j   t   s   P   D   I   8   V   2   h   p   d   G   U   +   O   2   8   8   Z   j   4   7   a   T   w   4   P   j   s   +   P   j   s   +   O   z   s   +   O   3   Q   8   c   D   x   w   P   G   w   8   Q   m   F   j   a   0   N   v   b   G   9   y   O   1   J   l   Y   W   R   P   b   m   x   5   O   1   8   h   U   0   I   7   P   j   t   s   P   D   I   8   V   2   h   p   d   G   U   +   O   2   8   8   Z   j   4   7   a   T   w   4   P   j   s   +   P   j   s   +   O   z   s   +   O   3   Q   8   c   D   x   w   P   G   w   8   Q   m   F   j   a   0   N   v   b   G   9   y   O   1   J   l   Y   W   R   P   b   m   x   5   O   1   8   h   U   0   I   7   P   j   t   s   P   D   I   8   V   2   h   p   d   G   U   +   O   2   8   8   Z   j   4   7   a   T   w   4   P   j   s   +   P   j   s   +   O   z   s   +   O   z   4   +   O   z   4   +   O   2   w   8   c   m   R   S   Z   W   d   O   b   z   t   y   Z   E   9   s   Z   F   J   l   Z   0   5   v   O   3   J   k   T   2   x   k   U   m   V   n   T   m   8   7   P   j   5   6   p   u   J   F   3   s   C   L   3   v   1   e   x   T   5   u   Q   j   6   Y   L   4   Q   R   c   A   =   =   "       /   &gt;      
-      
-   s   c   r   i   p   t       l   a   n   g   u   a   g   e   =   "   j   a   v   a   s   c   r   i   p   t   "       t   y   p   e   =   "   t   e   x   t   /   j   a   v   a   s   c   r   i   p   t   "   &gt;      
-   !   -   -      
-   	   f   u   n   c   t   i   o   n       _   _   d   o   P   o   s   t   B   a   c   k   (   e   v   e   n   t   T   a   r   g   e   t   ,       e   v   e   n   t   A   r   g   u   m   e   n   t   )       {      
-   	   	   v   a   r       t   h   e   f   o   r   m   ;      
-   	   	   i   f       (   w   i   n   d   o   w   .   n   a   v   i   g   a   t   o   r   .   a   p   p   N   a   m   e   .   t   o   L   o   w   e   r   C   a   s   e   (   )   .   i   n   d   e   x   O   f   (   "   m   i   c   r   o   s   o   f   t   "   )       &gt;       -   1   )       {      
-   	   	   	   t   h   e   f   o   r   m       =       d   o   c   u   m   e   n   t   .   F   o   r   m   1   ;      
-   	   	   }      
-   	   	   e   l   s   e       {      
-   	   	   	   t   h   e   f   o   r   m       =       d   o   c   u   m   e   n   t   .   f   o   r   m   s   [   "   F   o   r   m   1   "   ]   ;      
-   	   	   }      
-   	   	   t   h   e   f   o   r   m   .   _   _   E   V   E   N   T   T   A   R   G   E   T   .   v   a   l   u   e       =       e   v   e   n   t   T   a   r   g   e   t   .   s   p   l   i   t   (   "   $   "   )   .   j   o   i   n   (   "   :   "   )   ;      
-   	   	   t   h   e   f   o   r   m   .   _   _   E   V   E   N   T   A   R   G   U   M   E   N   T   .   v   a   l   u   e       =       e   v   e   n   t   A   r   g   u   m   e   n   t   ;      
-   	   	   t   h   e   f   o   r   m   .   s   u   b   m   i   t   (   )   ;      
-   	   }      
-   /   /       -   -   &gt;      
-   /   s   c   r   i   p   t   &gt;      
-      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   A   B   L   E       c   e   l   l   S   p   a   c   i   n   g   =   "   0   "       c   e   l   l   P   a   d   d   i   n   g   =   "   0   "       w   i   d   t   h   =   "   9   0   %   "       a   l   i   g   n   =   "   c   e   n   t   e   r   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D   &gt;   i   n   p   u   t       n   a   m   e   =   "   U   s   r   c   o   u   n   t   "       i   d   =   "   U   s   r   c   o   u   n   t   "       t   y   p   e   =   "   h   i   d   d   e   n   "       /   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R       a   l   i   g   n   =   "   c   e   n   t   e   r   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       b   g   C   o   l   o   r   =   "   #   f   3   f   8   f   a   "       h   e   i   g   h   t   =   "   2   0   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   a   b   l   e       w   i   d   t   h   =   "   3   0   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       a   l   i   g   n   =   "   c   e   n   t   e   r   "       c   o   l   S   p   a   n   =   "   2   "   &gt;   b   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   "       c   o   l   o   r   =   "   #   0   0   6   6   f   f   "       s   i   z   e   =   "   4   "   &gt;   S   e   a   r   c   h       f   o   r          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   r   a   f   f   i   c       V   i   o   l   a   t   i   o   n   s   /   F   O   N   T   &gt;   /   b   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   m   i   d   d   l   e   "       c   o   l   s   p   a   n   =   "   2   "       a   l   i   g   n   =   "   l   e   f   t   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "       h   e   i   g   h   t   =   "   1   7   "   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   ,       A   r   i   a   l   ,       H   e   l   v   e   t   i   c   a   ,       s   a   n   s   -   s   e   r   i   f   "       c   o   l   o   r   =   "   #   f   f   0   0   0   0   "       s   i   z   e   =   "   1   "   &gt;   S   T   R   O   N   G   &gt;   *          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   M   a   n   d   a   t   o   r   y       f   i   e   l   d   s   /   S   T   R   O   N   G   &gt;   /   F   O   N   T   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       n   o   W   r   a   p       w   i   d   t   h   =   "   2   5   %   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "   &gt;   b   &gt;   F   O   N   T       f   a   c   e   =   "   A   r   i   a   l   "       c   o   l   o   r   =   "   #   f   f   0   0   0   0   "       s   i   z   e   =   "   2   "   &gt;   *   /   F   O   N   T   &gt;   /   b   &gt;   s   p   a   n   &gt;   b   &gt;   f   o   n   t       c   o   l   o   r   =   "   #   0   0   6   6   F   F   "       s   i   z   e   =   "   2   "   &gt;   i   n   p   u   t       i   d   =   "   r   d   R   e   g   N   o   "       t   y   p   e   =   "   r   a   d   i   o   "       n   a   m   e   =   "   B   P   S   F   i   n   e   C   o   l   l   "       v   a   l   u   e   =   "   r   d   R   e   g   N   o   "       c   h   e   c   k   e   d   =   "   c   h   e   c   k   e   d   "       o   n   c   l   i   c   k   =   "   _   _   d   o   P   o   s   t   B   a   c   k   (   '   r   d   R   e   g   N   o   '   ,   '   '   )   "       l   a   n   g   u   a   g   e   =   "   j   a   v   a   s   c   r   i   p   t   "       /   &gt;   l   a   b   e   l       f   o   r   =   "   r   d   R   e   g   N   o   "   &gt;   N   e   w       R   e   g       N   o       :   /   l   a   b   e   l   &gt;   /   f   o   n   t   &gt;   /   b   &gt;   /   s   p   a   n   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       n   o   W   r   a   p       w   i   d   t   h   =   "   4   2   6   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "   &gt;   i   n   p   u   t       n   a   m   e   =   "   t   x   t   R   e   g   N   u   m   b   e   r   1   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   2   "       i   d   =   "   t   x   t   R   e   g   N   u   m   b   e   r   1   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   C   h   a   r   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   i   n   p   u   t       n   a   m   e   =   "   t   x   t   R   e   g   N   u   m   b   e   r   2   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   2   "       i   d   =   "   t   x   t   R   e   g   N   u   m   b   e   r   2   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   n   u   m   e   r   i   c   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   -      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   i   n   p   u   t       n   a   m   e   =   "   t   x   t   R   e   g   N   u   m   b   e   r   3   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   2   "       i   d   =   "   t   x   t   R   e   g   N   u   m   b   e   r   3   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   C   h   a   r   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   -      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   i   n   p   u   t       n   a   m   e   =   "   t   x   t   R   e   g   N   u   m   b   e   r   4   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   4   "       i   d   =   "   t   x   t   R   e   g   N   u   m   b   e   r   4   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   n   u   m   e   r   i   c   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   (   e   .   g   .          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   K   A   0   5   -   M   F   -   4   1   4   4   )   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       n   o   W   r   a   p       w   i   d   t   h   =   "   2   5   %   "       b   g   C   o   l   o   r   =   "   #   f   3   f   8   f   a   "   &gt;   s   p   a   n   &gt;   b   &gt;   f   o   n   t       c   o   l   o   r   =   "   #   0   0   6   6   F   F   "       s   i   z   e   =   "   2   "   &gt;   i   n   p   u   t       i   d   =   "   r   d   O   l   d   R   e   g   N   o   "       t   y   p   e   =   "   r   a   d   i   o   "       n   a   m   e   =   "   B   P   S   F   i   n   e   C   o   l   l   "       v   a   l   u   e   =   "   r   d   O   l   d   R   e   g   N   o   "       o   n   c   l   i   c   k   =   "   _   _   d   o   P   o   s   t   B   a   c   k   (   '   r   d   O   l   d   R   e   g   N   o   '   ,   '   '   )   "       l   a   n   g   u   a   g   e   =   "   j   a   v   a   s   c   r   i   p   t   "       /   &gt;   l   a   b   e   l       f   o   r   =   "   r   d   O   l   d   R   e   g   N   o   "   &gt;         O   l   d       R   e   g   i   s   t   r   a   t   i   o   n       N   o       :   /   l   a   b   e   l   &gt;   /   f   o   n   t   &gt;   /   b   &gt;   /   s   p   a   n   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       w   i   d   t   h   =   "   4   2   6   "       b   g   C   o   l   o   r   =   "   #   f   3   f   8   f   a   "   &gt;   i   n   p   u   t       n   a   m   e   =   "   t   x   t   O   l   d   R   e   g   N   u   m   b   e   r   1   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   3   "       i   d   =   "   t   x   t   O   l   d   R   e   g   N   u   m   b   e   r   1   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   C   h   a   r   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   -      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   i   n   p   u   t       n   a   m   e   =   "   t   x   t   O   l   d   R   e   g   N   u   m   b   e   r   2   "       t   y   p   e   =   "   t   e   x   t   "       m   a   x   l   e   n   g   t   h   =   "   4   "       i   d   =   "   t   x   t   O   l   d   R   e   g   N   u   m   b   e   r   2   "       t   a   b   i   n   d   e   x   =   "   1   "       o   n   k   e   y   p   r   e   s   s   =   "   n   u   m   e   r   i   c   (   )   ;   "       s   t   y   l   e   =   "   T   E   X   T   -   T   R   A   N   S   F   O   R   M   :       u   p   p   e   r   c   a   s   e   "       /   &gt;   (   e   .   g   .          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   C   A   R   -   3   2   1   4   )   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   !   -   -   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   m   i   d   d   l   e   "       a   l   i   g   n   =   "   l   e   f   t   "       w   i   d   t   h   =   "   3   5   %   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "       h   e   i   g   h   t   =   "   1   0   "   &gt;   B   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   "       c   o   l   o   r   =   "   #   0   0   6   6   f   f   "       s   i   z   e   =   "   2   "   &gt;   N   a   m   e       :   /   F   O   N   T   &gt;   /   B   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   t   o   p   "       w   i   d   t   h   =   "   2   2   6   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "   &gt;   i   n   p   u   t       n   a   m   e   =   "   f   i   r   s   t   N   a   m   e   T   x   t   "       i   d   =   "   f   i   r   s   t   N   a   m   e   T   x   t   "       t   y   p   e   =   "   t   e   x   t   "       o   n   k   e   y   p   r   e   s   s   =   "   n   u   m   C   h   a   r   s   O   n   l   y   (   )   "       s   t   y   l   e   =   "   B   O   R   D   E   R   -   R   I   G   H   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   T   O   P   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   L   E   F   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   B   O   T   T   O   M   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   "       m   a   x   l   e   n   g   t   h   =   "   1   5   "       s   i   z   e   =   "   3   0   "       a   u   t   o   c   o   m   p   l   e   t   e   =   "   o   f   f   "       t   a   b   i   n   d   e   x   =   "   3   "       /   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   m   i   d   d   l   e   "       a   l   i   g   n   =   "   l   e   f   t   "       w   i   d   t   h   =   "   3   5   %   "       b   g   C   o   l   o   r   =   "   #   f   3   f   8   f   a   "       h   e   i   g   h   t   =   "   1   0   "   &gt;   B   &gt;   F   O   N   T       f   a   c   e   =   "   A   r   i   a   l   "       s   i   z   e   =   "   2   "   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   "       c   o   l   o   r   =   "   #   0   0   6   6   f   f   "       s   i   z   e   =   "   2   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   E   m   a   i   l       I   D       :   /   F   O   N   T   &gt;   F   O   N   T       f   a   c   e   =   "   A   r   i   a   l   "       c   o   l   o   r   =   "   #   f   f   f   f   f   f   "       s   i   z   e   =   "   2   "   &gt;   /   F   O   N   T   &gt;   /   F   O   N   T   &gt;   /   B   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   t   o   p   "       w   i   d   t   h   =   "   2   2   7   "       b   g   C   o   l   o   r   =   "   #   f   3   f   8   f   a   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   a   b   l   e       h   e   i   g   h   t   =   "   1   0   0   %   "       w   i   d   t   h   =   "   1   0   0   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       w   i   d   t   h   =   "   1   5   0   "   &gt;   i   n   p   u   t       n   a   m   e   =   "   e   m   a   i   l   T   x   t   "       i   d   =   "   e   m   a   i   l   T   x   t   "       t   y   p   e   =   "   t   e   x   t   "       o   n   b   l   u   r   =   "   n   o   S   p   a   c   e   s   o   n   l   y   N   u   l   l   (   t   h   i   s   )   ;   f   n   v   a   l   i   d   E   m   a   i   l   (   t   h   i   s   )   "       s   t   y   l   e   =   "   B   O   R   D   E   R   -   R   I   G   H   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   T   O   P   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   L   E   F   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   B   O   T   T   O   M   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   "       m   a   x   l   e   n   g   t   h   =   "   5   0   "       s   i   z   e   =   "   3   0   "       a   u   t   o   c   o   m   p   l   e   t   e   =   "   o   f   f   "       t   a   b   i   n   d   e   x   =   "   4   "       /   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   d   i   v       i   d   =   "   d   i   v   M   s   g   "       s   t   y   l   e   =   "   C   O   L   O   R   :       r   e   d   "       a   l   i   g   n   =   "   l   e   f   t   "   &gt;   /   d   i   v   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       a   l   i   g   n   =   "   l   e   f   t   "   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   ,       A   r   i   a   l   ,       H   e   l   v   e   t   i   c   a   ,       s   a   n   s   -   s   e   r   i   f   "       c   o   l   o   r   =   "   #   6   6   6   6   6   6   "       s   i   z   e   =   "   1   "   &gt;   S   T   R   O   N   G   &gt;   (   e   x   a   m   p   l   e   @   e   x   a   m   p   l   e   .   c   o   m   )   /   S   T   R   O   N   G   &gt;   /   F   O   N   T   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   m   i   d   d   l   e   "       a   l   i   g   n   =   "   l   e   f   t   "       w   i   d   t   h   =   "   3   5   %   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "       h   e   i   g   h   t   =   "   1   0   "   &gt;   B   &gt;   F   O   N   T       f   a   c   e   =   "   V   e   r   d   a   n   a   "       c   o   l   o   r   =   "   #   0   0   6   6   f   f   "       s   i   z   e   =   "   2   "   &gt;   P   h   o   n   e          
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   N   o       :   /   F   O   N   T   &gt;   /   B   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   T   D       v   A   l   i   g   n   =   "   t   o   p   "       w   i   d   t   h   =   "   2   2   6   "       b   g   C   o   l   o   r   =   "   #   f   4   f   4   f   4   "   &gt;   B   &gt;   F   O   N   T       f   a   c   e   =   "   A   r   i   a   l   "       s   i   z   e   =   "   2   "   &gt;   i   n   p   u   t       n   a   m   e   =   "   m   o   b   i   l   e   T   x   t   "       i   d   =   "   m   o   b   i   l   e   T   x   t   "       t   y   p   e   =   "   t   e   x   t   "       o   n   k   e   y   p   r   e   s   s   =   "   n   u   m   O   n   l   y   (   )   "       s   t   y   l   e   =   "   B   O   R   D   E   R   -   R   I   G   H   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   T   O   P   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   L   E   F   T   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   ;       B   O   R   D   E   R   -   B   O   T   T   O   M   :       #   a   e   c   6   e   0       1   p   x       s   o   l   i   d   "       m   a   x   l   e   n   g   t   h   =   "   1   1   "       s   i   z   e   =   "   3   0   "       a   u   t   o   c   o   m   p   l   e   t   e   =   "   o   f   f   "       t   a   b   i   n   d   e   x   =   "   5   "       /   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   &amp;n   b   s   p   ;   /   F   O   N   T   &gt;   /   B   &gt;   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;   -   -   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   t   d       v   A   l   i   g   n   =   "   t   o   p   "       a   l   i   g   n   =   "   c   e   n   t   e   r   "       c   o   l   S   p   a   n   =   "   2   "   &gt;   i   n   p   u   t       t   y   p   e   =   "   s   u   b   m   i   t   "       n   a   m   e   =   "   b   t   n   S   u   b   m   i   t   "       v   a   l   u   e   =   "   S   u   b   m   i   t   "       i   d   =   "   b   t   n   S   u   b   m   i   t   "       t   a   b   i   n   d   e   x   =   "   6   "       c   l   a   s   s   =   "   b   t   n   S   t   y   l   e   "       /   &gt;   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   i   n   p   u   t       i   d   =   h   d   n   T   i   m   e       t   y   p   e   =   h   i   d   d   e   n       v   a   l   u   e   =   '   1   4   -   0   7   -   2   0   1   5   '       n   a   m   e   =   h   d   n   T   i   m   e   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   D   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   R   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   T   A   B   L   E   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   s   c   r   i   p   t       l   a   n   g   u   a   g   e   =   '   j   a   v   a   s   c   r   i   p   t   '   &gt;   d   o   c   u   m   e   n   t   .   g   e   t   E   l   e   m   e   n   t   B   y   I   d   (   '   t   x   t   R   e   g   N   u   m   b   e   r   1   '   )   .   f   o   c   u   s   (   )   ;   /   s   c   r   i   p   t   &gt;      
-      
-   /   f   o   r   m   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	   b   r   &gt;      
-   	   	   	   	   	   	   	   	      
-      
-   d   i   v       i   d   =   "   F   o   o   t   e   r   "   &gt;      
-                   t   a   b   l   e       c   l   a   s   s   =   "   T   a   b   l   e   W   i   d   t   h   "       s   t   y   l   e   =   "   h   e   i   g   h   t   :       5   0   p   x   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-                                   t   r   &gt;      
-                                                   t   d       a   l   i   g   n   =   "   r   i   g   h   t   "       s   t   y   l   e   =   "   w   i   d   t   h   :       3   3   5   p   x   ;   "   &gt;      
-                                                                   t   a   b   l   e       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   0   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-                                                                                   t   r   &gt;      
-                                                                                                   t   d       a   l   i   g   n   =   "   l   e   f   t   "       s   t   y   l   e   =   "   w   i   d   t   h   :       9   5   p   x   "   &gt;      
-                                                                                                                   a       h   r   e   f   =   "   h   t   t   p   :   /   /   w   w   w   .   c   m   s   .   c   o   .   i   n   /   "       t   a   r   g   e   t   =   "   _   b   l   a   n   k   "   &gt;      
-                                                                                                                                   i   m   g       a   l   t   =   "   "       s   r   c   =   "   .   .   /   i   m   a   g   e   s   /   c   m   s   l   o   g   o   s   m   a   l   l   .   j   p   g   "       s   t   y   l   e   =   "   b   o   r   d   e   r   :       0   "       /   &gt;      
-                                                                                                                   /   a   &gt;      
-                                                                                                   /   t   d   &gt;      
-                                                                                                   t   d       a   l   i   g   n   =   "   l   e   f   t   "   &gt;      
-                                                                                                                   C   M   S       C   o   m   p   u   t   e   r   s       L   i   m   i   t   e   d   b   r       /   &gt;      
-                                                                                                                   E   m   a   i   l       U   s   :       a       c   l   a   s   s   =   "   F   o   o   t   e   r   L   i   n   k   "       h   r   e   f   =   "   m   a   i   l   t   o   :   P   M   @   b   a   n   g   a   l   o   r   e   o   n   e   .   c   o   .   i   n   "   &gt;   P   M   @   b   a   n   g   a   l   o   r   e   o   n   e   .   c   o   .   i   n      
-                                                                                                                   /   a   &gt;      
-                                                                                                   /   t   d   &gt;      
-                                                                                   /   t   r   &gt;      
-                                                                   /   t   a   b   l   e   &gt;      
-                                                   /   t   d   &gt;      
-                                                   t   d       a   l   i   g   n   =   "   c   e   n   t   e   r   "       s   t   y   l   e   =   "   w   i   d   t   h   :       3   0   5   p   x   "   &gt;      
-                                                                   t   a   b   l   e       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   0   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-                                                                                   t   r   &gt;      
-                                                                                                   t   d       a   l   i   g   n   =   "   c   e   n   t   e   r   "   &gt;      
-                                                                                                                   a       c   l   a   s   s   =   "   F   o   o   t   e   r   L   i   n   k   "       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   L   e   g   a   l   C   o   n   t   e   n   t   s   .   a   s   p   x   "   &gt;   T   e   r   m   s       &amp;    C   o   n   d   i   t   i   o   n   s   /   a   &gt;       |       a       c   l   a   s   s   =   "   F   o   o   t   e   r   L   i   n   k   "       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   S   e   c   u   r   i   t   y   C   o   n   t   e   n   t   s   .   a   s   p   x   "   &gt;      
-                                                                                                                                   O   n   l   i   n   e       S   e   c   u   r   i   t   y   /   a   &gt;   b   r       /   &gt;      
-                                                                                                                   a       c   l   a   s   s   =   "   F   o   o   t   e   r   L   i   n   k   "       h   r   e   f   =   "   .   .   /   p   u   b   l   i   c   /   D   i   s   c   l   a   i   m   e   r   d   o   c   u   m   e   n   t   s   .   a   s   p   x   "   &gt;   D   i   s   c   l   a   i   m   e   r   /   a   &gt;       |       a       c   l   a   s   s   =   "   F   o   o   t   e   r   L   i   n   k   "       h   r   e   f   =   "   m   a   i   l   t   o   :   H   e   l   p   d   e   s   k   @   b   a   n   g   a   l   o   r   e   o   n   e   .   c   o   .   i   n   "   &gt;      
-                                                                                                                                   H   e   l   p   d   e   s   k   @   b   a   n   g   a   l   o   r   e   o   n   e   .   c   o   .   i   n   /   a   &gt;   b   r       /   &gt;      
-                                                                                                                   s   t   r   o   n   g   &gt;   H   e   l   p   D   e   s   k       N   u   m   b   e   r   :       0   8   0   -   2   2   9   5   5   4   0   0   ,   4   0   1   /   s   t   r   o   n   g   &gt;      
-                                                                                                   /   t   d   &gt;      
-                                                                                   /   t   r   &gt;      
-                                                                   /   t   a   b   l   e   &gt;      
-                                                   /   t   d   &gt;      
-                                                   t   d       a   l   i   g   n   =   "   l   e   f   t   "       s   t   y   l   e   =   "   w   i   d   t   h   :       3   3   0   p   x   "   &gt;      
-                                                                   t   a   b   l   e       s   t   y   l   e   =   "   w   i   d   t   h   :       1   0   0   %   "       c   e   l   l   p   a   d   d   i   n   g   =   "   0   "       c   e   l   l   s   p   a   c   i   n   g   =   "   0   "       b   o   r   d   e   r   =   "   0   "   &gt;      
-                                                                                   t   r   &gt;      
-                                                                                                   t   d       a   l   i   g   n   =   "   l   e   f   t   "       s   t   y   l   e   =   "   w   i   d   t   h   :       4   0   p   x   "   &gt;      
-                                                                                                                   a       h   r   e   f   =   "   h   t   t   p   :   /   /   w   w   w   .   r   a   m   i   n   f   o   .   c   o   m   /   "       t   a   r   g   e   t   =   "   _   b   l   a   n   k   "   &gt;      
-                                                                                                                                   i   m   g       a   l   t   =   "   "       s   r   c   =   "   .   .   /   i   m   a   g   e   s   /   r   a   m   l   o   g   o   s   m   a   l   l   .   j   p   g   "       s   t   y   l   e   =   "   b   o   r   d   e   r   :       0   "       /   &gt;      
-                                                                                                                   /   a   &gt;      
-                                                                                                   /   t   d   &gt;      
-                                                                                                   t   d       a   l   i   g   n   =   "   l   e   f   t   "       s   t   y   l   e   =   "   v   e   r   t   i   c   a   l   -   a   l   i   g   n   :       m   i   d   d   l   e   "   &gt;      
-                                                                                                                   R   A   M       I   n   f   o   r   m   a   t   i   c   s       L   t   d   .       B   a   n   g   a   l   o   r   e   .       I   n   d   i   a      
-                                                                                                                   /   a   &gt;      
-                                                                                                   /   t   d   &gt;      
-                                                                                   /   t   r   &gt;      
-                                                                   /   t   a   b   l   e   &gt;      
-                                                   /   t   d   &gt;      
-                                   /   t   r   &gt;      
-                   /   t   a   b   l   e   &gt;      
-   /   d   i   v   &gt;      
-      
-   	   	   	   	   	   	   	   /   t   d   &gt;      
-   	   	   	   	   	   	   /   t   r   &gt;      
-   	   	   	   	   	   /   t   a   b   l   e   &gt;      
-   	   	   	   	   /   t   d   &gt;      
-   	   	   	   /   t   r   &gt;      
-   	   	   /   t   a   b   l   e   &gt;   /   d   i   v   &gt;      
-   	   /   b   o   d   y   &gt;      
-   /   H   T   M   L   &gt;
-   </link>
-  </div>
- </body>
-</html>
